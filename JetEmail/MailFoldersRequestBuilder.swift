@@ -154,9 +154,9 @@ extension Microsoft.Graph {
     
     struct Message : Codable, Identifiable {
         let                         id: ID
+        
+        // subject
         let                    subject: String?
-        let                     sender: Recipient?
-        let                bodyPreview: String?
         /*
          The date and time the message was created.
          The date and time information uses ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
@@ -165,16 +165,25 @@ extension Microsoft.Graph {
         let       lastModifiedDateTime: DateTimeOffset?
         let           receivedDateTime: DateTimeOffset?
         let               sentDateTime: DateTimeOffset?
-        /*let              bccRecipients: [Recipient]?
+        
+        let                     sender: Recipient?   // sender?
+        let                       from: Recipient?   // from
+        let               toRecipients: [Recipient]? // to
+        let                    replyTo: [Recipient]? // 回复给
+        let               ccRecipients: [Recipient]? // 抄送, carbon copy
+        let              bccRecipients: [Recipient]? // 密件抄送，密送，blind carbon copy
+        
+        let                bodyPreview: String?
         let                       body: ItemBody?
+        //let                 uniqueBody: ItemBody?
+        
+        /*
         let                 categories: [String]?
-        let               ccRecipients: [Recipient]?
         let                  changeKey: String?
         let             conversationId: String?
         let          conversationIndex: Data? // Edm.Binary is typically represented as Data in Swift
 
         let                       flag: FollowupFlag?
-        let                       from: Recipient?
         let             hasAttachments: Bool?
         let                 importance: Importance?
         let    inferenceClassification: InferenceClassificationType?
@@ -185,9 +194,7 @@ extension Microsoft.Graph {
         let                     isRead: Bool?
         let     isReadReceiptRequested: Bool?
         let             parentFolderId: String?
-        let                    replyTo: [Recipient]?
-        let               toRecipients: [Recipient]?
-        let                 uniqueBody: ItemBody?
+        
         let                    webLink: String?*/
         
         struct ID : RawRepresentable, Codable, Hashable {
@@ -211,6 +218,9 @@ extension Microsoft.Graph {
     
     struct Recipient : Codable {
         let emailAddress: EmailAddress?
+        var nameAndAddress: String {
+            emailAddress?.nameAndAddress ?? "nil"
+        }
     }
     
     // https://learn.microsoft.com/en-us/graph/api/resources/emailaddress
@@ -218,6 +228,10 @@ extension Microsoft.Graph {
     struct EmailAddress: Codable {
         let address: String?
         let name: String?
+        
+        var nameAndAddress: String {
+            (name ?? "nil") + " " + "<\(address ?? "nil")>"
+        }
     }
     
     // https://learn.microsoft.com/en-us/graph/api/resources/followupFlag
@@ -286,6 +300,17 @@ extension MailFolder : Hashable {
     
 }
 
+extension Microsoft.Graph.Message : Hashable {
+    static func == (lhs: Microsoft.Graph.Message, rhs: Microsoft.Graph.Message) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+}
+
 
 
 struct MSALAPIMailFolderID : RawRepresentable, Codable, Hashable {
@@ -301,11 +326,6 @@ extension String.StringInterpolation {
 
 enum MSALAPIError : Error {
     case description(String)
-}
-
-struct Node<Value> {
-    var value: Value
-    var children: [Node]
 }
 
 struct GraphCollectionResponse<Value : Decodable> : Decodable {

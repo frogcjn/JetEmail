@@ -18,9 +18,9 @@ class Tree<Value> {
 }
 
 extension TreeNode {
-    func descendants() -> [TreeNode<Value>] {
-        var queue: [TreeNode<Value>] = [self]
-        var result: [TreeNode<Value>] = []
+    func descendants() -> [TreeNode<Element>] {
+        var queue: [TreeNode<Element>] = [self]
+        var result: [TreeNode<Element>] = []
         while !queue.isEmpty {
             print(queue)
             let current = queue.removeFirst()
@@ -33,31 +33,31 @@ extension TreeNode {
     
 
 @dynamicMemberLookup
-class TreeNode<Value> {
-    weak var parent: TreeNode<Value>? = nil
-    var children: [TreeNode<Value>] = []
-    var value: Value
+class TreeNode<Element> {
+    weak var parent: TreeNode<Element>? = nil
+    var children: [TreeNode<Element>] = []
+    var element: Element
     
-    init(parent: TreeNode<Value>? = nil, children: [TreeNode<Value>] = [], value: Value) {
+    init(parent: TreeNode<Element>? = nil, children: [TreeNode<Element>] = [], value: Element) {
         self.parent = parent
         self.children = children
-        self.value = value
+        self.element = value
     }
 }
 
 // @dynamicMemberLookup
 extension TreeNode {
     
-    subscript<TargetValue>(dynamicMember keyPath: KeyPath<Value, TargetValue>) -> TargetValue {
-        value[keyPath: keyPath]
+    subscript<TargetValue>(dynamicMember keyPath: KeyPath<Element, TargetValue>) -> TargetValue {
+        element[keyPath: keyPath]
     }
     
-    subscript<TargetValue>(dynamicMember keyPath: WritableKeyPath<Value, TargetValue>) -> TargetValue {
+    subscript<TargetValue>(dynamicMember keyPath: WritableKeyPath<Element, TargetValue>) -> TargetValue {
         get {
-            value[keyPath: keyPath]
+            element[keyPath: keyPath]
         }
         set {
-            value[keyPath: keyPath] = newValue
+            element[keyPath: keyPath] = newValue
         }
     }
 }

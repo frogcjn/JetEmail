@@ -23,7 +23,7 @@ extension FolderPaths {
         for path in folders {
             var current = tree.root
             for name in path {
-                if let node = current.children.first(where: { $0.value == name }) {
+                if let node = current.children.first(where: { $0.element == name }) {
                     current = node
                     continue
                 } else {

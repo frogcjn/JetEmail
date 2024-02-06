@@ -13,7 +13,8 @@ struct MessageList : View {
     var model : MailFolderViewModel
     
     var body: some View {
-        NavigationSplitView {
+
+        //NavigationSplitView {
             Group {
                 if model.isLoadingMessages {
                     ProgressView()
@@ -24,13 +25,13 @@ struct MessageList : View {
                             ErrorText(model.errorMessage)
                         }
                     }
-                    List(model.messages) { item in
-                        VStack(alignment: .leading) {
-                            Text(item.sender?.emailAddress?.name ?? item.sender?.emailAddress?.address ?? "")
-                            Text(item.subject ?? "")
-                            Text(item.receivedDateTime?.date.description ?? "")
-                        }
-                    }
+         List(model.messages, selection: $model.selectedMessage) { item in
+             VStack(alignment: .leading) {
+                 Text(item.sender?.emailAddress?.name ?? item.sender?.emailAddress?.address ?? "")
+                 Text(item.subject ?? "")
+                 Text(item.receivedDateTime?.date.formattedRelative() ?? "")
+             }.tag(item)
+         }
                 }
             }
             .toolbar {
@@ -43,8 +44,8 @@ struct MessageList : View {
                     await model.loadMessages()
                 }
             }
-        } detail: {
-            Text("Mail Content")
-        }
+        //} detail: {
+            // Text("Mail Content")
+        //}
     }
 }

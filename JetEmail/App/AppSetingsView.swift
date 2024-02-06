@@ -13,12 +13,15 @@ struct AppSettingsView : View {
     var appSettings
     
     var body: some View {
-        Group {
+        VStack {
             switch appSettings.appContextResult {
             case .success(let msalApp):
                 LoginView(msalApp: msalApp)
             case .failure(let error):
                 ErrorText("Unable to create Application Context \(String(describing: error))")
+            }
+            Form {
+                Toggle("Show with Dark Background", isOn: Bindable(appSettings).isOnColorScheme)
             }
         }
         .textSelection(.enabled)

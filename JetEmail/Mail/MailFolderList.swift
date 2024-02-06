@@ -31,9 +31,9 @@ struct MailFolderList : View {
                             .controlSize(.small)
                     }
                 }
-                List(model.rootChildren, children: \.children.nilIfEmpty, selection: $model.selectedMailFolder) { item in
-                    Text(item.value.displayName)
-                        .tag(item) // selection tag
+                List(model.rootChildren, children: \.children.nilIfEmpty, selection: $model.selectedMailFolder) { node in
+                    Text(node.displayName)
+                        .tag(node.element) // selection tag
                 }
                 
                 /*Section("target mail folders", isExpanded: $isExpanded) {

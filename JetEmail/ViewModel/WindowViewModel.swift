@@ -20,8 +20,9 @@ class WindowViewModel {
     
     // properties
     var splitViewVisibility: NavigationSplitViewVisibility = .automatic
-    var selectedMailFolder: TreeNode<MailFolder>? = nil
-    
+    var selectedMailFolder: MailFolder? = nil
+    var selectedMessage: Microsoft.Graph.Message? = nil
+
     // conversation view model
     private var _conversationViewModel: [MailFolder: MailFolderViewModel] = [:]
     subscript(mailFolder mailFolder: MailFolder) -> MailFolderViewModel {
@@ -36,24 +37,38 @@ class WindowViewModel {
         }
     }
     
+    // message view model
+    private var _messageViewModels: [Microsoft.Graph.Message: MessageViewModel] = [:]
+    subscript(message message: Microsoft.Graph.Message) -> MessageViewModel {
+        get {
+            if let navigation = _messageViewModels[message] {
+                return navigation
+            } else {
+                let navigation = MessageViewModel(self, message: message)
+                _messageViewModels[message] = navigation
+                return navigation
+            }
+        }
+    }
+    
     var isLoadingFolderTree = false
     var tree: Tree<MailFolder>? = nil
     var rootChildren: [TreeNode<MailFolder>] { tree?.root.children ?? [] }
 }
 
-extension TreeNode : Identifiable where Value : Identifiable {
+extension TreeNode : Identifiable where Element : Identifiable {
     
 }
 
-extension TreeNode: Equatable where Value: Equatable {
-    static func == (lhs: TreeNode<Value>, rhs: TreeNode<Value>) -> Bool {
-        lhs.value == rhs.value
+extension TreeNode: Equatable where Element: Equatable {
+    static func == (lhs: TreeNode<Element>, rhs: TreeNode<Element>) -> Bool {
+        lhs.element == rhs.element
     }
 }
 
-extension TreeNode : Hashable where Value : Hashable {
+extension TreeNode : Hashable where Element : Hashable {
     func hash(into hasher: inout Hasher) {
-        hasher.combine(value)
+        hasher.combine(element)
     }
 }
 
@@ -95,7 +110,7 @@ extension WindowViewModel {
             let (parent, parentFolder) = queue.removeFirst()
             print("<checking: \(parentFolder.displayName)>")
             for child in parent.children {
-                let childName = child.value
+                let childName = child.element
                 var childFolder: MailFolder
                 
                 switch childName {

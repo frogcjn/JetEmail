@@ -18,14 +18,42 @@ class AppSettings {
     var appContext: AppContext? { try? appContextResult.get() }
     var userContext: UserContext? { appContext?.user }
     
-    // Folder List
-    // Folder List
+    // Target Folder
     var targetFolderPaths: [[FolderName]] { FolderPaths.shared }
     var targetFolderTree: Tree<FolderName> { FolderPaths.sharedTree }
     var targetFolderTreeRootChildren: [TreeNode<FolderName>] { targetFolderTree.root.children }
     
+    //
+    var isOnColorScheme: Bool {
+        get {
+            access(keyPath: \.isOnColorScheme)
+            return UserDefaults.standard.isOnColorScheme ?? true
+        }
+        set {
+            withMutation(keyPath: \.isOnColorScheme) {
+                UserDefaults.standard.isOnColorScheme = newValue
+            }
+        }
+    }
+    
     init() {
         appContextResult = .init(catching: AppContext.init)
         appContext?._settings = self
+    }
+}
+
+extension UserDefaults {
+    
+    private enum Keys: String {
+        case isOnColorScheme
+    }
+    
+    var isOnColorScheme: Bool? {
+        get {
+            value(forKey: Keys.isOnColorScheme.rawValue) as? Bool
+        }
+        set {
+           set(newValue, forKey: Keys.isOnColorScheme.rawValue)
+        }
     }
 }

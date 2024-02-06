@@ -18,11 +18,12 @@ struct JetEmailApp: App {
                 .environment(appSettings)
         }
         .defaultSize(width: 800, height: 600)
-        
+        #if os(macOS)
         Settings {
             AppSettingsView()
                 .frame(width: 400, height: 300)
                 .environment(appSettings)
         }
+        #endif
     }
 }
