@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MessageView : View {
     
+
+    
     @Bindable
     var model : MessageViewModel
     var body: some View {
@@ -40,14 +42,36 @@ struct MessageView : View {
         
         Text(model.body?.contentType?.rawValue ?? "")
         
-        switch (model.body?.contentType, model.body?.content)  {
+        if let body = model.body {
+            EmailBodyView(itemBody: body)
+        }
+        
+    }
+}
+
+struct EmailBodyView : View {
+    
+    @Environment(AppSettings.self)
+    var appSettings
+    
+    var itemBody: Microsoft.Graph.ItemBody
+    
+    var body: some View {
+        switch (itemBody.contentType, itemBody.content)  {
         case (.html, let htmlString?):
             WebView(htmlString: htmlString)
         case (.text, let text?):
-            Text(text)
+            if appSettings.isOnColorScheme {
+                Text(text)
+            } else {
+                Group {
+                    Text(text)
+                        .background(.background)
+                }
+                .environment(\.colorScheme, .light)
+            }
         default:
             EmptyView()
         }
-        
     }
 }

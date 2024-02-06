@@ -12,6 +12,9 @@ struct AppSettingsView : View {
     @Environment(AppSettings.self)
     var appSettings
     
+    @Environment(\.colorScheme)
+    var colorScheme
+    
     var body: some View {
         VStack {
             switch appSettings.appContextResult {
@@ -20,8 +23,11 @@ struct AppSettingsView : View {
             case .failure(let error):
                 ErrorText("Unable to create Application Context \(String(describing: error))")
             }
-            Form {
-                Toggle("Show with Dark Background", isOn: Bindable(appSettings).isOnColorScheme)
+            
+            if colorScheme == .dark {
+                Form {
+                    Toggle("Show with Dark Background", isOn: Bindable(appSettings).isOnColorScheme)
+                }
             }
         }
         .textSelection(.enabled)
