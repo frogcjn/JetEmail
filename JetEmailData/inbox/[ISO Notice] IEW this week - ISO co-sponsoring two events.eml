@@ -1,0 +1,1460 @@
+Received: from PH7PR01MB8026.prod.exchangelabs.com (2603:10b6:510:274::6) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 14 Nov 2023 19:02:12
+ +0000
+Received: from CH0PR07CA0023.namprd07.prod.outlook.com (2603:10b6:610:32::28)
+ by PH7PR01MB8026.prod.exchangelabs.com (2603:10b6:510:274::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6977.31; Tue, 14 Nov 2023 19:02:10 +0000
+Received: from CY4PEPF0000EE3F.namprd03.prod.outlook.com
+ (2603:10b6:610:32:cafe::2f) by CH0PR07CA0023.outlook.office365.com
+ (2603:10b6:610:32::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.17 via Frontend
+ Transport; Tue, 14 Nov 2023 19:02:10 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.100)
+ smtp.mailfrom=mail121.atl91.mcsv.net; dkim=fail (body hash did not verify)
+ header.d=mit.edu;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of mail121.atl91.mcsv.net
+ does not designate 18.9.1.100 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.100;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.100) by
+ CY4PEPF0000EE3F.mail.protection.outlook.com (10.167.242.19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7002.13 via Frontend Transport; Tue, 14 Nov 2023 19:02:09 +0000
+Received: from oc11expo11.exchange.mit.edu (18.9.4.16) by
+ oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 14 Nov 2023 14:01:53 -0500
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ oc11expo11.exchange.mit.edu (18.9.4.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Tue, 14 Nov 2023 14:01:53 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Tue, 14 Nov 2023 14:01:53 -0500
+Received: from DM6PR07CA0037.namprd07.prod.outlook.com (2603:10b6:5:74::14) by
+ MW4PR01MB6483.prod.exchangelabs.com (2603:10b6:303:74::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6977.28; Tue, 14 Nov 2023 19:01:51 +0000
+Received: from DS1PEPF00017090.namprd03.prod.outlook.com
+ (2603:10b6:5:74:cafe::e0) by DM6PR07CA0037.outlook.office365.com
+ (2603:10b6:5:74::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.17 via Frontend
+ Transport; Tue, 14 Nov 2023 19:01:50 +0000
+Authentication-Results-Original: spf=pass (sender IP is 198.2.130.121)
+ smtp.mailfrom=mail121.atl91.mcsv.net; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mail121.atl91.mcsv.net
+ designates 198.2.130.121 as permitted sender)
+ receiver=protection.outlook.com; client-ip=198.2.130.121;
+ helo=mail121.atl91.mcsv.net; pr=C
+Received: from mail121.atl91.mcsv.net (198.2.130.121) by
+ DS1PEPF00017090.mail.protection.outlook.com (10.167.17.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7002.13 via Frontend Transport; Tue, 14 Nov 2023 19:01:50 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=k2;
+	t=1699988410; x=1700248910; i=riechman@mit.edu;
+	bh=8oWbBo/GtCQg8SuMTH4wQODFxSHF87+2DgmIU0tU3YU=;
+	h=Subject:From:Reply-To:To:Date:Message-ID:X-MC-User:Feedback-ID:
+	 List-ID:List-Unsubscribe:List-Unsubscribe-Post:Content-Type:
+	 MIME-Version:CC:Date:Subject:From;
+	b=X18Mdy6xncodeLZXCuy1cn//oRetw0ftD4O0+hAbwciaX9G1AkMtVLBRoAVhuADiP
+	 wEn7jtSSTJyvNIQqf2l4WvSc1icmMxl+U0ygNO53zzLd0JfFo149Jyz3K8csUNE/vh
+	 U0SFR1M7LsbR2ZEYqAfDzzkTjf9QiyhDxCq5KZB99lVJjwJF9DHW5QZKyc4v7wlMV2
+	 ZGwedDtTg2KrDgAAoDQdxn88v24/yL16+pknwX5nPTD0rsAlDnnzKIzyy+GqyX4cBX
+	 HUhuB4BqqfeFoYP3Z1t0Fxe5JOss720Q2VwZfEJqR2GwZC6Kbc/Pn7yE2aQMYRGdLz
+	 0riW5Z2H5cJVg==
+Received: from localhost (localhost [127.0.0.1])
+	by mail121.atl91.mcsv.net (Mailchimp) with ESMTP id 4SVFwp1RpczRKhvFS
+	for <jiannan@MIT.EDU>; Tue, 14 Nov 2023 19:00:10 +0000 (GMT)
+Subject: =?utf-8?Q?=5BISO=20Notice=5D=20IEW=20this=20week=20=2D=20ISO=20co=2Dsponsoring=20two=20events?=
+From: =?utf-8?Q?MIT=20International=20Students=20Office?= <riechman@mit.edu>
+Reply-To: =?utf-8?Q?MIT=20International=20Students=20Office?= <riechman@mit.edu>
+To: =?utf-8?Q?Jiannan?= <jiannan@MIT.EDU>
+Date: Tue, 14 Nov 2023 19:00:06 +0000
+Message-ID: <156ecccacf03a6376855ef479.929c932d78.20231114185945.1d94541a1d.b4018274@mail121.atl91.mcsv.net>
+X-Mailer: Mailchimp Mailer - **CID1d94541a1d929c932d78**
+X-Campaign: mailchimp156ecccacf03a6376855ef479.1d94541a1d
+X-campaignid: mailchimp156ecccacf03a6376855ef479.1d94541a1d
+X-Report-Abuse: Please report abuse for this campaign here: https://mailchimp.com/contact/abuse/?u=156ecccacf03a6376855ef479&id=1d94541a1d&e=929c932d78
+X-MC-User: 156ecccacf03a6376855ef479
+Feedback-ID: 50137178:50137178.774402:us12:mc
+List-ID: 156ecccacf03a6376855ef479mc list <156ecccacf03a6376855ef479.206181.list-id.mcsv.net>
+X-Accounttype: pr
+List-Unsubscribe: <https://mit.us12.list-manage.com/unsubscribe?u=156ecccacf03a6376855ef479&id=3195a3d812&e=929c932d78&c=1d94541a1d>,
+ <mailto:unsubscribe-mc.us12_156ecccacf03a6376855ef479.1d94541a1d-929c932d78@unsubscribe.mailchimpapp.net?subject=unsubscribe>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Content-Type: multipart/alternative; boundary="_----------=_MCPart_797283380"
+Return-Path: bounce-mc.us12_50137178.774402-929c932d78@mail121.atl91.mcsv.net
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ DS1PEPF00017090:EE_|MW4PR01MB6483:EE_|CY4PEPF0000EE3F:EE_|PH7PR01MB8026:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: c7701cea-166e-4d80-900b-08dbe5443436
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?AURKXoMufCJkhjgXm5QwhPjKmFl4UnjO+Nq8Fjz0zwLOolh4P00L2fBoDPXC?=
+ =?us-ascii?Q?O/lqGFplhoXi5yzoH6kLL1UawdsExt6z4xDECW19zfnNS+uEkorbkHdiKoxk?=
+ =?us-ascii?Q?0Zep1ZTX2rewrGKc6sFVkt9g2W3efGfTIo4oxuvJH9hpiZIQQWtnfkwzvds4?=
+ =?us-ascii?Q?rc0iMGe4U+0L0Oei0w2N0RJ5NZV26sttJNydBrhLAhFhmxn9uPHkbEXgS5lo?=
+ =?us-ascii?Q?5Qw1ACUtMXspuxIYPOC/DXC5Q7fej1Fm1GRxHg+lg/Lu6vFHewCo6UGWSJbu?=
+ =?us-ascii?Q?aVXRP2EBtzJl21SKgeUW9otBI/7kSpDo6MPchBqMuqyZSYBqneUn0RwAYhT1?=
+ =?us-ascii?Q?SV+pEppQo9FqV8louEf1oyi2BbOvWDECDunmAeSXLCVUQ9X5gGlra1A31+4K?=
+ =?us-ascii?Q?5hupRkdC+twiJsN3tgay5MPgl2XMse3K6Sac88TVLKAphy8wfSpKP2XikLSf?=
+ =?us-ascii?Q?JV19LJOp//gyoYjolcaEVohLYQ4KfduH27HvkgNaENhfE2C0i5pyFCyW31zd?=
+ =?us-ascii?Q?thfGI6qvC/6zVoP1Bh+ey6OEwpUAOP+h/WlUcoPxHsmrYe87afKdk5tQlRSx?=
+ =?us-ascii?Q?GaxliBrYsP5Vyr3npKVjFvMgDkyCyoRAxEsOSFeTq7NPLpWV+KllOIYNQO3A?=
+ =?us-ascii?Q?Q2DD5Enh0O3C35kxf4zDLAhPCx7J53762GcmkakBKNg4HOhbyLGrnCDaEllV?=
+ =?us-ascii?Q?vUOW0SzsH9uORc3Whgpy5647/4gSzUZo/lEa9ND4uo0tPW4ryTFTJINAG8fB?=
+ =?us-ascii?Q?dNzxHwwVFMzs57fc0cVIoJOIlvtn3oWQPtW8PJFLLAS/S7OhuJnq2/wDc59A?=
+ =?us-ascii?Q?gjsddb/0TuO3XYz0+mdTQnSfdCP2McaS9ym+Vh8fs+W+t0pOKUEty+HAyEz7?=
+ =?us-ascii?Q?S6U9sbb/g965Z/zV258RYEPEhd1mbTz6QewyvUNG2kbnepKyb7aRtJS3LV7z?=
+ =?us-ascii?Q?WGMbwW443FEcCJ/1AM95zzwt71OMDqby7me6yQEHtHntUa0tKFPML+0kTW80?=
+ =?us-ascii?Q?sD1m4KtBjj6XeKR18YU2m6v+UBl+MQa1BJRflQZ9G/VM2gt1ITI13mmh8whW?=
+ =?us-ascii?Q?KwglkcYtvdbmjcNY+d45SgKYTEymmnybs+jayQ+1vOlGu5X2J7LYcna6xcsA?=
+ =?us-ascii?Q?wdq3WXkswY7tDFjirPYr+FuUOz5MDo5yDY9FWSWJqWCSrKh7yktCYGJGpn2A?=
+ =?us-ascii?Q?LWs5ypDb76zuOBUL7sIFv1vcehHGbjmIVhE5lyoaqaEAJvJGwEygJOv1hlbT?=
+ =?us-ascii?Q?w5i4U9kP94N11gTgmwcUNQvZ/i0PqEmZl+iVOd7QnS4ZM6CtX/Sc5NmOfsgg?=
+ =?us-ascii?Q?PPQ2axalEZm4XUf1IgO4uWKhYdyqQnW3ib3NpN4g8vd450cT2++YO0UT8uWq?=
+ =?us-ascii?Q?Y/ms7gGGI9Fd9eR7X7VdaDtJx9BuAH5HxxEd2JiVzsWE6RW2mw=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:198.2.130.121;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail121.atl91.mcsv.net;PTR:mail121.atl91.mcsv.net;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6483
+X-OrganizationHeadersPreserved: MW4PR01MB6483.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb3.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb3.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo11.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 14 Nov 2023 19:02:09.9585
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ c7701cea-166e-4d80-900b-08dbe5443436
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: CY4PEPF0000EE3F.namprd03.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CY4PEPF0000EE3F.namprd03.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CY4PEPF0000EE3F.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DS1PEPF00017090.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ fa57673e-78a1-492f-8521-08dbe54428e7
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.100;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb4.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2023 19:02:09.7241
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7701cea-166e-4d80-900b-08dbe5443436
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.100];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ DS1PEPF00017090.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR01MB8026
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.9815613
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6977.029
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MFN4dE1qUThBejRYajVpVWU1YmVycVNPUnFnOUZlU3NPaW1VZjR4VUIwL2xP?=
+ =?utf-8?B?QnExSXNLTm9QeFlYUFRVZEd5bWRwTnpacWlVeldURHpXL1FvcEMzRGFJL3ov?=
+ =?utf-8?B?d0dpT0Y2OUsyTUFFTHlRQjVqejJSa3Vqb0poZTduaW5YYTJ2WUM0NHhwenRm?=
+ =?utf-8?B?UHZnbkEva0RKSGdhOHQwQkFRMlM4WnZHRjhDeFEwd0srYzc2eGpNc2Y4R0oy?=
+ =?utf-8?B?WVc1Tnl1NjYzbE5ycDFpMUVQTlROaVFuOWdoZlg4WXUvUXE2YUVQbUpPSzVm?=
+ =?utf-8?B?MVVFMUx6S2JTT2xML1kyTEg5YnVDYml4WEVxYmk0ZWhJUXowVm02L25wZlFl?=
+ =?utf-8?B?Sk1naTZNWjdHaGliYVRHT2U1RlptenRyZncwbnVSM0pCa0V2OEpISUR1VDVQ?=
+ =?utf-8?B?K29YaFVrWWZVV1pHRTA5alp2bXByU1lPMFViUk5JNEVnb0V3ODVGVFp1a3FP?=
+ =?utf-8?B?YnVhaVF2SlNqdDY4WjJWNi9tQmc5WE5JZzlMMW5WVXlDSEdsOWVtZ2ErLytz?=
+ =?utf-8?B?T3ZVVGZ4eXlMTGc2Smd4NmJhcWt5R0xkY0J4SENvVXN1VGI4elJvblR1MjdL?=
+ =?utf-8?B?Yk8rZ1ErVVcrWXhiRkFqOTZtcThOQ0VjbEJLdXpNSU1oQ1htZEFmTVFmdGlw?=
+ =?utf-8?B?WXBhYUh3NWZIMUlhL3ROQzVTVUdlUVFDUk9UV1pTOUJsL1R0RHlZdnVmdGNl?=
+ =?utf-8?B?L1dabGpTLzNCSGwwRlJTNGFUMHBjcFhzVWZtdFh4TXNvdHA1N2pRa3QzMUtI?=
+ =?utf-8?B?ZVpwZnlkSmIxNmRwU3RIbGczaldJdXkwbCtvUzJrNkxUNnJXS2tva0N4eGs3?=
+ =?utf-8?B?azh3RGZnNWRVQ01xZEVFeENOWFhVcFVKaDVTaTBlMUc1T1MxOGg5dkkxcXY2?=
+ =?utf-8?B?NEZPcnlia2hQYzFBWGZsYlYxeU4xYlJwbGlpRTFGNng4a0RKc0Y4MzJsRytq?=
+ =?utf-8?B?amFrV1RhVHlNMnk2S1RtakhiT3dOMVVuVkQwakpZeWFGRlRDNWV0OWlia3VC?=
+ =?utf-8?B?eU56TGJxRjNNNW1kbFcrNzBRYnFKamF0WCtYZDZnY3E0K0pWLzRzSW5Mc3Bw?=
+ =?utf-8?B?SjR3R0JTUDhZVmNLRWkwWjViNENCdkRZZWtVWnFwZ3dJS0xTbE1aUXErcjQ0?=
+ =?utf-8?B?UHlaNHZONnVOVUl0aG5GL1F3Y0l1ZW80Z1Bzblc4di9TTFlKTnFYeVhpWXRI?=
+ =?utf-8?B?RWFZanBBVEM3NC9iTk52akFlK3VSNEZHWXp0UExOL3ZxaEpWZUpRVW5pRGJB?=
+ =?utf-8?B?aHEvemd2MFJmaXBOcFRBK1RqOUVtc0VndlN0WUc5WU4rSXNoeGZSVGFNZG1h?=
+ =?utf-8?B?QVl0cUs0VHVqbDVmQWZ6bnFuWEJkMDJab25VUUdjb1dXVGZ5NFRQWU1yZDYy?=
+ =?utf-8?B?YmdhbEVjUk0vU1RpcUFwWnRPYWx3T1BxSEZXTmFUTUg4NWdlM0ZVaFJVcyth?=
+ =?utf-8?B?cDU3ZTk5MTJjZUNISUhpRFJrWkNrcXBheWFVenRlajhYcmNRZUsvdlhQcFZ0?=
+ =?utf-8?B?d01GYmJlMHkyMXlJdnNPaVZvbG9HOGwwZmNvbFJQRHBEd2tQZDcvUzh5TUZX?=
+ =?utf-8?B?N1JMRjVsTUlvTno4MzBuYm40YUQzMVBpa3RaUnZqQW9ES2JEZmJwbGhINjJC?=
+ =?utf-8?B?WjNjNE9mSmZUaG04R3B2aFlSM0FyWWZGb3R3dkZzTi9MWm8wQm5sb3ZuRG94?=
+ =?utf-8?B?M1lhb05EZkpQdTl0SWpmcGQ1Wi9Ud1dKQzlLSXczcmt5M1VaajYzbnZsTWhK?=
+ =?utf-8?B?MHgxSDFSU0ZDTW5GR1dpMnV2WGl0ZTlWRitUeUNqMlBubWNySHBXNzJQS0o0?=
+ =?utf-8?B?RzcwZHV0WGRabERERUplMVRMWFFEdHExWU9GV05UTW90VFdtUEpzaHFiSysv?=
+ =?utf-8?B?N3VKWURGYmZkZU1oT2lLS3NqZkx6RTJWTWZ3WmErMEFpODVuaGJFWDhNV2N2?=
+ =?utf-8?B?eUx0V0xLeHM3K3F5SzhCU2xEQWNad0dlcWZwYVdtNlJ0cVl0UjZJeHI5NmZG?=
+ =?utf-8?B?VlRyK1VaYzkwVC9pQjh3R3dBeFlybUQrWllRZmZzNGxzRXRXY05WOTY4SVJQ?=
+ =?utf-8?B?Y1B5ZDJJeHFRZmZuNm5tTFJTMjR1RGIyMmpPQ3FWNXY1RTA0ZFZwNlR4QzZI?=
+ =?utf-8?B?ZHp3U08zZHdKNUVlL0NzR1RYY01vanNTeGhpZzM1SWpGNzFpUk9CaGdCTjM1?=
+ =?utf-8?B?NlJhS0o0c1loT2ZXaFlpaFpVeTdxRlRnNlJCL3NDcGE0aFN4TDRPc3FqN25C?=
+ =?utf-8?B?VXFDUjhndW1yaTFVc2hVQVBqTFVnPT0=?=
+MIME-Version: 1.0
+
+--_----------=_MCPart_797283380
+Content-Type: text/plain; charset="utf-8"; format="fixed"
+Content-Transfer-Encoding: quoted-printable
+
+Taste of the Continents & Nightmarket events!
+
+https://iso.mit.edu/
+International Education Week (IEW) 2023 (https://iso.mit.edu/event/interna=
+tional-education-week-iew-2023-3/)
+
+November 13-17=2C 2023
+
+International Education Week (https://iew.state.gov/) (IEW) is an opportun=
+ity to celebrate the benefits of international education and exchange worl=
+dwide. This joint initiative of the U.S. Department of State and the U.S.=
+ Department of Education (https://mit.us12.list-manage.com/track/click?u=
+=3D156ecccacf03a6376855ef479&id=3D3a97687c55&e=3D0c8125d2b8)  is part of U=
+=2ES. efforts to promote programs that prepare Americans for a global enviro=
+nment and attract future leaders from abroad to study=2C learn=2C and exch=
+ange experiences.
+
+This year=E2=80=99s theme=2C =E2=80=9CInternational Education Is the Futur=
+e=2C=E2=80=9D explores the many ways that international education is drivi=
+ng us into the future.
+
+Check our ISO website (https://iso.mit.edu/event/international-education-w=
+eek-iew-2023-3/) for a flyer of all international-related events happening=
+ this week=2C including the two events that ISO is co-sponsoring.
+
+https://mcusercontent.com/156ecccacf03a6376855ef479/images/cc0d1444-3dc5-4=
+63e-3d9b-b659fb7ece2a.png
+------------------------------------------------------------
+
+IEW: Taste of the Continents (https://iso.mit.edu/event/iew-taste-of-the-c=
+ontinents/)
+
+Wednesday=2C November 15
+6pm to 8pm
+Morss Hall=2C Walker Memorial (Building 50)
+No registration required
+
+Open to entire MIT community
+Co-sponsored by GSC and ISO
+
+Join the Graduate Students Council (GSC) and International Students Office=
+ (ISO) to celebrate the 2023 International Education Week through dumpling=
+s! We will showcase several versions of dumplings from different continent=
+s around the world.
+There is no need to RSVP!
+
+https://mcusercontent.com/156ecccacf03a6376855ef479/images/8a7b5e18-0f62-4=
+930-3ab9-fd25b3cd667a.jpg
+------------------------------------------------------------
+
+IEW: Nightmarket (https://iso.mit.edu/event/iew-nightmarket/)
+
+Friday=2C November 17
+8pm to 10pm
+Lobby 13
+Tickets (https://docs.google.com/forms/d/e/1FAIpQLScs_Cfh5Ri0bVBI1yS0g6PDl=
+OmrvPEONzeU9AnbGLVUwCPmmw/viewform) required
+
+Open to entire MIT community
+Hosted by MIT AAA=2C CSC=2C and ATS; co-sponsored by ISO
+
+Nightmarket is an annual event that celebrates the diverse array of cultur=
+es and traditions within pan-Asian communities on MIT=E2=80=99s campus. Th=
+e event is a nod to the abundance of street markets in Asia=2C featuring f=
+ood=2C cultural booths with crafts and games=2C and non-stop cultural perf=
+ormances. Open to the entire MIT community & friends=2C Nightmarket is one=
+ of the biggest cultural events on campus with hundreds of attendees. Our=
+ goal is to bring as many people together as possible to share and celebra=
+te the many Asian communities within MIT.
+
+MIT AAA=2C CSC=2C and ATS proudly present=E2=80=A6
+
+=F0=9F=8C=99 (https://emojipedia.org/crescent-moon) NIGHTMARKET=F0=9F=8C=
+=99 (https://emojipedia.org/crescent-moon)
+
+Join us for a night of festivities and fun on Friday=2C November 17th from=
+ 8 - 10 pm at our annual Nightmarket!
+
+We will bring:
+
+=F0=9F=8D=9C Food stands with delicious Asian cuisine
+
+=F0=9F=8E=A4 A super cool lineup of amazing performances
+
+=F0=9F=8E=AA Game booths for you to bring (and beat) your friends
+
+
+So tell all of your friends and buy your tickets in advance for just $6 fr=
+om=E2=80=A6
+
+=F0=9F=8E=9F=EF=B8=8F 10 am - 5 pm from November 13th - 16th in Lobby 10
+
+=F0=9F=8E=9F=EF=B8=8F 10 am - 2 pm on November 17th in Lobby 10
+
+=E2=80=8B=E2=80=8B=F0=9F=8E=9F=EF=B8=8F Online Here (https://forms.gle/w6h=
+6PfiiWhpgmopd8)
+
+Tickets will also be available at the door on the day of the event for $8.
+**all-tickets are non-refundable :(
+
+Questions? Email us at nightmarket [at] mit.edu
+https://mcusercontent.com/156ecccacf03a6376855ef479/images/4c1b0bd0-c11c-9=
+dff-ca52-d00449beddf2.png
+Tickets (https://forms.gle/w6h6PfiiWhpgmopd8)
+https://www.instagram.com/mit.iso/
+https://iso.mit.edu/
+mailto:iso-help@mit.edu
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+This email was sent to jiannan@MIT.EDU (mailto:jiannan@MIT.EDU)
+why did I get this? (https://mit.us12.list-manage.com/about?u=3D156ecccacf=
+03a6376855ef479&id=3D3195a3d812&e=3D929c932d78&c=3D1d94541a1d)     unsubscri=
+be from this list (https://mit.us12.list-manage.com/unsubscribe?u=3D156ecc=
+cacf03a6376855ef479&id=3D3195a3d812&e=3D929c932d78&c=3D1d94541a1d)     updat=
+e subscription preferences (https://mit.us12.list-manage.com/profile?u=3D1=
+56ecccacf03a6376855ef479&id=3D3195a3d812&e=3D929c932d78&c=3D1d94541a1d)
+MIT International Students Office . 77 Massachusetts Ave . E18-219 . Cambr=
+idge=2C MA 02139 . USA
+--_----------=_MCPart_797283380
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head><!-- NAME: SIMPLE TEXT --><!--[if gte mso 15]>
+        <xml>
+            <o:OfficeDocumentSettings>
+            <o:AllowPNG/>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+        <![endif]-->
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+        <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+        <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-sc=
+ale=3D1">
+        <title>[ISO Notice] IEW this week - ISO co-sponsoring two events</t=
+itle>
+
+    <style type=3D"text/css">
+		p{
+			margin:10px 0;
+			padding:0;
+		}
+		table{
+			border-collapse:collapse;
+		}
+		h1,h2,h3,h4,h5,h6{
+			display:block;
+			margin:0;
+			padding:0;
+		}
+		img,a img{
+			border:0;
+			height:auto;
+			outline:none;
+			text-decoration:none;
+		}
+		body,#bodyTable,#bodyCell{
+			height:100%;
+			margin:0;
+			padding:0;
+			width:100%;
+		}
+		.mcnPreviewText{
+			display:none !important;
+		}
+		#outlook a{
+			padding:0;
+		}
+		img{
+			-ms-interpolation-mode:bicubic;
+		}
+		table{
+			mso-table-lspace:0pt;
+			mso-table-rspace:0pt;
+		}
+		.ReadMsgBody{
+			width:100%;
+		}
+		.ExternalClass{
+			width:100%;
+		}
+		p,a,li,td,blockquote{
+			mso-line-height-rule:exactly;
+		}
+		a[href^=3Dtel],a[href^=3Dsms]{
+			color:inherit;
+			cursor:default;
+			text-decoration:none;
+		}
+		p,a,li,td,body,table,blockquote{
+			-ms-text-size-adjust:100%;
+			-webkit-text-size-adjust:100%;
+		}
+		.ExternalClass,.ExternalClass p,.ExternalClass td,.ExternalClass div,.Ext=
+ernalClass span,.ExternalClass font{
+			line-height:100%;
+		}
+		a[x-apple-data-detectors]{
+			color:inherit !important;
+			text-decoration:none !important;
+			font-size:inherit !important;
+			font-family:inherit !important;
+			font-weight:inherit !important;
+			line-height:inherit !important;
+		}
+		#bodyCell{
+			padding:10px;
+		}
+		.templateContainer{
+			max-width:600px !important;
+		}
+		a.mcnButton{
+			display:block;
+		}
+		.mcnImage,.mcnRetinaImage{
+			vertical-align:bottom;
+		}
+		.mcnTextContent{
+			word-break:break-word;
+		}
+		.mcnTextContent img{
+			height:auto !important;
+		}
+		.mcnDividerBlock{
+			table-layout:fixed !important;
+		}
+		body,#bodyTable{
+			background-color:#FFFFFF;
+			background-image:none;
+			background-repeat:no-repeat;
+			background-position:center;
+			background-size:cover;
+		}
+		#bodyCell{
+			border-top:0;
+		}
+		.templateContainer{
+			border:0;
+		}
+		h1{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:26px;
+			font-style:normal;
+			font-weight:bold;
+			line-height:125%;
+			letter-spacing:normal;
+			text-align:left;
+		}
+		h2{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:22px;
+			font-style:normal;
+			font-weight:bold;
+			line-height:125%;
+			letter-spacing:normal;
+			text-align:left;
+		}
+		h3{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:20px;
+			font-style:normal;
+			font-weight:bold;
+			line-height:125%;
+			letter-spacing:normal;
+			text-align:left;
+		}
+		h4{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:18px;
+			font-style:normal;
+			font-weight:bold;
+			line-height:125%;
+			letter-spacing:normal;
+			text-align:left;
+		}
+		#templateHeader{
+			border-top:0;
+			border-bottom:0;
+		}
+		#templateHeader .mcnTextContent,#templateHeader .mcnTextContent p{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:16px;
+			line-height:150%;
+			text-align:left;
+		}
+		#templateHeader .mcnTextContent a,#templateHeader .mcnTextContent p a{
+			color:#007C89;
+			font-weight:normal;
+			text-decoration:underline;
+		}
+		#templateBody{
+			border-top:0;
+			border-bottom:0;
+		}
+		#templateBody .mcnTextContent,#templateBody .mcnTextContent p{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:16px;
+			line-height:150%;
+			text-align:left;
+		}
+		#templateBody .mcnTextContent a,#templateBody .mcnTextContent p a{
+			color:#007C89;
+			font-weight:normal;
+			text-decoration:underline;
+		}
+		#templateFooter{
+			border-top:0;
+			border-bottom:0;
+		}
+		#templateFooter .mcnTextContent,#templateFooter .mcnTextContent p{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:12px;
+			line-height:150%;
+			text-align:left;
+		}
+		#templateFooter .mcnTextContent a,#templateFooter .mcnTextContent p a{
+			color:#202020;
+			font-weight:normal;
+			text-decoration:underline;
+		}
+	@media only screen and (min-width:768px){
+		.templateContainer{
+			width:600px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		body,table,td,p,a,li,blockquote{
+			-webkit-text-size-adjust:none !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		body{
+			width:100% !important;
+			min-width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnRetinaImage{
+			max-width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImage{
+			width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnCartContainer,.mcnCaptionTopContent,.mcnRecContentContainer,.mcnCapti=
+onBottomContent,.mcnTextContentContainer,.mcnBoxedTextContentContainer,.mcn=
+ImageGroupContentContainer,.mcnCaptionLeftTextContentContainer,.mcnCaptionR=
+ightTextContentContainer,.mcnCaptionLeftImageContentContainer,.mcnCaptionRi=
+ghtImageContentContainer,.mcnImageCardLeftTextContentContainer,.mcnImageCar=
+dRightTextContentContainer,.mcnImageCardLeftImageContentContainer,.mcnImage=
+CardRightImageContentContainer{
+			max-width:100% !important;
+			width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnBoxedTextContentContainer{
+			min-width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageGroupContent{
+			padding:9px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnCaptionLeftContentOuter .mcnTextContent,.mcnCaptionRightContentOuter =
+.mcnTextContent{
+			padding-top:9px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageCardTopImageContent,.mcnCaptionBottomContent:last-child .mcnCapt=
+ionBottomImageContent,.mcnCaptionBlockInner .mcnCaptionTopContent:last-chil=
+d .mcnTextContent{
+			padding-top:18px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageCardBottomImageContent{
+			padding-bottom:9px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageGroupBlockInner{
+			padding-top:0 !important;
+			padding-bottom:0 !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageGroupBlockOuter{
+			padding-top:9px !important;
+			padding-bottom:9px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnTextContent,.mcnBoxedTextContentColumn{
+			padding-right:18px !important;
+			padding-left:18px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageCardLeftImageContent,.mcnImageCardRightImageContent{
+			padding-right:18px !important;
+			padding-bottom:0 !important;
+			padding-left:18px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcpreview-image-uploader{
+			display:none !important;
+			width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		h1{
+			font-size:22px !important;
+			line-height:125% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		h2{
+			font-size:20px !important;
+			line-height:125% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		h3{
+			font-size:18px !important;
+			line-height:125% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		h4{
+			font-size:16px !important;
+			line-height:150% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		table.mcnBoxedTextContentContainer td.mcnTextContent,td.mcnBoxedTextConte=
+ntContainer td.mcnTextContent p{
+			font-size:14px !important;
+			line-height:150% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		td#templateHeader td.mcnTextContent,td#templateHeader td.mcnTextContent p=
+{
+			font-size:16px !important;
+			line-height:150% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		td#templateBody td.mcnTextContent,td#templateBody td.mcnTextContent p{
+			font-size:16px !important;
+			line-height:150% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		td#templateFooter td.mcnTextContent,td#templateFooter td.mcnTextContent p=
+{
+			font-size:14px !important;
+			line-height:150% !important;
+		}
+
+}</style></head>
+    <body style=3D"background:#FFFFFF none no-repeat center/cover;height: 1=
+00%;margin: 0;padding: 0;width: 100%;-ms-text-size-adjust: 100%;-webkit-tex=
+t-size-adjust: 100%;background-color: #FFFFFF;background-image: none;backgr=
+ound-repeat: no-repeat;background-position: center;background-size: cover;"=
+>
+        <!--
+-->
+        <!--[if !gte mso 9]><!----><span class=3D"mcnPreviewText" style=3D"=
+display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px=
+; opacity:0; overflow:hidden; visibility:hidden; mso-hide:all;">Taste of th=
+e Continents &amp; Nightmarket events!</span><!--<![endif]-->
+        <!--
+-->
+        <center>
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" height=3D"100%" width=3D"100%" id=3D"bodyTable" style=3D"backgrou=
+nd:#FFFFFF none no-repeat center/cover;border-collapse: collapse;mso-table-=
+lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-s=
+ize-adjust: 100%;height: 100%;margin: 0;padding: 0;width: 100%;background-c=
+olor: #FFFFFF;background-image: none;background-repeat: no-repeat;backgroun=
+d-position: center;background-size: cover;">
+                <tr>
+                    <td align=3D"left" valign=3D"top" id=3D"bodyCell" style=
+=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-s=
+ize-adjust: 100%;height: 100%;margin: 0;padding: 10px;width: 100%;border-to=
+p: 0;">
+                        <!-- BEGIN TEMPLATE // -->
+                        <!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600" style=3D"width:600px;">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600" s=
+tyle=3D"width:600px;">
+                        <![endif]-->
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%" class=3D"templateContainer" style=3D"border-collapse:=
+ collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust:=
+ 100%;-webkit-text-size-adjust: 100%;border: 0;max-width: 600px !important;=
+">
+                            <tr>
+                                <td valign=3D"top" id=3D"templateHeader" st=
+yle=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-tex=
+t-size-adjust: 100%;border-top: 0;border-bottom: 0;"><table border=3D"0" ce=
+llpadding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"mcnTextBlock" sty=
+le=3D"min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-t=
+able-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;=
+">
+    <tbody class=3D"mcnTextBlockOuter">
+        <tr>
+            <td valign=3D"top" class=3D"mcnTextBlockInner" style=3D"padding=
+-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-=
+text-size-adjust: 100%;">
+              	<!--[if mso]>
+				<table align=3D"left" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" =
+width=3D"100%" style=3D"width:100%;">
+				<tr>
+				<![endif]-->
+		=09
+				<!--[if mso]>
+				<td valign=3D"top" width=3D"600" style=3D"width:600px;">
+				<![endif]-->
+                <table align=3D"left" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" style=3D"max-width: 100%;min-width: 100%;border-collapse: colla=
+pse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;=
+-webkit-text-size-adjust: 100%;" width=3D"100%" class=3D"mcnTextContentCont=
+ainer">
+                    <tbody><tr>
+
+                        <td valign=3D"top" class=3D"mcnTextContent" style=
+=3D"padding: 0px 18px 9px;font-size: 14px;mso-line-height-rule: exactly;-ms=
+-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-wo=
+rd;color: #202020;font-family: Helvetica;line-height: 150%;text-align: left=
+;">
+
+                            <p style=3D"text-align: center;font-size: 14px;=
+margin: 10px 0;padding: 0;mso-line-height-rule: exactly;-ms-text-size-adjus=
+t: 100%;-webkit-text-size-adjust: 100%;color: #202020;font-family: Helvetic=
+a;line-height: 150%;"><a href=3D"https://mit.us12.list-manage.com/track/cli=
+ck?u=3D156ecccacf03a6376855ef479&amp;id=3D0c38659008&amp;e=3D929c932d78" ta=
+rget=3D"_blank" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust=
+: 100%;-webkit-text-size-adjust: 100%;color: #007C89;font-weight: normal;te=
+xt-decoration: underline;"><font face=3D"helvetica neue, helvetica, arial, =
+verdana, sans-serif"><span style=3D"font-size:20px"><strong><img data-file-=
+id=3D"1540765" height=3D"115" src=3D"https://gallery.mailchimp.com/156eccca=
+cf03a6376855ef479/images/b22303b4-8ef6-4ee2-ba15-3271665392f8.jpg" style=3D=
+"border: 0px;width: 300px;height: 115px;margin: 0px;outline: none;text-deco=
+ration: none;-ms-interpolation-mode: bicubic;" width=3D"300"></strong></spa=
+n></font></a><br>
+<a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecccacf03a63=
+76855ef479&amp;id=3D550eb4ede3&amp;e=3D929c932d78" target=3D"_blank" style=
+=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-s=
+ize-adjust: 100%;color: #007C89;font-weight: normal;text-decoration: underl=
+ine;"><span style=3D"font-size:20px"><strong>International Education Week (=
+IEW) 2023</strong></span></a><br>
+<br>
+<strong><font color=3D"#000000"><span style=3D"font-size:16px">November 13-=
+17, 2023</span></font></strong><br>
+<br>
+<span style=3D"font-size:14px"><a href=3D"https://mit.us12.list-manage.com/=
+track/click?u=3D156ecccacf03a6376855ef479&amp;id=3D5ea4b7c501&amp;e=3D929c9=
+32d78" target=3D"_blank" style=3D"mso-line-height-rule: exactly;-ms-text-si=
+ze-adjust: 100%;-webkit-text-size-adjust: 100%;color: #007C89;font-weight: =
+normal;text-decoration: underline;">International Education Week</a> (IEW) =
+is an opportunity to celebrate the benefits of international education and =
+exchange worldwide. This&nbsp;<a href=3D"https://mit.us12.list-manage.com/t=
+rack/click?u=3D156ecccacf03a6376855ef479&amp;id=3D68a306ab52&amp;e=3D929c93=
+2d78" target=3D"_blank" style=3D"mso-line-height-rule: exactly;-ms-text-siz=
+e-adjust: 100%;-webkit-text-size-adjust: 100%;color: #007C89;font-weight: n=
+ormal;text-decoration: underline;">joint initiative of the U.S. Department =
+of State and the U.S. Department of Education</a>&nbsp;is part of U.S. effo=
+rts to promote programs that prepare Americans for a global environment and=
+ attract future leaders from abroad to study, learn, and exchange experienc=
+es.<br>
+<br>
+This year=E2=80=99s theme, =E2=80=9C<strong>International Education Is the =
+Future,</strong>=E2=80=9D explores the many ways that international educati=
+on is driving us into the future.&nbsp;<br>
+<br>
+<strong>Check our <a href=3D"https://mit.us12.list-manage.com/track/click?u=
+=3D156ecccacf03a6376855ef479&amp;id=3D4d606c0673&amp;e=3D929c932d78" target=
+=3D"_blank" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 10=
+0%;-webkit-text-size-adjust: 100%;color: #007C89;font-weight: normal;text-d=
+ecoration: underline;">ISO website</a> for a flyer of all international-rel=
+ated events happening this week, including the two events that ISO is co-sp=
+onsoring.</strong><br>
+<br>
+<a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecccacf03a63=
+76855ef479&amp;id=3D066dd26f80&amp;e=3D929c932d78" style=3D"mso-line-height=
+-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;co=
+lor: #007C89;font-weight: normal;text-decoration: underline;"><img data-fil=
+e-id=3D"1549282" height=3D"240" src=3D"https://mcusercontent.com/156ecccacf=
+03a6376855ef479/images/cc0d1444-3dc5-463e-3d9b-b659fb7ece2a.png" style=3D"b=
+order: 0px initial;width: 240px;height: 240px;margin: 0px;outline: none;tex=
+t-decoration: none;-ms-interpolation-mode: bicubic;" width=3D"240"></a></sp=
+an></p>
+
+<hr>
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
+    </tbody>
+</table><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%" class=3D"mcnTextBlock" style=3D"min-width: 100%;border-collapse: collap=
+se;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-=
+webkit-text-size-adjust: 100%;">
+    <tbody class=3D"mcnTextBlockOuter">
+        <tr>
+            <td valign=3D"top" class=3D"mcnTextBlockInner" style=3D"padding=
+-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-=
+text-size-adjust: 100%;">
+              	<!--[if mso]>
+				<table align=3D"left" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" =
+width=3D"100%" style=3D"width:100%;">
+				<tr>
+				<![endif]-->
+		=09
+				<!--[if mso]>
+				<td valign=3D"top" width=3D"600" style=3D"width:600px;">
+				<![endif]-->
+                <table align=3D"left" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" style=3D"max-width: 100%;min-width: 100%;border-collapse: colla=
+pse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;=
+-webkit-text-size-adjust: 100%;" width=3D"100%" class=3D"mcnTextContentCont=
+ainer">
+                    <tbody><tr>
+
+                        <td valign=3D"top" class=3D"mcnTextContent" style=
+=3D"padding: 0px 18px 9px;font-size: 14px;mso-line-height-rule: exactly;-ms=
+-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-wo=
+rd;color: #202020;font-family: Helvetica;line-height: 150%;text-align: left=
+;">
+
+                            <p style=3D"text-align: center;font-size: 14px;=
+margin: 10px 0;padding: 0;mso-line-height-rule: exactly;-ms-text-size-adjus=
+t: 100%;-webkit-text-size-adjust: 100%;color: #202020;font-family: Helvetic=
+a;line-height: 150%;"><a href=3D"https://mit.us12.list-manage.com/track/cli=
+ck?u=3D156ecccacf03a6376855ef479&amp;id=3Ddf93829ab8&amp;e=3D929c932d78" ta=
+rget=3D"_blank" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust=
+: 100%;-webkit-text-size-adjust: 100%;color: #007C89;font-weight: normal;te=
+xt-decoration: underline;"><span style=3D"font-size:20px"><strong>IEW: Tast=
+e of the Continents</strong></span></a><br>
+<br>
+<span style=3D"font-size:14px"><strong>Wednesday, November 15<br>
+6pm to 8pm<br>
+Morss Hall, Walker Memorial (Building 50)<br>
+<font color=3D"#000000">No registration required</font><br>
+<br>
+Open to entire MIT community<br>
+Co-sponsored by GSC and ISO</strong></span><br>
+<br>
+Join the Graduate Students Council (GSC) and International Students Office =
+(ISO) to celebrate the 2023 International Education Week through dumplings!=
+ We will showcase several versions of dumplings from different continents a=
+round the world.<br>
+There is no need to RSVP! &nbsp;<br>
+<br>
+<span style=3D"font-size:14px"><a href=3D"https://mit.us12.list-manage.com/=
+track/click?u=3D156ecccacf03a6376855ef479&amp;id=3Dfac4d32f4d&amp;e=3D929c9=
+32d78" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-w=
+ebkit-text-size-adjust: 100%;color: #007C89;font-weight: normal;text-decora=
+tion: underline;"><img data-file-id=3D"1549286" height=3D"424" src=3D"https=
+://mcusercontent.com/156ecccacf03a6376855ef479/images/8a7b5e18-0f62-4930-3a=
+b9-fd25b3cd667a.jpg" style=3D"border: 0px;width: 300px;height: 424px;margin=
+: 0px;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;"=
+ width=3D"300"></a></span></p>
+
+<hr>
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
+    </tbody>
+</table><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%" class=3D"mcnTextBlock" style=3D"min-width: 100%;border-collapse: collap=
+se;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-=
+webkit-text-size-adjust: 100%;">
+    <tbody class=3D"mcnTextBlockOuter">
+        <tr>
+            <td valign=3D"top" class=3D"mcnTextBlockInner" style=3D"padding=
+-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-=
+text-size-adjust: 100%;">
+              	<!--[if mso]>
+				<table align=3D"left" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" =
+width=3D"100%" style=3D"width:100%;">
+				<tr>
+				<![endif]-->
+		=09
+				<!--[if mso]>
+				<td valign=3D"top" width=3D"600" style=3D"width:600px;">
+				<![endif]-->
+                <table align=3D"left" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" style=3D"max-width: 100%;min-width: 100%;border-collapse: colla=
+pse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;=
+-webkit-text-size-adjust: 100%;" width=3D"100%" class=3D"mcnTextContentCont=
+ainer">
+                    <tbody><tr>
+
+                        <td valign=3D"top" class=3D"mcnTextContent" style=
+=3D"padding: 0px 18px 9px;font-size: 14px;mso-line-height-rule: exactly;-ms=
+-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-wo=
+rd;color: #202020;font-family: Helvetica;line-height: 150%;text-align: left=
+;">
+
+                            <p style=3D"text-align: center;font-size: 14px;=
+margin: 10px 0;padding: 0;mso-line-height-rule: exactly;-ms-text-size-adjus=
+t: 100%;-webkit-text-size-adjust: 100%;color: #202020;font-family: Helvetic=
+a;line-height: 150%;"><a href=3D"https://mit.us12.list-manage.com/track/cli=
+ck?u=3D156ecccacf03a6376855ef479&amp;id=3D525c6b274b&amp;e=3D929c932d78" ta=
+rget=3D"_blank" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust=
+: 100%;-webkit-text-size-adjust: 100%;color: #007C89;font-weight: normal;te=
+xt-decoration: underline;"><span style=3D"font-size:20px"><strong>IEW: Nigh=
+tmarket</strong></span></a><br>
+<br>
+<strong><span style=3D"font-size:14px">Friday, November 17<br>
+8pm to 10pm<br>
+Lobby 13<br>
+<a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecccacf03a63=
+76855ef479&amp;id=3D01d882f84d&amp;e=3D929c932d78" target=3D"_blank" style=
+=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-s=
+ize-adjust: 100%;color: #007C89;font-weight: normal;text-decoration: underl=
+ine;">Tickets</a> required<br>
+<br>
+Open to entire MIT community<br>
+Hosted by MIT AAA, CSC, and ATS; co-sponsored by ISO</span></strong></p>
+
+<p style=3D"text-align: justify;font-size: 14px;margin: 10px 0;padding: 0;m=
+so-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-a=
+djust: 100%;color: #202020;font-family: Helvetica;line-height: 150%;">Night=
+market is an annual event that celebrates the diverse array of cultures and=
+ traditions within pan-Asian communities on MIT=E2=80=99s campus. <strong>T=
+he event is a nod to the abundance of street markets in Asia, featuring foo=
+d, cultural booths with crafts and games, and non-stop cultural performance=
+s.</strong> Open to the entire MIT community &amp; friends, Nightmarket is =
+one of the biggest cultural events on campus with hundreds of attendees. Ou=
+r goal is to bring as many people together as possible to share and celebra=
+te the many Asian communities within MIT.<br>
+<br>
+<strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd">MIT =
+AAA, CSC, and ATS proudly present=E2=80=A6</strong></p>
+
+<p dir=3D"ltr" style=3D"font-size: 14px;margin: 10px 0;padding: 0;mso-line-=
+height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 1=
+00%;color: #202020;font-family: Helvetica;line-height: 150%;text-align: lef=
+t;"><strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd">=
+<a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecccacf03a63=
+76855ef479&amp;id=3D19d4b287a3&amp;e=3D929c932d78" style=3D"mso-line-height=
+-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;co=
+lor: #007C89;font-weight: normal;text-decoration: underline;">=F0=9F=8C=99<=
+/a>NIGHTMARKET<a href=3D"https://mit.us12.list-manage.com/track/click?u=3D1=
+56ecccacf03a6376855ef479&amp;id=3Db74b4b46b0&amp;e=3D929c932d78" style=3D"m=
+so-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-a=
+djust: 100%;color: #007C89;font-weight: normal;text-decoration: underline;"=
+>=F0=9F=8C=99</a><br>
+<br>
+Join us for a night of festivities and fun on Friday, November 17th from 8 =
+- 10 pm at our annual Nightmarket!&nbsp;</strong></p>
+
+<p dir=3D"ltr" style=3D"font-size: 14px;margin: 10px 0;padding: 0;mso-line-=
+height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 1=
+00%;color: #202020;font-family: Helvetica;line-height: 150%;text-align: lef=
+t;"><strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd">=
+We will bring:</strong></p>
+
+<p dir=3D"ltr" style=3D"font-size: 14px;margin: 10px 0;padding: 0;mso-line-=
+height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 1=
+00%;color: #202020;font-family: Helvetica;line-height: 150%;text-align: lef=
+t;"><strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd">=
+=F0=9F=8D=9C Food stands with delicious Asian cuisine</strong></p>
+
+<p dir=3D"ltr" style=3D"font-size: 14px;margin: 10px 0;padding: 0;mso-line-=
+height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 1=
+00%;color: #202020;font-family: Helvetica;line-height: 150%;text-align: lef=
+t;"><strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd">=
+=F0=9F=8E=A4 A super cool lineup of amazing performances&nbsp;</strong></p>
+
+<p dir=3D"ltr" style=3D"font-size: 14px;margin: 10px 0;padding: 0;mso-line-=
+height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 1=
+00%;color: #202020;font-family: Helvetica;line-height: 150%;text-align: lef=
+t;"><strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd">=
+=F0=9F=8E=AA Game booths for you to bring (and beat) your friends</strong><=
+/p>
+&nbsp;
+
+<p dir=3D"ltr" style=3D"font-size: 14px;margin: 10px 0;padding: 0;mso-line-=
+height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 1=
+00%;color: #202020;font-family: Helvetica;line-height: 150%;text-align: lef=
+t;"><strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd">=
+So tell all of your friends and buy your tickets in advance for just $6 fro=
+m=E2=80=A6</strong></p>
+
+<p dir=3D"ltr" style=3D"font-size: 14px;margin: 10px 0;padding: 0;mso-line-=
+height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 1=
+00%;color: #202020;font-family: Helvetica;line-height: 150%;text-align: lef=
+t;"><strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd">=
+&nbsp;&nbsp;&nbsp;=F0=9F=8E=9F=EF=B8=8F 10 am - 5 pm from November 13th - 1=
+6th in Lobby 10</strong></p>
+
+<p dir=3D"ltr" style=3D"font-size: 14px;margin: 10px 0;padding: 0;mso-line-=
+height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 1=
+00%;color: #202020;font-family: Helvetica;line-height: 150%;text-align: lef=
+t;"><strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd">=
+&nbsp;&nbsp;&nbsp;=F0=9F=8E=9F=EF=B8=8F 10 am - 2 pm on November 17th in Lo=
+bby 10</strong></p>
+
+<p dir=3D"ltr" style=3D"font-size: 14px;margin: 10px 0;padding: 0;mso-line-=
+height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 1=
+00%;color: #202020;font-family: Helvetica;line-height: 150%;text-align: lef=
+t;"><strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd">=
+&nbsp;&nbsp;&nbsp;=E2=80=8B=E2=80=8B=F0=9F=8E=9F=EF=B8=8F <a href=3D"https:=
+//mit.us12.list-manage.com/track/click?u=3D156ecccacf03a6376855ef479&amp;id=
+=3Daf243112b9&amp;e=3D929c932d78" style=3D"mso-line-height-rule: exactly;-m=
+s-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;color: #007C89;font=
+-weight: normal;text-decoration: underline;">Online Here</a>&nbsp;</strong>=
+</p>
+
+<p dir=3D"ltr" style=3D"font-size: 14px;margin: 10px 0;padding: 0;mso-line-=
+height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 1=
+00%;color: #202020;font-family: Helvetica;line-height: 150%;text-align: lef=
+t;"><strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd">=
+Tickets will also be available at the door on the day of the event for $8.<=
+br>
+**all-tickets are non-refundable :(</strong></p>
+
+<p dir=3D"ltr" style=3D"text-align: center;font-size: 14px;margin: 10px 0;p=
+adding: 0;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-=
+text-size-adjust: 100%;color: #202020;font-family: Helvetica;line-height: 1=
+50%;"><strong id=3D"docs-internal-guid-2839e25c-7fff-e218-da1c-e5d7e87e5edd=
+">Questions? Email us at nightmarket [at] mit.edu</strong></p>
+
+<div style=3D"text-align: center;"><a href=3D"https://mit.us12.list-manage.=
+com/track/click?u=3D156ecccacf03a6376855ef479&amp;id=3D5736313d68&amp;e=3D9=
+29c932d78" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100=
+%;-webkit-text-size-adjust: 100%;color: #007C89;font-weight: normal;text-de=
+coration: underline;"><img data-file-id=3D"1549290" height=3D"168" src=3D"h=
+ttps://mcusercontent.com/156ecccacf03a6376855ef479/images/4c1b0bd0-c11c-9df=
+f-ca52-d00449beddf2.png" style=3D"border: 0px;width: 300px;height: 168px;ma=
+rgin: 0px;outline: none;text-decoration: none;-ms-interpolation-mode: bicub=
+ic;" width=3D"300"></a></div>
+
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
+    </tbody>
+</table><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%" class=3D"mcnButtonBlock" style=3D"min-width: 100%;border-collapse: coll=
+apse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%=
+;-webkit-text-size-adjust: 100%;">
+    <tbody class=3D"mcnButtonBlockOuter">
+        <tr>
+            <td style=3D"padding-top: 0;padding-right: 18px;padding-bottom:=
+ 18px;padding-left: 18px;mso-line-height-rule: exactly;-ms-text-size-adjust=
+: 100%;-webkit-text-size-adjust: 100%;" valign=3D"top" align=3D"center" cla=
+ss=3D"mcnButtonBlockInner">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cla=
+ss=3D"mcnButtonContentContainer" style=3D"border-collapse: separate !import=
+ant;border-radius: 4px;background-color: #2BAADF;mso-table-lspace: 0pt;mso-=
+table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%=
+;">
+                    <tbody>
+                        <tr>
+                            <td align=3D"center" valign=3D"middle" class=3D=
+"mcnButtonContent" style=3D"font-family: Arial;font-size: 16px;padding: 18p=
+x;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-siz=
+e-adjust: 100%;">
+                                <a class=3D"mcnButton " title=3D"Tickets" h=
+ref=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecccacf03a637685=
+5ef479&amp;id=3D4f916132f0&amp;e=3D929c932d78" target=3D"_blank" style=3D"f=
+ont-weight: bold;letter-spacing: normal;line-height: 100%;text-align: cente=
+r;text-decoration: none;color: #FFFFFF;mso-line-height-rule: exactly;-ms-te=
+xt-size-adjust: 100%;-webkit-text-size-adjust: 100%;display: block;">Ticket=
+s</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table></td>
+                            </tr>
+                            <tr>
+                                <td valign=3D"top" id=3D"templateBody" styl=
+e=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-=
+size-adjust: 100%;border-top: 0;border-bottom: 0;"><table border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"mcnFollowBlock" sty=
+le=3D"min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-t=
+able-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;=
+">
+    <tbody class=3D"mcnFollowBlockOuter">
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"padding: 9px;mso-l=
+ine-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjus=
+t: 100%;" class=3D"mcnFollowBlockInner">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wid=
+th=3D"100%" class=3D"mcnFollowContentContainer" style=3D"min-width: 100%;bo=
+rder-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-tex=
+t-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody><tr>
+        <td align=3D"center" style=3D"padding-left: 9px;padding-right: 9px;=
+mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-=
+adjust: 100%;">
+            <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%" style=3D"min-width: 100%;border-collapse: collapse;mso-table-lspa=
+ce: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-=
+adjust: 100%;" class=3D"mcnFollowContent">
+                <tbody><tr>
+                    <td align=3D"center" valign=3D"top" style=3D"padding-to=
+p: 9px;padding-right: 9px;padding-left: 9px;mso-line-height-rule: exactly;-=
+ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                        <table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" style=3D"border-collapse: collapse;mso-table-lspace: =
+0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adju=
+st: 100%;">
+                            <tbody><tr>
+                                <td align=3D"center" valign=3D"top" style=
+=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-s=
+ize-adjust: 100%;">
+                                    <!--[if mso]>
+                                    <table align=3D"center" border=3D"0" ce=
+llspacing=3D"0" cellpadding=3D"0">
+                                    <tr>
+                                    <![endif]-->
+
+                                        <!--[if mso]>
+                                        <td align=3D"center" valign=3D"top"=
+>
+                                        <![endif]-->
+
+
+                                            <table align=3D"left" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"display: inline;border-col=
+lapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-a=
+djust: 100%;-webkit-text-size-adjust: 100%;">
+                                                <tbody><tr>
+                                                    <td valign=3D"top" styl=
+e=3D"padding-right: 10px;padding-bottom: 9px;mso-line-height-rule: exactly;=
+-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class=3D"mcnFol=
+lowContentItemContainer">
+                                                        <table border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"mcnFollowConte=
+ntItem" style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-=
+rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                            <tbody><tr>
+                                                                <td align=
+=3D"left" valign=3D"middle" style=3D"padding-top: 5px;padding-right: 10px;p=
+adding-bottom: 5px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text=
+-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                    <table =
+align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"" =
+style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: =
+0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                        <tb=
+ody><tr>
+
+                                                                           =
+     <td align=3D"center" valign=3D"middle" width=3D"24" class=3D"mcnFollow=
+IconContent" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 1=
+00%;-webkit-text-size-adjust: 100%;">
+                                                                           =
+         <a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecc=
+cacf03a6376855ef479&amp;id=3Dfb4dc017c2&amp;e=3D929c932d78" target=3D"_blan=
+k" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webki=
+t-text-size-adjust: 100%;"><img src=3D"https://cdn-images.mailchimp.com/ico=
+ns/social-block-v2/color-instagram-48.png" alt=3D"Instagram" style=3D"displ=
+ay: block;border: 0;height: auto;outline: none;text-decoration: none;-ms-in=
+terpolation-mode: bicubic;" height=3D"24" width=3D"24" class=3D""></a>
+                                                                           =
+     </td>
+
+
+                                                                        </t=
+r>
+                                                                    </tbody=
+></table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody></table>
+                                                    </td>
+                                                </tr>
+                                            </tbody></table>
+
+                                        <!--[if mso]>
+                                        </td>
+                                        <![endif]-->
+
+                                        <!--[if mso]>
+                                        <td align=3D"center" valign=3D"top"=
+>
+                                        <![endif]-->
+
+
+                                            <table align=3D"left" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"display: inline;border-col=
+lapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-a=
+djust: 100%;-webkit-text-size-adjust: 100%;">
+                                                <tbody><tr>
+                                                    <td valign=3D"top" styl=
+e=3D"padding-right: 10px;padding-bottom: 9px;mso-line-height-rule: exactly;=
+-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class=3D"mcnFol=
+lowContentItemContainer">
+                                                        <table border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"mcnFollowConte=
+ntItem" style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-=
+rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                            <tbody><tr>
+                                                                <td align=
+=3D"left" valign=3D"middle" style=3D"padding-top: 5px;padding-right: 10px;p=
+adding-bottom: 5px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text=
+-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                    <table =
+align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"" =
+style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: =
+0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                        <tb=
+ody><tr>
+
+                                                                           =
+     <td align=3D"center" valign=3D"middle" width=3D"24" class=3D"mcnFollow=
+IconContent" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 1=
+00%;-webkit-text-size-adjust: 100%;">
+                                                                           =
+         <a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecc=
+cacf03a6376855ef479&amp;id=3Da64f4912ca&amp;e=3D929c932d78" target=3D"_blan=
+k" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webki=
+t-text-size-adjust: 100%;"><img src=3D"https://cdn-images.mailchimp.com/ico=
+ns/social-block-v2/color-link-48.png" alt=3D"Website" style=3D"display: blo=
+ck;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpola=
+tion-mode: bicubic;" height=3D"24" width=3D"24" class=3D""></a>
+                                                                           =
+     </td>
+
+
+                                                                        </t=
+r>
+                                                                    </tbody=
+></table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody></table>
+                                                    </td>
+                                                </tr>
+                                            </tbody></table>
+
+                                        <!--[if mso]>
+                                        </td>
+                                        <![endif]-->
+
+                                        <!--[if mso]>
+                                        <td align=3D"center" valign=3D"top"=
+>
+                                        <![endif]-->
+
+
+                                            <table align=3D"left" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"display: inline;border-col=
+lapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-a=
+djust: 100%;-webkit-text-size-adjust: 100%;">
+                                                <tbody><tr>
+                                                    <td valign=3D"top" styl=
+e=3D"padding-right: 0;padding-bottom: 9px;mso-line-height-rule: exactly;-ms=
+-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class=3D"mcnFollow=
+ContentItemContainer">
+                                                        <table border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"mcnFollowConte=
+ntItem" style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-=
+rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                            <tbody><tr>
+                                                                <td align=
+=3D"left" valign=3D"middle" style=3D"padding-top: 5px;padding-right: 10px;p=
+adding-bottom: 5px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text=
+-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                    <table =
+align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"" =
+style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: =
+0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                        <tb=
+ody><tr>
+
+                                                                           =
+     <td align=3D"center" valign=3D"middle" width=3D"24" class=3D"mcnFollow=
+IconContent" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 1=
+00%;-webkit-text-size-adjust: 100%;">
+                                                                           =
+         <a href=3D"mailto:iso-help@mit.edu" target=3D"_blank" style=3D"mso=
+-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adj=
+ust: 100%;"><img src=3D"https://cdn-images.mailchimp.com/icons/social-block=
+-v2/color-forwardtofriend-48.png" alt=3D"Email" style=3D"display: block;bor=
+der: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-m=
+ode: bicubic;" height=3D"24" width=3D"24" class=3D""></a>
+                                                                           =
+     </td>
+
+
+                                                                        </t=
+r>
+                                                                    </tbody=
+></table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody></table>
+                                                    </td>
+                                                </tr>
+                                            </tbody></table>
+
+                                        <!--[if mso]>
+                                        </td>
+                                        <![endif]-->
+
+                                    <!--[if mso]>
+                                    </tr>
+                                    </table>
+                                    <![endif]-->
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+    </tr>
+</tbody></table>
+
+            </td>
+        </tr>
+    </tbody>
+</table></td>
+                            </tr>
+                            <tr>
+                                <td valign=3D"top" id=3D"templateFooter" st=
+yle=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-tex=
+t-size-adjust: 100%;border-top: 0;border-bottom: 0;"></td>
+                            </tr>
+                        </table>
+                        <!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]-->
+                        <!-- // END TEMPLATE -->
+                    </td>
+                </tr>
+            </table>
+        </center>
+                <center>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wid=
+th=3D"100%" id=3D"canspamBarWrapper" style=3D"background-color:#FFFFFF; bor=
+der-top:1px solid #E5E5E5;">
+                    <tr>
+                        <td align=3D"center" valign=3D"top" style=3D"paddin=
+g-top:20px; padding-bottom:20px;">
+                            <table border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" id=3D"canspamBar">
+                                <tr>
+                                    <td align=3D"center" valign=3D"top" sty=
+le=3D"color:#606060; font-family:Helvetica, Arial, sans-serif; font-size:11=
+px; line-height:150%; padding-right:20px; padding-bottom:5px; padding-left:=
+20px; text-align:center;">
+                                        This email was sent to <a href=3D"m=
+ailto:jiannan@MIT.EDU" target=3D"_blank" style=3D"color:#404040 !important;=
+">jiannan@MIT.EDU</a>
+                                        <br>
+                                        <a href=3D"https://mit.us12.list-ma=
+nage.com/about?u=3D156ecccacf03a6376855ef479&amp;id=3D3195a3d812&amp;e=3D92=
+9c932d78&amp;c=3D1d94541a1d" target=3D"_blank" style=3D"color:#404040 !impo=
+rtant;"><em>why did I get this?</em></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=3D"=
+https://mit.us12.list-manage.com/unsubscribe?u=3D156ecccacf03a6376855ef479&=
+amp;id=3D3195a3d812&amp;e=3D929c932d78&amp;c=3D1d94541a1d" style=3D"color:#=
+404040 !important;">unsubscribe from this list</a>&nbsp;&nbsp;&nbsp;&nbsp;<=
+a href=3D"https://mit.us12.list-manage.com/profile?u=3D156ecccacf03a6376855=
+ef479&amp;id=3D3195a3d812&amp;e=3D929c932d78&amp;c=3D1d94541a1d" style=3D"c=
+olor:#404040 !important;">update subscription preferences</a>
+                                        <br>
+                                        MIT International Students Office =
+=C2=B7 77 Massachusetts Ave =C2=B7 E18-219 =C2=B7 Cambridge, MA 02139 =C2=
+=B7 USA
+                                        <br>
+                                        <br>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <style type=3D"text/css">
+                    @media only screen and (max-width: 480px){
+                        table#canspamBar td{font-size:14px !important;}
+                        table#canspamBar td a{display:block !important; mar=
+gin-top:10px !important;}
+                    }
+                </style>
+            </center><img src=3D"https://mit.us12.list-manage.com/track/ope=
+n.php?u=3D156ecccacf03a6376855ef479&amp;id=3D1d94541a1d&amp;e=3D929c932d78"=
+ height=3D"1" width=3D"1" alt=3D""></body>
+</html>=
+
+--_----------=_MCPart_797283380--

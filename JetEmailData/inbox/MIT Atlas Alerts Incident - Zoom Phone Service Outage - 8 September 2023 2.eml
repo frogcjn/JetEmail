@@ -1,0 +1,534 @@
+Received: from CH3PR01MB8594.prod.exchangelabs.com (2603:10b6:610:175::21) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Fri, 8 Sep 2023 19:48:48
+ +0000
+Received: from BL1PR13CA0233.namprd13.prod.outlook.com (2603:10b6:208:2bf::28)
+ by CH3PR01MB8594.prod.exchangelabs.com (2603:10b6:610:175::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6768.30; Fri, 8 Sep 2023 19:48:47 +0000
+Received: from BL02EPF0001A106.namprd05.prod.outlook.com
+ (2603:10b6:208:2bf:cafe::8d) by BL1PR13CA0233.outlook.office365.com
+ (2603:10b6:208:2bf::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.10 via Frontend
+ Transport; Fri, 8 Sep 2023 19:48:47 +0000
+Authentication-Results: spf=softfail (sender IP is 18.7.71.113)
+ smtp.mailfrom=notifications.statuspage.io; dkim=pass (signature was verified)
+ header.d=notifications.statuspage.io;dmarc=pass action=none
+ header.from=statuspage.io;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ notifications.statuspage.io discourages use of 18.7.71.113 as permitted
+ sender)
+Received: from mail.exchange.mit.edu (18.7.71.113) by
+ BL02EPF0001A106.mail.protection.outlook.com (10.167.241.139) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6792.11 via Frontend Transport; Fri, 8 Sep 2023 19:48:47 +0000
+Received: from w92expo28.exchange.mit.edu (18.7.74.34) by
+ w92exhyb8.exchange.mit.edu (18.7.71.113) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Fri, 8 Sep 2023 15:48:16 -0400
+Received: from oc11exhyb4.exchange.mit.edu (18.9.1.100) by
+ w92expo28.exchange.mit.edu (18.7.74.34) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Fri, 8 Sep 2023 15:48:11 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.47) by
+ oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Fri, 8 Sep 2023 15:48:11 -0400
+Received: from MN2PR04CA0002.namprd04.prod.outlook.com (2603:10b6:208:d4::15)
+ by SA1PR01MB6703.prod.exchangelabs.com (2603:10b6:806:1a6::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6768.30; Fri, 8 Sep 2023 19:48:08 +0000
+Received: from MN1PEPF0000ECDA.namprd02.prod.outlook.com
+ (2603:10b6:208:d4:cafe::2) by MN2PR04CA0002.outlook.office365.com
+ (2603:10b6:208:d4::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.31 via Frontend
+ Transport; Fri, 8 Sep 2023 19:48:08 +0000
+Authentication-Results-Original: spf=pass (sender IP is 23.253.183.145)
+ smtp.mailfrom=notifications.statuspage.io; dkim=pass (signature was verified)
+ header.d=notifications.statuspage.io;dmarc=pass action=none
+ header.from=statuspage.io;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of
+ notifications.statuspage.io designates 23.253.183.145 as permitted sender)
+ receiver=protection.outlook.com; client-ip=23.253.183.145;
+ helo=mail-183-145.mailgun.info; pr=C
+Received: from mail-183-145.mailgun.info (23.253.183.145) by
+ MN1PEPF0000ECDA.mail.protection.outlook.com (10.167.242.134) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.11 via Frontend Transport; Fri, 8 Sep 2023 19:48:08 +0000
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed;
+ d=notifications.statuspage.io; q=dns/txt; s=mailgun; t=1694202487;
+ x=1694209687; h=In-Reply-To: Message-Id: References: To: To: From: From:
+ Subject: Subject: Content-Type: Mime-Version: Date: Sender: Sender;
+ bh=kHiB4pKTEpYRfCYju4MFinEslsndISVse8g2hXa95ug=;
+ b=afQkbmae+mmpBR3tieWuzVhrgp5ox11krS4+vDf0sbiAWr6Qhg6Ei756dSIkZQ1yaMTk+SMUqQUgCk6pkFu26s8gfgUlK6gQe4g5bNvsh4kWtOdYG31j6qXxwZCv5Qou812ekiSgh3/wK/dlpObXlz7VR2vPbb/dWM+eNQmrePg=
+X-Mailgun-Sending-Ip: 23.253.183.145
+X-Mailgun-Sid: WyJlYjQ1MSIsImppYW5uYW5AbWl0LmVkdSIsIjExY2EiXQ==
+Received: from <unknown> (<unknown> []) by 84839388ac91 with HTTP id
+ 64fb7a74710e6fd791cc9255; Fri, 08 Sep 2023 19:48:04 GMT
+Sender: noreply=statuspage.io@notifications.statuspage.io
+Date: Fri, 08 Sep 2023 19:48:04 +0000
+Content-Type: multipart/alternative;
+ boundary="75f4f564612856e40a41aa0b52d6e669ba1b24e8cdcee7e21e91715be578"
+Subject: MIT Atlas Alerts Incident - Zoom Phone Service Outage - 8 September 2023
+From: noreply@statuspage.io
+To: jiannan@mit.edu
+X-Entity-Ref-ID: gc5ctl6n6xp6@statuspage.io
+References: <gc5ctl6n6xp6-y9kntqs2sm5l-p7xg6vtrnb9n@statuspage.io>
+ <gc5ctl6n6xp6-hbwntyrnms68-p7xg6vtrnb9n@statuspage.io>
+Message-ID: <gc5ctl6n6xp6-p27vd6gf5kdt-p7xg6vtrnb9n@statuspage.io>
+In-Reply-To: <gc5ctl6n6xp6-y9kntqs2sm5l-p7xg6vtrnb9n@statuspage.io>
+Return-Path: bounce+192cca.11ca-jiannan=mit.edu@notifications.statuspage.io
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ MN1PEPF0000ECDA:EE_|SA1PR01MB6703:EE_|BL02EPF0001A106:EE_|CH3PR01MB8594:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 05d4661b-64ec-40a5-20d5-08dbb0a49e05
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:2;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?JVGU80kdN7tiM5Q38lRRIfq1sj/SzA/VXkL2FTX7kjkHYvklvlnHE20qN5I5?=
+ =?us-ascii?Q?BehoWtW1u3tYyfWKzk47MbofbjLAN8sH66k65kokO2zGsI1EhpA7coaZM/o+?=
+ =?us-ascii?Q?gmbKEIpFpbNIJd8Chq/OA4kZrTrF+roSYgitGV77u9bHK/xYAHaDF+8ZOiHs?=
+ =?us-ascii?Q?mB0azR9UmhTg5e32wfFGgspF7DmByzYfL1qdSZu/yseGwNncFBBp46yME1Ju?=
+ =?us-ascii?Q?DV0ZQHl4aUalV7Cvfzkc9UTP1BRkBQVJiohrYeYCs7TS2cmZ06QANeuuf/S+?=
+ =?us-ascii?Q?Gn+2aXVOUi/Ov3ija742n/0v9v83CA0/+UdnQ7cqqCWvENAhvRc7KSeupSDI?=
+ =?us-ascii?Q?8FaNWBcFnyJI64Mh1ALbxqYgONdY5NOUkb+/SUA2ZPUtdal20U8plkhfSiI4?=
+ =?us-ascii?Q?HhebZEpq2QIVjlnWHlHgxCE5q3JWrp6USSRWxwRQuoxW4gcELW+13dO7VLd4?=
+ =?us-ascii?Q?+jEF9nur15yG+KJB6LglqHWTxCpihr3OgIqQWfnPwfYRDCKpB0z3jJiHUejT?=
+ =?us-ascii?Q?mjvOF8CmtpjRxCMiyBOF2qzduQiW6LoO51hrsKu0mNOtQHel4QX53NQ3U4Rq?=
+ =?us-ascii?Q?4ukMZD34gFh3Q8n3fv1Iazf+ULzCrQ33BQNNfaNiOG9lQ0i2uUis5H4kRPTz?=
+ =?us-ascii?Q?OaDk0ULzfeGuzXYF53kwGA93laHvHZLTGVlssRl0oNsk/8ZYBdI9sVWBtA0M?=
+ =?us-ascii?Q?3UCksxX6V46cg51ljzfeeV4yoq0BVE/ecPzivT8/AQo0yGcRkUV6qn5e9UGx?=
+ =?us-ascii?Q?FEKM3wQX6PMOpXahI36shiAhKR5LUJw7MO9YOdd7hPh11dX0nC+BppywJf9n?=
+ =?us-ascii?Q?sWAO4VwKMbPwT4Q429NtMLcS4FUaqxCeHtQ6rDH98pjMobXZq+FVZ4vJJCB7?=
+ =?us-ascii?Q?715KyWDOr2BVf34pfxmfjErjFHz5s+SNoSw9oSrucmlfKvsh8NZ3hG4BgaFG?=
+ =?us-ascii?Q?sqATwpmVWPe5lj2N86ORQf/3SlipIZ4Io8W+XwNDe0TtRaRzAEgrqmpsuF79?=
+ =?us-ascii?Q?8Dp62MGQoETXrZP8CYeZM1tUd/BNwMuGj22BJagbrQ+AAyTY4yydvng4hY9Z?=
+ =?us-ascii?Q?b2U22zr2w4E2AKQYjkJKyn/N+af2izg+wjx8ybp+OWtx94tbOSFk5D5Vli1S?=
+ =?us-ascii?Q?cDx+TNeuW8T3hL1jyM0tEAaCJBf0R9Zq/SvF8nDXlec9Zku5rodkVsEn6AJi?=
+ =?us-ascii?Q?hJkxYh/Y804a47wj6BBEKaPXRqsTu3u8pfwvI5XpSlm4NOWUDfHR9c/iMOrL?=
+ =?us-ascii?Q?i1YSknMoqocDKDdipnhHDgwNNFgGuyCqsbQwlpuh4vCUi0L7nbtg/C1XKbA+?=
+ =?us-ascii?Q?mhZeexBdlKVqrNrsoJEgliElZ51oq6DHWCZbRQ+7YJnA6hLB7lGwS31I8yRL?=
+ =?us-ascii?Q?3f4l3IMpuTaSCw5kMBch183lQ/yPBhjZF3yxHzwXCKHEQq+eGrHs52ldgjo9?=
+ =?us-ascii?Q?7tU8v5BI17r52g2SpuuX/rH6ufZwXoXrxn4QNlxwoSCbHH27JdVYF9Piji5j?=
+ =?us-ascii?Q?bd5FaMNNzVn82qKgfgiNLBbV2fHzg8sel4XQDgDrPukawyrrrQH8F6m95BjQ?=
+ =?us-ascii?Q?qNLL1tVUcKRb/1eHw4CQD5Jw+47kbCaTxi7zwh7ZObSDIqKsilQkzkOBqxnD?=
+ =?us-ascii?Q?RXfLSzaJb1P4sSgNHHRsmPVG9TtAsBN1ScFfugVUzRj5MzZbLBETft/czF2S?=
+ =?us-ascii?Q?prKnxxLdmbcsg+evTc/N5XZ0izWDa1eyfD/bj/yIlP+SbHWRvI6aZZnMcilk?=
+ =?us-ascii?Q?GB17K3eyAwP5Ve5Kd+S196S9B+7SfhkqOpcvV29WhJFkf9JAW8uyHKJVunKE?=
+ =?us-ascii?Q?a5Q9p8J+ICSaSM4oQUJseP4uLNE0yY0wadzgOzZ9FhrUSVs6H5RcihKtYuuZ?=
+ =?us-ascii?Q?jc+hxZlpnMwShTnZZpgvrkYl6I7wLYwOMKHZ9xgndlTvEIPfqKlaGHGWxdse?=
+ =?us-ascii?Q?jE6GvRFlSOAjVEn4aGg7iUDPDUzr0kQ6zuKUOrFo11k=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:23.253.183.145;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail-183-145.mailgun.info;PTR:mail-183-145.mailgun.info;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB6703
+X-OrganizationHeadersPreserved: SA1PR01MB6703.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb4.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb4.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo28.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 08 Sep 2023 19:48:47.5318
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 05d4661b-64ec-40a5-20d5-08dbb0a49e05
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: BL02EPF0001A106.namprd05.prod.outlook.com
+X-CrossPremisesHeadersFiltered: BL02EPF0001A106.namprd05.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ BL02EPF0001A106.namprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ MN1PEPF0000ECDA.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ d6ba92f8-6439-4b43-7b79-08dbb0a48685
+X-Microsoft-Antispam: BCL:2;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.113;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:w92exhyb8.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2023 19:48:47.4380
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05d4661b-64ec-40a5-20d5-08dbb0a49e05
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.113];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ MN1PEPF0000ECDA.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR01MB8594
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.2098685
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6768.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?windows-1256?Q?ah6EiES1xuOPQEOqt8QQ4NZubH1MVrWjV6fwQbRBxkjFC1GvuhD4RvhG?=
+ =?windows-1256?Q?bk9T+e696tTafVH4UcgJVcUz+vziC7gDUwwjBaWK1x9knyrvwcUfy6L+?=
+ =?windows-1256?Q?Q2zZ/HB6U2vQ7en6CqyIStMOQci774Qis0nX0XzbSpEnRBsRoElN11Kw?=
+ =?windows-1256?Q?+mVRHuNz4M3iO+lTcWxvr2COQeVHeDg/p3SpTexqMrBTVHMmsTZWrMQf?=
+ =?windows-1256?Q?TXk4xDmMwMnsgJqTW6+afDaGhBoU4MsYmsQeud/ZSgXg3szvU6pQ/ac9?=
+ =?windows-1256?Q?IMZR1bOsm/yE3sZcqtv0NDPFRsL+k6MRmQfX8AaqnOB5t368i6HisIua?=
+ =?windows-1256?Q?VCXGx4bCaIoW7ceWcCIYzhpORmIFhGggSEppK74K6d5IMi825r/p79yr?=
+ =?windows-1256?Q?uDm7VnFZEnOzQ7CmfqpDGzDiuo5EKDdGhIluSmwwOw05mkwh/oBT9bxe?=
+ =?windows-1256?Q?3jR6kqFGVoMHVc8/icFkuhizRCdWgeHVJWmw5K3MBAsU5Sc/6KMIxrFO?=
+ =?windows-1256?Q?4+lybgBpPNRK8RPmXRrr6IAcwaDSzEC8fW3pEfvFkjmIl5PpnfvVYRhU?=
+ =?windows-1256?Q?FUuzCeqhQD2jvHp7J0C34iSmitM+1M8jDi+gu7Y8YvjZaaoZA5N90Gez?=
+ =?windows-1256?Q?MygSiIkz/gAN7XgZp4/iUS5UP6RTFFdmYuClkA7XiiTGxFZYKeq8sV+w?=
+ =?windows-1256?Q?BmcKEh2ajMJjGtXBtw7kV/MC/h9yEgPTicwtG8/3F0zuzvcBdWyTRdSD?=
+ =?windows-1256?Q?X1e4lNiifzyy4SGajFuOxjruLAE0xbLjabtyEjEgMvGbIlrMKjrlJifr?=
+ =?windows-1256?Q?FSfWMytGuta1J3Fbfj/Bmb3UbkvgW2w+CCfmCklk+hZ5/1+RxjLhOC/j?=
+ =?windows-1256?Q?7qkzfZBRpIdLh8EATW4LMsP/zkB9wYxhwejCbsvmP6Nq4CNxztOfrMoX?=
+ =?windows-1256?Q?L/UIVJEPUAXcZUTAopCMV9UFjOEvNgEu7lBW1YROcR255WqIdgkSTYm0?=
+ =?windows-1256?Q?yBnoxQgHAK6YEzaO5KMfaCGKAIb0x0ELTJJ7a9Bgtp/r/d9XNVZ/X7rf?=
+ =?windows-1256?Q?HdK5xy0fRr5kEjjMl4QuksILGbkGhY4+bkwniXTwCMAgZng8pnlUO5GZ?=
+ =?windows-1256?Q?d8JLsq+2nx1PS8f2ycYG0hWpexK5rnsM66695vjdVweWwGrNvlrPzau2?=
+ =?windows-1256?Q?92cQPcbR9SzboaBqOf4vX+IV3Ej4GV0l0ZOMlMntFMTBzD2cvTSsvjle?=
+ =?windows-1256?Q?8NBqz9g0K0qM6lmA4TCuKo2TmXA6s/JuXjx+r3xaCsFAnXLt5guJG2ft?=
+ =?windows-1256?Q?4k0Hk5eDRf22tOhEyrhUdo7KD4AhrPVSTdL+1hc8O1r4T2e1fahXDFP/?=
+ =?windows-1256?Q?mU8eElx/adj/bcOVaInSQ4yJmxCx/r966JPLvfwFat7IztuijYkFBrLz?=
+ =?windows-1256?Q?rQkYMUgAdlqMDZCXo5FQqtxgZFoOzf6EVuA8GjFJwLZyUZOP0Y15Ogx5?=
+ =?windows-1256?Q?/DZTnoVjdrElEtVmQISqhhXMeBU4umcZ21Ywbe+WbF1tVdpfEng6QMtb?=
+ =?windows-1256?Q?Hri0A+e92eVenPjtGfIqtQtZjne/UK2X3hgYtQCi9tnxziucCm9SEnwu?=
+ =?windows-1256?Q?YG1zJABctSKl+0FMN4gAOo3E1ZO/xsnqZtWiq0BDz5LAMhfDmPOhX6fh?=
+ =?windows-1256?Q?wt7ZRhG+oCyaLWhXwqqfZJc4G6DRIt9YncvfzTicMpSyVs9/JI2w0Vq0?=
+ =?windows-1256?Q?msApIW7/BZFTzKDYKHs5hMPqrk1Go8+0OVN0+10PFJOVMSLsEe+Z4Ee2?=
+ =?windows-1256?Q?89KVFJU5GJkNQl0GQGu5w8A44aJgXYjm1opdyAcV+8XQz3ACJnhpdn7m?=
+ =?windows-1256?Q?40pwparLyvl8SNxJ8YG+wwbvS8blpZYMvzvrJqe5zF6CGTc0jxVu0qsW?=
+ =?windows-1256?Q?4qK9trQq/37tdm7xjrgAFPgo/w1L/9U8N2uKEasUqWX/06rwK9Uca+Qk?=
+ =?windows-1256?Q?NJrkeDwxIN7YkNVOiw6yqVyPCQHHyAWDCemHieqfPnLvNNZdvgaXwcuf?=
+ =?windows-1256?Q?e0V5sGwFW8uh8sUVHf/n2OGn1ijjeE3ecjVaVEWGjYdvz/bhipFv9Wjc?=
+ =?windows-1256?Q?xtbwufqfTYEc+Js42iDv2dRW?=
+MIME-Version: 1.0
+
+--75f4f564612856e40a41aa0b52d6e669ba1b24e8cdcee7e21e91715be578
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=ascii
+
+Zoom Phone Service Outage
+
+Incident resolved
+This incident has been resolved.
+
+Time posted
+Sep  8, 15:47 EDT
+
+Components Affected
+Atlas Alert
+
+View 2 previous incident updates https://stspg.io/1v2mwxhc7m3q
+
+You received this email because you are subscribed to MIT Atlas Alerts's service status notifications.
+Manage your subscription: https://atlas-alerts.mit.edu/subscriptions/p7xg6vtrnb9n/edit
+--75f4f564612856e40a41aa0b52d6e669ba1b24e8cdcee7e21e91715be578
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=ascii
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+><title></title><!--[if !mso]><!-- --><meta http-equiv=3D"X-UA-Compatible" =
+content=3D"IE=3Dedge"><!--<![endif]--><meta name=3D"viewport" content=3D"wi=
+dth=3Ddevice-width,initial-scale=3D1"><style type=3D"text/css">#outlook a {=
+ padding:0; }
+          .ReadMsgBody { width:100%; }
+          .ExternalClass { width:100%; }
+          .ExternalClass * { line-height:100%; }
+          body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-=
+size-adjust:100%; }
+          table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-tab=
+le-rspace:0pt; }
+          img { border:0;height:auto;line-height:100%; outline:none;text-de=
+coration:none;-ms-interpolation-mode:bicubic; }
+          p { display:block;margin:13px 0; }</style><!--[if !mso]><!--><sty=
+le type=3D"text/css">@media only screen and (max-width:480px) {
+            @-ms-viewport { width:320px; }
+            @viewport { width:320px; }
+          }</style><!--<![endif]--><!--[if mso]>
+        <xml>
+        <o:OfficeDocumentSettings>
+          <o:AllowPNG/>
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+        </xml>
+        <![endif]--><!--[if lte mso 11]>
+        <style type=3D"text/css">
+          .outlook-group-fix { width:100% !important; }
+        </style>
+        <![endif]--><style type=3D"text/css">@media only screen and (min-wi=
+dth:480px) {
+        .mj-column-per-100 { width:100% !important; max-width: 100%; }
+.mj-column-per-85 { width:85% !important; max-width: 85%; }
+      }</style><style type=3D"text/css"></style><style type=3D"text/css">.e=
+mail-logo-image {
+  max-width: 320px;
+  max-height: 100px;
+  width: auto !important;
+  height: auto !important;
+}
+
+@media only screen and (max-width:450px) {
+  .email-logo-image {
+    max-width: 250px;
+  }
+
+  .content-section > table > tbody > tr > td {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .incident-link > table > tbody > tr > td {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .header-spacing > table > tbody > tr > td {
+    padding-top: 45px !important;
+    padding-bottom: 30px !important;
+  }
+}
+
+/* border-radius, border, and border-collapse: collapse do not combine well=
+. */
+/* when we do have embedded (discrete) css, override this to put the border=
+ on the outside div, not on the table cell. */
+div.content-outer > table,
+div.content-outer > table > tbody > tr > td {
+  border: none !important;
+}
+
+div.content-outer {
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+  border: 1px solid #E0E0E0;
+}
+
+.email-body a, .email-body a:hover, .email-body a:visited {
+  color: #3498db !important;
+}
+
+
+
+      table, td {
+        border-collapse: separate;
+      }
+
+      div.content-outer > table {
+        background: #ffffff;
+        border: 1px solid #E0E0E0;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+      }
+
+      div.outlook-affected-components-column table table {
+        table-layout: fixed;
+      }
+
+      div.incident-link > table {
+        border-collapse: collapse;
+        border-top: 1px solid #E0E0E0;
+        vertical-align: middle;
+      }
+
+      div.incident-link link {
+        padding: 25px 0;
+      }
+
+      .email-body img {
+        max-width: 100%;
+      }
+
+      div.footer-text a {
+        color: #3498db;
+      }  td {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto=
+', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-se=
+rif !important;
+      }</style></head><body style=3D"font-size: 16px; line-height: 24px; fo=
+nt-weight: normal; font-style: normal; background-color: #fcfcfc;"><div sty=
+le=3D"display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0=
+px;max-width:0px;opacity:0;overflow:hidden;"> Resolved - 1 component affect=
+ed - This incident has been resolved. &#8204;&nbsp;&#8204;&nbsp;&#8204;&nbs=
+p;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&=
+nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#820=
+4;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#=
+8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp=
+;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&n=
+bsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204=
+;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8=
+204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;=
+&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nb=
+sp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;=
+&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#82=
+04;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&=
+#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbs=
+p;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&=
+nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#820=
+4;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#=
+8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp=
+;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&n=
+bsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204=
+;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8204;&nbsp;&#8=
+204;&nbsp;&#8204;&nbsp;</div><div style=3D"background-color:#fcfcfc;"><!--[=
+if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" class=3D"header-spacing-outlook" style=3D"width:600px;" width=3D=
+"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:=
+exactly;"><![endif]--><div class=3D"header-spacing" style=3D"Margin:0px aut=
+o;max-width:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr><t=
+d style=3D"direction:ltr;font-size:0px;padding:0;padding-bottom:30px;paddin=
+g-left:0px;padding-right:0px;padding-top:30px;text-align:center;vertical-al=
+ign:top;"><!--[if mso | IE]><table role=3D"presentation" border=3D"0" cellp=
+adding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-align:t=
+op;width:600px;" ><![endif]--><div class=3D"mj-column-per-100 outlook-group=
+-fix" style=3D"font-size:13px;text-align:left;direction:ltr;display:inline-=
+block;vertical-align:top;width:100%;"><table border=3D"0" cellpadding=3D"0"=
+ cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><td styl=
+e=3D"vertical-align:top;padding:0;"><table border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" role=3D"presentation" width=3D"100%"><tr><td align=3D"cent=
+er" style=3D"font-size:0px;padding:0;word-break:break-word;"><div style=3D"=
+font-size:13px;line-height:1;text-align:center;color:#000000;">  <h1 class=
+=3D"text_logo" style=3D"margin: 0; font-weight: normal; padding-left: 20px;=
+ padding-right: 20px; font-size: 40px; color: #333333;">MIT Atlas Alerts</h=
+1>  </div></td></tr></table></td></tr></tbody></table></div><!--[if mso | I=
+E]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if ms=
+o | IE]></td></tr></table><table align=3D"center" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" class=3D"content-outer-outlook" style=3D"width:600=
+px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line=
+-height-rule:exactly;"><![endif]--><div class=3D"content-outer" style=3D"ba=
+ckground:#ffffff;background-color:#ffffff;Margin:0px auto;border-radius:4px=
+;max-width:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" role=3D"presentation" style=3D"background:#ffffff;backgrou=
+nd-color:#ffffff;width:100%;border-radius:4px;"><tbody><tr><td style=3D"bor=
+der:solid 1px #E0E0E0;direction:ltr;font-size:0px;padding:0px;text-align:ce=
+nter;vertical-align:top;"><!--[if mso | IE]><table role=3D"presentation" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"content-sec=
+tion-outlook" width=3D"600px" ><table align=3D"center" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" class=3D"content-section-outlook" style=3D"wid=
+th:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;ms=
+o-line-height-rule:exactly;"><![endif]--><div class=3D"content-section" sty=
+le=3D"Margin:0px auto;max-width:600px;"><table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"width:=
+100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:0;paddin=
+g-left:40px;padding-right:40px;text-align:center;vertical-align:top;"><!--[=
+if mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0"><tr><td class=3D"" width=3D"600px" ><table align=3D"center"=
+ border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" style=3D"width=
+:520px;" width=3D"520" ><tr><td style=3D"line-height:0px;font-size:0px;mso-=
+line-height-rule:exactly;"><![endif]--><div style=3D"Margin:0px auto;max-wi=
+dth:520px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr><td style=
+=3D"direction:ltr;font-size:0px;padding:0;padding-top:50px;text-align:cente=
+r;vertical-align:top;"><!--[if mso | IE]><table role=3D"presentation" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"ver=
+tical-align:top;width:520px;" ><![endif]--><div class=3D"mj-column-per-100 =
+outlook-group-fix" style=3D"font-size:13px;text-align:left;direction:ltr;di=
+splay:inline-block;vertical-align:top;width:100%;"><table border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody=
+><tr><td style=3D"vertical-align:top;padding:0;"><table border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tr><td =
+align=3D"left" style=3D"font-size:0px;padding:0;word-break:break-word;"><di=
+v style=3D"font-size:13px;line-height:1;text-align:left;color:#000000;"><ta=
+ble cellpadding=3D"0" cellspacing=3D"0" height=3D"0" width=3D"32" padding=
+=3D"0" style=3D"Margin:0;border-top:3px solid #e74c3c;"><tr><td></td></tr><=
+/table> <table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0"><tr><td height=3D"20" style=3D"height:20px;"></td></tr></table>
+ <h2 style=3D"margin: 0; font-weight: normal; font-size: 24px; line-height:=
+ 32px; color: #333333;">Zoom Phone Service Outage</h2> <table role=3D"prese=
+ntation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td height=3D=
+"35" style=3D"height:35px;"></td></tr></table>
+ <span style=3D"font-size: 18px;line-height: 1.5;color: #333333;">Incident =
+resolved</span> <table role=3D"presentation" border=3D"0" cellpadding=3D"0"=
+ cellspacing=3D"0"><tr><td height=3D"12" style=3D"height:12px;"></td></tr><=
+/table>
+ <span class=3D"email-body" style=3D"font-size: 14px;line-height: 1.5;color=
+: #333333;">This incident has been resolved.</span> <table role=3D"presenta=
+tion" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td height=3D"35=
+" style=3D"height:35px;"></td></tr></table>
+ <h3 style=3D"margin: 0; font-weight: normal; font-size: 14px; line-height:=
+ 1.5; color: #AAAAAA;">Time posted</h3> <table role=3D"presentation" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td height=3D"12" style=3D"h=
+eight:12px;"></td></tr></table>
+ <span style=3D"font-size: 14px;line-height: 1.5;color: #333333;">Sep  8, 1=
+5:47 EDT</span> <table role=3D"presentation" border=3D"0" cellpadding=3D"0"=
+ cellspacing=3D"0"><tr><td height=3D"35" style=3D"height:35px;"></td></tr><=
+/table>
+   <h3 style=3D"margin: 0; font-weight: normal; font-size: 14px; line-heigh=
+t: 1.5; color: #AAAAAA;">Components affected</h3> <table role=3D"presentati=
+on" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td height=3D"15" =
+style=3D"height:15px;"></td></tr></table>
+ <table cellspacing=3D"0" cellpadding=3D"0" class=3D"affected-component" st=
+yle=3D"font-family: inherit;margin: 0 20px 0 0; padding: 0 0 15px 0; displa=
+y: inline-block; color: #333333; font-size: 14px; max-width: 100%;  overflo=
+w: hidden; text-overflow: ellipsis; white-space: nowrap;"><tr><td style=3D"=
+padding-right: 5px;"><img width=3D"15" height=3D"15" alt=3D"Operational" st=
+yle=3D"vertical-align: middle;" src=3D"https://dka575ofm4ao0.cloudfront.net=
+/assets/pages/manage/font_awesome_icons/operational-bd56b9a77953a492054b9fa=
+c76372f877402640990002ec53d717aa59e1d2d80.png"></td><td style=3D"vertical-a=
+lign: middle;">Atlas Alert</td></tr></table>  <table role=3D"presentation" =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td height=3D"40" styl=
+e=3D"height:40px;"></td></tr></table>
+  </div></td></tr></table></td></tr></tbody></table></div><!--[if mso | IE]=
+></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso =
+| IE]></td></tr></table></td></tr></table><![endif]--></td></tr></tbody></t=
+able></div><!--[if mso | IE]></td></tr></table></td></tr><tr><td class=3D"i=
+ncident-link-outlook" width=3D"600px" ><table align=3D"center" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" class=3D"incident-link-outlook" style=
+=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size=
+:0px;mso-line-height-rule:exactly;"><![endif]--><div class=3D"incident-link=
+" style=3D"Margin:0px auto;max-width:600px;"><table align=3D"center" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"w=
+idth:100%;"><tbody><tr><td style=3D"border-top:1px solid #E0E0E0;direction:=
+ltr;font-size:0px;padding:0;padding-left:40px;padding-right:40px;text-align=
+:center;vertical-align:top;"><!--[if mso | IE]><table role=3D"presentation"=
+ border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=
+=3D"vertical-align:top;width:520px;" ><![endif]--><div class=3D"mj-column-p=
+er-100 outlook-group-fix" style=3D"font-size:13px;text-align:left;direction=
+:ltr;display:inline-block;vertical-align:top;width:100%;"><table border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"=
+><tbody><tr><td style=3D"vertical-align:top;padding:0;"><table border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><=
+tr><td align=3D"left" style=3D"font-size:0px;padding:0;padding-top:25px;pad=
+ding-bottom:25px;word-break:break-word;"><div style=3D"font-size:13px;line-=
+height:1;text-align:left;color:#000000;"> <a class=3D"link" style=3D"font-s=
+ize: 14px; color: #3498db" href=3D"https://stspg.io/1v2mwxhc7m3q">View 2 pr=
+evious incident updates</a> </div></td></tr></table></td></tr></tbody></tab=
+le></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody>=
+</table></div><!--[if mso | IE]></td></tr></table></td></tr></table><![endi=
+f]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><t=
+able align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" clas=
+s=3D"" style=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0=
+px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style=3D"M=
+argin:0px auto;max-width:600px;"><table align=3D"center" border=3D"0" cellp=
+adding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"width:100%;">=
+<tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:0;padding-top:2=
+0px;text-align:center;vertical-align:top;"><!--[if mso | IE]><table role=3D=
+"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td cla=
+ss=3D"" style=3D"vertical-align:top;width:510px;" ><![endif]--><div class=
+=3D"mj-column-per-85 outlook-group-fix" style=3D"font-size:13px;text-align:=
+left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><ta=
+ble border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" =
+width=3D"100%"><tbody><tr><td style=3D"vertical-align:top;padding:0;"><tabl=
+e border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" wi=
+dth=3D"100%"><tr><td align=3D"center" style=3D"font-size:0px;padding:0;padd=
+ing-right:20px;padding-left:20px;word-break:break-word;"><div style=3D"font=
+-size:13px;line-height:1;text-align:center;color:#000000;"><div class=3D"fo=
+oter-text" style=3D"line-height:1.5;font-size: 12px;color:#AAAAAA;"> <p>You=
+ received this email because you are subscribed to MIT Atlas Alerts's servi=
+ce status notifications.</p>
+ </div> <table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0"><tr><td height=3D"25" style=3D"height:25px;"></td></tr></table>
+  <a style=3D"font-size: 12px; color: #AAAAAA" href=3D"https://atlas-alerts=
+.mit.edu/subscriptions/p7xg6vtrnb9n/edit">Manage your subscription</a> <tab=
+le role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><=
+tr><td height=3D"25" style=3D"height:25px;"></td></tr></table>
+  <span class=3D"footer_powered_by" style=3D"color: #AAAAAA;font-size: 12px=
+;"><a style=3D"color: #AAAAAA;font-size: 12px;" href=3D"https://www.atlassi=
+an.com/software/statuspage?utm_source=3Demail&amp;utm_medium=3Dpowered-by&a=
+mp;utm_campaign=3Datlas-alerts.mit.edu&amp;utm_content=3DSP-notifications">=
+Powered by Atlassian Statuspage</a> </span> <table role=3D"presentation" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td height=3D"60" style=
+=3D"height:60px;"></td></tr></table>
+ </div></td></tr></table></td></tr></tbody></table></div><!--[if mso | IE]>=
+</td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso |=
+ IE]></td></tr></table><![endif]--></div></body></html>
+
+--75f4f564612856e40a41aa0b52d6e669ba1b24e8cdcee7e21e91715be578--

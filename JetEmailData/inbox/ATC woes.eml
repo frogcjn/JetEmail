@@ -1,0 +1,640 @@
+Received: from SJ2PR01MB8050.prod.exchangelabs.com (2603:10b6:a03:4d3::17) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 6 Dec 2023 04:15:48
+ +0000
+Received: from BL1PR13CA0349.namprd13.prod.outlook.com (2603:10b6:208:2c6::24)
+ by SJ2PR01MB8050.prod.exchangelabs.com (2603:10b6:a03:4d3::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7068.25; Wed, 6 Dec 2023 04:15:45 +0000
+Received: from BL6PEPF0001AB4F.namprd04.prod.outlook.com
+ (2603:10b6:208:2c6:cafe::5c) by BL1PR13CA0349.outlook.office365.com
+ (2603:10b6:208:2c6::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.24 via Frontend
+ Transport; Wed, 6 Dec 2023 04:15:45 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.99)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ gmail.com discourages use of 18.9.1.99 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.99) by
+ BL6PEPF0001AB4F.mail.protection.outlook.com (10.167.242.73) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7068.20 via Frontend Transport; Wed, 6 Dec 2023 04:15:45 +0000
+Received: from oc11expo8.exchange.mit.edu (18.9.4.13) by
+ oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 5 Dec 2023 23:15:41 -0500
+Received: from oc11exhyb7.exchange.mit.edu (18.9.1.112) by
+ oc11expo8.exchange.mit.edu (18.9.4.13) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Tue, 5 Dec 2023 23:15:40 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
+ by oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Tue, 5 Dec 2023 23:15:40 -0500
+Received: from SJ0PR03CA0218.namprd03.prod.outlook.com (2603:10b6:a03:39f::13)
+ by SA1PR01MB8296.prod.exchangelabs.com (2603:10b6:806:388::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.34; Wed, 6 Dec 2023 04:15:36 +0000
+Received: from DS1PEPF0001709A.namprd05.prod.outlook.com
+ (2603:10b6:a03:39f:cafe::6a) by SJ0PR03CA0218.outlook.office365.com
+ (2603:10b6:a03:39f::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34 via Frontend
+ Transport; Wed, 6 Dec 2023 04:15:36 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.208.174)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of gmail.com designates
+ 209.85.208.174 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.208.174; helo=mail-lj1-f174.google.com; pr=C
+Received: from mail-lj1-f174.google.com (209.85.208.174) by
+ DS1PEPF0001709A.mail.protection.outlook.com (10.167.18.104) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7068.20 via Frontend Transport; Wed, 6 Dec 2023 04:15:35 +0000
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2ca0f21e48cso29489731fa.2;
+        Tue, 05 Dec 2023 20:15:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701836134; x=1702440934; darn=mit.edu;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Lc5FcreTazd7LBn0oDtPdy2qe5FvIKvps6FtBb/fMvI=;
+        b=Bs6jjn3uEFf93KdjKWopZa8cB736m447yO/vOvpMIBV6MeHrfot0nFVWQy+83qklfZ
+         hZs1OB9ehbslYb5VHzSSQbd8s9ohriCwz/NevRtMmExGa/Vsa0zjGrH+IAF271FGXKn4
+         O8/DrHzFuM1o7e+++clKAXzRh9RQIXE8uHAriDNq9wQYPu9YypokwvVy2KWEQC7x6Gib
+         2Fa8hIF8AklQkvewWEIrwyAvo5TEMAP4kGuhH0efsmXBSlt2/7l+/nCOAPscuQz0mFJA
+         WXFjjq0LkfJPCSnXxx7qStocmsjaAIlSPS+Ubq+J0F0EoPB0XySAurXjIrg+Wbrc+OxJ
+         TxkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701836134; x=1702440934;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lc5FcreTazd7LBn0oDtPdy2qe5FvIKvps6FtBb/fMvI=;
+        b=Ntx/XAwjr6vxDCgreY8TPFH5aamUJSPrZG7hu4f7eB2pyLLpbWrs/31cloOvgq6YK6
+         KgDPMdDUEX/4VI+5K6ojvClYMvRYDO2ZkF2OvFLZG/w1VUKHtqjny7ijk+FxU0xshsbY
+         SBYcIdauhsKj9ht/X3FvELOOpydWxC3j3mccGFVbLkgx9gLryFY8ShuP+mCZor5dk8+p
+         DnYE+2P1QhCEMS4TbYUa3aFu18NXUE/YP6v6kHQQbk7c8DoWMoxBtWdBz4jhtkD90V7r
+         Cv/sul221g9a8zcOu6CWCi/beE928bSuGl0ZWWJIJhWaZXtge+PCWCouDybExH+KPFoa
+         D9AQ==
+X-Gm-Message-State: AOJu0YweMiu2lXj93zaPXgzpmyizAJZsmx7g+ZvnjQBN8FObMrT7Z10p
+	rHJ6aQlgWa1sNxXQIM9gFd8/I6lDbvZeMJamNoQHF1bnqjA91g==
+X-Google-Smtp-Source: AGHT+IHIwBQi6PVKGzkswT2MwnyNaPS0tioAITF77ECmYNrcd18ZbKlkz1WwO52nVNBjxf0dxxJT8YFXp8n2ENz6Oks=
+X-Received: by 2002:a05:6512:2018:b0:50b:f877:6d8f with SMTP id
+ a24-20020a056512201800b0050bf8776d8fmr134707lfb.27.1701836133902; Tue, 05 Dec
+ 2023 20:15:33 -0800 (PST)
+From: Nancy Leveson <leveson.nancy8@gmail.com>
+Date: Tue, 5 Dec 2023 23:15:21 -0500
+Message-ID: <CABMQRd4S6=+mmMR69cC=j5rrvuGBZh=ZTXDV09EzRK-pvHE83w@mail.gmail.com>
+Subject: ATC woes
+To: Isabel de Luis <ideluis@olin.edu>, Andrew Kopeikin <kopeikin@mit.edu>, Pauline Harrington <ph1@mit.edu>, 
+	Noam David Eisen <eisenn@mit.edu>, Adam Munekata <AMunekata@outlook.com>, 
+	Cecilia Perez Gago <cecipg@mit.edu>, Lawrence Wong <l_wong@mit.edu>, Elizabeth White Baker <bakerew@vcu.edu>, 
+	Andy Canady <canadyam@mit.edu>, Natalie Basnight <nbasnight75@gmail.com>, John Thomas <jthomas4@mit.edu>, 
+	Rodrigo Lopes Rose <rlrose@mit.edu>, Michael Stone <michael.r.stone@gmail.com>, 
+	"WILLIAM E JR Col USAF AETC AWC/DEW YOUNG (william.young.3@us.af.mil)" <wyoung@mit.edu>, Michael Sebasti Schmid <schmidm@mit.edu>, Sarah Summers <sesumme@gmail.com>, 
+	John Thomas Clarke Barstow <jbarstow@mit.edu>, Alexander Hillman <ahillman@mit.edu>, Brittany Bishop <brit901@mit.edu>, 
+	Justin Wei Siang Poh <jpoh@mit.edu>, Shem Malmquist <shem.malmquist@gmail.com>, 
+	Kristen Joyce Ammons <kjammons@mit.edu>, Natalie Ann Basnight <natbas35@mit.edu>, Tim Blackford <tblackfd@mit.edu>, 
+	Madison M Bronnimann <bronnima@mit.edu>, Braden Corrigan Brower <bcbrower@mit.edu>, Jiannan Cao <jiannan@mit.edu>, 
+	Don Duval <donduval@mit.edu>, Joseph Estep <joeestep@mit.edu>, 
+	Lauren E Gutierrez <laureng2@mit.edu>, Jack Martin Hamel <jmhamel@mit.edu>, 
+	Francisco Javier Jeldres <fjeldres@mit.edu>, Billy Kline <wkline@mit.edu>, Ayaka Miyamoto <ayakam@mit.edu>, 
+	Connor Daniel Rude <rudc6118@mit.edu>, Ahaana Sarup <asarup@mit.edu>, Anup Sreekumar <anupsk@mit.edu>, 
+	Kensuke Suzuki <ksuzuki1@mit.edu>, Christopher Douglas Tommila <ctommila@mit.edu>, Stephanie Walker <steph151@mit.edu>, 
+	Yutaro Watanabe <yutaro22@mit.edu>, Bingnan Zhou <bnzhou@mit.edu>, Carissma McGee <cmcgee32@mit.edu>, 
+	Joana N Nikolova <jonik@mit.edu>
+Content-Type: multipart/alternative; boundary="0000000000003a2c28060bcf9ad8"
+Return-Path: leveson.nancy8@gmail.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ DS1PEPF0001709A:EE_|SA1PR01MB8296:EE_|BL6PEPF0001AB4F:EE_|SJ2PR01MB8050:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: b414fbc6-68ea-4c01-8b2b-08dbf6120506
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?j0hHs6DGBnUfO2pIqFZA/GhfNTDleBdKSJbVRvOtIyznx6YrX4+A6/Ctqqn2?=
+ =?us-ascii?Q?rQOPlsChxMnsSEoDspB0X9GQPMWQH4jZvvA2WRgLhdxJM+CvBASYTm+dpjMo?=
+ =?us-ascii?Q?seSfBmcV+fEee+VizUo7zWAYoRN2g4PMEGvQW5r7tTfvxMP++rTkV7uERN8f?=
+ =?us-ascii?Q?l3ptd0ZlF6i+GB5/KFhU8M8Rv1c5w/kYku+cjB05++T5GJwcMSpNYqQoUJme?=
+ =?us-ascii?Q?xx5UUpMdvt//rkvGVfrQSpNvKqhsjDfZ4VcnR13fJw4Pv6Q8pDGvlWHAcU6f?=
+ =?us-ascii?Q?d/BOilfvpLpOQPvEcG4zOomntviDgxwJ5BUIkNziHP+uTiyHnRLlvFyCe6Yc?=
+ =?us-ascii?Q?a3ctJPX+jOxZ9PwP2f+HNN4Y+KNUDaWp5KAp5pZf2WYl9BSmsRK7ocjunyuS?=
+ =?us-ascii?Q?asfW1FEHamRRIz4V62Vqlrk/Z4UDz1ELv/NlFVc6urgYSWXEz7KrGvUdvEoP?=
+ =?us-ascii?Q?6hm9HNi5lOMW/CdOF5ThXCHCSwBxDrxTJcH8Y7e32TEUwIeP5Pinj7C9EWXS?=
+ =?us-ascii?Q?z/oH2hMtCQYxOpqPDREzpisU1ZNQKoCN84k4xEfM9a+UtimXNygjfkIS/+i3?=
+ =?us-ascii?Q?o0aE8NzK3cJW3T4X96BNxs6VgAm+9AhPA0LAuK6+kmQf4XU5COGK7sOWxMsL?=
+ =?us-ascii?Q?pK273OjnfMDsgNHSk287f9VA6jDL2DoYeuXfu2UcdmvHGRyheh9uk0+ZnyDS?=
+ =?us-ascii?Q?9QAbJYyJISmxjN+EUTIBRddoWZR2R+nmb+DtQ02kKTwZdqax2CNKscAFK7Rh?=
+ =?us-ascii?Q?c6Mt/+fprEBpXvOkD6qJ6MO6iYmwB2xGjexr2NFRvDrnWhPwD33dklL0y3gp?=
+ =?us-ascii?Q?y7ttKkcJHnO4N/OXgQlzB2xd9tP2Rd69+5xrQefu+IHLXUMxBBbQXib/+U5d?=
+ =?us-ascii?Q?9tl0VaB2NC4wJdqQn83MMNYbq48GeOemnE7DcLCihHgeqMSdYzE5KibmQ05A?=
+ =?us-ascii?Q?7VWTJcwPJBIM6DTdgLUqFzrtJquBC71Nc9teYs/QI02aV752SERZznF/qDDb?=
+ =?us-ascii?Q?CzhogUc1SfmRPtqLV7L5jVGxsQpuxVz4uhgJElqcPE7nV1qj42pPpdkpdzIs?=
+ =?us-ascii?Q?EXa4UhkhTp/y+AsXmlUSIveT4iJZLdfRbvmRgQxv6V58Vf6vAy1Bh7h1vmoQ?=
+ =?us-ascii?Q?05w1Czqi0LoQRHJE26UUk/aGUYACTwn4VohtMenDq5BWF/dM7P1zJWkGcm4t?=
+ =?us-ascii?Q?FyupLMPu9Ol6ELc5zh3t+eot4JehWv46ot+8NruvuXVaqsBPknXlufjyncI1?=
+ =?us-ascii?Q?JMtFIV1NABmJ3IRJA1x1NWKEIDsgKEbP5aEqQPsIwwbGLxU4F8YMZGOoYbB+?=
+ =?us-ascii?Q?yfocik4Tiz0Zf4yIbLRFg94YLRQ1qMF5W6q1Ap3q9+ozJCVBUCnJYZfdsjdc?=
+ =?us-ascii?Q?OzvPPcdok/rVHIi+lsK+cfOYceCGkbqHuIWHkWxZgGWllvnowINBlk+WHkWE?=
+ =?us-ascii?Q?06uLxU3cicF9ukqFCDdCr2/5jikynOfJn17XhllR0qcf90ksOIMq58XBiUS/?=
+ =?us-ascii?Q?n+OJrV2cP23dACs2aCsY2eM92x/J6qgzlS/xzf5o876x01HOLhgChd4dSgtl?=
+ =?us-ascii?Q?RJtenj0i42K1Kx05mak3zaTxAovXgSzcdLdEb5FeXmaVmXu7vu/A4hT72QPv?=
+ =?us-ascii?Q?tLVP8KmgbZ+GcilW8DNV5K4VGI4gbVj4C4sTFs0VAYNXUpUd09MaVrCaEFgs?=
+ =?us-ascii?Q?VXJOlp8Q+wA8V5KF5zDRJiP/AuHNe9+jwQWDiKy4sxXjnHWdjBdfha1/ctvY?=
+ =?us-ascii?Q?z78C4/3qqg=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.208.174;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-lj1-f174.google.com;PTR:mail-lj1-f174.google.com;CAT:NONE;SFS:(13230031)(4636009)(451199024)(66899024)(7116003)(82870400002)(4006050)(5660300002)(7416002)(921008)(30864003)(86362001)(55446002)(40140700001)(3480700007)(33964004)(966005)(6666004)(83380400001)(26005)(82202003)(73392003)(336012)(1096003)(8676002)(7596003)(7636003)(356005)(450100002)(110136005)(42186006)(75640400001)(76482006)(166002)(35244002)(350894002);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB8296
+X-OrganizationHeadersPreserved: SA1PR01MB8296.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb7.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb7.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo8.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 06 Dec 2023 04:15:45.7216
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ b414fbc6-68ea-4c01-8b2b-08dbf6120506
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: BL6PEPF0001AB4F.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: BL6PEPF0001AB4F.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ BL6PEPF0001AB4F.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DS1PEPF0001709A.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 171902f1-2d3a-4644-aba4-08dbf611ff33
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.99;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb3.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2023 04:15:45.4716
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b414fbc6-68ea-4c01-8b2b-08dbf6120506
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.99];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ DS1PEPF0001709A.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR01MB8050
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.3229163
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7068.025
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?aE5NMmdjU25MRjBrbE55bkJERFVja3RRQXZOQ2tDbCtVNmkzM2o0OVVKOThv?=
+ =?utf-8?B?RkExV2tZZUV5SmRkSXVrQllBQjJPMlI2b3FjMkFxbmptcG8vQ0JxU2t4dy94?=
+ =?utf-8?B?SHptb21PNWRHdVJiM0FsSGxLcUN4M01OMnhWT1lPZGxIMXlQQm5QcXhHTkxo?=
+ =?utf-8?B?bTBJZ3ZqalFuM0ZFb1RkV010Z2NQa1R1a3l2NjBpMzU1cUFaSG03alpsd2FW?=
+ =?utf-8?B?NTFXZVVPR3JpeVltU0dQSHZZRTlHYTc2dlNsSVpJZXg5TDBCWTQyTXlXMW5H?=
+ =?utf-8?B?T3lwVmpiRnlEdFYwK2Q4NVFKUWpuRER2ZG1xMHN4OGRITlNuMVlYSldtS1Vz?=
+ =?utf-8?B?RFg2bTh2SmxrR0UxQUR2OUNCRk5NSnJKc3hPQUgyd25XNHZpdXlZZ0prcWZF?=
+ =?utf-8?B?QUJPWFBDRGhUbGxScW9vem5sZDVHUXpDZTI2US8rdGN1WTRjeENONitKdCth?=
+ =?utf-8?B?eUxiaS9Tc2s5SW9JU3NLc0lLNzRIaEJCYVBTRHZxOVRGNFNrZzNVRnZTcWJw?=
+ =?utf-8?B?U2c4U1hySVhPdE9Ndy80dTBDU05QbEdPTUNvOWt5UDhXNmZGQkI2UGtFWlZX?=
+ =?utf-8?B?azRJWnN6Slk5bGlSTkt5eXNmQURiZVF5OU5ySEJsdHlFajVxVmhnQ3U1eGM1?=
+ =?utf-8?B?cE5xdS9BcmJWM09INi9NcWJzV29Ock9qUlkxMnJuRGE1aW14Z1M0RkNLWkpx?=
+ =?utf-8?B?VUg5cUp1dXZMcHBLZGVMRzNiK3VqWVlRYjR5MERmRlRCY1czUFdkNjdDR0Zo?=
+ =?utf-8?B?YnJIMWx1L01EdWFicUw3MExrQjZJV1h0ejltbDdIb0pPbTRUNjhaSmFOZyt1?=
+ =?utf-8?B?d1VqZ25yRFdtRkxuU01KU3NjNGVaSnhZZ29nNUo1Y1hGaVhGR3pDYXpjZ3V0?=
+ =?utf-8?B?bTR4T2VuV0xPd0k3MG1VUWN0Q2lNa3JLdlk4cGhVWGlrNlZmWEkzNVNCWFJm?=
+ =?utf-8?B?MlFQc28reUV3RTRaZElhNEh6NmlpTkdsdWFtS0dNcmVDS1JJTmNzNmZ5ZHpt?=
+ =?utf-8?B?MmVzY3RIN1lQbTdyRUxHa2N4WjdVUkc3VndQQ0JNaFluVkQydHAyYWVXSUh0?=
+ =?utf-8?B?dVhzczMvcE5RUnJZMTQxWmRPQWJkVU5GekxQdHVMZXVpTWpjUVMvUFFSYzBN?=
+ =?utf-8?B?Rk5mQ1RJQ1lVMkJFMlNrSjl2NmQ4V3gxcUZPLzBhR2lYYVlSUzZRb0pBaUlU?=
+ =?utf-8?B?S3IzcTNEV1BxRU91a1d4d3hkV09aZXFiMWNKMnlpK29PdHVJV2VWc0czRGtj?=
+ =?utf-8?B?cDVxWjFIRTRXVVIwV1Qra2U3RkM3TTRZNjArQU02bGpTOTdOSFFHN0ZvTmtU?=
+ =?utf-8?B?ZXFWWjVobjZFSHQ4SjgzR05CelNpZk1VUFlWdERNa0R5UVZHQm5XNDZFQmdX?=
+ =?utf-8?B?SGc2OTRVampDanZjRGIrRUhieWhXOVRZZWtzWmN5T1FQS3dFQmpNS0xxZE5v?=
+ =?utf-8?B?VTNKK0dwZ0lrdy9IeU5SMVEvaTlsNWF3a280ZmF3bW9ISVJkQXpRMU53WWNS?=
+ =?utf-8?B?TEFQWXFXb1VNejhYMUYwallqZEJ3N3V4K0N4bnVWOFRId1ZJZlZPR3hEQWdq?=
+ =?utf-8?B?YUJSU0U5SWgxeCs4RndHRFlsNnUxOGRlVFExdU5FU1FWY3BLa0lQTUJ0OVdo?=
+ =?utf-8?B?aUhUNU8yYXB4cmFnMDQ5ZGNXR2hFMTBjNWdWZE1lVWJJRHM5SUJPSDlYWUNo?=
+ =?utf-8?B?Yy9HRXZVSmlBU3l2UnpsWHVsWURnS0dHcDR2SlMrL1FTbEtjaXNpaXNyV3p3?=
+ =?utf-8?B?dGc3Wk5IRHhRNDNtTzl6TjB6NXpac0RVUmx1ZTR2WllRb0RjdzhOSnRoTW9K?=
+ =?utf-8?B?bUNrZ25tVmZYMlBPSFR1OFFjR3lKZjBCaWRaN0dHRmhKOCs0akZCU09VV3RR?=
+ =?utf-8?B?c3hRVXcwaXdydkF3b1g0Ly9MSFYvU0pxaWRIdWVZcUs1OWFkQUlYbGVzc3cx?=
+ =?utf-8?B?N2dBNXo3dlg3WDhkVU95YnRzZTluK3Y1VlVpNnZvRkFJTTBtckp1ODhjM0o1?=
+ =?utf-8?B?MFdBNkhKdm43d1pHRW54b3c0VTBKUlM2cDFlOFQ0blJ6VitLVHBYK2lIYk5R?=
+ =?utf-8?B?THU5NVc2Umx0N3I4YjFONUdqLzJLaDVZMDdzM1g3ZCtnZUZJTUszYVgwQnZU?=
+ =?utf-8?B?bm1aaDRQeDRNTGJUNDdTS1pKbzNkNlNSNUM0dzFnOXU2Z2YwTEJoUG55SGJu?=
+ =?utf-8?Q?sl/MvuQUYhDpInebG2ryfkS7bYmMGw3OArQKeZ+eYz52?=
+MIME-Version: 1.0
+
+--0000000000003a2c28060bcf9ad8
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Air traffic controllers pushed to the brink
+Dec. 4, 2023 at 3:41 pm, Seattle Times
+[
+https://www.seattletimes.com/business/air-traffic-controllers-pushed-to-the=
+-brink/?utm_source=3Dmarketingcloud&utm_medium=3Demail&utm_campaign=3DEveni=
+ng+Brief+12-04-23_12_4_2023&utm_term=3DActive%20subscriber
+]
+By EMILY STEEL and SYDNEY EMBER
+The New York Times
+One air traffic controller went into work drunk this summer and joked about
+=E2=80=9Cmaking big money buzzed.=E2=80=9D Another routinely smoked marijua=
+na during
+breaks. A third employee threatened violence and then =E2=80=9Caggressively=
+ pushed=E2=80=9D
+a colleague who was directing airplanes.
+
+The incidents were extreme examples, but they fit into a pattern that
+reveals glaring vulnerabilities in one of the most important protective
+layers of the nation=E2=80=99s aviation safety system.
+
+In the past two years, air traffic controllers and others have submitted
+hundreds of complaints to a Federal Aviation Administration hotline
+describing issues like dangerous staffing shortages, mental health problems
+and deteriorating buildings, some infested by bugs and black mold.
+
+There were at least seven reports of controllers sleeping on duty and five
+about employees working while under the influence of alcohol or drugs. The
+New York Times obtained summaries of the complaints through an open-records
+request.
+
+Air traffic controllers, who spend hours a day glued to monitors or
+scanning the skies, with the lives of thousands of passengers at stake, are
+a last line of defense against crashes. The job comes with high stakes and
+intense pressure, even in the best of conditions.
+
+Yet the conditions for many controllers are far from ideal. A nationwide
+staffing shortage =E2=80=94 caused by years of employee turnover and tight =
+budgets,
+among other factors =E2=80=94 has forced many controllers to work six-day w=
+eeks and
+10-hour days.
+The result is a fatigued, distracted and demoralized workforce that is
+increasingly prone to making mistakes, according to a Times investigation.
+The findings are based on interviews with more than 70 current and former
+air traffic controllers, pilots and federal officials, as well as thousands
+of pages of federal safety reports and internal FAA records the Times
+obtained.
+
+While the U.S. airspace is remarkably safe, potentially dangerous close
+calls have been happening, on average, multiple times a week this year, the
+Times reported in August. Some controllers say they fear a deadly crash is
+inevitable.
+
+In the fiscal year that ended Sept. 30, there were 503 air traffic control
+lapses the FAA preliminarily categorized as =E2=80=9Csignificant,=E2=80=9D =
+65% more than in
+the prior year, according to internal agency reports reviewed by the Times.
+During that period, air traffic increased about 4%.
+
+A database of aviation safety issues is peppered with recent mistakes by
+exhausted controllers. A controller at the air traffic control center in
+the Jacksonville, Fla., area instructed one airliner to turn into the path
+of another, later blaming being overworked and fatigued. A controller at a
+facility that monitors the skies above Southern California told a plane to
+fly too low, attributing the lapse to being =E2=80=9Cextremely tired=E2=80=
+=9D after working
+=E2=80=9Ccontinuous=E2=80=9D overtime.
+
+=E2=80=9CIf I can make a small mistake like that, I can make a bigger one,=
+=E2=80=9D the
+controller wrote in a submission included in the database, which is
+maintained by NASA.
+
+Many controllers are aviation enthusiasts who are drawn to the job because
+it can pay six figures. Some relish the opportunity to earn more by working
+overtime.
+
+But the Times found the combination of six-day workweeks and
+round-the-clock schedules has caused controllers to develop physical and
+mental health problems. Many avoid seeking professional help because doing
+so might jeopardize the medical clearances they need to work. Some turn to
+sleeping pills or alcohol to cope. Others resign or retire.
+
+The FAA estimated more than 1,400 controllers =E2=80=94 or about 10% of the=
+ total
+workforce =E2=80=94 would depart this fiscal year.
+
+Jeannie Shiffer, an FAA spokesperson, said the agency =E2=80=9Cmaintains th=
+e
+safest, most complex and busiest airspace in the world.=E2=80=9D She added,=
+ =E2=80=9CThe
+nation absolutely needs more air traffic controllers, and growing the
+workforce will result in better working conditions and more flexibility.=E2=
+=80=9D
+
+Ever since the Reagan administration replaced thousands of striking
+controllers, the agency has struggled to keep pace with waves of
+retirements. The problem grew worse during the COVID-19 pandemic, when the
+FAA slowed training of new controllers.
+
+For the current fiscal year, the FAA sought $117 million to train
+controllers and hire 1,800 new ones.
+
+Yet training is difficult; many aspiring controllers fail. The FAA=E2=80=99=
+s hiring
+plan is expected to have =E2=80=9Ca negligible improvement over today=E2=80=
+=99s
+understaffed levels,=E2=80=9D with a net increase of fewer than 200 control=
+lers by
+2032, the National Airspace System Safety Review Team, a group of experts
+appointed by the agency, said in a November report.
+
+From 2011 to 2022, the number of fully certified controllers declined more
+than 9%, even though traffic increased. Based on targets set by the FAA and
+the union representing controllers, 99% of the nation=E2=80=99s air traffic=
+ control
+sites are understaffed.
+
+To help fill that gap, controllers at 40% of the facilities worked six-day
+weeks at least once a month last year, according to the controllers union.
+The number of overtime hours clocked by controllers nearly tripled over the
+past decade, according to FAA data.
+
+The Jacksonville air traffic control center is one of the country=E2=80=99s
+busiest. Yet it has only 207 controllers, below the target of 298 set by
+the FAA and the controllers union.
+
+The toll on safety has become apparent.
+
+There was the close call caused by the fatigued controller, which occurred
+in April. And in a confidential safety report last year, a Jacksonville
+controller described hyperventilating and struggling to stand after two
+hours of directing heavy plane traffic.
+
+=E2=80=9CWe have recently had a heart attack, multiple panic attacks (inclu=
+ding my
+own), people losing their medicals due to depression and some that just
+outright quit the FAA because it has gotten so bad,=E2=80=9D the controller=
+ wrote.
+=E2=80=9CWho knows how many other stress-induced physical and mental issues=
+ are
+happening that we don=E2=80=99t even know about yet,=E2=80=9D the controlle=
+r added. =E2=80=9CThis
+place is breaking people. We need help. I=E2=80=99ll say it again, SOS!!=E2=
+=80=9D
+
+At a Senate hearing in November, Jennifer Homendy, the chair of the
+National Transportation Safety Board, said the shortage of air traffic
+controllers, coupled with mandatory overtime, had become a threat to
+aviation safety.
+
+In interviews and complaints submitted to the FAA, air traffic employees
+warned that they and their colleagues were buckling:
+
+One complaint described a controller =E2=80=9Ccaught sleeping on operationa=
+l
+positions numerous times.=E2=80=9D Another described two controllers fallin=
+g asleep
+=E2=80=9Cwhile providing air traffic services.=E2=80=9D
+An employee =E2=80=9Cphysically assaulted one controller, verbally assaulte=
+d
+another controller,=E2=80=9D who began to cry, and then shoved a chair at s=
+omeone.
+Other hotline reports also detailed physical and verbal attacks.
+Several controllers reported that co-workers appeared unstable, with one
+=E2=80=9Cshowing extreme signs of mental problems.=E2=80=9D
+Controllers in one location were reported for =E2=80=9Cusing alcohol and il=
+legal
+drugs while on position=E2=80=9D directing traffic. Another described the =
+=E2=80=9Cstrong
+odor of alcohol=E2=80=9D on multiple air traffic employees.
+One controller who worked in Colorado and elsewhere said she consumed up to
+nine vodka drinks a night to deal with trouble sleeping and recurrent panic
+attacks her doctor attributed, in part, to her job.
+Shiffer, the FAA spokesperson, said the agency investigates all hotline
+complaints and acts on credible ones.
+
+Controllers said they had been reluctant to seek help for physical and
+mental health problems because of the FAA=E2=80=99s rules requiring medical
+clearances.
+
+The guidelines, which are designed to ensure controllers are mentally and
+physically sound, prohibit them from taking certain medications that can
+cause drowsiness or other side effects. The rules also disqualify
+controllers with certain medical conditions from working.
+
+One unintended consequence, numerous controllers said, is that they
+avoid taking
+necessary medications or resort to alcohol or drugs.
+
+Shiffer said the agency took controllers=E2=80=99 health seriously, includi=
+ng by
+offering free counseling.
+Ashley Smith had worked for more than a decade as a controller in the
+Atlanta area.
+
+In January 2022, an error by a controller in Atlanta caused two Delta
+airliners to get dangerously close, according to internal FAA safety
+reports. A cockpit collision alert prompted one plane=E2=80=99s pilots to q=
+uickly
+climb. In a review, the FAA acknowledged fatigue might have been a factor,
+given the controller=E2=80=99s schedule had included two overtime shifts in=
+ each of
+the previous three weeks.
+
+A few weeks after the close call, Smith sent an email to Tim Arel, a senior
+FAA air traffic official. She detailed how multiple recent near misses in
+Atlanta had involved controllers who had repeatedly pulled overtime shifts.
+
+Arel responded the next day, acknowledging the agency faced staffing issues=
+.
+
+Three months later, Smith resigned, convinced that nothing would ever
+improve.
+
+=E2=80=9CThey are kicking the can down the road,=E2=80=9D she said.
+
+This story was originally published at nytimes.com.
+
+Warm Regards, Nancy
+
+Prof. Nancy Leveson
+Jerome C. Hunsaker Professor in Aeronautics and Astronautics
+Engineering Systems Laboratory
+MIT, Room 33-412
+77 Massachusetts Ave.
+Cambridge, MA 02142
+
+Telephone: 617-258-0505 (MIT)
+Mobile: 617-460-5749
+
+Email: leveson@mit.edu
+URL: http://sunnyday.mit.edu
+
+--0000000000003a2c28060bcf9ad8
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-size:small"><span=
+ style=3D"color:rgb(35,31,32);font-family:ff-meta-serif-web-pro;font-size:4=
+2px;letter-spacing:-1px">Air traffic controllers pushed to the brink</span>=
+<br></div><div class=3D"gmail_default" style=3D"font-size:small"><div class=
+=3D"gmail-article-dateline" style=3D"box-sizing:inherit;color:rgb(112,117,1=
+24);font-family:ff-dagny-web-pro;font-size:15px;line-height:21px;margin-bot=
+tom:27px">Dec. 4, 2023 at 3:41 pm, Seattle Times&nbsp;</div><div class=3D"g=
+mail-article-dateline" style=3D"box-sizing:inherit;color:rgb(112,117,124);f=
+ont-family:ff-dagny-web-pro;font-size:15px;line-height:21px;margin-bottom:2=
+7px">[<a href=3D"https://www.seattletimes.com/business/air-traffic-controll=
+ers-pushed-to-the-brink/?utm_source=3Dmarketingcloud&amp;utm_medium=3Demail=
+&amp;utm_campaign=3DEvening+Brief+12-04-23_12_4_2023&amp;utm_term=3DActive%=
+20subscriber">https://www.seattletimes.com/business/air-traffic-controllers=
+-pushed-to-the-brink/?utm_source=3Dmarketingcloud&amp;utm_medium=3Demail&am=
+p;utm_campaign=3DEvening+Brief+12-04-23_12_4_2023&amp;utm_term=3DActive%20s=
+ubscriber</a>]</div><div class=3D"gmail-article-dateline" style=3D"box-sizi=
+ng:inherit;color:rgb(112,117,124);font-family:ff-dagny-web-pro;font-size:15=
+px;line-height:21px;margin-bottom:27px">By EMILY STEEL and SYDNEY EMBER<br>=
+The New York Times<br>One air traffic controller went into work drunk this =
+summer and joked about =E2=80=9Cmaking big money buzzed.=E2=80=9D Another r=
+outinely smoked marijuana during breaks. A third employee threatened violen=
+ce and then =E2=80=9Caggressively pushed=E2=80=9D a colleague who was direc=
+ting airplanes.<br><br>The incidents were extreme examples, but they fit in=
+to a pattern that reveals glaring vulnerabilities in one of the most import=
+ant protective layers of the nation=E2=80=99s aviation safety system.<br><b=
+r>In the past two years, air traffic controllers and others have submitted =
+hundreds of complaints to a Federal Aviation Administration hotline describ=
+ing issues like dangerous staffing shortages, mental health problems and de=
+teriorating buildings, some infested by bugs and black mold.<br><br>There w=
+ere at least seven reports of controllers sleeping on duty and five about e=
+mployees working while under the influence of alcohol or drugs. The New Yor=
+k Times obtained summaries of the complaints through an open-records reques=
+t.<br><br>Air traffic controllers, who spend hours a day glued to monitors =
+or scanning the skies, with the lives of thousands of passengers at stake, =
+are a last line of defense against crashes. The job comes with high stakes =
+and intense pressure, even in the best of conditions.<br><br>Yet the condit=
+ions for many controllers are far from ideal. A nationwide staffing shortag=
+e =E2=80=94 caused by years of employee turnover and tight budgets, among o=
+ther factors =E2=80=94 has forced many controllers to work six-<span style=
+=3D"font-size:small;font-family:Arial,Helvetica,sans-serif;color:rgb(34,34,=
+34)">day weeks and 10-hour days.</span><br></div></div><div class=3D"gmail_=
+default" style=3D"font-size:small">The result is a fatigued, distracted and=
+ demoralized workforce that is increasingly prone to making mistakes, accor=
+ding to a Times investigation. The findings are based on interviews with mo=
+re than 70 current and former air traffic controllers, pilots and federal o=
+fficials, as well as thousands of pages of federal safety reports and inter=
+nal FAA records the Times obtained.<br><br>While the U.S. airspace is remar=
+kably safe, potentially dangerous close calls have been happening, on avera=
+ge, multiple times a week this year, the Times reported in August. Some con=
+trollers say they fear a deadly crash is inevitable.<br><br>In the fiscal y=
+ear that ended Sept. 30, there were 503 air traffic control lapses the FAA =
+preliminarily categorized as =E2=80=9Csignificant,=E2=80=9D 65% more than i=
+n the prior year, according to internal agency reports reviewed by the Time=
+s. During that period, air traffic increased about 4%.<br><br>A database of=
+ aviation safety issues is peppered with recent mistakes by exhausted contr=
+ollers. A controller at the air traffic control center in the Jacksonville,=
+ Fla., area instructed one airliner to turn into the path of another, later=
+ blaming being overworked and fatigued. A controller at a facility that mon=
+itors the skies above Southern California told a plane to fly too low, attr=
+ibuting the lapse to being =E2=80=9Cextremely tired=E2=80=9D after working =
+=E2=80=9Ccontinuous=E2=80=9D overtime.<br><br>=E2=80=9CIf I can make a smal=
+l mistake like that, I can make a bigger one,=E2=80=9D the controller wrote=
+ in a submission included in the database, which is maintained by NASA.<br>=
+<br>Many controllers are aviation enthusiasts who are drawn to the job beca=
+use it can pay six figures. Some relish the opportunity to earn more by wor=
+king overtime.<br></div><div class=3D"gmail_default" style=3D"font-size:sma=
+ll"><br></div><div class=3D"gmail_default" style=3D"font-size:small">But th=
+e Times found the combination of six-day workweeks and round-the-clock sche=
+dules has caused controllers to develop physical and mental health problems=
+. Many avoid seeking professional help because doing so might jeopardize th=
+e medical clearances they need to work. Some turn to sleeping pills or alco=
+hol to cope. Others resign or retire.<br><br>The FAA estimated more than 1,=
+400 controllers =E2=80=94 or about 10% of the total workforce =E2=80=94 wou=
+ld depart this fiscal year.<br><br>Jeannie Shiffer, an FAA spokesperson, sa=
+id the agency =E2=80=9Cmaintains the safest, most complex and busiest airsp=
+ace in the world.=E2=80=9D She added, =E2=80=9CThe nation absolutely needs =
+more air traffic controllers, and growing the workforce will result in bett=
+er working conditions and more flexibility.=E2=80=9D<br><br>Ever since the =
+Reagan administration replaced thousands of striking controllers, the agenc=
+y has struggled to keep pace with waves of retirements. The problem grew wo=
+rse during the COVID-19 pandemic, when the FAA slowed training of new contr=
+ollers.<br><br>For the current fiscal year, the FAA sought $117 million to =
+train controllers and hire 1,800 new ones.<br><br>Yet training is difficult=
+; many aspiring controllers fail. The FAA=E2=80=99s hiring plan is expected=
+ to have =E2=80=9Ca negligible improvement over today=E2=80=99s understaffe=
+d levels,=E2=80=9D with a net increase of fewer than 200 controllers by 203=
+2, the National Airspace System Safety Review Team, a group of experts appo=
+inted by the agency, said in a November report.<br></div><div class=3D"gmai=
+l_default" style=3D"font-size:small"><br></div><div class=3D"gmail_default"=
+ style=3D"font-size:small">From 2011 to 2022, the number of fully certified=
+ controllers declined more than 9%, even though traffic increased. Based on=
+ targets set by the FAA and the union representing controllers, 99% of the =
+nation=E2=80=99s air traffic control sites are understaffed.<br><br>To help=
+ fill that gap, controllers at 40% of the facilities worked six-day weeks a=
+t least once a month last year, according to the controllers union. The num=
+ber of overtime hours clocked by controllers nearly tripled over the past d=
+ecade, according to FAA data.<br><br>The Jacksonville air traffic control c=
+enter is one of the country=E2=80=99s busiest. Yet it has only 207 controll=
+ers, below the target of 298 set by the FAA and the controllers union.<br><=
+/div><div><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gmai=
+l_signature"><div dir=3D"ltr"><div><div dir=3D"ltr"><div><div dir=3D"ltr"><=
+div><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><di=
+v dir=3D"ltr"><div><font face=3D"comic sans ms, sans-serif"><br></font></di=
+v><div>The toll on safety has become apparent.<br><br>There was the close c=
+all caused by the fatigued controller, which occurred in April. And in a co=
+nfidential safety report last year, a Jacksonville controller described hyp=
+erventilating and struggling to stand after two hours of directing heavy pl=
+ane traffic.<br><br>=E2=80=9CWe have recently had a heart attack, multiple =
+panic attacks (including my own), people losing their medicals due to depre=
+ssion and some that just outright quit the FAA because it has gotten so bad=
+,=E2=80=9D the controller wrote. =E2=80=9CWho knows how many other stress-i=
+nduced physical and mental issues are happening that we don=E2=80=99t even =
+know about yet,=E2=80=9D the controller added. =E2=80=9CThis place is break=
+ing people. We need help. I=E2=80=99ll say it again, SOS!!=E2=80=9D<br><br>=
+At a Senate hearing in November, Jennifer Homendy, the chair of the Nationa=
+l Transportation Safety Board, said the shortage of air traffic controllers=
+, coupled with mandatory overtime, had become a threat to aviation safety.<=
+font face=3D"comic sans ms, sans-serif"><br></font></div><div><font face=3D=
+"comic sans ms, sans-serif"><br></font></div><div>In interviews and complai=
+nts submitted to the FAA, air traffic employees warned that they and their =
+colleagues were buckling:<br><br>One complaint described a controller =E2=
+=80=9Ccaught sleeping on operational positions numerous times.=E2=80=9D Ano=
+ther described two controllers falling asleep =E2=80=9Cwhile providing air =
+traffic services.=E2=80=9D<br>An employee =E2=80=9Cphysically assaulted one=
+ controller, verbally assaulted another controller,=E2=80=9D who began to c=
+ry, and then shoved a chair at someone. Other hotline reports also detailed=
+ physical and verbal attacks.<br>Several controllers reported that co-worke=
+rs appeared unstable, with one =E2=80=9Cshowing extreme signs of mental pro=
+blems.=E2=80=9D<br>Controllers in one location were reported for =E2=80=9Cu=
+sing alcohol and illegal drugs while on position=E2=80=9D directing traffic=
+. Another described the =E2=80=9Cstrong odor of alcohol=E2=80=9D on multipl=
+e air traffic employees.<br>One controller who worked in Colorado and elsew=
+here said she consumed up to nine vodka drinks a night to deal with trouble=
+ sleeping and recurrent panic attacks her doctor attributed, in part, to he=
+r job.<br>Shiffer, the FAA spokesperson, said the agency investigates all h=
+otline complaints and acts on credible ones.<br><br>Controllers said they h=
+ad been reluctant to seek help for physical and mental health problems beca=
+use of the FAA=E2=80=99s rules requiring medical clearances.<br><br>The gui=
+delines, which are designed to ensure controllers are mentally and physical=
+ly sound, prohibit them from taking certain medications that can cause drow=
+siness or other side effects. The rules also disqualify controllers with ce=
+rtain medical conditions from working.<br><br>One unintended consequence, n=
+umerous controllers said, is that they avoid<span class=3D"gmail_default" s=
+tyle=3D"font-size:small">&nbsp;</span>taking necessary medications or resor=
+t to alcohol or drugs.<font face=3D"comic sans ms, sans-serif"><br></font><=
+/div><br>Shiffer said the agency took controllers=E2=80=99 health seriously=
+, including by offering free counseling.</div><div dir=3D"ltr">Ashley Smith=
+ had worked for more than a decade as a controller in the Atlanta area.<br>=
+<br>In January 2022, an error by a controller in Atlanta caused two Delta a=
+irliners to get dangerously close, according to internal FAA safety reports=
+. A cockpit collision alert prompted one plane=E2=80=99s pilots to quickly =
+climb. In a review, the FAA acknowledged fatigue might have been a factor, =
+given the controller=E2=80=99s schedule had included two overtime shifts in=
+ each of the previous three weeks.<br><br>A few weeks after the close call,=
+ Smith sent an email to Tim Arel, a senior FAA air traffic official. She de=
+tailed how multiple recent near misses in Atlanta had involved controllers =
+who had repeatedly pulled overtime shifts.<br><br>Arel responded the next d=
+ay, acknowledging the agency faced staffing issues.<br><br>Three months lat=
+er, Smith resigned, convinced that nothing would ever improve.<br><br>=E2=
+=80=9CThey are kicking the can down the road,=E2=80=9D she said.<br><br>Thi=
+s story was originally published at <a href=3D"http://nytimes.com">nytimes.=
+com</a>.<br><div><font face=3D"comic sans ms, sans-serif"><br></font></div>=
+<div><font face=3D"comic sans ms, sans-serif">Warm Regards, Nancy</font></d=
+iv><div><br></div><div>Prof. Nancy Leveson<br></div><div>Jerome C. Hunsaker=
+ Professor in Aeronautics and Astronautics</div><div>Engineering Systems La=
+boratory</div><div>MIT, Room 33-412<br>77 Massachusetts Ave.<br>Cambridge, =
+MA 02142<br><br>Telephone: 617-258-0505 (MIT)</div><div>Mobile: 617-460-574=
+9</div><div><br>Email: <a href=3D"mailto:leveson@mit.edu" target=3D"_blank"=
+>leveson@mit.edu</a><br>URL: <a href=3D"http://sunnyday.mit.edu" target=3D"=
+_blank">http://sunnyday.mit.edu</a><br></div></div></div></div></div></div>=
+</div></div></div></div></div></div></div></div></div>
+
+--0000000000003a2c28060bcf9ad8--

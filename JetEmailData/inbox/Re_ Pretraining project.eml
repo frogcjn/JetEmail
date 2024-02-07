@@ -1,0 +1,739 @@
+Received: from CH3PR01MB8362.prod.exchangelabs.com (2603:10b6:610:17a::19) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Fri, 17 Nov 2023 17:56:18
+ +0000
+Received: from CH2PR14CA0031.namprd14.prod.outlook.com (2603:10b6:610:56::11)
+ by CH3PR01MB8362.prod.exchangelabs.com (2603:10b6:610:17a::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7002.23; Fri, 17 Nov 2023 17:56:16 +0000
+Received: from CY4PEPF0000EDD3.namprd03.prod.outlook.com
+ (2603:10b6:610:56:cafe::9c) by CH2PR14CA0031.outlook.office365.com
+ (2603:10b6:610:56::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.23 via Frontend
+ Transport; Fri, 17 Nov 2023 17:56:16 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.98)
+ smtp.mailfrom=mail.huji.ac.il; dkim=test (signature was verified)
+ header.d=mail.huji.ac.il;dmarc=pass action=none header.from=mail.huji.ac.il;
+Received-SPF: Fail (protection.outlook.com: domain of mail.huji.ac.il does not
+ designate 18.9.1.98 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.9.1.98; helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.98) by
+ CY4PEPF0000EDD3.mail.protection.outlook.com (10.167.241.207) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7025.12 via Frontend Transport; Fri, 17 Nov 2023 17:56:15 +0000
+Received: from w92expo21.exchange.mit.edu (18.7.74.75) by
+ oc11exhyb2.exchange.mit.edu (18.9.1.98) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Fri, 17 Nov 2023 12:55:52 -0500
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ w92expo21.exchange.mit.edu (18.7.74.75) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Fri, 17 Nov 2023 12:55:52 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
+ oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Fri, 17 Nov 2023 12:55:52 -0500
+Received: from MN2PR01CA0017.prod.exchangelabs.com (2603:10b6:208:10c::30) by
+ SA1PR01MB8623.prod.exchangelabs.com (2603:10b6:806:37b::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7002.23; Fri, 17 Nov 2023 17:55:48 +0000
+Received: from BL02EPF0001A100.namprd03.prod.outlook.com
+ (2603:10b6:208:10c:cafe::8e) by MN2PR01CA0017.outlook.office365.com
+ (2603:10b6:208:10c::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.21 via Frontend
+ Transport; Fri, 17 Nov 2023 17:55:48 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.216.41)
+ smtp.mailfrom=mail.huji.ac.il; dkim=test (signature was verified)
+ header.d=mail.huji.ac.il;dmarc=pass action=none
+ header.from=mail.huji.ac.il;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mail.huji.ac.il
+ designates 209.85.216.41 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.216.41;
+ helo=mail-pj1-f41.google.com; pr=C
+Received: from mail-pj1-f41.google.com (209.85.216.41) by
+ BL02EPF0001A100.mail.protection.outlook.com (10.167.242.107) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.12 via Frontend Transport; Fri, 17 Nov 2023 17:55:47 +0000
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2802d218242so1948816a91.1
+        for <jiannan@mit.edu>; Fri, 17 Nov 2023 09:55:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mail.huji.ac.il; s=mailhuji; t=1700243746; x=1700848546; darn=mit.edu;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cd4iP6QHcTPOepogDe670RRuXVZm/2tn8DXUq9lABfg=;
+        b=bLsLl+G5J5+ima3k/Bb0ofhEljyfx+ICHL7PtcJ0c2JlUZWP8zryLIVBi1wZQt2XMf
+         4nw9upP8ZpYokPSTDFLirthSX7i6WOJ7O+0kdTWwVliCHZbG1aWo0yi3sTZGO2AhUbBV
+         VryMilaVs9LHbmeTJspE2LGWPyWiDCgkR0iS4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700243746; x=1700848546;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cd4iP6QHcTPOepogDe670RRuXVZm/2tn8DXUq9lABfg=;
+        b=C1+FefK+LcrYDrykTELZ0Jg9AQEwyx5OGF4ZVzsTl40CnciboKytrkH6cwlTOj47m0
+         EJI5XxQaIPyZFTjeGoc1AnF1NzrYBoS0Qgsv+5oR8MKMH7pageNwItJR97IW0cEPvfoY
+         U50ePihbavz5pGYVik4nZ+4bw2RZcEVqyhV/Hz6/qyQ+Iis4ADX4pJVIr36D0bLQw2ht
+         vA2XMPquHDlgrllRUE0yhMgT+Xy6igCTt84pWIOXv8Dz1aKRUsMXQfOnT8q6F/2e7Tlp
+         USsrDbtRtRawzi8z3TBSRz7UFEeeCP/cs4paJmT0EEe9AB/cXn+2X+da1AQ7jzUOcInw
+         mROA==
+X-Gm-Message-State: AOJu0YyoI+iNx1nLaAZY8SK/fwMmb6RBX0FC1tm2kVP6kz7MrdbEZ0bf
+	uy/mvN/S+QORxS0Ov3U6I+1DMi9bCcca5aL8XFGrDvUJ0xJZE2na
+X-Google-Smtp-Source: AGHT+IHgUk/Gdu8xFGV09H1941Jh8piRsAV/80j9vb26mW68BH87k/huCln7ko7ZYBQsKQcqmRF8WCWJI7QZjSQt2OM=
+X-Received: by 2002:a17:90b:3143:b0:281:858:a086 with SMTP id
+ ip3-20020a17090b314300b002810858a086mr258893pjb.6.1700243746380; Fri, 17 Nov
+ 2023 09:55:46 -0800 (PST)
+References: <CAFW_fcd0LKEj_WMMn4fWXr817XDV0+=v5P+RedzYAQyQ8SP19w@mail.gmail.com>
+ <BN0PR01MB7134A774ACA916C6AD0F8E82BDB7A@BN0PR01MB7134.prod.exchangelabs.com>
+ <CAFW_fcfxr83Ua7xUxy9RvWzGzLmtQ7vNTr2cGt+v_ONbb7cAKw@mail.gmail.com>
+ <BN0PR01MB7134734DD8B11365975ADA6ABDB7A@BN0PR01MB7134.prod.exchangelabs.com>
+In-Reply-To: <BN0PR01MB7134734DD8B11365975ADA6ABDB7A@BN0PR01MB7134.prod.exchangelabs.com>
+From: Leshem Choshen <leshem.choshen@mail.huji.ac.il>
+Date: Fri, 17 Nov 2023 12:55:35 -0500
+Message-ID: <CAFW_fcezH-K1z3dVS_gB1wMVeZRQy2-ugyqh50D4upAm2UwiWw@mail.gmail.com>
+Subject: Re: Pretraining project
+To: Jiannan Cao <jiannan@mit.edu>
+Content-Type: multipart/alternative; boundary="000000000000890110060a5cd82b"
+Return-Path: leshem.choshen@mail.huji.ac.il
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BL02EPF0001A100:EE_|SA1PR01MB8623:EE_|CY4PEPF0000EDD3:EE_|CH3PR01MB8362:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: a017595f-2f1f-473c-9f7a-08dbe7967e80
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?GkjL4H3KIiWLq9KYNRktpSYI3kwB7RK0/6dfyDIQUuT8p9W7eRWRTpRxgHN+?=
+ =?us-ascii?Q?fWzF35QRv29xkCii3Q20nZq7pm79ffEZqNvG8P8ZKk/Az4HDsgOkRPAEHOiP?=
+ =?us-ascii?Q?DbXoCnPFOsCYv7jAALz/T9rBUW8Amg7I9D8ZTNfxazRQSUggNVMjYw9U0UDc?=
+ =?us-ascii?Q?3sQ3ooqch1XN/6XpcA3uNfmx8uLcau87QTfkpIehwObmAdg0awS4aHw8E7AZ?=
+ =?us-ascii?Q?ZNH21F0N3L1s/lw0kGG2+bmhTQC6uIuAEB0oqvSVZ8jg05dcj+n3T/gro2G8?=
+ =?us-ascii?Q?z7gFPyWxCPVusTGo4ZrLAVILI8RE25tQ5KW1yKSTyGBDsYIGF8m7mEDela6q?=
+ =?us-ascii?Q?kezHIhVWr4WECv4E+QESAk5YyV49WtgBRm/8KZPzHkbz//oqeEPczFtZdxy8?=
+ =?us-ascii?Q?HTtayM5/JN7ejXnFhJLByUBopXpZEnfSDnqlsOAtG2Wd48sZGAf5wqdbCJM3?=
+ =?us-ascii?Q?8eqkn4M5u1qlCNnIe9mUvD8IpNbYmj3//FH2reXW0nOttIGH6iaHSATbwEDO?=
+ =?us-ascii?Q?KB3t/zW33h2AFiazZP90KgbSfWJiR4j8/DAxN1Ocp6bl4EFoDhS+uF6Pwihy?=
+ =?us-ascii?Q?Z5zGOQ8T6lXuaadLerBT96OhWltf4pKnDesJUXKqYPFHEbYsVfnyAa24Wd1y?=
+ =?us-ascii?Q?PTRGCkTwxZUoYdot9hiZxbDGOBYTxeqdeq5AFfBdf1bfVgOSVWcaEU2INpme?=
+ =?us-ascii?Q?V8w9K3FlCRjq6tVh4lkqYaShdiIXSkS9iuVwv9uE6wTyNR+gtWTulvtLeOkF?=
+ =?us-ascii?Q?5PAb72bBU9wSU8muxd3lITw/q6nLJKR6UIJWtMSDpcUvvAKBojsqam/xrqpP?=
+ =?us-ascii?Q?yPlWXDEGmLlEBMm0/PVBUn/7jUWRQOxt9p7R3OOTRZKGnwwMqzgOh7SWAvXZ?=
+ =?us-ascii?Q?NzdKcizfsATkgUsjUWZ0t6spjKxdUQirkUbHynQck6pbGWrZxtW5pIo7OK68?=
+ =?us-ascii?Q?5H5Y1RKHxyrXFy/xtfwx11r9nJxZ4kAwaM4Muv0Jy6Mk2ar9WWlT9CIxCncW?=
+ =?us-ascii?Q?VT4fcBlwttDaYRLEOJbNE1Op0d1iV68bZT6rB60pjZnUUSzRyxU/ggW6HG4Q?=
+ =?us-ascii?Q?elJOOYcZRp42q4ZPfd93VrsQY4WW9cykORp+JIk1vtEKyY0E/5m0zTaGldtY?=
+ =?us-ascii?Q?tk0+Lq4xdKcoNKui41YqXkqEujuG7Y7EEq69HldIBen4JElXvitjh5qurW81?=
+ =?us-ascii?Q?YOl8Y9tCkMMai5GjaIXl4thKpegpeOYfFtNUBOEAAvUdvTlvsrTyJr28Sqnb?=
+ =?us-ascii?Q?VUZ18X+osu5cW7uqyiFEeX36fB2ocNJz+VYFxs06ALJZ18R1PwzPzzGP4ZK9?=
+ =?us-ascii?Q?ApDILs7zjtQ0FOyvLp0CFfe2Dt9EzfUFM6bn4yrsfx66H5iSRCpNmpfO8OJM?=
+ =?us-ascii?Q?K/7p3dOdjrdXR/vt+l/WVhI0FzOMA6IoVVLUIeB4A82Mz+0t1u9l9iceOvX4?=
+ =?us-ascii?Q?TiTz6RRAfIUvBuLusPdwo29VL02R83icUTuME074rMIV5GnFKoqRRqdY3BPR?=
+ =?us-ascii?Q?AjNR0rzAMQ8x88Wej3GYzisMBGnVESu77NpgDhhu8IchzOzREIT6EiZSbpv4?=
+ =?us-ascii?Q?l61CK2JEXsUm7SLTwXTv4TlfTmfiHVstTnkZoakuL/N4kJ7wxEsqAyGjKxQi?=
+ =?us-ascii?Q?wj1Vb4ldF2w6RMhtrZCgKYapQXET5/XjebYl4j7ONrDb?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.216.41;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-pj1-f41.google.com;PTR:mail-pj1-f41.google.com;CAT:NONE;SFS:(13230031)(4636009)(451199024)(1690799017)(26005)(336012)(6666004)(53546011)(33964004)(66899024)(6916009)(8676002)(1096003)(7116003)(75640400001)(5660300002)(44832011)(42186006)(4006050)(86362001)(55446002)(40140700001)(7636003)(356005)(7596003)(83380400001)(9686003)(3480700007)(76236004)(166002);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB8623
+X-OrganizationHeadersPreserved: SA1PR01MB8623.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb3.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb3.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo21.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 17 Nov 2023 17:56:15.6526
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ a017595f-2f1f-473c-9f7a-08dbe7967e80
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: CY4PEPF0000EDD3.namprd03.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CY4PEPF0000EDD3.namprd03.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CY4PEPF0000EDD3.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL02EPF0001A100.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 5be134de-6289-4753-5b4d-08dbe7966de4
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.98;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb2.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2023 17:56:15.4026
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a017595f-2f1f-473c-9f7a-08dbe7967e80
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.98];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL02EPF0001A100.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR01MB8362
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.3079869
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7002.015
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?OG5rNWlDZzJWSkZoeXJoYzJQNnEzdFRKc1ErUTU5aWVlTWxsZDFTZE5SQ3RB?=
+ =?utf-8?B?MnVkZjI5TnBrK2w2TUJRY3E1V09iSlF1ZXJVNTVtL2xEM2NrNEdNbll0Zzla?=
+ =?utf-8?B?U1pYQVkzbkxsaE50TDEwVnFYUjAxcmxuQnhmVlBzMUxWTWZ4QjZvNCtqQWVP?=
+ =?utf-8?B?Tm1ZTlhFTFlxejZyQ0cvblBZNmQ4QXhPK0RzMjJYdzQrRXBoT205aitpcFpK?=
+ =?utf-8?B?QnVaVlN5SHhZL0k0VFlTcWpuU25RbmMwSWhKTlQyUENnWjlSNTdGRWwrSUNF?=
+ =?utf-8?B?SGhDdmhTSTBoSVhUaytYT2drM0xFeEFlOXA4Vjc2cHNMSjBCT0R2TWptSWkz?=
+ =?utf-8?B?Y0Fnd3RZczJhN2VqbDMyMXh5aG4zTUgvTDNJZmNyeW9xdDdJbXhSV0svUzFa?=
+ =?utf-8?B?T0QzL0NOUHU1UGV5MWYxTzc4TE9CQ2ZFYWE4dDMxc0F5TjlYLzRJM3hKTHZy?=
+ =?utf-8?B?aVRHYXo4OStXN2pBUUpHU21jeitjT0ZLRjh0T285MTFaMlY2bnd6Ti9aTHY0?=
+ =?utf-8?B?dERSak90S253OW0rQ3IxQkk5cmJlck1pQXFBc0tpVVN3RE1vMWk2dExXcS9h?=
+ =?utf-8?B?dnViKzNHWlFtSG9vWkhyOEYydkF6UUZaekVCMnI1QzVGdEhoS2dlMm4zZms5?=
+ =?utf-8?B?cE5QN2prblFSSzhpUWx5ak9nTEFESVJDb1NsQ1YyK040Wnc1NkswZ2tEMkQ0?=
+ =?utf-8?B?NzZhYk1XVFpGdC92Q2QyMmVsUWhvOFpxYngwSGVmbE42ajQwamF3RHlQcTR4?=
+ =?utf-8?B?R2NEaURzS1Y5akttSjNVd3pCclRqMXZ3MllKTDByOWtmQ0wrUmRIQUU4ZGxj?=
+ =?utf-8?B?RS9YVzhCZ0ZJbzJNb2NXcnAxa01kMUtjRm9RUzNHa09kR3BDaGh4a2kyRFY5?=
+ =?utf-8?B?LzhPRnBjdURoTUordFRrNUxraHVyMFZ3Rk0vek5qYWU3enRVbjYxRDZ0Mk1a?=
+ =?utf-8?B?WVZkTDl6L0p4OXZJSXRHaXJUOXYyaHZMSG16THg5c3B0VHNTTFNUNTJEVEUr?=
+ =?utf-8?B?bjlvOUgrVnp5QVZFYk5GYXltd3RtekRpUnRaTFB6MlU4TWs0R3cyZHVVcHRv?=
+ =?utf-8?B?dGdlODJtOFBuWitiYTE4NWxpVGpEdDZSVDFPK3owR0xxRFJhVUhBYkRwN2cy?=
+ =?utf-8?B?KzQ4S1pEbjI0M29oblNwODhkcml1YUF2US81NzFtVVFDTUpNOGpEekt4VmVa?=
+ =?utf-8?B?RmdWdFZDOHN6TTEyR0R4a2hERjBING5lL01HZURxWGtTWGhKSkVVT0NTRk85?=
+ =?utf-8?B?NlFqR3krTTZIRGE2UmcxQ1oxbW9jVXFUSllSVmtCSDRVOGkxY2c1SHYrREV3?=
+ =?utf-8?B?UjF4d2tQa1EvQnY2NkdRTGNzZUpDVzdsT3hxRHlwSTBleG1QRzVnVmhTc09D?=
+ =?utf-8?B?eWh1VlJNSGI5eVZCN2YyVnlsbHp4V3l3azdMeEVkNWY5OEVzZEFmeWNDMzYx?=
+ =?utf-8?B?WkYvNzNBdk95OFpKcG1iMzFLZTZlQVZ6SlFRNmpqdTlza0ZoSUd0MksvdmpX?=
+ =?utf-8?B?UmZTdHgyd2FUN003aGFsMU1nVUhRUTVXYnoyOUNwZm8rcTVOSmRCSGs3cjF5?=
+ =?utf-8?B?UGpkNTREcW91RlFUZ1lCY0RZNEJyd0Y3WWgxaEZIclhVMm1DcERTTnBDVmxY?=
+ =?utf-8?B?OS91Yng1cUNCQVRmL2NnUjQzajhUL1dtMFZtcnQ1aUZBZDdFeFRGQjFTblZk?=
+ =?utf-8?B?RWY2ZXJxeFR2MmsrYVRWcTRUVk5lSXRYQnFOMlU3QVRvQzlvQmx4U1VHVWt4?=
+ =?utf-8?B?WUtVSkdKZGlmM1RrOGxvRWxBTm9aYlJhRUV0WjJRbG82aWt1bFlJM055SnYr?=
+ =?utf-8?B?MDIyTHU1eUpPYmwraHh1VWhMTEtiTzhWRWxFMGNwZmZzYVVnOTJpd1JjM1BU?=
+ =?utf-8?B?cmkzQVU4MExDVDBlclpHYUN4WW5vcDByamxENnB0R0VWbDNWazU3OW5vYjVK?=
+ =?utf-8?B?cDl1SGhDOVQrR0hKcW1JUzVXZ3J1ZFFQTW1hcHgxQXZhNnZMa2xxREFMU3lM?=
+ =?utf-8?B?VHg4YlFDbnpzcE5ENmJLTnpiVk9WOEJSbDA2amtJSGFzTFN0Yi9PbFNIcis4?=
+ =?utf-8?B?bzhiazIwd3dYUVFPQTJvVU1wbklITzRZWFNVTGl6S3B2Z3BkWEtIVkRFcmVn?=
+ =?utf-8?B?S2djZ0RoaDYvZWVSVHNJT3REWXd4UFNQaUl2TDhmbnJMWUJGUVVuVFhHZmJs?=
+ =?utf-8?Q?tW38GakkpzdlED4je5tnxxs=3D?=
+MIME-Version: 1.0
+
+--000000000000890110060a5cd82b
+Content-Type: text/plain; charset="UTF-8"
+
+Anytime today or Monday 11-16?
+
+
+
+[image: Mailtrack]
+<https://mailtrack.io?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&>
+Sender
+notified by
+Mailtrack
+<https://mailtrack.io?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&>
+17/11/23,
+12:55:04 p. m.
+
+On Fri, 17 Nov 2023 at 12:19, Jiannan Cao <jiannan@mit.edu> wrote:
+
+> Hi Leshem,
+>
+>
+>
+> Yes. We could set up a first meeting. For the GPU, currently if no other
+> resource I could use Google Colab for convenience.
+>
+>
+>
+> Best,
+>
+> Jiannan
+>
+>
+>
+> *From: *Leshem Choshen <leshem.choshen@mail.huji.ac.il>
+> *Date: *Friday, November 17, 2023 at 12:15
+> *To: *Jiannan Cao <jiannan@mit.edu>
+> *Subject: *Re: Pretraining project
+>
+> Hey Jiannan,
+>
+> I am at MIT (and IBM). It seems the common approach around is to start
+> working on something, and then if it works well, and both sides are happy
+> to grow it into a full scale project paper etc.
+>
+> Do you want to set up a first meeting to discuss how to start it and where
+> we intent to go eventually? (I presume the initial steps would be quite
+> technical unless you have access to GPUs and such stuff)
+>
+>
+>
+> And thanks for the well wishes, I am fine (being here, I mostly face US
+> antisemitism but not the war, of course I know many who aren't). we all
+> hope the war ends, crossing my fingers that this will indeed be the war
+> that ends and not just another battle waiting for another war in two or
+> three years, but not much we can do but hope.
+>
+>
+>
+>
+> [image: Image removed by sender. Mailtrack]
+> <https://mailtrack.io/?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&>
+>
+> Sender notified by
+> Mailtrack
+> <https://mailtrack.io?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&>
+>
+> 17/11/23, 12:09:02 p. m.
+>
+>
+> [image: Image removed by sender.]
+>
+> On Fri, 17 Nov 2023 at 11:59, Jiannan Cao <jiannan@mit.edu> wrote:
+>
+> Hi Leshem,
+>
+>
+>
+> I apologize for my delayed response. I've been organizing my inbox and
+> just came across your email.
+>
+>
+>
+> Are you at MIT right now? Or in Israel? I hope you have a safe
+> environment, and we both love peace. I also hope the war will end soon and
+> no one gets hurt.
+>
+>
+>
+> I am interested in collaborating on the project. As a third-year Master's
+> student at MIT, I am excited about the opportunity to contribute to
+> innovative projects in NLP field. I did a research internship focusing on
+> LLM at Apple in China in this summer, related to LLM fine-tuning and LLM
+> tool learning. My pre-master background as a Product Manager in AI, coupled
+> with my experience in various NLP projects and research, aligns well with
+> the objectives of your project. I have attached my resume for your
+> reference.
+>
+>
+>
+> Currently, I only have less course for this academic year and still
+> looking for research projects to work on.
+>
+>
+>
+> For the future, I am considering roles such as a Research Assistant,
+> Machine Learning Engineer specializing in NLP, or pursuing a Ph.D. I am
+> mainly motivated by the challenges and advancements in technology and peer
+> collaboration, which I believe are essential for growth in this dynamic
+> field.
+>
+>
+>
+> You can also reach me at +1 650 300 9068 using iMessage. What do you
+> prefer?
+>
+>
+>
+> I wish you a great day ahead.
+>
+> Thank you!
+>
+>
+>
+> *From: *Leshem Choshen <leshem.choshen@mail.huji.ac.il>
+> *Date: *Tuesday, October 10, 2023 at 15:07
+> *To: *Jiannan Cao <jiannan@mit.edu>
+> *Subject: *Pretraining project
+>
+> Hi,
+>
+> I've got your mail from Jacob (Prof. Andreas). I had an idea regarding
+> pretraining that we thought might fit a project. The idea is to have a
+> slight modification in the pertaining that might improve performance and
+> offer some inference improvements for almost no training costs. Sounds too
+> easy to work? I agree, which requires implementing and seeing where it
+> fails.
+>
+>
+>
+> I wondered, what motivates you, what is your background and availability?
+> Oh, and did anyone else reach out to you, by any chance?
+>
+> But mostly, I wanted to say hi, see what's up, answer any questions,
+> discuss and continue from there.
+>
+>
+> Have a glorious day
+>
+> Leshem Choshen
+>
+> *Error! Filename not specified.*
+> <http://ktilana.wixsite.com/leshem-choshen>*Error! Filename not
+> specified.* <leshem.choshen@mail.huji.ac.il>*Error! Filename not
+> specified.*
+> <https://scholar.google.com/citations?hl=en&view_op=list_works&gmla=AJsN-F4PyOBRfjaJ400_0gVzZN0Dd4pk_vvPzj3pZe91jg_18lInMB3vknKdzGH4kTM3ADukdT3h3fjL5TASZ2Y5qwibLHycyATwwVjnveeXaWloc5kSuBM&user=8b8IhUYAAAAJ>*Error!
+> Filename not specified.* <https://twitter.com/LChoshen>
+>
+>
+>
+>
+>
+> *Error! Filename not specified.*
+> <https://mailtrack.io/?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&>
+>
+> Sender notified by
+> Mailtrack
+> <https://mailtrack.io?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&>
+>
+> 10/10/23, 02:59:14 p. m.
+>
+> *Error! Filename not specified.*
+>
+>
+
+--000000000000890110060a5cd82b
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div dir=3D"ltr">Anytime today or Monday 11-16?<br><br><br><=
+br><div id=3D"gmail-mt-signature">
+        <table border=3D"0" cellpadding=3D"8" cellspacing=3D"0" style=3D"us=
+er-select: none;">
+            <tbody><tr>
+                <td>
+                    <a id=3D"gmail-signatureLink-logo" href=3D"https://mail=
+track.io?utm_source=3Dgmail&amp;utm_medium=3Dsignature&amp;utm_campaign=3Ds=
+ignaturevirality11&amp;" class=3D"gmail-mt-no-pointer-events" style=3D"text=
+-decoration:none">
+                        <img src=3D"https://s3.amazonaws.com/mailtrack-sign=
+ature/sender-notified-72.gif" alt=3D"Mailtrack" class=3D"gmail-mt-no-pointe=
+r-events" width=3D"32" height=3D"32">
+                    </a>
+                </td>
+                <td>
+                    <span style=3D"color:rgb(119,119,119)">Sender notified =
+by</span> <br>
+                    <a id=3D"gmail-signatureLink-text" href=3D"https://mail=
+track.io?utm_source=3Dgmail&amp;utm_medium=3Dsignature&amp;utm_campaign=3Ds=
+ignaturevirality11&amp;" class=3D"gmail-mt-install gmail-mt-no-pointer-even=
+ts" style=3D"color:rgb(67,116,247)">Mailtrack</a>
+                   =20
+    </td><td><span style=3D"color:transparent;font-size:0px">17/11/23, 12:5=
+5:04 p.&nbsp;m.</span></td>
+
+               =20
+                <td>
+                   =20
+
+                </td>
+            </tr>
+        </tbody></table>
+    </div></div><br><img width=3D"0" height=3D"0" class=3D"mailtrack-img" a=
+lt=3D"" style=3D"display:flex" src=3D"https://mailtrack.io/trace/mail/fb2d8=
+cd039640286979adaea0fc9fc6295fc8f55.png?u=3D2571037"><div class=3D"gmail_qu=
+ote"><div dir=3D"ltr" class=3D"gmail_attr">On Fri, 17 Nov 2023 at 12:19, Ji=
+annan Cao &lt;<a href=3D"mailto:jiannan@mit.edu">jiannan@mit.edu</a>&gt; wr=
+ote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
+ 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div class=
+=3D"msg-2494280865980439309">
+
+
+
+
+
+<div lang=3D"EN-US" style=3D"overflow-wrap: break-word;">
+<div class=3D"m_-2494280865980439309WordSection1">
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hi Leshem,<u></u><u><=
+/u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Yes. We could set up =
+a first meeting. For the GPU, currently if no other resource I could use Go=
+ogle Colab for convenience.<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Best,<u></u><u></u></=
+span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Jiannan<u></u><u></u>=
+</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+<div id=3D"m_-2494280865980439309mail-editor-reference-message-container">
+<div>
+<div style=3D"border-right:none;border-bottom:none;border-left:none;border-=
+top:1pt solid rgb(181,196,223);padding:3pt 0cm 0cm">
+<p class=3D"MsoNormal" style=3D"margin-bottom:12pt"><b><span style=3D"font-=
+size:12pt;color:black">From:
+</span></b><span style=3D"font-size:12pt;color:black">Leshem Choshen &lt;<a=
+ href=3D"mailto:leshem.choshen@mail.huji.ac.il" target=3D"_blank">leshem.ch=
+oshen@mail.huji.ac.il</a>&gt;<br>
+<b>Date: </b>Friday, November 17, 2023 at 12:15<br>
+<b>To: </b>Jiannan Cao &lt;<a href=3D"mailto:jiannan@mit.edu" target=3D"_bl=
+ank">jiannan@mit.edu</a>&gt;<br>
+<b>Subject: </b>Re: Pretraining project<u></u><u></u></span></p>
+</div>
+<div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hey&nbsp;Jiannan,<u><=
+/u><u></u></span></p>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">I am at MIT (and IBM)=
+. It seems the common approach around is to start working on something, and=
+ then if it works well, and both sides are happy to grow it into a full sca=
+le project paper etc.<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Do you want to set up=
+ a first meeting to discuss how to start it and where we intent&nbsp;to go =
+eventually? (I presume the initial steps would be quite technical unless yo=
+u have access to GPUs and such stuff)<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal" style=3D"margin-bottom:12pt"><span style=3D"font-siz=
+e:11pt">And thanks for the well wishes, I am fine (being here, I mostly fac=
+e US antisemitism&nbsp;but not the war, of&nbsp;course I know many who aren=
+'t). we all hope the war ends, crossing my fingers
+ that this will indeed be the war that ends and not just another battle wai=
+ting for another war in two or three years, but not much we can&nbsp;do but=
+ hope.<br>
+<br>
+<br>
+<u></u><u></u></span></p>
+</div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+<div id=3D"m_-2494280865980439309gmail-mt-signature">
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tbody>
+<tr>
+<td style=3D"padding:6pt">
+<p class=3D"MsoNormal"><a href=3D"https://mailtrack.io/?utm_source=3Dgmail&=
+amp;utm_medium=3Dsignature&amp;utm_campaign=3Dsignaturevirality11&amp;" tar=
+get=3D"_blank"><span style=3D"font-size:11pt;color:windowtext;text-decorati=
+on:none"><span style=3D"color:blue;border:1pt solid windowtext;padding:0cm"=
+><img border=3D"0" width=3D"0" height=3D"0" style=3D"width: 0.3333in; heigh=
+t: 0.3333in;" id=3D"m_-2494280865980439309_x0000_i1026" alt=3D"Image remove=
+d by sender. Mailtrack" src=3D"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP=
+///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></span></span></a><span style=3D"font-s=
+ize:11pt"><u></u><u></u></span></p>
+</td>
+<td style=3D"padding:6pt">
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt;color:rgb(119,119,119)=
+">Sender notified by</span><span style=3D"font-size:11pt">
+<br>
+<a href=3D"https://mailtrack.io?utm_source=3Dgmail&amp;utm_medium=3Dsignatu=
+re&amp;utm_campaign=3Dsignaturevirality11&amp;" target=3D"_blank"><span sty=
+le=3D"color:rgb(67,116,247)">Mailtrack</span></a>
+<u></u><u></u></span></p>
+</td>
+<td style=3D"padding:6pt">
+<p class=3D"MsoNormal"><span style=3D"font-size:1pt">17/11/23, 12:09:02 p.&=
+nbsp;m.</span><span style=3D"font-size:11pt"><u></u><u></u></span></p>
+</td>
+<td style=3D"padding:6pt"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><br>
+<span style=3D"border:1pt solid windowtext;padding:0cm"><img border=3D"0" w=
+idth=3D"0" height=3D"0" style=3D"width: 0.3333in; height: 0.3333in;" id=3D"=
+m_-2494280865980439309_x0000_i1025" alt=3D"Image removed by sender." src=3D=
+"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIB=
+RAA7"></span><u></u><u></u></span></p>
+<div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">On Fri, 17 Nov 2023 a=
+t 11:59, Jiannan Cao &lt;<a href=3D"mailto:jiannan@mit.edu" target=3D"_blan=
+k">jiannan@mit.edu</a>&gt; wrote:<u></u><u></u></span></p>
+</div>
+<blockquote style=3D"border-top:none;border-right:none;border-bottom:none;b=
+order-left:1pt solid rgb(204,204,204);padding:0cm 0cm 0cm 6pt;margin-left:4=
+.8pt;margin-right:0cm">
+<div>
+<div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hi Leshem,<u></u><u><=
+/u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">I apologize for my de=
+layed response. I've been organizing my inbox and just came across your ema=
+il.<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Are you at MIT right =
+now? Or in Israel? I hope you have a safe environment, and we both love pea=
+ce. I also hope the war will end soon and no one gets
+ hurt.<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">I am interested in co=
+llaborating on the project. As a third-year Master's student at MIT, I am e=
+xcited about the opportunity to contribute to innovative
+ projects in NLP field. I did a research internship focusing on LLM at Appl=
+e in China in this summer, related to LLM fine-tuning and LLM tool learning=
+. My pre-master background as a Product Manager in AI, coupled with my expe=
+rience in various NLP projects and
+ research, aligns well with the objectives of your project. I have attached=
+ my resume for your reference.
+<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Currently, I only hav=
+e less course for this academic year and still looking for research project=
+s to work on.<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">For the future, I am =
+considering roles such as a Research Assistant, Machine Learning Engineer s=
+pecializing in NLP, or pursuing a Ph.D. I am mainly
+ motivated by the challenges and advancements in technology and peer collab=
+oration, which I believe are essential for growth in this dynamic field.<u>=
+</u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">You can also reach me=
+ at +1 650 300 9068 using iMessage. What do you prefer?<u></u><u></u></span=
+></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">I wish you a great da=
+y ahead.<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Thank you!<u></u><u><=
+/u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<div id=3D"m_-2494280865980439309m_2478589684320277844m_7563982815859554363=
+mail-editor-reference-message-container">
+<div>
+<div style=3D"border-right:none;border-bottom:none;border-left:none;border-=
+top:1pt solid rgb(181,196,223);padding:3pt 0cm 0cm">
+<p class=3D"MsoNormal" style=3D"margin-bottom:12pt"><b><span style=3D"font-=
+size:12pt;color:black">From:
+</span></b><span style=3D"font-size:12pt;color:black">Leshem Choshen &lt;<a=
+ href=3D"mailto:leshem.choshen@mail.huji.ac.il" target=3D"_blank">leshem.ch=
+oshen@mail.huji.ac.il</a>&gt;<br>
+<b>Date: </b>Tuesday, October 10, 2023 at 15:07<br>
+<b>To: </b>Jiannan Cao &lt;<a href=3D"mailto:jiannan@mit.edu" target=3D"_bl=
+ank">jiannan@mit.edu</a>&gt;<br>
+<b>Subject: </b>Pretraining project</span><span style=3D"font-size:11pt"><u=
+></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hi,<u></u><u></u></sp=
+an></p>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">I've got your mail fr=
+om Jacob (Prof. Andreas). I had an idea regarding pretraining that we thoug=
+ht might fit a project. The idea is to&nbsp;have a slight
+ modification in&nbsp;the pertaining that might improve performance and off=
+er some inference improvements for almost no training costs. Sounds too eas=
+y to&nbsp;work? I agree, which requires implementing and seeing where it fa=
+ils.<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">I wondered, what moti=
+vates you, what is your background and availability? Oh, and did anyone els=
+e reach out to you,&nbsp;by any chance?<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">But mostly, I wanted =
+to say hi, see what's up, answer any questions, discuss and continue from t=
+here.&nbsp;<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><br clear=3D"all">
+<u></u><u></u></span></p>
+<div>
+<div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Have a glorious day<u=
+></u><u></u></span></p>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Leshem Choshen<u></u>=
+<u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><a href=3D"http://kti=
+lana.wixsite.com/leshem-choshen" target=3D"_blank"><span style=3D"font-size=
+:12pt;font-family:&quot;Times New Roman&quot;,serif;color:rgb(17,85,204);bo=
+rder:1pt none windowtext;padding:0cm;text-decoration:none"><b>Error!
+ Filename not specified.</b></span></a><a href=3D"mailto:leshem.choshen@mai=
+l.huji.ac.il" target=3D"_blank"><span style=3D"font-size:10pt;font-family:&=
+quot;Times New Roman&quot;,serif;color:rgb(17,85,204);border:1pt none windo=
+wtext;padding:0cm;text-decoration:none"><b>Error! Filename
+ not specified.</b></span></a><a href=3D"https://scholar.google.com/citatio=
+ns?hl=3Den&amp;view_op=3Dlist_works&amp;gmla=3DAJsN-F4PyOBRfjaJ400_0gVzZN0D=
+d4pk_vvPzj3pZe91jg_18lInMB3vknKdzGH4kTM3ADukdT3h3fjL5TASZ2Y5qwibLHycyATwwVj=
+nveeXaWloc5kSuBM&amp;user=3D8b8IhUYAAAAJ" target=3D"_blank"><span style=3D"=
+font-size:10pt;font-family:&quot;Times New Roman&quot;,serif;color:rgb(17,8=
+5,204);border:1pt none windowtext;padding:0cm;text-decoration:none"><b>Erro=
+r!
+ Filename not specified.</b></span></a><a href=3D"https://twitter.com/LChos=
+hen" target=3D"_blank"><span style=3D"font-size:10pt;font-family:&quot;Time=
+s New Roman&quot;,serif;color:rgb(17,85,204);border:1pt none windowtext;pad=
+ding:0cm;text-decoration:none"><b>Error! Filename not
+ specified.</b></span></a><u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+</div>
+</div>
+</div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<div id=3D"m_-2494280865980439309m_2478589684320277844m_7563982815859554363=
+mt-signature">
+<table border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tbody>
+<tr>
+<td style=3D"padding:6pt">
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><a href=3D"https://ma=
+iltrack.io/?utm_source=3Dgmail&amp;utm_medium=3Dsignature&amp;utm_campaign=
+=3Dsignaturevirality11&amp;" target=3D"_blank"><span style=3D"border:1pt so=
+lid windowtext;padding:0cm;text-decoration:none"><b>Error!
+ Filename not specified.</b></span></a><u></u><u></u></span></p>
+</td>
+<td style=3D"padding:6pt">
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt;color:rgb(119,119,119)=
+">Sender notified by</span><span style=3D"font-size:11pt">
+<br>
+<a href=3D"https://mailtrack.io?utm_source=3Dgmail&amp;utm_medium=3Dsignatu=
+re&amp;utm_campaign=3Dsignaturevirality11&amp;" target=3D"_blank"><span sty=
+le=3D"color:rgb(67,116,247)">Mailtrack</span></a>
+<u></u><u></u></span></p>
+</td>
+<td style=3D"padding:6pt">
+<p class=3D"MsoNormal"><span style=3D"font-size:1pt">10/10/23, 02:59:14 p.&=
+nbsp;m.</span><span style=3D"font-size:11pt"><u></u><u></u></span></p>
+</td>
+<td style=3D"padding:6pt"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt;border:1pt solid windo=
+wtext;padding:0cm"><b>Error! Filename not specified.</b></span><span style=
+=3D"font-size:11pt"><u></u><u></u></span></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div></blockquote></div></div>
+
+--000000000000890110060a5cd82b--

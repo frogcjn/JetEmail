@@ -1,0 +1,475 @@
+Received: from PH0PR01MB8046.prod.exchangelabs.com (2603:10b6:510:283::17) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Fri, 13 Jan 2023 07:38:27
+ +0000
+Received: from MW4P223CA0005.NAMP223.PROD.OUTLOOK.COM (2603:10b6:303:80::10)
+ by PH0PR01MB8046.prod.exchangelabs.com (2603:10b6:510:283::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5986.19; Fri, 13 Jan 2023 07:38:25 +0000
+Received: from CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:80:cafe::c4) by MW4P223CA0005.outlook.office365.com
+ (2603:10b6:303:80::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.14 via Frontend
+ Transport; Fri, 13 Jan 2023 07:38:25 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.112)
+ smtp.mailfrom=northeastern.edu; dkim=pass (signature was verified)
+ header.d=northeastern.edu;dmarc=pass action=none
+ header.from=northeastern.edu;
+Received-SPF: Fail (protection.outlook.com: domain of northeastern.edu does
+ not designate 18.9.1.112 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.112;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.112) by
+ CO1NAM11FT065.mail.protection.outlook.com (10.13.174.62) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6002.13 via Frontend Transport; Fri, 13 Jan 2023 07:38:25 +0000
+Received: from oc11expo11.exchange.mit.edu (18.9.4.16) by
+ oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Fri, 13 Jan 2023 02:38:24 -0500
+Received: from oc11exhyb7.exchange.mit.edu (18.9.1.112) by
+ oc11expo11.exchange.mit.edu (18.9.4.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Fri, 13 Jan 2023 02:38:23 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.173)
+ by oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42 via Frontend Transport; Fri, 13 Jan 2023 02:38:23 -0500
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=imC0MCG4q+h5NjLVnLL0SDmt1UdcyN+PTW+S6UenVduzUXXZ5+xJ29WT7rHX0VepTlWx7TZwxY/THE2e6XPpLQU1+M9hChbIoTZgHMvKV1KCUpMkLV7Uw0t/JWpAoflOlyPsFrX26yz6p3+XPO4Vf+GantF6ycxOZsCcIeGB5cGKjfA3pkdWmks3gzCzkP4w96r6zjh89V7LfVQ+i2QW31bN+Fbdb1PAKue7gy2JpTWLVpYwtoWuW0xF41jvxWpL3Lth3AEkKTHhWvvfYHP0F1kFx7VAIB5P1+XU8LhA8I7U1JmY3E8k1XYkJY7BhY2IkGklLOsudZtV8F5od3Ad1w==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O1hwCogTIZPraJEvXA3GkkZGb8Ie4E5avL+gV3U8OUI=;
+ b=PGvnFjQHm/0cyvvc5+4EJIMdul1V+/5V413YPWEzoTSoXceDyeZcx5ZlorY7VYHvQc9NR9f4GJuzFEBk0gdFFe3HkHqN1MDPlWsCvNulDA1+k3BtI/C1qyfhzdjkGxPB820GRJQ8gu1jye80YQ/mEplD5RZVe5dy+S8Rn9dQd3AjDJ+39ZyYEqrvlZ0xSLPYaMo91VzjHZ6DlUsNm8oauUnRybAXBopTHw4p/vhg448rQkexD64+0qK5ZbjfYvsnN9ItNWa1mXcx0x6piYVFIJiGY1nyL6Y2CJc4FiFrCql09i4wxI+b8LBy0z87imTLPFqGahdgPg7GD+6k4RXqqw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 40.107.92.102) smtp.rcpttodomain=mit.edu smtp.mailfrom=northeastern.edu;
+ dmarc=pass (p=quarantine sp=reject pct=50) action=none
+ header.from=northeastern.edu; dkim=pass (signature was verified)
+ header.d=northeastern.edu; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=northeastern.edu] dkim=[1,1,header.d=northeastern.edu]
+ dmarc=[1,1,header.from=northeastern.edu])
+Received: from MW4PR03CA0340.namprd03.prod.outlook.com (2603:10b6:303:dc::15)
+ by BN0PR01MB7053.prod.exchangelabs.com (2603:10b6:408:163::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.13; Fri, 13 Jan 2023 07:38:20 +0000
+Received: from CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dc:cafe::fd) by MW4PR03CA0340.outlook.office365.com
+ (2603:10b6:303:dc::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13 via Frontend
+ Transport; Fri, 13 Jan 2023 07:38:19 +0000
+Authentication-Results-Original: spf=pass (sender IP is 40.107.92.102)
+ smtp.mailfrom=northeastern.edu; dkim=pass (signature was verified)
+ header.d=northeastern.edu;dmarc=pass action=none
+ header.from=northeastern.edu;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of northeastern.edu
+ designates 40.107.92.102 as permitted sender)
+ receiver=protection.outlook.com; client-ip=40.107.92.102;
+ helo=NAM10-BN7-obe.outbound.protection.outlook.com; pr=C
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (40.107.92.102)
+ by CO1NAM11FT107.mail.protection.outlook.com (10.13.175.97) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.13 via Frontend Transport; Fri, 13 Jan 2023 07:38:19 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FEnps19JwGTKpfX+L09V9rKLUYgvp8Qafwt9tPCN8x0+WtE4am9aSj73+7nFQDiBs0ElYVvFW4qlEjWhGZw905lqLR4oTXJ++U1s5eSTGcxa8gSUnfpx7V8PDgEcIrOMnqRwGK3THWGFfkFsfN3EbVH7mFRDvKftWSxwBHHsz0evBOEi0YUmGGcUBlxjdHocsrcE8ufgYET4fyAoDNXmMlooCdIxiRRQrkHmduk1T5qyNeWmv8edNEac22LAOh8iBQDQDS5UQtY6oL7WFkY7UfrMFpzuEcJEGc0eqrlhAm1uYLUkUrA3EfjGC9vQaedheIv6+114m9Wh7EzyO5fu8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O1hwCogTIZPraJEvXA3GkkZGb8Ie4E5avL+gV3U8OUI=;
+ b=PBaj5lcnoTLRHEmBryiK4/Q1D5WMMJksjdIh0q6RbsOtBXDoW6hITIs30+5MVgrHQxE3UeoBoe6gcVnFd6jCLVganfBey1Ys0NM2/cvrupk1qrQ1VLaBFFx+9fg5J7K7MR2QrFtjLeLCAaQZxb3hQUJig49OGIToEbOj7C0LzI39Mtj4tJf1XLX3UumxaA0fh9XfS/Vn2aiCIW+wrCbQOc0IEmwLMx4cAJ5fexp1/A+TEtzEo2PQW1Z9CYDcD7aRgvNQHNHnDw4Qzen05KqjBOX1oAinAoVENka6V6rzkH/xZGI0iYGqx+YfsWCfY7i470UjbofbFUmVH17EjzVDRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=northeastern.edu; dmarc=pass action=none
+ header.from=northeastern.edu; dkim=pass header.d=northeastern.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=northeastern.edu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O1hwCogTIZPraJEvXA3GkkZGb8Ie4E5avL+gV3U8OUI=;
+ b=c0s6of0LyJdOlV/EZT1k9CE8jhJQ+PlAAojbFD4HyRqOnZ9vcrlJHtFFKlc12NeixULhk196TgmxqtHlPhd5p+cIU7MPx/PZJ2eo89pJOmgdx734+gbfMPknkuamIPUjgLKvFZLHG/1jiUTAY3TZd5pNYBdaAg+cvOweq2z2AhjIdLK2w17t+hk7QUxTQNhDS0egISl96axMdVrx7SpP1CTNby2hl27TC+jC8Awj/wyr9BsQ/P/FYfjfnOJtGi8N/ZvGFHNqjR55+lFIb+bZpB1j4Nie2R7vpf9c6V7WuOyqNDMfal0fb5n6n3DC9F8k2+eftx4stpm+8IX6ec6klw==
+Received: from BL0PR06MB4162.namprd06.prod.outlook.com (2603:10b6:208:40::22)
+ by SJ0PR06MB8295.namprd06.prod.outlook.com (2603:10b6:a03:38f::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Fri, 13 Jan
+ 2023 07:38:14 +0000
+Received: from BL0PR06MB4162.namprd06.prod.outlook.com
+ ([fe80::7170:5d9b:5690:ab58]) by BL0PR06MB4162.namprd06.prod.outlook.com
+ ([fe80::7170:5d9b:5690:ab58%5]) with mapi id 15.20.5986.019; Fri, 13 Jan 2023
+ 07:38:14 +0000
+From: "Wang, Dakuo" <d.wang@northeastern.edu>
+To: Jiannan Cao <jiannan@mit.edu>
+Subject: Re: Interested into your research
+Thread-Topic: Interested into your research
+Thread-Index: AQHZJsaIovxS7waGYUqRezRD3IBruK6bJvOAgABftE2AAG+cQQ==
+Date: Fri, 13 Jan 2023 07:38:13 +0000
+Message-ID: <BL0PR06MB4162E91DD980E269CDD58419E0C29@BL0PR06MB4162.namprd06.prod.outlook.com>
+References: <BN0PR01MB7134DEE2A7018ED65B288716BDFD9@BN0PR01MB7134.prod.exchangelabs.com>
+ <AA08ED18-F2BB-493B-B36A-F1FF0F8DECDC@northeastern.edu>
+ <BN0PR01MB7134103C6E52BFB94F4F7D41BDC29@BN0PR01MB7134.prod.exchangelabs.com>
+In-Reply-To: <BN0PR01MB7134103C6E52BFB94F4F7D41BDC29@BN0PR01MB7134.prod.exchangelabs.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=northeastern.edu;
+x-ms-traffictypediagnostic:
+ BL0PR06MB4162:EE_|SJ0PR06MB8295:EE_|CO1NAM11FT107:EE_|BN0PR01MB7053:EE_|CO1NAM11FT065:EE_|PH0PR01MB8046:EE_
+X-MS-Office365-Filtering-Correlation-Id: 78e884e6-4f3f-4b7e-906c-08daf53927c0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: 32zS7KbTgFHKDB92mHFF3HnePTxj7s4XJkfHXKKumF35zABfEFl8gGJ3jt4uoV1lSyFlLtuMW1aYKQQfWUWMe61rhcVxcqSv6P7R2WW/VzRwRpW70Asv6C08Eazjzao6Yh5b4IE4dba/K59eNbVQ4TGKV4ABMeAnIb+rhU4e69fxg6ZadN5wFeX0m6Y+KgckQZaqfKNsr41/75dI3mb8tK5+62XPc11ihzDEleBJwYXCa+TMsD0d3w0rSYrNTnLt5zxSqwwyWW4aGVsyFKSc+rXg+/ns0mP5FUv55IEGlivYQIf5D1nF7Y5qb1ztFzjtxG0gtRtV/JZXqK3KUXyBZxLKwSZy4JeRIBLE+ZDVXvBF0k+YzA54lpU5fIw7OE8bQNCL7XogfOBCBZoL3vBawIZfDFEkFPaHTGTZZJBomWM9aUiR4vzu1kwGk8YpwnqxWiXnUVufTg9dDUREkETb60pzvx6dD6nV1w/MGoh9rshJnBV5eTW02ZNzRMfThIZjo/uccklzXe8uuvZ9CTuzDEEH0Lz7kVfnoJNS2TpnVq3lbDLewyLJtHgBzWnpCb5rqcEK2FWNCs7tOBWyklDbd24zypC67j9BA98h9oxTKItqapTl5pLkp4wkgcpv0BPNMmxiBh9hooyVaUHVW/xdwENL7XKnQnJmUH4/75DbPkytslfQFSXjdTmEiejKy7OolS8vQvLY60c5Scq/ugVbT5pFvTZmk8BLAl2rTmlYR1K0tdAXzvghS0x2VLjZXGPy1VGa3CUn2VaKAewbvRjngA==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR06MB4162.namprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(84040400005)(451199015)(2906002)(41300700001)(7696005)(41320700001)(52536014)(33656002)(66556008)(66946007)(76116006)(8676002)(66446008)(64756008)(66476007)(186003)(38070700005)(75432002)(786003)(6916009)(3480700007)(19627235002)(8936002)(5660300002)(45080400002)(9686003)(478600001)(53546011)(6506007)(316002)(86362001)(122000001)(166002)(55016003)(71200400001)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-Original-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-Original-0: =?Windows-1252?Q?L4HDAOFWwHR5Rmaqxqwbs9uOZcKnqx0QCFR7UsImuZ246XvCFc1m811E?=
+ =?Windows-1252?Q?pPYy14GDJ1HN79zl26HEAIh8jIqm0iRQLtbgL/LCpMS1A+dlEzwo0Kyu?=
+ =?Windows-1252?Q?5kjRnAc344U+Xd38brujGSewo/eH28mwZxISztKrJin7/GRbnhIa8ai3?=
+ =?Windows-1252?Q?mpcEnDztb7EqU4GgDDGrfu+5YnKIP1QuSVlLyCum1/+TWYQNh2wrdrL2?=
+ =?Windows-1252?Q?UdPBekr/Lss5DQgscKCu6bNMAGSSYyNujuCe3aJCCoZTe6CrOUR5rURk?=
+ =?Windows-1252?Q?3+wXOWZArkPW8SUqkX9xTr/+cmK/5a/iZIX9IdFri4N2XXuOnh7vm0Q/?=
+ =?Windows-1252?Q?xls1iAubJz3kr7AGHwgnUv+icws5oiKkmHpkqIYM4gAqzgZHRB5FxJs6?=
+ =?Windows-1252?Q?GFhjKCnQqTNqcQOZ5mieQq0lYLaLT6QR/APm+rjo1YRZ/BtIrQgtctHN?=
+ =?Windows-1252?Q?ly1+6YXzAUdRb7cRxLDcaQoMHaFIB/84UGS5D8TTwbPbAx7R4rElutTH?=
+ =?Windows-1252?Q?XRJiXGITNbjQgJ0R+KOPPoC8Mr1ZsJrCe83Mw90+Kvu7tOgrAsAMehmU?=
+ =?Windows-1252?Q?fr4+uK1uIdCROU0McQyI+mA6khvH+t8Z1LgsOoTNOw7bz0LeaROgFcFk?=
+ =?Windows-1252?Q?CqhhhBAu4azoATWcmZaJVD+niouW/CbQ0jaJVABvUla95rLQ/sZBabxm?=
+ =?Windows-1252?Q?qP9GsoW9AL3mGAFE8jJlyjkEWS44/lZad+mPs+dsZ7lbjcwx6blMPyqf?=
+ =?Windows-1252?Q?k0oz+nLbLyTTbpsEWSHMyixqk0ppcPssdb8F4+1Z1BMR6sWumyKK8fTK?=
+ =?Windows-1252?Q?6LGDW1OpgPeJbFSZBPxBiza/Ipy/4YcuaCfrSPiDustqgQ6uR2kMOyUW?=
+ =?Windows-1252?Q?ktF/2RvGUb/6H89mqJxjleplzaAxNALGoXS0f03eDZEKrC66wrCTAgib?=
+ =?Windows-1252?Q?owQc35oEsmHCqmLmJwU0V0CfZFXIPVzO8Kln3lInLw5il27jcK51oOeF?=
+ =?Windows-1252?Q?/8LoB/14ZHl3Ycf3bq+XI9era0qSkm0IcKjlwZkRuRPTBqMvsALtbtqD?=
+ =?Windows-1252?Q?SXpgBTKz6jiPmj7ISOUYSgHvTBl6xPPcCNEXOi/w0TBc3tOpzxj0bf/q?=
+ =?Windows-1252?Q?JHCs7RDFJpBlwrBTnM5zmvCLHaWUyWgIiVe5TAigFd4RYHqHYXG3LJjm?=
+ =?Windows-1252?Q?KQvV0sBCUgOGgkK6LoD4WTXpUf4hrIFZ6do7A5xhjs58C2e5MzZJjInS?=
+ =?Windows-1252?Q?Y50D+VCiYOkgyxNg5RS06laCfBSqdfE/Tx6WJOcXWhdKMgynGt0YUpjY?=
+ =?Windows-1252?Q?H3RJmen6n8Ey0lqYamrnnMrb3L3yxl4MsPaA4MrLA8VfaobZpPoq/IF5?=
+ =?Windows-1252?Q?MTz+JtofUnkmTLyalrOQ5ZWHVfVI2skmFjIb/cZbEyAUP5WKIXbH3NfM?=
+ =?Windows-1252?Q?tZQHkCnDTD0lapaNNnM9DJt9CS6ryLGZ3fg+kOtDc/+w40EkV7MgvCnY?=
+ =?Windows-1252?Q?YUboMh8uIOIIaWCpe3wfVXG0pq/vYd5XwELwQt2T8HC1A/4woMpD+6hL?=
+ =?Windows-1252?Q?Bq4juPqJ/xRcvJ8fG5fK8sjRFXHo/yaWzbEK9azkcsN7FJzPZpMCDH1P?=
+ =?Windows-1252?Q?S/GX1f0Dj9h6B9RsTd6wfCSD/oM1rTuuKmXueR5iCinFV4WWpqlD4Tzb?=
+ =?Windows-1252?Q?66QNOh4XUMt3n7UCK4OicDD+B4Y3PcjYi3oWBjA4GgMu/pLQeS+8QtdU?=
+ =?Windows-1252?Q?lagGlMG3xGFBodu1NXwtPOsFs4SPfEn5BmvNvoHGpacRGGdMc0nw16Jp?=
+ =?Windows-1252?Q?b32tKX0BLj0Zs38vtqsWZj4INWQ=3D?=
+Content-Type: multipart/alternative;
+	boundary="_000_BL0PR06MB4162E91DD980E269CDD58419E0C29BL0PR06MB4162namp_"
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR06MB8295
+Return-Path: d.wang@northeastern.edu
+X-EOPAttributedMessage: 1
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersPromoted: CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 0d5182c8-f3ad-434c-7a30-08daf53920c3
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?dem8otgFwvYUzm96kV3blE1BIe74h6SufUPxzmVzCqlCqZw5Z1ujN/yOIrxn?=
+ =?us-ascii?Q?IdXDzZVh0CI7CwvG7fNeeDhryy0jSTBvelmJ3Y30rp8CQ6KLyDuYpKRoHyov?=
+ =?us-ascii?Q?X74H8khzFeHErWMFTLyLJYJKt+JqzwCgEuE3a/iRGvTPhS2RqY00WS06tFCo?=
+ =?us-ascii?Q?dS61u4OMpsclse0HXJ9UDJPumR+7w5iASXWfBBiMgXNWk0FlbAEBDlr800ln?=
+ =?us-ascii?Q?UsY2ddkzVhpn9rBtjcLC7GeZI830+ze6/RP9uQh6VPC/v45nP7iluBamFlTj?=
+ =?us-ascii?Q?2BWI+zkpLczW5+BMe5oPOH8Jvpu0qL1y8vImq8AyoXMnv+n4FpK/GNs/Wrx8?=
+ =?us-ascii?Q?FVCx7igl9BtN8FU/tsACRDI4vjx7NI5Bt35dgp5E/otbz6UsYBG3M0rSuahK?=
+ =?us-ascii?Q?NS5aKttKuSd0HA+nq4AYsLX4FnzxWs29tuYscH9kXP74Yqr/5PAkhLt9AExT?=
+ =?us-ascii?Q?tyj0nSs+QBtMFkWFyW2emP2ti4eqNQzfU5d+avy3A2+6QqZy6S290XDIKQnO?=
+ =?us-ascii?Q?pQ6iHl8NCG1uPC85nptBuoyjKBXTg/0l32l2QO+Af0ssoJweSRtw6324oCAO?=
+ =?us-ascii?Q?J3bQBAEFCovQSF/3Y22rCQ38p6z1rBfU+tdbXxh6lADop1b4D0nzBdnsC/7q?=
+ =?us-ascii?Q?c+NeN616ugZjNlrpScu6vjj6COR2wHwhNGwg4giaRvgc4B+fkMek5R3tPWZg?=
+ =?us-ascii?Q?samajplKv559bkqo14z/B0q24KqlQzglVzCGcFhT4+uoKqmxaHM+6l5o2VVA?=
+ =?us-ascii?Q?bH/LBvTg+HgktBtnCl61zNvxVUyYPlo9VX4GuaEW6WxFbc9extxbui67CXOK?=
+ =?us-ascii?Q?YMIifdTgxvbV1utNHh81r5EbJWY4cJH1sm4znheGY22NaGm3bGF7kekam57w?=
+ =?us-ascii?Q?ltfzll78Wm01Speuh/wM/NPdppAz0cWXTE49fgjLMTdTj6MCphgpN1j7gVj/?=
+ =?us-ascii?Q?N0jqZw1gZpR3NZG6z5y6bTaijWJ47n9R1/g1DqxqmGm+YB7CNapD6xndqjqi?=
+ =?us-ascii?Q?jEXd2/XqvIQ9Ts1UyrW5B66HBSvfRX6Rgd0bzE0/fh25s/ih8m5PZDSgCkBY?=
+ =?us-ascii?Q?Prx9qfqqsLEqXUXSMx/s1gVTSwF50SFh/xRb5gYne4CBDl0hk+QwMvdcyLMM?=
+ =?us-ascii?Q?htI2pzoZYHRTYPzonvBrXv1+cDSHY63E9/du2o1suaSd03TSN7rZtmEPzNIO?=
+ =?us-ascii?Q?r5N9+GyzEIAnrAsWyfRNKiMg7ZO/azjQfQuWRZqvDf5qA4RlJ38C34VGiaZm?=
+ =?us-ascii?Q?Q6D4mMmqYRv8JOcU+qpRE+rE3rCBVBhJrfxbkqn6zrWcV+FycroI4+JDg6vV?=
+ =?us-ascii?Q?EOOOUah2PQE741plLc6AnIQcQ4p2SmVmC9nZomysp2dwbL/wxWO7qwgYPQkj?=
+ =?us-ascii?Q?+M/DouUpB7QQ8jgWcaL2ZToEVMy2jCQqRcNYi348GgvQDN69Dp4BNUT7FSgZ?=
+ =?us-ascii?Q?8uHe0dW6sFtsohNsxgWfalqz9a63cbC+61PK4JDGIGjCCPko4cR1a17YhuEm?=
+ =?us-ascii?Q?xzJcZw2xBuDEmsyQq09vKkRl5hW9SYQDtxuo+uvvOShRNDRWS/vafs2T3Rvd?=
+ =?us-ascii?Q?Ee3NcCa07+yZsqHufHab5qYxzB0dcOyEpObMgz9GlPBSz+UUYwGy2nnU89/w?=
+ =?us-ascii?Q?xnInOiG+g5qrNlOdz6dmjjHMXA+HwYPjAWM4+OuqxMQe0n0qY4+6rkn9KOSr?=
+ =?us-ascii?Q?xwpSxROO8pzRF+qIN5w83QL/6uRi3uNdma1J0Y/0wKr3zQee?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:40.107.92.102;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:NAM10-BN7-obe.outbound.protection.outlook.com;PTR:mail-bn7nam10on2102.outbound.protection.outlook.com;CAT:NONE;SFS:(13230022)(4636009)(84040400005)(451199015)(6506007)(3480700007)(83320400002)(5660300002)(53546011)(52536014)(4006050)(8636004)(1096003)(6916009)(8676002)(9686003)(356005)(166002)(33656002)(45080400002)(7636003)(75640400001)(83310400002)(83280400002)(83300400002)(26005)(336012)(55016003)(7696005)(75432002)(86362001)(83290400002)(19627235002);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR01MB7053
+X-OrganizationHeadersPreserved: BN0PR01MB7053.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb7.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb7.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo11.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 13 Jan 2023 07:38:25.5218
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 78e884e6-4f3f-4b7e-906c-08daf53927c0
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted:
+ CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 2382a060-5319-455d-3471-08daf539242e
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.112;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 07:38:25.1312
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78e884e6-4f3f-4b7e-906c-08daf53927c0
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1NAM11FT107.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB8046
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.3589294
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.5986.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?Windows-1252?Q?v4qagvcg41eWunY2s/OjfClchl4P9uzN4mMIyS8J/Heq0VEWbsfmSo/y?=
+ =?Windows-1252?Q?gw205kbYaI9R86aF09CxRp9MzbefqJ7v7TWq3JIoHhOa7nm54SGZW2eN?=
+ =?Windows-1252?Q?OHGIQ7qRpcG16SdC6E3zvjClDXK3P5Dd0U8+UKEjYN2NehuO4IwahlI7?=
+ =?Windows-1252?Q?/ydwIQIGaUWUCLOhZAicxO1k9u8DJ0gFZQB/va+GSK3uHhY2bKd16gnz?=
+ =?Windows-1252?Q?R0F97PqevfK0OFvn6EMkU95sbLzYOP47H4FP8e+qPqBRexmTSwVFMxJv?=
+ =?Windows-1252?Q?c6dFbtNk8i7WpZUJMIgGpMvhulhhfUb3fCjr4UodfGAG/nFOlgzhW0tL?=
+ =?Windows-1252?Q?J6A7ZcCPOhCjO5BOAAxP67RL7ms7rTBWGMOFd4ilsgM2hTsPWE0c6l47?=
+ =?Windows-1252?Q?DY/a55Q5pNyzOFKAMHl5UQz6yAkeBrYLH3MqaA/ZSy1QuYMEy6tCt1Z+?=
+ =?Windows-1252?Q?EBVgusxeRoOaIJQM4ppUA0p3FxuWcwQrn/CQ9Yz33pX9KeDzwWvsPVgl?=
+ =?Windows-1252?Q?cuRIXc3tNUohSPQsqypzJbIHtQ2j1UiUuYwSyoTmS+SG0DAonxUUUwNY?=
+ =?Windows-1252?Q?W2a0NCiHgztKrENntp/77HTRZ3ZfXxlcCWnKzvYBxW29frJ1pzIS7Lh3?=
+ =?Windows-1252?Q?HUaoemjXYBBOCup4Iw9tNSraX5wEPhlJspDUqEc3r0Sme0jn9OOe9MyK?=
+ =?Windows-1252?Q?PKspUVoKRZ/RlCjB5Krmcifhyd082FXyUwueElqqwQaenk8mEheTsDhE?=
+ =?Windows-1252?Q?J/CK7IuJ17ws7hKRK/mgl5X+w8pDdxcD7ZrecSGbMU4X5N0BhnDo/MqV?=
+ =?Windows-1252?Q?h9KMtSIvNzcYSJc4eYbDQNs0XR/WVnoeGY44mZ9+8+Z2R9XLAlkJURe2?=
+ =?Windows-1252?Q?zoqxR89C8nBADJRjKKf29OpFtp5/fKvI9kD9HO+v+iNwRQzwVs5reCpP?=
+ =?Windows-1252?Q?y5mb+MEG2k8TofS8FhVP3s2NCMHutRTV2WBO6ULhJxsPeIKH5+HIpWw3?=
+ =?Windows-1252?Q?AI6ETxtrjpUg5YoX7kA3V2pBZ3neiR/NCycbDPraVrV4EceSSnWW8U+U?=
+ =?Windows-1252?Q?2QDp766QIpWQ09o2xaWdjATygcfUsvUf/w80NAYiJKE4u+iR8ktXA7Cc?=
+ =?Windows-1252?Q?IzXAPUr6cX1Y+DiHolUb/kXyGrNH0lH6mW6lBqUGe5aXJvQOzecrUP/r?=
+ =?Windows-1252?Q?czLMsyC8o9z3/r+u797W8kObTe6nKy2jxt10veVlbB4vZ/b/oBw2ogiw?=
+ =?Windows-1252?Q?kVZXDzPzTEnJwu/+22ElR/BqkOJSW0A3MfvEXwu/W9QqeDat4Ys6/wtS?=
+ =?Windows-1252?Q?uFrBsn64dwyMvoZk2ogmqa7ZCWaci121cnG2NhT+HhavbEIheFYJSyqN?=
+ =?Windows-1252?Q?SS0jjMjAyKu9x6sKlQD1YgBjEMigSBuENKIvtWWh8MfuFE0+0nm8D/SS?=
+ =?Windows-1252?Q?C2TlZ5ygXb3uCcExVRXHFxFWi9cHSJZu6/fDEKpq6P3XcdoEGAdv3yka?=
+ =?Windows-1252?Q?R0QDgh3NjtIFPMqBj4+MIeUs1j1Rew6hg1dJT32V4SPFtd5mNHPxQTU4?=
+ =?Windows-1252?Q?IdJoKH5vSVm1Kf9+REidb4Rhb1Dz77yqA4zWDE76RpwIrIHAEO1rp0Su?=
+ =?Windows-1252?Q?z8guj88DxYR9iWJTVLMjpLtFKlL6Ac8XGTDekqFmz8Vt0LgMkw2O0aDy?=
+ =?Windows-1252?Q?1CMk/V30Xb8pax8nzsjzuWiu2GAaiyXv6jDRMHi2gBlTM0hUQtf6JPdE?=
+ =?Windows-1252?Q?r2YJsCA1Z2BMgn4LGKQ5X6AtXDW6URTXtGatcBj6gAUPsi5T/9VN4UP2?=
+ =?Windows-1252?Q?d9q0S0SCTtooqqLxUqApKZ+LeNVSIyso18onDvqlvtYvIHTc?=
+MIME-Version: 1.0
+
+--_000_BL0PR06MB4162E91DD980E269CDD58419E0C29BL0PR06MB4162namp_
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+
+How about 2 to 2:30?
+
+Get Outlook for iOS<https://aka.ms/o0ukef>
+________________________________
+From: Jiannan Cao <jiannan@mit.edu>
+Sent: Thursday, January 12, 2023 7:59:16 PM
+To: Wang, Dakuo <d.wang@northeastern.edu>
+Subject: Re: Interested into your research
+
+
+Hi Dakuo,
+
+
+
+I'm available tomorrow 10AM-2:30PM
+
+what period of time would you prefer?
+
+
+
+Thanks!
+
+Jiannan
+
+
+
+From: Wang, Dakuo <d.wang@northeastern.edu>
+Date: Thursday, January 12, 2023 at 19:15
+To: Jiannan Cao <jiannan@mit.edu>
+Subject: Re: Interested into your research
+
+Great! let=92s find a time to chat! What time are you available tomorrow?
+
+
+
+Best,
+
+Dakuo
+
+
+
+
+
+From: Jiannan Cao <jiannan@mit.edu>
+Date: Thursday, January 12, 2023 at 3:45 PM
+To: "Wang, Dakuo" <d.wang@northeastern.edu>
+Subject: Interested into your research
+
+
+
+Hi Dakuo,
+
+
+
+I'm Cao, Jiannan, currently an MIT SDM MS student, second year at MIT campu=
+s.
+
+I'm very interested into your research domain HCI + AI, and computational n=
+otebook. I would like to be a research assistant into your research lab.
+
+Would you mind having more detailed discuss on this?
+
+
+
+Thanks!
+
+Jiannan
+
+
+
+This is my resume.
+
+
+
+--_000_BL0PR06MB4162E91DD980E269CDD58419E0C29BL0PR06MB4162namp_
+Content-Type: text/html; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DWindows-1=
+252">
+</head>
+<body>
+<div dir=3D"ltr">
+<div></div>
+<div>
+<div>
+<div dir=3D"ltr">How about 2 to 2:30?</div>
+</div>
+<div id=3D"ms-outlook-mobile-signature">
+<div><br>
+</div>
+Get <a href=3D"https://aka.ms/o0ukef">Outlook for iOS</a></div>
+</div>
+</div>
+<hr style=3D"display:inline-block;width:98%" tabindex=3D"-1">
+<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" st=
+yle=3D"font-size:11pt" color=3D"#000000"><b>From:</b> Jiannan Cao &lt;jiann=
+an@mit.edu&gt;<br>
+<b>Sent:</b> Thursday, January 12, 2023 7:59:16 PM<br>
+<b>To:</b> Wang, Dakuo &lt;d.wang@northeastern.edu&gt;<br>
+<b>Subject:</b> Re: Interested into your research</font>
+<div>&nbsp;</div>
+</div>
+<style>
+<!--
+@font-face
+	{font-family:"Cambria Math"}
+@font-face
+	{font-family:DengXian}
+@font-face
+	{font-family:Calibri}
+@font-face
+	{}
+p.x_MsoNormal, li.x_MsoNormal, div.x_MsoNormal
+	{margin:0cm;
+	font-size:10.0pt;
+	font-family:"Calibri",sans-serif}
+span.x_EmailStyle19
+	{font-family:"Calibri",sans-serif;
+	color:windowtext}
+.x_MsoChpDefault
+	{font-size:10.0pt}
+@page WordSection1
+	{margin:72.0pt 72.0pt 72.0pt 72.0pt}
+div.x_WordSection1
+	{}
+-->
+</style>
+<div lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72" style=3D"word-wrap:b=
+reak-word">
+<div class=3D"x_WordSection1">
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">Hi Dakuo,</span><=
+/p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">I'm available tom=
+orrow 10AM-2:30PM</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">what period of ti=
+me would you prefer?</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">Thanks!</span></p=
+>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">Jiannan</span></p=
+>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p>
+<div style=3D"border:none; border-top:solid #B5C4DF 1.0pt; padding:3.0pt 0c=
+m 0cm 0cm">
+<p class=3D"x_MsoNormal" style=3D"margin-bottom:12.0pt"><b><span style=3D"f=
+ont-size:12.0pt; color:black">From:
+</span></b><span style=3D"font-size:12.0pt; color:black">Wang, Dakuo &lt;d.=
+wang@northeastern.edu&gt;<br>
+<b>Date: </b>Thursday, January 12, 2023 at 19:15<br>
+<b>To: </b>Jiannan Cao &lt;jiannan@mit.edu&gt;<br>
+<b>Subject: </b>Re: Interested into your research</span></p>
+</div>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">Great! let=92s fi=
+nd a time to chat! What time are you available tomorrow?</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">Best,</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">Dakuo</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p>
+<div style=3D"border:none; border-top:solid #B5C4DF 1.0pt; padding:3.0pt 0c=
+m 0cm 0cm">
+<p class=3D"x_MsoNormal"><b><span style=3D"font-size:12.0pt; color:black">F=
+rom: </span>
+</b><span style=3D"font-size:12.0pt; color:black">Jiannan Cao &lt;jiannan@m=
+it.edu&gt;<br>
+<b>Date: </b>Thursday, January 12, 2023 at 3:45 PM<br>
+<b>To: </b>&quot;Wang, Dakuo&quot; &lt;d.wang@northeastern.edu&gt;<br>
+<b>Subject: </b>Interested into your research</span><span style=3D"font-siz=
+e:11.0pt"></span></p>
+</div>
+<div>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p>
+</div>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">Hi Dakuo,</span><=
+/p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">I'm Cao, Jiannan,=
+ currently an MIT SDM MS student, second year at MIT campus.
+</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">I'm very interest=
+ed into your research domain HCI + AI, and computational notebook. I would =
+like to be a research assistant into your research lab.</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">Would you mind ha=
+ving more detailed discuss on this?</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">Thanks!</span></p=
+>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">Jiannan</span></p=
+>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">This is my resume=
+.</span></p>
+<p class=3D"x_MsoNormal"><span style=3D"font-size:11.0pt">&nbsp;</span></p>
+</div>
+</div>
+</body>
+</html>
+
+--_000_BL0PR06MB4162E91DD980E269CDD58419E0C29BL0PR06MB4162namp_--

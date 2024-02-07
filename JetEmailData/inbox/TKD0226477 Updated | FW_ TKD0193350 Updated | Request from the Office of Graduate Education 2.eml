@@ -1,0 +1,546 @@
+Received: from SA1PR01MB7294.prod.exchangelabs.com (2603:10b6:806:1f5::16) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 19 Sep 2023 12:12:14
+ +0000
+Received: from PH8PR07CA0024.namprd07.prod.outlook.com (2603:10b6:510:2cd::8)
+ by SA1PR01MB7294.prod.exchangelabs.com (2603:10b6:806:1f5::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.28; Tue, 19 Sep 2023 12:12:13 +0000
+Received: from SN1PEPF0002BA4B.namprd03.prod.outlook.com
+ (2603:10b6:510:2cd:cafe::76) by PH8PR07CA0024.outlook.office365.com
+ (2603:10b6:510:2cd::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.28 via Frontend
+ Transport; Tue, 19 Sep 2023 12:12:13 +0000
+Authentication-Results: spf=softfail (sender IP is 18.7.71.111)
+ smtp.mailfrom=service-now.com; dkim=pass (signature was verified)
+ header.d=service-now.com;dmarc=pass action=none header.from=service-now.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ service-now.com discourages use of 18.7.71.111 as permitted sender)
+Received: from mail.exchange.mit.edu (18.7.71.111) by
+ SN1PEPF0002BA4B.mail.protection.outlook.com (10.167.242.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6792.19 via Frontend Transport; Tue, 19 Sep 2023 12:12:12 +0000
+Received: from w92expo13.exchange.mit.edu (18.7.74.67) by
+ w92exhyb6.exchange.mit.edu (18.7.71.111) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 19 Sep 2023 08:11:57 -0400
+Received: from oc11exhyb4.exchange.mit.edu (18.9.1.100) by
+ w92expo13.exchange.mit.edu (18.7.74.67) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Tue, 19 Sep 2023 08:11:56 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Tue, 19 Sep 2023 08:11:56 -0400
+Received: from MN2PR02CA0021.namprd02.prod.outlook.com (2603:10b6:208:fc::34)
+ by IA0PR01MB8585.prod.exchangelabs.com (2603:10b6:208:48f::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.24; Tue, 19 Sep 2023 12:10:12 +0000
+Received: from BL02EPF0001A0F9.namprd03.prod.outlook.com
+ (2603:10b6:208:fc:cafe::a6) by MN2PR02CA0021.outlook.office365.com
+ (2603:10b6:208:fc::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.28 via Frontend
+ Transport; Tue, 19 Sep 2023 12:10:12 +0000
+Authentication-Results-Original: spf=pass (sender IP is 199.91.141.22)
+ smtp.mailfrom=service-now.com; dkim=pass (signature was verified)
+ header.d=service-now.com;dmarc=pass action=none
+ header.from=service-now.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of service-now.com
+ designates 199.91.141.22 as permitted sender)
+ receiver=protection.outlook.com; client-ip=199.91.141.22;
+ helo=outbound37.service-now.com; pr=C
+Received: from outbound37.service-now.com (199.91.141.22) by
+ BL02EPF0001A0F9.mail.protection.outlook.com (10.167.242.100) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.19 via Frontend Transport; Tue, 19 Sep 2023 12:10:11 +0000
+Received: from app132155.sjc201.service-now.com (unknown [10.249.57.169])
+	by outbound37.service-now.com (Postfix) with ESMTP id E1AB5286AC
+	for <jiannan@mit.edu>; Tue, 19 Sep 2023 05:10:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 outbound37.service-now.com E1AB5286AC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=service-now.com;
+	s=20210504; t=1695125410;
+	bh=EiCVLALDFLwCWXfZHdYj5Ry5fV6pUKZGM0EhPP+5Pyw=;
+	h=Date:From:Reply-To:To:Subject:From;
+	b=qQ8Dmo9GSGRtBDgxed6/keyT3tCqIPzReY4Wvg8oEUAdEecemX9jEDI947CX1gZce
+	 Qk9tHMxW6WWIiNKUjH5UU1EQGUxAKKTG70F4UW5TQVF59pW7aEApPsbLqcaFO7dcMg
+	 6nQi601hL+WA8ptuCDG/8Z+cYJftx42wVuerr7Q6WbPF9j5LxXUn01N0gsltC1rEMl
+	 E5VPTkH1Pf8T8ihAzKPEi9x2L4NchVy1AptwxcXHu4dZxs2q57NOitDMIvYA/r3Kib
+	 DYveFOpHmcV0vJl3jyJvag7cE9KAZg1GPlqr8bbVhU6ABJvukwyMiH9LN3ho1QXDzM
+	 V3FzkcQ7qF3+g==
+Date: Tue, 19 Sep 2023 05:10:10 -0700 (PDT)
+From: MIT ServiceNow <mit@service-now.com>
+Reply-To: MIT ServiceNow <mit@service-now.com>
+To: jiannan@mit.edu
+Message-ID: <30194468.9760.1695125410879@app132155.sjc201.service-now.com>
+Subject: TKD0226477 Updated | FW: TKD0193350 Updated | Request from the
+ Office of Graduate Education
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-ServiceNow-Source: Notification-492f97d1db4818100e619098f4961945
+X-ServiceNow-SysEmail-Version: 2
+Precedence: bulk
+Auto-Submitted: auto-generated
+X-ServiceNow-Generated: true
+Return-Path: mit@service-now.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BL02EPF0001A0F9:EE_|IA0PR01MB8585:EE_|SN1PEPF0002BA4B:EE_|SA1PR01MB7294:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 697b4291-e640-4632-0fbc-08dbb909a82c
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?utf-8?B?emtQbWg1WU1sMW56aGppZkx5NWs4TThYd2Vxb2hUVHh4MG1lc0VuSXRjSGly?=
+ =?utf-8?B?UUMyZkJlbG1IZUNZRnNleGlIL29aVURsREVldzFiMGx4Q0xWTkRhV2RieVho?=
+ =?utf-8?B?OTdWOGFTMHUxNmRIQWEvOWNRNS8zZlQ3Z29DSjlUejZmYXFrOHR1ZnRId3Fu?=
+ =?utf-8?B?QllvZEFZaTFJbC8vSTVDdDZXYy9jV3M3V0NWeHVPRHNBYnF3RVJoUFBnSk5X?=
+ =?utf-8?B?cUV5MEYyMEI1d0tkVVlNUWJJVC94Z0phTkFYaHJwZUx3VGtNZUJaZEpmd2Z6?=
+ =?utf-8?B?L2FNaVhJR05iUWJHZkRXaTliR21iQ3ZiSy9jYUFrd2RpNzQzWi94VlVPSnU2?=
+ =?utf-8?B?QkYxMEE5OGFsRnN5OVo3c1RiQmJuZFp0ejI1MWlaWEpxcDkzR2dRNlNLUkc4?=
+ =?utf-8?B?Ymo3UDkrZUVzQkNFQXJlS29RWFZOeWx6REEwQW9rSVpyZTBNVEovbnAwcThT?=
+ =?utf-8?B?cGNQNXZwNlYra0dibXY3Rkt3TCt1cTVTWFEzaFhkS085TnIvdk9Wa1VJVnFN?=
+ =?utf-8?B?NWRuTVN4OW1VNjVsdkxlU3pON0hpMXp2bzd6ZTFJYWtNS0cybERiV20rU0pU?=
+ =?utf-8?B?bVFwekUvNEY3RWFGTDY5eXRHUVM5eWw0b0wzS1lxZGxFcCtrYkt4V3lkWmMw?=
+ =?utf-8?B?bnI2NkNpamZtQ3FZOTlENUE5Q0ttWFZHeldnRTFkSjhXOUQvU1JhRVd4SHNX?=
+ =?utf-8?B?VDhTbXNKa29uaUFIQnFNd3JHN2t0aG9QWkZVOUlsd2tZQmQzQVZ5ZW41VTZI?=
+ =?utf-8?B?MklRTlpuZ0xDL2h3SEpxdHZvMU1YdUZKcS95anQ3MDBDVUNIaVBOdjhJMDJV?=
+ =?utf-8?B?VFJnaFVHSkt4U3FpMVBaaEZTU0hBZEd2ZGUrTnRSbEFUTFFIeFlsWTF5NWZQ?=
+ =?utf-8?B?M2xaU2M0dmEzTk43QjRWWXV5SkhCSmR0K1BvRHZUMHhBdHBwQUl0eEx4YWc0?=
+ =?utf-8?B?UHhtelJlUWw3eDA3bG94aE5QSFoxMmYrRUIzRVFKT0k2Vkx4cWNIcVVGaCtr?=
+ =?utf-8?B?ZHdwYzRCMXBzMG1jUEswV05hYkJ4Y0QvUFE5VjM5ZjFQTDdWcVVvRllna3h3?=
+ =?utf-8?B?dnFVREltRUFMYzFSRzJBR3RiR1ora1c4RTFmSlY5WlVvM09TWm1FcDhJUVVk?=
+ =?utf-8?B?Y1EzNWhCanRIWG9KeE5RTytyMVRKcnlsQzhMd09XNDR2endJRGlrLzE2K05y?=
+ =?utf-8?B?bDhkK05aTGpCYkk2Yk90VE9sTEZmdURLTXdZeHQ5TEVYK0JCd2V5WEYrVEhG?=
+ =?utf-8?B?bTh4T0hZWGI4NGdubmhjSnRWVEJrL2IycW1WY1hOVWwyOFFMNit4V2NMWnBs?=
+ =?utf-8?B?d0kwSWtacExxeXNFRGdwL3ZSbVVqQnF6VEhGYXRRNnlxam1TeHhIUHVJRW9s?=
+ =?utf-8?B?aGFqeXNqSisxdklFVENYNjZRR2pheGN6WW8xSFFtL1MzQXdyOEU3eWRVZWh1?=
+ =?utf-8?B?ZUdmYjJ0ZEkvbk55Z1dEekRnUnp4VjY0VmNxVWVrd2xyQU4wcndHSXZwQStW?=
+ =?utf-8?B?TlpuUHJwU2U2TWY0MkE2TzJKZnhXVzVLQ0VwTzQxQjh4OVZRS3hYbmJYQVVK?=
+ =?utf-8?B?WjNwWU1kK09GNGh1NnFLQzA0ZmhkMXFNelRPZndySmk4bDJWK0hKd3oyQ1VQ?=
+ =?utf-8?B?ak1VUTRXbExlaHVFSVNFT2o1WjBrZE56aE5jbkpOUVFmM2piYmpGL1hTT3Bp?=
+ =?utf-8?B?aEMxVEgxQ01XMGZWMnBlQmNBTUd5SDd1UjBPS2V4MjJyemZWUDNWRjhUMC9Z?=
+ =?utf-8?B?UXFmbHIvMmZMK2gyMmxUUDVFTStHaFpSQUFLdWRrVFFRR1ZXSVg2ZUtHaVc4?=
+ =?utf-8?B?V1hJV0o0bVRVRzdLaXFialBwTHRIaWhBRlhOWjQrd293Y3ExYnlINlhvYmEv?=
+ =?utf-8?B?QmhFMTF0YitwS3ZuU0Q3S2d6cWI3V0huRnpTcmsyVDFhNDJpdUdISzVETVJn?=
+ =?utf-8?B?QUhTemYvRHF3RVljTVAwdG5qK3JKZHJYMVdsN3VLRDRjVE1uZGcyU2ozTkE3?=
+ =?utf-8?B?dkVwK2FlS1VMR1JRT3BCdEFOZWhFOVJTM09RNTRlekt2UzVRWUtSRWp2bXNO?=
+ =?utf-8?B?SWhQb3FnNGwvRStBUVRvK25KQWc0RFlLOEhhV2Q3dHBKV0x1d3VjQzNiUlEy?=
+ =?utf-8?B?VTA5MUl2b3RnVnF5NlJZMnZkcy9hUUNNRnBqdkFTTlczai82cndCTVNPYTRN?=
+ =?utf-8?B?TGVzay9IZURlSWZ1bGZQUGVMaW94SHZBanFacTlZMkxVb1FUcVp0OTMzWisr?=
+ =?utf-8?B?cXUrZUJxamxBeFhGdmVTZFExSnN1REh6Vm9DSzBlWithbDdSaHRQV1BCaDQ0?=
+ =?utf-8?B?T2EwOEwwaWtGenBoMis3WVlBaEFmTVREUTBpN1FsVDNyaUN5VEtBYWlWT0RY?=
+ =?utf-8?B?MlRNUFBOREhRWXFZeFMwR1RxY2RWVXJvWXpINkhRc1ZZTVgzLzZHaGM4MHZQ?=
+ =?utf-8?B?cCsyRTNJdGRxc21VR3hxdlI0TWNNeUc1dVRmUTFtWU9oZUFOTmtnaks3T2Nl?=
+ =?utf-8?B?QjBMTUt3UVB2MFc1UXhXK21ZdzNQUkdZbEZ4a2tjUUUxWDBUK1E0UEl3RVJI?=
+ =?utf-8?B?KzZvZERudy9YeXJSdDhCZmZTL01Bb1NmSERBVkZGd2hFM0ZiTU01WXFhbHJo?=
+ =?utf-8?B?T2p6dmR0RTNjWHhrcVgxMlFsRXVnZWlDYUlOaEcwbnpQWjg3Zys4SWtibzY3?=
+ =?utf-8?B?d1J4TDJIU1FxdjJMWHlVaFBWaTMvSWlRdDVmSWZEYU8xakRDK3hCMDdFV3B0?=
+ =?utf-8?B?a1ZxL0hhZ3FvMnlDS1hScWRuOFVIZUVvdC9OUm8wNTlEOHpoR1RoY0R4M2s2?=
+ =?utf-8?Q?o8XVz94uZsbtovxgwM6WEX4Cx/zrvapnA4YhO9eCHX?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:199.91.141.22;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:outbound37.service-now.com;PTR:outbound37.service-now.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR01MB8585
+X-OrganizationHeadersPreserved: IA0PR01MB8585.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb4.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb4.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo13.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 19 Sep 2023 12:12:13.0361
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 697b4291-e640-4632-0fbc-08dbb909a82c
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: SN1PEPF0002BA4B.namprd03.prod.outlook.com
+X-CrossPremisesHeadersFiltered: SN1PEPF0002BA4B.namprd03.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ SN1PEPF0002BA4B.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL02EPF0001A0F9.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 9d9daa00-3c4a-4082-5042-08dbb9096019
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.111;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:w92exhyb6.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2023 12:12:12.8173
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 697b4291-e640-4632-0fbc-08dbb909a82c
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.111];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL02EPF0001A0F9.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB7294
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.6728389
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.025
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cE8rM0JKWjkyeDR1L3NFTVN1bjMyaUN1cFMwUWFnNnoxNTQ3NUhYRk9keHZm?=
+ =?utf-8?B?dzh3S2FEbHI2RmZ6M2ZkWEk5L0NQN2d5aDlIYmgyU2JHZ0R0NERkK01sZkJ2?=
+ =?utf-8?B?RG9DeVY4bW05YVZXYjRtdVRjNCsyRGVRa2ZoZjYxVFZhZUdDT2luWFpoMDVP?=
+ =?utf-8?B?ck9jeUIyaXppTmJjZjJISmc2ZndCUWZ0SFRsdGJrcytWRmhzTnlQQlZqTFFP?=
+ =?utf-8?B?VURsZC9zQjMzNEI0VjVUWkFKSk5yeEFFRzdTUldVOEk5aHdSejhYRmtueldR?=
+ =?utf-8?B?OFJ1N0t2SWhhaDFWTVBtc3p0REszWHplWVcyWHlQdlhKbzVLVUdhOHppOWQx?=
+ =?utf-8?B?bkZGOWkzOVpiMmVXMEc1RjEyQTYvdWdEUWtrNWk0dFF4THhtRENOZ3RGa1VP?=
+ =?utf-8?B?RWcycHBEcXR2NUZHZytFeW9xNlVacEJWUy9jT0RGQThHWk9NR1plSXdQQmtv?=
+ =?utf-8?B?aE1rQWw0UzMyeVJCRWY2ZnpqaVI4NnFSdUR3NGtjNXN2QzJyUlZWRUJiQm9K?=
+ =?utf-8?B?WXZIMjk5ODRCTnJXOVlwVGxjamJ6WXdBRlY0K3BVM1dJOHpDNCt0dzZCZTFO?=
+ =?utf-8?B?N1gxazRmWVFMc0E5OUNxSmNNajJrK25JUXdpN1NRSUpwQU9EOUZGMzN2eFlz?=
+ =?utf-8?B?ZmNtbUZaNFhWQ2dsSm1wNHVqNmN1UFNFMXBBcTl2ZjBiaUZpQjFRQm5peCtN?=
+ =?utf-8?B?Mkxrd201aldyTW9YYWR3TFFIK1g2K2hzMWw4UTl1VCtFejZKejdFM3pwRHRV?=
+ =?utf-8?B?RVllcnV0YjRZaEhrUkliSTh0QlpPSXczcVJ4dkpRMW1IQ0JVVkpvR3JkV3oz?=
+ =?utf-8?B?aDNOa1pkWi9YaDducHpCVUFVWVVQcEFCdlhtdHlNcUlLcVVvaHVMMm5kSGNV?=
+ =?utf-8?B?Z1lZVFQ2YjY5NFRTblJDNHpDbXFJUzBrWGtuS2JQTzBqc3draDg5ZlByMkdo?=
+ =?utf-8?B?ZjdBRUhjYTN4T0VGeFFuZi9YNHNVc2lSaUFjRzBLR3JOeXZaMm9hRkRFVHJT?=
+ =?utf-8?B?ZHdRNEVUTEwyTWFvbU4xQ3NVWHFMaGxtZ3FVL0dHRXpreXJuMXdhMkRCaUs1?=
+ =?utf-8?B?U3d3cXI5MTR0TXpCdGJnNXZsSS8yV3BoUVNCTU5BUmlvQ3dCOUhEdThveXZB?=
+ =?utf-8?B?Z3ZhZUdqYTBHRytUVTN0OTIzS2cvbi9GMUJqVFk5dHk5NDBXdUVramtnN1pO?=
+ =?utf-8?B?RWtBMkRqeXpZZHE1VzVnNHp2VDc3ZHZlYUErT2wzUk1CamNNMEY2SnI4bHp0?=
+ =?utf-8?B?U3EwREc0ZVJtL1oxLzNaM2dIV0tpV2RsRWE2ZmJFTlVPU3ROSlQrRnM1Tlgr?=
+ =?utf-8?B?Z0F6dkljVVROTitjcGUzdUVyMnVMamliN1BVZXFiM2NNL2Zvek9wRy80cHE0?=
+ =?utf-8?B?Rk5GUEwzV3VSSGI0VGIzdTJ0c1Vvemt4ZjBpSWJxWXV3SDV4OXo0bTg0N0VE?=
+ =?utf-8?B?WGJJRndUVy9pNUFDWHpkdDJ3UDFsajRrQ3FSdG91WFlFU3RLbTVXOE5PUytu?=
+ =?utf-8?B?NWk1VmkyOWRhTkNVTjB4amJCVkljVGVkMjVPelJpWkZ1eU52eXozTE9JY245?=
+ =?utf-8?B?SlpDb292cWU4M25HNElkeVJtVTVGdEtWbkdSRlNvQ2Q0R3BNa21XUDBrcXp3?=
+ =?utf-8?B?YVZWeFFXUFlycnhqcDVtUlYyVWE3TzNNeW90N3htanc4MTdkMWVQNUFaTC9N?=
+ =?utf-8?B?V3BGNEV1ZUdJUzlIbnFlQTBWYldPRHVwRmlycjhRYm9ScEZPV1ZBdHhWSS81?=
+ =?utf-8?B?cmp0djNJUTJvTWVwVjM1TC9jV2V0RVRmZnVUbW5RTFNtYnVPZ1pEWkZINkdj?=
+ =?utf-8?B?SDdWdFZSZEJWSGx6Zm80WDlFek5USTErdjlYaXlRQVIvV253OEc5a1BDY3VF?=
+ =?utf-8?B?aEV3YUlvdVgyZmV1T1hRR0d6RmdTeEdhZ0RRV3F5ZWNMQmFGYXVtVkdtdCt4?=
+ =?utf-8?B?OUFGZ25IRlh2TWdCKytrNUNsS2luRzFzNkcweERVRVNIMW1DWCtncVBDaUFF?=
+ =?utf-8?B?ZzIreWRpVHdFeTZvR3VuaCswSUtZaXc4RnpjMGFmbkYrOUVhU0lUWmg2WEsz?=
+ =?utf-8?B?anBZOWhwMjVKa2dWYjZOcHc4dkN4Q24wQ3Q4RHYxbHd1NERUZElCbzFWd0JV?=
+ =?utf-8?B?TUwyZzZuKzNydjVjNGI1N0tMYThKaHhEcE8vZHBCUnNsd2ZHc3lnMmZOMjFB?=
+ =?utf-8?B?YXBOdE9RUklmK3VQVFFBSlBOdGE3bVZpaUdDaUxLVkorMHRZQ0tXQWNqUWFP?=
+ =?utf-8?B?UDhJRXpZZk1LNXpCMEtBY09hdFF4b1ZnSmdkeEhUNHBJdjRRMWJpV1ZtNDM1?=
+ =?utf-8?B?UWxiVlV0Y0YxeGVVQU1ueFowbHRaN25MTUFIdHhUWmRMcWg4UGF6WFNFalZK?=
+ =?utf-8?B?Rko0a2J4NWRpODNZcVNMR0dwUGRFYUpHb2JSUDM2TGRUQVpiK2JWR3I3OFhR?=
+ =?utf-8?B?YmdPS0hYOWg2bjB1SncrV0pGUmdVSmMxTUZXT010QWJHaEZhb2xLWXA1aGV2?=
+ =?utf-8?B?OHluR0R1RUx0cFk3VmxEUkI4UTZYd2grL2JMaHI0ZXBUZGhJN2VLTEp1b2Zx?=
+ =?utf-8?B?Vjd3ZVBGaVhrNGRGNjdGVXVHb3Z2WVJSN0RRbTFJUG52ZHhuMXlNQStKa0x5?=
+ =?utf-8?B?OUx0cGo1bEhmVG1QU3hPNndhSnVQTUF1UzRRSXFhSk5lV1NrRGhSTjN3cFk3?=
+ =?utf-8?B?MnBIZVE0aERNc21YaVBwRmhJMFhqUzVQSHYvOHJiaU9FQVl2TjIyaDZrRVJK?=
+ =?utf-8?Q?VqPLLMZiuZrzLXgdpqOt3n5?=
+MIME-Version: 1.0
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"></=
+head><body><div><a id=3D"snc_uri_ref_link" href=3D"https://mit.service-now.=
+com/nav_to.do?uri=3Dx_mits2_sloanfcs_case.do%3Fsys_id=3D8563b90bdbcd7dd0c55=
+96fccd3961951%26sysparm_stack=3Dx_mits2_sloanfcs_case_list.do%3Fsysparm_que=
+ry=3Dactive=3Dtrue">TKD0226477</a> has been updated by Nicole LeBlanc. Plea=
+se refer to <strong>Additional comments</strong> below. You may add comment=
+s to this ticket by replying to this email.</div>
+<div>&nbsp;</div>
+<div><div><div><span colspan=3D"2"><hr></span></div><div style=3D""><span c=
+lass=3D"tdwrap"><strong>2023-09-19 08:10:01 AM EDT - Nicole LeBlanc</strong=
+></span><span style=3D"float:right;"><sup> Additional comments</sup></span>=
+</div><div style=3D""><span colspan=3D"2"><span style=3D"word-wrap:break-wo=
+rd;display:block;">Reply from: nleblanc@mit.edu<br>Copied: jiannan@mit.edu,=
+guttenee@mit.edu,pvillema@mit.edu,lusi@mit.edu<br><br>Dear Jiannan,<br><br>=
+After connecting with Liz from Office of Graduate Education to discuss this=
+ further, it has been agreed upon to adjust your account. You will be credi=
+ted rent and house tax charges accrued for the months of April, May, June a=
+nd July 2023 due to your extenuating family circumstances. Your rent-respon=
+sibility resumes from August 1, 2023 as that was the start of the license p=
+eriod for your renewed housing for 2023-2024. Please ensure that you follow=
+ policies&lt;https://studentlife.mit.edu/housing/graduate-family-housing/mo=
+ving-out&gt; moving forward and reach out&lt;https://studentlife.mit.edu/co=
+ntact-housing&gt; if you have questions so we can assist in the future.<br>=
+<br><br>Kind regards,<br><br><br>-Nicole<br><br>Senior Assignment Associate=
+<br>Division of Student Life | Housing &amp; Residential Services<br>Massac=
+husetts Institute of Technology<br>201 Vassar St, W59-200<br>Cambridge, MA =
+ 02139<br>617-253-5149</span></span></div><div><span colspan=3D"2"><hr></sp=
+an></div><div style=3D""><span class=3D"tdwrap"><strong>2023-09-14 02:53:33=
+ PM EDT - Nicole LeBlanc</strong></span><span style=3D"float:right;"><sup> =
+Additional comments</sup></span></div><div style=3D""><span colspan=3D"2"><=
+span style=3D"word-wrap:break-word;display:block;">Reply from: nleblanc@mit=
+.edu<br>Copied: jiannan@mit.edu,guttenee@mit.edu,pvillema@mit.edu,lusi@mit.=
+edu<br><br>Hello Jiannan,<br><br>I am sending this upward to my supervisors=
+ to review further. I have copied them on this reply.<br><br><br>Paul Ville=
+maire,  Associate Director of Residential Services<br>Email: pvillema@mit.e=
+du&lt;mailto:pvillema@mit.edu&gt;<br>Lusi Wang, Assistant Director, Housing=
+ Assignments and Technology<br>Email: lusi@mit.edu&lt;mailto:lusi@mit.edu&g=
+t;<br>Kind regards,<br><br>-Nicole<br><br>Senior Assignment Associate<br>Di=
+vision of Student Life | Housing &amp; Residential Services<br>Massachusett=
+s Institute of Technology<br>201 Vassar St, W59-200<br>Cambridge, MA  02139=
+<br>617-253-5149</span></span></div><div><span colspan=3D"2"><hr></span></d=
+iv><div style=3D""><span class=3D"tdwrap"><strong>2023-09-14 02:23:38 PM ED=
+T - Jiannan Cao</strong></span><span style=3D"float:right;"><sup> Additiona=
+l comments</sup></span></div><div style=3D""><span colspan=3D"2"><span styl=
+e=3D"word-wrap:break-word;display:block;">Reply from: jiannan@mit.edu<br>Co=
+pied: nleblanc@mit.edu,guttenee@mit.edu<br><br>=EF=BB=BF<br>But your late r=
+esponse make a situation that I=E2=80=99m not knowing the right way of term=
+ination, and not knowing the status of termination until August.<br><br>I b=
+elieve the rent should be reduced for the five months.<br><br>Thanks!<br>Ji=
+annan</span></span></div><div><span colspan=3D"2"><hr></span></div><div sty=
+le=3D""><span class=3D"tdwrap"><strong>2023-09-14 02:23:35 PM EDT - Jiannan=
+ Cao</strong></span><span style=3D"float:right;"><sup> Additional comments<=
+/sup></span></div><div style=3D""><span colspan=3D"2"><span style=3D"word-w=
+rap:break-word;display:block;">Reply from: jiannan@mit.edu<br>Copied: nlebl=
+anc@mit.edu,guttenee@mit.edu<br><br>But your late response make a situation=
+ that I=E2=80=99m not knowing the right way of termination, and not knowing=
+ the status of termination until August.<br><br>I believe the rent should b=
+e reduced for the five months.<br><br>Thanks!<br>Jiannan</span></span></div=
+><div><span colspan=3D"2"><hr></span></div><div style=3D""><span class=3D"t=
+dwrap"><strong>2023-09-14 01:26:08 PM EDT - Nicole LeBlanc</strong></span><=
+span style=3D"float:right;"><sup> Additional comments</sup></span></div><di=
+v style=3D""><span colspan=3D"2"><span style=3D"word-wrap:break-word;displa=
+y:block;">Reply from: nleblanc@mit.edu<br>Copied: jiannan@mit.edu<br><br>De=
+ar Jiannan,<br><br>On March 15, 2023, Renewal Policy communication was sent=
+ out which discussed renewal policy and termination processes. As of March =
+24, 2023, you completed the renewal application process to continue your ho=
+using, not terminate it. According to your timeline you moved out a few day=
+s after the renewal was completed, but there was no checkout processed by t=
+he house and no termination form submitted to formally terminate the housin=
+g assignment.<br><br>While OGE had reached out to offer support of the term=
+ination and although the follow up to OGE=E2=80=99s email was later, a term=
+ination form still would have been required to be submitted by the resident=
+ to end their housing assignment. We understand the response to the OGE ema=
+il was delayed, and for that we apologize.  We are a small office working w=
+ith thousands of students and because of this, we have set up multiple ways=
+ to contact&lt;https://studentlife.mit.edu/contact-housing&gt; our office i=
+n the event one form of communication may be delayed.<br><br>However, as st=
+ated in the license agreement&lt;https://studentlife.mit.edu/sites/default/=
+files/2023-2024%20Graduate%20Housing%20License%20Agreement.pdf&gt;, the ter=
+mination form is the only means of notification that HRS will accept. We ca=
+nnot accept an email from a department as a means of ending a student=E2=80=
+=99s housing without hearing directly from that student.<br>The form allows=
+ residents to indicate reasons for termination as =E2=80=9COther=E2=80=9D ,=
+ if they don=E2=80=99t fit into the approved reasons, and there is an oppor=
+tunity to provide further details to explain on the form. Without the termi=
+nation form, staff would be unable to process the termination of your housi=
+ng. If the termination form had been received at any point in time, the ter=
+mination could have been processed, ending your rent-responsibility and you=
+r renewal cancelled.<br><br>At this time you would remain rent-responsible =
+for your continued housing given that you signed to renew your housing and =
+did not complete a termination form.<br>If you=E2=80=99re need of assistanc=
+e I would suggest looking into the Graduate Student Short-Term Emergency Fu=
+nd&lt;https://oge.mit.edu/student-finances/financial-assistance-and-grants/=
+graduate-student-short-term-emergency-fund/&gt; or following up with Office=
+ of Graduate Education&lt;https://oge.mit.edu/&gt; to see if they have addi=
+tional support resources available.<br><br><br>Kind regards,<br><br><br>-Ni=
+cole<br><br>Senior Assignment Associate<br>Division of Student Life | Housi=
+ng &amp; Residential Services<br>Massachusetts Institute of Technology<br>2=
+01 Vassar St, W59-200<br>Cambridge, MA  02139<br>617-253-5149<br><br><br><b=
+r><br>________________________________<br>2023-09-07 01:25:14 PM EDT - Jian=
+nan Cao Additional comments<br>Forwarded by: jiannan@mit.edu&lt;mailto:jian=
+nan@mit.edu&gt;<br>Copied: jsrubin@mit.edu,guttenee@mit.edu&lt;mailto:jsrub=
+in@mit.edu,guttenee@mit.edu&gt;<br><br>Hi Graduate Housing,<br><br>I'm Jian=
+nan Cao, MIT Number is 915588993.<br><br>My family had a health issue back =
+in late March 2023. Then, I chose to go back to China and move everything o=
+ut of Sidney Pacific Apt 838C on March 27th, and I returned the key to the =
+housing manager.<br><br>I had tried to follow the instructions on the websi=
+te.<br>Below is the webpage URL about moving out back to April 2023.<br>htt=
+ps://web.archive.org/web/20230409221218/https://studentlife.mit.edu/housing=
+/graduate-family-housing/moving-out&lt;https://web.archive.org/web/20230409=
+221218/https:/studentlife.mit.edu/housing/graduate-family-housing/moving-ou=
+t&lt;https://web.archive.org/web/20230409221218/https:/studentlife.mit.edu/=
+housing/graduate-family-housing/moving-out%3chttps:/web.archive.org/web/202=
+30409221218/https:/studentlife.mit.edu/housing/graduate-family-housing/movi=
+ng-out&gt;&gt;<br><br>I was still trying to figure out what to do on this o=
+ld web page for my situation's early termination. The six bullet points do =
+not include my case.<br><br>Approved Reasons for Early Termination*<br><br>=
+=C2=B7 Graduation from MIT<br>=C2=B7 Withdrawal from MIT<br>=C2=B7 Medical =
+Leave<br>=C2=B7 Change in Family Status (proof required&lt;https://web.arch=
+ive.org/web/20230409221218/https:/studentlife.mit.edu/housing/graduate-fami=
+ly-housing/get-housing/family-housing&gt;)<br>=C2=B7 Academic-Required Off-=
+site Internship (academic department letter required)<br>=C2=B7 Registering=
+ as a Non-resident (approval from the Office of Graduate Education&lt;https=
+://web.archive.org/web/20230409221218/https:/oge.mit.edu/&gt; required)<br>=
+<br>Residents are required to provide documentation and must give a minimum=
+ of thirty days notice by completing the online Termination Form within the=
+ Housing Portal&lt;https://web.archive.org/web/20230409221218/https:/mit.st=
+arrezhousing.com/StarRezPortalX&gt;. Rent-responsibility (including house-t=
+ax) will cease at the end of the month in which the termination date falls.=
+<br>Example: If Housing &amp; Residential Services receives a resident=E2=
+=80=99s Termination Form and all required documentation on November 15, the=
+ resident is responsible for their rent and house tax until December 31.<br=
+>*NOTE: Terminating for any reason (approved or unapproved) during the firs=
+t two months of a semester (September, October and February, March) incurs =
+a termination fee equal to one month's current rent.<br><br>At that time, I=
+ believed the last point should be suitable, so I contacted Liz on April 10=
+th from the Office of Graduate Education. Then, Liz contacted housing about=
+ my situation and asked for termination help on 2023-04-18 at 09:27:28 PM E=
+DT. The housing department waited to reply. Liz got the reply on 2023-07-24=
+ at 03:12:47 PM EDT. There should be a four to five-month delay for taking =
+action on terminating my housing. After I received the information that Sid=
+-Pac 838C was still not terminated in August, I was surprised and have no t=
+ime to take actions, to sublease it or terminate it. After I reached the 83=
+8C apartment on September 6th, the apartment was cleaned and locked, so I a=
+sked the housing manager to return my key at 8 AM.<br><br>Could you do me a=
+ favor to remove the housing rent bill for five months (April, May, June, J=
+uly, and August)? In my situation, the webpage is unclear on whether I coul=
+d get approved for early termination for those six bullet points back in Ap=
+ril, so I contacted the graduate education department to ask for a solution=
+. They contacted housing department and have not gotten a response for four=
+ months. My termination request has sent to the Office of Graduate Educatio=
+n and the housing department. I trusted the Education Department and Housin=
+g communication, so I believed the termination was done in April.<br><br>Th=
+anks!<br>Jiannan<br><br>The Email communication related to housing:</span><=
+/span></div><div><span colspan=3D"2"><hr></span></div><div style=3D""><span=
+ class=3D"tdwrap"><strong>2023-09-07 01:25:14 PM EDT - Jiannan Cao</strong>=
+</span><span style=3D"float:right;"><sup> Additional comments</sup></span><=
+/div><div style=3D""><span colspan=3D"2"><span style=3D"word-wrap:break-wor=
+d;display:block;">Forwarded by: jiannan@mit.edu<br>Copied: jsrubin@mit.edu,=
+guttenee@mit.edu<br><br>Hi Graduate Housing,<br><br>I'm Jiannan Cao, MIT Nu=
+mber is 915588993.<br><br>My family had a health issue back in late March 2=
+023. Then, I chose to go back to China and move everything out of Sidney Pa=
+cific Apt 838C on March 27th, and I returned the key to the housing manager=
+.<br><br>I had tried to follow the instructions on the website.<br>Below is=
+ the webpage URL about moving out back to April 2023.<br>https://web.archiv=
+e.org/web/20230409221218/https://studentlife.mit.edu/housing/graduate-famil=
+y-housing/moving-out&lt;https://web.archive.org/web/20230409221218/https:/s=
+tudentlife.mit.edu/housing/graduate-family-housing/moving-out&gt;<br><br>I =
+was still trying to figure out what to do on this old web page for my situa=
+tion's early termination. The six bullet points do not include my case.<br>=
+<br>Approved Reasons for Early Termination*<br><br>=C2=B7         Graduatio=
+n from MIT<br>=C2=B7         Withdrawal from MIT<br>=C2=B7         Medical =
+Leave<br>=C2=B7         Change in Family Status (proof required&lt;https://=
+web.archive.org/web/20230409221218/https:/studentlife.mit.edu/housing/gradu=
+ate-family-housing/get-housing/family-housing&gt;)<br>=C2=B7         Academ=
+ic-Required Off-site Internship (academic department letter required)<br>=
+=C2=B7         Registering as a Non-resident (approval from the Office of G=
+raduate Education&lt;https://web.archive.org/web/20230409221218/https:/oge.=
+mit.edu/&gt; required)<br><br>Residents are required to provide documentati=
+on and must give a minimum of thirty days notice by completing the online T=
+ermination Form within the Housing Portal&lt;https://web.archive.org/web/20=
+230409221218/https:/mit.starrezhousing.com/StarRezPortalX&gt;.  Rent-respon=
+sibility (including house-tax) will cease at the end of the month in which =
+the termination date falls.<br>Example: If Housing &amp; Residential Servic=
+es receives a resident=E2=80=99s Termination Form and all required document=
+ation on November 15, the resident is responsible for their rent and house =
+tax until December 31.<br>*NOTE: Terminating for any reason (approved or un=
+approved) during the first two months of a semester (September, October and=
+ February, March) incurs a termination fee equal to one month's current ren=
+t.<br><br>At that time, I believed the last point should be suitable, so I =
+contacted Liz on April 10th from the Office of Graduate Education. Then, Li=
+z contacted housing about my situation and asked for termination help on 20=
+23-04-18 at 09:27:28 PM EDT. The housing department waited to reply. Liz go=
+t the reply on 2023-07-24 at 03:12:47 PM EDT. There should be a four to fiv=
+e-month delay for taking action on terminating my housing. After I received=
+ the information that Sid-Pac 838C was still not terminated in August, I wa=
+s surprised and have no time to take actions, to sublease it or terminate i=
+t. After I reached the 838C apartment on September 6th, the apartment was c=
+leaned and locked, so I asked the housing manager to return my key at 8 AM.=
+<br><br>Could you do me a favor to remove the housing rent bill for five mo=
+nths (April, May, June, July, and August)? In my situation, the webpage is =
+unclear on whether I could get approved for early termination for those six=
+ bullet points back in April, so I contacted the graduate education departm=
+ent to ask for a solution. They contacted housing department and have not g=
+otten a response for four months. My termination request has sent to the Of=
+fice of Graduate Education and the housing department. I trusted the Educat=
+ion Department and Housing communication, so I believed the termination was=
+ done in April.<br><br>Thanks!<br>Jiannan<br><br>The Email communication re=
+lated to housing:<br><br><br>From: Elizabeth Guttenberg &lt;guttenee@mit.ed=
+u&gt;<br>Date: Wednesday, August 2, 2023 at 20:01<br>To: Jiannan Cao &lt;ji=
+annan@mit.edu&gt;<br>Subject: Re: TKD0193350 Updated | Request from the Off=
+ice of Graduate Education<br>Hi Jiannan,<br><br>That=E2=80=99s what it look=
+s like =E2=80=93 I believe they need you to submit a termination letter. Ha=
+ve you been billed for rent since May?<br><br>-Liz<br><br>--<br>Elizabeth G=
+uttenberg, LCSW<br>Assistant Dean | GradSupport<br>MIT Office of Graduate E=
+ducation<br><br>From: Jiannan Cao &lt;jiannan@mit.edu&gt;<br>Date: Tuesday,=
+ July 25, 2023 at 6:21 PM<br>To: Elizabeth Guttenberg &lt;guttenee@mit.edu&=
+gt;<br>Subject: Re: TKD0193350 Updated | Request from the Office of Graduat=
+e Education<br>Hi Eliz,<br><br>So my apartment did not terminate?<br><br>Th=
+anks!<br>Jiannan<br><br><br>On Jul 26, 2023, at 05:03, Elizabeth Guttenberg=
+ &lt;guttenee@mit.edu&gt; wrote:<br>=EF=BB=BF<br>Hi Jiannan,<br><br>I hope =
+you=E2=80=99re having a good summer! How are you and your family doing?<br>=
+<br>I received the note below from Housing =E2=80=93 are you planning to re=
+turn to your apartment this fall? If not, I recommend submitting your termi=
+nation letter soon so that you avoid additional charges.<br><br>Warmly,<br>=
+<br>Liz<br><br>--<br>Elizabeth Guttenberg, LCSW<br>Assistant Dean | GradSup=
+port<br>MIT Office of Graduate Education<br><br>From: MIT ServiceNow &lt;mi=
+t@service-now.com&gt;<br>Date: Monday, July 24, 2023 at 3:13 PM<br>To: Eliz=
+abeth Guttenberg &lt;guttenee@mit.edu&gt;<br>Subject: TKD0193350 Updated | =
+Request from the Office of Graduate Education<br>TKD0193350&lt;https://mit.=
+service-now.com/nav_to.do?uri=3Dx_mits2_sloanfcs_case.do%3Fsys_id=3D14005c6=
+9dbdaa59086c66d8d13961939%26sysparm_stack=3Dx_mits2_sloanfcs_case_list.do%3=
+Fsysparm_query=3Dactive=3Dtrue&gt; has been updated by Nicole LeBlanc. Plea=
+se refer to Additional comments below. You may add comments to this ticket =
+by replying to this email.<br><br>________________________________<br>2023-=
+07-24 03:12:47 PM EDT - Nicole LeBlanc Additional comments<br>Hello Liz,<br=
+><br>Terribly sorry for the delay in seeing and responding to this message =
+in our housing queue. Our system was severely inundated at the time of this=
+ query and we're still coming out of the bulk of emails.<br><br>Residents c=
+an submit a termination form and should submit a termination form when endi=
+ng their housing. If Jiannan could go into their housing portal https://mit=
+.starrezhousing.com/StarRezPortalX, to complete a termination form it would=
+ be helpful. If there's a reason Jiannan cannot complete the form and their=
+ housing needs to be terminated manually, please let me know. I would need =
+to know from what date Jiannan's housing would need to be terminated as at =
+this time it appears they've remain assigned, have not checked-out of the r=
+esidence and has renewed their housing the upcoming year.<br><br>Kind regar=
+ds,<br><br>-Nicole<br>Senior Assignments Associate<br>Housing &amp; Residen=
+tial Services<br>________________________________<br>2023-04-18 09:27:28 PM=
+ EDT - Elizabeth Guttenberg Additional comments<br>Received from: guttenee@=
+mit.edu<br>Copied: jiannan@mit.edu<br><br>Dear Housing Team,<br><br>I am em=
+ailing on behalf of graduate student, Jiannan Cao (ID # 915588993).<br><br>=
+Due to valid extenuating circumstances, Jiannan is requesting to terminate =
+their lease at Sidney Pacific Apt 838C as soon as possible. I am in support=
+ of Jiannan=E2=80=99s request.<br><br>Thank you, as always, for your suppor=
+t and consideration. Jiannan and I are available to answer follow-up questi=
+ons if needed.<br><br>Warmly,<br><br>Liz<br>--<br>Elizabeth Guttenberg, LCS=
+W<br>Assistant Dean | GradSupport<br>MIT Office of Graduate Education<br><b=
+r><br><br><br>tkd:com:rw<br><br><br><br><br><br><br>From: Elizabeth Guttenb=
+erg guttenee@mit.edu&lt;mailto:guttenee@mit.edu&gt;<br>Date: Tuesday, April=
+ 18, 2023 at 21:28<br>To: Jiannan Cao jiannan@mit.edu&lt;mailto:jiannan@mit=
+.edu&gt;<br>Subject: Re: Terminate my MIT housing for this term<br>Hi Jiann=
+an,<br><br>Thank you for the kind words. I=E2=80=99m so glad to hear that y=
+ou=E2=80=99re spending quality time with your family. I just wrote to housi=
+ng and copied you for confirmation. Let me know if you still haven=E2=80=99=
+t heard back from them by next Thursday (4/27) and I=E2=80=99ll follow up.<=
+br><br>Warmly,<br><br>Liz<br><br>--<br>Elizabeth Guttenberg, LCSW<br>Assist=
+ant Dean | GradSupport<br>MIT Office of Graduate Education<br><br>From: Jia=
+nnan Cao jiannan@mit.edu&lt;mailto:jiannan@mit.edu&gt;<br>Date: Tuesday, Ap=
+ril 18, 2023 at 1:38 PM<br>To: Elizabeth Guttenberg guttenee@mit.edu&lt;mai=
+lto:guttenee@mit.edu&gt;<br>Subject: Re: Terminate my MIT housing for this =
+term<br>Thank you! My family would also thank you for your kind! My family =
+is good, and I=E2=80=99ll visit my grand mother in this weekend.<br><br>I a=
+lso hope you and your family would also have a healthy life.<br><br>About h=
+ousing termination, if I need to take some action please let me know!<br><b=
+r>Best,<br>Jiannan<br><br>On Apr 19, 2023, at 01:30, Elizabeth Guttenberg g=
+uttenee@mit.edu&lt;mailto:guttenee@mit.edu&gt; wrote:<br>=EF=BB=BF<br>Hi Ji=
+annan,<br><br>I=E2=80=99ll write to housing later today! I=E2=80=99m here i=
+f you need anything else =E2=80=93 sending warm thoughts to you and your fa=
+mily.<br><br>-Liz<br><br>--<br>Elizabeth Guttenberg, LCSW<br>Assistant Dean=
+ | GradSupport<br>MIT Office of Graduate Education<br><br>From: Jiannan Cao=
+ jiannan@mit.edu&lt;mailto:jiannan@mit.edu&gt;<br>Date: Monday, April 10, 2=
+023 at 2:04 PM<br>To: Elizabeth Guttenberg guttenee@mit.edu&lt;mailto:gutte=
+nee@mit.edu&gt;<br>Subject: Re: Terminate my MIT housing for this term<br>H=
+i Liz,<br><br>My mother is in a good status, and my father need more heathy=
+ life style. he always smokes.<br><br>I would like to terminate MIT Housing=
+ ASAP.<br>I have cleared the room, no more stuff is in my room.<br><br>Than=
+k you so much!<br><br>My mit email: jiannan@mit.edu&lt;mailto:jiannan@mit.e=
+du&gt;<br>My mit id: 915588993<br>My room number: Sidney Pacific Apt 838C<b=
+r><br><br><br><br><br><br><br>On Apr 11, 2023, at 02:00, Elizabeth Guttenbe=
+rg guttenee@mit.edu&lt;mailto:guttenee@mit.edu&gt; wrote:<br>=EF=BB=BF<br>H=
+i Jiannan,<br><br>I=E2=80=99m so glad to hear that your father is recoverin=
+g well. How are you and the rest of your family doing?<br><br>Non-residenti=
+al status is only available to PhD students, but I=E2=80=99m happy to write=
+ to housing and request that you be allowed to terminate your housing early=
+. Is there a specific date on which you would like to terminate your lease?=
+ Do you have all your belongings with you or do you need to come back to ca=
+mpus to move out?<br><br>Let me know what you think and if there=E2=80=99s =
+anything else I can do to help.<br><br>Warmly,<br><br>Liz<br><br>--<br>Eliz=
+abeth Guttenberg, LCSW<br>Assistant Dean | GradSupport<br>MIT Office of Gra=
+duate Education<br><br>From: Jiannan Cao jiannan@mit.edu&lt;mailto:jiannan@=
+mit.edu&gt;<br>Date: Monday, April 10, 2023 at 6:55 AM<br>To: Elizabeth Gut=
+tenberg guttenee@mit.edu&lt;mailto:guttenee@mit.edu&gt;<br>Subject: Termina=
+te my MIT housing for this term<br>Hi Liz,<br><br>I need to terminate my MI=
+T housing. Could you help me register me as a non-resident for this term?<b=
+r><br>Approved Reasons for Early Termination*<br><br><br>  1.  Graduation f=
+rom MIT<br>  2.  Withdrawal from MIT<br>  3.  Medical Leave<br>  4.  Change=
+ in Family Status (proof required&lt;https://studentlife.mit.edu/housing/gr=
+aduate-family-housing/get-housing/family-housing&gt;)<br>  5.  Academic-Req=
+uired Off-site Internship (academic department letter required)<br>  6.  Re=
+gistering as a Non-resident (approval from the Office of Graduate Education=
+&lt;https://oge.mit.edu/&gt; required)<br><br>Thanks!<br>Jiannan</span></sp=
+an></div></div></div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div>tkd:com:rw</div>
+<div>&nbsp;</div><div>&nbsp;</div><div style=3D"display:inline">Ref:MSG1908=
+7071</div></body></html>

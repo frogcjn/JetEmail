@@ -1,0 +1,662 @@
+Received: from DM4PR01MB7860.prod.exchangelabs.com (2603:10b6:8:6e::7) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Mon, 23 Oct 2023 14:25:28
+ +0000
+Received: from BYAPR03CA0032.namprd03.prod.outlook.com (2603:10b6:a02:a8::45)
+ by DM4PR01MB7860.prod.exchangelabs.com (2603:10b6:8:6e::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.26; Mon, 23 Oct 2023 14:25:26 +0000
+Received: from CO1PEPF000042AD.namprd03.prod.outlook.com
+ (2603:10b6:a02:a8:cafe::e2) by BYAPR03CA0032.outlook.office365.com
+ (2603:10b6:a02:a8::45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.26 via Frontend
+ Transport; Mon, 23 Oct 2023 14:25:25 +0000
+Authentication-Results: spf=fail (sender IP is 18.7.71.113)
+ smtp.mailfrom=us-west-2.amazonses.com; dkim=pass (signature was verified)
+ header.d=adobe.com;dmarc=pass action=none header.from=adobe.com;
+Received-SPF: Fail (protection.outlook.com: domain of us-west-2.amazonses.com
+ does not designate 18.7.71.113 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.7.71.113;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.7.71.113) by
+ CO1PEPF000042AD.mail.protection.outlook.com (10.167.243.42) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Mon, 23 Oct 2023 14:25:25 +0000
+Received: from oc11expo25.exchange.mit.edu (18.9.4.96) by
+ w92exhyb8.exchange.mit.edu (18.7.71.113) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Mon, 23 Oct 2023 10:25:24 -0400
+Received: from oc11exhyb6.exchange.mit.edu (18.9.1.111) by
+ oc11expo25.exchange.mit.edu (18.9.4.96) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Mon, 23 Oct 2023 10:25:24 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by oc11exhyb6.exchange.mit.edu (18.9.1.111) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Mon, 23 Oct 2023 10:25:23 -0400
+Received: from BYAPR21CA0017.namprd21.prod.outlook.com (2603:10b6:a03:114::27)
+ by DM8PR01MB6872.prod.exchangelabs.com (2603:10b6:8:11::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.26; Mon, 23 Oct 2023 14:25:16 +0000
+Received: from CO1PEPF000044EE.namprd05.prod.outlook.com
+ (2603:10b6:a03:114:cafe::5) by BYAPR21CA0017.outlook.office365.com
+ (2603:10b6:a03:114::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.14 via Frontend
+ Transport; Mon, 23 Oct 2023 14:25:15 +0000
+Authentication-Results-Original: spf=pass (sender IP is 54.240.27.171)
+ smtp.mailfrom=us-west-2.amazonses.com; dkim=pass (signature was verified)
+ header.d=adobe.com;dmarc=pass action=none header.from=adobe.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of us-west-2.amazonses.com
+ designates 54.240.27.171 as permitted sender)
+ receiver=protection.outlook.com; client-ip=54.240.27.171;
+ helo=a27-171.smtp-out.us-west-2.amazonses.com; pr=C
+Received: from a27-171.smtp-out.us-west-2.amazonses.com (54.240.27.171) by
+ CO1PEPF000044EE.mail.protection.outlook.com (10.167.241.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Mon, 23 Oct 2023 14:25:15 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=i4g5aewsgd7ryvtfutogcuufmul7lwfw; d=adobe.com; t=1698071115;
+	h=Date:From:Reply-To:To:Message-ID:Subject:MIME-Version:Content-Type;
+	bh=9cHiwUpEjozxct1vU/mHkNrY7Z1w9SrvpUdfDMj8pks=;
+	b=u5MsaRmkyBJECIqzt3Ft4SPZ/kV9hXess7eJZRuETa06bYibO4kXGshYWU+MbVqM
+	+ijmbmoFc5RsiK19spTLrd+m2HNsbjIEXdM0IzOrRztRGSa/2rswQde4IFe7dqsHJtb
+	qpQWXuzdrrmi0Iv9eqPE4XdhCKqzF7rU/1oGTHPA=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1698071115;
+	h=Date:From:Reply-To:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=9cHiwUpEjozxct1vU/mHkNrY7Z1w9SrvpUdfDMj8pks=;
+	b=dxFdh+1lTmHo9I8gyVbWOFZz5Yr+GclLQhUk+Mk/vpGsUFZe4HtYIibBaKj2xpqa
+	DgeQ8LSvuAz0ztIPOwRCqD3F0Oee2YG/WdMKuItB9d7fThK+seOE6zcy/Ftbi62Dv2A
+	d8QNYwk/wEippRJrsbngG5g78FBqVYHiMeHNFXVc=
+Date: Mon, 23 Oct 2023 14:25:15 +0000
+From: Adobe <notifications@adobe.com>
+Reply-To: Adobe <notifications@adobe.com>
+To: jiannan@mit.edu
+Message-ID: <0101018b5cecf6ab-c07f506a-7a44-44fd-a4bd-39c0f50fc9f1-000000@us-west-2.amazonses.com>
+Subject: You have new custom fonts available in Creative Cloud
+Errors-To: Adobe <notifications@adobe.com>
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_10848642_128452270.1698071115429"
+Feedback-ID: 1.us-west-2.ku+g3V2webPClheY6fH/5SeT9kAvSyse8tlpucr1z2Q=:AmazonSES
+X-SES-Outgoing: 2023.10.23-54.240.27.171
+Return-Path:
+ 0101018b5cecf6ab-c07f506a-7a44-44fd-a4bd-39c0f50fc9f1-000000@us-west-2.amazonses.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CO1PEPF000044EE:EE_|DM8PR01MB6872:EE_|CO1PEPF000042AD:EE_|DM4PR01MB7860:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: ce5bddbd-8226-4d9f-d46b-08dbd3d3e63d
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:5;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?Z26jVY1x5103SP8Dkp06xywM7hQGgiUpjCWnR5C3/QgGVAyrrAWwO87giX03?=
+ =?us-ascii?Q?VepKc76u2ldGnngO/8tJOEiV3EAEO80xuD6RN2+jpz4EHW8DYO2a9tLwCPHN?=
+ =?us-ascii?Q?8io5DcdsXg0M6IEhG12FiC9t5WNJB7rvgBY0BGkG2Az0A8Y9AHvlfqrRccVi?=
+ =?us-ascii?Q?xNc/qGuf4ilybkWYHZ1dhQmT3lBLegaEM/+7Kxu2ANn7dlwevm62Azjeq/7I?=
+ =?us-ascii?Q?YD/Dgh6TU7q6qXOZxDXh1rIVwbH8gBgbfwfN1ISQ20ewu7jqL4NgXmxV1ym0?=
+ =?us-ascii?Q?eAT4iGwDVMbTo0HP1V5Oqzt3rSVn5RpMfAL5aA/sd/KIJkfCHHvZUS8H/6Wk?=
+ =?us-ascii?Q?iN5HV8HY/nNiN5R2uhreI4EBJsiBgNLTbEcFI8tEeQhYCeCuTgvrNRuMdRF6?=
+ =?us-ascii?Q?kgi7C6eg8AsZ/I7qR8KnukUm9xVfPipcaUjE7zpW+RtVm130kQBPyIcO7xCw?=
+ =?us-ascii?Q?+JKZmtd6uqXlgqBRSiUvEyoErrpS28mYIMtsbhk/ArlTV6lBVBAOwE0790Ah?=
+ =?us-ascii?Q?0FZ87OivRLOx9+3AIGZmKMTgIyPlS7VW8YVHpEqBCaGya1Dfpe4plCxZgyO1?=
+ =?us-ascii?Q?PG/VcoUjlO09WbPVSL15/sdE6StAu5+gf1dldNe4n9my4QZVghH5qb+oQ7BL?=
+ =?us-ascii?Q?yy6LHzKWFGBSiq0vZWpwmlCcSBL7NUL7leP35gjpQe+Uved0MfqoSExi800i?=
+ =?us-ascii?Q?L2B0sVNiGNg8OsNhzXO3+o4y2k5v+PmG8kKx4/pCJ0uxMQ/87PmiEZ7o7EKR?=
+ =?us-ascii?Q?AG6YLnueOdmg9DyjZKF/L6Nkzqtd7m8TdFCX/Foflqa+fK383DYelT2SeEvy?=
+ =?us-ascii?Q?/MGyAJY+zojox36obF9oj6xbfd1sa4NiqOQbHUe64oXJtduMZ9aMJxZ0x1GH?=
+ =?us-ascii?Q?DBccRrgqDFz6KVY/zancHe4xL0DHDZBW0zAh6dYy0nPuUluSB2r3I6okvFwZ?=
+ =?us-ascii?Q?kZwz5x5SMYtQwYajz9q92mCIGsKGDLGUmfATDFk3LFHBEwVP7w0zuFk+IZsT?=
+ =?us-ascii?Q?lREvG2dt2xYPqgYio/O8UMMl3KUSlDNk7GqWSeVpAqzT2FwwJRumhiOESLmi?=
+ =?us-ascii?Q?DaQGKU5Golx5cXiolmrhSc/U6i1M9ofetzfD1V8KKDq25OIomHd/xeuR24+h?=
+ =?us-ascii?Q?uR9SFxX3pKjtmt7aXpPm6lMFtN++DpmcwVE5x3HykGbEFMGa9NRalxrGQ5e3?=
+ =?us-ascii?Q?EQ1NJ3rco/LQLowDK/2a3R9zXIle/CsAaW2s6AUiHcSvormc3M+TzKK0/iIp?=
+ =?us-ascii?Q?pkWItDglYnBYxpO2yY9vcnh2Vqo2r/NIN5iWiUbtLXJdhCZcdwOhmDrdPOjO?=
+ =?us-ascii?Q?mC1YdGzjoGP3yOYz3CSMfQBE/jgn02+5pRr0alcJHLmxzSAe3UjEODpjaI2Z?=
+ =?us-ascii?Q?+tCypGrT/OEj65/o7Aq0aUcfTn+v5NBqBPmjrUmCvht3jP5uwMtfE27pH3fc?=
+ =?us-ascii?Q?Ejnt9DFJHWReBCFHFYlLYd5tOTsm48/BMjrb7PzBloGmb0SbjZRMqqVkXUYu?=
+ =?us-ascii?Q?iwPm0PadLlUrJahzL4yxHKf0BFfz6uoFD+ZrVc9fxL7lWmYfWmF6/aC9i4Ht?=
+ =?us-ascii?Q?ddjoWhwz761JlsTRJkywle0TYx6ANZz1EN7z44PZgdpVWF5zzGlRxT08aHEx?=
+ =?us-ascii?Q?2BtQ0pggUFi7Nbvso3oxDoyGbbMiuEEjUPGyrqCAug2V+oqGKiHeCD2FfAUz?=
+ =?us-ascii?Q?8R4QX4TnwJTYkeC8PEbHyGZ2PS/h5ebcZWSe6n0hu+gai8c+MNLx9cB4mtje?=
+ =?us-ascii?Q?rFg37pPe9iHJqadiFOKFWtE1jZa5u75z/9q1dcf5+TOII7glSWKGGvIFwO3Z?=
+ =?us-ascii?Q?1N4kbPk1SVOqxDDFJl3nYsbfGCTYwdKoLqY=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:54.240.27.171;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:a27-171.smtp-out.us-west-2.amazonses.com;PTR:a27-171.smtp-out.us-west-2.amazonses.com;CAT:NONE;SFS:(13230031)(4636009)(286005)(47000500020)(14302899009)(451199024)(332800013)(1690799017)(19627405001)(66899024)(26005)(9036002)(6916009)(36736006)(166002)(83170400001)(9316004)(356005)(7596003)(7636003)(83380400001)(42882007)(336012)(33964004)(76236004)(79850400001)(9686003)(71280400001)(58800400005)(956004)(7696005)(6506007)(966005)(3450700001)(6486002)(1096003)(8676002)(4006050)(75640400001)(76899018)(130870200001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR01MB6872
+X-OrganizationHeadersPreserved: DM8PR01MB6872.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb6.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb6.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo25.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 23 Oct 2023 14:25:25.7429
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ ce5bddbd-8226-4d9f-d46b-08dbd3d3e63d
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: CO1PEPF000042AD.namprd03.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CO1PEPF000042AD.namprd03.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1PEPF000042AD.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1PEPF000044EE.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 15f8938c-12df-4dc4-d9fd-08dbd3d3e05d
+X-Microsoft-Antispam: BCL:5;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.113;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:w92exhyb8.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2023 14:25:25.4929
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce5bddbd-8226-4d9f-d46b-08dbd3d3e63d
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.113];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1PEPF000044EE.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR01MB7860
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.5188752
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6907.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Q0ZtWkVvM1JuaUxieHNqTm5NZkxuVUF2V0lTWW1DZk5PV2JOZ0NpL05xWUFH?=
+ =?utf-8?B?WTIrTzF2dTlSQmxTRmdtTFlXejBvcFBzYnBTQTdVRjhsMG9zK2U3Q2U1NHVl?=
+ =?utf-8?B?YlYxQTBXMlVndDVKT3lvbHdVRGVVQUVxS3dybUdFN3I1MEw2U2prYW00SzdK?=
+ =?utf-8?B?VUlWejJCRWJnNDZvZlM3SmdycXZENmVhRGlOaTRsRFFYbkpHZFg1OWZQN0Vu?=
+ =?utf-8?B?MGgzVWR0ODVWYm4rYzBNd2g4VjdmbGp4c1Q3K2FEaUhETytOeXdheS91SHpO?=
+ =?utf-8?B?WnAzK05aTWduKzAyYkxLMmM1Y3dqUGpOVTd4ZjU2WnoxcjVGT3ZCcGlFQ1h4?=
+ =?utf-8?B?Y2JIdG53R2dXZUk0UE1mcW1FTk1KTnhnNmtaZGhOY281U3NIOGRobnVtSUxY?=
+ =?utf-8?B?aVR4N0UrbExaUTMvekUzL3pqeUxwUFJPWEIzZzFGQTFOMmllNjFTbk4yNXMw?=
+ =?utf-8?B?S1I4WmN2SENuRUpnV3REOXhmZ1lNR3kyaWorNmFocU5yNEU5NGI2MzRKU2Fv?=
+ =?utf-8?B?MSt3SlpTVVRWa0tvYWJDazJXbmxNM2dvdE93cUtLbWZqN1ZLTUdRc213WVRO?=
+ =?utf-8?B?Z3NSVjRvTkc5UGRINUw1dy9LNWxoNjFkZDF4eEFLeFJOUWI1Z3VuZDQxb0VO?=
+ =?utf-8?B?TTJ4ais4ZHkwS0FFdWhsZ0RJNUNIbkhHT2FnNi9HN3UzSzFxOVlXUkNJUTEx?=
+ =?utf-8?B?RytEaVY2TDZBK0xpa0dLaUl6U3I1N05kd2UramNqYjZkN1BsR1ZiVE5DdVc2?=
+ =?utf-8?B?MXA4N3RtRzZBM2sweWZZY3pqa2lLcHpJZXM1bFgvcy9Oak0zSHkweU5yeWJW?=
+ =?utf-8?B?U2xUSHhCV1JYVzhCZGROWkJUSVJObE9zMm1vbkQ2MnplbGM2cHVQRkRlTjBm?=
+ =?utf-8?B?NE5qenpRV3F3MHF3R0Q0NGxlOC9iZjVIYnJMSXFrQUd3Z21uM1ptSmprUmNK?=
+ =?utf-8?B?czhDeFNSTUFNYnl2SGViZDBiQndPMnZCUUcwQkhtVDBCU2d1Z015Yi83dzJj?=
+ =?utf-8?B?bU1aT2RuTzBtZVBscWhzYjJJTEZ3QlhZaWV5bVBmUHBtMVhSeStOVWs1eTg3?=
+ =?utf-8?B?cGdCbzYvbERya2pnc3d6UThFZTFVVE5Sb3dVUGZlM1dMem1LUEtJaTA5clNF?=
+ =?utf-8?B?SFRIM0ZEdkcra3VRdlg3Y2FHSC9ROHZYQlIvUml5eXUwaGF6d0EwSDFoelhZ?=
+ =?utf-8?B?eXBoOVF1VUZBRXlYVStYWk5Sbng0MWE1ejhZVUZpWUFDakoxbm5yVnB6Lzc2?=
+ =?utf-8?B?VjRRTUhEUVMyRTdwTHRSSFdlQXFmYjIrOUhnM3ErQkJzU2c5ODdwVUVPUWI1?=
+ =?utf-8?B?Uk1TcGQwaHhtRm9ma0xHTXE4dGhXWUJncytCQmVkeElUdTRYSWxMUzQ5VzRZ?=
+ =?utf-8?B?enFmZUdzY0VKU0Q0WUUzTUd4VTl1U2hUdVN0bFV0KzlsRzZoRDVmbkVtTE5F?=
+ =?utf-8?B?dUV5L0FybUErMnY4T3hlSU5UQWVBSUkvdExzRmxVYUN5SEk5MlRoNEZLd0l2?=
+ =?utf-8?B?SzBENkRTYjE2cjlVNExzSmlhUGVSWXY4K09wRGNyWEJoR2hEYkU5VVFGUU9B?=
+ =?utf-8?B?WDhsVFl2U2x0cjJUbVpnd1JNZFJXUWhreXdqeGZxQ2k4REIyQXFnK05VZmFt?=
+ =?utf-8?B?Z01mYmdyT3MwYmxuWnYzVXdiQ3dhVFJYSFNTUzNCWEI4RmQydHJoZHpRd3ds?=
+ =?utf-8?B?Vk94SFZ5dS9lWVdSM04yT0dyTktFRk1MQWgxZHpyVkhLMGhoYVhjY1o3dy8x?=
+ =?utf-8?B?cjhGa3dBMFJwbFQ3SSttZHpudDFZWmVINVZuNGphcWJDZ3p6a3N2QUpTZ21B?=
+ =?utf-8?B?M1BPQWRsL0c3ZUdtZ29GdlM3K0lDaUR5Y0IrY1VwczIybXRYU1JaUVpuTjRv?=
+ =?utf-8?B?dUZydlNpS2pBNHpqczRnZzMyZVMvVEtLM05laS9zUDdZVTl0RXlBcDVnS29w?=
+ =?utf-8?B?WGo0cXN5Ylc5L0xnQTVUQ0VoamM0cWJlZWxWT0ErcHRBc3hGZE9FVWdNOHEy?=
+ =?utf-8?B?ZzVrVVY2ZjlOdTlvR29kOVBGR0xEVTFpOWpSbW5PLzcvMmVNMnZPY2lPQUlE?=
+ =?utf-8?B?dmZXM0wvcG44NkhlaUFqNzM0OVBiQW84UVdibDliRmEyTFNnTVNtZ2dGNGx4?=
+ =?utf-8?B?V2tIRmtBdXhrV25iYlFCZDVOM1g2RVMxdHM4VUJkbk40djNYaWtLSW16OTVv?=
+ =?utf-8?B?aEg2d2h1UW0vSHF2K1FMcForemp2ZGpPaWk4UkhmdksxN1lOck90ZGtteDgr?=
+ =?utf-8?B?NTMwRGVpMWl4QXhxRnVSdlVENXkyWVMrU2hqTDB6TUF0NU90ZWRpdldDWEVY?=
+ =?utf-8?B?OFVNVTV5dTJzK3l3OU9GcEZTZU9TL1Q4aUZuYTRxTHNDUG1WUHBoUzV0RVJE?=
+ =?utf-8?Q?yg0Gv3izPKKCbiTg=3D?=
+MIME-Version: 1.0
+
+------=_Part_10848642_128452270.1698071115429
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+------------------------------------------------------------------
+ADOBE
+------------------------------------------------------------------
+
+Welcome! Here's how to get started with Custom fonts
+Your administrator at MIT has added custom fonts to your Creative Cloud account. The fonts are available for you to use in supported mobile apps and Creative Cloud Desktop enabled devices.
+
+Sign in to Creative Cloud to start using your fonts..
+
+To start using Custom fonts, use jiannan@mit.edu to sign in to Adobe by clicking on the Get Started button below.  If you already have an Adobe account, please sign out and sign back in to get access.
+
+Get Started:
+https://adobe.com/go/custom_fonts_upload_welcome 
+With Custom fonts you can:
+
+- Maintain brand consistency throughout your projects.
+- Know your fonts are where you need them to be, whenever you need them.
+- Spend more time creating and less time coordinating.
+
+If you have questions about the fonts you've been assigned, email your administrator.
+
+------------------------------------------------------------------
+
+Learn how to use the creative resources in Custom fonts and collaborate with your team.
+
+https://www.adobe.com/go/cc_welcome_learn
+
+https://www.adobe.com/go/cc_welcome_collab
+
+If you have questions about setting up or using Custom fonts, contact your administrator.
+
+https://www.adobe.com/go/howto_contact_admin
+
+------------------------------------------------------------------
+
+Manage your Account
+Visit your Adobe Account page to view your available products and access helpful resources to get the most out of your membership.
+
+Learn more:
+https://www.adobe.com/go/account
+
+Get answers to your questions
+Check out Adobe Forums to meet the experts behind the answers, learn about our products, get inspiration, or pick up new tips and tricks.
+
+Learn more:
+https://www.adobe.com/go/support
+
+******************************************************************
+
+
+Adobe, the Adobe logo, Creative Cloud, the Creative Cloud logo, and Document Cloud are either registered  trademarks or trademarks of Adobe in the United States and/or other countries.
+
+This is not a comprehensive list of Adobe trademarks. For a full list, refer to the Adobe Trademark Guidelines. All other trademarks are the property of their respective owners.
+
+Adobe Trademark Guidelines:
+https://www.adobe.com/go/trademarks
+
+Adobe, 345 Park Avenue, San Jose, CA 95110 USA  
+------=_Part_10848642_128452270.1698071115429
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:schemas-microso=
+ft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:office"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><l=
+ink rel=3D"icon" href=3D"https://www.adobe.com/favicon.ico" type=3D"image/x=
+-icon">
+<link rel=3D"shortcut icon" href=3D"https://www.adobe.com/favicon.ico" type=
+=3D"image/x-icon">
+<meta name=3D"x-apple-disable-message-reformatting">
+
+<meta name=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=3D1.0=
+">
+<meta name=3D"format-detection" content=3D"telephone=3Dno">
+<meta name=3D"format-detection" content=3D"date=3Dno">
+<meta name=3D"format-detection" content=3D"address=3Dno">
+<meta name=3D"format-detection" content=3D"email=3Dno">
+<title>Adobe</title>
+
+<!--[if mso]>
+<style type=3D"text/css">
+body, table, td {
+font-family:Helvetica Neue, Helvetica, Verdana, Arial, sans-serif !importan=
+t;
+}
+.button {
+background:transparent !important;
+}
+</style>
+<xml>
+  <o:OfficeDocumentSettings>
+    <o:AllowPNG/>
+    <o:PixelsPerInch>96</o:PixelsPerInch>
+  </o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+
+<style type=3D"text/css">
+@import url("https://use.typekit.net/onr8tbr.css");
+.ReadMsgBody { width:100%;}
+.ExternalClass {width:100%;}
+table {border-collapse:collapse; margin:0 auto;}
+a, a:visited {color:#1473E6; text-decoration:none;}
+.legal a {text-decoration:underline;}
+/* iOS BLUE LINKS */
+a[x-apple-data-detectors] {color:inherit !important; text-decoration:none !=
+important; font-size:inherit !important; font-family:inherit !important; fo=
+nt-weight:inherit !important; line-height:inherit !important;}
+
+.mobile {border-spacing:0;display:none!important;height:0;max-height:0;mso-=
+hide:all;overflow:hidden;visibility:hidden;width:0;}
+=09
+	@media only screen and (max-width:480px) {
+		u ~ div {
+			min-width:100vw;
+		}
+		div > u ~ div {
+        	min-width: 100%;
+		}
+		.web {
+			 display:none !important;
+	     }
+		=20
+		 .mobile {
+			 display:block !important;
+			 width:auto !important;
+			 overflow:visible !important;
+			 height:auto !important;
+			 max-height:inherit !important;
+			 font-size:15px !important;
+			 line-height:21px !important;
+			 visibility:visible !important;
+	     }
+		=20
+		 .email-width {
+			 width:84% !important;
+	     }
+		=20
+		 .full-width {
+			 width:100% !important;
+	     }
+		=20
+		 .mobile-image {
+			 height:auto !important;
+			 width:100% !important;
+	     }
+	=09
+		.social {
+			float:left !important;
+			padding-top:100px !important;
+			text-align:left !important;
+		}
+	}
+</style>
+</head>
+  <body bgcolor=3D"#E4E4E4" style=3D"background-color:#E4E4E4; margin:0; pa=
+dding:0;-webkit-font-smoothing:antialiased;width:100% !important;-webkit-te=
+xt-size-adjust:none;" topmargin=3D"0">
+    <div style=3D"font-size:1px; color:#E4E4E4; display:none; overflow:hidd=
+en; visibility:hidden;">Welcome! Here=E2=80=99s how to get started with Cus=
+tom fonts. &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
+p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
+p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;&nbsp;=E2=80=
+=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=
+=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=
+=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C=
+&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C=
+&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=
+=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=
+=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;</div>
+
+<table width=3D"100%" bgcolor=3D"#E4E4E4" style=3D"background-color:#E4E4E4=
+;" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation">
+  <tr>
+    <td>
+    	<table class=3D"full-width" align=3D"center" width=3D"600" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"width:=
+600px;">
+		<tr>
+           <td bgcolor=3D"#ffffff" style=3D"border-top:4px solid #EB1000; b=
+ackground-color:#ffffff; padding-bottom:60px;">
+          =20
+            <!-- pod1 -->
+            <table class=3D"email-width" align=3D"center" width=3D"500" bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" bgcolor=
+=3D"#ffffff" style=3D"background-color:#ffffff; width:500px;">
+			 <tr>
+            	<td style=3D"color:#EB1000; font-family:adobe-clean, Helvetica=
+ Neue, Helvetica, Verdana, Arial, sans-serif; font-size:12px; line-height:1=
+8px; padding-top:50px;"><img alt=3D"Adobe" src=3D"https://landing.adobe.com=
+/dam/global/images/adobe-logo.420x110.png" width=3D"108" height=3D"auto" bo=
+rder=3D"0" hspace=3D"0" vspace=3D"0" style=3D"color:#EB1000; font-family:ad=
+obe-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size=
+:12px; line-height:18px; display:block; vertical-align:top;"></td>
+             </tr>
+             <tr>
+            	<td style=3D"color:#2C2C2C; font-family:adobe-clean, Helvetica=
+ Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-height:2=
+6px; padding-top:60px; padding-bottom:40px;"><strong style=3D"color:#000000=
+; font-size:28px; line-height:36px;">Welcome! Here=E2=80=99s how to get sta=
+rted with Custom fonts</strong><br><br>
+				Your administrator at MIT has added custom fonts to your Creative Cloud=
+ account. The fonts are available for you to use in supported mobile apps a=
+nd Creative Cloud Desktop enabled devices.<br><br>
+				Sign in to Creative Cloud to start using your fonts..<br><br>
+				To start using Custom fonts, use <a href=3D"mailto:jiannan@mit.edu" tar=
+get=3D"_blank" style=3D"color:#2C2C2C; font-weight:bold; text-decoration:no=
+ne;">jiannan@mit.edu</a>  to sign in to Adobe by clicking on the Get Starte=
+d button below.								If you already have an Adobe account, please sign ou=
+t and sign back in to get access.</td>
+             </tr>
+			 			 <tr>
+				<td style=3D"color:#1473E6; font-family:adobe-clean, Helvetica Neue, He=
+lvetica, Verdana, Arial, sans-serif; font-size:16px; line-height:20px;"><!-=
+-[if gte mso 9]>
+				  <v:roundrect xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:w=3D"urn=
+:schemas-microsoft-com:office:word" style=3D"height:40px; v-text-anchor:mid=
+dle; width:200px;" arcsize=3D"50%" stroke=3D"f" fillcolor=3D"#1473E6">
+				  <v:textbox style=3D"mso-fit-shape-to-text:t">
+				  <center style=3D"color:#ffffff; font-family:Helvetica Neue, Helvetica=
+, Verdana, Arial, sans-serif; font-size:16px;">
+				  <![endif]-->
+					<a class=3D"button" href=3D"https://postoffice.adobe.com/po-server/lin=
+k/redirect?target=3DeyJhbGciOiJIUzUxMiJ9.eyJ0ZW1wbGF0ZSI6Im9jX2NjX3dlbGNvbW=
+UiLCJlbWFpbEFkZHJlc3MiOiJqaWFubmFuQG1pdC5lZHUiLCJyZXF1ZXN0SWQiOiIwNjY3YTkyN=
+S04YTZhLTQwOTktYmY5OS05MjZlMzRkMDNiOWUiLCJsaW5rIjoiaHR0cHM6Ly9hZG9iZS5jb20v=
+Z28vY3VzdG9tX2ZvbnRzX3VwbG9hZF93ZWxjb21lIiwibGFiZWwiOiI4IiwibG9jYWxlIjoiZW5=
+fVVMifQ.OFb_sjVN-jO4rkUROTDsNCHQO1PjQTAcBTl5dmLKm31yRVD6Tznr3WyHNrPNZUbSoxJ=
+BWxQeJ-Rvn1kjui4yGQ" target=3D"_blank" style=3D"background-color:#1473E6;bo=
+rder-radius:20px;color:#ffffff;display:inline-block;font-size:16px;line-hei=
+ght:40px;text-align:center;text-decoration:none;width:200px;-webkit-text-si=
+ze-adjust:none;"><strong>Get started</strong></a>
+				  <!--[if gte mso 9]>
+				  </center>
+				  <p style=3D"margin:0; font-size:0; line-height:0;"><o:p xmlns:o=3D"ur=
+n:schemas-microsoft-com:office:office">&nbsp;</o:p></p>
+				  </v:textbox>
+				  </v:roundrect>
+				  <![endif]-->
+				</td>
+             </tr>
+			 			 			 <tr>
+            	<td style=3D"color:#2C2C2C; font-family:adobe-clean, Helvetica=
+ Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-height:2=
+6px; padding-top:50px;">With Custom fonts you can:</td>
+             </tr>
+			 <tr>
+            	<td style=3D"color:#2C2C2C; font-family:adobe-clean, Helvetica=
+ Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-height:2=
+6px; padding-top:20px;">
+				 <table align=3D"left" width=3D"auto" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" role=3D"presentation" style=3D"float:left;">
+					<tr>
+						<td width=3D"5%" style=3D"color:#2C2C2C; font-family:adobe-clean, Hel=
+vetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:26px; line-he=
+ight:26px; vertical-align:top; width:5%;" valign=3D"top">=E2=80=A2&nbsp;</t=
+d>
+						<td width=3D"95%" style=3D"color:#2C2C2C; font-family:adobe-clean, He=
+lvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-h=
+eight:26px; padding-top:4px; width:95%;">Maintain brand consistency through=
+out your projects.</td>
+					</tr>
+					<tr>
+						<td width=3D"5%" style=3D"color:#2C2C2C; font-family:adobe-clean, Hel=
+vetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:26px; line-he=
+ight:26px; vertical-align:top; width:5%;" valign=3D"top">=E2=80=A2&nbsp;&nb=
+sp;</td>
+						<td width=3D"95%" style=3D"color:#2C2C2C; font-family:adobe-clean, He=
+lvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-h=
+eight:26px; padding-top:4px; width:95%;">Know your fonts are where you need=
+ them to be, whenever you need them.</td>
+					</tr>
+					<tr>
+						<td width=3D"5%" style=3D"color:#2C2C2C; font-family:adobe-clean, Hel=
+vetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:26px; line-he=
+ight:26px; vertical-align:top; width:5%;" valign=3D"top">=E2=80=A2&nbsp;&nb=
+sp;</td>
+						<td width=3D"95%" style=3D"color:#2C2C2C; font-family:adobe-clean, He=
+lvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-h=
+eight:26px; padding-top:4px; width:95%;">Spend more time creating and less =
+time coordinating.</td>
+				    </tr>
+				 </table>
+				</td>
+             </tr>
+			 <tr>
+            	<td style=3D"color:#2C2C2C; font-family:adobe-clean, Helvetica=
+ Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-height:2=
+6px; padding-top:20px;">If you have questions about the fonts you=E2=80=99v=
+e been assigned, email your administrator.</td>
+             </tr>
+						            </table>
+            <!-- END pod1 -->
+			  =20
+		  </td>
+		</tr>
+		<tr>
+           <td bgcolor=3D"#FBFBFB" style=3D"background-color:#FBFBFB; paddi=
+ng-top:40px; padding-bottom:60px;">
+			  =20
+			<!-- pod2 -->
+            <table class=3D"email-width" align=3D"center" width=3D"500" bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"width:500px;">
+			 <tr>
+            	<td style=3D"color:#2C2C2C; font-family:adobe-clean, Helvetica=
+ Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-height:2=
+6px;">
+				 <table align=3D"left" width=3D"auto" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" role=3D"presentation" style=3D"float:left;">
+					<tr>
+						<td valign=3D"top" style=3D"color:#2C2C2C; font-family:adobe-clean, H=
+elvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-=
+height:26px; padding-top:20px;"><img alt=3D"" src=3D"https://landing.adobe.=
+com/dam/2022/images/mwpe-1370/oc_cc_welcome.90x90-1.png" width=3D"40" heigh=
+t=3D"auto" border=3D"0" hspace=3D"0" vspace=3D"0" style=3D"display:block; v=
+ertical-align:top;"></td>
+						<td width=3D"10" style=3D"width:10px;">&nbsp;</td>
+						<td valign=3D"top" style=3D"color:#2C2C2C; font-family:adobe-clean, H=
+elvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-=
+height:26px; padding-top:20px;"><a href=3D"https://postoffice.adobe.com/po-=
+server/link/redirect?target=3DeyJhbGciOiJIUzUxMiJ9.eyJ0ZW1wbGF0ZSI6Im9jX2Nj=
+X3dlbGNvbWUiLCJlbWFpbEFkZHJlc3MiOiJqaWFubmFuQG1pdC5lZHUiLCJyZXF1ZXN0SWQiOiI=
+wNjY3YTkyNS04YTZhLTQwOTktYmY5OS05MjZlMzRkMDNiOWUiLCJsaW5rIjoiaHR0cHM6Ly93d3=
+cuYWRvYmUuY29tL2dvL2NjX3dlbGNvbWVfbGVhcm4iLCJsYWJlbCI6IjkiLCJsb2NhbGUiOiJlb=
+l9VUyJ9.Befp6YXAo5X2QfCew7FATAXx-DuOD8zInfHTbgKXktCkQCEBni0XRAD-oQCmqWxSI5I=
+tazkji3_Uj32OppKCxg" target=3D"_blank" style=3D"color:#2C2C2C; text-decorat=
+ion:underline;">Learn</a> how to use the creative resources in Custom fonts=
+ and <a href=3D"https://postoffice.adobe.com/po-server/link/redirect?target=
+=3DeyJhbGciOiJIUzUxMiJ9.eyJ0ZW1wbGF0ZSI6Im9jX2NjX3dlbGNvbWUiLCJlbWFpbEFkZHJ=
+lc3MiOiJqaWFubmFuQG1pdC5lZHUiLCJyZXF1ZXN0SWQiOiIwNjY3YTkyNS04YTZhLTQwOTktYm=
+Y5OS05MjZlMzRkMDNiOWUiLCJsaW5rIjoiaHR0cHM6Ly93d3cuYWRvYmUuY29tL2dvL2NjX3dlb=
+GNvbWVfY29sbGFiIiwibGFiZWwiOiIxMCIsImxvY2FsZSI6ImVuX1VTIn0.XNZUSRkQ4fFOGa_m=
+Mx37m8_JMlUG-oxM6DCtbCyxjedGiTl8ddabknq8hkypexyi6PilSP0tPNdaFRkukIqnWA" tar=
+get=3D"_blank" style=3D"color:#2C2C2C; text-decoration:underline;">collabor=
+ate</a> with your team.</td>
+					</tr>
+					<tr>
+						<td valign=3D"top" style=3D"color:#2C2C2C; font-family:adobe-clean, H=
+elvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-=
+height:26px; padding-top:20px;"><img alt=3D"" src=3D"https://landing.adobe.=
+com/dam/2022/images/mwpe-1370/oc_cc_welcome.90x90-2.png" width=3D"36" heigh=
+t=3D"auto" border=3D"0" hspace=3D"0" vspace=3D"0" style=3D"display:block; v=
+ertical-align:top;"></td>
+						<td width=3D"10" style=3D"width:10px;">&nbsp;</td>
+						<td valign=3D"top" style=3D"color:#2C2C2C; font-family:adobe-clean, H=
+elvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:18px; line-=
+height:26px; padding-top:20px;">If you have questions about setting up or u=
+sing Custom fonts, <a href=3D"https://postoffice.adobe.com/po-server/link/r=
+edirect?target=3DeyJhbGciOiJIUzUxMiJ9.eyJ0ZW1wbGF0ZSI6Im9jX2NjX3dlbGNvbWUiL=
+CJlbWFpbEFkZHJlc3MiOiJqaWFubmFuQG1pdC5lZHUiLCJyZXF1ZXN0SWQiOiIwNjY3YTkyNS04=
+YTZhLTQwOTktYmY5OS05MjZlMzRkMDNiOWUiLCJsaW5rIjoiaHR0cHM6Ly93d3cuYWRvYmUuY29=
+tL2dvL2hvd3RvX2NvbnRhY3RfYWRtaW4iLCJsYWJlbCI6IjExIiwibG9jYWxlIjoiZW5fVVMifQ=
+.gK6XjgIE5xOphDIwCZaGvz2ccgxgLyaIfodgQ8s7OpPXLrSoS9Mn2F9lTkA5oDdiGaDfUMS_Ga=
+WTTi0-9l95_Q" target=3D"_blank" style=3D"color:#2C2C2C; text-decoration:und=
+erline;">contact your administrator</a>.</td>
+					</tr>
+				 </table>
+				</td>
+             </tr>
+			</table>
+            <!-- END pod2 -->
+           =20
+           <!-- END email content -->
+           </td>
+        </tr>
+		<tr>
+		<td bgcolor=3D"#F4F4F4" style=3D"background-color:#F4F4F4;">
+		 =20
+		  <!-- logo, links & legal-->
+		  <table class=3D"email-width" align=3D"center" width=3D"500" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" bgcolor=3D"#F4F=
+4F4" style=3D"background-color:#F4F4F4; width:500px;">
+		   <tr>
+			<td style=3D"color:#EB1000; font-family:adobe-clean, Helvetica Neue, Hel=
+vetica, Verdana, Arial, sans-serif; font-size:12px; line-height:18px; paddi=
+ng-top:40px;"><img alt=3D"Adobe" src=3D"https://landing.adobe.com/dam/globa=
+l/images/adobe-logo.classic.160x222.png" width=3D"30" height=3D"auto" borde=
+r=3D"0" hspace=3D"0" vspace=3D"0" style=3D"color:#EB1000; font-family:adobe=
+-clean, Helvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:12=
+px; line-height:18px; display:block; vertical-align:top;"></td>
+		   </tr>
+		   <tr>
+			  <td class=3D"legal" style=3D"color:#959595; font-family:adobe-clean, H=
+elvetica Neue, Helvetica, Verdana, Arial, sans-serif; font-size:12px; line-=
+height:18px; padding-top:50px; padding-bottom:50px;"><strong style=3D"font-=
+size:14px;">Manage your Account</strong><br>
+                  Visit your Adobe Account page to view your available prod=
+ucts and access helpful resources to get the most out of your membership. <=
+a href=3D"https://postoffice.adobe.com/po-server/link/redirect?target=3DeyJ=
+hbGciOiJIUzUxMiJ9.eyJ0ZW1wbGF0ZSI6Im9jX2NjX3dlbGNvbWUiLCJlbWFpbEFkZHJlc3MiO=
+iJqaWFubmFuQG1pdC5lZHUiLCJyZXF1ZXN0SWQiOiIwNjY3YTkyNS04YTZhLTQwOTktYmY5OS05=
+MjZlMzRkMDNiOWUiLCJsaW5rIjoiaHR0cHM6Ly93d3cuYWRvYmUuY29tL2dvL2FjY291bnQiLCJ=
+sYWJlbCI6IjEyIiwibG9jYWxlIjoiZW5fVVMifQ.i_RJ1K8A6TUwfQ2AuWh1mnai1pKwBXwXPjp=
+aYvUoxXd-xqXl9OGtm0Ax2I7-ogbzXwSbJ2m2YveCRAj_DAwNTQ" target=3D"_blank" styl=
+e=3D"color:#959595; text-decoration:underline;">Learn more</a><br><br>
+                  <strong style=3D"font-size:14px;">Get answers to your que=
+stions</strong><br>
+                  Check out Adobe Forums to meet the experts behind the ans=
+wers, learn about our products, get inspiration, or pick up new tips and tr=
+icks. <a href=3D"https://postoffice.adobe.com/po-server/link/redirect?targe=
+t=3DeyJhbGciOiJIUzUxMiJ9.eyJ0ZW1wbGF0ZSI6Im9jX2NjX3dlbGNvbWUiLCJlbWFpbEFkZH=
+Jlc3MiOiJqaWFubmFuQG1pdC5lZHUiLCJyZXF1ZXN0SWQiOiIwNjY3YTkyNS04YTZhLTQwOTktY=
+mY5OS05MjZlMzRkMDNiOWUiLCJsaW5rIjoiaHR0cHM6Ly93d3cuYWRvYmUuY29tL2dvL3N1cHBv=
+cnQiLCJsYWJlbCI6IjEzIiwibG9jYWxlIjoiZW5fVVMifQ.fVmXqBxCtwJsF0sENtWBhi8fvyii=
+cqh2jsmo2rqHKExiNL-3s2gKgAr8N74HKA3_1ygowayF005TMRDOmgJHuQ" target=3D"_blan=
+k" style=3D"color:#959595; text-decoration:underline;">Learn more</a><br><b=
+r>
+				  				  Adobe, the Adobe logo, Creative Cloud, the Creative Cloud logo,=
+ and Document Cloud are either registered  trademarks or trademarks of Adob=
+e in the United States and/or other countries.<br><br>
+			This is not a comprehensive list of Adobe trademarks. For a full list, r=
+efer to the <a href=3D"https://postoffice.adobe.com/po-server/link/redirect=
+?target=3DeyJhbGciOiJIUzUxMiJ9.eyJ0ZW1wbGF0ZSI6Im9jX2NjX3dlbGNvbWUiLCJlbWFp=
+bEFkZHJlc3MiOiJqaWFubmFuQG1pdC5lZHUiLCJyZXF1ZXN0SWQiOiIwNjY3YTkyNS04YTZhLTQ=
+wOTktYmY5OS05MjZlMzRkMDNiOWUiLCJsaW5rIjoiaHR0cHM6Ly93d3cuYWRvYmUuY29tL2dvL3=
+RyYWRlbWFya3MiLCJsYWJlbCI6IjE0IiwibG9jYWxlIjoiZW5fVVMifQ.6YV1Rox7VNl-rr-Xe1=
+BB8oUpGMdKgeo88QUEghihxKXP8RAGLXJVSEphP37UpkGaHHV3rumGZ2e3TuBgesZcng" targe=
+t=3D"_blank" style=3D"color:#959595;">Adobe Trademark Guidelines</a>. All o=
+ther trademarks are the property of their respective owners.<br><br>
+			  Adobe, 345 Park Avenue, San Jose, CA 95110 USA			  			  </td>
+			</tr>
+		  </table>
+		  <!-- END logo, links & legal-->
+		=09
+		</td>
+	  </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+<img src=3D"https://postoffice.adobe.com/po-server/link/open?source=3DeyJhb=
+GciOiJIUzUxMiJ9.eyJ0ZW1wbGF0ZSI6Im9jX2NjX3dlbGNvbWUiLCJlbWFpbEFkZHJlc3MiOiJ=
+qaWFubmFuQG1pdC5lZHUiLCJyZXF1ZXN0SWQiOiIwNjY3YTkyNS04YTZhLTQwOTktYmY5OS05Mj=
+ZlMzRkMDNiOWUiLCJsb2NhbGUiOiJlbl9VUyJ9.HmtU011DOdtTTWBESNb6Vqqk4mODSbzkGJQI=
+8mWERMqlqap_Ht8pQWu3bX73IoC3sbU4YVvLqc-xxtihfXeDWA" height=3D"1" width=3D"1=
+"><!-- oc_cc_welcome -->
+  </body>
+</html>=
+
+------=_Part_10848642_128452270.1698071115429--

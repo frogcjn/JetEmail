@@ -1,0 +1,852 @@
+Received: from SJ0PR01MB6127.prod.exchangelabs.com (2603:10b6:a03:290::19) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Fri, 21 Jul 2023 15:57:36
+ +0000
+Received: from MW4PR03CA0356.namprd03.prod.outlook.com (2603:10b6:303:dc::31)
+ by SJ0PR01MB6127.prod.exchangelabs.com (2603:10b6:a03:290::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6609.24; Fri, 21 Jul 2023 15:57:34 +0000
+Received: from CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dc:cafe::c4) by MW4PR03CA0356.outlook.office365.com
+ (2603:10b6:303:dc::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.28 via Frontend
+ Transport; Fri, 21 Jul 2023 15:57:34 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.110)
+ smtp.mailfrom=in.constantcontact.com; dkim=fail (body hash did not verify)
+ header.d=ajg.ccsend.com;dmarc=fail action=none header.from=ccsend.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ in.constantcontact.com discourages use of 18.9.1.110 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.110) by
+ CO1NAM11FT066.mail.protection.outlook.com (10.13.175.18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6588.39 via Frontend Transport; Fri, 21 Jul 2023 15:57:34 +0000
+Received: from oc11expo6.exchange.mit.edu (18.9.4.11) by
+ oc11exhyb5.exchange.mit.edu (18.9.1.110) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Fri, 21 Jul 2023 11:57:17 -0400
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ oc11expo6.exchange.mit.edu (18.9.4.11) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Fri, 21 Jul 2023 11:57:17 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.40) by
+ oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Fri, 21 Jul 2023 11:57:17 -0400
+Received: from BN9PR03CA0640.namprd03.prod.outlook.com (2603:10b6:408:13b::15)
+ by BL3PR01MB6803.prod.exchangelabs.com (2603:10b6:208:33e::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6609.25; Fri, 21 Jul 2023 15:55:12 +0000
+Received: from BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13b:cafe::18) by BN9PR03CA0640.outlook.office365.com
+ (2603:10b6:408:13b::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.33 via Frontend
+ Transport; Fri, 21 Jul 2023 15:55:12 +0000
+Authentication-Results-Original: spf=pass (sender IP is 208.75.123.182)
+ smtp.mailfrom=in.constantcontact.com; dkim=pass (signature was verified)
+ header.d=ajg.ccsend.com;dmarc=pass action=none
+ header.from=ccsend.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of in.constantcontact.com
+ designates 208.75.123.182 as permitted sender)
+ receiver=protection.outlook.com; client-ip=208.75.123.182;
+ helo=ccm182.constantcontact.com; pr=C
+Received: from ccm182.constantcontact.com (208.75.123.182) by
+ BN8NAM11FT069.mail.protection.outlook.com (10.13.176.152) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6609.28 via Frontend Transport; Fri, 21 Jul 2023 15:55:12 +0000
+Return-Path:
+ AdDy0lqP4RNOW8V5u83sATQ==_1101924600302_OaeduCJwEe6M13PhGM9fsg==@in.constantcontact.com
+Received: from [10.252.0.90] ([10.252.0.90:47544] helo=p2-jbemailsyndicator19.ctct.net)
+	by 10.249.231.10 (envelope-from <AdDy0lqP4RNOW8V5u83sATQ==_1101924600302_OaeduCJwEe6M13PhGM9fsg==@in.constantcontact.com>)
+	(ecelerity 4.3.1.999 r(:)) with ESMTP
+	id 66/86-46937-06AAAB46; Fri, 21 Jul 2023 11:55:12 -0400
+DKIM-Signature: v=1; q=dns/txt; a=rsa-sha256; c=relaxed/relaxed; s=2020252757; d=ajg.ccsend.com; h=date:mime-version:subject:X-Feedback-ID:X-250ok-CID:message-id:from:reply-to:list-unsubscribe:list-unsubscribe-post:to; bh=cDRd6cE6bGbRlpGzwBp88FgCI0flpAXZYURd533rRVU=; b=U9Db9Uzc0UT2VJN5FZmHmZxGn8+q5QV4Hrgke71SYFFOS9uNR5sNE6OJ3KESu7aeHjy0cMh+hOjjCETn2tAqUpQiQyCzFPT5WlpFvzYmmt7aHvK5iLtmOm+dtytlEOQQdRd6xR+JSx7BCyWzGIA+metgfoUbC+d71X/qUP8MyMc=
+DKIM-Signature: v=1; q=dns/txt; a=rsa-sha256; c=relaxed/relaxed; s=1000073432; d=auth.ccsend.com; h=date:mime-version:subject:X-Feedback-ID:X-250ok-CID:message-id:from:reply-to:list-unsubscribe:list-unsubscribe-post:to; bh=cDRd6cE6bGbRlpGzwBp88FgCI0flpAXZYURd533rRVU=; b=TE/IwrWs2jWQM6fXE3Fy587dwNP/RVDRHozgWw6qfmhkjGd0cOujBdO2+Lvj1WhQWNTJFpTkuoAmPcl+8CDyIthILfkvf+KsTqAd0pXgsCp+5DINtpWqOBlpec1Dv15FKSaDA1A6vBYHB3T5Dgutlee1GScR/eOAESBAzTmQpEw=
+Message-ID: <1140412349929.1101924600302.1118335320.0.221155JL.2002@synd.ccsend.com>
+Date: Fri, 21 Jul 2023 11:55:12 -0400 (EDT)
+From: Gallagher Student Health & Special Risk <info+gallagherstudent.com@ccsend.com>
+Reply-To: info@gallagherstudent.com
+Sender: Gallagher Student Health & Special Risk <peter@ajg.ccsend.com>
+To: jiannan@mit.edu
+Subject: 2023-2024 Massachusetts Institute of Technology Student Health
+ Insurance Plan - Waiver Reminder
+Content-Type: multipart/alternative;
+	boundary="----=_Part_768185611_1762676557.1689954912199"
+List-Unsubscribe: <https://visitor.constantcontact.com/do?p=un&m=001E7oISzyWyklWoLeZiooIVQ%3D%3D&se=001e8FppSoRgPzjFxEPnxL7SA%3D%3D&t=001EkZLEx15CcE%3D&llr=opcg6hcab>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+X-Campaign-Activity-ID: 743cb496-a3f8-44d3-96f1-5e6ef37b004d
+X-250ok-CID: 743cb496-a3f8-44d3-96f1-5e6ef37b004d
+X-Channel-ID: 39a79db8-2270-11ee-8cd7-73e118cf5fb2
+X-Return-Path-Hint: AdDy0lqP4RNOW8V5u83sATQ==_1101924600302_OaeduCJwEe6M13PhGM9fsg==@in.constantcontact.com
+X-Roving-Campaignid: 1140412349929
+X-Roving-Id: 1101924600302.1118335320
+X-Feedback-ID: 39a79db8-2270-11ee-8cd7-73e118cf5fb2:743cb496-a3f8-44d3-96f1-5e6ef37b004d:1101924600302:CTCT
+X-CTCT-ID: 39a335de-2270-11ee-9fe9-b388005b3ead
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BN8NAM11FT069:EE_|BL3PR01MB6803:EE_|CO1NAM11FT066:EE_|SJ0PR01MB6127:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: b2bb8501-755a-43d6-9cc9-08db8a03330f
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:5;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?CYTT6DQJSqHTnFH9d/H41/mZCjZmhnOk3j+9SCiXG6BEnTAvtpF7BSbubhU2?=
+ =?us-ascii?Q?zX8uGHycsADBbPemgdoGbqBVmi5wbuPwhYPE1wylDKemmFpDyz812JvoHVpY?=
+ =?us-ascii?Q?kdW7EIonmhuLeAoc3ZJVnShzaW8DJctmAWnnCSavQYURH5CVXU1OtSfeBEDU?=
+ =?us-ascii?Q?MAaD3Fk9vgNQjr9RrGWiyp8qc09DT78Z2k6WqwsK/kqFOWIkNIhgS39+46tn?=
+ =?us-ascii?Q?z+Sc2KHyUfkS6Mukgj7hTx1Ow9CbelCaAc6T/YJNu2ekglT/RzTfDYGS+Hav?=
+ =?us-ascii?Q?2n5ILFFM7xJvUD2QQAX3bZiozcnogbA6XjOWhzfnVpMa09tmukkJMZXQiKL0?=
+ =?us-ascii?Q?ceA2GQpw/BNAS5wpw5uTcfFvjRzEHdxC6yAHeopCjJO66mTUyIXWIYtvgn0H?=
+ =?us-ascii?Q?cJ734JNFIH/6MwrHohSFXPYlX6lfTfD6+7CkKBvmCUf5XObeJ8oZuPYTg/Qy?=
+ =?us-ascii?Q?6tdVQ8sDsab7uRFp+BTkmRqcd8+0G87KMeTFOL+6LbS1F/uqDh6jhTU3vSpi?=
+ =?us-ascii?Q?PvPfXFm7zdXKb5WIwZhonnxbtbtWFIS/nyGWrp1UHIYF6gVhvuek9GpnHMPh?=
+ =?us-ascii?Q?MhHKYZi5/MV8jPXST/5IFQow29b555z9u8cD8dsjBiIukqJXHAY/powlYCk9?=
+ =?us-ascii?Q?JUyVzWUCjSDNJyPynNBEI0VuhvLIoiJgL5+W9tb6lq5H4fMMQ+SuCAJPzeQP?=
+ =?us-ascii?Q?euoMTuAehfosQaKRpA78RiSF3+LSqCV8jdR5OKdYIECQd0gNvobiXIMHE9dI?=
+ =?us-ascii?Q?/l5JAo16VN6xGVzyHPVGHSXAnV/eGHTxJ47YW5arkBt8irFIXxFvRGnOec4t?=
+ =?us-ascii?Q?BmH3n2MA66M8OsF4Q3iEe8WhzJ0hUqoG8qUn3jtyGj/JJhY25xnNmaL/bDi8?=
+ =?us-ascii?Q?p1p9vxJGEZrBCuuWj6pHQaDlFscg1tABWQRPwc3DuJJ087p1q9iTpmQX62jU?=
+ =?us-ascii?Q?ze315KJXNo8y+pchoR6H01BVNFs8RMGKSnxhqWcKem7RJOUrcsS5UaZZMCQM?=
+ =?us-ascii?Q?AzOSeg1pRsS0TYP0Ak+icHCHKZH3UVwzGP6M47Khb50xu1PbJjkZ41cPXr8F?=
+ =?us-ascii?Q?3OlrY6qyMAELa+LsGoCKPlvw3XzeuZZZHHf0oY8lsU2c/Ej3LYoYqCrDKXfl?=
+ =?us-ascii?Q?Gq8mhywEEiSpl6PVYRtQ48R1jjXxfgHwMukPgjHZ9oYjNS2qGCJcU7ZcDAuu?=
+ =?us-ascii?Q?1CcbUN9YWrxD4MXBzltJ6U9O10mdWMNxnsrv7bZG6JRU6p/noXThK2rGVSj0?=
+ =?us-ascii?Q?5sau7i/drIL/Z6qqq4EGLsUqEWTwBLxhNI+A9RwcHh/xHIsIxbtqidyX7F2F?=
+ =?us-ascii?Q?50Z67Aq7aiDU0A9abfETRGkNzjPDdKNqC6Hy7dRxfZp/PQfnYO2zn6JU3emX?=
+ =?us-ascii?Q?8Hh000fc31qaO+U4/ohF/6lYIh6VNYdXFehPGRonhwkqa1lzxFXXsSPeDVyj?=
+ =?us-ascii?Q?hgRzwy30y+PIhYddz3suM1E2kR25vqdvYngTbTJ3iYz1yAPCvSyyDKNDpTLx?=
+ =?us-ascii?Q?5UOPQGUwYG/OUmOGPQdVGFCYmrJTcP3EzzlJcYa7QbVFwliGymCTQyHkOmnE?=
+ =?us-ascii?Q?96JZdKeMOVdbEthK0nf1ywyO6QUB7nqTUUQvUBJdGFofNvwExNxo8HVv8VVv?=
+ =?us-ascii?Q?djsB/3bFFWpSqobpgB1Mh4HkBEmseXHngt3lW+JGlwKPW+MFFG39RnOuriNx?=
+ =?us-ascii?Q?X5L4VJs7wbD87HcozkLzI2hRyTcgX5d1plhCErqGqKTU6VGRtSQ4XjTfTPzn?=
+ =?us-ascii?Q?ydmwjvbSw+u+ewnM2BWdBNH95wrTgLT+wLWJ6aOeKP+85mvMyISXAINOal4q?=
+ =?us-ascii?Q?8fnTKMvDlsQQbmTB4l1bwSCBE3CnIjvdp3p7Nj8JgDis212I0hK+XeCpAnbM?=
+ =?us-ascii?Q?Ybb8I0ErL9094lB1VPptDh6W1kUZbEN2uuN3ic7LX6A70jMbBNqFkeRQldXM?=
+ =?us-ascii?Q?8UTpS8ZmrWqxADI5Zp6yV7DgxIW2/7XsjwH6cj4zfCA7xy2j9sYDNemiNV5i?=
+ =?us-ascii?Q?MTJ3u+1IBm1OIAKOseBEizDFYJAU9su/g3/tJm3bzdsNK1RK1/9lgeC8dzPq?=
+ =?us-ascii?Q?qHnf0ztYyC06mC4O+UcJ7MKSTUs7+S27TDxzR8PzrmoRInCiHpBnFVziWoKy?=
+ =?us-ascii?Q?pJRF+lDhuLA+6xCPfWhGWK+vFUhICMpO8xx7eHBmHBl3pmP1QOvwDLL6asUL?=
+ =?us-ascii?Q?JXB7GzmHK+rDJ53UApDDiseKzB7o7SiH+QBd0STMTJJjK2tMiy8Q51MXWQRw?=
+ =?us-ascii?Q?6WiK6EeOtfoLGbM47NgyCjsvusymFGb81iorgkCQmCgUQmUWpSCf2Yl/f9x5?=
+ =?us-ascii?Q?pb0P5kWuykBinle2YqPGCCK7?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:208.75.123.182;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:ccm182.constantcontact.com;PTR:ccm182.constantcontact.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR01MB6803
+X-OrganizationHeadersPreserved: BL3PR01MB6803.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb3.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb3.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo6.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 21 Jul 2023 15:57:34.9253
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ b2bb8501-755a-43d6-9cc9-08db8a03330f
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted:
+ CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 6205b3b0-8191-42ee-191f-08db8a02de17
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.110;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb5.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2023 15:57:34.6909
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2bb8501-755a-43d6-9cc9-08db8a03330f
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.110];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB6127
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.4933924
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6609.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eTZUc1V6QWZzM0tRdmtwYXVWa2g4SWJrTDQ3NXR2Vlc3M2xhMHE0MFlCV21x?=
+ =?utf-8?B?WDVLZFFlUmdYSlRyREduT1FURVlHNXAxUWZRVHd4WTd1cnFHWXpacGpuOXRI?=
+ =?utf-8?B?T200cHBvSDBwVWZlTDJ2YzBXMnNSY1VDUThOTEMwaHNFeXFzKy9zb2Y4MXMr?=
+ =?utf-8?B?RDdrWmlpdEQxYmZuekVwdFc0OE45MXA4bTJ0VTh2Vk9PcE9DYTc5SnlmMjZD?=
+ =?utf-8?B?WGhoeDBEZUdYczlCdkxFS3Z2RldzZUdySmdxZDFjWUd0dmxOSU5SYStMQWZM?=
+ =?utf-8?B?LzdaeTZseHhDOHp1a2xBRXFZSHRRKzBXeGp5K2lOTWc5WGtNZ20ybDlDNjFs?=
+ =?utf-8?B?TzlQblMza3VlaG9WWFFBcXg1NXhQWWNKVk45YnNKQnV4dDRjQlZCM09VZ0hK?=
+ =?utf-8?B?Qk1FR0FKN3UwbVFQdndXUHl1dmFMTEhaS2YyTlNxQms3K2FnKzU1bnZSMGgz?=
+ =?utf-8?B?MlRkZzZ2N3NZTDBUUHp1VmZOKzlHT1pHR2F1OTBKcTdsU250aXdVMjMrb0RE?=
+ =?utf-8?B?ckd5WFdCQXc5eDQzTmpzaGpxbFh1TW9KcDJFZDFoTjBGanJ2ZlN6MTVOU0Vr?=
+ =?utf-8?B?OW9saG05MVJFZ05zQndYQUtRZ3Z2VkVKRFNGQk5mUVNneG9yUkYrMDJKYWV3?=
+ =?utf-8?B?UTloSDdUSVoxTFNMVDMxUVpINE80TWp0d1JLWnM2TFV3ZCtHQWpyWnBFSzZW?=
+ =?utf-8?B?bkZtckhnZzNUNmRVTWxrb0pPZ0pZdW1GYnpuV0lESXBsbnVqK0VwcnorSXZC?=
+ =?utf-8?B?TG1yeDkrTjYxVVBsZEtlVENMS05hZG1JaXFTVk9DQVZTMTdvVnc4TE9UYm14?=
+ =?utf-8?B?emx3V2JmQ09nR09zQkxvdWticjkvNUFBZWZQeDAxa2Q4M2pBOTR0ZHFYNjlN?=
+ =?utf-8?B?RzZvamJjbG1iQ1JQMWhJZVdKM2RrZGFhOGQrUTlvM0lrcVp2U0NyWVFWQXdv?=
+ =?utf-8?B?TmwycWlGeDhabkRIOVdpZDVISEwyY2ZzWUgyUnQvRmxkQXgxNGMxQVEydmtS?=
+ =?utf-8?B?Mk5Uak5DMjFVNWtWSnBOYUlFSklkeGhwVUtDR1dIYVBMaGV5ZVpzWUZYeXU3?=
+ =?utf-8?B?c3pYQ09CdjhiZmZMNHdQWTNLTkNxTXNvaHIvcXRUeldjOXBHWlY0eEZhM1h4?=
+ =?utf-8?B?TUxTVmVmajdaRzk2SExtM3dZRXV0OENqZEwrbk81eVNycnJxUTJvWHAwb2JB?=
+ =?utf-8?B?TlFjTGFQOGxoZXRBRGNKTGdBNnRhODZONnA4UytNU0JrN280a3QrUUpPYWlG?=
+ =?utf-8?B?ZU9lbXlhNTBDYVNWS1FLVC90RDhrMm5yME1vUFZ4Rk0wNnBZcElBNTZiUHFN?=
+ =?utf-8?B?YlpVc09jMlFDdWtFVUxSRE83SlRYY2hIUDBKaWwvYVZCMGRjSHZGWCtvZnBr?=
+ =?utf-8?B?bldhNlZoME9YR2JRNUpZV3hTVHhvc2hIaU1xa29LbmpFeEhzTEpiUzh0SVB0?=
+ =?utf-8?B?c21MeS93ZjNPUm5RNXI5MTJDN2lmbWtQcjNJM1c5OGowdUl4WkhZVjRQakEv?=
+ =?utf-8?B?VzJ2OUhxVnBrOVBrZHBsVDZlaFhlTjFVUEVKOGxrVDJJY0NXby9tZVA4dDdK?=
+ =?utf-8?B?d1R6ejBIWVNTSHVJckNXU25QL2RTdkdQMW5qbmRPWVp4bHJQVTUvUk1HNUZN?=
+ =?utf-8?B?NHU2dXRaWDA5Wmp5ZUNnWEJxYUVGeWVOcEtEbFA4bjloMlNsMlJDOTlMNU5G?=
+ =?utf-8?B?d2g5d0dIYk9vdjN2ZUdjb3JxRi9GaXRxZFhxc3A1NjB2SWsrUHdQSXV1QlJO?=
+ =?utf-8?B?elo3L0lvSU9NZWFLWmViR0VSaGV5V1ZIdVVpOWVVdEU4WUtxNk1aVU9jQVR6?=
+ =?utf-8?B?dXhKSUludkdvOWZSMUgwZU10R3JhekE4VDFnRmNqS2R4R3hFOUdWeEVnd01K?=
+ =?utf-8?B?VHBrMDc2emtzZkhnaEp0ZjcvbTVkUk8zY2daVWhDbE0zZmFYSTVPYlVtR1B4?=
+ =?utf-8?B?b0VIZzNVWnROMWJoTWQ4REhrVTBpZmI2VWMzSHQ0SzJBMFowU2c1TlFLWkNv?=
+ =?utf-8?B?aEJrQlFCQ0dFbHp6MnB2WmszVUlNaXNqdEtMZlorZ1FtbEFuNEM1V0w1VDhG?=
+ =?utf-8?B?dk9TU1Z2RFUzeHRoZ2c1R0wxK0Jpc05sUmVLQ051WjRqdmgzUCthTnN0Zkk0?=
+ =?utf-8?B?V0drUlRXNzBLREJLOTFlZmZRZlhvY2hzSmlnUEVBWHd1alpjbSs4akpoSUxG?=
+ =?utf-8?B?N0xEZDFZc0ZhSWNBSWFrZWc0R3ZTODVaL1hYZjhjSGV1NFRhL29EWnJ1MEto?=
+ =?utf-8?B?ZFIrZUNDV2tuSmhFb2tZZXJTektIQ0U5QlpyK0l1YUN4NnhOV25hYTFWVnlz?=
+ =?utf-8?B?b3lKcGhSY1huejN4ZEc5WEMvNFp1aHNTMU5FNEdIblBQYVcyK3FTTFlWR0VC?=
+ =?utf-8?B?NXVTSUxwcWppQ3E5Qzd3YmVmR244MWFseWlQbHBXeSs0b2hMMGc4VmJqZDgz?=
+ =?utf-8?B?Q0RQUzRYR3hVbm5ZeG5sU1pGbmw3NWJpb0FhRGNuUzBNUUx4MzcyMXpTaFov?=
+ =?utf-8?B?SEd6YjQrNFlxU21QTTM2VDZPeGtSV25aaUFKUURVZzcvZHIvdmM2alRLT2JS?=
+ =?utf-8?B?YlBtNjhDZlg3c0lnQ29kYmlNSGUxMkR2ZWZhUHQ1QW9CcHdHTlhsNUZHRklq?=
+ =?utf-8?B?L1VYeTZJY2tQSVh1UTh3SXdWWnBabE1Ec1psNi9rNEdEQ203cVpYVkJXUW9Q?=
+ =?utf-8?B?QzVtMjdmakFoM3JhY0IxRGNhNkliL0JWRU1ocCtheUl1enVTZ2JkeVpvaTZK?=
+ =?utf-8?Q?aLuPvILwyavpUoL2kV89gr7?=
+MIME-Version: 1.0
+
+------=_Part_768185611_1762676557.1689954912199
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+ Download Document It's a fact: people don't mind scrolling to read an emai=
+l, as long as it's relevant and interesting. Make sure your message follows=
+ through on the promise in your subject line, and use several short paragra=
+phs if you have a lot to say. When in doubt, challenge yourself to write le=
+ss and add links that support your topic. =E2=80=8C =E2=80=8C =E2=80=8C Gal=
+lagher Student Health & Special Risk | 500 Victory Road, Quincy, MA 02171 U=
+nsubscribe jiannan@mit.edu Constant Contact Data Notice Sent by info@gallag=
+herstudent.com powered by Try email marketing for free today!
+------=_Part_768185611_1762676557.1689954912199
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+<!DOCTYPE html><html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!--[if gte mso 9]>
+<style id="ol-styles">
+/* OUTLOOK-SPECIFIC STYLES */
+li {
+text-indent: -1em;
+padding: 0;
+margin: 0;
+line-height: 1.2;
+}
+ul, ol {
+padding: 0;
+margin: 0 0 0 40px;
+}
+p {
+margin: 0;
+padding: 0;
+margin-bottom: 0;
+}
+sup {
+font-size: 85% !important;
+}
+sub {
+font-size: 85% !important;
+}
+</style>
+<![endif]-->
+<style id="template-styles-head" data-premailer="ignore">
+.footer-main-width {
+width: 610px!important;
+max-width: 610px;
+}
+table {
+border-collapse: collapse;
+table-layout: fixed;
+}
+.bgimage {
+table-layout: auto;
+}
+.preheader-container {
+color: transparent;
+display: none;
+font-size: 1px;
+line-height: 1px;
+max-height: 0px;
+max-width: 0px;
+opacity: 0;
+overflow: hidden;
+}
+/* LIST AND p STYLE OVERRIDES */
+.editor-text p {
+margin: 0;
+padding: 0;
+margin-bottom: 0;
+}
+.editor-text ul,
+.editor-text ol {
+padding: 0;
+margin: 0 0 0 40px;
+}
+.editor-text li {
+padding: 0;
+margin: 0;
+line-height: 1.2;
+}
+/* ==================================================
+CLIENT/BROWSER SPECIFIC OVERRIDES
+================================================== */
+/* IE: correctly scale images with w/h attbs */
+img {
+-ms-interpolation-mode: bicubic;
+}
+/* Text Link Style Reset */
+a {
+text-decoration: underline;
+}
+/* iOS: Autolink styles inherited */
+a[x-apple-data-detectors] {
+text-decoration: underline !important;
+font-size: inherit !important;
+font-family: inherit !important;
+font-weight: inherit !important;
+line-height: inherit !important;
+color: inherit !important;
+}
+/* FF/Chrome: Smooth font rendering */
+.editor-text, .MainTextFullWidth {
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+/* Gmail/Web viewport fix */
+u + .body .template-body {
+width: 610px;
+}
+@media only screen and (max-width:480px) {
+u + .body .template-body {
+width: 100% !important;
+}
+}
+/* Office365/Outlook.com image reset */
+[office365] button, [office365] .divider-base div, [office365] .spacer-base div, [office365] .editor-image div { display: block !important; }
+</style>
+<style>@media only screen and (max-width:480px) {
+table {
+border-collapse: collapse;
+}
+.main-width {
+width: 100% !important;
+}
+.mobile-hidden {
+display: none !important;
+}
+td.OneColumnMobile {
+display: block !important;
+}
+.OneColumnMobile {
+width: 100% !important;
+}
+td.editor-col .editor-text {
+padding-left: 20px !important; padding-right: 20px !important;
+}
+td.editor-col .editor-image.editor-image-hspace-on td {
+padding-left: 20px !important; padding-right: 20px !important;
+}
+td.editor-col .editor-button-container {
+padding-left: 20px !important; padding-right: 20px !important;
+}
+td.editor-col .editor-social td {
+padding-left: 20px !important; padding-right: 20px !important;
+}
+td.editor-col .block-margin {
+padding-left: 20px !important; padding-right: 20px !important;
+}
+td.editor-col td.block-margin .editor-text {
+padding-left: 0px !important; padding-right: 0px !important;
+}
+td.editor-col td.block-margin .editor-image.editor-image-hspace-on td {
+padding-left: 0px !important; padding-right: 0px !important;
+}
+td.editor-col td.block-margin .editor-button-container {
+padding-left: 0px !important; padding-right: 0px !important;
+}
+td.editor-col td.block-margin .editor-social td {
+padding-left: 0px !important; padding-right: 0px !important;
+}
+.editor-button td > table tr > td {
+padding: 0px 0px 0px 0px !important;
+}
+.editor-button td > table tr > td td {
+padding: 9px 15px 10px 15px !important;
+}
+.layout {
+padding: 15px 9px 15px 9px !important;
+}
+.layout-container-border {
+padding: 0px 0px 0px 0px !important;
+}
+.layout-container {
+padding: 0px 0px 0px 0px !important;
+}
+.editor-image img {
+width: auto !important; margin-left: auto !important; margin-right: auto !important;
+}
+.editor-image .image-cell {
+padding-bottom: 15px !important;
+}
+.editor-text {
+font-size: 16px !important;
+}
+.section-headline-text {
+font-size: 24px !important;
+}
+.headline-text {
+font-size: 24px !important;
+}
+.subheadline-text {
+font-size: 20px !important;
+}
+.feature {
+padding-top: 0px !important; padding-bottom: 0px !important;
+}
+.layout-outer {
+padding: 0px 20px !important;
+}
+.feature-heading-text {
+font-size: 20px !important;
+}
+.feature-text {
+font-size: 16px !important;
+}
+.split.editor-col {
+margin-top: 0px !important;
+}
+.split.editor-col ~ .split.editor-col {
+margin-top: 10px !important;
+}
+.split-layout-margin {
+padding: 0px 20px !important;
+}
+.article {
+padding-top: 0px !important; padding-bottom: 0px !important;
+}
+.article-heading-text {
+font-size: 20px !important;
+}
+.article-text {
+font-size: 16px !important;
+}
+.social-container {
+text-align: center !important;
+}
+.social-text {
+font-size: 14px !important;
+}
+.cpn-heading-text {
+font-size: 28px !important;
+}
+.editor-cpn-heading-text {
+font-size: 28px !important;
+}
+td.col-divided .editor-col {
+border-right: 0px solid #FADB4D !important; border-bottom: 1px solid #FADB4D !important;
+}
+td.col-divided td.editor-col:last-of-type {
+border-bottom: 0 !important;
+}
+.col-divided {
+padding: 0 20px !important;
+}
+td.col-divided .editor-col .editor-text {
+padding-left: 0px !important; padding-right: 0px !important;
+}
+td.col-divided .editor-col .editor-image.editor-image-hspace-on td {
+padding-left: 0px !important; padding-right: 0px !important;
+}
+td.col-divided .editor-col .editor-button-container {
+padding-left: 0px !important; padding-right: 0px !important;
+}
+td.col-divided .editor-col .editor-social td {
+padding-left: 0px !important; padding-right: 0px !important;
+}
+td.col-divided .editor-col .block-margin {
+padding-left: 0px !important; padding-right: 0px !important;
+}
+.action-block .poll-answer {
+width: 100% !important; display: block !important;
+}
+.action-block .poll-button {
+width: 100% !important;
+}
+div.MobileFooter {
+font-size: 11px !important;
+}
+td.FooterMobile {
+padding: 0px 10px 0px 10px !important;
+}
+td.MainCenter {
+width: 100% !important;
+}
+table.MainSide {
+display: none !important;
+}
+img.MainSide {
+display: none !important;
+}
+td.MainSide {
+display: none !important;
+}
+.rsvp-button-inner {
+padding: 0px 0px 10px 0px !important;
+}
+.rsvp-button-outer {
+width: 100% !important; max-width: 100% !important;
+}
+.footer-main-width {
+width: 100% !important;
+}
+.footer-mobile-hidden {
+display: none !important;
+}
+.footer-column {
+display: block !important;
+}
+.footer-mobile-stack {
+display: block !important;
+}
+.footer-mobile-stack-padding {
+padding-top: 3px;
+}
+}
+@media only screen and (max-width:320px) {
+.layout {
+padding: 0px 0px 0px 0px !important;
+}
+}
+@media screen {
+@font-face {
+font-family: ''; font-style: normal; font-weight: 400; src: local(''), local(''), url() format(''); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+}
+</style>
+</head>
+<body class="body" align="center" style="width: 100%; min-width: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background-color: #7DB1E0; margin: 0px; padding: 0px;" bgcolor="#7DB1E0">
+<table class="template-body" border="0" cellpadding="0" cellspacing="0" style="text-align: center; min-width: 100%;" width="100%">
+<tr>
+<td class="preheader-container">
+<div>
+<div id="preheader" style="display: none; font-size: 1px; color: transparent; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+<span data-entity-ref="preheader"></span>
+</div>
+<img src="https://r20.rs6.net/on.jsp?ca=743cb496-a3f8-44d3-96f1-5e6ef37b004d&amp;a=1101924600302&amp;c=39a335de-2270-11ee-9fe9-b388005b3ead&amp;ch=39a79db8-2270-11ee-8cd7-73e118cf5fb2" alt="">
+</div>
+</td>
+</tr>
+<tr>
+<td class="template-shell-container" align="center">
+<div class="bgcolor" style="background-color: #7DB1E0;">
+<table class="bgimage" width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #7DB1E0;" bgcolor="#7DB1E0">
+<tbody>
+<tr>
+<td align="center">
+<table class="main-width" width="610" align="center" border="0" cellpadding="0" cellspacing="0" style="width: 610px;">
+<tbody>
+<tr>
+<td class="layout" align="center" valign="top" style="padding: 15px 5px;">
+<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td class="layout-container-border" align="center" valign="top" style="background-color: #FADB4D; padding: 0px;" bgcolor="#FADB4D">
+<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" style="background-color: #FADB4D;" bgcolor="#FADB4D">
+<tbody>
+<tr>
+<td class="layout-container" align="center" valign="top" style="background-color: #FFFFFF; padding: 0;" bgcolor="#FFFFFF">
+<div class="">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="galileo-ap-layout-editor" style="min-width: 100%;">
+<tbody>
+<tr>
+<td class="spacer editor-col OneColumnMobile" width="100%" align="left" valign="top">
+<div class="gl-contains-spacer">
+<table class="editor-spacer" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+<td class="spacer-container" align="center" valign="top">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+<td class="spacer-base" style="padding-bottom: 10px; height: 1px; line-height: 1px;" width="100%" align="center" valign="top">
+<div><img alt="" width="5" height="1" border="0" hspace="0" vspace="0" src="https://imgssl.constantcontact.com/letters/images/sys/S.gif" style="display: block; height: 1px; width: 5px;"></div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="galileo-ap-layout-editor" style="min-width: 100%;">
+<tbody>
+<tr>
+<td class="content editor-col OneColumnMobile" width="100%" align="left" valign="top">
+<div class="gl-contains-image">
+<table class="editor-image content-image editor-image-vspace-on" style="min-width: 100%;" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+<td align="center" valign="top" style="padding-top: 10px; padding-bottom: 10px;">
+<div class="publish-container">
+<a href="https://r20.rs6.net/tn.jsp?f=001kYrvQcOzfoD7Ng2rn4vmwCO9ZPgtOGlnWgq-V7NbAHMxFf3T42QTCFC-g-TDB6EqCzxQWH5eP_zuHYRsIxhJH_qxYx5Dkc2PonqUzQkfv9aNcPbryF4G8DUxGYyqQlR5zlQw3TgQF-GZN1hphkVrsP4cjoWijgqPyBk-z2P4KcflgfoKf4Kq-RhrwDtGLLewMNoxtx1Zm-iqtx-aJIcgHEOlKLCxwGPMhBzN6zrNsQc=&amp;c=PKRApbPqiPcIopg_3ArzWjGwAn9qHNnBhrxDOM040PtbGCCQWZF5MQ==&amp;ch=i7pxw9CUjPOHot0t02ncXue2PZ68nJsM9yM11_sH5YYHftGN9obG_A==">
+<img alt="" class="" style="display: block; height: auto; max-width: 100%;" width="560" border="0" hspace="0" vspace="0" src="https://files.constantcontact.com/ee903df8001/f52a8e35-849e-48e5-93dd-a6764c1d276a.png?rdr=true">
+</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="galileo-ap-layout-editor" style="min-width: 100%;">
+<tbody>
+<tr>
+<td class="button editor-col OneColumnMobile" width="100%" align="left" valign="top">
+<div class="gl-contains-button">
+<table class="editor-button" width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%; min-width: 100%;">
+<tbody>
+<tr>
+<td class="editor-button-container " style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 14px; font-weight: bold; text-decoration: none; color: #000000; padding: 10px 20px;">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="galileo-ap-content-editor" style="width: 100%; min-width: 100%;">
+<tbody>
+<tr>
+<td class="MainTextFullWidthTD" align="center" valign="top" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 14px; font-weight: bold; text-decoration: none; color: #000000; padding: 0px;">
+<table border="0" cellpadding="0" cellspacing="0" style="width: initial; moz-border-radius: 7px; border-radius: 7px; border-spacing: 0; background-color: #FADB4D; min-width: initial; padding: 0; border: none;" bgcolor="#FADB4D">
+<tbody>
+<tr>
+<td class="MainTextFullWidthTD" align="center" valign="top" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 14px; font-weight: bold; text-decoration: none; color: #000000; padding: 15px 25px;">
+<div>
+<div class="MainTextFullWidth"><a href="https://r20.rs6.net/tn.jsp?f=001kYrvQcOzfoD7Ng2rn4vmwCO9ZPgtOGlnWgq-V7NbAHMxFf3T42QTCFC-g-TDB6EqCzxQWH5eP_zuHYRsIxhJH_qxYx5Dkc2PonqUzQkfv9aNcPbryF4G8DUxGYyqQlR5zlQw3TgQF-GZN1hphkVrsP4cjoWijgqPyBk-z2P4KcflgfoKf4Kq-RhrwDtGLLewMNoxtx1Zm-iqtx-aJIcgHEOlKLCxwGPMhBzN6zrNsQc=&amp;c=PKRApbPqiPcIopg_3ArzWjGwAn9qHNnBhrxDOM040PtbGCCQWZF5MQ==&amp;ch=i7pxw9CUjPOHot0t02ncXue2PZ68nJsM9yM11_sH5YYHftGN9obG_A==" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 14px; font-weight: bold; text-decoration: none; color: #000000;">Download Document</a></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="galileo-ap-layout-editor" style="min-width: 100%;">
+<tbody>
+<tr>
+<td class="content editor-col OneColumnMobile" width="100%" align="left" valign="top">
+<div class="gl-contains-text">
+<table width="100%" style="min-width: 100%;" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+<td class="editor-text content-text" align="left" valign="top" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 14px; color: #000000; text-align: left; display: block; word-wrap: break-word; line-height: 1.2; padding: 10px 20px;">
+<div></div>
+<div class="text-container galileo-ap-content-editor"><div><div>It's a fact: people don't mind scrolling to read an email, as long as it's relevant and interesting. Make sure your message follows through on the promise in your subject line, and use several short paragraphs if you have a lot to say. When in doubt, challenge yourself to write less and add links that support your topic.</div></div></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="galileo-ap-layout-editor" style="min-width: 100%;">
+<tbody>
+<tr>
+<td class="spacer editor-col OneColumnMobile" width="100%" align="left" valign="top">
+<div class="gl-contains-spacer">
+<table class="editor-spacer" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+<td class="spacer-container" align="center" valign="top">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+<td class="spacer-base" style="padding-bottom: 10px; height: 1px; line-height: 1px;" width="100%" align="center" valign="top">
+<div><img alt="" width="5" height="1" border="0" hspace="0" vspace="0" src="https://imgssl.constantcontact.com/letters/images/sys/S.gif" style="display: block; height: 1px; width: 5px;"></div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="galileo-ap-layout-editor" style="min-width: 100%;">
+<tbody>
+<tr>
+<td class="social editor-col OneColumnMobile" width="100%" align="left" valign="top" style="background-color: #7DB1E0;" bgcolor="#7DB1E0">
+<div class="gl-contains-spacer">
+<table class="editor-spacer" width="100%" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+<td class="spacer-container" align="center" valign="top">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+<td class="spacer-base" style="padding-bottom: 10px; height: 1px; line-height: 1px;" width="100%" align="center" valign="top">
+<div><img alt="" width="5" height="1" border="0" hspace="0" vspace="0" src="https://imgssl.constantcontact.com/letters/images/sys/S.gif" style="display: block; height: 1px; width: 5px;"></div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="gl-contains-social-button">
+<table class="editor-social" width="100%" cellpadding="0" cellspacing="0" border="0" style="width: 100%; min-width: 100%;">
+<tbody>
+<tr>
+<td class=" social-container social-container" align="center" style="padding: 0px 20px 10px;">
+<div class="galileo-ap-content-editor">
+<a href="https://r20.rs6.net/tn.jsp?f=001kYrvQcOzfoD7Ng2rn4vmwCO9ZPgtOGlnWgq-V7NbAHMxFf3T42QTCP3Sk3rLttnzaR7w6P_Ap_RoMbeZVNBI3-rtwNu4ayUBTbtKlTiUZDlZWgT0OYFElvN_oHLQThSe&amp;c=PKRApbPqiPcIopg_3ArzWjGwAn9qHNnBhrxDOM040PtbGCCQWZF5MQ==&amp;ch=i7pxw9CUjPOHot0t02ncXue2PZ68nJsM9yM11_sH5YYHftGN9obG_A==" style="display: inline-block; text-decoration: none;">
+<img alt="Facebook" width="32" border="0" src="https://imgssl.constantcontact.com/galileo/images/templates/Galileo-SocialMedia/facebook-visit-default-circle.png" style="display: inline-block; margin: 0; padding: 0;"> ‌
+</a>
+<a href="https://r20.rs6.net/tn.jsp?f=001kYrvQcOzfoD7Ng2rn4vmwCO9ZPgtOGlnWgq-V7NbAHMxFf3T42QTCNnttO7EE3J8KYM8Aokl_PfccAL7GqdDmFNn8NorZHRB_vUHZL_C20SzTti9WVoh_NVSt-6Yp4O7hBXAGgMobYpH6Mi17CrzErsL05_nQf86&amp;c=PKRApbPqiPcIopg_3ArzWjGwAn9qHNnBhrxDOM040PtbGCCQWZF5MQ==&amp;ch=i7pxw9CUjPOHot0t02ncXue2PZ68nJsM9yM11_sH5YYHftGN9obG_A==" style="display: inline-block; text-decoration: none;">
+<img alt="Twitter" width="32" border="0" src="https://imgssl.constantcontact.com/galileo/images/templates/Galileo-SocialMedia/twitter-visit-default-circle.png" style="display: inline-block; margin: 0; padding: 0;"> ‌
+</a>
+<a href="https://r20.rs6.net/tn.jsp?f=001kYrvQcOzfoD7Ng2rn4vmwCO9ZPgtOGlnWgq-V7NbAHMxFf3T42QTCP3Sk3rLttnzaR7w6P_Ap_RoMbeZVNBI3-rtwNu4ayUBTbtKlTiUZDlZWgT0OYFElvN_oHLQThSe&amp;c=PKRApbPqiPcIopg_3ArzWjGwAn9qHNnBhrxDOM040PtbGCCQWZF5MQ==&amp;ch=i7pxw9CUjPOHot0t02ncXue2PZ68nJsM9yM11_sH5YYHftGN9obG_A==" style="display: inline-block; text-decoration: none;">
+<img alt="LinkedIn" width="32" border="0" src="https://imgssl.constantcontact.com/galileo/images/templates/Galileo-SocialMedia/linkedin-visit-default-circle.png" style="display: inline-block; margin: 0; padding: 0;"> ‌
+</a>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+<tr>
+<td></td>
+</tr>
+</table>
+<table class="footer-container" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #ffffff; margin-left: auto; margin-right: auto; table-layout: auto !important" bgcolor="#ffffff">
+  <tr>
+    <td width="100%" align="center" valign="top" style="width: 100%;">
+      <div class="footer-max-main-width" align="center" style="margin-left: auto; margin-right: auto; max-width: 100%;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td class="footer-layout" align="center" valign="top" style="padding: 16px 0px;">
+              <table class="footer-main-width" style="width: 580px;" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td class="footer-text" align="center" valign="top" style="color: #5d5d5d; font-family: Verdana,Geneva,sans-serif; font-size: 12px; padding: 4px 0px;">
+                    
+                    <span class="footer-column">Gallagher Student Health &amp; Special Risk<span class="footer-mobile-hidden"> | </span></span><span class="footer-column">500 Victory Road<span class="footer-mobile-hidden">, </span></span><span class="footer-column"></span><span class="footer-column"></span><span class="footer-column">Quincy, MA 02171</span><span class="footer-column"></span>
+                    
+                  </td>
+                </tr>
+                <tr>
+                  <td class="footer-row" align="center" valign="top" style="padding: 10px 0px;">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td class="footer-text" align="center" valign="top" style="color: #5d5d5d; font-family: Verdana,Geneva,sans-serif; font-size: 12px; padding: 4px 0px;">
+                          <a href="https://visitor.constantcontact.com/do?p=un&amp;m=001E7oISzyWyklWoLeZiooIVQ%3D&amp;ch=39a79db8-2270-11ee-8cd7-73e118cf5fb2&amp;ca=743cb496-a3f8-44d3-96f1-5e6ef37b004d" style="color: #5d5d5d">Unsubscribe jiannan@mit.edu</a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="footer-text" align="center" valign="top" style="color: #5d5d5d; font-family: Verdana,Geneva,sans-serif; font-size: 12px; padding: 4px 0px;">
+                          
+                          
+                          <a class="footer-about-provider" href="https://www.constantcontact.com/legal/customer-contact-data-notice" style="color: #5d5d5d">Constant Contact Data Notice</a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="footer-text" align="center" valign="top" style="color: #5d5d5d; font-family: Verdana,Geneva,sans-serif; font-size: 12px; padding: 4px 0px;">
+                          Sent by
+                          
+                          <a href="mailto:info@gallagherstudent.com" style="color: #5d5d5d; text-decoration: none">info@gallagherstudent.com</a>
+                          
+
+                          
+                          
+                          <span class="footer-column">powered by</span>
+                          
+                          
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="footer-text" align="center" valign="top" style="color: #5d5d5d; font-family: Verdana,Geneva,sans-serif; font-size: 12px; padding: 4px 0px;">
+                    
+                    
+                    <a href="http://www.constantcontact.com/index.jsp?cc=nge&amp;rmc=VF21_3GE&amp;pn=ROVING&amp;nav=743cb496-a3f8-44d3-96f1-5e6ef37b004d" style="color: #5d5d5d; text-decoration: none">
+                    <img alt="Trusted Email from Constant Contact - Try it FREE today." width="160" border="0" hspace="0" vspace="0" src="https://static.ctctcdn.com/letters/images/CTCTFooter/Logo_Blue_Orange_2022.png">
+                    </a>
+                    <div class="footer-cta-text" style="color: #5d5d5d; font-family: Verdana,Geneva,sans-serif; font-size: 9px; line-height: 2">
+                    <a href="http://www.constantcontact.com/index.jsp?cc=nge&amp;rmc=VF21_3GE&amp;pn=ROVING&amp;nav=743cb496-a3f8-44d3-96f1-5e6ef37b004d" style="color: #5d5d5d; text-decoration: none">Try email marketing for free today!</a>
+                    </div>
+                    
+                    
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+  </tr>
+</table></body>
+</html>
+
+------=_Part_768185611_1762676557.1689954912199--

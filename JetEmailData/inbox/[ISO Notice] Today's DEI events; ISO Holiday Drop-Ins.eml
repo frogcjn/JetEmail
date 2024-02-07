@@ -1,0 +1,1335 @@
+Received: from BN0PR01MB6861.prod.exchangelabs.com (2603:10b6:408:160::22) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 29 Nov 2023 17:44:45
+ +0000
+Received: from SN7PR04CA0211.namprd04.prod.outlook.com (2603:10b6:806:127::6)
+ by BN0PR01MB6861.prod.exchangelabs.com (2603:10b6:408:160::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.29; Wed, 29 Nov 2023 17:44:44 +0000
+Received: from SA2PEPF00001507.namprd04.prod.outlook.com
+ (2603:10b6:806:127:cafe::34) by SN7PR04CA0211.outlook.office365.com
+ (2603:10b6:806:127::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.29 via Frontend
+ Transport; Wed, 29 Nov 2023 17:44:44 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.113)
+ smtp.mailfrom=mail7.sea21.rsgsv.net; dkim=fail (body hash did not verify)
+ header.d=mit.edu;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of mail7.sea21.rsgsv.net
+ does not designate 18.9.1.113 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.113;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.113) by
+ SA2PEPF00001507.mail.protection.outlook.com (10.167.242.39) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Wed, 29 Nov 2023 17:44:44 +0000
+Received: from oc11exhyb5.exchange.mit.edu (18.9.1.110) by
+ oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 29 Nov 2023 12:44:29 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ oc11exhyb5.exchange.mit.edu (18.9.1.110) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Wed, 29 Nov 2023 12:44:28 -0500
+Received: from SJ0PR05CA0111.namprd05.prod.outlook.com (2603:10b6:a03:334::26)
+ by MW6PR01MB8599.prod.exchangelabs.com (2603:10b6:303:23e::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.29; Wed, 29 Nov 2023 17:44:27 +0000
+Received: from MWH0EPF000989EA.namprd02.prod.outlook.com
+ (2603:10b6:a03:334:cafe::d6) by SJ0PR05CA0111.outlook.office365.com
+ (2603:10b6:a03:334::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.22 via Frontend
+ Transport; Wed, 29 Nov 2023 17:44:27 +0000
+Authentication-Results-Original: spf=pass (sender IP is 148.105.12.7)
+ smtp.mailfrom=mail7.sea21.rsgsv.net; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mail7.sea21.rsgsv.net
+ designates 148.105.12.7 as permitted sender) receiver=protection.outlook.com;
+ client-ip=148.105.12.7; helo=mail7.sea21.rsgsv.net; pr=C
+Received: from mail7.sea21.rsgsv.net (148.105.12.7) by
+ MWH0EPF000989EA.mail.protection.outlook.com (10.167.241.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Wed, 29 Nov 2023 17:44:26 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=k2;
+	t=1701279835; x=1701540335; i=riechman@mit.edu;
+	bh=vVzF7Lxb2S0ZDabCmyU8NzGYsHjIGEGFftuyD4IcIxI=;
+	h=Subject:From:Reply-To:To:Date:Message-ID:X-MC-User:Feedback-ID:
+	 List-ID:List-Unsubscribe:List-Unsubscribe-Post:Content-Type:
+	 MIME-Version:CC:Date:Subject:From;
+	b=pH1oUPmr+IhrJlT5DtgbH5xvy3egQntVGSOS+2othuc03LNHhouxesn8b+tv7YcEg
+	 HuhLe+Omx8isv13KhMRB8cbiNKnB1BoA3/HQ2k5mgl3z3AWoXOsi/2o3Fh8NOyVuAR
+	 /7yw1E3RnA8VfaLg/RkdRN43GyTVfSxoltwdsvZzAQNFFq3R5LRYJQifcKsvLnwJi2
+	 fLXRx81OlBovWfsODW+mJXP7ioZOPA5d/+QA8I4uhoLG4dK3aiTlBCHyhC8K+OjWvI
+	 n5j7PwY5Qa+EwYbVAKZsqzk7Ob1lZuxrXQyC8iYNYEXyuRy7uyKlk5ColNKX4O42YP
+	 yjSfp6S7+y7Ng==
+Received: from localhost (localhost [127.0.0.1])
+	by mail7.sea21.rsgsv.net (Mailchimp) with ESMTP id 4SgRWv4qcFzK6GQ97
+	for <jiannan@MIT.EDU>; Wed, 29 Nov 2023 17:43:55 +0000 (GMT)
+Subject: =?utf-8?Q?=5BISO=20Notice=5D=20Today=27s=20DEI=20events=3B=20ISO=20Holiday=20Drop=2DIns?=
+From: =?utf-8?Q?MIT=20International=20Students=20Office?= <riechman@mit.edu>
+Reply-To: =?utf-8?Q?MIT=20International=20Students=20Office?= <riechman@mit.edu>
+To: =?utf-8?Q?Jiannan?= <jiannan@MIT.EDU>
+Date: Wed, 29 Nov 2023 17:43:53 +0000
+Message-ID: <156ecccacf03a6376855ef479.929c932d78.20231129174346.d88fdcecc1.2a06becb@mail7.sea21.rsgsv.net>
+X-Mailer: Mailchimp Mailer - **CIDd88fdcecc1929c932d78**
+X-Campaign: mailchimp156ecccacf03a6376855ef479.d88fdcecc1
+X-campaignid: mailchimp156ecccacf03a6376855ef479.d88fdcecc1
+X-Report-Abuse: Please report abuse for this campaign here: https://mailchimp.com/contact/abuse/?u=156ecccacf03a6376855ef479&id=d88fdcecc1&e=929c932d78
+X-MC-User: 156ecccacf03a6376855ef479
+Feedback-ID: 50137178:50137178.774450:us12:mc
+List-ID: 156ecccacf03a6376855ef479mc list <156ecccacf03a6376855ef479.206181.list-id.mcsv.net>
+X-Accounttype: pr
+List-Unsubscribe: <https://mit.us12.list-manage.com/unsubscribe?u=156ecccacf03a6376855ef479&id=3195a3d812&e=929c932d78&c=d88fdcecc1>,
+ <mailto:unsubscribe-mc.us12_156ecccacf03a6376855ef479.d88fdcecc1-929c932d78@unsubscribe.mailchimpapp.net?subject=unsubscribe>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Content-Type: multipart/alternative; boundary="_----------=_MCPart_880477227"
+Return-Path: bounce-mc.us12_50137178.774450-929c932d78@mail7.sea21.rsgsv.net
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ MWH0EPF000989EA:EE_|MW6PR01MB8599:EE_|SA2PEPF00001507:EE_|BN0PR01MB6861:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: a4f94fba-d439-4653-aa28-08dbf102df95
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?9bhfMhqp6EnVgEu24TeGd/WT7RLcqHkzQPNqryJpaFqFeM2LiWLI/iI8/pZc?=
+ =?us-ascii?Q?YBAEL1OLGs9JLI5oQweFzwMmKCOSGQVclV1uIyylLjROVyAn9LShY1McoUiw?=
+ =?us-ascii?Q?BQgzvKqU1QjxUC2SXHnCiu8OcrpWS0nuuNkX8AHJK+Y0J/lUndTyGK6nfYFy?=
+ =?us-ascii?Q?frcxO+tBMkiFRRx4dTIRNe/R8FYwKy3hGVySX2F/xRlvoMXo5gx/f+qJRDYQ?=
+ =?us-ascii?Q?I15Poa311LB9Pz3pBuxb7be9XWIG2IAnOK+eF2Nw4o5MQrzH4zBMennpF/8L?=
+ =?us-ascii?Q?oPTUa5b0f28jVV9dnwLBo7C1GaYY5OghZMK8BgI0UV6osxmGKFB3OlOPSr/7?=
+ =?us-ascii?Q?MERm1lRPO3FZgiFupAdDJI43tXeV7QPfm/4uAWxjFT3GVgnXq/uAAKAUo4H3?=
+ =?us-ascii?Q?TcAJbT+zsOjKx0K1tVgDDtaBF/t7PGELPp2A8BTaiWR9D3zY1IlVlq7YE/D0?=
+ =?us-ascii?Q?tnvLEfaYYlBRW/L5ZoPyILIJVMN4TB/EbPGKIvJ+dkBTyrxZyS5VLUUY9ZqM?=
+ =?us-ascii?Q?+M4tYlABRsqRnbiWWS3OwoYRyt3SRRIKswqRr50jZMuR9cM7zCtsll6cxDhY?=
+ =?us-ascii?Q?9wjR+SyWy6Lmf0yyVuk423oC7SovVy3NBtb4Ar2tKZjVa+onYe1+IcQtTXNH?=
+ =?us-ascii?Q?2GPZ07FMLWs/NYQTvVj/jfqn0jmCMo+hZIkY+nBl6IpSdZENHkM6Zjw0KN2E?=
+ =?us-ascii?Q?/tAyvw5gGncxBAZMVwMUE4MBMzAl/nGo9Og0VCtMsiTR/e1Fq9Ia6wgrpBEl?=
+ =?us-ascii?Q?SlVaLHRwbc//LGGxQeBVWGPs9RPR1fGhEKg0EB9DrIzXAiuol/kB9S94meet?=
+ =?us-ascii?Q?D0rg4DU/KwBDEdfgNEu+H4v/xgtgB4ZNLbyoUhT2V8wEMin7Ee+DS1ACNVsh?=
+ =?us-ascii?Q?lON9nqrAVRwJf8DX3qB4r/KIptG4boVqPjXB0uw11yLoqf0RPhQj30zQEdf7?=
+ =?us-ascii?Q?NWjThq9Dbs4sikaB/GWOl7kWcKVm+gQ6gvl2jCS0OcLVZ5guG4wdntoEgCGv?=
+ =?us-ascii?Q?SpAms4ZYLmzMBR7woEeh9VM2B+FKUf0gWvd9oF+ZR+uk3Ye/uytRBe/nNv6m?=
+ =?us-ascii?Q?GYtBU7EUzVtHcEpzMV96wF6hNqNlSpRwui2xqyUrb+aYv9Bz8IaE5/sAo2kn?=
+ =?us-ascii?Q?rnIVz0KfHjsYYLvSsKG8/T8zbb81cnrsZwn66m7/Gw08qDADqcQYJdRPOn3T?=
+ =?us-ascii?Q?Apv2U3A0waIVkhyBKR9biHj0UqifOibKU63As+DEi5grD2Znuq3Q+9kHhofX?=
+ =?us-ascii?Q?iKxI/V7Xkjdo6W+gTV5MSmBA5aE1z+acBHJkjeP0/W3FGBLdsBDDfHKjli4r?=
+ =?us-ascii?Q?0woAtXR+oIgnNBTq7ClhXG0OskGZ8TkTSqvY42Xq3aKaSsZg1eGJktwsKnSE?=
+ =?us-ascii?Q?HZ8SwZJ4B4zmb1URIr4gDne3HJbXMqPGoy1Udw6ynujiBz6gsQ=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:148.105.12.7;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail7.sea21.rsgsv.net;PTR:mail7.sea21.rsgsv.net;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR01MB8599
+X-OrganizationHeadersPreserved: MW6PR01MB8599.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb5.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb5.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb8.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 29 Nov 2023 17:44:44.6413
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ a4f94fba-d439-4653-aa28-08dbf102df95
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: SA2PEPF00001507.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: SA2PEPF00001507.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ SA2PEPF00001507.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ MWH0EPF000989EA.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ e8bc3079-a0ed-4f1a-6b31-08dbf102d504
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.113;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb8.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2023 17:44:44.4069
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4f94fba-d439-4653-aa28-08dbf102df95
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.113];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ MWH0EPF000989EA.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR01MB6861
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.5001741
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7046.004
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZnBaWlk3d09DbDR5QW9zYjgwZGp3WnhhUjdJcFQ4eHpLWUlGd3gwUmtITnRQ?=
+ =?utf-8?B?WmJ0TlpMWDJiNnVOQ3MvN09NT2lTR0pBc21sb2Q0M3N4VEl1bFpJNUVoS0Z5?=
+ =?utf-8?B?WFFreEl2UHZCTHNtbU1xeVExV2Q1ZS8wbkJoR1dtdVNhREZERTROMy9VZ29s?=
+ =?utf-8?B?ajhsa3dnYnNJK2kyS2wwY0NjUkprVlZIRU5HK2srOEtWQnhsenVpMFJmT1FP?=
+ =?utf-8?B?ejdVUFNZdEtKL1EwRVJ1WWlzb2FJRlVjRjZaWGN5eU5mQ1k3bWJ2QVYxc2hT?=
+ =?utf-8?B?U2t0UGM5MFVnMUk4Zy9RMVlDT21XdGZmVjNOZlNqNEN6dXRRRFovd29kUlQw?=
+ =?utf-8?B?SmRpa1hEOU01WitPc0Mzd0dJYklyZ2FvNjg1eDkxY01hVno3MzdPdVJ2b29G?=
+ =?utf-8?B?TW10eTdHQTdWaDl2bUIwaVZ0NXhCSHJ5NCtUQTdPV0c3Z2ludnEzWi9ZRjNS?=
+ =?utf-8?B?UUdvS1pXWFRGMzBiYlBHbXh3bEVpV3F1SUh2MUYrd2NNRkJsSXVpVFA3VGNz?=
+ =?utf-8?B?RGk0V2FhWEk4Z041L2FTeUJaRTRQSkZzSk5nL3F2Yk8rUVliWHFOMkd0VWNL?=
+ =?utf-8?B?Q0NvdnZISXpid3BYelo3SkZodlE5MGJzTW9PS3hjMm9peTRMVDM5eGxXSFAy?=
+ =?utf-8?B?RC95blFEOVlyamtTWGY4YXVoRWhFQnZ4d0NiVlExbnVETkp2dUZCTjBWbURU?=
+ =?utf-8?B?VldwUDU4aW1nclhHU3YweWliKzRMR25rWUEyN0djVHNmV2lCR3JaZk54S2pW?=
+ =?utf-8?B?NG41ZU9tTm9lSjQ0OEw0WTV3Z2l4M1FUc2VLT1B5TEFBdW9aQ0x2NWhNNkZp?=
+ =?utf-8?B?ODVLMFg0enI4ZnAvUXlMK3BwelZPM1JaNlM5eUh6eExvdnlWREhUT3RhSEcv?=
+ =?utf-8?B?VEdGRXFYZVozMDNzaHNtT2ZWM3dEMmR2L2M1MXJta3Qvc3Z3Q1IrclhHYXdG?=
+ =?utf-8?B?UkNGcEg2RmtPUW9xM1FSY1hLbk1USUQwQXQvWjRUcDR4b2V1bDU5MXlRdFNp?=
+ =?utf-8?B?SXNuS3h5UHhtVWs1UldwUlBkS3BkTWR0MmxMZ1ArVStaQ1VqdGh5cktaeFVD?=
+ =?utf-8?B?cUl5Z1l2clNPU3phL2Nsb2ZOT29zbnZnTkpnYkNVaVY5SldKME03UEY5Mnpj?=
+ =?utf-8?B?ZGhLR2RxMTY3Z2NQRjlaTnJyd2UxMENjSFFQaHdRalcyK1NhQ3dLcTgwbTZt?=
+ =?utf-8?B?Mm5FNTViMTZ5Rmc0MlVmYzVCRU1ZMHJZWk94VDdKVmYyQnN1TUo3Tk1GYW5j?=
+ =?utf-8?B?Q2hNVjFmOHVXVS85akt2NHBndXVCUVhIcDlxb3pHWTI4dDBHWms5c1kxTmpB?=
+ =?utf-8?B?SXlEQTZlanhKdXkrbVRJVDZmR2p1bUhMVVNoVk5GbWR2RVd2N2lCVnRhVi9i?=
+ =?utf-8?B?VEFhLytscjZacU5wd0FBamJWRUJrVTVlSS9NTXozN0huQUlzQ3ZNTCtMSXZZ?=
+ =?utf-8?B?ekp3M3hqcWJwNnF2ck5oVDIveSsrTzJhWFZUbUxWODAvNWltSzhFcmlBUHFG?=
+ =?utf-8?B?aGR4SWtjcEZ1cnU1YkQyNkJ5RTYwNFI3OS8zRzFjeGZxYU1Vc3RSbkQ4OWRq?=
+ =?utf-8?B?MFNocnI4UEI1WjYzaTg1eU9XTFpqcFEyU3I0UHQwQXlybDQyNXU3QTIyOEdJ?=
+ =?utf-8?B?dk9XV2o2Qzc3V1BKbTFqNW43L2JyVm9RdktENC80bkYwenNyOVFQc0s5anRi?=
+ =?utf-8?B?aTFKQXFzWjZNaGhpV2ordElpSjgyQXppcEg2enBGRDVpbEw2OHhlckdMSEhP?=
+ =?utf-8?B?T1hrSnhDYzlyTUhHTFdyMmZZbExLTTNJd043TEJzZnlGZmJaK3E0ckFMdGxu?=
+ =?utf-8?B?K2ZnMURCRlA2aXh5UHFJOUtCK0RmV3YzKzFncTNoUkREVHgrYU5YVGkvcitP?=
+ =?utf-8?B?R3daVWk2NUdoSElTZTR6RGlKaCt2aTlqWmR1dGE1UlJ0aVlzZEw4UXBXZDk5?=
+ =?utf-8?B?ejUyL01SRlI2ZmlGaVErcnRTaFFmbFdaMGlWMGZmckdGVVlXVDdNM1ZpaGZY?=
+ =?utf-8?B?Q1Y4a1pBaVM3S3NJNG16VDM0MTJVeGRUemd6MWJ4WnJqaEthaHp2NlNFYXdK?=
+ =?utf-8?B?TE9JNWM1VzROVE1WVTBCYkU4amNPUzJGZHppenFnVUlKdnlFeEptamNqa1du?=
+ =?utf-8?B?L3IrWmV0YjBJVm1xNzdzYVNBcFpoOXN5dkFNOTRNZnNOT1dvaUMzUmZ4SlRm?=
+ =?utf-8?B?TEV4NkY4OWcxZ091Q1ZJTDMyaTM5bkdhLzc3Nk5HbGJsTzhyUVUrYzVBRXcr?=
+ =?utf-8?B?YS95NWxhbzlHUTl2MHZUNnRwN2p3PT0=?=
+MIME-Version: 1.0
+
+--_----------=_MCPart_880477227
+Content-Type: text/plain; charset="utf-8"; format="fixed"
+Content-Transfer-Encoding: quoted-printable
+
+
+
+https://iso.mit.edu/
+SAVE THE DATE: ISO Holiday Drop-Ins
+
+Thursday December 7=2C 11am - 2pm
+
+Wednesday December 13=2C 1:30pm - 4pm
+
+Friday December 15=2C 11am - 2pm
+
+Stop by E19-202 to enjoy some hot apple cider and treats.
+This is our annual tradition!
+
+------------------------------------------------------------
+
+Israel=2C Palestine=2C Gaza before and after October 7th: Understanding hi=
+storical context and contrasting narratives
+
+The MIT Center for International Studies (CIS) has organized a =E2=80=9Cmi=
+ni course=E2=80=9D on the Middle East crisis that is open to the MIT commu=
+nity (including alumni) only.
+Location: Zoom
+Dates: TODAY=2C Wednesday=2C November 29^th
+Wednesday December 6^th
+Wednesday December 16^th
+Time: 2:00 pm =E2=80=93 4:00 pm
+Registration (https://docs.google.com/forms/d/e/1FAIpQLSfc9ouSHkjMgixckBcc=
+6YZHRY9y-JEjXJhLyMVWD1dSn8y_-A/viewform) required for Zoom link
+
+https://mcusercontent.com/156ecccacf03a6376855ef479/images/767616be-c988-e=
+f35-cdfd-667cc18fffc5.jpg
+------------------------------------------------------------
+
+Disabled@MIT presents: A Disability Revolution
+
+Disabled@MIT (https://calendar.mit.edu/event/disabledmit_presents_crip_cam=
+p_a_disability_revolution)  is a new student-led group at MIT representing=
+ the student disability community on campus. At this event=2C we will be s=
+howing the movie Crip Camp: A Disability Revolution. This acclaimed docume=
+ntary shares the story of a New York summer camp for disabled teens and ho=
+w members of that camp went on to participate in historic protests for dis=
+ability rights and accessibility legislation.
+
+Location: Building 14=2C The Nexus=2C Hayden Library -160 MEMORIAL DR=2C C=
+ambridge=2C MA 02139
+Date: TODAY=2C Wednesday=2C November 29^th
+Time: 3:00 pm =E2=80=93 5:30 pm
+Register (https://docs.google.com/forms/d/e/1FAIpQLScDgMtz7_tPu3F-Lh4iGadt=
+g9SdJR64mp0vMWX-mksaIy1IUg/viewform)
+
+https://mcusercontent.com/156ecccacf03a6376855ef479/images/2659f503-cb27-f=
+09e-9a45-8423b9943650.jpg
+------------------------------------------------------------
+
+Culture and Wellbeing Workshop
+
+Want to discuss how culture and identity intersect with well-being? Curiou=
+s to learn more about culturally relevant wellness resources in the Boston=
+ area and at MIT? Join the MIT Asian American Initiative and the UA Studen=
+t Support and Wellbeing Committee for a joint event with discussion=2C res=
+ource sharing=2C and interactive  activities. We will be joined by Jonatha=
+n Chou=2C MD=2C psychiatrist and multicultural community outreach speciali=
+st at MIT Medical. This event is open to all community members and cultura=
+l backgrounds.
+
+Dinner and boba will be provided.
+
+Location: Wellbeing Lab (https://doingwell.mit.edu/wellbeinglab/) =2C Stud=
+ent Center 3^rd Floor
+Date: TODAY=2C Wednesday=2C November 29^th
+Time: 5:30 pm =E2=80=93 7:00 pm
+RSVP: https://tinyurl.com/culture-and-wellbeing
+https://www.instagram.com/mit.iso/
+https://iso.mit.edu/
+mailto:iso-help@mit.edu
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+This email was sent to jiannan@MIT.EDU (mailto:jiannan@MIT.EDU)
+why did I get this? (https://mit.us12.list-manage.com/about?u=3D156ecccacf=
+03a6376855ef479&id=3D3195a3d812&e=3D929c932d78&c=3Dd88fdcecc1)     unsubscri=
+be from this list (https://mit.us12.list-manage.com/unsubscribe?u=3D156ecc=
+cacf03a6376855ef479&id=3D3195a3d812&e=3D929c932d78&c=3Dd88fdcecc1)     updat=
+e subscription preferences (https://mit.us12.list-manage.com/profile?u=3D1=
+56ecccacf03a6376855ef479&id=3D3195a3d812&e=3D929c932d78&c=3Dd88fdcecc1)
+MIT International Students Office . 77 Massachusetts Ave . E18-219 . Cambr=
+idge=2C MA 02139 . USA
+--_----------=_MCPart_880477227
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head><!-- NAME: SIMPLE TEXT --><!--[if gte mso 15]>
+        <xml>
+            <o:OfficeDocumentSettings>
+            <o:AllowPNG/>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+        <![endif]-->
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+        <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+        <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-sc=
+ale=3D1">
+        <title>[ISO Notice] Today's DEI events; ISO Holiday Drop-Ins</title=
+>
+
+    <style type=3D"text/css">
+		p{
+			margin:10px 0;
+			padding:0;
+		}
+		table{
+			border-collapse:collapse;
+		}
+		h1,h2,h3,h4,h5,h6{
+			display:block;
+			margin:0;
+			padding:0;
+		}
+		img,a img{
+			border:0;
+			height:auto;
+			outline:none;
+			text-decoration:none;
+		}
+		body,#bodyTable,#bodyCell{
+			height:100%;
+			margin:0;
+			padding:0;
+			width:100%;
+		}
+		.mcnPreviewText{
+			display:none !important;
+		}
+		#outlook a{
+			padding:0;
+		}
+		img{
+			-ms-interpolation-mode:bicubic;
+		}
+		table{
+			mso-table-lspace:0pt;
+			mso-table-rspace:0pt;
+		}
+		.ReadMsgBody{
+			width:100%;
+		}
+		.ExternalClass{
+			width:100%;
+		}
+		p,a,li,td,blockquote{
+			mso-line-height-rule:exactly;
+		}
+		a[href^=3Dtel],a[href^=3Dsms]{
+			color:inherit;
+			cursor:default;
+			text-decoration:none;
+		}
+		p,a,li,td,body,table,blockquote{
+			-ms-text-size-adjust:100%;
+			-webkit-text-size-adjust:100%;
+		}
+		.ExternalClass,.ExternalClass p,.ExternalClass td,.ExternalClass div,.Ext=
+ernalClass span,.ExternalClass font{
+			line-height:100%;
+		}
+		a[x-apple-data-detectors]{
+			color:inherit !important;
+			text-decoration:none !important;
+			font-size:inherit !important;
+			font-family:inherit !important;
+			font-weight:inherit !important;
+			line-height:inherit !important;
+		}
+		#bodyCell{
+			padding:10px;
+		}
+		.templateContainer{
+			max-width:600px !important;
+		}
+		a.mcnButton{
+			display:block;
+		}
+		.mcnImage,.mcnRetinaImage{
+			vertical-align:bottom;
+		}
+		.mcnTextContent{
+			word-break:break-word;
+		}
+		.mcnTextContent img{
+			height:auto !important;
+		}
+		.mcnDividerBlock{
+			table-layout:fixed !important;
+		}
+		body,#bodyTable{
+			background-color:#FFFFFF;
+			background-image:none;
+			background-repeat:no-repeat;
+			background-position:center;
+			background-size:cover;
+		}
+		#bodyCell{
+			border-top:0;
+		}
+		.templateContainer{
+			border:0;
+		}
+		h1{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:26px;
+			font-style:normal;
+			font-weight:bold;
+			line-height:125%;
+			letter-spacing:normal;
+			text-align:left;
+		}
+		h2{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:22px;
+			font-style:normal;
+			font-weight:bold;
+			line-height:125%;
+			letter-spacing:normal;
+			text-align:left;
+		}
+		h3{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:20px;
+			font-style:normal;
+			font-weight:bold;
+			line-height:125%;
+			letter-spacing:normal;
+			text-align:left;
+		}
+		h4{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:18px;
+			font-style:normal;
+			font-weight:bold;
+			line-height:125%;
+			letter-spacing:normal;
+			text-align:left;
+		}
+		#templateHeader{
+			border-top:0;
+			border-bottom:0;
+		}
+		#templateHeader .mcnTextContent,#templateHeader .mcnTextContent p{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:16px;
+			line-height:150%;
+			text-align:left;
+		}
+		#templateHeader .mcnTextContent a,#templateHeader .mcnTextContent p a{
+			color:#007C89;
+			font-weight:normal;
+			text-decoration:underline;
+		}
+		#templateBody{
+			border-top:0;
+			border-bottom:0;
+		}
+		#templateBody .mcnTextContent,#templateBody .mcnTextContent p{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:16px;
+			line-height:150%;
+			text-align:left;
+		}
+		#templateBody .mcnTextContent a,#templateBody .mcnTextContent p a{
+			color:#007C89;
+			font-weight:normal;
+			text-decoration:underline;
+		}
+		#templateFooter{
+			border-top:0;
+			border-bottom:0;
+		}
+		#templateFooter .mcnTextContent,#templateFooter .mcnTextContent p{
+			color:#202020;
+			font-family:Helvetica;
+			font-size:12px;
+			line-height:150%;
+			text-align:left;
+		}
+		#templateFooter .mcnTextContent a,#templateFooter .mcnTextContent p a{
+			color:#202020;
+			font-weight:normal;
+			text-decoration:underline;
+		}
+	@media only screen and (min-width:768px){
+		.templateContainer{
+			width:600px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		body,table,td,p,a,li,blockquote{
+			-webkit-text-size-adjust:none !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		body{
+			width:100% !important;
+			min-width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnRetinaImage{
+			max-width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImage{
+			width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnCartContainer,.mcnCaptionTopContent,.mcnRecContentContainer,.mcnCapti=
+onBottomContent,.mcnTextContentContainer,.mcnBoxedTextContentContainer,.mcn=
+ImageGroupContentContainer,.mcnCaptionLeftTextContentContainer,.mcnCaptionR=
+ightTextContentContainer,.mcnCaptionLeftImageContentContainer,.mcnCaptionRi=
+ghtImageContentContainer,.mcnImageCardLeftTextContentContainer,.mcnImageCar=
+dRightTextContentContainer,.mcnImageCardLeftImageContentContainer,.mcnImage=
+CardRightImageContentContainer{
+			max-width:100% !important;
+			width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnBoxedTextContentContainer{
+			min-width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageGroupContent{
+			padding:9px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnCaptionLeftContentOuter .mcnTextContent,.mcnCaptionRightContentOuter =
+.mcnTextContent{
+			padding-top:9px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageCardTopImageContent,.mcnCaptionBottomContent:last-child .mcnCapt=
+ionBottomImageContent,.mcnCaptionBlockInner .mcnCaptionTopContent:last-chil=
+d .mcnTextContent{
+			padding-top:18px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageCardBottomImageContent{
+			padding-bottom:9px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageGroupBlockInner{
+			padding-top:0 !important;
+			padding-bottom:0 !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageGroupBlockOuter{
+			padding-top:9px !important;
+			padding-bottom:9px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnTextContent,.mcnBoxedTextContentColumn{
+			padding-right:18px !important;
+			padding-left:18px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcnImageCardLeftImageContent,.mcnImageCardRightImageContent{
+			padding-right:18px !important;
+			padding-bottom:0 !important;
+			padding-left:18px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.mcpreview-image-uploader{
+			display:none !important;
+			width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		h1{
+			font-size:22px !important;
+			line-height:125% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		h2{
+			font-size:20px !important;
+			line-height:125% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		h3{
+			font-size:18px !important;
+			line-height:125% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		h4{
+			font-size:16px !important;
+			line-height:150% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		table.mcnBoxedTextContentContainer td.mcnTextContent,td.mcnBoxedTextConte=
+ntContainer td.mcnTextContent p{
+			font-size:14px !important;
+			line-height:150% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		td#templateHeader td.mcnTextContent,td#templateHeader td.mcnTextContent p=
+{
+			font-size:16px !important;
+			line-height:150% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		td#templateBody td.mcnTextContent,td#templateBody td.mcnTextContent p{
+			font-size:16px !important;
+			line-height:150% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		td#templateFooter td.mcnTextContent,td#templateFooter td.mcnTextContent p=
+{
+			font-size:14px !important;
+			line-height:150% !important;
+		}
+
+}</style></head>
+    <body style=3D"background:#FFFFFF none no-repeat center/cover;height: 1=
+00%;margin: 0;padding: 0;width: 100%;-ms-text-size-adjust: 100%;-webkit-tex=
+t-size-adjust: 100%;background-color: #FFFFFF;background-image: none;backgr=
+ound-repeat: no-repeat;background-position: center;background-size: cover;"=
+>
+        <!--
+-->
+        <center>
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" height=3D"100%" width=3D"100%" id=3D"bodyTable" style=3D"backgrou=
+nd:#FFFFFF none no-repeat center/cover;border-collapse: collapse;mso-table-=
+lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-s=
+ize-adjust: 100%;height: 100%;margin: 0;padding: 0;width: 100%;background-c=
+olor: #FFFFFF;background-image: none;background-repeat: no-repeat;backgroun=
+d-position: center;background-size: cover;">
+                <tr>
+                    <td align=3D"left" valign=3D"top" id=3D"bodyCell" style=
+=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-s=
+ize-adjust: 100%;height: 100%;margin: 0;padding: 10px;width: 100%;border-to=
+p: 0;">
+                        <!-- BEGIN TEMPLATE // -->
+                        <!--[if (gte mso 9)|(IE)]>
+                        <table align=3D"center" border=3D"0" cellspacing=3D=
+"0" cellpadding=3D"0" width=3D"600" style=3D"width:600px;">
+                        <tr>
+                        <td align=3D"center" valign=3D"top" width=3D"600" s=
+tyle=3D"width:600px;">
+                        <![endif]-->
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%" class=3D"templateContainer" style=3D"border-collapse:=
+ collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust:=
+ 100%;-webkit-text-size-adjust: 100%;border: 0;max-width: 600px !important;=
+">
+                            <tr>
+                                <td valign=3D"top" id=3D"templateHeader" st=
+yle=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-tex=
+t-size-adjust: 100%;border-top: 0;border-bottom: 0;"><table border=3D"0" ce=
+llpadding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"mcnTextBlock" sty=
+le=3D"min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-t=
+able-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;=
+">
+    <tbody class=3D"mcnTextBlockOuter">
+        <tr>
+            <td valign=3D"top" class=3D"mcnTextBlockInner" style=3D"padding=
+-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-=
+text-size-adjust: 100%;">
+              	<!--[if mso]>
+				<table align=3D"left" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" =
+width=3D"100%" style=3D"width:100%;">
+				<tr>
+				<![endif]-->
+		=09
+				<!--[if mso]>
+				<td valign=3D"top" width=3D"600" style=3D"width:600px;">
+				<![endif]-->
+                <table align=3D"left" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" style=3D"max-width: 100%;min-width: 100%;border-collapse: colla=
+pse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;=
+-webkit-text-size-adjust: 100%;" width=3D"100%" class=3D"mcnTextContentCont=
+ainer">
+                    <tbody><tr>
+
+                        <td valign=3D"top" class=3D"mcnTextContent" style=
+=3D"padding: 0px 18px 9px;font-size: 14px;mso-line-height-rule: exactly;-ms=
+-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-wo=
+rd;color: #202020;font-family: Helvetica;line-height: 150%;text-align: left=
+;">
+
+                            <p style=3D"text-align: center;font-size: 14px;=
+margin: 10px 0;padding: 0;mso-line-height-rule: exactly;-ms-text-size-adjus=
+t: 100%;-webkit-text-size-adjust: 100%;color: #202020;font-family: Helvetic=
+a;line-height: 150%;"><a href=3D"https://mit.us12.list-manage.com/track/cli=
+ck?u=3D156ecccacf03a6376855ef479&amp;id=3Da2ff255208&amp;e=3D929c932d78" ta=
+rget=3D"_blank" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust=
+: 100%;-webkit-text-size-adjust: 100%;color: #007C89;font-weight: normal;te=
+xt-decoration: underline;"><font face=3D"helvetica neue, helvetica, arial, =
+verdana, sans-serif"><span style=3D"font-size:20px"><strong><img data-file-=
+id=3D"1540765" height=3D"115" src=3D"https://gallery.mailchimp.com/156eccca=
+cf03a6376855ef479/images/b22303b4-8ef6-4ee2-ba15-3271665392f8.jpg" style=3D=
+"border: 0px;width: 300px;height: 115px;margin: 0px;outline: none;text-deco=
+ration: none;-ms-interpolation-mode: bicubic;" width=3D"300"></strong></spa=
+n></font></a><br>
+<span style=3D"font-size:20px"><strong>SAVE THE DATE: ISO Holiday Drop-Ins<=
+/strong></span><br>
+<br>
+<strong><font color=3D"#000000"><span style=3D"font-size:16px">Thursday Dec=
+ember 7, 11am - 2pm<br>
+<br>
+Wednesday December 13, 1:30pm - 4pm<br>
+<br>
+Friday December 15, 11am - 2pm</span></font></strong><br>
+<br>
+<span style=3D"font-size:14px">Stop by E19-202 to enjoy some hot apple cide=
+r and treats.<br>
+This is our annual tradition!<br>
+<br>
+<img data-file-id=3D"1549322" height=3D"240" src=3D"https://mcusercontent.c=
+om/156ecccacf03a6376855ef479/images/127f3690-d185-7eb3-4699-3052e5d0dc82.pn=
+g" style=3D"border: 0px;width: 240px;height: 240px;margin: 0px;outline: non=
+e;text-decoration: none;-ms-interpolation-mode: bicubic;" width=3D"240"></s=
+pan></p>
+
+<hr>
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
+    </tbody>
+</table><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%" class=3D"mcnTextBlock" style=3D"min-width: 100%;border-collapse: collap=
+se;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-=
+webkit-text-size-adjust: 100%;">
+    <tbody class=3D"mcnTextBlockOuter">
+        <tr>
+            <td valign=3D"top" class=3D"mcnTextBlockInner" style=3D"padding=
+-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-=
+text-size-adjust: 100%;">
+              	<!--[if mso]>
+				<table align=3D"left" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" =
+width=3D"100%" style=3D"width:100%;">
+				<tr>
+				<![endif]-->
+		=09
+				<!--[if mso]>
+				<td valign=3D"top" width=3D"600" style=3D"width:600px;">
+				<![endif]-->
+                <table align=3D"left" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" style=3D"max-width: 100%;min-width: 100%;border-collapse: colla=
+pse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;=
+-webkit-text-size-adjust: 100%;" width=3D"100%" class=3D"mcnTextContentCont=
+ainer">
+                    <tbody><tr>
+
+                        <td valign=3D"top" class=3D"mcnTextContent" style=
+=3D"padding: 0px 18px 9px;font-size: 14px;mso-line-height-rule: exactly;-ms=
+-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-wo=
+rd;color: #202020;font-family: Helvetica;line-height: 150%;text-align: left=
+;">
+
+                            <p style=3D"text-align: center;font-size: 14px;=
+margin: 10px 0;padding: 0;mso-line-height-rule: exactly;-ms-text-size-adjus=
+t: 100%;-webkit-text-size-adjust: 100%;color: #202020;font-family: Helvetic=
+a;line-height: 150%;"><span style=3D"font-size:20px"><strong>Israel, Palest=
+ine, Gaza before and after October 7th: Understanding historical context an=
+d contrasting narratives</strong></span><br>
+&nbsp;<br>
+The MIT Center for International Studies (CIS) has organized a =E2=80=9Cmin=
+i course=E2=80=9D on the Middle East crisis that is open to the MIT communi=
+ty (including alumni) only.<br>
+<strong>Location:</strong>&nbsp;Zoom<br>
+<strong>Dates</strong>: <strong>TODAY</strong>, Wednesday, November 29<sup>=
+th</sup>&nbsp;<br>
+Wednesday December 6<sup>th</sup>&nbsp;<br>
+Wednesday December 16<sup>th</sup>&nbsp;&nbsp;<br>
+<strong>Time:</strong>&nbsp;2:00 pm =E2=80=93 4:00 pm<br>
+<strong><a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156eccc=
+acf03a6376855ef479&amp;id=3D48c3124344&amp;e=3D929c932d78" target=3D"_blank=
+" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit=
+-text-size-adjust: 100%;color: #007C89;font-weight: normal;text-decoration:=
+ underline;">Registration</a> required for Zoom link<br>
+<br>
+<a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecccacf03a63=
+76855ef479&amp;id=3D36c4c3f874&amp;e=3D929c932d78" style=3D"mso-line-height=
+-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;co=
+lor: #007C89;font-weight: normal;text-decoration: underline;"><img data-fil=
+e-id=3D"1549326" height=3D"370" src=3D"https://mcusercontent.com/156ecccacf=
+03a6376855ef479/images/767616be-c988-ef35-cdfd-667cc18fffc5.jpg" style=3D"b=
+order: 0px;width: 240px;height: 370px;margin: 0px;outline: none;text-decora=
+tion: none;-ms-interpolation-mode: bicubic;" width=3D"240"></a></strong></p=
+>
+
+<hr>
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
+    </tbody>
+</table><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%" class=3D"mcnTextBlock" style=3D"min-width: 100%;border-collapse: collap=
+se;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-=
+webkit-text-size-adjust: 100%;">
+    <tbody class=3D"mcnTextBlockOuter">
+        <tr>
+            <td valign=3D"top" class=3D"mcnTextBlockInner" style=3D"padding=
+-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-=
+text-size-adjust: 100%;">
+              	<!--[if mso]>
+				<table align=3D"left" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" =
+width=3D"100%" style=3D"width:100%;">
+				<tr>
+				<![endif]-->
+		=09
+				<!--[if mso]>
+				<td valign=3D"top" width=3D"600" style=3D"width:600px;">
+				<![endif]-->
+                <table align=3D"left" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" style=3D"max-width: 100%;min-width: 100%;border-collapse: colla=
+pse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;=
+-webkit-text-size-adjust: 100%;" width=3D"100%" class=3D"mcnTextContentCont=
+ainer">
+                    <tbody><tr>
+
+                        <td valign=3D"top" class=3D"mcnTextContent" style=
+=3D"padding: 0px 18px 9px;font-size: 14px;mso-line-height-rule: exactly;-ms=
+-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-wo=
+rd;color: #202020;font-family: Helvetica;line-height: 150%;text-align: left=
+;">
+
+                            <p style=3D"text-align: center;font-size: 14px;=
+margin: 10px 0;padding: 0;mso-line-height-rule: exactly;-ms-text-size-adjus=
+t: 100%;-webkit-text-size-adjust: 100%;color: #202020;font-family: Helvetic=
+a;line-height: 150%;"><strong><span style=3D"font-size:20px">Disabled@MIT p=
+resents: A Disability Revolution</span></strong><br>
+<br>
+<a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecccacf03a63=
+76855ef479&amp;id=3D3f10342d85&amp;e=3D929c932d78" style=3D"mso-line-height=
+-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;co=
+lor: #007C89;font-weight: normal;text-decoration: underline;">Disabled@MIT<=
+/a>&nbsp;is a new student-led group at MIT representing the student disabil=
+ity community on campus. At this event, we will be showing the movie&nbsp;<=
+em>Crip Camp: A Disability Revolution</em>. This acclaimed documentary shar=
+es the story of a New York summer camp for disabled teens and how members o=
+f that camp went on to participate in historic protests for disability righ=
+ts and accessibility legislation.<br>
+<br>
+<strong>Location:</strong>&nbsp;Building 14, The Nexus, Hayden Library -160=
+ MEMORIAL DR, Cambridge, MA 02139<br>
+<strong>Date</strong>: <strong>TODAY</strong>, Wednesday, November 29<sup>t=
+h</sup><br>
+<strong>Time:</strong>&nbsp;3:00 pm =E2=80=93 5:30 pm<br>
+<strong><a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156eccc=
+acf03a6376855ef479&amp;id=3D163d338def&amp;e=3D929c932d78" target=3D"_blank=
+" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit=
+-text-size-adjust: 100%;color: #007C89;font-weight: normal;text-decoration:=
+ underline;">Register</a><br>
+<br>
+<a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecccacf03a63=
+76855ef479&amp;id=3Db5499f1b0e&amp;e=3D929c932d78" style=3D"mso-line-height=
+-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;co=
+lor: #007C89;font-weight: normal;text-decoration: underline;"><img data-fil=
+e-id=3D"1549330" height=3D"240" src=3D"https://mcusercontent.com/156ecccacf=
+03a6376855ef479/images/2659f503-cb27-f09e-9a45-8423b9943650.jpg" style=3D"b=
+order: 0px;width: 240px;height: 240px;margin: 0px;outline: none;text-decora=
+tion: none;-ms-interpolation-mode: bicubic;" width=3D"240"></a></strong></p=
+>
+
+<hr>
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
+    </tbody>
+</table><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%" class=3D"mcnTextBlock" style=3D"min-width: 100%;border-collapse: collap=
+se;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-=
+webkit-text-size-adjust: 100%;">
+    <tbody class=3D"mcnTextBlockOuter">
+        <tr>
+            <td valign=3D"top" class=3D"mcnTextBlockInner" style=3D"padding=
+-top: 9px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-=
+text-size-adjust: 100%;">
+              	<!--[if mso]>
+				<table align=3D"left" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" =
+width=3D"100%" style=3D"width:100%;">
+				<tr>
+				<![endif]-->
+		=09
+				<!--[if mso]>
+				<td valign=3D"top" width=3D"600" style=3D"width:600px;">
+				<![endif]-->
+                <table align=3D"left" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" style=3D"max-width: 100%;min-width: 100%;border-collapse: colla=
+pse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;=
+-webkit-text-size-adjust: 100%;" width=3D"100%" class=3D"mcnTextContentCont=
+ainer">
+                    <tbody><tr>
+
+                        <td valign=3D"top" class=3D"mcnTextContent" style=
+=3D"padding: 0px 18px 9px;font-size: 14px;mso-line-height-rule: exactly;-ms=
+-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;word-break: break-wo=
+rd;color: #202020;font-family: Helvetica;line-height: 150%;text-align: left=
+;">
+
+                            <p style=3D"text-align: center;font-size: 14px;=
+margin: 10px 0;padding: 0;mso-line-height-rule: exactly;-ms-text-size-adjus=
+t: 100%;-webkit-text-size-adjust: 100%;color: #202020;font-family: Helvetic=
+a;line-height: 150%;"><span style=3D"font-size:20px"><strong>Culture and We=
+llbeing Workshop</strong></span><br>
+<br>
+Want to discuss how culture and identity intersect with well-being? Curious=
+ to learn more about culturally relevant wellness resources in the Boston a=
+rea and at MIT? Join the&nbsp;<strong>MIT Asian American Initiative</strong=
+>&nbsp;and the&nbsp;<strong>UA Student Support and Wellbeing Committee</str=
+ong>&nbsp;for a joint event with discussion, resource sharing, and interact=
+ive&nbsp; activities. We will be joined by Jonathan Chou, MD, psychiatrist =
+and multicultural community outreach specialist at MIT Medical.&nbsp;<stron=
+g>This event is open to all community members and cultural backgrounds</str=
+ong>.<br>
+<br>
+Dinner and boba will be provided.<br>
+<br>
+<strong>Location:</strong>&nbsp;<a href=3D"https://mit.us12.list-manage.com=
+/track/click?u=3D156ecccacf03a6376855ef479&amp;id=3Dabde71558a&amp;e=3D929c=
+932d78" target=3D"_blank" style=3D"mso-line-height-rule: exactly;-ms-text-s=
+ize-adjust: 100%;-webkit-text-size-adjust: 100%;color: #007C89;font-weight:=
+ normal;text-decoration: underline;">Wellbeing Lab</a>, Student Center 3<su=
+p>rd</sup>&nbsp;Floor<br>
+<strong>Date</strong>: <strong>TODAY</strong>, Wednesday, November 29<sup>t=
+h</sup><br>
+<strong>Time:</strong>&nbsp;5:30 pm =E2=80=93 7:00 pm<br>
+<strong>RSVP:</strong>&nbsp;<a href=3D"https://mit.us12.list-manage.com/tra=
+ck/click?u=3D156ecccacf03a6376855ef479&amp;id=3D91ecd2eb02&amp;e=3D929c932d=
+78" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webk=
+it-text-size-adjust: 100%;color: #007C89;font-weight: normal;text-decoratio=
+n: underline;">https://tinyurl.com/culture-and-wellbeing</a></p>
+
+                        </td>
+                    </tr>
+                </tbody></table>
+				<!--[if mso]>
+				</td>
+				<![endif]-->
+
+				<!--[if mso]>
+				</tr>
+				</table>
+				<![endif]-->
+            </td>
+        </tr>
+    </tbody>
+</table></td>
+                            </tr>
+                            <tr>
+                                <td valign=3D"top" id=3D"templateBody" styl=
+e=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-=
+size-adjust: 100%;border-top: 0;border-bottom: 0;"><table border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"mcnFollowBlock" sty=
+le=3D"min-width: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-t=
+able-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;=
+">
+    <tbody class=3D"mcnFollowBlockOuter">
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"padding: 9px;mso-l=
+ine-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjus=
+t: 100%;" class=3D"mcnFollowBlockInner">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wid=
+th=3D"100%" class=3D"mcnFollowContentContainer" style=3D"min-width: 100%;bo=
+rder-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-tex=
+t-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+    <tbody><tr>
+        <td align=3D"center" style=3D"padding-left: 9px;padding-right: 9px;=
+mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-=
+adjust: 100%;">
+            <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%" style=3D"min-width: 100%;border-collapse: collapse;mso-table-lspa=
+ce: 0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-=
+adjust: 100%;" class=3D"mcnFollowContent">
+                <tbody><tr>
+                    <td align=3D"center" valign=3D"top" style=3D"padding-to=
+p: 9px;padding-right: 9px;padding-left: 9px;mso-line-height-rule: exactly;-=
+ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                        <table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" style=3D"border-collapse: collapse;mso-table-lspace: =
+0pt;mso-table-rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adju=
+st: 100%;">
+                            <tbody><tr>
+                                <td align=3D"center" valign=3D"top" style=
+=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-s=
+ize-adjust: 100%;">
+                                    <!--[if mso]>
+                                    <table align=3D"center" border=3D"0" ce=
+llspacing=3D"0" cellpadding=3D"0">
+                                    <tr>
+                                    <![endif]-->
+
+                                        <!--[if mso]>
+                                        <td align=3D"center" valign=3D"top"=
+>
+                                        <![endif]-->
+
+
+                                            <table align=3D"left" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"display: inline;border-col=
+lapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-a=
+djust: 100%;-webkit-text-size-adjust: 100%;">
+                                                <tbody><tr>
+                                                    <td valign=3D"top" styl=
+e=3D"padding-right: 10px;padding-bottom: 9px;mso-line-height-rule: exactly;=
+-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class=3D"mcnFol=
+lowContentItemContainer">
+                                                        <table border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"mcnFollowConte=
+ntItem" style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-=
+rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                            <tbody><tr>
+                                                                <td align=
+=3D"left" valign=3D"middle" style=3D"padding-top: 5px;padding-right: 10px;p=
+adding-bottom: 5px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text=
+-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                    <table =
+align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"" =
+style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: =
+0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                        <tb=
+ody><tr>
+
+                                                                           =
+     <td align=3D"center" valign=3D"middle" width=3D"24" class=3D"mcnFollow=
+IconContent" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 1=
+00%;-webkit-text-size-adjust: 100%;">
+                                                                           =
+         <a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecc=
+cacf03a6376855ef479&amp;id=3Dd5d68469eb&amp;e=3D929c932d78" target=3D"_blan=
+k" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webki=
+t-text-size-adjust: 100%;"><img src=3D"https://cdn-images.mailchimp.com/ico=
+ns/social-block-v2/color-instagram-48.png" alt=3D"Instagram" style=3D"displ=
+ay: block;border: 0;height: auto;outline: none;text-decoration: none;-ms-in=
+terpolation-mode: bicubic;" height=3D"24" width=3D"24" class=3D""></a>
+                                                                           =
+     </td>
+
+
+                                                                        </t=
+r>
+                                                                    </tbody=
+></table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody></table>
+                                                    </td>
+                                                </tr>
+                                            </tbody></table>
+
+                                        <!--[if mso]>
+                                        </td>
+                                        <![endif]-->
+
+                                        <!--[if mso]>
+                                        <td align=3D"center" valign=3D"top"=
+>
+                                        <![endif]-->
+
+
+                                            <table align=3D"left" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"display: inline;border-col=
+lapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-a=
+djust: 100%;-webkit-text-size-adjust: 100%;">
+                                                <tbody><tr>
+                                                    <td valign=3D"top" styl=
+e=3D"padding-right: 10px;padding-bottom: 9px;mso-line-height-rule: exactly;=
+-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class=3D"mcnFol=
+lowContentItemContainer">
+                                                        <table border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"mcnFollowConte=
+ntItem" style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-=
+rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                            <tbody><tr>
+                                                                <td align=
+=3D"left" valign=3D"middle" style=3D"padding-top: 5px;padding-right: 10px;p=
+adding-bottom: 5px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text=
+-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                    <table =
+align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"" =
+style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: =
+0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                        <tb=
+ody><tr>
+
+                                                                           =
+     <td align=3D"center" valign=3D"middle" width=3D"24" class=3D"mcnFollow=
+IconContent" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 1=
+00%;-webkit-text-size-adjust: 100%;">
+                                                                           =
+         <a href=3D"https://mit.us12.list-manage.com/track/click?u=3D156ecc=
+cacf03a6376855ef479&amp;id=3D1f17f045a9&amp;e=3D929c932d78" target=3D"_blan=
+k" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webki=
+t-text-size-adjust: 100%;"><img src=3D"https://cdn-images.mailchimp.com/ico=
+ns/social-block-v2/color-link-48.png" alt=3D"Website" style=3D"display: blo=
+ck;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpola=
+tion-mode: bicubic;" height=3D"24" width=3D"24" class=3D""></a>
+                                                                           =
+     </td>
+
+
+                                                                        </t=
+r>
+                                                                    </tbody=
+></table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody></table>
+                                                    </td>
+                                                </tr>
+                                            </tbody></table>
+
+                                        <!--[if mso]>
+                                        </td>
+                                        <![endif]-->
+
+                                        <!--[if mso]>
+                                        <td align=3D"center" valign=3D"top"=
+>
+                                        <![endif]-->
+
+
+                                            <table align=3D"left" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"display: inline;border-col=
+lapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;-ms-text-size-a=
+djust: 100%;-webkit-text-size-adjust: 100%;">
+                                                <tbody><tr>
+                                                    <td valign=3D"top" styl=
+e=3D"padding-right: 0;padding-bottom: 9px;mso-line-height-rule: exactly;-ms=
+-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;" class=3D"mcnFollow=
+ContentItemContainer">
+                                                        <table border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" class=3D"mcnFollowConte=
+ntItem" style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-=
+rspace: 0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                            <tbody><tr>
+                                                                <td align=
+=3D"left" valign=3D"middle" style=3D"padding-top: 5px;padding-right: 10px;p=
+adding-bottom: 5px;padding-left: 9px;mso-line-height-rule: exactly;-ms-text=
+-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                    <table =
+align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"" =
+style=3D"border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: =
+0pt;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;">
+                                                                        <tb=
+ody><tr>
+
+                                                                           =
+     <td align=3D"center" valign=3D"middle" width=3D"24" class=3D"mcnFollow=
+IconContent" style=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 1=
+00%;-webkit-text-size-adjust: 100%;">
+                                                                           =
+         <a href=3D"mailto:iso-help@mit.edu" target=3D"_blank" style=3D"mso=
+-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adj=
+ust: 100%;"><img src=3D"https://cdn-images.mailchimp.com/icons/social-block=
+-v2/color-forwardtofriend-48.png" alt=3D"Email" style=3D"display: block;bor=
+der: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-m=
+ode: bicubic;" height=3D"24" width=3D"24" class=3D""></a>
+                                                                           =
+     </td>
+
+
+                                                                        </t=
+r>
+                                                                    </tbody=
+></table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody></table>
+                                                    </td>
+                                                </tr>
+                                            </tbody></table>
+
+                                        <!--[if mso]>
+                                        </td>
+                                        <![endif]-->
+
+                                    <!--[if mso]>
+                                    </tr>
+                                    </table>
+                                    <![endif]-->
+                                </td>
+                            </tr>
+                        </tbody></table>
+                    </td>
+                </tr>
+            </tbody></table>
+        </td>
+    </tr>
+</tbody></table>
+
+            </td>
+        </tr>
+    </tbody>
+</table></td>
+                            </tr>
+                            <tr>
+                                <td valign=3D"top" id=3D"templateFooter" st=
+yle=3D"mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-tex=
+t-size-adjust: 100%;border-top: 0;border-bottom: 0;"></td>
+                            </tr>
+                        </table>
+                        <!--[if (gte mso 9)|(IE)]>
+                        </td>
+                        </tr>
+                        </table>
+                        <![endif]-->
+                        <!-- // END TEMPLATE -->
+                    </td>
+                </tr>
+            </table>
+        </center>
+                <center>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wid=
+th=3D"100%" id=3D"canspamBarWrapper" style=3D"background-color:#FFFFFF; bor=
+der-top:1px solid #E5E5E5;">
+                    <tr>
+                        <td align=3D"center" valign=3D"top" style=3D"paddin=
+g-top:20px; padding-bottom:20px;">
+                            <table border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" id=3D"canspamBar">
+                                <tr>
+                                    <td align=3D"center" valign=3D"top" sty=
+le=3D"color:#606060; font-family:Helvetica, Arial, sans-serif; font-size:11=
+px; line-height:150%; padding-right:20px; padding-bottom:5px; padding-left:=
+20px; text-align:center;">
+                                        This email was sent to <a href=3D"m=
+ailto:jiannan@MIT.EDU" target=3D"_blank" style=3D"color:#404040 !important;=
+">jiannan@MIT.EDU</a>
+                                        <br>
+                                        <a href=3D"https://mit.us12.list-ma=
+nage.com/about?u=3D156ecccacf03a6376855ef479&amp;id=3D3195a3d812&amp;e=3D92=
+9c932d78&amp;c=3Dd88fdcecc1" target=3D"_blank" style=3D"color:#404040 !impo=
+rtant;"><em>why did I get this?</em></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=3D"=
+https://mit.us12.list-manage.com/unsubscribe?u=3D156ecccacf03a6376855ef479&=
+amp;id=3D3195a3d812&amp;e=3D929c932d78&amp;c=3Dd88fdcecc1" style=3D"color:#=
+404040 !important;">unsubscribe from this list</a>&nbsp;&nbsp;&nbsp;&nbsp;<=
+a href=3D"https://mit.us12.list-manage.com/profile?u=3D156ecccacf03a6376855=
+ef479&amp;id=3D3195a3d812&amp;e=3D929c932d78&amp;c=3Dd88fdcecc1" style=3D"c=
+olor:#404040 !important;">update subscription preferences</a>
+                                        <br>
+                                        MIT International Students Office =
+=C2=B7 77 Massachusetts Ave =C2=B7 E18-219 =C2=B7 Cambridge, MA 02139 =C2=
+=B7 USA
+                                        <br>
+                                        <br>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <style type=3D"text/css">
+                    @media only screen and (max-width: 480px){
+                        table#canspamBar td{font-size:14px !important;}
+                        table#canspamBar td a{display:block !important; mar=
+gin-top:10px !important;}
+                    }
+                </style>
+            </center><img src=3D"https://mit.us12.list-manage.com/track/ope=
+n.php?u=3D156ecccacf03a6376855ef479&amp;id=3Dd88fdcecc1&amp;e=3D929c932d78"=
+ height=3D"1" width=3D"1" alt=3D""></body>
+</html>=
+
+--_----------=_MCPart_880477227--

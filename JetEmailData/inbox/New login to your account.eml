@@ -1,0 +1,512 @@
+Received: from SA1PR01MB6686.prod.exchangelabs.com (2603:10b6:806:1a4::12) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Thu, 12 Oct 2023 04:50:47
+ +0000
+Received: from SN6PR2101CA0022.namprd21.prod.outlook.com
+ (2603:10b6:805:106::32) by SA1PR01MB6686.prod.exchangelabs.com
+ (2603:10b6:806:1a4::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.44; Thu, 12 Oct
+ 2023 04:50:46 +0000
+Received: from SN1PEPF0002BA51.namprd03.prod.outlook.com
+ (2603:10b6:805:106:cafe::1f) by SN6PR2101CA0022.outlook.office365.com
+ (2603:10b6:805:106::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.12 via Frontend
+ Transport; Thu, 12 Oct 2023 04:50:46 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.100)
+ smtp.mailfrom=pm.tracxn.com; dkim=pass (signature was verified)
+ header.d=pm.mtasv.net;dmarc=pass action=none header.from=tracxn.com;
+Received-SPF: Fail (protection.outlook.com: domain of pm.tracxn.com does not
+ designate 18.9.1.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.9.1.100; helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.100) by
+ SN1PEPF0002BA51.mail.protection.outlook.com (10.167.242.74) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6838.22 via Frontend Transport; Thu, 12 Oct 2023 04:50:46 +0000
+Received: from oc11exhyb1.exchange.mit.edu (18.9.1.60) by
+ oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Thu, 12 Oct 2023 00:50:45 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.41) by
+ oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Thu, 12 Oct 2023 00:50:45 -0400
+Received: from SJ0P220CA0016.NAMP220.PROD.OUTLOOK.COM (2603:10b6:a03:41b::23)
+ by DS0PR01MB8012.prod.exchangelabs.com (2603:10b6:8:152::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6863.37; Thu, 12 Oct 2023 04:50:43 +0000
+Received: from MWH0EPF000989E8.namprd02.prod.outlook.com
+ (2603:10b6:a03:41b:cafe::67) by SJ0P220CA0016.outlook.office365.com
+ (2603:10b6:a03:41b::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38 via Frontend
+ Transport; Thu, 12 Oct 2023 04:50:42 +0000
+Authentication-Results-Original: spf=pass (sender IP is 104.245.209.235)
+ smtp.mailfrom=pm.tracxn.com; dkim=pass (signature was verified)
+ header.d=pm.mtasv.net;dmarc=pass action=none
+ header.from=tracxn.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of pm.tracxn.com designates
+ 104.245.209.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=104.245.209.235; helo=mta235b-ord.mtasv.net; pr=C
+Received: from mta235b-ord.mtasv.net (104.245.209.235) by
+ MWH0EPF000989E8.mail.protection.outlook.com (10.167.241.135) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.22 via Frontend Transport; Thu, 12 Oct 2023 04:50:42 +0000
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=pm20230619; d=pm.mtasv.net;
+ h=From:Date:Subject:Message-Id:To:MIME-Version:Content-Type:
+ Content-Transfer-Encoding:Date:From:Message-ID:Reply-To:Sender:Subject:To:CC;
+ bh=TXd9IYloSEhZE0PYUP8Fpo25qsc=;
+ b=EfVMq20jNLEdTAOsBS6vKYcyXClnBkoMfkLLYpYYcmYhpdcHTQWAT14mgPm2ZYbYD+NLJ+cBeZnF
+   L0sfOv3KI1ZXhfsDvRqwxFW9xmoa+6F2nXnlgf2ZBcGxVNWylGANMjbZS6+BhiSSxBMH1211v5oK
+   zIEHaFOFV9vSD3Xkatk=
+Received: by mta235b-ord.mtasv.net id h4tthu34o8gt for <jiannan@mit.edu>; Thu, 12 Oct 2023 00:50:38 -0400 (envelope-from <pm_bounces@pm.tracxn.com>)
+X-PM-IP: 104.245.209.235
+X-IADB-IP: 104.245.209.235
+X-IADB-IP-REVERSE: 235.209.245.104
+DKIM-Signature: v=1; a=rsa-sha256; d=tracxn.com; s=20160512064039pm;
+	c=relaxed/relaxed; i=noreply@tracxn.com; t=1697086238;
+	h=date:date:from:from:message-id:reply-to:sender:subject:subject:to:to:cc:
+	feedback-id:mime-version:content-type:content-transfer-encoding;
+	bh=NsfdX4Q4bpa8k48I3NlmOdBZrX/94wIuww6WLVNE8jQ=;
+	b=gJEsv4zyBKconIk+VwFIn4pf+7LPoqT4k2LDJKyrjWxqQtM5jxCHbJGfpwLCjhJbPqJG7EVxyfT
+	roxPRMzS9xJ84vTElve6zUFeeFaG+3GNQl8N10EEZx1/JDpQ0m1Q70i+Sy85Cx4MPx+DWIjP6neTb
+	cr5QdyXpDKqRdmvd2u4=
+From: noreply@tracxn.com
+Date: Thu, 12 Oct 2023 04:50:38 +0000
+Subject: New login to your account
+Message-ID: <cb6c930d-9576-4d1b-a2c4-3c0d4e749a58@mtasv.net>
+To: jiannan@mit.edu
+Feedback-ID: s1955073-_:s1955073:a112149:postmark
+X-Complaints-To: abuse@postmarkapp.com
+X-PM-Message-Id: cb6c930d-9576-4d1b-a2c4-3c0d4e749a58
+X-PM-RCPT: |bTB8MTEyMTQ5fDE5NTUwNzN8amlhbm5hbkBtaXQuZWR1|
+X-PM-Message-Options: v1;1.tq0-1P-VaUgU_iFVJyxvWQ.ztqyl64_VHofbLgL1YWIuiRI0f3aIGa5tKoXXyFCkcdtBLtjbPH7UtY2vV6MG5iUWWMzB6c6R0HCelJgGDRc7oM5e5d1lllYWqUYMHn-1VuaImQAjyNH0wC07KzwQyM5jNqtJ0S_FxVta2z_TEl8wuN9pFBzafWxG-RJz3tBn1C7OyT6q4v1mpcVG3n97Ndv
+X-PM-MTA-Pool: transactional-3
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Return-Path: pm_bounces@pm.tracxn.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ MWH0EPF000989E8:EE_|DS0PR01MB8012:EE_|SN1PEPF0002BA51:EE_|SA1PR01MB6686:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31c64de0-5d12-4703-1ff1-08dbcadecc85
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?utf-8?B?TFBYekFNWjZnRmdMcEtYU09YRzRabTI0dmRsbW1hOUZxSzk0NHk1NGdudGMr?=
+ =?utf-8?B?dXJYOW44Yk1VMVBSUzFOT1BwYXhab3ZvajBjdk1VK2M0Q2crT2pxSGp6dlJM?=
+ =?utf-8?B?WWxrSnhEMmQ3NlMxNHpnZ2taL201VDdGTUpLQi9CZEZ0blFBbWQ4Y0hnME5C?=
+ =?utf-8?B?Qy9jeHEzdGVuODc5bFpQNDdHOWIyU1JLOTkvcWVuMVFVNkwwLy9Oem9WcE0y?=
+ =?utf-8?B?Tk5LaXh6SVpwNG9YY3U0MisxS2JZMkhoQXlqY1d2VXFPcERMWFRMa2VQZUg0?=
+ =?utf-8?B?ZWdXOWpTSG9qRXlPTlBxazZGKzZ1OTVRR3A3RThERWttUnZ3RWQwU0txdVRr?=
+ =?utf-8?B?M2hOdWNQUmJsU0Z0WGFGTW93Qk1JZWphTFl6QmxTQWdKQmV3Z0QzZDNPb0Vh?=
+ =?utf-8?B?dWF6am5saEd1Q2V1bHlLWHQ2NXE4TjQ3L0VPbEFUL1JxVmVnU1UyNUdFUlMy?=
+ =?utf-8?B?N1BoblZnOU95L0UzVG5zaU5KTkZHN2JQVW5VdXNkOG1TZlpzNHJrZUpmdmVX?=
+ =?utf-8?B?MVJYSVFuVG9FaE5GaW5kRjhYWEJjU0NLRjFVUHVFZ1hGMnp4VzlMS1RLUjgv?=
+ =?utf-8?B?QU51dXozTzl0bCtKRi9FZVFPckVqdzh2Syt0dlVpTWNEUVliTmMrUDlvMEFz?=
+ =?utf-8?B?bDFJUFd2a0IwMkcvOTIvVDd1SVFIckRYUi9IN3RHU2p1Zm5xU1ppRzhPUUJy?=
+ =?utf-8?B?Q2hHd0tpdnFxMFh6S21pQ3N5cjQ1UGEwZDE4RGwybEUvZmRJcFhUZXBsUWJz?=
+ =?utf-8?B?N1VNZlp1dWNlOTgwTUZ3YXFuSm54aFFnUTE5RElvcnhuQ2tXQ2lWNzRnL1g4?=
+ =?utf-8?B?MVRKWXFyV28xYWloWC9TdklqRkh4eFhFNjJ1UzN2R0FGVEFURVNBeEV2SGlZ?=
+ =?utf-8?B?eHVLWlJjR0ZabnV1b1pncUEyaWlDQjMwTFNFK1lRU2dlaFdrYlJ3UlphYk4v?=
+ =?utf-8?B?bmwrTmdHaW00U0N5a0N5elVIaENNcVJsWEtPRkhBdTZNYVIxQnBlMTBPeEpt?=
+ =?utf-8?B?SXJBdTgxNlhsL0RMODd3dXVCV09STzlGanRQVjBqUVA5WGxVenNONm5wMWlB?=
+ =?utf-8?B?WVJ2cllTdnBsa29BcHZwVGpTd2FSZ2x1enJQSGZVOHpML2VxREtzcU9tOWRr?=
+ =?utf-8?B?VDUxcngwRmtTOHJGT1F0Z2l6QWdFcUErRGJZek8rTGx6R3NSQjJ5MlJ3TjVB?=
+ =?utf-8?B?NHJrNFVNai9CN2FTRFphOFpsRGpJZFA0OGJIT0VQZWMyaVlISlI3d2YvZnJn?=
+ =?utf-8?B?a0pycnNNRlVVL0tmYTV1ZjJpY0JGSlladWJBbXJOT3hzbmI3dTB0UGJ1ZklO?=
+ =?utf-8?B?ZEpITEVNT1AzUUQrS2ZtK2FzK2JzSDEwQllrMTc4UEFnRVB2dnhuQStPdjhS?=
+ =?utf-8?B?YXhqbEZNZUZFWU5GdG5TUU9CU3J0NHRRSWlnclJ1RE1WOUY5T3pzdFp5RnVY?=
+ =?utf-8?B?VWhlR0RmckNiUTRhVm5XaE8wWjFvcFZnc1ZXZW9RNGxlcHFBamdvRGhhZnZa?=
+ =?utf-8?B?TFBMaXVEeW15cDZGZkZzZ28vcXZuUlkrTDJwK2VWck5DMFp3WitiOFd0bFBl?=
+ =?utf-8?B?N1R4Nit3alVxajZPd3dlcEtaUnc5b245OHFDdDE0T0poMG12N21EUS8zTTh4?=
+ =?utf-8?B?SVE3RU11bzhrdUZPRWFRM1BtbzdYZm1TaFBmUVcvTUE1bVFQclJHL2dFekxL?=
+ =?utf-8?B?MytCeU9qV2M5M0JFa08yMi8wVlE3UEFWdDhJcWVOSjFWTVk4RGJteWxlYk1C?=
+ =?utf-8?B?UmNIazdLQmlsdWhrbFJyVXoySFovMnVndFRDQjQwSkxLZDRUbkhJbklxTXhO?=
+ =?utf-8?B?NWhCbEVaQlVhWmRmV0s1ck1LU2lhaU5YTXcyci92UCtnL1ozcWl2ekFPL25Q?=
+ =?utf-8?B?RE93MmtDZ3J3Ri9obkdZQVlwNWd4T1F0V1dzQ2NLcTFvRjV4TkozNndGMEdz?=
+ =?utf-8?B?bU1PQmoxZjI5OEVZRytKY0swZ1d3b0RMUHAwL1FYNXlJS2JlY3RxWURTZTVJ?=
+ =?utf-8?B?S3JRMkxuUlltbWthT2RjNWwwVENRSEE4Ky9zS1kzV0ROT21jdUhSV0EzV29V?=
+ =?utf-8?B?UTh2cWVWZTZJYlJreDJjYXJLSGRGd25rS052NDdnMmkyb1BJcEZlYkhwOTBM?=
+ =?utf-8?B?ZEtMbWNvMVF5R29OQndDQU1PakRrRGswa1RzOE1tZFJvWGxRdzVzQnVLdGxs?=
+ =?utf-8?B?N0pSNSsvSkdSMGswaEtCR3dQaVV4aGlQZ1pFY3lETkk5SndvTjRRc0l0TnpE?=
+ =?utf-8?B?dUhJZERELzllNnZldDg3ZllzQ1BGK1pGWjBEYWlmU2hzYjA0QndyLzAzbkE0?=
+ =?utf-8?B?cGhNbFp1MG5YM1crc3dPa3d5MU5hdE9qYjhUaTNDeDJHTFBsdERpVUZzOC84?=
+ =?utf-8?Q?+TP9xtVN9zu4N07I=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:104.245.209.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta235b-ord.mtasv.net;PTR:mta235b-ord.mtasv.net;CAT:NONE;SFS:(13230031)(4636009)(451199024)(1690799017)(66574015)(76236004)(31686004)(42186006)(6916009)(1096003)(336012)(75640400001)(8676002)(4006050)(83170400001)(166002)(22186003)(356005)(7636003)(7596003)(5660300002)(4744005)(15650500001)(9686003)(966005)(26005)(58800400005)(36756003)(66899024)(83380400001)(31696002)(76899018)(43540500003);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR01MB8012
+X-OrganizationHeadersPreserved: DS0PR01MB8012.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb1.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb1.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb4.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 12 Oct 2023 04:50:46.5884
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 31c64de0-5d12-4703-1ff1-08dbcadecc85
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: SN1PEPF0002BA51.namprd03.prod.outlook.com
+X-CrossPremisesHeadersFiltered: SN1PEPF0002BA51.namprd03.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ SN1PEPF0002BA51.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ MWH0EPF000989E8.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ d46e7b8c-41b8-4e70-05ae-08dbcadeca1c
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.100;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb4.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2023 04:50:46.3696
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31c64de0-5d12-4703-1ff1-08dbcadecc85
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.100];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ MWH0EPF000989E8.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB6686
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.5033859
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6863.043
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZVpuSzhvRE1nODd2K2JOK0c2OG1BTUVoTVJQSTBMOGQvQzhjUDVTNDJIdDdu?=
+ =?utf-8?B?OC9XZWdLeVMxUSsvSDg4WGpIMS9KWUtZQ0RZNElyeDltTnAyN1VPcGRqanZ2?=
+ =?utf-8?B?NlNZMFlwdWF2Nk5sMkN5djZ0cmZ0L1VIa1RIQ1dNVks4YnBnSUNiTldzRjdz?=
+ =?utf-8?B?ZGtHVnpzTGVZUXNyMUVmREl4dVp2R3ZEakFjRUV5M3BOU3Z6RU1SQngwR0FG?=
+ =?utf-8?B?emxGMitPMHI0bGg1ckRPbWRyVVBENkxIR3ZPaGVvU0toT04rZy9oMkt1TFFw?=
+ =?utf-8?B?VGgzdkRMVlRSVm12aXdZWWlyWlRGSjgzdUtJT05SK3E5V1A1M2dxTitjZlEw?=
+ =?utf-8?B?cmVSb1F6ZStEeDVIN3ZWemMyNHlYN2UwYlZzU1QzaVpmdXpiUUFwVTg3cDVK?=
+ =?utf-8?B?MzdWVWVDNXp3Qk1ibmlkYytic2tDbEVta1BDNU5oOWU4T1VZNWdFOTN3dlF4?=
+ =?utf-8?B?YVBnODJyU2FRTXJtSzNaRGlvNTNDWHFrRmpFbjhCQWdCMUx0TWRneHZxSjBo?=
+ =?utf-8?B?NVI4YTFqRzRrbjdQa3hHaFRKNzBmVlNiL3BraGFBMnZHaDdXMHZPeVdHU1NY?=
+ =?utf-8?B?TjZ3bWttcmRRL3hXMVVXWGMwVEd5cDRYRVhGSWJDUjdmOHZ5WGlxNU5nd3hC?=
+ =?utf-8?B?SFRReU9FYi8yTTdSQ04vVkVqaHhQb215YkRsbit4LytUdnEzaGcyOWdzaDhn?=
+ =?utf-8?B?STlwazl0cWc3MHA1Z2I5RTZpVnZmSXBtbG95cEhQVG5yblR0ZldJSmU5SytE?=
+ =?utf-8?B?VTVHMy84bEdYS1pFUVdYS2NVVk9vRXZzYURhaUpTejdJKzV2N0h3aC9VeWF6?=
+ =?utf-8?B?Q2h2VTNTdWdxczhlejQrVkdGRkp1dkNTTlJuME9mbC94QXJzZFpOM0IvZTlq?=
+ =?utf-8?B?cURpWXZrUSsyN3dUN0ZtMTl5UkxSMzZEeWc1YzNLbkR3VlUxckQrdkgrV2FE?=
+ =?utf-8?B?a0k0ajQvMkR4bXVhbVFmd2IvWFJEMVdCWnJXd1FWcGNlUkxsK3dMVnYzTVVH?=
+ =?utf-8?B?Qi8zMUJFV1ZDQWRTOWJxcVkzOUc0NnBhdEp3cVRORHVhbkVDRWNuMkJUdHpH?=
+ =?utf-8?B?TGpKR012LzE0Skt2WnNmWHlXRkVBWGZnN2ttYlFiT1pSTlA5K05SL0w1SUxw?=
+ =?utf-8?B?VFJqR2VMUE00S1k5MWFXUVp5UStiaFNYRHRqL0FhU2tTa0VjOXVsNHdSU0cx?=
+ =?utf-8?B?ZW1TTmdiVkwvQXhXVUphK2VyL3pvK09wUFd4NEZwSHRDNG9vb0ZmN1NTZEtH?=
+ =?utf-8?B?a0U4ekJGTWdmUDdqOXBmWVlWSEdEQnA1UC80NTRXeG16S0p2WHB6bUtHUHRl?=
+ =?utf-8?B?SDVnN0xXSFI4YUp1UlVJZW1uTUJMZCt5YU9UMHV0VGlnQldnYXBySm04c2c1?=
+ =?utf-8?B?L3EyZit2SWZuMnIzQ20xcTIydWtaQ20yT1Z6eitJblJ0a3dZb2t1YlNXWXNv?=
+ =?utf-8?B?MmpZU2hvNmlFR091WUpaM0I0Nm00YjNjdXpVZ2x4QWVYdGM5VWExTWwrTmdl?=
+ =?utf-8?B?MFZIY01NSEdLdm9RUXRRRXZ0QXlwcXA1RW9mZEk3TFVuOXkxTnJoWGl2ZDFs?=
+ =?utf-8?B?VWNDb0xOVklyUVZ6RFhiSE5LNmdtRi9Ld1FFSDRraFAwTVUwRGhOTXZLOXRl?=
+ =?utf-8?B?enVmaU5wNFFSYjVONnIwTmQ3L1dRd1hhWEtrZjQwSi95R3RqdjNKK3hvQXRK?=
+ =?utf-8?B?UE1jZzRVNGhua3FqaS9DcnB1U1dsbjZicm5lUC9sc2ZGTjVtdFBRNGxjUzBu?=
+ =?utf-8?B?K0RHeEVIT2NNQzR0dVVpUnVVbzlUdHMvbFR6K0xMWkJ3RVpkUlVhekhIU3Na?=
+ =?utf-8?B?UENNRWZJUGk0R2NHd3dwQjdwOXdiV2k0ZW9RWDNNd0RUd2FxK2g3OWZ4Mnlx?=
+ =?utf-8?B?NUhRTUprRnM3anBjVnBHRmx5b3RYNzdTVmwvOHF6S2daakdpOGRzM1ZodzI3?=
+ =?utf-8?B?K1V2OVJlNHNvTDVOREVJd0pSUWFXMzFZbGVzditPL1dBaGdmZHY5SWdIWnJ6?=
+ =?utf-8?B?ZFVpRURjeUtSeUJCMnpZaTRWc2ptRy9mUndhSTlBUnkyL3doc1ZBbVhVTXNs?=
+ =?utf-8?B?THFsb05FZTNUcVF0STFOUWd5cThQdW55dnhWZURjVlJJaFRick8zY3lNcUh6?=
+ =?utf-8?B?dkJxWFVmRWl0VzRyUjlUbXYvRm5KNVc5MXJqbkczdmRaczBpQWw5Rjd1N1Zt?=
+ =?utf-8?B?YXNWWXFudU5nTkZ4RkhFTU9kSktZbllYMnI0dDBHK1FsV1FaaGc1ZnZCWlJM?=
+ =?utf-8?B?OVVnbGM5Q0RUOG9JaUNSSkJZZWF3PT0=?=
+MIME-Version: 1.0
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle></title><!--[if !mso]><!--><meta http-equiv=3D"X-UA-Compatible" conten=
+t=3D"IE=3Dedge"><!--<![endif]--><meta name=3D"viewport" content=3D"width=3D=
+device-width,initial-scale=3D1"><style type=3D"text/css">#outlook a { paddi=
+ng:0; }
+      body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size=
+-adjust:100%; }
+      table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-table-r=
+space:0pt; }
+      img { border:0;height:auto;line-height:100%; outline:none;text-decora=
+tion:none;-ms-interpolation-mode:bicubic; }
+      p { display:block;margin:13px 0; }</style><!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]--><!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]--><!--[if !mso]><!--><link href=3D"https://fonts.googleapis.c=
+om/css?family=3DLato:300,400,500,700" rel=3D"stylesheet" type=3D"text/css">=
+<link href=3D"https://fonts.googleapis.com/css?family=3DUbuntu:300,400,500,=
+700" rel=3D"stylesheet" type=3D"text/css"><style type=3D"text/css">@import =
+url(https://fonts.googleapis.com/css?family=3DLato:300,400,500,700);
+@import url(https://fonts.googleapis.com/css?family=3DUbuntu:300,400,500,70=
+0);</style><!--<![endif]--><style type=3D"text/css">@media only screen and =
+(min-width:480px) {
+        .mj-column-per-100 { width:100% !important; max-width: 100%; }
+.mj-column-per-33-333333333333336 { width:33.333333333333336% !important; m=
+ax-width: 33.333333333333336%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-100 { width:100% !important; max-width: 100%; }
+.moz-text-html .mj-column-per-33-333333333333336 { width:33.333333333333336=
+% !important; max-width: 33.333333333333336%; }</style><style type=3D"text/=
+css">@media only screen and (max-width:480px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style><style type=3D"text/css"></style></head><body style=3D"word-sp=
+acing:normal;"><div class=3D"grey-background-table" style=3D"background: #e=
+fefef; border: 0px; padding-top: 25px; padding-bottom: 25px;"><!--[if mso |=
+ IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"=
+0" class=3D"shadow-border-outlook" role=3D"presentation" style=3D"width:600=
+px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line=
+-height-rule:exactly;"><![endif]--><div class=3D"shadow-border" style=3D"bo=
+rder: 0px; padding-left: 15px; padding-right: 15px; background: url('https:=
+//s3.amazonaws.com/tracxnassets/assets/static/images/shadow/left-shadow.png=
+')
+		left center,url('https://s3.amazonaws.com/tracxnassets/assets/static/imag=
+es/shadow/right-shadow.png')
+		      right center; background-repeat: repeat-y,repeat-y; margin: 0px aut=
+o; max-width: 600px;"><table align=3D"center" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr>=
+<td style=3D"direction:ltr;font-size:0px;padding:20px 0;padding-bottom:0px;=
+padding-top:0px;text-align:center;"><!--[if mso | IE]><table role=3D"presen=
+tation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D""=
+ width=3D"600px" ><table align=3D"center" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px;" wid=
+th=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-height-=
+rule:exactly;"><![endif]--><div style=3D"margin:0px auto;max-width:600px;">=
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" ro=
+le=3D"presentation" style=3D"width:100%;"><tbody><tr><td style=3D"direction=
+:ltr;font-size:0px;padding:20px 0;padding-bottom:0px;padding-top:0px;text-a=
+lign:center;"><!--[if mso | IE]><table role=3D"presentation" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-ali=
+gn:top;width:600px;" ><![endif]--><div class=3D"mj-column-per-100 mj-outloo=
+k-group-fix" style=3D"font-size:0px;text-align:left;direction:ltr;display:i=
+nline-block;vertical-align:top;width:100%;"><table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"background-color:wh=
+ite;vertical-align:top;" width=3D"100%"><tbody><!-- header --><tr><td align=
+=3D"center" style=3D"background:#293348;font-size:0px;padding:10px 25px;pad=
+ding-bottom:0px;word-break:break-word;"><!--[if mso | IE]><table role=3D"pr=
+esentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td height=
+=3D"40px" style=3D"vertical-align:top;height:40px;"><![endif]--><div style=
+=3D"font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-he=
+ight:1;text-align:center;color:#000000;height:40px;"><a href=3D"https://tra=
+cxn.com" rilt=3D"img_email_logo" target=3D"_blank"><img src=3D"https://cdn.=
+tracxn.com/images/static/tracxn-white.png" style=3D"height:30px"></a></div>=
+<!--[if mso | IE]></td></tr></table><![endif]--></td></tr><!-- Top Image --=
+><tr><td align=3D"center" style=3D"font-size:0px;padding:10px;word-break:br=
+eak-word;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"=
+presentation" style=3D"border-collapse:collapse;border-spacing:0px;"><tbody=
+><tr><td style=3D"width:580px;"><img height=3D"auto" src=3D"https://cdn.tra=
+cxn.com/images/static/email-template/login/new-login.jpg" style=3D"border:0=
+;display:block;outline:none;text-decoration:none;height:auto;width:100%;fon=
+t-size:13px;" width=3D"580"></td></tr></tbody></table></td></tr><tr><td ali=
+gn=3D"left" style=3D"font-size:0px;padding:15px 35px 10px 10px;padding-top:=
+5px;padding-bottom:15px;word-break:break-word;"><div style=3D"font-family:A=
+rial,Helvetica,sans-serif;font-size:13px;line-height:18px;text-align:left;c=
+olor:#293348;"><p style=3D"padding-bottom:15px;margin:0px;">Hi Pardon,</p><=
+p style=3D"margin:0px;">A new sign-in has been noticed through your account=
+ <a href=3D"jiannan@mit.edu" style=3D"text-decoration:none" target=3D"_blan=
+k">jiannan@mit.edu</a></p></div></td></tr><!-- tableSub --><tr><td align=3D=
+"left" style=3D"font-size:0px;padding:0px;padding-left:10px;word-break:brea=
+k-word;"><table cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" border=
+=3D"0" style=3D"color:#000000;font-family:Ubuntu, Helvetica, Arial, sans-se=
+rif;font-size:13px;line-height:22px;table-layout:auto;width:100%;border:non=
+e;"><tr style=3D"margin:0px;padding-left:0px;"><td><p style=3D"margin:0px;"=
+><span class=3D"span-header" style=3D"font-family: Arial, Helvetica, sans-s=
+erif; line-height: 28px; margin: 0px; padding: 0px; font-weight: 700; margi=
+n-top: 0px; margin-bottom: 0px; color: #293348; font-size: 13px;">Date and =
+Time:</span></p></td><td><p style=3D"margin:0px;padding-left:10px;padding-r=
+ight:10px;"><span class=3D"span-data" style=3D"font-family: Arial, Helvetic=
+a,
+			sans-serif; line-height: 28px; padding: 0px; margin-top: 0px; margin-bot=
+tom: 0px; color: #293348; margin: 0px; font-size: 13px;">Oct 12, 2023 04:50=
+ AM (GMT)</span></p></td></tr><tr style=3D"margin:0px;padding-left:0px;"><t=
+d><p style=3D"margin:0px;"><span class=3D"span-header" style=3D"font-family=
+: Arial, Helvetica, sans-serif; line-height: 28px; margin: 0px; padding: 0p=
+x; font-weight: 700; margin-top: 0px; margin-bottom: 0px; color: #293348; f=
+ont-size: 13px;">Device:</span></p></td><td><p style=3D"margin:0px;padding-=
+left:10px;padding-right:10px;"><span class=3D"span-data" style=3D"font-fami=
+ly: Arial, Helvetica,
+			sans-serif; line-height: 28px; padding: 0px; margin-top: 0px; margin-bot=
+tom: 0px; color: #293348; margin: 0px; font-size: 13px;">Web Browser, (Safa=
+ri/17.0)</span></p></td></tr><tr style=3D"margin:0px;padding-left:0px;"><td=
+ width=3D"25%" padding=3D"0px"><p style=3D"margin:0px;padding:0px;"><span c=
+lass=3D"span-header" style=3D"font-family: Arial, Helvetica, sans-serif; li=
+ne-height: 28px; margin: 0px; padding: 0px; font-weight: 700; margin-top: 0=
+px; margin-bottom: 0px; color: #293348; font-size: 13px;">Logged in through=
+:</span></p></td><td><p style=3D"margin:0px;padding-left:10px;"><span class=
+=3D"span-data" style=3D"font-family: Arial, Helvetica,
+			sans-serif; line-height: 28px; padding: 0px; margin-top: 0px; margin-bot=
+tom: 0px; color: #293348; margin: 0px; font-size: 13px;">Login with passwor=
+d</span></p></td></tr><tr style=3D"margin:0px;padding-left:0px;"><td><p sty=
+le=3D"margin:0px;"><span class=3D"span-header" style=3D"font-family: Arial,=
+ Helvetica, sans-serif; line-height: 28px; margin: 0px; padding: 0px; font-=
+weight: 700; margin-top: 0px; margin-bottom: 0px; color: #293348; font-size=
+: 13px;">Location and IP:</span></p></td><td><p style=3D"margin:0px;padding=
+-left:10px;"><span class=3D"span-data" style=3D"font-family: Arial, Helveti=
+ca,
+			sans-serif; line-height: 28px; padding: 0px; margin-top: 0px; margin-bot=
+tom: 0px; color: #293348; margin: 0px; font-size: 13px;">Waxhaw, United Sta=
+tes &amp; 2a09:bac3:9d23:428::6a:a8</span></p></td></tr><tr style=3D"margin=
+:0px;padding-left:0px;"><td></td><td><p style=3D"margin:0px;padding-left:10=
+px;"><span style=3D"font-family: Arial, Helvetica, sans-serif;font-size: 13=
+px !important; padding: 0px; margin: 0px; color: #777777;margin:0px;"><i>(m=
+ay not match your exact location)</i></span></p></td></tr></table></td></tr=
+><!-- text --><tr><td align=3D"left" style=3D"font-size:0px;padding:15px 35=
+px 10px 10px;padding-top:15px;padding-bottom:10px;word-break:break-word;"><=
+div style=3D"font-family:Arial,Helvetica,sans-serif;font-size:13px;line-hei=
+ght:18px;text-align:left;color:#293348;"><p style=3D"margin:0px;padding-bot=
+tom:15px">You can review your complete login activity from <a style=3D"text=
+-decoration:none" href=3D"https://tracxn.com/a/s/recentlogins" target=3D"_b=
+lank">here</a></p><p style=3D"margin:0px;">If you find anything suspicious =
+you can <a style=3D"text-decoration:none" href=3D"https://tracxn.com/contac=
+tus" target=3D"_blank">contact us</a></p><p style=3D"margin:0px;padding:0px=
+;padding-top:5px">Please note that resetting your password will log you out=
+ from all other active sessions.</p></div></td></tr><tr><td align=3D"center=
+" style=3D"font-size:0px;padding:10px 10px 5px 10px;word-break:break-word;"=
+><p style=3D"border-top:solid 1px #e0e0e0;font-size:1px;margin:0px auto;wid=
+th:100%;"></p><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" style=3D"border-top:solid 1px #e0e0e0;font-si=
+ze:1px;margin:0px auto;width:580px;" role=3D"presentation" width=3D"580px" =
+><tr><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"left" style=3D"fon=
+t-size:0px;padding:15px 35px 10px 10px;padding-top:15px;padding-bottom:5px;=
+word-break:break-word;"><div style=3D"font-family:Arial,Helvetica,sans-seri=
+f;font-size:13px;line-height:18px;text-align:left;color:#293348;"><p style=
+=3D"margin:0px;">For any support, contact us at <a href=3D"mailto:bd@tracxn=
+.com" target=3D"_blank" style=3D"text-decoration: none;">bd@tracxn.com</a><=
+/p></div></td></tr><!-- thanks --><tr><td align=3D"left" style=3D"backgroun=
+d:#ffffff;font-size:0px;padding:10px 25px;padding-top:15px;padding-bottom:0=
+px;padding-left:10px;word-break:break-word;"><div style=3D"font-family:Ubun=
+tu, Helvetica, Arial, sans-serif;font-size:13px;line-height:21px;text-align=
+:left;color:#293348;"><p style=3D"padding:0px;padding-bottom:0px;margin:0px=
+;">Thanks,<br>Team Tracxn!</p><p style=3D"padding:0px;padding-bottom:10px;m=
+argin:0px;color:#bdbdbd;"><a href=3D"https://www.tracxn.com/" target=3D"_bl=
+ank">https://www.tracxn.com</a></p></div></td></tr></tbody></table></div><!=
+--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></d=
+iv><!--[if mso | IE]></td></tr></table></td></tr><![endif]--><!-- footer --=
+><!--[if mso | IE]></table><![endif]--></td></tr></tbody></table></div><!--=
+[if mso | IE]></td></tr></table><table align=3D"center" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" class=3D"footer-container-outlook" role=3D"pr=
+esentation" style=3D"width:600px;" width=3D"600" bgcolor=3D"#e6e6e6" ><tr><=
+td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><!=
+[endif]--><div class=3D"footer-container" style=3D"background:#e6e6e6;backg=
+round-color:#e6e6e6;margin:0px auto;max-width:600px;"><table align=3D"cente=
+r" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" s=
+tyle=3D"background:#e6e6e6;background-color:#e6e6e6;width:100%;"><tbody><tr=
+><td style=3D"direction:ltr;font-size:0px;padding:0px 15px;text-align:cente=
+r;"><!--[if mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0"><tr><td class=3D"footer-wrapper-outlook" width=3D"=
+600px" ><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" class=3D"footer-wrapper-outlook" role=3D"presentation" style=3D"widt=
+h:570px;" width=3D"570" ><tr><td style=3D"line-height:0px;font-size:0px;mso=
+-line-height-rule:exactly;"><![endif]--><div class=3D"footer-wrapper" style=
+=3D"margin:0px auto;max-width:570px;"><table align=3D"center" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"width:10=
+0%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:15px;text-=
+align:center;"><!--[if mso | IE]><table role=3D"presentation" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"layout-wrapper-contain=
+er-outlook" style=3D"vertical-align:top;width:180px;" ><![endif]--><div cla=
+ss=3D"mj-column-per-33-333333333333336 mj-outlook-group-fix layout-wrapper-=
+container" style=3D"font-size:0px;text-align:left;direction:ltr;display:inl=
+ine-block;vertical-align:top;width:100%;"><table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><t=
+d style=3D"vertical-align:top;padding-top:10px;"><table border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><=
+div style=3D"font-size: 12px; color: #555; font-family: 'Lato', sans-serif;=
+ display: inline; text-align: center;"><div>Mobile Apps</div><div style=3D"=
+padding-top: 5px"><a target=3D"_blank" rel=3D"noreferrer noopener nofollow"=
+ href=3D"https://play.google.com/store/apps/details?id=3Dcom.tracxn.android=
+" style=3D"margin-right: 15px; text-decoration: none"><img src=3D"https://c=
+dn.tracxn.com/images/static/email-template/alerts/android_icon.png" width=
+=3D"20" height=3D"20"> </a><a target=3D"_blank" rel=3D"noreferrer noopener =
+nofollow" href=3D"https://tracxn.com/a/downloads" style=3D"text-decoration:=
+ none"><img src=3D"https://cdn.tracxn.com/images/static/email-template/aler=
+ts/iOS_icon.png" width=3D"20" height=3D"20"></a></div></div></tbody></table=
+></td></tr></tbody></table></div><!--[if mso | IE]></td><td class=3D"layout=
+-wrapper-container-outlook" style=3D"vertical-align:top;width:180px;" ><![e=
+ndif]--><div class=3D"mj-column-per-33-333333333333336 mj-outlook-group-fix=
+ layout-wrapper-container" style=3D"font-size:0px;text-align:left;direction=
+:ltr;display:inline-block;vertical-align:top;width:100%;"><table border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"=
+><tbody><tr><td style=3D"vertical-align:top;padding-top:10px;"><table borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"=
+100%"><tbody><div style=3D"font-size: 12px; color: #555; font-family: 'Lato=
+', sans-serif; display: inline; text-align: center;"><div>Connect with us o=
+n</div><div style=3D"padding-top: 5px"><a target=3D"_blank" rel=3D"noreferr=
+er noopener nofollow" href=3D"https://twitter.com/Tracxn" style=3D"margin-r=
+ight: 15px; text-decoration: none"><img src=3D"https://cdn.tracxn.com/image=
+s/static/email-template/alerts/twitter_icon.png" width=3D"20" height=3D"20"=
+> </a><a target=3D"_blank" rel=3D"noreferrer noopener nofollow" href=3D"htt=
+ps://www.facebook.com/Tracxn" style=3D"margin-right: 15px; text-decoration:=
+ none"><img src=3D"https://cdn.tracxn.com/images/static/email-template/aler=
+ts/facebook_icon.png" width=3D"20" height=3D"20"> </a><a target=3D"_blank" =
+rel=3D"noreferrer noopener nofollow" href=3D"https://www.linkedin.com/compa=
+ny/tracxn/mycompany/" style=3D"margin-right: 15px; text-decoration: none"><=
+img src=3D"https://cdn.tracxn.com/images/static/email-template/alerts/linke=
+din_icon.png" width=3D"20" height=3D"20"> </a><a target=3D"_blank" rel=3D"n=
+oreferrer noopener nofollow" href=3D"https://www.slideshare.net/Tracxn"><im=
+g src=3D"https://cdn.tracxn.com/images/static/email-template/alerts/slidesh=
+are_icon.png" width=3D"20" height=3D"20" style=3D"padding-bottom: 1px"></a>=
+</div></div></tbody></table></td></tr></tbody></table></div><!--[if mso | I=
+E]></td><td class=3D"layout-wrapper-container-outlook" style=3D"vertical-al=
+ign:top;width:180px;" ><![endif]--><div class=3D"mj-column-per-33-333333333=
+333336 mj-outlook-group-fix layout-wrapper-container" style=3D"font-size:0p=
+x;text-align:left;direction:ltr;display:inline-block;vertical-align:top;wid=
+th:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" width=3D"100%"><tbody><tr><td style=3D"vertical-align:top;padd=
+ing-top:10px;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" width=3D"100%"><tbody><div style=3D"font-size: 12px; colo=
+r: #555; font-family: 'Lato', sans-serif; display: inline; text-align: cent=
+er;"><div>Browser Extensions</div><div style=3D"padding-top: 5px"><a target=
+=3D"_blank" style=3D"text-decoration: none; margin-right: 15px" rel=3D"nore=
+ferrer noopener nofollow" href=3D"https://chrome.google.com/webstore/detail=
+/tracxn-extension/mcplkbacfdjapifgiidjidmnfilipnep?hl=3Den&amp;utm_source=
+=3DCampaign&amp;utm_medium=3DEmail&amp;utm_campaign=3DPortfolio%20Tracker">=
+<img src=3D"https://cdn.tracxn.com/images/static/email-template/alerts/chro=
+me_icon.png" width=3D"20" height=3D"20"> </a><a target=3D"_blank" style=3D"=
+text-decoration: none" rel=3D"noreferrer noopener nofollow" href=3D"https:/=
+/b.tracxn.com/product-announce-ff"><img src=3D"https://cdn.tracxn.com/image=
+s/static/email-template/alerts/mozilla_icon.png" width=3D"14" height=3D"14"=
+ style=3D"vertical-align: top; margin-top: 2px"></a></div></div></tbody></t=
+able></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><!=
+[endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></tab=
+le></td></tr><tr><td class=3D"" width=3D"600px" ><table align=3D"center" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentat=
+ion" style=3D"width:570px;" width=3D"570" ><tr><td style=3D"line-height:0px=
+;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style=3D"mar=
+gin:0px auto;max-width:570px;"><table align=3D"center" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"width:100%;"><t=
+body><tr><td style=3D"direction:ltr;font-size:0px;padding:20px 0;padding-bo=
+ttom:15px;padding-top:10px;text-align:center;"><!--[if mso | IE]><table rol=
+e=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><![=
+endif]--><div style=3D"color: #555; font-size: 12px; font-family: 'Lato', s=
+ans-serif;"><div><span style=3D"padding-right: 5px">=C2=A9</span>2023, Trac=
+xn Technologies Limited. All rights reserved</div><div style=3D"padding-top=
+: 5px; text-align: center"><div style=3D"padding-top: 3px">No. L-248, 2nd F=
+loor, 17th Cross, Sector 6, HSR Layout, Bengaluru, 560102, India</div><div =
+style=3D"padding-top: 15px"><a target=3D"_blank" class=3D"footer-container_=
+_policy-cont__policy-link" style=3D"text-decoration: none; color: #337ab7" =
+rel=3D"noreferrer noopener nofollow" href=3D"https://tracxn.com/emailpolicy=
+">Email Policy</a> <span class=3D"footer-container__policy-cont__divider" s=
+tyle=3D"font-size: 12px; margin-left: 7px; border-right: 1px solid #bdbdbd"=
+></span> <a target=3D"_blank" class=3D"footer-container__policy-cont__polic=
+y-link" rel=3D"noreferrer noopener nofollow" style=3D"margin-left: 10px; te=
+xt-decoration: none; color: #337ab7" href=3D"https://tracxn.com/privacypoli=
+cy">Privacy Policy</a></div></div></div><!--[if mso | IE]></tr></table><![e=
+ndif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table=
+></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso =
+| IE]></td></tr></table><![endif]--></div><img src=3D"https://ea.pstmrk.it/=
+open?m=3Dv3_1.GMNvfoz0pazfxatw5TaC4g.3XXVmMWcZo5CIGAwpBUE8MaJAlwluGM38j9uJq=
+Ko2CdDuUEscps6kDEoZ5q-El9kxUCtziBtIwuwTVV9jv2y08Gw47Rc2w3bM3WHYJ53u8ws8rehf=
+1K5U309ZwhIzXsNR5iBHDe0YrQaOBWpMZYAdQCxgoyZDk1IkYwBZpdXNLHHAIQye_IKMWIo8oR6=
+y2nUOg7djuB0kbjwn0KHHi2C3_i-g40NMADNinug_H76Yz7ODxuXkmNAw3LthRcJ5YFJll2xLg8=
+MMdWRY0k23-jWvQvZhnshy3HDv93H2_tEfnzIfVkD8C4Q5jcGDPVfIMFGQFcTKyYAEx1LeLkYCq=
+sQMawcLbgJ5HGCK5vw7EuyOpvweFSQ3ZtZZHutYofR3MGWxi5KlO3ENmvjl_49FwSYjG_2RPlRk=
+y_dlTkhTiuNM2CzeRul4Qy-wgTOsTxOSA_6EI7e2Jr6mHu5BxGP0jLPuA" width=3D"1" heig=
+ht=3D"1" border=3D"0" alt=3D""></body></html>=

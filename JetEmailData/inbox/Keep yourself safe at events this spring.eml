@@ -1,0 +1,569 @@
+Received: from DM6PR01MB5642.prod.exchangelabs.com (2603:10b6:5:148::28) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 15 Mar 2023 20:06:29
+ +0000
+Received: from DS7PR05CA0043.namprd05.prod.outlook.com (2603:10b6:8:2f::22) by
+ DM6PR01MB5642.prod.exchangelabs.com (2603:10b6:5:148::28) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.26; Wed, 15 Mar 2023 20:06:28 +0000
+Received: from DS1PEPF0000E64C.namprd02.prod.outlook.com
+ (2603:10b6:8:2f:cafe::6b) by DS7PR05CA0043.outlook.office365.com
+ (2603:10b6:8:2f::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29 via Frontend
+ Transport; Wed, 15 Mar 2023 20:06:28 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.112)
+ smtp.mailfrom=a552720.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of a552720.bnc3.mailjet.com
+ does not designate 18.9.1.112 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.112;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.112) by
+ DS1PEPF0000E64C.mail.protection.outlook.com (10.167.18.42) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6178.13 via Frontend Transport; Wed, 15 Mar 2023 20:06:27 +0000
+Received: from w92expo16.exchange.mit.edu (18.7.74.70) by
+ oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.47; Wed, 15 Mar 2023 16:06:07 -0400
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ w92expo16.exchange.mit.edu (18.7.74.70) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 15 Mar 2023 16:06:07 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.45) by
+ oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.47 via Frontend Transport; Wed, 15 Mar 2023 16:06:07 -0400
+Received: from MW4P223CA0003.NAMP223.PROD.OUTLOOK.COM (2603:10b6:303:80::8) by
+ PH0PR01MB6665.prod.exchangelabs.com (2603:10b6:510:99::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.30; Wed, 15 Mar 2023 20:06:03 +0000
+Received: from CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:80:cafe::db) by MW4P223CA0003.outlook.office365.com
+ (2603:10b6:303:80::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29 via Frontend
+ Transport; Wed, 15 Mar 2023 20:06:02 +0000
+Authentication-Results-Original: spf=pass (sender IP is 185.250.237.108)
+ smtp.mailfrom=a552720.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=704
+Received-SPF: Pass (protection.outlook.com: domain of a552720.bnc3.mailjet.com
+ designates 185.250.237.108 as permitted sender)
+ receiver=protection.outlook.com; client-ip=185.250.237.108;
+ helo=o108.p38.mailjet.com; pr=C
+Received: from o108.p38.mailjet.com (185.250.237.108) by
+ CO1NAM11FT065.mail.protection.outlook.com (10.13.174.62) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6199.16 via Frontend Transport; Wed, 15 Mar 2023 20:06:01 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; q=dns/txt;
+  d=bnc3.mailjet.com; i=dsl-replies=3Dmit.edu@a552720.bnc3.mailjet.com; s=mailjet1; x=1678998161;
+  h=message-id:mime-version:from:from:to:to:subject:subject:date:date:list-id:list-unsubscribe:
+  list-unsubscribe-post:feedback-id:precedence:x-campaignid:x-csa-complaints:
+  x-mj-mid:x-mj-smtpguid:x-report-abuse-to:content-type;
+  bh=BT4/pCTWyUX9UyvLUPRDiga9h4lRD0mDXuRttoJgN5Y=;
+  b=Tt0LcfYYIKKDKDh2M50hXkJs+bUZZvYCRQA5gFOiuLUsGLBFXHx64XDsG
+ ddeJt9aiZclCqacHeBWelODzs8dK80yOhP9rj/mWxftRl86hgYCLMqGHDQ21
+ f5iQRQOllvqFLcviB47mj2y2g7KSUCADJDjn7kOWlSp4lOqWBXl1KY=
+Return-Path:
+ 4fae9a1d.AXEAABHHY-4AAclS0ZoAAM105GoAAYCrInQAJUfFAAhvEABkEiUo@a552720.bnc3.mailjet.com
+Message-ID: <4fae9a1d.AXEAABHHY-4AAclS0ZoAAM105GoAAYCrInQAJUfFAAhvEABkEiUo@mailjet.com>
+From: Judy Robinson and John DiFava <dsl-replies@mit.edu>
+To: jiannan@mit.edu
+Subject: Keep yourself safe at events this spring
+Date: Wed, 15 Mar 2023 20:06:00 +0000 (UTC)
+List-Id: <dsl-replies.mit.edu.iz1w-swzil.mj>
+List-Unsubscribe: <mailto:unsub-4fae9a1d.iz1w.lr7rvp66hj0k@bnc3.mailjet.com>,
+	<https://iz1w.mjt.lu/unsub2?m=AXEAABHHY-4AAclS0ZoAAM105GoAAYCrInQAJUfFAAhvEABkEiUoZfGiSPZgTCqZL2BExNCO1AAIBDM&b=4fae9a1d&e=ca577d58&x=a7iET_5Bkh8rOy7esnA68A>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Feedback-Id: 42.552720.525363:MJ
+Precedence: bulk
+X-CampaignID: 7672615322
+X-CSA-Complaints: csa-complaints@eco.de
+X-MJ-Mid: AXEAABHHY-4AAclS0ZoAAM105GoAAYCrInQAJUfFAAhvEABkEiUoZfGiSPZgTCqZL2BExNCO1AAIBDM
+X-MJ-SMTPGUID: 65f1a248-f660-4c2a-992f-6044c4d08ed4
+X-REPORT-ABUSE-TO: Message sent by Mailjet please report to
+	abuse@mailjet.com with a copy of the message
+Content-Type: multipart/alternative; boundary="=-eVgwQiKYEfHsWxHAq+Yu"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CO1NAM11FT065:EE_|PH0PR01MB6665:EE_|DS1PEPF0000E64C:EE_|DM6PR01MB5642:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6676270b-fcc6-465d-2da7-08db2590c304
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?TKvZyTjNk9bVk/fzmoiDXQt76tB95hfGdJsktjJ2x71D4RoLaNT1hPjzP3kf?=
+ =?us-ascii?Q?oS7WRbbhyYbbNg9KJILmvp8Q6aSnpC6CJpkoLCXAXajXA5VpeDlChMRiU8RL?=
+ =?us-ascii?Q?XeH7Pa0nOuSTpQ524b86qr6WCgKbO3IcB1b+dkCkkmvzbGqxbbx8G1yKkqVu?=
+ =?us-ascii?Q?8i2ejUU8d8UFPBAolvo0ffUgHn7mJtFAMRXdR5go2HTKtwIXnu5vzQRH2o6e?=
+ =?us-ascii?Q?AsJ5Y8WTZMRBjum4MkYXhvidwIZhy2F+ljqxudoKs7HsitKMXQ8JHyQXKj9Y?=
+ =?us-ascii?Q?1mvTzEy1DjoZcRNd5dSdNnUStofjpWl/wi+0l9C+OOI7cMr6KkPY/nBWbTL8?=
+ =?us-ascii?Q?CBKhKf1LbtwFRzvqZQ76/WR9yQ3c2Q0Y1YK82tm03griELphd5asi+1jcrbd?=
+ =?us-ascii?Q?XHkXKWn/5YK6uBf4/dsZdl4olp6LyDdIIiIn8XneTjJnPZmHXVNjsM0qCxu7?=
+ =?us-ascii?Q?msp64gIgwRAFpjjztrwY6GuKl9Qs6fmgqqEpcErmPyS3h3kjyeRW3edEchPz?=
+ =?us-ascii?Q?NIK6LOlC2bBbxZznTD8dM1IIeAZyOZ8kEeyfvN6HrpDfdJu2hEACHKAGbvXW?=
+ =?us-ascii?Q?U4I9kZObw1YnGOUw1oXnB+tW7h0Z8nOr8FP5O4Be8hjFbJpHAcYZuoKxHxMx?=
+ =?us-ascii?Q?3wfEqi2rmEBu8ls+hZe6JjZfR0dvcowMuSDvitF+1A8/f7UCvzPjx98oDgbk?=
+ =?us-ascii?Q?jD3OdosFddWcboMbT4jp7Lh9my3Js87Y+r15aI/qqLoTJ6MT6RDuNY9Irpc2?=
+ =?us-ascii?Q?G0Kh2+/Wcnv3q077ogIbiJ9m7bRQm9PZY050WSx1mtvhb062aewW7BwOIonY?=
+ =?us-ascii?Q?5mDzx4JxOOpaPn75KVeJUxxGoOBapVlPGJ6CV+9KqY3eZkplKqLNNdPNLoy7?=
+ =?us-ascii?Q?TrWlaQoaCUqPRTAFNgaf6ItVbP+OEkhQv+8297z/KP7quTxXxPjmi48F76Zm?=
+ =?us-ascii?Q?tvQdQqDCG2ikAqKXmjI1IpCakCw9dP5JYQqnCBfF2RAWZulcSYR/sAzIWEV3?=
+ =?us-ascii?Q?n4Vt34e3wfuE0w71VAZL6/GtFC7WI2CQk0zwec1vwBwHwKqaDf0fZi88Hz2s?=
+ =?us-ascii?Q?N5BxQq5nu2rl5J9GQqmb54FyOyPJoYXDo1ROFsDQXrWCoNmTpuyb3Ty7rF6+?=
+ =?us-ascii?Q?VfYuVS8vy+qL?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:185.250.237.108;CTRY:FR;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:o108.p38.mailjet.com;PTR:o108.p38.mailjet.com;CAT:NONE;SFS:(13230025)(4636009)(1690799011)(451199018)(356005)(40140700001)(36756003)(166002)(83170400001)(7636003)(7596003)(7066003)(4006050)(1096003)(22186003)(5660300002)(75640400001)(956004)(9316004)(336012)(6506007)(76236004)(26005)(33964004)(83380400001)(9686003)(6636002)(42882007)(36736006)(19810500001)(8676002)(966005)(6486002)(58800400005)(6916009)(7696005)(66899018)(1406899021)(76899012);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6665
+X-OrganizationHeadersPreserved: PH0PR01MB6665.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb3.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb3.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo16.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 15 Mar 2023 20:06:28.0406
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 6676270b-fcc6-465d-2da7-08db2590c304
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: DS1PEPF0000E64C.namprd02.prod.outlook.com
+X-CrossPremisesHeadersFiltered: DS1PEPF0000E64C.namprd02.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DS1PEPF0000E64C.namprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 987b70c2-65d9-4794-5866-08db2590b383
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.112;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 20:06:27.8375
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6676270b-fcc6-465d-2da7-08db2590c304
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB5642
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.0249271
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6178.026
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UGNXNUloVDM2cU1rYzYraU1XR3ErM1k1aEtaaW5aTmZIZktKckJkTG4wMnYz?=
+ =?utf-8?B?Y3lzcGFrbXRtdUhYZlpPUEVLT0pVai8xdWVQaktQUzdFalI5Y1JacXk2ZHhJ?=
+ =?utf-8?B?RkYxMjNOT1NleE03WE4rbmRESWpWOHNMaFY4RFNFdHF2NitJR0YrUTRFb001?=
+ =?utf-8?B?NjBMRGlMekQrTkMwVzlHN01sVVV4RFROSkpHK2FyNVpndlJscjZRaE1VL1pU?=
+ =?utf-8?B?anFHVmFXdXBsSG5aYmFXVzNPQitQRUhhQmRtaFZqbk9RMUkycDI0bSt3dXZx?=
+ =?utf-8?B?c3AwZGtzY2hyc215a1lZRHZRYS9IdXJaZmIvMnBiZ2s1cEduaUxMMUFuUVM0?=
+ =?utf-8?B?Tk9xTVRDb3NNTlJVR3NzMGg0a2U1ZVNrNkVaVjBGNmoyUFhtMHdrYXkyZjJV?=
+ =?utf-8?B?NnhLU293QTBtSE0yU3RtZTByWnBtR0xWNTNxdjNzeUVZQ21HUVBnc1d6WTdr?=
+ =?utf-8?B?ekRxN2FUMk05RUN5SUJCT1ZQK3lqV3ZpMjFndUtUMmNPRDhsQkpaYW5qanZq?=
+ =?utf-8?B?dEdiRlhjU0VHRlVnTm9pbVRvc2tna3prSEZ1Q2kyT1NFRWVRTzl2R2d5R25q?=
+ =?utf-8?B?dHpoQWl4T0dKdy9pYjAwcHRSWmdvVnluNlhvZVdzc0lDVlVrYndHZ3l2aWpk?=
+ =?utf-8?B?K2Z0TXhpNW1uVXBtSkNZVGl4bHdEa2doTTJPZWNHQnpycndRcmhSWDAvNnFZ?=
+ =?utf-8?B?aWR6em9vMytoNGJGVkIyZ0ltR2J1azJ0MGVONk1WYjdabitPNTEwTTJFQzR4?=
+ =?utf-8?B?aEhFK09FT3ovbHpnSnlyVFlvSjVGZW1OVHNnbXBmcU8zQUpGM1hyWlAzQ1N1?=
+ =?utf-8?B?QWQwRllFVUpMTWsyQ2g3bkxyaDgxdlZwRXora3ZLd0huQmZpbmNrbVNheDkv?=
+ =?utf-8?B?M3BBV1RPUzU2cEFjRDd5OEp4SjFjMFg4Mk9SM0hTMWJhU1p5em1mek0zblhI?=
+ =?utf-8?B?Z3pRQjgwVzNGYTBHM1NtdzJhRTJrV0RYYlBYZzN1RVBYcDQvTGRNSVR6SlZV?=
+ =?utf-8?B?Z1liclJZWUhxcWx4ckNTSmdRYXdBMnRXVUt1cFFWQ1orTXJ6SHJXSkFvRnJM?=
+ =?utf-8?B?cUlrRGMwSXl6MTgrT1E1N2M2bnF6V1dacmUzUEtVZktEcTE2dDN4dncyYUlM?=
+ =?utf-8?B?OVZ1bEFlMml2YVpraEI4MkwrZzFBSDhxSE1WdHUrSjJWUGlCRGRXYnpDNXFW?=
+ =?utf-8?B?ZWNRK0hGa2psK1owOGFpYXdVWksxRCtPeUxNQTdtZk83NXVidzd1SzFsOWcz?=
+ =?utf-8?B?T0R1cVVvNUdxYnUyRkpDTTJUMkZGZzNNK2ZZZ050Zm03V0tENWwzYk9uUnZQ?=
+ =?utf-8?B?bEdLL1dac2ZYUEdjNjlFdWhYUVZ3Vk5KSm9pQk9vUXFzai9jT29SekYwazA4?=
+ =?utf-8?B?a05mVVh5b3BxcGtvZmlXNXg0MlZRNFljTVdkb0JrQlNPaURkL0UrSEdkdERn?=
+ =?utf-8?B?WkduWUFRL2VlQlNTWC9NalpNaGFuQ24wc2s5R0xqTjFkV21IWEtVT0FzUEtT?=
+ =?utf-8?B?ME5ndEhsQlI2SEY4UjlEYStRQ1hyeSs2aGsxUE9oUVBiamRSMG1rRS9jaUd0?=
+ =?utf-8?B?QXFmUmtaNFY0ZVB2TGpQajJ2MkNOWUR4Y1FLZVh0ajRrNUtNcTJBNS9wd1NB?=
+ =?utf-8?B?M1NmRGxabStFclE1KzFVTVUxL1R2b1MzU2ZwdXZZWUJoejJvSEsydzN3S3Np?=
+ =?utf-8?B?Wis0ckVVUTh5amc1RHppdmZaQmVyb1U1SGR5VUlGSWdxeG4yNlZST2hJZDZF?=
+ =?utf-8?B?YzNqMGg3NGFxdnorMStPOGppR0taSTBIZWdnT0hWWFhEaStSdnJGMkh0aldi?=
+ =?utf-8?B?YjhSTTJOS21MTVZhT0xUdmpxblcvcnVQZnZ3Q2poTjJ0T0tONmJtR1NZTEs5?=
+ =?utf-8?B?NTNRVTFZdGRXZ29RaVdvSTlQNUFZS084aTdEWlcvek5vdCthVERnYVk5dyt5?=
+ =?utf-8?B?MDVsV3VIb1pIY1Z0dFpmei9WYU11RDB3Q2JaRi9NUHNKcE9kaFg0YzZRQjZS?=
+ =?utf-8?B?Q3hoZnQrd3ZMNXBSaFg2cm0rQU5hcmNVYTRQNFJLQnpIbnhrTndXVGYvZkho?=
+ =?utf-8?B?SkYwOWlvVVgvWm5VZGQ3cG5QcTFGVFMwVC84YVNlT2hnSCtRUlpDb1A0VzRt?=
+ =?utf-8?B?aHFHbGFISGw2QWFPSXM3TG8xZ2tqRlRuR0MxWk4vUWtodEFSNnRUK2JjNG9z?=
+ =?utf-8?B?WDN3Zk03NStBc2FSWmUyUUhWWFFsZWdyUzI1bWtYK1VaWURTR2poc3ZuQUxW?=
+ =?utf-8?Q?BUArm3pq9RwfUUJb0n0+6bk/DvptopZR4kcmbOkbLQ=3D?=
+MIME-Version: 1.0
+
+--=-eVgwQiKYEfHsWxHAq+Yu
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<<Judy Robinson and John DiFava>> [https://iz1w.mjt.lu/img/iz1w/b/mjuk0/gmm=
+73.png]
+TL:DR: Enjoy all that the Boston area has to offer this spring; public drin=
+king, open containers, and intoxication are prohibited in Boston and Cambri=
+dge; be mindful of your beverages =E2=80=93 local police warn about drink s=
+piking; MIT resources are available in emergencies or if you need support.
+
+Dear students,
+
+Despite the wintery weather, spring is right around the corner. With warmer=
+ temperatures come some of Boston=E2=80=99s best-loved events, like St. Pat=
+rick=E2=80=99s Day this weekend and the Boston Marathon in April. If you jo=
+in the festivities, keep the following in mind.
+
+Event safety
+
+Follow these precautions when you attend any event:
+
+ * Be alert and aware of your surroundings and dial 911 if you see any susp=
+icious activity.
+ * Be aware that public drinking, open containers, and intoxication are pro=
+hibited by city and state ordinances.
+ * Do not congregate on rooftops, fire escapes, balconies, and porches.
+ * Beware of the BORG [https://studentlife.mit.edu/aods/alcohol-info/borgs]=
+: Diluting alcohol with water and adding electrolytes will NOT prevent the =
+toxic effects of over-consuming alcohol.
+ * For large outdoor events such as the marathon, avoid bringing backpacks,=
+ which are subject to search by police.
+
+Minimize the risk of drink spiking
+
+Boston and Cambridge Police continue to receive an elevated number of drink=
+-spiking reports, including from students. To minimize your risk, follow th=
+ese recommendations from the Office of Alcohol and Other Drug Services (AOD=
+S) [https://studentlife.mit.edu/aods/alcohol-info/drink-spiking]:
+
+ * Don=E2=80=99t leave your drink unattended and try to hold your drink in =
+your hand at all times.
+ * Watch your drink being poured or opened.
+ * Avoid accepting drinks from strangers.
+ * Keep an eye on your friends' drinks.
+ * Make plans for your journey home with friends and don't leave without ea=
+ch other.
+
+Physical symptoms of drink spiking
+
+Someone who has been drugged may experience the following symptoms:
+
+ * Difficulty breathing
+ * Dizziness, disorientation, and blurred vision
+ * Nausea or vomiting
+ * Loss of control over your body
+ * Passing out
+ * Waking up with no memories or missing memories from a prolonged period o=
+f time
+ * Feeling drunk when you=E2=80=99ve had little to no alcohol
+ * Sudden change in body temperature (hot and cold)
+ * Heart rate changes
+
+Campus resources are available
+
+If you think you may have consumed a spiked drink and you need support, ple=
+ase reach out to the following resources:
+
+ * For urgent medical needs, call 911 or get to an emergency room.
+ * Call MIT Police [https://police.mit.edu/] at (617) 253-1212 or dial 100 =
+from any MIT phone in an emergency.
+ * DoingWell [https://doingwell.mit.edu/support-3/] can help connect you to=
+ many support options.
+ * These and other resources are available on the AODS website [https://stu=
+dentlife.mit.edu/aods/alcohol-info/drink-spiking].
+
+It=E2=80=99s not your fault if someone attempts to spike your drink=E2=80=
+=93a victim is never responsible for a crime. Still, it is important for yo=
+u to be aware of these risks. However you enjoy springtime in Boston and Ca=
+mbridge, please take precautions to keep yourself and your friends safe.
+
+Sincerely,
+
+Judy Robinson=C2=A0
+Senior Associate Dean for Residential Education
+
+John DiFava=C2=A0
+Chief, MIT Police
+
+
+
+This e-mail has been sent to jiannan@mit.edu, click here to unsubscribe htt=
+p://iz1w.mjt.lu/unsub2?hl=3Den&m=3DAXEAABHHY-4AAclS0ZoAAM105GoAAYCrInQAJUfF=
+AAhvEABkEiUoZfGiSPZgTCqZL2BExNCO1AAIBDM&b=3D4fae9a1d&e=3Dca577d58&x=3Da7iET=
+_5Bkh8rOy7esnA68A.
+
+
+
+[https://www.mailjet.com/?utm_source=3Dfooter&utm_medium=3Demail&utm_campai=
+gn=3Dlogo1]=
+
+--=-eVgwQiKYEfHsWxHAq+Yu
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>Keep yourself safe at events this spring</title><!--[if !mso]><!--><me=
+ta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><!--<![endif]--><me=
+ta name=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=3D1"><st=
+yle type=3D"text/css">#outlook a { padding:0; }
+          body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-=
+size-adjust:100%; }
+          table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-tab=
+le-rspace:0pt; }
+          img { border:0;height:auto;line-height:100%; outline:none;text-de=
+coration:none;-ms-interpolation-mode:bicubic; }
+          p { display:block;margin:13px 0; }</style><!--[if mso]>
+        <noscript>
+        <xml>
+        <o:OfficeDocumentSettings>
+          <o:AllowPNG/>
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+        </xml>
+        </noscript>
+        <![endif]--><!--[if lte mso 11]>
+        <style type=3D"text/css">
+          .mj-outlook-group-fix { width:100% !important; }
+        </style>
+        <![endif]--><style type=3D"text/css">@media only screen and (min-wi=
+dth:480px) {
+        .mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-100 { width:100% !important; max-width: 100%; }</style><sty=
+le type=3D"text/css">[owa] .mj-column-per-100 { width:100% !important; max-=
+width: 100%; }</style><style type=3D"text/css">@media only screen and (max-=
+width:480px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style></head><body style=3D"word-spacing:normal;background-color:#ff=
+ffff;"><div style=3D"background-color:#ffffff;"><!--[if mso | IE]><table al=
+ign=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" =
+role=3D"presentation" style=3D"width:600px;" width=3D"600" bgcolor=3D"#ffff=
+ff" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:ex=
+actly;"><![endif]--><div style=3D"background:#ffffff;background-color:#ffff=
+ff;margin:0px auto;max-width:600px;"><table align=3D"center" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"backgroun=
+d:#ffffff;background-color:#ffffff;width:100%;"><tbody><tr><td style=3D"dir=
+ection:ltr;font-size:0px;padding:20px 0;text-align:center;"><!--[if mso | I=
+E]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><![end=
+if]--><div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-s=
+ize:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:t=
+op;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr>=
+<td align=3D"left" style=3D"font-size:0px;padding:10px 25px 10px 25px;paddi=
+ng-right:25px;padding-left:25px;word-break:break-word;"><table border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"border-=
+collapse:collapse;border-spacing:0px;"><tbody><tr><td style=3D"width:550px;=
+"><img alt=3D"Judy Robinson and John DiFava" height=3D"auto" src=3D"https:/=
+/iz1w.mjt.lu/img/iz1w/b/mjuk0/gmm73.png" style=3D"border:none;display:block=
+;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" =
+width=3D"550"></td></tr></tbody></table></td></tr><tr><td align=3D"left" st=
+yle=3D"font-size:0px;padding:0px 25px 0px 25px;padding-top:0px;padding-righ=
+t:25px;padding-bottom:0px;padding-left:25px;word-break:break-word;"><div st=
+yle=3D"font-family:Arial, sans-serif;font-size:14px;letter-spacing:normal;l=
+ine-height:1;text-align:left;color:#000000;"><p class=3D"text-build-content=
+" style=3D"line-height: 24px; margin: 10px 0; margin-top: 10px;" data-testi=
+d=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial, Helvetica,=
+ Arial, sans-serif;font-size:14px;line-height:24px;"><i><b>TL:DR: </b>Enjoy=
+ all that the Boston area has to offer this spring; public drinking, open c=
+ontainers, and intoxication are prohibited in Boston and Cambridge; be mind=
+ful of your beverages =E2=80=93 local police warn about drink spiking; MIT =
+resources are available in emergencies or if you need support.</i></span></=
+p><p class=3D"text-build-content" style=3D"line-height: 24px; margin: 10px =
+0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Ari=
+al, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">Dear stu=
+dents,</span></p><p class=3D"text-build-content" style=3D"line-height: 24px=
+; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;=
+font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:=
+24px;">Despite the wintery weather, spring is right around the corner. With=
+ warmer temperatures come some of Boston=E2=80=99s best-loved events, like =
+St. Patrick=E2=80=99s Day this weekend and the Boston Marathon in April. If=
+ you join the festivities, keep the following in mind.</span></p><p class=
+=3D"text-build-content" style=3D"line-height: 24px; margin: 10px 0;" data-t=
+estid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial, Helvet=
+ica, Arial, sans-serif;font-size:14px;line-height:24px;"><b>Event safety</b=
+></span></p><p class=3D"text-build-content" style=3D"line-height: 24px; mar=
+gin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-=
+family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;=
+">Follow these precautions when you attend any event:</span></p><ul><li sty=
+le=3D"line-height:24px;"><span style=3D"color:#000000;font-family:Arial, He=
+lvetica, Arial, sans-serif;font-size:14px;line-height:24px;">Be alert and a=
+ware of your surroundings and dial 911 if you see any suspicious activity.<=
+/span></li><li style=3D"line-height:24px;"><span style=3D"color:#000000;fon=
+t-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24p=
+x;">Be aware that public drinking, open containers, and intoxication are pr=
+ohibited by city and state ordinances.</span></li><li style=3D"line-height:=
+24px;"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sa=
+ns-serif;font-size:14px;line-height:24px;">Do not congregate on rooftops, f=
+ire escapes, balconies, and porches.</span></li><li style=3D"line-height:24=
+px;"><a class=3D"link-build-content" style=3D"color:inherit;; text-decorati=
+on: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AXEAABHHY-4AAcl=
+S0ZoAAM105GoAAYCrInQAJUfFAAhvEABkEiUoZfGiSPZgTCqZL2BExNCO1AAIBDM/1/tO1aBbNe=
+ARqvpdmAJPsflA/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L2FvZHMvYWxjb2hvbC1pbmZv=
+L2Jvcmdz"><span style=3D"color:#1c80ff;font-family:Arial;font-size:14px;lin=
+e-height:24px;"><u>Beware of the BORG</u></span></a><span style=3D"color:#0=
+00000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-h=
+eight:24px;">: Diluting alcohol with water and adding electrolytes will NOT=
+ prevent the toxic effects of over-consuming alcohol.</span></li><li style=
+=3D"line-height:24px;"><span style=3D"color:#000000;font-family:Arial, Helv=
+etica, Arial, sans-serif;font-size:14px;line-height:24px;">For large outdoo=
+r events such as the marathon, avoid bringing backpacks, which are subject =
+to search by police.</span></li></ul><p class=3D"text-build-content" style=
+=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span st=
+yle=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-s=
+ize:14px;line-height:24px;"><b>Minimize the risk of drink spiking</b></span=
+></p><p class=3D"text-build-content" style=3D"line-height: 24px; margin: 10=
+px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:=
+Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">Bosto=
+n and Cambridge Police continue to receive an elevated number of drink-spik=
+ing reports, including from students. To minimize your risk, follow </span>=
+<a class=3D"link-build-content" style=3D"color:inherit;; text-decoration: n=
+one;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AXEAABHHY-4AAclS0ZoA=
+AM105GoAAYCrInQAJUfFAAhvEABkEiUoZfGiSPZgTCqZL2BExNCO1AAIBDM/2/GdU-i8B4yQqdW=
+BJlSjHgpQ/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L2FvZHMvYWxjb2hvbC1pbmZvL2Rya=
+W5rLXNwaWtpbmc"><span style=3D"color:#1c80ff;font-family:Arial;font-size:14=
+px;line-height:24px;"><u>these recommendations from the Office of Alcohol a=
+nd Other Drug Services (AODS)</u></span></a><span style=3D"color:#000000;fo=
+nt-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24=
+px;">:</span></p><ul><li style=3D"line-height:24px;"><span style=3D"color:#=
+000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-=
+height:24px;">Don=E2=80=99t leave your drink unattended and try to hold you=
+r drink in your hand at all times.</span></li><li style=3D"line-height:24px=
+;"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-s=
+erif;font-size:14px;line-height:24px;">Watch your drink being poured or ope=
+ned.</span></li><li style=3D"line-height:24px;"><span style=3D"color:#00000=
+0;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-heigh=
+t:24px;">Avoid accepting drinks from strangers.</span></li><li style=3D"lin=
+e-height:24px;"><span style=3D"color:#000000;font-family:Arial, Helvetica, =
+Arial, sans-serif;font-size:14px;line-height:24px;">Keep an eye on your fri=
+ends' drinks.</span></li><li style=3D"line-height:24px;"><span style=3D"col=
+or:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;l=
+ine-height:24px;">Make plans for your journey home with friends and don't l=
+eave without each other.</span></li></ul><p class=3D"text-build-content" st=
+yle=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span=
+ style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;fon=
+t-size:14px;line-height:24px;"><b>Physical symptoms of drink spiking</b></s=
+pan></p><p class=3D"text-build-content" style=3D"line-height: 24px; margin:=
+ 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-fami=
+ly:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">So=
+meone who has been drugged may experience the following symptoms:</span></p=
+><ul><li style=3D"line-height:24px;"><span style=3D"color:#000000;font-fami=
+ly:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">Di=
+fficulty breathing</span></li><li style=3D"line-height:24px;"><span style=
+=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size=
+:14px;line-height:24px;">Dizziness, disorientation, and blurred vision</spa=
+n></li><li style=3D"line-height:24px;"><span style=3D"color:#000000;font-fa=
+mily:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">=
+Nausea or vomiting</span></li><li style=3D"line-height:24px;"><span style=
+=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size=
+:14px;line-height:24px;">Loss of control over your body</span></li><li styl=
+e=3D"line-height:24px;"><span style=3D"color:#000000;font-family:Arial, Hel=
+vetica, Arial, sans-serif;font-size:14px;line-height:24px;">Passing out</sp=
+an></li><li style=3D"line-height:24px;"><span style=3D"color:#000000;font-f=
+amily:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;"=
+>Waking up with no memories or missing memories from a prolonged period of =
+time</span></li><li style=3D"line-height:24px;"><span style=3D"color:#00000=
+0;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-heigh=
+t:24px;">Feeling drunk when you=E2=80=99ve had little to no alcohol</span><=
+/li><li style=3D"line-height:24px;"><span style=3D"color:#000000;font-famil=
+y:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">Sud=
+den change in body temperature (hot and cold)</span></li><li style=3D"line-=
+height:24px;"><span style=3D"color:#000000;font-family:Arial, Helvetica, Ar=
+ial, sans-serif;font-size:14px;line-height:24px;">Heart rate changes</span>=
+</li></ul><p class=3D"text-build-content" style=3D"line-height: 24px; margi=
+n: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-fa=
+mily:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">=
+<b>Campus resources are available</b></span></p><p class=3D"text-build-cont=
+ent" style=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H=
+"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-se=
+rif;font-size:14px;line-height:24px;">If you think you may have consumed a =
+spiked drink and you need support, please reach out to the following resour=
+ces:</span></p><ul><li style=3D"line-height:24px;"><span style=3D"color:#00=
+0000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-he=
+ight:24px;">For urgent medical needs, call 911 or get to an emergency room.=
+</span></li><li style=3D"line-height:24px;"><span style=3D"color:#000000;fo=
+nt-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24=
+px;">Call </span><a class=3D"link-build-content" style=3D"color:inherit;; t=
+ext-decoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AXE=
+AABHHY-4AAclS0ZoAAM105GoAAYCrInQAJUfFAAhvEABkEiUoZfGiSPZgTCqZL2BExNCO1AAIBD=
+M/3/Behcv7AVXpwBBGMfYcvoTA/aHR0cHM6Ly9wb2xpY2UubWl0LmVkdS8"><span style=3D"=
+color:#1c80ff;font-family:Arial;font-size:14px;line-height:24px;"><u>MIT Po=
+lice</u></span></a><span style=3D"color:#000000;font-family:Arial, Helvetic=
+a, Arial, sans-serif;font-size:14px;line-height:24px;"> at (617) 253-1212 o=
+r dial 100 from any MIT phone in an emergency.</span></li><li style=3D"line=
+-height:24px;"><a class=3D"link-build-content" style=3D"color:inherit;; tex=
+t-decoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AXEAA=
+BHHY-4AAclS0ZoAAM105GoAAYCrInQAJUfFAAhvEABkEiUoZfGiSPZgTCqZL2BExNCO1AAIBDM/=
+4/gP-1_2zB6_jvlfv7wJO70A/aHR0cHM6Ly9kb2luZ3dlbGwubWl0LmVkdS9zdXBwb3J0LTMv">=
+<span style=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:2=
+4px;"><u>DoingWell</u></span></a><span style=3D"color:#000000;font-family:A=
+rial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;"> can h=
+elp connect you to many support options.</span></li><li style=3D"line-heigh=
+t:24px;"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, =
+sans-serif;font-size:14px;line-height:24px;">These and other resources are =
+available on the </span><a class=3D"link-build-content" style=3D"color:inhe=
+rit;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/=
+lnk/AXEAABHHY-4AAclS0ZoAAM105GoAAYCrInQAJUfFAAhvEABkEiUoZfGiSPZgTCqZL2BExNC=
+O1AAIBDM/5/a9EGnCmRF0TJPviMv_87Mw/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L2FvZ=
+HMvYWxjb2hvbC1pbmZvL2RyaW5rLXNwaWtpbmc"><span style=3D"color:#1c80ff;font-f=
+amily:Arial;font-size:14px;line-height:24px;"><u>AODS website</u></span></a=
+><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-ser=
+if;font-size:14px;line-height:24px;">.</span></li></ul><p class=3D"text-bui=
+ld-content" style=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKV=
+vbOW58H"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, =
+sans-serif;font-size:14px;line-height:24px;">It=E2=80=99s not your fault if=
+ someone attempts to spike your drink=E2=80=93a victim is never responsible=
+ for a crime. Still, it is important for you to be aware of these risks. Ho=
+wever you enjoy springtime in Boston and Cambridge, please take precautions=
+ to keep yourself and your friends safe.</span></p><p class=3D"text-build-c=
+ontent" style=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW=
+58H"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans=
+-serif;font-size:14px;line-height:24px;">Sincerely,</span></p><p class=3D"t=
+ext-build-content" style=3D"line-height: 24px; margin: 10px 0;" data-testid=
+=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial, Helvetica, =
+Arial, sans-serif;font-size:14px;line-height:24px;">Judy Robinson&nbsp;</sp=
+an><br><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sa=
+ns-serif;font-size:14px;line-height:24px;">Senior Associate Dean for Reside=
+ntial Education</span></p><p class=3D"text-build-content" style=3D"line-hei=
+ght: 24px; margin: 10px 0; margin-bottom: 10px;" data-testid=3D"PKVvbOW58H"=
+><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-ser=
+if;font-size:14px;line-height:24px;">John DiFava&nbsp;</span><br><span styl=
+e=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-siz=
+e:14px;line-height:24px;">Chief, MIT Police</span></p></div></td></tr></tbo=
+dy></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr>=
+</tbody></table></div><!--[if mso | IE]></td></tr></table><table align=3D"c=
+enter" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"=
+presentation" style=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-h=
+eight:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div sty=
+le=3D"margin:0px auto;max-width:600px;"><table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"width:=
+100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20px 0px=
+ 20px 0px;text-align:center;"><!--[if mso | IE]><table role=3D"presentation=
+" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=
+=3D"vertical-align:top;width:600px;" ><![endif]--><div class=3D"mj-column-p=
+er-100 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;directi=
+on:ltr;display:inline-block;vertical-align:top;width:100%;"><table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"v=
+ertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"left" style=3D"f=
+ont-size:0px;padding:0px 20px 0px 20px;padding-top:0px;padding-bottom:0px;w=
+ord-break:break-word;"><div style=3D"font-family:Arial, sans-serif;font-siz=
+e:13px;letter-spacing:normal;line-height:1;text-align:left;color:#000000;">=
+<p style=3D"text-align: center; margin: 10px 0; margin-top: 10px; margin-bo=
+ttom: 10px;"><span style=3D"font-size:10px;text-align:center;color:#5e6977;=
+font-family:Arial;line-height:22px;">This e-mail has been sent to jiannan@m=
+it.edu, </span><a href=3D"http://iz1w.mjt.lu/unsub2?hl=3Den&amp;m=3DAXEAABH=
+HY-4AAclS0ZoAAM105GoAAYCrInQAJUfFAAhvEABkEiUoZfGiSPZgTCqZL2BExNCO1AAIBDM&am=
+p;b=3D4fae9a1d&amp;e=3Dca577d58&amp;x=3Da7iET_5Bkh8rOy7esnA68A" target=3D"_=
+blank" style=3D"; text-decoration: none;"><span><span style=3D"font-size:10=
+px;text-align:center;color:#0000EE;font-family:Arial;line-height:22px;"><u>=
+click here to unsubscribe</u></span></span></a><span style=3D"font-size:10p=
+x;text-align:center;color:#5e6977;font-family:Arial;line-height:22px;">.</s=
+pan></p></div></td></tr></tbody></table></div><!--[if mso | IE]></td></tr><=
+/table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td><=
+/tr></table><![endif]--></div>
+<br><img src=3D"http://iz1w.mjt.lu/oo/AXEAABHHY-4AAclS0ZoAAM105GoAAYCrInQAJ=
+UfFAAhvEABkEiUoZfGiSPZgTCqZL2BExNCO1AAIBDM/4fc95fbb/e.gif" height=3D"1" wid=
+th=3D"1" alt=3D"" border=3D"0" style=3D"height:1px;width:1px;border:0;">
+</body></html>=
+
+--=-eVgwQiKYEfHsWxHAq+Yu--

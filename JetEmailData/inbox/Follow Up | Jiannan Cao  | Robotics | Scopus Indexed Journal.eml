@@ -1,0 +1,593 @@
+Received: from BL3PR01MB6899.prod.exchangelabs.com (2603:10b6:208:356::8) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Thu, 30 Nov 2023 11:11:06
+ +0000
+Received: from BLAPR03CA0129.namprd03.prod.outlook.com (2603:10b6:208:32e::14)
+ by BL3PR01MB6899.prod.exchangelabs.com (2603:10b6:208:356::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.24; Thu, 30 Nov 2023 11:11:05 +0000
+Received: from MN1PEPF0000F0E2.namprd04.prod.outlook.com
+ (2603:10b6:208:32e:cafe::a5) by BLAPR03CA0129.outlook.office365.com
+ (2603:10b6:208:32e::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.23 via Frontend
+ Transport; Thu, 30 Nov 2023 11:11:05 +0000
+Authentication-Results: spf=fail (sender IP is 18.7.71.73)
+ smtp.mailfrom=AI-MLIntelligence.com; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=AI-MLIntelligence.com;
+Received-SPF: Fail (protection.outlook.com: domain of AI-MLIntelligence.com
+ does not designate 18.7.71.73 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.7.71.73;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.7.71.73) by
+ MN1PEPF0000F0E2.mail.protection.outlook.com (10.167.242.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Thu, 30 Nov 2023 11:11:05 +0000
+Received: from w92expo6.exchange.mit.edu (18.7.74.60) by
+ w92exhyb3.exchange.mit.edu (18.7.71.73) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Thu, 30 Nov 2023 06:10:50 -0500
+Received: from oc11exhyb5.exchange.mit.edu (18.9.1.110) by
+ w92expo6.exchange.mit.edu (18.7.74.60) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Thu, 30 Nov 2023 06:10:50 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ oc11exhyb5.exchange.mit.edu (18.9.1.110) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Thu, 30 Nov 2023 06:10:50 -0500
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=n/MQk2HIld4lhv2hYPmw9ezVjmgeVB7X+nIcMn2zKAGmmOSMAAT7ZMSP3MRbMYImXKDdwwZCzvpT9FYKR5n6++3i0NtuSpvj0LHXzAOOcrfl+ZMWs004GCkxcbhavwoOhuJ5ofhFg5Q9pzw5SEEueikBXjLMk5yThVaGRot3FVXAZTXwHB20lqgnQDN/gbLEC0Yf/IH/tnpM7IA/Y2Vn0bhByDcsRwU/s7f2Tav2fqT+kcMX7Nxk7z2MewqWfimA4F1Q2BuXeMzDlIsjm9OUSS/uQyxHxCXprlt5KJ9I2PM7x5toutzxF3RzZPs1l0EMIvo97d2VNIQLb1aBz6TmDQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=26iYZdR2rTQ/+9HgUM5ZQ51y0vtStIkTZwsmHN8bQQs=;
+ b=V3hZIuBZ4WSNYtp2KiOBknwVo+nK9HOLpZo5q3hzQw6EGeZlk48JD9OwjfoGDrb8VrS3GJ1czn+5efeCvqZeOwz4sxWFbxAEs/fuGmvOVp9BLJhRRytYMfB0VYIPpIhv/mVNMeT7rdD99Ud1U8LVFcHf/hDa4lD4KYfNIWGY3u8kGEq/kOMmMoergobLJYi2ewxFvM+nD5zN9nBI23cKFqCYnaB4V9TR42nJHvjWMDikAtlyz79uhq1GgW/vZPPNcu5fPoAEJaNkyZa+2uvFAu16XEEMTjumkcf2AKJal2XfoBnZl3nqp6I+FtedFP+3a3aSiG380/GfCdrUKWGAYw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 40.107.222.86) smtp.rcpttodomain=mit.edu smtp.mailfrom=ai-mlintelligence.com;
+ dmarc=bestguesspass action=none header.from=ai-mlintelligence.com; dkim=none
+ (message not signed); arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=ai-mlintelligence.com]
+ dkim=[1,1,header.d=ai-mlintelligence.com]
+ dmarc=[1,1,header.from=ai-mlintelligence.com])
+Received: from SJ0PR03CA0151.namprd03.prod.outlook.com (2603:10b6:a03:338::6)
+ by SA0PR01MB6441.prod.exchangelabs.com (2603:10b6:806:d9::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.29; Thu, 30 Nov 2023 11:10:47 +0000
+Received: from CO1PEPF000044F3.namprd05.prod.outlook.com
+ (2603:10b6:a03:338:cafe::d4) by SJ0PR03CA0151.outlook.office365.com
+ (2603:10b6:a03:338::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.29 via Frontend
+ Transport; Thu, 30 Nov 2023 11:10:47 +0000
+Authentication-Results-Original: spf=pass (sender IP is 40.107.222.86)
+ smtp.mailfrom=AI-MLIntelligence.com; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none
+ header.from=AI-MLIntelligence.com;compauth=pass reason=109
+Received-SPF: Pass (protection.outlook.com: domain of AI-MLIntelligence.com
+ designates 40.107.222.86 as permitted sender)
+ receiver=protection.outlook.com; client-ip=40.107.222.86;
+ helo=IND01-MAX-obe.outbound.protection.outlook.com; pr=C
+Received: from IND01-MAX-obe.outbound.protection.outlook.com (40.107.222.86)
+ by CO1PEPF000044F3.mail.protection.outlook.com (10.167.241.73) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Thu, 30 Nov 2023 11:10:46 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hSWn/Fz32MHzb7qzjaUtf6PLBERliJRfYHtjBjNIlL6u1mSFOx8b9E8u+0GK8QkSrOWbxWQfi+PbSRTF4oIxDfCZirJ7ecCMAc5L1r6BlFXBQld5oiwo3XMhBPtIgETlG5cn/cZInJ9jHBjVD+SZq3RFxEbM1D9a5z6w65+1whmRXwKBHknkaW0KFadoRU/is5uRmkNJ2/JatXrSxbOqSKIexkvBKUsUpP94p7H73lCL9v4Ks4hJODWJF/zpZsDK6FVw4wUqrBnVt5kaXBnNas1jl4UoZablCb6YRxO6OoK16mfv4AOr8wtDJ+77szzyuzs9qTXPGlwP1qrlJbFPgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=26iYZdR2rTQ/+9HgUM5ZQ51y0vtStIkTZwsmHN8bQQs=;
+ b=jMON1LilP19J0YRm9iogvso7grnE9LxU9zH50imw/dGicuSNJWz037vKZnSugtNFOSoyu3JoegLAD9yia3HC7tIpCeb9Pw/XEgZn3ZkvtIv2bIuARJU6qMwatwolA9L1UXUaZMzXzDt6pwRpMdmUwKH8WgHGUF8PhuZ7/fG+We65yMRThgPXdtlm4oPkgScd0/SP667qtyPFcF+8DCj+47GmjVGC+q/3gx/fa4hCzWfQOvXxsHdFIinxOkaVAj83df57H9CCAnw2hIzrQG41geD/YIPX/CD3m7nttIulFiEe4SgJcjn+frsfLfLabbpYGG50GeELSCrELIABXWfrBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=ai-mlintelligence.com; dmarc=pass action=none
+ header.from=ai-mlintelligence.com; dkim=pass header.d=ai-mlintelligence.com;
+ arc=none
+Received: from PN2PR01MB8427.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:58::7)
+ by PNZPR01MB8362.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:3a::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.24; Thu, 30 Nov
+ 2023 11:10:43 +0000
+Received: from PN2PR01MB8427.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::b34:e012:d5b1:66d0]) by PN2PR01MB8427.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::b34:e012:d5b1:66d0%4]) with mapi id 15.20.7046.024; Thu, 30 Nov 2023
+ 11:10:43 +0000
+From: Artificial Intelligence <Artificial-Intell@AI-MLIntelligence.com>
+To: "jiannan@mit.edu" <jiannan@mit.edu>
+Subject: Follow Up | Jiannan Cao  | Robotics | Scopus Indexed Journal
+Thread-Topic: Follow Up | Jiannan Cao  | Robotics | Scopus Indexed Journal
+Thread-Index: Adojfdg5lo5TYuULRha974JfOFPQqw==
+Date: Thu, 30 Nov 2023 11:10:43 +0000
+Message-ID: <PN2PR01MB8427FADFF84B9B677EDE73B2B982A@PN2PR01MB8427.INDPRD01.PROD.OUTLOOK.COM>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=AI-MLIntelligence.com;
+x-ms-traffictypediagnostic:
+ PN2PR01MB8427:EE_|PNZPR01MB8362:EE_|CO1PEPF000044F3:EE_|SA0PR01MB6441:EE_|MN1PEPF0000F0E2:EE_|BL3PR01MB6899:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: f226f629-e7b2-4c99-3378-08dbf1950bcf
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: T4ohGi8xcWvOifc5Dv8sw0uFOXjNzIZ/Jxo/HSmehxGoWttTjB1cgfRedlx+xMradiJesfw1dWNQWiWznAmtMP11FZ3DWrk0a7dbsgHTeAd4zuE+5AVTjOk3ZtCmC4/6rJMg48XtVVQEjAR0kuvFwV7oTVvWT44MqlK7bPvkvUEQtc7nMAK2AXe05Yc0cNd4gk008kxGlvqi4QWu4ew7loucztTZLci48+0R8bCiUMg+L2fIvGPvECVegGIBn7HIEoPmBie/Jc/o8u3G2F5/95X44lFfKGM6hmANhE+kWa5QCq93aDL/dKMK36hSaa9UoGr8qDsJicLVVI+zXHnJwzgPUgqnodLjMmJPV24mtg+sbXQ64DUewkGTeAfYpUcABHSQrnPnsGm5ulC0UeVGuEj3iRKKu1Yic/8TPDg/V0eTIiiIYhAntPH5cdG3QcceC3vOqF4NNxooDftKomBHlrsSL8Vlf0zWpUuUUSHykFKuoP9eidNUdhXppC7e3u8ncWbOuSO6/k0pJ4sD8lsu2pcu8eK6c3yC07Hg/8+/FghH6I2dQHJkZKvTGVUnw6T1AyY1mah5SKIipNj0V1TghDBXD6uZi9rWEEVVJTNmgZx8NZbzxU9CGEKe5Cenu7JAf+Th/jIIfJdDlRnm1wpF3Q==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN2PR01MB8427.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(39850400004)(136003)(376002)(346002)(230922051799003)(186009)(1800799012)(64100799003)(451199024)(9686003)(26005)(71200400001)(478600001)(7696005)(6506007)(83380400001)(41300700001)(76236004)(5660300002)(2906002)(76116006)(52536014)(8676002)(8936002)(64756008)(66446008)(66476007)(66556008)(66946007)(316002)(6916009)(122000001)(166002)(38100700002)(38070700009)(33656002)(86362001)(55016003)(202311291699003)(66899024)(5006899006)(1406899027);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-Original-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-Original-0: =?us-ascii?Q?Pz1baXWeMxFtgtRvmLxvkuyagAN+FSKW4FJdHanfrSCd9mcNJnG0J+CTfI+k?=
+ =?us-ascii?Q?YHudGBh9I7OfpwSY3N3Bd/8menP+h7jvK+I/6Ga7U0bh7Q77JQ6vak9h0+Wh?=
+ =?us-ascii?Q?HFJVXUSQD1CX2nEwPF4q7lXrKns4cLoRNdsN8HXI6nboQ3q6rswECEv8sLmr?=
+ =?us-ascii?Q?JyV1leNTtvAN/ZZ0sePlJAoQRluJLhwXS25nwLOH/a3dSG9WY+kCJnKQ1Esr?=
+ =?us-ascii?Q?S1vCu6m7wEtu6NqxDPgjxRaG/MyIiK8bf+x7zNNy7aLL5aBu0OvDcZVl3cjw?=
+ =?us-ascii?Q?cnmduvgBPXa+6pysR2/j8p46wsu19XjdpjZRpmo6AXPpiE7cD6/jRq++NWUH?=
+ =?us-ascii?Q?+w0gaP/lw1rpBNYV3OH+KpFy78DiXNK8iBKSs3y1IqhEgNJVWmOUh8fUnMXs?=
+ =?us-ascii?Q?Yx/Bi2JVfuD0cW12wrXu9oMf6bTls3YNpNAl9CBZUbz+gUSZb1cD0soTKfK0?=
+ =?us-ascii?Q?uiOKnefGNbYqcbkksm/9B6ycwn/BacnU54GPSUMUquPN5AUpPpm3g5MFSoBu?=
+ =?us-ascii?Q?PiLHN09mMVD3O6TkzOfHBvTzr0nnUyVNNjyXQ907wWF6UIyT5sc6wqa8RsI1?=
+ =?us-ascii?Q?XhCb2Qw1jIoceiyyH5CwyhdtveFxaewl8zks/kSDUhpkpPs+mQNGTVZf4KSz?=
+ =?us-ascii?Q?6Z/5PQY+rFthGYkWXCmhTuYNkSDlFbFTMOYQ8/QHrLSCuLGidtjc0j/Ql8ig?=
+ =?us-ascii?Q?kLKpQbCsZ4+R1AOA7cZZhQxbvxMrV2TobDBuC3bTJtbjWBZEbjH2sxHmag5/?=
+ =?us-ascii?Q?O/274OmOAqhhUa9PS4csPqbWM5r9ArhOtKGfLZDIJDUhz+rWJEVNnt0wNlo6?=
+ =?us-ascii?Q?xdlsjlZPxDT4kHNacB2wYspMoWhu5T+G8ONw4jfNJADt7vVf/N6DyOQbqhpt?=
+ =?us-ascii?Q?3zuEm7I+RO0wcaXs6rGR+tgq0ry4QErXXBH/3TYuoU+fu9uNs/1tUkE1LeEy?=
+ =?us-ascii?Q?wCfpKE0WRlBggQtl0ZxXesw0q/S+DU9tRPpHmyHl5EFNWU+aFZ7LjcOdEMcr?=
+ =?us-ascii?Q?NwVdKNd4AX+ZLJWdRFWS8mpkoca2iYpzvPktki0YBu6+jnOxxQmaAbpiS+8S?=
+ =?us-ascii?Q?7Xv1F0GmI1GwldnHOMAA6fdJ+b5FBXZHQFYElnm5S+6lhOgMUXrS4KQT1qiq?=
+ =?us-ascii?Q?95BUmnWqN6wGOHsgd3CGGXtArMl7T9pSnzteQYdg6ahu64R92BDZtKPgxBNW?=
+ =?us-ascii?Q?rNu1aWTynFadq9JOVRL1rFyc9SKm3+Y2Pqxw2NNd5nPS5VBaGu3MbbtBNAmq?=
+ =?us-ascii?Q?0bTNCLCNeG6wxiUZxD3HF7vwNqCsN1CCyBdKO/JYJEFm5Qp91W0w+pS31fYl?=
+ =?us-ascii?Q?CYxqwiumXPIGThT/Qnc7PgFTGGBHX+/Mtn7dVVQxwh9zwTaovDpvD99noNyu?=
+ =?us-ascii?Q?Itir2ItU04lEeF6g6rMvJhx4wQiYJJ4FRjgk80rKwNEN5XKoD4FQV1zmDRgH?=
+ =?us-ascii?Q?idE6j3wdonrOgWXOpdIfeB92Bh24mf8DX1gxCqVgX7VDZQKH432gHRuREdgK?=
+ =?us-ascii?Q?xRJS0CYgxiuGNa20IigQodmouzSf1cg3kWgCOptdEALb2R7NZpjQmHptE5q3?=
+ =?us-ascii?Q?SA54z5tZm49VYTRX59nqZWwVEBeNG/emQzm5khJ5FBCuHxVuErKhw38BZ11B?=
+ =?us-ascii?Q?uv0ued7YoxAQlVFk4G2C9sk=3D?=
+Content-Type: multipart/alternative;
+	boundary="_000_PN2PR01MB8427FADFF84B9B677EDE73B2B982APN2PR01MB8427INDP_"
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNZPR01MB8362
+Return-Path: Artificial-Intell@AI-MLIntelligence.com
+X-EOPAttributedMessage: 1
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: CO1PEPF000044F3.namprd05.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersPromoted: CO1PEPF000044F3.namprd05.prod.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 5797b4c6-bfb2-4b3a-20a1-08dbf194fe92
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?oeaOGKTctyXH/YMbpx0OTKfrPwT8xoWQxFrd5B/JuqpGannipNExJ3BhyxOy?=
+ =?us-ascii?Q?zp4abtVnC/i7IjEqusSBBN0XHalDt44WGaXdx42ZuSDAzggXltrFMoNMF/ug?=
+ =?us-ascii?Q?k0R5GcHWCVvIoBLMQp6Pnf7idEexmSdmx1e/Z/A0rnZ9AZ/twJX0i4rYkmOh?=
+ =?us-ascii?Q?FkDpeYLyTSoVjauxT7cl2dojyfSYHG8v+Jye0C08tdi/gV0uO34josecgTsf?=
+ =?us-ascii?Q?eiQxCCDxFTXNOHRsvFEoT/TR14sQS8JYa0JwI5BYKr3uI76H2dczgSp3jkem?=
+ =?us-ascii?Q?Ja2laz0L+Ud+RC2THCUfHb0OZ5KASSPaOJDPziJ5ZvgD+/jwAGDd2P0GdEXD?=
+ =?us-ascii?Q?lJ2KW/5l94d6IschN9B8BN7ilLvSo8rlNO5tGCXxQ2uYaR4XIYaFijWhL+lq?=
+ =?us-ascii?Q?jsd1YX/S/9qlJJrD+SkXWN89zHPTGhH1hJfjw44F7/Dnd/yblK5NgHtOUSOj?=
+ =?us-ascii?Q?XQwCUdmZQS0y0hS9nzWUDKq9riLVR9z+zEfJv3Pj14B0NFosSvAjmQXD8cGa?=
+ =?us-ascii?Q?y4n9BvZV4e5wHpvy8Zb2hOHXWTgCrDwmm0JGQXXZwVKPiVvoNyH66RC9y60u?=
+ =?us-ascii?Q?jRm6IEVIdOUwEoQnHcA9h5zIsmAHad6sldnA9hF5cRYMn1amBhbvoMN2bRL0?=
+ =?us-ascii?Q?EnFalQhliotNucnt0/OSW+rtvQIeTPwWIjKxL8ruJfrzXgRYoiAHIuZYAfZJ?=
+ =?us-ascii?Q?vYHHzxqs8wxO70EU8w/IYTurV9wc0aLiEuvjw54ww14qFyR5Zu42Krw81+9y?=
+ =?us-ascii?Q?Vxfx+sl+ATHGgixBX4fed1ta7lWAlQq4yVO8Ui7pDv4KYPQOR9zbJg67sZd6?=
+ =?us-ascii?Q?nygCHTZN6LtpxqjtzoaNix04dnMAYTs+g4AhTvA90oRCgvOx6J/s+o44auLx?=
+ =?us-ascii?Q?yw6NFx1X6b9rA0iQcP/Z/iIbRULExvt4yj21uq8LXFWC4MaFUuVcf4DhQmzd?=
+ =?us-ascii?Q?kUPtPXC2l+M52WL6OS811FmCoCq5nvDYmYS+gTjcsVv3yKNJ6HttG6ntKn2v?=
+ =?us-ascii?Q?xD27IFFthxQYGBLfP8czu5a/+tBQ/WlJzHDGk5frMpBtBkTrqPgAmJlRCmPd?=
+ =?us-ascii?Q?pM+4F7kTAqlpGLOqgts40pOedl66+YoPHTYuilhGi8QP1QcBpOGpqSavw6OA?=
+ =?us-ascii?Q?WfIrMas1kKQC2LbOw2isPHs11sEwLqx+8+a7+vqfZvfVplms9a4r0oyAJHl2?=
+ =?us-ascii?Q?I0z19cpnfafFxp8Sks5AEMBmwkDJvXfMVy52wxO0T2jcyD0I9vRQ7qp7k16P?=
+ =?us-ascii?Q?SzsHKx00kp7SwMHgjZ2JaFEmWa0Eh+IZzaRtpVktf/xzm03t7mt9G+pOBppi?=
+ =?us-ascii?Q?cZOvm3blv94ZODU5mu9x7/wWmElWNCfzbL39FP3TcDftUPJD2f2cRirLaUYl?=
+ =?us-ascii?Q?hSf2TQS8IiHLhzS4wik9SwKHugrUWc+JS1mjxPT6dMzhr5MYjvo8YruGW7pJ?=
+ =?us-ascii?Q?4PKWXHR2HndmbBNP3AsyUe8r2xZSrjRJCpLAeECDYHZFLp68nZjz4dPSeRFn?=
+ =?us-ascii?Q?W33E/xAsWxJVBdUWvWzTcLuZmMx/akzB50LR87mqBW/BAG8Ay6R1OKlp39nC?=
+ =?us-ascii?Q?SJhzwqDLMscs3M5yel8znd3aWYS7c7pcVgS28U8PR3zvqg3OI90dM4ZRJlqa?=
+ =?us-ascii?Q?w4Q+771OpPvgJVS9ufUANN2t/EzQGFk/Y/kVLH1xvnqj5G1z2Ko1cWdIgtw6?=
+ =?us-ascii?Q?3mKxQA8mvaAGdevNBxv6yxIS+Y9R8PBdjvOB6v0NrGACZr7p1jNgdUncIFew?=
+ =?us-ascii?Q?U5X1cKQYrHqiQRlsTH7H5B8Lmrv7x++5XgCEpSXo2q+BxMO6WHkI/5k4AzMf?=
+ =?us-ascii?Q?Q4hDWxT+CF9HT5Wv/bWRblDtoPFW1PNNp/k=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:40.107.222.86;CTRY:IN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IND01-MAX-obe.outbound.protection.outlook.com;PTR:mail-maxind01on2086.outbound.protection.outlook.com;CAT:NONE;SFS:(13230031)(4636009)(6302899012)(451199024)(1096003)(75640400001)(55016003)(76236004)(4006050)(52536014)(66899024)(8676002)(86362001)(9686003)(7696005)(6506007)(336012)(6916009)(5660300002)(202311291699003)(22186003)(58800400005)(26005)(33656002)(166002)(83380400001)(356005)(83290400002)(83280400002)(8636004)(7636003)(83320400002)(83310400002)(83300400002)(1406899027)(76899018)(4306899006);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR01MB6441
+X-OrganizationHeadersPreserved: SA0PR01MB6441.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb5.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb5.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo6.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 30 Nov 2023 11:11:05.3606
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ f226f629-e7b2-4c99-3378-08dbf1950bcf
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: MN1PEPF0000F0E2.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: MN1PEPF0000F0E2.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ MN1PEPF0000F0E2.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1PEPF000044F3.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ f0a27434-19f0-47c5-575c-08dbf19500c7
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.73;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:w92exhyb3.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2023 11:11:05.2669
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f226f629-e7b2-4c99-3378-08dbf1950bcf
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.73];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1PEPF000044F3.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR01MB6899
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.2183017
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7046.004
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?Windows-1252?Q?hghIj1j8xF9lOz5nnK1dT/Zlo5oKjBM6QLaS4ilb8sdu0cEgBRMVvRDQ?=
+ =?Windows-1252?Q?2DgIRvtTYLkgrlcuPCV9mQx91WpThbWz0NYXHkXnZRCe7M+wwqzwA7xA?=
+ =?Windows-1252?Q?/NQHdJ67EYIiNgBhoZES//h1oateS8nuPxzqRyOPhYbaugugXj6JTiXq?=
+ =?Windows-1252?Q?t+hEFmgHkHllfTPzr/EA/EEGoPdYGsrafb6jRwL6Hp4zUD8B3zSk9/9b?=
+ =?Windows-1252?Q?sTj8Y87I4CFYm4sJMrIf8M2GT2X7eEEfM3rwqW+7fcg++Vu++dUu6K1w?=
+ =?Windows-1252?Q?nxZKHwEc0EsVQH17x3yGXAIn+dVbWANnsK6Fc24zRAW7xF2gFLJKyCXA?=
+ =?Windows-1252?Q?QZ4V7dyzvxoWYspGiKJ3pH7Zr8V25TIC8NuD1AILPSpVAnQ0J5Iy85Tg?=
+ =?Windows-1252?Q?1gx7w5+rIwhZjPD70SuXdCSwvJ2tIOjhP4pDvTFlRqJpU8A15SuXPWyu?=
+ =?Windows-1252?Q?m+LtMu9OWR+V1r+QV2TASeabtdKCsGzKn+QdGJnrT/Y7eQMIA0KkTM+K?=
+ =?Windows-1252?Q?/zLRZpmdeBL4f+e4RikCRJ8H3Ln7WWsLqQqIybWDZe0oHrFo1B+ARyR8?=
+ =?Windows-1252?Q?+6TrKefWS/gwVzWemeXPgxPHc5mKQ9lqHyUurZwGRfnNpx/dxfX0I/Ja?=
+ =?Windows-1252?Q?ENLDwypvnp1GC666aUFBrKtvUBJRVvvc74oV5Jr1kOj2PPekp0V2jr1E?=
+ =?Windows-1252?Q?w1ghbPcVNsrKigcEPLcjNGHXUkTFvTH7i8iyd9wtU/EhjS2uN4O4BJi6?=
+ =?Windows-1252?Q?2+9WOoMWnv1wmQAF0rjD86tnkL1vmfV222A0W+F4tK/CAewSMAOE7y5l?=
+ =?Windows-1252?Q?t6jlp9CaD17qWM8H9Qm+RKWfcWHxz3XlxXapyPg5FcwcWNSMuba7px8O?=
+ =?Windows-1252?Q?UNjgjviJ0YTptrJSfBNtEKKqXJGwDL+IWzNH9PQMrWJToRin2NVTSqub?=
+ =?Windows-1252?Q?Yl7BUSc3kwz6DmkHogQ4MT0vneKzxIh7NFKvcRI+bep+tjNGc/ft63FP?=
+ =?Windows-1252?Q?x1QBWkV5Bp5NNDBrxeFk+4oyZS1j7hyfo8IkhI9suJvYHK2YqKy2ir6p?=
+ =?Windows-1252?Q?zvYUH/cDzYDdSPJ7P0I7lxtaQ/Mr5z4bRNv3TnYMyW2d+JczTAEDCuXW?=
+ =?Windows-1252?Q?G27f03DfY2+9jMYmAaWgVgcQzAsBFXBnmDaRXgpNEV4m6On/j8E47SvQ?=
+ =?Windows-1252?Q?k4kYWXMv1bFL/b+VBZUz1Pb5VgsVmpLwyt7T/gbSyTfwluEsCyuIqqxz?=
+ =?Windows-1252?Q?a/R7fghNdPsptBb7m/sz4UxF7gwC2niQbdXK0BlNWT3I+plo10eaWbMD?=
+ =?Windows-1252?Q?kXYP6tKmmDiWUJv1Fu7CRo8RUaiKNn59XoK32mEnLLSWEYietr+zO+Rb?=
+ =?Windows-1252?Q?JwvxECWcw5EEhIo7+9sVLz4AU80DQUFXi4qvoHFsHGea3UzkaYJEZZsX?=
+ =?Windows-1252?Q?L5nIHuxYH1CN0nfCCfav5KHUk4l9RTG+gjxJaOTcGo35+uXgMLQTHD6o?=
+ =?Windows-1252?Q?0CtK/d0cGMqCBYecS34je1Nne+iqJJ6m9BfudSXxVgpFd9zwtPGDlVkl?=
+ =?Windows-1252?Q?Mime+m84a6bv14f03H1avhFGGn+zj5pyeuFyR46YeO8aRPEVC/U0PmyR?=
+ =?Windows-1252?Q?qvIzXvlhAc5qae4l+PlrvxI58XpiKJxknul05ZAhyyQQfvtmcw42Zv8C?=
+ =?Windows-1252?Q?mR4S5V7ThGlwAt1q3sf5RTnD0HiAXo07HcIR3RKCJhpOj2leUMddmqEG?=
+ =?Windows-1252?Q?n5B0M/sGFfpNH+CpPagSFfmIXxT9XVar1Y+xvSoA4ZVwzpKXLi3ocNJw?=
+ =?Windows-1252?Q?c+SaLgwI1yjxfapF2qFSlsOCLAF66ZAJHRYLDKDvOfh9rL7T?=
+MIME-Version: 1.0
+
+--_000_PN2PR01MB8427FADFF84B9B677EDE73B2B982APN2PR01MB8427INDP_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Dear Jiannan Cao,
+I trust this correspondence finds you in good health.
+I am writing to extend an invitation on behalf of Advances in Artificial In=
+telligence and Machine Learning<https://www.oajaiml.com/> (ISSN: 2582-9793,=
+ IF: 0.605, Cite Score: 0.7), a distinguished Journal, proudly indexed in e=
+steemed databases such as SCOPUS<https://www.scopus.com/sourceid/2110116461=
+2>, DBLP and other major databases.
+Your significant contribution titled "PROAGENT: FROM ROBOTIC PROCESS AUTOMA=
+TION TO AGENTIC PROCESS AUTOMATION" to the field has garnered our attention=
+, and we would be honored to feature your esteemed work in our upcoming iss=
+ue Volume 3 Issue 4.
+Key Details:
+
+  *   Indexing: SCOPUS, DBLP
+  *   Submission Deadline: 7th December 2023
+We are lacking just one article to complete the Issue and we are pleased to=
+ offer you a 30% discount on the publication fee if manuscript will be subm=
+itted on or before the specified deadline.
+For comprehensive submission guidelines kindly visit our Autor guidelines p=
+age<https://www.oajaiml.com/authorguide>.
+Let us know, if you have any other manuscript too for submission. We eagerl=
+y anticipate the opportunity to showcase your work in our indexed journal.
+Best regards,
+Mr. Yash k.
+Journal Coordinator
+Advances in Artificial Intelligence and Machine Learning
+Tc-1/7, TC-1
+New Moti Nagar
+West Delhi Delhi-110015
+Shimur Publications
+
+click here to unsubscribe<https://oajaiml.com/newsletter>
+
+
+
+
+
+
+--_000_PN2PR01MB8427FADFF84B9B677EDE73B2B982APN2PR01MB8427INDP_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:blue;
+	text-decoration:underline;}
+span.EmailStyle18
+	{mso-style-type:personal-compose;
+	font-family:"Times New Roman",serif;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-size:10.0pt;
+	mso-ligatures:none;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+/* List Definitions */
+@list l0
+	{mso-list-id:379406151;
+	mso-list-template-ids:-2064614956;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:3.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l0:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:4.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1
+	{mso-list-id:947200332;
+	mso-list-template-ids:456394924;}
+@list l1:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1:level2
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1:level3
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:1.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1:level4
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:2.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1:level5
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:2.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1:level6
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:3.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1:level7
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:3.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1:level8
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:4.0in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1:level9
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:4.5in;
+	mso-level-number-position:left;
+	text-indent:-.25in;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"blue" vlink=3D"purple" style=3D"word-wrap:brea=
+k-word">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%"><span=
+ style=3D"font-family:&quot;Times New Roman&quot;,serif">Dear Jiannan Cao,<=
+/span><o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%"><span=
+ style=3D"font-family:&quot;Times New Roman&quot;,serif">I trust this corre=
+spondence finds you in good health.</span><o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%"><span=
+ style=3D"font-family:&quot;Times New Roman&quot;,serif">I am writing to ex=
+tend an invitation on behalf of
+</span><a href=3D"https://www.oajaiml.com/"><span style=3D"font-family:&quo=
+t;Times New Roman&quot;,serif;color:#0563C1">Advances in Artificial Intelli=
+gence and Machine Learning</span></a><span style=3D"font-family:&quot;Times=
+ New Roman&quot;,serif"> (ISSN: 2582-9793, IF: 0.605, Cite
+ Score: 0.7), a distinguished Journal, proudly indexed in esteemed database=
+s such as
+</span><a href=3D"https://www.scopus.com/sourceid/21101164612"><b><span sty=
+le=3D"font-family:&quot;Times New Roman&quot;,serif">SCOPUS</span></b></a><=
+span style=3D"font-family:&quot;Times New Roman&quot;,serif">,
+<b>DBLP </b>and other major databases.</span><o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%"><span=
+ style=3D"font-family:&quot;Times New Roman&quot;,serif">Your significant c=
+ontribution titled
+<b>&#8220;PROAGENT: FROM ROBOTIC PROCESS AUTOMATION TO AGENTIC PROCESS AUTO=
+MATION&#8221;</b> to the field has garnered our attention, and we would be =
+honored to feature your esteemed work in our upcoming issue Volume 3 Issue =
+4.</span><o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%"><b><s=
+pan style=3D"font-family:&quot;Times New Roman&quot;,serif">Key Details:</s=
+pan></b><o:p></o:p></p>
+<ul style=3D"margin-top:0in" type=3D"disc">
+<li class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%;mso-l=
+ist:l0 level1 lfo3">
+<b><span style=3D"font-family:&quot;Times New Roman&quot;,serif">Indexing:<=
+/span></b><span style=3D"font-family:&quot;Times New Roman&quot;,serif"> SC=
+OPUS, DBLP</span><o:p></o:p></li><li class=3D"MsoNormal" style=3D"margin-bo=
+ttom:8.0pt;line-height:105%;mso-list:l0 level1 lfo3">
+<b><span style=3D"font-family:&quot;Times New Roman&quot;,serif">Submission=
+ Deadline:</span></b><span style=3D"font-family:&quot;Times New Roman&quot;=
+,serif"> 7th December 2023</span><o:p></o:p></li></ul>
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%"><span=
+ style=3D"font-family:&quot;Times New Roman&quot;,serif">We are lacking jus=
+t one article to complete the Issue and we are pleased to offer you a 30% d=
+iscount on the publication fee if manuscript will
+ be submitted on or before the specified deadline.</span><o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%"><span=
+ style=3D"font-family:&quot;Times New Roman&quot;,serif">For comprehensive =
+submission guidelines kindly visit our
+</span><a href=3D"https://www.oajaiml.com/authorguide"><span style=3D"font-=
+family:&quot;Times New Roman&quot;,serif;color:#0563C1">Autor guidelines pa=
+ge</span></a><span style=3D"font-family:&quot;Times New Roman&quot;,serif">=
+.</span><o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%"><span=
+ style=3D"font-family:&quot;Times New Roman&quot;,serif">Let us know, if yo=
+u have any other manuscript too for submission. We eagerly anticipate the o=
+pportunity to showcase your work in our indexed
+ journal.</span><o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-bottom:12.0pt;line-height:105%"><spa=
+n style=3D"font-family:&quot;Times New Roman&quot;,serif">Best regards,
+<br>
+Mr. Yash k.<br>
+Journal Coordinator<br>
+<b>Advances in Artificial Intelligence and Machine Learning</b><br>
+</span><span style=3D"font-size:10.0pt;line-height:105%;color:black">Tc-1/7=
+, TC-1<br>
+New Moti Nagar<br>
+West Delhi Delhi-110015<br>
+</span><b><i><span style=3D"font-size:10.0pt;line-height:105%">Shimur Publi=
+cations</span></i></b><o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-bottom:12.0pt;line-height:105%"><b><=
+span style=3D"font-family:&quot;Times New Roman&quot;,serif">&nbsp;</span><=
+/b><o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%"><span=
+ style=3D"font-size:8.0pt;line-height:105%">click here to
+</span><a href=3D"https://oajaiml.com/newsletter"><span style=3D"font-size:=
+8.0pt;line-height:105%;color:#0563C1">unsubscribe</span></a><o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%"><span=
+ style=3D"font-family:&quot;Times New Roman&quot;,serif">&nbsp;</span><o:p>=
+</o:p></p>
+<p class=3D"MsoNormal" style=3D"margin-bottom:8.0pt;line-height:105%"><span=
+ style=3D"font-family:&quot;Times New Roman&quot;,serif">&nbsp;</span><o:p>=
+</o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+</div>
+</body>
+</html>
+
+--_000_PN2PR01MB8427FADFF84B9B677EDE73B2B982APN2PR01MB8427INDP_--

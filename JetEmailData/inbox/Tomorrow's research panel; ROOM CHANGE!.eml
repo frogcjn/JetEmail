@@ -1,0 +1,771 @@
+Received: from SA1PR01MB6734.prod.exchangelabs.com (2603:10b6:806:1a7::12) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 14 Mar 2023 23:49:22
+ +0000
+Received: from BN9PR03CA0853.namprd03.prod.outlook.com (2603:10b6:408:13d::18)
+ by SA1PR01MB6734.prod.exchangelabs.com (2603:10b6:806:1a7::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.26; Tue, 14 Mar 2023 23:49:20 +0000
+Received: from BN8NAM11FT011.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13d:cafe::15) by BN9PR03CA0853.outlook.office365.com
+ (2603:10b6:408:13d::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.25 via Frontend
+ Transport; Tue, 14 Mar 2023 23:49:19 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.100)
+ smtp.mailfrom=mail75.suw231.rsgsv.net; dkim=fail (body hash did not verify)
+ header.d=mit.edu;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of mail75.suw231.rsgsv.net
+ does not designate 18.9.1.100 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.100;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.100) by
+ BN8NAM11FT011.mail.protection.outlook.com (10.13.176.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6199.16 via Frontend Transport; Tue, 14 Mar 2023 23:49:19 +0000
+Received: from oc11expo16.exchange.mit.edu (18.9.4.47) by
+ oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.47; Tue, 14 Mar 2023 19:49:19 -0400
+Received: from oc11exhyb5.exchange.mit.edu (18.9.1.110) by
+ oc11expo16.exchange.mit.edu (18.9.4.47) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Tue, 14 Mar 2023 19:49:18 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
+ by oc11exhyb5.exchange.mit.edu (18.9.1.110) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.47 via Frontend Transport; Tue, 14 Mar 2023 19:49:18 -0400
+Received: from BN8PR15CA0035.namprd15.prod.outlook.com (2603:10b6:408:c0::48)
+ by PH0PR01MB6634.prod.exchangelabs.com (2603:10b6:510:7a::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.26; Tue, 14 Mar 2023 23:49:16 +0000
+Received: from BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:c0:cafe::24) by BN8PR15CA0035.outlook.office365.com
+ (2603:10b6:408:c0::48) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26 via Frontend
+ Transport; Tue, 14 Mar 2023 23:49:16 +0000
+Authentication-Results-Original: spf=pass (sender IP is 198.2.174.75)
+ smtp.mailfrom=mail75.suw231.rsgsv.net; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mail75.suw231.rsgsv.net
+ designates 198.2.174.75 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.2.174.75; helo=mail75.suw231.rsgsv.net; pr=C
+Received: from mail75.suw231.rsgsv.net (198.2.174.75) by
+ BN8NAM11FT069.mail.protection.outlook.com (10.13.176.152) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6199.11 via Frontend Transport; Tue, 14 Mar 2023 23:49:16 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=k3;
+	t=1678837730; x=1678895330; i=hopes@mit.edu;
+	bh=CiU42iFWnY5avFrGNIr5I8JA1wu8sxqHCdKNqjyCWg0=;
+	h=Subject:From:Reply-To:To:Date:Message-ID:X-MC-User:Feedback-ID:
+	 List-ID:List-Unsubscribe:List-Unsubscribe-Post:Content-Type:
+	 MIME-Version:CC:Date:Subject:From;
+	b=LlBimkZz0vONfADLCEneGPej1ThJ6bjKRxPrlcS778Gk31F1G5TrSnEJ1qDNFJSlb
+	 zZy4hPCG6d/iahosHn676mXXFMK+0jcM4iiO1OXbEOgXSkGQpcBs8O60lii3ZkHj4K
+	 JD0em73+qz9/7aG91XiLLYtPe/YZ0v5d/mB4wbSS9D4DduMvErIeywaYAwo9bm+5mK
+	 pGQB4id9nVB6PhYyMLwe7KZtIbpd/gAn+Ecus3sMiUL1/rQEbtrLOEeQEen3OED/tJ
+	 ReiR0hMyTTCQGj2TL6Rz84sJXDMryEhMouwo6DBKUF+dguDxPHWsM/se2vneC1sjjL
+	 lQnvcNbSKTrjg==
+Received: from localhost (localhost [127.0.0.1])
+	by mail75.suw231.rsgsv.net (Mailchimp) with ESMTP id 4Pbqwy2jVqzKsw9mK
+	for <jiannan@mit.edu>; Tue, 14 Mar 2023 23:48:50 +0000 (GMT)
+Subject: =?utf-8?Q?Tomorrow=27s=20research=20panel=3B=20ROOM=20CHANGE=21?=
+From: =?utf-8?Q?Hope=20Schroeder?= <hopes@mit.edu>
+Reply-To: =?utf-8?Q?Hope=20Schroeder?= <hopes@mit.edu>
+To: <jiannan@mit.edu>
+Date: Tue, 14 Mar 2023 23:48:47 +0000
+Message-ID: <0b56e043e266fd7919d5c0091.cd7f9efabf.20230314234840.270a961373.4692f32d@mail75.suw231.rsgsv.net>
+X-Mailer: Mailchimp Mailer - **CID270a961373cd7f9efabf**
+X-Campaign: mailchimp0b56e043e266fd7919d5c0091.270a961373
+X-campaignid: mailchimp0b56e043e266fd7919d5c0091.270a961373
+X-Report-Abuse: Please report abuse for this campaign here: https://mailchimp.com/contact/abuse/?u=0b56e043e266fd7919d5c0091&id=270a961373&e=cd7f9efabf
+X-MC-User: 0b56e043e266fd7919d5c0091
+Feedback-ID: 187502110:187502110.13854266:us17:mc
+List-ID: 0b56e043e266fd7919d5c0091mc list <0b56e043e266fd7919d5c0091.1360730.list-id.mcsv.net>
+X-Accounttype: pd
+List-Unsubscribe: <https://mit.us17.list-manage.com/unsubscribe?u=0b56e043e266fd7919d5c0091&id=11ecc6afd3&e=cd7f9efabf&c=270a961373>,
+ <mailto:unsubscribe-mc.us17_0b56e043e266fd7919d5c0091.270a961373-cd7f9efabf@unsubscribe.mailchimpapp.net?subject=unsubscribe>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Content-Type: multipart/alternative; boundary="_----------=_MCPart_916383330"
+Return-Path:
+ bounce-mc.us17_187502110.13854266-cd7f9efabf@mail75.suw231.rsgsv.net
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BN8NAM11FT069:EE_|PH0PR01MB6634:EE_|BN8NAM11FT011:EE_|SA1PR01MB6734:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6ff0de0b-798d-4079-901b-08db24e6baa3
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?pniOWd3uE6K2mkD/RWw3lzBVi6UgELuv4HDjgWuXsDoEMcbXxLvgx5Fn1j4g?=
+ =?us-ascii?Q?Fdat+4G8nwaaXuOtuhR4XwzjmQrdSsg+4f6wx0moB4qzy2L9dcvLwOaCAXIH?=
+ =?us-ascii?Q?Pwwzt/xzmJN4Co2XHZr2capqc8xph5vLMgJ3XD2U4t14vBBVlsAL4H22jgpV?=
+ =?us-ascii?Q?m9UcdFjkdkP7cGRrZqe+yi0i3NAqratOwvR2WDopiA0PbTqwBV2QWdVHwAlw?=
+ =?us-ascii?Q?G1PiUwzmqqgoD45qnR0MIGQfkN4dfMqlFAtpB3JcAboAj/ZE47P6S4yoeExG?=
+ =?us-ascii?Q?LrtBlPhzLDlG1d0nRlJHEijy2qPGtpSf8rwckpK8Oyg9r5P4yTXNkkLu9C0t?=
+ =?us-ascii?Q?e/bk0LHUuDFYRlVjWNaa/XQjT4+BRRNS5e8OcvXHR/rK8Vmye2lBs0f3fS4e?=
+ =?us-ascii?Q?6do54JVDE88W25wnKVQ9p9v55Tw+ABmWfdxcimANvEf+/NjKsc/Qvg/SoRXx?=
+ =?us-ascii?Q?+veA3A9ijHh1pwSWcBin1z4nfVHa7AMbNIi2iRg+UZP4Df/vlxbcU6p6l4Py?=
+ =?us-ascii?Q?5SaVVj6NwRMAznGOKhEA6kgIdUAoZRcRExA+xoffPvags8dQe+x8igOw8/AO?=
+ =?us-ascii?Q?VRJxKDwKXkIR6tTuO+8H/Z7iW6I3+Y2RoHucVbHgOR5IHCDgorjyvfwEMLkD?=
+ =?us-ascii?Q?RWauRDP7vOWQ7nAoN+8pdAQdRApVyFfaooM3RUCgTYjI/gVEA0V3ul5n+p2F?=
+ =?us-ascii?Q?j6ogv/hEnt2rOxJPFMpWSalgvXws62yvx10TDm4A9pmfesB1Yc6r3NzPnHgj?=
+ =?us-ascii?Q?uGQQamo/h2xobm8TJgigFkWw6AnoMBe+D9Rc3jWf1qF+gNWp/gUEb8quT2LB?=
+ =?us-ascii?Q?Y3M0ba1rkANWNkACf6BQHQKjnqNTuvAE8RfnrBTsN0cABntyMwjhH0H3JzmR?=
+ =?us-ascii?Q?mIZQF81fWiWPMph2wh3bMMXOkQypqbF7/8mO4fdIp/dQpned2oWoXVGLZNr0?=
+ =?us-ascii?Q?UBMuOBrOtEaEWR+j51gvq96Gdte4iHAJq+Mc8uHom8xEvqaDrNjgk4wVBplx?=
+ =?us-ascii?Q?RbO+WMvyl067/xfaqm2db38tYSLHbeuCfryGDnruAJo5HgdSfACPLynKWFOS?=
+ =?us-ascii?Q?7/glWPn3lI8CoUWXQ1ymxc2tVV3FqQRiFO7XeEJBWzIKByxhADYIUue4x0yf?=
+ =?us-ascii?Q?xMUiMVXb8b3y1I8hptdhwQ1yACr+ABSW+hjk+ZbVA3aFmdGxMa9fy+tvBwtm?=
+ =?us-ascii?Q?yAg+9XSgvcCLJ7bdalwZtq57mNwA5Z6iIM/To3hzCmlnTQR6rrLuErSP8qDQ?=
+ =?us-ascii?Q?xBti+HKx0KQunLygU0eaLBgji9L2SK6a6pUp/4ZTjiMPBd6SGIjzvunPEhCH?=
+ =?us-ascii?Q?xUxx+z0sc0kmQN/Ujk2NXO7PeqaH9NgI0mcrgrDcuhzLbHiLVtlnYtet46ti?=
+ =?us-ascii?Q?uluMqOgiBuVbmqfIDMlws1ic4vyU?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:198.2.174.75;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail75.suw231.rsgsv.net;PTR:mail75.suw231.rsgsv.net;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6634
+X-OrganizationHeadersPreserved: PH0PR01MB6634.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb5.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb5.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo16.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 14 Mar 2023 23:49:19.5416
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 6ff0de0b-798d-4079-901b-08db24e6baa3
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted:
+ BN8NAM11FT011.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ BN8NAM11FT011.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ BN8NAM11FT011.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 26a45279-d889-4a10-452f-08db24e6b89e
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.100;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb4.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 23:49:19.4166
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ff0de0b-798d-4079-901b-08db24e6baa3
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.100];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BN8NAM11FT069.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB6734
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.1408198
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6178.026
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?QlozRkcxK24wRWlEQTlYQ082QTFGZVhJbDRxQUZwc2tvVytJWHk3U3I5VVMz?=
+ =?utf-8?B?MHRQVjJtWkdLWVZEeDRGNXlWRmtsSElrRjd5NEYxZTVWUTlacUk1OExDdS9X?=
+ =?utf-8?B?VnY1eHptRjM2blRjaDF0Sm81QitZZlJmUDcySndmMFZoV1lXVTJsd002NEVG?=
+ =?utf-8?B?VlJJemZ0VkZ2UHE4Y0hqWmtDaWgvcFh2VFJsem9KdDVWL1lZZUY1TVVUYThJ?=
+ =?utf-8?B?ZGJ0dGNOS2k0blZ2MWQ0eTY2REhOMkpFMFByNzNFMUcyNko5VzRaSUxjTVp3?=
+ =?utf-8?B?VTd6Y3RNY2p5ZktBL0pLSFVvSE1GYWxXZFR5bWt3UGJhTnIwT1EwKzhEeWhV?=
+ =?utf-8?B?aVJnT2Q1dWtUVUh3ZnF1dU01WlZreFJ1K2ZsbWg0aEF0eE5tQTZ6d2tqa1ZZ?=
+ =?utf-8?B?dDVYUUFaSU9qeGJ3Njd2QVNaWWppc2pLOVhZdWQyU2JWQjgrbDI3WjI1MUZq?=
+ =?utf-8?B?T20rbG9KeTg5UFpFMW9LN0hHeFA0MVpZa2pZNEJtVFlyMGhOWVJJbDl1SlZL?=
+ =?utf-8?B?UEVIN3RqdDh6UnNzTi9KWmcxNk4rUnF6Y3F3cXpELzV2U3YyWC9aUjV1VWNY?=
+ =?utf-8?B?bnNUekVuSHhOQzZLeUhVSE1ndTB4K1dLV3hscnphdEx3MXZJbS9mSkpaSUNQ?=
+ =?utf-8?B?Sm4vUHpxZFN2RHZTUHh6VTdZL0NwNis3UFJLeElLeXo5WmNydEpvaU1LZXk1?=
+ =?utf-8?B?L0dta1dwN2NscEZWNldtTDU5Zm8yRmdybzVjKy95RFhYZXhDd3g4VTcxS3Vm?=
+ =?utf-8?B?eHdXdVY2TnRBRC9wdWVXY0ZrY2JmMWM3dC9NODF3SDZ2RE1xaHhaZDFSNTJ1?=
+ =?utf-8?B?YlczSkQzRUROQjZXL2tIVE1aNXdwdVN2MnEwcXpYMGhLWURDSUhIcVlOV3JZ?=
+ =?utf-8?B?NVNhMDZLSkJzRURraXJLSHNGRjV6S0wvWmlHMkozRWxoZm5LOUpQZDdDb0hH?=
+ =?utf-8?B?S0ZEVWt0aTlkenMwMWZHTU8rbEFsUXNXSENUZmVzVVNYc3k2R0N2YlVBUHZr?=
+ =?utf-8?B?Q01KVzBSVXNHRTY3U0pjYkk2eGI4dFFKdWxsYk9PV3JQcVp3UWx2R08zZ3JP?=
+ =?utf-8?B?dExZT1RRQk0yRW5hZjNpRWFzRGJMTndQYWNLRjE0UmZad1VTN25xQUhRT053?=
+ =?utf-8?B?ZnY3V25iS1Y3N2V6MjBqVHlCaFdaRm9jdkgxbzhWa3d3MjJrQTlDNlBiV2FK?=
+ =?utf-8?B?bHJ5ek82NVZ5VkpyOXNielVsc25xM1ZNWEsxbDRVOHJnUHZVUzBrbWFiMjJ1?=
+ =?utf-8?B?OFN1ait6SlNTZDl6NkhGU29NK29uVXBEQzByaGpDa0c0SVE2NjV1cC8rSFZE?=
+ =?utf-8?B?bXU2a25jem5pOUxSTmJwYWNlaVp4bFl5VkpVZkg4eVMwWFBWYkZaVE5Va3M4?=
+ =?utf-8?B?UzdvK3E3aXc5bGtkQTFibFNBWnFGbEh4d29oUDZPdm1qSmNpNjlZK2wyb25Y?=
+ =?utf-8?B?LzhDQ0FyTXB3TEV5ajczbURXb3dDRjQ5ZmtuZmlFTGR1Y0xCWlFEL2FaQW8y?=
+ =?utf-8?B?L3duK2x4bU9EOUV5UDhKM1FXS2tHRzZCRGpzVDA1OHEvR3N1NnJ4bHJZRXJL?=
+ =?utf-8?B?dE41U25NcTlpRTlRRzZ4M3Z6QmRPVFdBdjdMNGJzdFhDQTRGNFVSaHVnTVpY?=
+ =?utf-8?B?eVZ4bmN5QnNIeGZ5Zkl3SWtiVWFONTB4REhLKzA2MFdLRkxveXB3YXR3UjVJ?=
+ =?utf-8?B?TDBJSHRpUGZPYVJRUUdSRVZJVjNSbHJSNEVIWklaY3l2SjBaanc2RHU2ekdk?=
+ =?utf-8?B?bnRDQXVveng4d05IdXF6WXAvUk9TUnFzeHgvcW80RnBoLzZNK0dPdFFCQ1Uv?=
+ =?utf-8?B?SUJYZ0xyTjNFOE9BS1EvRi9lcDdKdTJma0R6b3dIUlQxV1h3dzVEN01Ra3Zl?=
+ =?utf-8?B?bzNuQTdXNWZHYXJDbHVUQSsyRjg4dDJnWkNFWkR1aWY3R2lnMXJSMDBkeGpX?=
+ =?utf-8?B?OEJUcGUydmIxNTA1bDFLTHdzZ0RYNjdwR0ZReVRsZGxpdkJteFRlNkNPTHMx?=
+ =?utf-8?B?bU5HQWkxN09NZURqK3FpZ0U0Z2wyS2JnUjRkRHN0d01QRnZGR2Y1ZHR6S0dK?=
+ =?utf-8?B?U0tjOUs2Skcvd0RPbXZmcEtBNml2UUVadDA1WHg3QUd5Qy9RWkErL1hmYlMv?=
+ =?utf-8?B?T1RUeFprQ2ZaK1pYRXFQNUhNVlA2NkNmaGhBQXpsUEFwNHdZZ3pBVURXT1dw?=
+ =?utf-8?B?LzVJVXdBdkNJYWZQaTUyQWdlQ3NMZ29ZbWVNdFdydkZQeEtOZ2M2Vjg1Um9n?=
+ =?utf-8?B?dWU1WlNUWmZpYmRUVTNJVGp5STBBPT0=?=
+MIME-Version: 1.0
+
+--_----------=_MCPart_916383330
+Content-Type: text/plain; charset="utf-8"; format="fixed"
+Content-Transfer-Encoding: quoted-printable
+
+Hi all=2C
+
+Logistical note: ROOM CHANGE!
+Please note: For tomorrow's class=2C we will be meeting in our original as=
+signed classroom=2C E15-359.
+* It is on the third floor of the Media Lab. If you enter on the new side=
+ of the building (E14)=2C then go to the Atrium on the 3rd floor where the=
+ open space is=2C then walk back down the hallway past the kitchen=2C you=
+ will find the room. We will post some signage to help you.
+
+
+Next=2C we have a thrilling lineup for our Media Lab research panel tomorr=
+ow during class at 2!
+
+This week=2C we=E2=80=99re branching out a bit from language models. We=E2=
+=80=99ll hear about research work on images=2C text=2C and text to image m=
+odels that give us insight about what this generative AI inflection point=
+ means and how we can research it. The panel represents a variety of field=
+s that are crucial as we understand generative AI: from NLP to psychology=
+ to digital forensics.
+
+
+Five panelists will give flash talks on their work (~10 minutes each) then=
+ we will have a panel discussion about doing research in this field. Come=
+ with your questions about research on these projects=2C or on doing resea=
+rch in this field! The panelists know you're all early in your projects=2C=
+ so take advantage of their expertise in conducting research like this.
+
+
+Tomorrow's presenters:
+
+
+* Ziv Epstein (http://zive.info/) : Final year PhD Student at MIT Media La=
+b (Human Dynamics)
++ Title: Social science methods for understanding generative AI
++ Related papers: Who gets credit for AI-generated art (https://www.scienc=
+edirect.com/science/article/pii/S2589004220307070) & Deceptive AI Systems=
+ that give explanations are just as convincing as honest AI systems in hum=
+an-machine decision making (https://arxiv.org/pdf/2210.08960.pdf)
+* Matt Groh (https://mattgroh.com/) : Final year PhD Student at MIT Media=
+ Lab (Affective Computing)
+
+* Title: Deepfake Detection
+* Related papers: Deepfake Detection by Human Crowds=2C Machines=2C and Ma=
+chine-Informed Crowds (https://www.pnas.org/doi/10.1073/pnas.2110013119) &=
+ Human Detection of Political Deepfakes across Transcripts=2C Audio=2C and=
+ Video (https://arxiv.org/abs/2202.12883)
+
+* Trudy Painter (https://www.trudy.computer/) : UROP/MEng at MIT Media Lab=
+ (Viral Communications)
++ Title: Latent Lab: Generative ML as an Exploration Partner
++ Media Lab project page (https://www.media.mit.edu/projects/latent-lab/ov=
+erview/)
+* Bel=C3=A9n Sald=C3=ADas Fuentes (https://belencarolina.com/) : PhD Stude=
+nt at MIT Media Lab (Center for Constructive Communication)
++ Title: Community-aligned Content Moderation with Rationale Generation
++ Media Lab project page (https://www.media.mit.edu/projects/explaining-ma=
+chine-supported-community-content-moderation/overview/)
+* Hang Jiang (https://hjian42.github.io/) : PhD Student at MIT Media Lab (=
+Center for Constructive Communication)
++ Title: CommunityLM: Probing Partisan Worldviews from Language Models
++ Related paper: CommunityLM: Probing Partisan Worldviews from Language Mo=
+dels (https://arxiv.org/pdf/2209.07065.pdf)
+
+
+We know some of you will be gone this week due to Harvard Spring Break (an=
+d we know which of you are affected by this). Some of these research talks=
+ will be recorded and posted.
+If you can only join by Zoom=2C please use this link (https://mit.zoom.us/=
+j/8267924368) ! This panel will be geared towards in person attendance=2C=
+ so we cannot guarantee this will be a true hybrid experience=2C but we wi=
+ll do our best if anyone who is remote wants to attend. Otherwise=2C see y=
+ou in person.
+
+Thanks=2C and see you all tomorrow.
+
+Best=2C
+Hope & MAS.S68 team
+
+
+This email was sent to jiannan@mit.edu (mailto:jiannan@mit.edu)
+why did I get this? (https://mit.us17.list-manage.com/about?u=3D0b56e043e2=
+66fd7919d5c0091&id=3D11ecc6afd3&e=3Dcd7f9efabf&c=3D270a961373)     unsubscri=
+be from this list (https://mit.us17.list-manage.com/unsubscribe?u=3D0b56e0=
+43e266fd7919d5c0091&id=3D11ecc6afd3&e=3Dcd7f9efabf&c=3D270a961373)     updat=
+e subscription preferences (https://mit.us17.list-manage.com/profile?u=3D0=
+b56e043e266fd7919d5c0091&id=3D11ecc6afd3&e=3Dcd7f9efabf&c=3D270a961373)
+MIT Center for Constructive Communication . 75 Amherst St . Cambridge=2C M=
+A=2C MA 02139 . USA
+--_----------=_MCPart_916383330
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><meta http-equiv=3D"Content-T=
+ype" content=3D"text/html; charset=3Dutf-8"><div dir=3D"ltr">Hi all,
+<div>&nbsp;</div>
+
+<div><strong>Logistical note: ROOM CHANGE!</strong></div>
+
+<div><strong>Please note:&nbsp;</strong>For tomorrow's class, we will be me=
+eting in our original assigned classroom,&nbsp;<strong>E15-359</strong>.&nb=
+sp;</div>
+
+<div>
+<ul>
+	<li style=3D"margin-left:15px"><font size=3D"1">It is on the third floor o=
+f the Media Lab. If you enter on the new side of the building (E14), then g=
+o to the Atrium on the 3rd floor where the open space is, then walk back do=
+wn the hallway past the kitchen, you will find the room. We will post some =
+signage to help you.&nbsp;</font></li>
+</ul>
+</div>
+
+<div>&nbsp;</div>
+
+<div>Next, we have a thrilling lineup for our&nbsp;<strong><font size=3D"4"=
+>Media Lab research panel&nbsp;</font></strong>tomorrow during class at 2!<=
+/div>
+
+<div>&nbsp;</div>
+
+<div>
+<p dir=3D"ltr" style=3D"line-height:1.38;margin-top:0pt;margin-bottom:0pt">=
+<span id=3D"m_-5754155407916064193m_-966296407278495437gmail-docs-internal-=
+guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><span style=3D"background-color:=
+transparent; color:rgb(0,0,0); font-family:arial; font-size:11pt; font-vari=
+ant-east-asian:normal; font-variant-numeric:normal; vertical-align:baseline=
+; white-space:pre-wrap">This week, we=E2=80=99re branching out a bit from l=
+anguage models. We=E2=80=99ll hear about research work on images, text, and=
+ text to image models that give us insight about what this generative AI in=
+flection point means and how we can research it. The panel represents a var=
+iety of fields that are crucial as we understand generative AI: from NLP to=
+ psychology to digital forensics.</span></span></p>
+&nbsp;
+
+<p dir=3D"ltr" style=3D"line-height:1.38;margin-top:0pt;margin-bottom:0pt">=
+<span id=3D"m_-5754155407916064193m_-966296407278495437gmail-docs-internal-=
+guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><span style=3D"background-color:=
+transparent; color:rgb(0,0,0); font-family:arial; font-size:11pt; font-vari=
+ant-east-asian:normal; font-variant-numeric:normal; vertical-align:baseline=
+; white-space:pre-wrap">Five panelists will give flash talks on their work =
+(~10 minutes each) then we will have a panel discussion about doing researc=
+h in this field. Come with your questions about research on these projects,=
+ or on doing research in this field! The panelists know you're all early in=
+ your projects, so take advantage of their expertise in conducting research=
+ like this.</span></span></p>
+
+<p dir=3D"ltr" style=3D"line-height:1.38;margin-top:0pt;margin-bottom:0pt">=
+&nbsp;</p>
+
+<p style=3D"line-height:1.38;margin-top:0pt;margin-bottom:0pt"><span id=3D"=
+m_-5754155407916064193m_-966296407278495437gmail-docs-internal-guid-03fb443=
+3-7fff-afe3-0bd2-a5acf3ab8060"><span style=3D"background-color:transparent;=
+ color:rgb(0,0,0); font-family:arial; font-variant-east-asian:normal; font-=
+variant-numeric:normal; vertical-align:baseline; white-space:pre-wrap"><str=
+ong><font size=3D"4">Tomorrow's presenters</font></strong><span style=3D"fo=
+nt-size:11pt">:</span></span></span></p>
+
+<p style=3D"line-height:1.38;margin-top:0pt;margin-bottom:0pt">&nbsp;</p>
+
+<ul style=3D"margin-top:0px;margin-bottom:0px">
+	<li dir=3D"ltr" style=3D"list-style-type:disc;font-size:11pt;font-family:A=
+rial;color:rgb(34,34,34);background-color:transparent;font-weight:400;font-=
+style:normal;font-variant:normal;text-decoration:none;vertical-align:baseli=
+ne;white-space:pre">
+	<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;background-=
+color:rgb(255,255,255);margin-top:10pt;margin-bottom:0pt"><span id=3D"m_-57=
+54155407916064193m_-966296407278495437gmail-docs-internal-guid-03fb4433-7ff=
+f-afe3-0bd2-a5acf3ab8060"><a href=3D"https://mit.us17.list-manage.com/track=
+/click?u=3D0b56e043e266fd7919d5c0091&amp;id=3D1d5c6b5a83&amp;e=3Dcd7f9efabf=
+" style=3D"text-decoration:none"><u style=3D"background-color:transparent; =
+color:rgb(17,85,204); font-family:arial; font-size:11pt; font-style:normal;=
+ font-variant:normal; font-weight:700; text-decoration:underline; vertical-=
+align:baseline; white-space:pre-wrap">Ziv Epstein</u></a><strong style=3D"b=
+ackground-color:transparent; color:rgb(0,0,0); font-family:arial; font-size=
+:11pt; font-style:normal; font-variant:normal; font-weight:700; text-decora=
+tion:none; vertical-align:baseline; white-space:pre-wrap">: </strong><span =
+style=3D"background-color:transparent; color:rgb(0,0,0); font-family:arial;=
+ font-size:11pt; font-style:normal; font-variant:normal; font-weight:400; t=
+ext-decoration:none; vertical-align:baseline; white-space:pre-wrap">Final y=
+ear PhD Student at MIT Media Lab (Human Dynamics)</span></span></p>
+
+	<ul style=3D"margin-top:0px;margin-bottom:0px">
+		<li dir=3D"ltr" style=3D"list-style-type:circle;font-size:11pt;font-famil=
+y:Arial;color:rgb(34,34,34);background-color:transparent;font-weight:400;fo=
+nt-style:normal;font-variant:normal;text-decoration:none;vertical-align:bas=
+eline;white-space:pre">
+		<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top=
+:0pt;margin-bottom:0pt"><span id=3D"m_-5754155407916064193m_-96629640727849=
+5437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><strong =
+style=3D"background-color:transparent; color:rgb(0,0,0); font-family:arial;=
+ font-size:11pt; font-style:normal; font-variant:normal; font-weight:700; t=
+ext-decoration:none; vertical-align:baseline; white-space:pre-wrap">Title</=
+strong><span style=3D"background-color:transparent; color:rgb(0,0,0); font-=
+family:arial; font-size:11pt; font-style:normal; font-variant:normal; font-=
+weight:400; text-decoration:none; vertical-align:baseline; white-space:pre-=
+wrap">: Social science methods for understanding generative AI</span></span=
+></p>
+		</li>
+		<li dir=3D"ltr" style=3D"list-style-type:circle;font-size:11pt;font-famil=
+y:Arial;color:rgb(34,34,34);background-color:transparent;font-weight:400;fo=
+nt-style:normal;font-variant:normal;text-decoration:none;vertical-align:bas=
+eline;white-space:pre">
+		<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top=
+:0pt;margin-bottom:0pt"><span id=3D"m_-5754155407916064193m_-96629640727849=
+5437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><span st=
+yle=3D"background-color:transparent; color:rgb(0,0,0); font-family:arial; f=
+ont-size:11pt; font-style:normal; font-variant:normal; font-weight:400; tex=
+t-decoration:none; vertical-align:baseline; white-space:pre-wrap">Related p=
+apers: </span><a href=3D"https://mit.us17.list-manage.com/track/click?u=3D0=
+b56e043e266fd7919d5c0091&amp;id=3D42379ef0a6&amp;e=3Dcd7f9efabf" style=3D"t=
+ext-decoration:none"><u style=3D"background-color:transparent; color:rgb(17=
+,85,204); font-family:arial; font-size:11pt; font-style:normal; font-varian=
+t:normal; font-weight:400; text-decoration:underline; vertical-align:baseli=
+ne; white-space:pre-wrap">Who gets credit for AI-generated art</u></a><span=
+ style=3D"background-color:transparent; color:rgb(34,34,34); font-family:ar=
+ial; font-size:11pt; font-style:normal; font-variant:normal; font-weight:40=
+0; text-decoration:none; vertical-align:baseline; white-space:pre-wrap"> &a=
+mp; </span><a href=3D"https://mit.us17.list-manage.com/track/click?u=3D0b56=
+e043e266fd7919d5c0091&amp;id=3D18dfbadaaf&amp;e=3Dcd7f9efabf" style=3D"text=
+-decoration:none"><u style=3D"background-color:transparent; color:rgb(17,85=
+,204); font-family:arial; font-size:11pt; font-style:normal; font-variant:n=
+ormal; font-weight:400; text-decoration:underline; vertical-align:baseline;=
+ white-space:pre-wrap">Deceptive AI Systems that give explanations are just=
+ as convincing as honest AI systems in human-machine decision making</u></a=
+></span></p>
+		</li>
+	</ul>
+	</li>
+	<li dir=3D"ltr" style=3D"list-style-type:disc;font-size:11pt;font-family:A=
+rial;color:rgb(34,34,34);background-color:transparent;font-weight:400;font-=
+style:normal;font-variant:normal;text-decoration:none;vertical-align:baseli=
+ne;white-space:pre">
+	<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top:=
+0pt;margin-bottom:0pt"><span id=3D"m_-5754155407916064193m_-966296407278495=
+437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><a href=
+=3D"https://mit.us17.list-manage.com/track/click?u=3D0b56e043e266fd7919d5c0=
+091&amp;id=3D9504f2a1e7&amp;e=3Dcd7f9efabf" style=3D"text-decoration:none">=
+<u style=3D"background-color:transparent; color:rgb(17,85,204); font-family=
+:arial; font-size:11pt; font-style:normal; font-variant:normal; font-weight=
+:700; text-decoration:underline; vertical-align:baseline; white-space:pre-w=
+rap">Matt Groh</u></a><strong style=3D"background-color:transparent; color:=
+rgb(0,0,0); font-family:arial; font-size:11pt; font-style:normal; font-vari=
+ant:normal; font-weight:700; text-decoration:none; vertical-align:baseline;=
+ white-space:pre-wrap">: </strong><span style=3D"background-color:transpare=
+nt; color:rgb(0,0,0); font-family:arial; font-size:11pt; font-style:normal;=
+ font-variant:normal; font-weight:400; text-decoration:none; vertical-align=
+:baseline; white-space:pre-wrap">Final year PhD Student at MIT Media Lab (A=
+ffective Computing)</span></span></p>
+	</li>
+</ul>
+
+<ul style=3D"margin-top:0px;margin-bottom:0px">
+	<li dir=3D"ltr" style=3D"list-style-type:circle;font-size:11pt;font-family=
+:Arial;color:rgb(34,34,34);background-color:transparent;font-weight:400;fon=
+t-style:normal;font-variant:normal;text-decoration:none;vertical-align:base=
+line;white-space:pre;margin-left:47pt">
+	<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top:=
+0pt;margin-bottom:0pt"><span id=3D"m_-5754155407916064193m_-966296407278495=
+437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><strong s=
+tyle=3D"background-color:transparent; color:rgb(0,0,0); font-family:arial; =
+font-size:11pt; font-style:normal; font-variant:normal; font-weight:700; te=
+xt-decoration:none; vertical-align:baseline; white-space:pre-wrap">Title</s=
+trong><span style=3D"background-color:transparent; color:rgb(0,0,0); font-f=
+amily:arial; font-size:11pt; font-style:normal; font-variant:normal; font-w=
+eight:400; text-decoration:none; vertical-align:baseline; white-space:pre-w=
+rap">: </span><span style=3D"background-color:transparent; color:rgb(34,34,=
+34); font-family:arial; font-size:11pt; font-style:normal; font-variant:nor=
+mal; font-weight:400; text-decoration:none; vertical-align:baseline; white-=
+space:pre-wrap">Deepfake Detection</span></span></p>
+	</li>
+	<li dir=3D"ltr" style=3D"list-style-type:circle;font-size:11pt;font-family=
+:Arial;color:rgb(34,34,34);background-color:transparent;font-weight:400;fon=
+t-style:normal;font-variant:normal;text-decoration:none;vertical-align:base=
+line;white-space:pre;margin-left:47pt">
+	<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top:=
+0pt;margin-bottom:0pt"><span id=3D"m_-5754155407916064193m_-966296407278495=
+437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><span sty=
+le=3D"background-color:transparent; color:rgb(34,34,34); font-family:arial;=
+ font-size:11pt; font-style:normal; font-variant:normal; font-weight:400; t=
+ext-decoration:none; vertical-align:baseline; white-space:pre-wrap">Related=
+ papers: </span><a href=3D"https://mit.us17.list-manage.com/track/click?u=
+=3D0b56e043e266fd7919d5c0091&amp;id=3D6b12b57af6&amp;e=3Dcd7f9efabf" style=
+=3D"text-decoration:none"><u style=3D"background-color:transparent; color:r=
+gb(17,85,204); font-family:arial; font-size:11pt; font-style:normal; font-v=
+ariant:normal; font-weight:400; text-decoration:underline; vertical-align:b=
+aseline; white-space:pre-wrap">Deepfake Detection by Human Crowds, Machines=
+, and Machine-Informed Crowds</u></a><span style=3D"background-color:transp=
+arent; color:rgb(34,34,34); font-family:arial; font-size:11pt; font-style:n=
+ormal; font-variant:normal; font-weight:400; text-decoration:none; vertical=
+-align:baseline; white-space:pre-wrap"> &amp; </span><a href=3D"https://mit=
+.us17.list-manage.com/track/click?u=3D0b56e043e266fd7919d5c0091&amp;id=3D09=
+111dd33d&amp;e=3Dcd7f9efabf" style=3D"text-decoration:none"><u style=3D"bac=
+kground-color:transparent; color:rgb(17,85,204); font-family:arial; font-si=
+ze:11pt; font-style:normal; font-variant:normal; font-weight:400; text-deco=
+ration:underline; vertical-align:baseline; white-space:pre-wrap">Human Dete=
+ction of Political Deepfakes across Transcripts, Audio, and Video</u></a></=
+span></p>
+	</li>
+</ul>
+
+<ul style=3D"margin-top:0px;margin-bottom:0px">
+	<li dir=3D"ltr" style=3D"list-style-type:disc;font-size:11pt;font-family:A=
+rial;color:rgb(34,34,34);background-color:transparent;font-weight:400;font-=
+style:normal;font-variant:normal;text-decoration:none;vertical-align:baseli=
+ne;white-space:pre">
+	<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top:=
+0pt;margin-bottom:0pt"><span id=3D"m_-5754155407916064193m_-966296407278495=
+437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><a href=
+=3D"https://mit.us17.list-manage.com/track/click?u=3D0b56e043e266fd7919d5c0=
+091&amp;id=3De6b33df45d&amp;e=3Dcd7f9efabf" style=3D"text-decoration:none">=
+<u style=3D"background-color:transparent; color:rgb(17,85,204); font-family=
+:arial; font-size:11pt; font-style:normal; font-variant:normal; font-weight=
+:700; text-decoration:underline; vertical-align:baseline; white-space:pre-w=
+rap">Trudy Painter</u></a><strong style=3D"background-color:transparent; co=
+lor:rgb(0,0,0); font-family:arial; font-size:11pt; font-style:normal; font-=
+variant:normal; font-weight:700; text-decoration:none; vertical-align:basel=
+ine; white-space:pre-wrap">:</strong><span style=3D"background-color:transp=
+arent; color:rgb(0,0,0); font-family:arial; font-size:11pt; font-style:norm=
+al; font-variant:normal; font-weight:400; text-decoration:none; vertical-al=
+ign:baseline; white-space:pre-wrap"> UROP/MEng at MIT Media Lab (Viral Comm=
+unications)</span></span></p>
+
+	<ul style=3D"margin-top:0px;margin-bottom:0px">
+		<li dir=3D"ltr" style=3D"list-style-type:circle;font-size:11pt;font-famil=
+y:Arial;color:rgb(34,34,34);background-color:transparent;font-weight:400;fo=
+nt-style:normal;font-variant:normal;text-decoration:none;vertical-align:bas=
+eline;white-space:pre">
+		<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top=
+:0pt;margin-bottom:0pt"><span id=3D"m_-5754155407916064193m_-96629640727849=
+5437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><strong =
+style=3D"background-color:transparent; color:rgb(0,0,0); font-family:arial;=
+ font-size:11pt; font-style:normal; font-variant:normal; font-weight:700; t=
+ext-decoration:none; vertical-align:baseline; white-space:pre-wrap">Title</=
+strong><span style=3D"background-color:transparent; color:rgb(0,0,0); font-=
+family:arial; font-size:11pt; font-style:normal; font-variant:normal; font-=
+weight:400; text-decoration:none; vertical-align:baseline; white-space:pre-=
+wrap">: </span><span style=3D"background-color:rgb(255,255,255); color:rgb(=
+34,34,34); font-family:arial; font-size:11pt; font-style:normal; font-varia=
+nt:normal; font-weight:400; text-decoration:none; vertical-align:baseline; =
+white-space:pre-wrap">Latent Lab: Generative ML as an Exploration Partner</=
+span></span></p>
+		</li>
+		<li dir=3D"ltr" style=3D"list-style-type:circle;font-size:11pt;font-famil=
+y:Arial;color:rgb(34,34,34);background-color:transparent;font-weight:400;fo=
+nt-style:normal;font-variant:normal;text-decoration:none;vertical-align:bas=
+eline;white-space:pre">
+		<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top=
+:0pt;margin-bottom:0pt"><span id=3D"m_-5754155407916064193m_-96629640727849=
+5437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><span st=
+yle=3D"background-color:transparent; color:rgb(0,0,0); font-family:arial; f=
+ont-size:11pt; font-style:normal; font-variant:normal; font-weight:400; tex=
+t-decoration:none; vertical-align:baseline; white-space:pre-wrap">Media Lab=
+ project </span><a href=3D"https://mit.us17.list-manage.com/track/click?u=
+=3D0b56e043e266fd7919d5c0091&amp;id=3De2dc40a208&amp;e=3Dcd7f9efabf" style=
+=3D"text-decoration:none"><u style=3D"background-color:transparent; color:r=
+gb(17,85,204); font-family:arial; font-size:11pt; font-style:normal; font-v=
+ariant:normal; font-weight:400; text-decoration:underline; vertical-align:b=
+aseline; white-space:pre-wrap">page</u></a></span></p>
+		</li>
+	</ul>
+	</li>
+	<li dir=3D"ltr" style=3D"list-style-type:disc;font-size:11pt;font-family:A=
+rial;color:rgb(34,34,34);background-color:transparent;font-weight:400;font-=
+style:normal;font-variant:normal;text-decoration:none;vertical-align:baseli=
+ne;white-space:pre">
+	<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;background-=
+color:rgb(255,255,255);margin-top:0pt;margin-bottom:0pt"><span id=3D"m_-575=
+4155407916064193m_-966296407278495437gmail-docs-internal-guid-03fb4433-7fff=
+-afe3-0bd2-a5acf3ab8060"><a href=3D"https://mit.us17.list-manage.com/track/=
+click?u=3D0b56e043e266fd7919d5c0091&amp;id=3D19ce56b7b0&amp;e=3Dcd7f9efabf"=
+ style=3D"text-decoration:none"><u style=3D"background-color:transparent; c=
+olor:rgb(17,85,204); font-family:arial; font-size:11pt; font-style:normal; =
+font-variant:normal; font-weight:700; text-decoration:underline; vertical-a=
+lign:baseline; white-space:pre-wrap">Bel=C3=A9n Sald=C3=ADas Fuentes</u></a=
+><strong style=3D"background-color:transparent; color:rgb(0,0,0); font-fami=
+ly:arial; font-size:11pt; font-style:normal; font-variant:normal; font-weig=
+ht:700; text-decoration:none; vertical-align:baseline; white-space:pre-wrap=
+">: </strong><span style=3D"background-color:transparent; color:rgb(0,0,0);=
+ font-family:arial; font-size:11pt; font-style:normal; font-variant:normal;=
+ font-weight:400; text-decoration:none; vertical-align:baseline; white-spac=
+e:pre-wrap">PhD Student at MIT Media Lab (Center for Constructive Communica=
+tion)</span></span></p>
+
+	<ul style=3D"margin-top:0px;margin-bottom:0px">
+		<li dir=3D"ltr" style=3D"list-style-type:circle;font-size:11pt;font-famil=
+y:Arial;color:rgb(34,34,34);background-color:transparent;font-weight:400;fo=
+nt-style:normal;font-variant:normal;text-decoration:none;vertical-align:bas=
+eline;white-space:pre">
+		<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top=
+:0pt;margin-bottom:0pt"><span id=3D"m_-5754155407916064193m_-96629640727849=
+5437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><strong =
+style=3D"background-color:transparent; color:rgb(0,0,0); font-family:arial;=
+ font-size:11pt; font-style:normal; font-variant:normal; font-weight:700; t=
+ext-decoration:none; vertical-align:baseline; white-space:pre-wrap">Title</=
+strong><span style=3D"background-color:transparent; color:rgb(0,0,0); font-=
+family:arial; font-size:11pt; font-style:normal; font-variant:normal; font-=
+weight:400; text-decoration:none; vertical-align:baseline; white-space:pre-=
+wrap">: Community-aligned Content Moderation with Rationale Generation</spa=
+n></span></p>
+		</li>
+		<li dir=3D"ltr" style=3D"list-style-type:circle;font-size:11pt;font-famil=
+y:Arial;color:rgb(34,34,34);background-color:transparent;font-weight:400;fo=
+nt-style:normal;font-variant:normal;text-decoration:none;vertical-align:bas=
+eline;white-space:pre">
+		<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top=
+:0pt;margin-bottom:0pt"><span id=3D"m_-5754155407916064193m_-96629640727849=
+5437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><span st=
+yle=3D"background-color:transparent; color:rgb(0,0,0); font-family:arial; f=
+ont-size:11pt; font-style:normal; font-variant:normal; font-weight:400; tex=
+t-decoration:none; vertical-align:baseline; white-space:pre-wrap">Media Lab=
+ project </span><a href=3D"https://mit.us17.list-manage.com/track/click?u=
+=3D0b56e043e266fd7919d5c0091&amp;id=3D025babd47e&amp;e=3Dcd7f9efabf" style=
+=3D"text-decoration:none"><u style=3D"background-color:transparent; color:r=
+gb(17,85,204); font-family:arial; font-size:11pt; font-style:normal; font-v=
+ariant:normal; font-weight:400; text-decoration:underline; vertical-align:b=
+aseline; white-space:pre-wrap">page</u></a></span></p>
+		</li>
+	</ul>
+	</li>
+	<li dir=3D"ltr" style=3D"list-style-type:disc;font-size:11pt;font-family:A=
+rial;color:rgb(34,34,34);background-color:transparent;font-weight:400;font-=
+style:normal;font-variant:normal;text-decoration:none;vertical-align:baseli=
+ne;white-space:pre">
+	<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top:=
+0pt;margin-bottom:0pt"><span id=3D"m_-5754155407916064193m_-966296407278495=
+437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><a href=
+=3D"https://mit.us17.list-manage.com/track/click?u=3D0b56e043e266fd7919d5c0=
+091&amp;id=3D442cfdbb8f&amp;e=3Dcd7f9efabf" style=3D"text-decoration:none">=
+<u style=3D"background-color:transparent; color:rgb(17,85,204); font-family=
+:arial; font-size:11pt; font-style:normal; font-variant:normal; font-weight=
+:700; text-decoration:underline; vertical-align:baseline; white-space:pre-w=
+rap">Hang Jiang</u></a><strong style=3D"background-color:transparent; color=
+:rgb(0,0,0); font-family:arial; font-size:11pt; font-style:normal; font-var=
+iant:normal; font-weight:700; text-decoration:none; vertical-align:baseline=
+; white-space:pre-wrap">: </strong><span style=3D"background-color:transpar=
+ent; color:rgb(0,0,0); font-family:arial; font-size:11pt; font-style:normal=
+; font-variant:normal; font-weight:400; text-decoration:none; vertical-alig=
+n:baseline; white-space:pre-wrap">PhD Student at MIT Media Lab (Center for =
+Constructive Communication)</span></span></p>
+
+	<ul style=3D"margin-top:0px;margin-bottom:0px">
+		<li dir=3D"ltr" style=3D"list-style-type:circle;font-size:11pt;font-famil=
+y:Arial;color:rgb(34,34,34);background-color:transparent;font-weight:400;fo=
+nt-style:normal;font-variant:normal;text-decoration:none;vertical-align:bas=
+eline;white-space:pre;margin-left:11pt">
+		<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top=
+:0pt;margin-bottom:10pt"><span id=3D"m_-5754155407916064193m_-9662964072784=
+95437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><strong=
+ style=3D"background-color:transparent; color:rgb(0,0,0); font-family:arial=
+; font-size:11pt; font-style:normal; font-variant:normal; font-weight:700; =
+text-decoration:none; vertical-align:baseline; white-space:pre-wrap">Title<=
+/strong><span style=3D"background-color:transparent; color:rgb(0,0,0); font=
+-family:arial; font-size:11pt; font-style:normal; font-variant:normal; font=
+-weight:400; text-decoration:none; vertical-align:baseline; white-space:pre=
+-wrap">: CommunityLM: Probing Partisan Worldviews from Language Models</spa=
+n></span></p>
+		</li>
+		<li dir=3D"ltr" style=3D"list-style-type:circle;font-size:11pt;font-famil=
+y:Arial;color:rgb(34,34,34);background-color:transparent;font-weight:400;fo=
+nt-style:normal;font-variant:normal;text-decoration:none;vertical-align:bas=
+eline;white-space:pre;margin-left:11pt">
+		<p dir=3D"ltr" role=3D"presentation" style=3D"line-height:1.38;margin-top=
+:0pt;margin-bottom:10pt"><span id=3D"m_-5754155407916064193m_-9662964072784=
+95437gmail-docs-internal-guid-03fb4433-7fff-afe3-0bd2-a5acf3ab8060"><span s=
+tyle=3D"background-color:transparent; font-size:11pt; font-variant-east-asi=
+an:normal; font-variant-numeric:normal; vertical-align:baseline; white-spac=
+e:pre-wrap">Related paper: CommunityLM: </span><a href=3D"https://mit.us17.=
+list-manage.com/track/click?u=3D0b56e043e266fd7919d5c0091&amp;id=3Df6955480=
+f0&amp;e=3Dcd7f9efabf" style=3D"background-color:transparent;white-space:pr=
+e-wrap;font-size:small;text-decoration-line:none"><span style=3D"background=
+-color:transparent; font-size:11pt; font-variant-east-asian:normal; font-va=
+riant-numeric:normal; text-decoration-line:underline; vertical-align:baseli=
+ne">Probing Partisan Worldviews from Language Models</span></a></span></p>
+		</li>
+	</ul>
+	</li>
+</ul>
+
+<div>&nbsp;</div>
+<span id=3D"m_-5754155407916064193m_-966296407278495437gmail-docs-internal-=
+guid-01e8cd96-7fff-1222-2cae-c1910c44a951"><span style=3D"background-color:=
+transparent; white-space:pre-wrap"><font face=3D"arial, sans-serif">We know=
+ some of you will be gone this week due to Harvard Spring Break (and we kno=
+w which of you are affected by this). </font></span></span><font face=3D"ar=
+ial, sans-serif">Some of these research talks will be recorded and posted.<=
+/font></div>
+
+<div><font face=3D"arial, sans-serif">If you can only join by Zoom, please =
+use this&nbsp;<a href=3D"https://mit.us17.list-manage.com/track/click?u=3D0=
+b56e043e266fd7919d5c0091&amp;id=3D36e4a5e254&amp;e=3Dcd7f9efabf" target=3D"=
+_blank">link</a>! This panel will be geared towards in person attendance, s=
+o we cannot guarantee this will be a true hybrid experience, but we will do=
+ our best if anyone who is remote wants to attend. Otherwise, see you in pe=
+rson.</font></div>
+
+<div>&nbsp;</div>
+
+<div><font face=3D"arial, sans-serif">Thanks, and see you all tomorrow.</fo=
+nt></div>
+
+<div>&nbsp;</div>
+
+<div><font face=3D"arial, sans-serif">Best,</font></div>
+
+<div><font face=3D"arial, sans-serif">Hope &amp; MAS.S68 team</font></div>
+</div>
+
+<center><br>
+<br>
+<br>
+<br>
+<br>
+&nbsp;
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" id=3D"canspamBarWra=
+pper" style=3D"background-color:#FFFFFF; border-top:1px solid #E5E5E5;" wid=
+th=3D"100%">
+	<tbody>
+		<tr>
+			<td align=3D"center" style=3D"padding-top:20px; padding-bottom:20px;" va=
+lign=3D"top">
+			<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" id=3D"canspamBar=
+">
+				<tbody>
+					<tr>
+						<td align=3D"center" style=3D"color:#606060; font-family:Helvetica, A=
+rial, sans-serif; font-size:11px; line-height:150%; padding-right:20px; pad=
+ding-bottom:5px; padding-left:20px; text-align:center;" valign=3D"top">This=
+ email was sent to <a href=3D"mailto:jiannan@mit.edu" style=3D"color:#40404=
+0 !important;" target=3D"_blank">jiannan@mit.edu</a><br>
+						<a href=3D"https://mit.us17.list-manage.com/about?u=3D0b56e043e266fd7=
+919d5c0091&amp;id=3D11ecc6afd3&amp;e=3Dcd7f9efabf&amp;c=3D270a961373" style=
+=3D"color:#404040 !important;" target=3D"_blank"><em>why did I get this?</e=
+m></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=3D"https://mit.us17.list-manage.com/u=
+nsubscribe?u=3D0b56e043e266fd7919d5c0091&amp;id=3D11ecc6afd3&amp;e=3Dcd7f9e=
+fabf&amp;c=3D270a961373" style=3D"color:#404040 !important;">unsubscribe fr=
+om this list</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=3D"https://mit.us17.list-ma=
+nage.com/profile?u=3D0b56e043e266fd7919d5c0091&amp;id=3D11ecc6afd3&amp;e=3D=
+cd7f9efabf&amp;c=3D270a961373" style=3D"color:#404040 !important;">update s=
+ubscription preferences</a><br>
+						MIT Center for Constructive Communication =C2=B7 75 Amherst St =C2=B7=
+ Cambridge, MA, MA 02139 =C2=B7 USA<br>
+						&nbsp;</td>
+					</tr>
+				</tbody>
+			</table>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<style type=3D"text/css">@media only screen and (max-width: 480px){
+                        table#canspamBar td{font-size:14px !important;}
+                        table#canspamBar td a{display:block !important; mar=
+gin-top:10px !important;}
+                    }
+</style>
+</center><img src=3D"https://mit.us17.list-manage.com/track/open.php?u=3D0b=
+56e043e266fd7919d5c0091&amp;id=3D270a961373&amp;e=3Dcd7f9efabf" height=3D"1=
+" width=3D"1" alt=3D"">=
+
+--_----------=_MCPart_916383330--

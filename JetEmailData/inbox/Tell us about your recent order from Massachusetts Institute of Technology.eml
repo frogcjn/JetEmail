@@ -1,0 +1,851 @@
+Received: from PH0PR01MB6182.prod.exchangelabs.com (2603:10b6:510:16::23) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Mon, 21 Aug 2023 19:21:21
+ +0000
+Received: from BYAPR06CA0010.namprd06.prod.outlook.com (2603:10b6:a03:d4::23)
+ by PH0PR01MB6182.prod.exchangelabs.com (2603:10b6:510:16::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.20; Mon, 21 Aug 2023 19:21:18 +0000
+Received: from CO1PEPF000044F5.namprd05.prod.outlook.com
+ (2603:10b6:a03:d4:cafe::ab) by BYAPR06CA0010.outlook.office365.com
+ (2603:10b6:a03:d4::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20 via Frontend
+ Transport; Mon, 21 Aug 2023 19:21:18 +0000
+Authentication-Results: spf=softfail (sender IP is 18.7.71.110)
+ smtp.mailfrom=mandrillapp.com; dkim=pass (signature was verified)
+ header.d=parchment.com;dmarc=pass action=none header.from=parchment.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ mandrillapp.com discourages use of 18.7.71.110 as permitted sender)
+Received: from mail.exchange.mit.edu (18.7.71.110) by
+ CO1PEPF000044F5.mail.protection.outlook.com (10.167.241.75) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6699.15 via Frontend Transport; Mon, 21 Aug 2023 19:21:18 +0000
+Received: from w92expo18.exchange.mit.edu (18.7.74.72) by
+ w92exhyb5.exchange.mit.edu (18.7.71.110) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Mon, 21 Aug 2023 15:21:01 -0400
+Received: from oc11exhyb1.exchange.mit.edu (18.9.1.60) by
+ w92expo18.exchange.mit.edu (18.7.74.72) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Mon, 21 Aug 2023 15:21:01 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Mon, 21 Aug 2023 15:21:01 -0400
+Received: from MW4PR03CA0128.namprd03.prod.outlook.com (2603:10b6:303:8c::13)
+ by BL3PR01MB7026.prod.exchangelabs.com (2603:10b6:208:359::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.24; Mon, 21 Aug 2023 19:20:58 +0000
+Received: from CO1PEPF000042AC.namprd03.prod.outlook.com
+ (2603:10b6:303:8c:cafe::d5) by MW4PR03CA0128.outlook.office365.com
+ (2603:10b6:303:8c::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20 via Frontend
+ Transport; Mon, 21 Aug 2023 19:20:58 +0000
+Authentication-Results-Original: spf=pass (sender IP is 198.2.136.122)
+ smtp.mailfrom=mandrillapp.com; dkim=pass (signature was verified)
+ header.d=parchment.com;dmarc=pass action=none
+ header.from=parchment.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mandrillapp.com
+ designates 198.2.136.122 as permitted sender)
+ receiver=protection.outlook.com; client-ip=198.2.136.122;
+ helo=mandrill.parchment.com; pr=C
+Received: from mandrill.parchment.com (198.2.136.122) by
+ CO1PEPF000042AC.mail.protection.outlook.com (10.167.243.41) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.14 via Frontend Transport; Mon, 21 Aug 2023 19:20:57 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=parchment.com;
+	s=mandrill; t=1692645657; x=1692906157;
+	i=survey-no-reply@parchment.com;
+	bh=K4BVfMvSpKG4tOnOmIg0YnGX9y57hAdBfR1b038x8fE=;
+	h=From:Subject:To:Message-Id:List-Unsubscribe:Feedback-ID:Date:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:CC:Date:
+	 Subject:From;
+	b=d1vsk3xW3K8OYz8DV92VDf1Av6O/UzTTjBt1u/Ulh28bzSi4F31Fadnl3HgonIjCo
+	 Ov4hhxYGF2SpZzQoiBM1hfmct6hxpCPDK4+SnjhNDP7t7NgiIjcK5hnGGnrlrdacxZ
+	 kGZjYCNtNlM24+vKhKOhd79wnOO54cvkf6Moh9IY=
+Received: from pmta11.mandrill.prod.atl01.rsglab.com (localhost [127.0.0.1])
+	by mandrill.parchment.com (Mailchimp) with ESMTP id 4RV2Q11Mj1zJKFD12
+	for <jiannan@mit.edu>; Mon, 21 Aug 2023 19:20:57 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandrillapp.com; 
+ i=@mandrillapp.com; q=dns/txt; s=mandrill; t=1692645657; h=From : 
+ Subject : To : Message-Id : List-Unsubscribe : Date : MIME-Version : 
+ Content-Type : Content-Transfer-Encoding : From : Subject : Date : 
+ X-Mandrill-User : List-Unsubscribe; 
+ bh=K4BVfMvSpKG4tOnOmIg0YnGX9y57hAdBfR1b038x8fE=; 
+ b=DoUgLuahFD9y6a6+qWhwzhDzpORNcSNu3pn1zYa//6IcAzfpdvwVuRe0cDOOSpwAm0IPMq
+ Em1HhSKiIrg5hlKucT0E1Bc1RKwsz5wne+3x+ofgzNNz+Cr3euuWcJEW3xDl7+x8pI4Y6zSD
+ VvD9FMiguFA9+VsWj54WkMtrYndkM=
+From: Parchment <survey-no-reply@parchment.com>
+Subject: =?utf-8?Q?Tell=20us=20about=20your=20recent=20order=20from=20Massachusetts=20Institute=20of=20Technology?=
+Received: from [34.209.190.195] by mandrillapp.com id 83306fea4cfe4e2cabf6a07bf68edb3d; Mon, 21 Aug 2023 19:20:57 +0000
+To: jiannan@mit.edu
+Message-ID: <169264565694.40.4656633242042190041@pgem-8f9bc5497-fr5zc>
+List-Unsubscribe: <mailto:unsubscribe-md_30717337.64e3b919.v1-83306fea4cfe4e2cabf6a07bf68edb3d@mailin1.us2.mcsv.net?subject=unsub>
+X-Native-Encoded: 1
+X-Report-Abuse: =?UTF-8?Q?Please=20forward=20a=20copy=20of=20this=20message,=20including=20all=20headers,=20to=20abuse@mandrill.com.=20You=20can=20also=20report=20abuse=20here:=20https://mandrillapp.com/contact/abuse=3Fid=3D30717337.83306fea4cfe4e2cabf6a07bf68edb3d?=
+X-Mandrill-User: md_30717337
+Feedback-ID: 30717337:30717337.20230821:md
+Date: Mon, 21 Aug 2023 19:20:57 +0000
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Return-Path:
+ bounce-md_30717337.64e3b919.v1-83306fea4cfe4e2cabf6a07bf68edb3d@mandrillapp.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CO1PEPF000042AC:EE_|BL3PR01MB7026:EE_|CO1PEPF000044F5:EE_|PH0PR01MB6182:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 36245349-85a2-4018-3820-08dba27bcb89
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:3;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?utf-8?B?NzFKaGRIcDRSWDZEWnkwSEQ3R05XbzFWc3E3aWhYaUQ5VDM3QkxBZW1KT1JB?=
+ =?utf-8?B?SjRtNVg2dFAzZkwweHZicGdIdyt0UmZHaDUwL3U4TDNQb1l2VFcrbVhzL3Rn?=
+ =?utf-8?B?czRrVW1vYjFMNnBneVl4NTQyc2MyajVUTlhSTVhYTGxhMVliQ0dtS2o3Lytz?=
+ =?utf-8?B?UTNPMkJHSXNjVGJ0YVp6TmhyOVhyYWcybm9HaXVBaXpRcjFvYWlaQWJvV1J0?=
+ =?utf-8?B?K0lKakNKU0orazgxUTFSN1lzeTIwS3d4VGV2OUtOOS91RlJRTWQ3NEtTNyty?=
+ =?utf-8?B?eVZJamZ0NzFDQjk0V2p6VXllenhCYTRud25rbzNTL3kwMGtlb01GM01LRUdT?=
+ =?utf-8?B?VTQxa3dSdTBRZlVCd2tuTkFnODVVcWorQ2xOUDNFamt0MWtJZzFPbHVXTFE4?=
+ =?utf-8?B?d3piUHF4UTJiejIyaGZDSXJuUnQ5TkduZ2MvZ0ZtbFdyRUZTMDJPYUFWK3Bv?=
+ =?utf-8?B?YlAweVA2RlFlNFBwRlFZZmpwT3NDTGR3QXdVTlpKTnA1YUs3aW9LM3BIQkN1?=
+ =?utf-8?B?b3llZm1KbEw3Q3Y5T2NIRDNxSUFmQWVTVnJhOXZPdTkrQTViUmIwcGh3bTk4?=
+ =?utf-8?B?MlgzTERPSXkvclBIR2psbEhtSXpvL3p3Sy95TWtGSDZxNkVNdlhHQU53N0JP?=
+ =?utf-8?B?NjJaOEVkWFFmTklialdwNXlSSG5xakgrQVVxQ2lvdVpwdWFWbGRiR3cxcWw3?=
+ =?utf-8?B?NzB1RVBocXltTDNUUDEvTFRqV0xjU1hjSW54WFdzbE90bTBkTVJXTGprTmNF?=
+ =?utf-8?B?Tlo4Z1laUTMxMVRJdXZoR1c5a2d6MFk5OEpFZGxDR2dKYkJmYjVDS2RQWm9V?=
+ =?utf-8?B?ZWxoN0VZUEJOOWFad1V4ZWpURitkeXFZZlV5YW83N1dBLzJNc3dKNG1mbjJK?=
+ =?utf-8?B?TGJ6VktYWEZWbEF2UkxVdkVRYmFYdHo2NHM3UVMxa29HaVdKd3BrMXdQaWZV?=
+ =?utf-8?B?Rm5WK0JnZ2N6aXd1d0J0VzhZSmZ4VDJGblFPZHNoNmxFMkt5YWZUdENzeC9k?=
+ =?utf-8?B?YllIdmU1OXd0N3JVWW5IaUg3UlE3QlJ3eWljNEVjYVlNVElrTzl1SkFQakNy?=
+ =?utf-8?B?ODh2azhhT01RRlZVUVZYQ3REOG5sVVZTY1FBdHdIMjN4b29sNDlkaWVBSWxJ?=
+ =?utf-8?B?K3VUTnkxZnBhUDZRQXYzT0lrNWNlM1VsWTcveUh1M3A1aDNaWVVDU3d3ZnZC?=
+ =?utf-8?B?V3RGRHR3N2lidFhKYzJZdlFTaFNrZ1JDdkFoWWFjSGRCNXIxb2ZvOXY5Z1ZJ?=
+ =?utf-8?B?Y2tNQThQN1dCbTBGZ3QzNHJvdFNGK3JHTjBONW16NDUrSUNQekRiUE8rNldM?=
+ =?utf-8?B?ZTgvMUVzbzV3L0F3eSt2RStiemRMeGhucWtVcEJaOGpWMTUzTURLN0NRTUdm?=
+ =?utf-8?B?RU1oZHB6N0dTTmhmcmNwMG9XblYvSWJ3dFVhKzljU041VUpVcDZmNFVHYm12?=
+ =?utf-8?B?RWhhQ3E2SCtnbDFxbmNSR3FhOTdoeVR4MnBQNzFmelpWaExYdUZYNlpIMEJy?=
+ =?utf-8?B?Q2tFWk1adjJtZ01GZWgvM2xxMUtzQlFXc1BWRktKQVZjZzV6TWdwaHRNcmZL?=
+ =?utf-8?B?TUJ2Sk9Ya1hsRG1rRkdFOWRyWHhzbmZMYUJZRVZFa3gzZXVPc012RkV2TFRY?=
+ =?utf-8?B?OFdYcmpUakl5MkQ4WWphYzFMbjFEazVCT3cxMnZZbzVaaFJaOEV1WEROeG1H?=
+ =?utf-8?B?UjFpYUJlQ3laOXZEcGd2SlhtNFhHcEQ0Mk5YaEZaRi9majR0SnFCTWx5ZkJC?=
+ =?utf-8?B?dUpDbkFmZk9BeU5RcEJ3Rnd1ekJKajlOK2tkS2FweXdyMmJNNG53MzZDdXps?=
+ =?utf-8?B?UEErUFhuMFhNNFlEK1J5c2dETXRENXNhQ1FaZWk4bTdCNnJSNGtNWXJUKzNj?=
+ =?utf-8?B?ZHg2Q2hseGJ0ZTNxa1o2VURNZi9LNjh3REYxenNpSzdnQnlrdUppeVRmV0lt?=
+ =?utf-8?B?T2FXMjg5NUNyMzlZZFBUWU1WNUVVZVBydXNYWTZOaUxQazAzcnVKU2lHbG16?=
+ =?utf-8?B?VTIxaGNkVEZBQzQ5QmY0dDA5L1RkNEVsQklJU3duOUorQXNCK1p6UFlySXE5?=
+ =?utf-8?B?UDBaZThmaEdldDZWbGplVHdhbjRkeis5ZmVVR2lqZVU1RnJ3TmFud2pMLzFq?=
+ =?utf-8?B?RHVZUWdPYWUwRHRDQ2RRbHZ6Ym9NTFEwVGt1djg1WDZvbzNVZEhaNFU5a1A3?=
+ =?utf-8?B?R29Ha0tjU0pLT0d6MlBtL3phOEcyd1BiRDcxNEY4cGJKdUFnc3NhODVNcGtX?=
+ =?utf-8?B?bUZIWjJ6SHNTYkhMUFhmQ3AvckREVkFLRDhzTDZGd3UveEVJSDRjb004WFJz?=
+ =?utf-8?B?dkFxS2pDZ2Nxa2ZRNEhoT1poRXA0UkxjUmdRUTFSaStSTDZtYm1sNkZCK0d4?=
+ =?utf-8?B?Q0N1a2FOR3UvT1hpUXVUaEtHejM2Q2o1Ty9XWEJyaHovaFk4Yy9DL2ZTOWg4?=
+ =?utf-8?B?MXVDcG1NcUdOM3R4ZnIrNUpqQUwwSFVQeHlHWkc5YXJIUG9ZWnNEVGRnNmlS?=
+ =?utf-8?B?SUlUNDhDMFRoRXZ6WjlYVG03Qll0WjJ4RytYZlF5WC85OGNremZmN25EaE81?=
+ =?utf-8?Q?SeTf0yMjeEpgqIXd3ZUu7taLievwd3?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:198.2.136.122;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mandrill.parchment.com;PTR:mandrill.parchment.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR01MB7026
+X-OrganizationHeadersPreserved: BL3PR01MB7026.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb1.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb1.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo18.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 21 Aug 2023 19:21:18.2501
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 36245349-85a2-4018-3820-08dba27bcb89
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: CO1PEPF000044F5.namprd05.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CO1PEPF000044F5.namprd05.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1PEPF000044F5.namprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1PEPF000042AC.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ d66d32a3-d233-4e86-9723-08dba27bbf7d
+X-Microsoft-Antispam: BCL:3;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.110;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:w92exhyb5.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2023 19:21:18.0001
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36245349-85a2-4018-3820-08dba27bcb89
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.110];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1PEPF000042AC.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6182
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.6928598
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6699.022
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Q3JPcmdCalllcENhbXM1WnJ2aXVtaHA5dVcwNWNveXg2eTZtRG0wcm1ISWFy?=
+ =?utf-8?B?Vkg1UnUrMFcxSHhIVVJ0cjNlTm42bHAyb1M1NUVxbWNuYXRIV0wyTncvQUtC?=
+ =?utf-8?B?NFdVUjJKaXJSRTRnV2RseWcra0FKdDE3NUVzd2JKaWRNM2FiZWhOYUgxUTdD?=
+ =?utf-8?B?cHRDQlA5aERoOG95d3JyV3lrOHl5anNRUU5EcXJINzNrMjl6Sm5rNWRWU3d6?=
+ =?utf-8?B?MXkyL3EzeUtEdGMwT2gwWE5TWElqZVVUOGp4Y2Nyd3JWTmtBTmNTZFQ4eURT?=
+ =?utf-8?B?YTZQQkphcCtUMnh0SXBKeCtPMW9ubjFtZXZnQitVYWQ2Y1dMMzU5YllqVkFo?=
+ =?utf-8?B?N3U3VUtVWXFRb2IxcEJWTFJ6RS85S0tFTXA0VDQyZEh3d1pMN0VzcTd3VmpG?=
+ =?utf-8?B?dkZkcWpTNVA5S0hWQ1U0dHVlT3N5MENOMk01WGl3ZXNVTkdlQklBS1NxNm9B?=
+ =?utf-8?B?aU1jSlM4MkZTQUh5ZDF4TkJPam9yck5ONTBzbEY2N0doZE94SFZON1lYUVRT?=
+ =?utf-8?B?c0YzUVQ5dk1hSzQwakZqRS96THQ3R1c2cGNtRUM2ZlFLd3dyaVdrWjBmcEtK?=
+ =?utf-8?B?ZmIrTXU3UGREMEx1VGV5MG1hd29jekhxUUtJd29mTkdXWTljTGFCMkhxZmpW?=
+ =?utf-8?B?dmFyN05OdDlaazZUT25MOHJhV2VEZjdhQ3FnMG4vWUFwYStXVVNjNi9MUUVY?=
+ =?utf-8?B?b3E0VW5YdjBHaFo0NHJOSzlPd3JIYWt5eE4xWlNJSXpEOXQvOUU2b1lOb0lU?=
+ =?utf-8?B?V3pvS2x6dW8vM29QNUNPaFEzVit5eWJJR1JRWUxYSFVYaVFydmU4U0kwYmhW?=
+ =?utf-8?B?N243dEo4dnZFM2xzRE85QVJTa0hrcUJ1WTluWVVwN2M2Zm40VUYvaXVWTllW?=
+ =?utf-8?B?emRwdzNYdXVYZysraGZSTjBFcks4aWtmL2RsUTRueEwvSzE4R0N3NHdoYnJy?=
+ =?utf-8?B?OWdQUFQ4czQ4R1VtVnZEd2RRVWVsaUtNdngwTGJsbGJjZ2g1Wk5HbDl2cUFF?=
+ =?utf-8?B?VEhlQnd5dTg1V3dQOW1oYUdPZit1aTdkS0xLb1poMFJDOVZpSXFzWHhUakhY?=
+ =?utf-8?B?amxQQTFUZFdMaStyMFd0TnZDWmJLdWtkT21qSm1ZNUpGdlo2cFhMckNSM2JF?=
+ =?utf-8?B?ZUE5eDRQYlI5bHAvMHd5bldLTG1vdjNlY25oQWhFVEJKSXlqRzdGc3pYd1Ba?=
+ =?utf-8?B?UDV1eE1BNEx5RExoanM5NnVZV2hqQlFmNExHWWFsd1lpSnkvOXZzY3dXYk5h?=
+ =?utf-8?B?am0wakltenc1M2RXR1VWbklpVCtiQ0puaHdYTHUveW1oQUwzNmJCczVoOHp6?=
+ =?utf-8?B?aTYwUkFuOFJZYjNMeGtLNlZOc2NFOFNTSXhnU1NXSmZqOXVJVWRCcW1nSGJN?=
+ =?utf-8?B?Y05lWkM4NGZaSnV0Y0s5UW1heFRTWmR6dktnWFk5d2F5WXRLcVZqVmJOaVRO?=
+ =?utf-8?B?QzZybVl5S2JXMVRxWDAwbzJiSjRLZm50ZlpGUDNod2k0VVpXUUs0b0JESTR6?=
+ =?utf-8?B?WjEwNGkwUlNCT2JGeHVSNEtRMUhxbFNLV0Nxd0Y2UklWaFBmcGgzMGhMYUVr?=
+ =?utf-8?B?dktGZXUxZ1RYMlI3Rmd2WVcxT2xVZW1lNW9DZlRwTWpuQmh0T1dpLzZxZHY1?=
+ =?utf-8?B?Q3VYZm5LZ2lyREZodDI4djZFM2RYSm1jN0VEY0pvc1ljQ1BRcXBkZTNDTDY4?=
+ =?utf-8?B?YkYwRmt5aWIwSVVqaTB1WjV0NW1yOUF1NDhReDBXTEkydXV1SmJBVmxoZ0NM?=
+ =?utf-8?B?a2hzckRsaTJHZTRCVVg1U084ZEhvbGU2anpla0tvNnAwRGZPa1VFdTZIaG9p?=
+ =?utf-8?B?KzZ2bXYwL2NYZmVmVXpWeU1NYUNKZHJTc05TaHZzbGxHZlJhN3V2VVBuN1RH?=
+ =?utf-8?B?TkYrd2x1NEpjQWZnMEt3cHVlTk1GWU4zNHZNZ0Q2MGRYVzVzazJTditsMWx1?=
+ =?utf-8?B?OWxHOXdWb2luUHM4eERpektwMnJQVzBDWnFXREQ4V09qeS9US21OdWh2YWVO?=
+ =?utf-8?B?SmViSVp1amdDVXdNZ3dsTWUzelVRa2Y3SWlxQzc3em1sMjdXKzZURlN5MVdQ?=
+ =?utf-8?B?WFFrN3pXVDd3NEJmWnJmV1h3UVdGcGJXZ1M3WWxrZlZ6RHlXOGh1eDdIL0hI?=
+ =?utf-8?B?ZnZicmhUU2w2anAxdGM0TkRMUUlyblVOOWowb0lRazJPOEN5cmhZanQyNmtT?=
+ =?utf-8?B?UUwvTi9ua2QxQi82N3JPYlFVbGdmYi81c21tcldOTVNGajBqODNHQm5LWDlS?=
+ =?utf-8?B?WkVEQ01VYWhGaHF4cjcrNm83ZE94WmpLTDdPd2lSeGRzcEZwSXZ4RXhldjJ1?=
+ =?utf-8?B?QllDTTZCeFRRYXhldVBLNVdCUjA3dzFmWFhuUjk1aVp4VXB2QjJ0QVlYMVZ0?=
+ =?utf-8?Q?adCV4prmdyn0r6eSRhYnDX0l5anc1rejvufd0?=
+MIME-Version: 1.0
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns=3D"http://www.w3.=
+org/1999/xhtml"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+<meta name=3D"viewport" content=3D"width=3Ddevice-width">
+
+    <style type=3D"text/css">
+		#outlook a{
+			padding:0;
+		}
+		.ReadMsgBody{
+			width:100%;
+		}
+		.ExternalClass{
+			width:100%;
+		}
+		.ExternalClass,.ExternalClass p,.ExternalClass span,.ExternalClass font,.=
+ExternalClass td,.ExternalClass div{
+			line-height:100%;
+		}
+		body,table,td,p,a,li,blockquote{
+			-webkit-text-size-adjust:100%;
+			-ms-text-size-adjust:100%;
+		}
+		table,td{
+			mso-table-lspace:0pt;
+			mso-table-rspace:0pt;
+		}
+		img{
+			-ms-interpolation-mode:bicubic;
+		}
+		body{
+			margin:0;
+			padding:0;
+		}
+		img{
+			border:0;
+			height:auto;
+			line-height:100%;
+			outline:none;
+			text-decoration:none;
+		}
+		table{
+			border-collapse:collapse !important;
+		}
+		body,#bodyTable,#bodyCell{
+			height:100% !important;
+			margin:0;
+			padding:0;
+			width:100% !important;
+		}
+		#bodyCell{
+			padding:20px;
+		}
+		#templateContainer{
+			width:600px;
+		}
+		body,#bodyTable{
+			background-color:#e3e3e3;
+		}
+		#bodyCell{
+			border-top:4px solid #acacac;
+		}
+		#templateContainer{
+			border:1px solid #acacac;
+		}
+		h1{
+			color:#202020;
+			display:block;
+			font-family:Helvetica;
+			font-size:26px;
+			font-style:normal;
+			font-weight:bold;
+			line-height:100%;
+			letter-spacing:normal;
+			margin-top:0;
+			margin-right:0;
+			margin-bottom:10px;
+			margin-left:0;
+			text-align:left;
+		}
+		h2{
+			color:#404040;
+			display:block;
+			font-family:Helvetica;
+			font-size:20px;
+			font-style:normal;
+			font-weight:bold;
+			line-height:100%;
+			letter-spacing:normal;
+			margin-top:0;
+			margin-right:0;
+			margin-bottom:10px;
+			margin-left:0;
+			text-align:left;
+		}
+		h3{
+			color:#606060 !important;
+			display:block;
+			font-family:Helvetica;
+			font-size:16px;
+			font-style:italic;
+			font-weight:normal;
+			line-height:100%;
+			letter-spacing:normal;
+			margin-top:0;
+			margin-right:0;
+			margin-bottom:10px;
+			margin-left:0;
+			text-align:left;
+		}
+		h4{
+			color:#808080 !important;
+			display:block;
+			font-family:Helvetica;
+			font-size:14px;
+			font-style:italic;
+			font-weight:normal;
+			line-height:100%;
+			letter-spacing:normal;
+			margin-top:0;
+			margin-right:0;
+			margin-bottom:10px;
+			margin-left:0;
+			text-align:left;
+		}
+		#templatePreheader{
+			background-color:#006090;
+			border-bottom:1px solid #CCCCCC;
+		}
+		#preHeaderColumns{
+			background-color:#006090;
+			border-bottom:1px solid #CCCCCC;
+		}
+		#preHeaderColumns .templateColumnContainer{
+			padding-top:20px;
+		}
+		#preHeaderColumns h1{
+			color:#fff;
+			font-size:16px;
+			font-weight:300;
+			margin-top:20px;
+			margin-bottom:5px;
+		}
+		#preHeaderColumns h2{
+			color:#fff;
+			font-size:18px;
+			font-weight:500;
+			margin-bottom:20px;
+		}
+		#preHeaderColumns .rightColumnContent{
+			text-align:right;
+		}
+		#templateHeader{
+			background-color:#F4F4F4;
+			border-top:1px solid #FFFFFF;
+			border-bottom:1px solid #CCCCCC;
+		}
+		.headerContent{
+			color:#505050;
+			font-family:Helvetica;
+			font-size:20px;
+			font-weight:bold;
+			line-height:100%;
+			padding-top:0;
+			padding-right:0;
+			padding-bottom:0;
+			padding-left:0;
+			text-align:left;
+			vertical-align:middle;
+		}
+		.headerContent a:link,.headerContent a:visited,.headerContent a .yshortcu=
+ts{
+			color:#EB4102;
+			font-weight:normal;
+			text-decoration:none;
+		}
+		#headerImage{
+			height:auto;
+			max-width:600px;
+		}
+		.bodyContent{
+			background-color:#fff;
+			color:#505050;
+			font-family:Helvetica;
+			font-size:14px;
+			line-height:150%;
+			padding-top:20px;
+			padding-right:20px;
+			padding-bottom:20px;
+			padding-left:20px;
+			text-align:left;
+			border-bottom:1px solid #CCCCCC;
+		}
+		.bodyContent a:link,.bodyContent a:visited,.bodyContent a .yshortcuts{
+			color:#45b3c4;
+			font-weight:normal;
+			text-decoration:none;
+		}
+		.bodyContent img{
+			display:inline;
+			height:auto;
+			max-width:560px;
+		}
+		.templateColumnContainer{
+			width:260px;
+		}
+		#templateColumns{
+			background-color:#fff;
+			border-bottom:1px solid #CCCCCC;
+		}
+		.leftColumnContent{
+			color:#505050;
+			font-family:Helvetica;
+			font-size:14px;
+			line-height:150%;
+			padding-top:0;
+			padding-right:20px;
+			padding-bottom:20px;
+			padding-left:20px;
+			text-align:left;
+		}
+		.leftColumnContent a:link,.leftColumnContent a:visited,.leftColumnContent=
+ a .yshortcuts{
+			color:#45b3c4;
+			font-weight:normal;
+			text-decoration:none;
+		}
+		.rightColumnContent{
+			color:#505050;
+			font-family:Helvetica;
+			font-size:14px;
+			line-height:150%;
+			padding-top:0;
+			padding-right:20px;
+			padding-bottom:20px;
+			padding-left:20px;
+			text-align:left;
+		}
+		.rightColumnContent a:link,.rightColumnContent a:visited,.rightColumnCont=
+ent a .yshortcuts{
+			color:#45b3c4;
+			font-weight:normal;
+			text-decoration:none;
+		}
+		.leftColumnContent img,.rightColumnContent img{
+			display:inline;
+			height:auto;
+			max-width:260px;
+		}
+		#templateFooter{
+			background-color:#006098;
+		}
+		#footerColumns{
+			background-color:#006098;
+		}
+		#footerColumns .leftColumnContent{
+			color:#fff;
+			font-family:Helvetica;
+			font-size:12px;
+			line-height:150%;
+			padding-top:15px;
+			padding-right:20px;
+			padding-bottom:15px;
+			padding-left:20px;
+			text-align:left;
+		}
+		#footerColumns .rightColumnContent{
+			color:#fff;
+			font-family:Helvetica;
+			font-size:12px;
+			line-height:150%;
+			padding-top:15px;
+			padding-right:20px;
+			padding-bottom:2px;
+			padding-left:20px;
+			text-align:center;
+		}
+		#footerColumns a:link,.footerContent a:visited,.footerContent a .yshortcu=
+ts,.footerContent a span{
+			color:#fff;
+			font-weight:normal;
+			text-decoration:none;
+		}
+		.copyright{
+			color:#777;
+			font-family:Helvetica;
+			font-size:10px;
+			line-height:100%;
+			padding-top:0;
+			padding-right:0;
+			padding-bottom:0;
+			padding-left:0;
+			text-align:left;
+			vertical-align:middle;
+		}
+		.copyright a:link,.copyright a:visited,.headerContent a .yshortcuts{
+			color:#999;
+			font-weight:normal;
+			text-decoration:none;
+		}
+	@media only screen and (max-width: 480px){
+		body,table,td,p,a,li,blockquote{
+			-webkit-text-size-adjust:none !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		body{
+			width:100% !important;
+			min-width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		#bodyCell{
+			padding:10px !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		#templateContainer{
+			max-width:600px !important;
+			width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		#preHeaderColumns .templateColumnContainer{
+			padding-top:0;
+		}
+
+}	@media only screen and (max-width: 480px){
+		#preHeaderColumns h2{
+			margin-bottom:0px;
+		}
+
+}	@media only screen and (max-width: 480px){
+		#preHeaderColumns .leftColumnContent h1,#preHeaderColumns .leftColumnCont=
+ent h2{
+			text-align:center;
+		}
+
+}	@media only screen and (max-width: 480px){
+		#preHeaderColumns .rightColumnContent img{
+			padding-top:0 !important;
+			display:block;
+			width:160px;
+			margin:0 auto;
+		}
+
+}	@media only screen and (max-width: 480px){
+		#headerImage{
+			height:auto !important;
+			max-width:600px !important;
+			width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.headerContent{
+			font-size:20px !important;
+			line-height:125% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.bodyContent{
+			font-size:18px !important;
+			line-height:125% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.templateColumnContainer{
+			display:block !important;
+			width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.columnImage{
+			height:auto !important;
+			max-width:260px !important;
+			width:100% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.leftColumnContent{
+			font-size:16px !important;
+			line-height:125% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		.rightColumnContent{
+			font-size:16px !important;
+			line-height:125% !important;
+		}
+
+}	@media only screen and (max-width: 480px){
+		#footerColumns .leftColumnContent{
+			text-align:center;
+		}
+
+}	@media only screen and (max-width: 480px){
+		#footerColumns .rightColumnContent{
+			text-align:center;
+		}
+
+}</style></head>
+    <body leftmargin=3D"0" marginwidth=3D"0" topmargin=3D"0" marginheight=
+=3D"0" offset=3D"0">
+    	<center>
+        	<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" height=3D"100%" width=3D"100%" id=3D"bodyTable">
+            	<tr>
+                	<td align=3D"center" valign=3D"top" id=3D"bodyCell">
+                    	<!-- BEGIN TEMPLATE // -->
+                    	<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" id=3D"templateContainer">
+                        	<tr>
+                            	<td align=3D"center" valign=3D"top">
+                            	<!-- BEGIN COLUMNS // -->
+                                    <table border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" width=3D"100%" id=3D"preHeaderColumns">
+                                    	<tr>
+                                        	<td align=3D"center" valign=3D"top=
+" class=3D"templateColumnContainer">
+
+                                            	<table border=3D"0" cellpaddin=
+g=3D"20" cellspacing=3D"0" width=3D"100%">
+                                                   =20
+                                                </table>
+                                            </td>
+                                        	<td align=3D"center" valign=3D"top=
+" class=3D"templateColumnContainer">
+                                            	<table border=3D"0" cellpaddin=
+g=3D"20" cellspacing=3D"0" width=3D"100%">
+                                                    <tr>
+                                                    	<td valign=3D"top" cla=
+ss=3D"rightColumnContent">
+                                                            <a href=3D"http=
+s://mandrillapp.com/track/click/30717337/www.parchment.com?p=3DeyJzIjoiamN1=
+Umg3Yy1kQTF3bGlQWnV0WEhrSjVTTW53IiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZ=
+cIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LnBhcmNobWVudC5jb21cIixcImlkXCI6XC=
+I4MzMwNmZlYTRjZmU0ZTJjYWJmNmEwN2JmNjhlZGIzZFwiLFwidXJsX2lkc1wiOltcIjU4Njc2M=
+jhmYzAyOTJlNTE5MDk3YjIzNTMwZGQxOGE3NzIxYTYzMDRcIl19In0"><img src=3D"https:/=
+/gallery.mailchimp.com/d2b896551ac982e4f38ebb761/images/ad36d266-05aa-49c1-=
+a968-77afa6a9d841.png" style=3D"max-width:160px;margin-top:4px;" border=3D"=
+0"></a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <!-- // END COLUMNS -->
+                                </td>
+                            </tr>
+                        	<tr>
+                            	<td align=3D"center" valign=3D"top">
+                                	<!-- BEGIN HEADER // -->
+                                    <table border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" width=3D"100%" id=3D"templateHeader">
+                                        <tr>
+                                                                  <td valig=
+n=3D"top" class=3D"headerContent"><img src=3D"https://gallery.mailchimp.com=
+/d2b896551ac982e4f38ebb761/images/7e0553b8-71e2-44f4-bd4e-a7183a2451b6.jpg"=
+ style=3D"max-width:600px;" id=3D"headerImage" alt=3D"7e0553b8-71e2-44f4-bd=
+4e-a7183a2451b6.jpg">
+                      </td>
+                                        </tr>
+                                    </table>
+                                    <!-- // END HEADER -->
+                                </td>
+                            </tr>
+							<tr>
+                            	<td align=3D"center" valign=3D"top">
+                                	<!-- BEGIN BODY // -->
+                                    <table border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" width=3D"100%" id=3D"templateBody">
+                                        <tr>
+                                            <td valign=3D"top" class=3D"bod=
+yContent">
+                                          =20
+                                                Thank you for your recent o=
+rder <b>Jiannan</b>,<br><br>
+
+Please take our two-question survey to help us serve you better next time. =
+We'd really appreciate it.<br>
+<center><a href=3D"https://mandrillapp.com/track/click/30717337/www.surveym=
+onkey.com?p=3DeyJzIjoiaTgzMUkwTWF3Wl96Sm50bFBWRC1WQ1pGVGlVIiwidiI6MSwicCI6I=
+ntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5zdXJ2=
+ZXltb25rZXkuY29tXFxcL3JcXFwvWUNIVFZUWT9wa2lkPTE2ODY5MzcyNiZTY2hvb2xOYW1lPU1=
+hc3NhY2h1c2V0dHMgSW5zdGl0dXRlIG9mIFRlY2hub2xvZ3kmU2Nob29sUEtJRD0zMjY1MCZTdG=
+F0ZT1NQSZDb3VudHJ5PVVTJkVtYWlsQWRkcmVzcz1qaWFubmFuQG1pdC5lZHUmT3JkZXJJRD1ST=
+VM3OTYyNDUwNlwiLFwiaWRcIjpcIjgzMzA2ZmVhNGNmZTRlMmNhYmY2YTA3YmY2OGVkYjNkXCIs=
+XCJ1cmxfaWRzXCI6W1wiMzg4YjAxMjFkNTYwMTBhOGIyZGQyYjI1NjA1OTBhYjU4OWYwNWI0N1w=
+iXX0ifQ"><img src=3D"https://gallery.mailchimp.com/d2b896551ac982e4f38ebb76=
+1/images/bcd92c04-36e4-4212-b9c7-82567427c763.png" border=3D"0"></a></cente=
+r>
+
+Thank you,<br>
+The Parchment Team<br><br>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                           =20
+                                             =20
+                                              =20
+                                            </tr></table></td>
+                                            </tr></table></td>
+                                        </tr>
+                                    </table>
+                                    <!-- // END BODY -->
+                               =20
+                           =20
+                        	<tr>
+                            	<td align=3D"center" valign=3D"top">
+                                    <!-- BEGIN COLUMNS // -->
+                                    <table border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" width=3D"100%" id=3D"footerColumns">
+                                    	<tr>
+                                        	<td align=3D"center" valign=3D"top=
+" class=3D"templateColumnContainer">
+                                            	<table border=3D"0" cellpaddin=
+g=3D"20" cellspacing=3D"0" width=3D"100%">
+                                                    <tr>
+                                                    	<td valign=3D"top" cla=
+ss=3D"rightColumnContent">
+                                                            <a href=3D"http=
+s://mandrillapp.com/track/click/30717337/www.parchment.com?p=3DeyJzIjoiamN1=
+Umg3Yy1kQTF3bGlQWnV0WEhrSjVTTW53IiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZ=
+cIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LnBhcmNobWVudC5jb21cIixcImlkXCI6XC=
+I4MzMwNmZlYTRjZmU0ZTJjYWJmNmEwN2JmNjhlZGIzZFwiLFwidXJsX2lkc1wiOltcIjU4Njc2M=
+jhmYzAyOTJlNTE5MDk3YjIzNTMwZGQxOGE3NzIxYTYzMDRcIl19In0">Parchment.com</a>&n=
+bsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href=3D"https://mandrillapp.com/track=
+/click/30717337/support.parchment.com?p=3DeyJzIjoiV2JGR3F3QkVEakhfekR3MVVuS=
+010NEhFd01ZIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJo=
+dHRwOlxcXC9cXFwvc3VwcG9ydC5wYXJjaG1lbnQuY29tXFxcL1wiLFwiaWRcIjpcIjgzMzA2ZmV=
+hNGNmZTRlMmNhYmY2YTA3YmY2OGVkYjNkXCIsXCJ1cmxfaWRzXCI6W1wiNjkzNmFmM2Q1N2U3NW=
+EyM2Y2YmE1ZTNjZGNmZjA5NDQxMWE5YmZhYVwiXX0ifQ">Help Center</a>&nbsp;&nbsp;&n=
+bsp;|&nbsp;&nbsp;&nbsp;<a href=3D"https://mandrillapp.com/track/click/30717=
+337/www.parchment.com?p=3DeyJzIjoiS2VJY1NYMTJvby1qY1NUc3hkMnNTaUFNMV9NIiwid=
+iI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwv=
+d3d3LnBhcmNobWVudC5jb21cXFwvcHJpdmFjeS1wb2xpY3lcXFwvXCIsXCJpZFwiOlwiODMzMDZ=
+mZWE0Y2ZlNGUyY2FiZjZhMDdiZjY4ZWRiM2RcIixcInVybF9pZHNcIjpbXCI3ZDhiYTE5YWQ4OW=
+RmNDMxN2NjZjk1ODEyYjc1YjEwYjA4ZTY5YjAzXCJdfSJ9">Privacy Policy</a>&nbsp;&nb=
+sp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href=3D"https://mandrillapp.com/track/click/=
+30717337/www.parchment.com?p=3DeyJzIjoiSF95U3pYV3VRM0hKaTBKWmVNUEJLdE5ZWEU0=
+IiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9=
+cXFwvd3d3LnBhcmNobWVudC5jb21cXFwvdGVybXMtb2YtdXNlXFxcL1wiLFwiaWRcIjpcIjgzMz=
+A2ZmVhNGNmZTRlMmNhYmY2YTA3YmY2OGVkYjNkXCIsXCJ1cmxfaWRzXCI6W1wiYTNlY2JlNzk1N=
+DgxNmM0MzU4MjQ0ZjY1YTIxMDZjNmU0M2E1MTk1N1wiXX0ifQ">Terms of Use</a><br><br>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                    </tr></table>
+                                    <!-- // END COLUMNS -->
+                                </td>
+                            </tr>
+                       =20
+                        <!-- // END TEMPLATE -->
+                        <br><font class=3D"copyright">  <font size=3D"-10">=
+This is a one time message related to your recent order, so that Parchment =
+and Massachusetts Institute of Technology <br> can strive to provide you th=
+e best experience possible.<br><br> This survey request is not a subscripti=
+on to marketing messages, <br>and we may ask you for feedback related to fu=
+ture orders you place with Parchment.<br><br>This email address is not moni=
+tored. To contact us related to your order, please <a href=3D"https://mandr=
+illapp.com/track/click/30717337/support.parchment.com?p=3DeyJzIjoiV2JGR3F3Q=
+kVEakhfekR3MVVuS010NEhFd01ZIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjox=
+LFwidXJsXCI6XCJodHRwOlxcXC9cXFwvc3VwcG9ydC5wYXJjaG1lbnQuY29tXFxcL1wiLFwiaWR=
+cIjpcIjgzMzA2ZmVhNGNmZTRlMmNhYmY2YTA3YmY2OGVkYjNkXCIsXCJ1cmxfaWRzXCI6W1wiNj=
+kzNmFmM2Q1N2U3NWEyM2Y2YmE1ZTNjZGNmZjA5NDQxMWE5YmZhYVwiXX0ifQ">visit our Hel=
+p Center</a>.<br><br><br></font><br></font>
+                   =20
+               =20
+           =20
+        </center>
+    <img src=3D"https://mandrillapp.com/track/open.php?u=3D30717337&amp;id=
+=3D83306fea4cfe4e2cabf6a07bf68edb3d" height=3D"1" width=3D"1" alt=3D""><cen=
+ter>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" =
+id=3D"canspamBarWrapper" style=3D"background-color:#FFFFFF; border-top:1px =
+solid #E5E5E5;">
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"padding-top:20px; =
+padding-bottom:20px;">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" id=
+=3D"canspamBar">
+                    <tr>
+                        <td align=3D"center" valign=3D"top" style=3D"color:=
+#606060; font-family:Helvetica, Arial, sans-serif; font-size:11px; line-hei=
+ght:150%; padding-right:20px; padding-bottom:5px; padding-left:20px; text-a=
+lign:center;">
+                            This email was sent to <a href=3D"mailto:jianna=
+n@mit.edu" target=3D"_blank" style=3D"color:#404040 !important;">jiannan@mi=
+t.edu</a>
+                            &nbsp;&nbsp;
+                            <a href=3D"https://mandrillapp.com/track/click/=
+30717337/mandrillapp.com?p=3DeyJzIjoic0hseEdheGFmM0hDQmgxTkVQY08xQy1yVVE0Ii=
+widiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cX=
+FwvbWFuZHJpbGxhcHAuY29tXFxcL3RyYWNrXFxcL3Vuc3ViLnBocD91PTMwNzE3MzM3JmlkPTgz=
+MzA2ZmVhNGNmZTRlMmNhYmY2YTA3YmY2OGVkYjNkLmYwT0xCODNiSkNVdldiejVHUjElMkI5a0Z=
+aVnRnJTNEJnI9aHR0cHMlM0ElMkYlMkZtYW5kcmlsbGFwcC5jb20lMkZ1bnN1YiUzRm1kX2VtYW=
+lsJTNEaiUyNTJBJTI1MkElMjUyQSUyNTJBJTI1NDBtJTI1MkElMjUyQSUyNTJBJTI1MkEuJTI1M=
+kElMjUyQSUyNTJBXCIsXCJpZFwiOlwiODMzMDZmZWE0Y2ZlNGUyY2FiZjZhMDdiZjY4ZWRiM2Rc=
+IixcInVybF9pZHNcIjpbXCI4N2Y5MjNmMTgyODZmYzk3ODAwYTU3MDdlYTIwMmMzYTA0NTAwZmE=
+0XCJdfSJ9" style=3D"color:#404040 !important;">unsubscribe from this list</=
+a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <style type=3D"text/css">
+        @media only screen and (max-width: 480px){
+            table[id=3D"canspamBar"] td{font-size:14px !important;}
+            table[id=3D"canspamBar"] td a{display:block !important; margin-=
+top:10px !important;}
+        }
+    </style>
+</center></body>
+</html>
+

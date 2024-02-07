@@ -1,0 +1,848 @@
+Received: from CH0PR01MB7171.prod.exchangelabs.com (2603:10b6:610:fb::19) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 24 Oct 2023 17:21:13
+ +0000
+Received: from MW4PR04CA0248.namprd04.prod.outlook.com (2603:10b6:303:88::13)
+ by CH0PR01MB7171.prod.exchangelabs.com (2603:10b6:610:fb::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.33; Tue, 24 Oct 2023 17:21:12 +0000
+Received: from MWH0EPF000971E9.namprd02.prod.outlook.com
+ (2603:10b6:303:88:cafe::49) by MW4PR04CA0248.outlook.office365.com
+ (2603:10b6:303:88::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.19 via Frontend
+ Transport; Tue, 24 Oct 2023 17:21:11 +0000
+Authentication-Results: spf=fail (sender IP is 18.7.71.112)
+ smtp.mailfrom=a619304.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of a619304.bnc3.mailjet.com
+ does not designate 18.7.71.112 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.7.71.112;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.7.71.112) by
+ MWH0EPF000971E9.mail.protection.outlook.com (10.167.243.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Tue, 24 Oct 2023 17:21:11 +0000
+Received: from w92expo21.exchange.mit.edu (18.7.74.75) by
+ w92exhyb7.exchange.mit.edu (18.7.71.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 24 Oct 2023 13:20:59 -0400
+Received: from oc11exhyb4.exchange.mit.edu (18.9.1.100) by
+ w92expo21.exchange.mit.edu (18.7.74.75) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Tue, 24 Oct 2023 13:20:59 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Tue, 24 Oct 2023 13:20:59 -0400
+Received: from DS7PR03CA0123.namprd03.prod.outlook.com (2603:10b6:5:3b4::8) by
+ CH3PR01MB8470.prod.exchangelabs.com (2603:10b6:610:1a4::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.26; Tue, 24 Oct 2023 17:20:57 +0000
+Received: from CY4PEPF0000FCBF.namprd03.prod.outlook.com
+ (2603:10b6:5:3b4:cafe::13) by DS7PR03CA0123.outlook.office365.com
+ (2603:10b6:5:3b4::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33 via Frontend
+ Transport; Tue, 24 Oct 2023 17:20:56 +0000
+Authentication-Results-Original: spf=pass (sender IP is 185.189.236.17)
+ smtp.mailfrom=a619304.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=704
+Received-SPF: Pass (protection.outlook.com: domain of a619304.bnc3.mailjet.com
+ designates 185.189.236.17 as permitted sender)
+ receiver=protection.outlook.com; client-ip=185.189.236.17;
+ helo=o17.p25.mailjet.com; pr=C
+Received: from o17.p25.mailjet.com (185.189.236.17) by
+ CY4PEPF0000FCBF.mail.protection.outlook.com (10.167.242.101) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Tue, 24 Oct 2023 17:20:56 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; q=dns/txt;
+  d=bnc3.mailjet.com; i=grad-ed=3Dmit.edu@a619304.bnc3.mailjet.com; s=mailjet1; x=1698175239;
+  h=message-id:mime-version:from:from:reply-to:to:to:subject:subject:date:date:list-id:list-unsubscribe:
+  list-unsubscribe-post:feedback-id:precedence:x-campaignid:x-csa-complaints:
+  x-mj-mid:x-mj-smtpguid:x-report-abuse-to:content-type;
+  bh=6DFtE0vai9bPuzuFJwczhL9sKGpzVYex4zlZU6jF+cE=;
+  b=ztkVWEzkTfTbF2QJ0o0a6GkQCIbs9LOj4lVldW28Ew/Kd8kr7wC0a1ofc
+ eKHWKVbUZXIj6jTslP9ZYbvcA1AGYWne2zfeirDRV+xRFrf83lXXqkBQJmYU
+ DPPv7Qc/E0tVoRZXGZISjewz4/nc7GE6oUC2yeGcaPNarEIdPBdIgQ=
+Return-Path:
+ e0fd82c7.AWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn@a619304.bnc3.mailjet.com
+Message-ID: <e0fd82c7.AWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn@mailjet.com>
+From: OGE Fellowships <grad-ed@mit.edu>
+Reply-To: grad-fellowships@mit.edu
+To: jiannan@mit.edu
+Subject: NEW! Fall Tax Workshop from the VPF
+Date: Tue, 24 Oct 2023 16:00:40 +0000 (UTC)
+List-Id: <grad-ed.mit.edu.kysz-097r2.mj>
+List-Unsubscribe: <mailto:unsub-e0fd82c7.kysz.lnt4zuqvmyih@bnc3.mailjet.com>,
+	<https://kysz.mjt.lu/unsub2?m=AWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks&b=e0fd82c7&e=4ed7b23d&x=a7iET_5Bkh8rOy7esnA68A>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Feedback-Id: 42.619304.586923:MJ
+Precedence: bulk
+X-CampaignID: 7713668434
+X-CSA-Complaints: csa-complaints@eco.de
+X-MJ-Mid: AWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks
+X-MJ-SMTPGUID: f0c69ff5-0b86-4185-a8aa-152611961eea
+X-REPORT-ABUSE-TO: Message sent by Mailjet please report to
+	abuse@mailjet.com with a copy of the message
+Content-Type: multipart/alternative; boundary="=-s7xN2fnHZ5KsjncPnmI6"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CY4PEPF0000FCBF:EE_|CH3PR01MB8470:EE_|MWH0EPF000971E9:EE_|CH0PR01MB7171:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 00fd1169-1584-4cfd-52dc-08dbd4b59eb4
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?tjomEHrpzLRTIwrSn2c9ZwMh/4vcBxu668de5za/pQc1APhbpoWtOdxylZMn?=
+ =?us-ascii?Q?dNUrkV/VT9gaASpYw9FR8X9MRmIFhK2NBJZHngI1YdlDAGHtbUVRFRNCuKIK?=
+ =?us-ascii?Q?XfGEZp0VaEUfZUWqB7pziWzRlwpDLM0ZgRRiVHEsjh2BlV/Gal8Uqw7GRlXe?=
+ =?us-ascii?Q?/SunPlNiwmA6J4cjeuqhVW04hVy67y8+ZpuGWJPU/0HAwU9a5uL7OCvLyHXk?=
+ =?us-ascii?Q?ZpO8qIPPeqiJSZgiPx3tA9Gt4Qb5i5G86DCtG5PW7Uj8dQQonHcMmqEL0WNu?=
+ =?us-ascii?Q?Ph9eutuTthpMy/Gkk5fZMBoK3ql4ufv3DJLQhp8p/vozu/cSv6d0jwU8eoSY?=
+ =?us-ascii?Q?BNHrvgOxKw72b3YDctLNiaSmByFGiqkkBuo1VsUmOrse+W8hxkuR3kzdNwRc?=
+ =?us-ascii?Q?g1gat0Idd8JoQxxKiFH70vVT14n+DXD5ji9NPeloR92DS0U0zocLi6Kr2Ukk?=
+ =?us-ascii?Q?lzl1NNasTnoLVnhjL4M8SN+FMlo+QyxAMd2jds9UT3ZiZ/LILtQIUsV/mypp?=
+ =?us-ascii?Q?2BM3/pF1IjBfL4D9Q3CXO4/nkynyjtc6qvADMwrEcwbNvn3YCBWlNWr0O39V?=
+ =?us-ascii?Q?r3nQkwKOpWRVI5ER4GachvmWSmrUyAnmL/B0932LHCrrdhr8rlRYLJ3qlbY0?=
+ =?us-ascii?Q?lnrYV99YH/pFkcHVdko1DkwlDhBCh94UhlaDx3j8TP12a758NUrOhnZoQJRG?=
+ =?us-ascii?Q?oPA0PV6WjZ4QxZ59M9S5bzbp7Kh7Obyzh3bPVQ27NQlOg6YpZqG6TM9AQg01?=
+ =?us-ascii?Q?TwtDEwS0bX18i6bA3C3DVrcL0Yhob77jsEE7j0ONaDFvVZTLj9QGmnI/Zexk?=
+ =?us-ascii?Q?25hqDS5oNLluN6n2alSihXRfsbqYu8vbXr5opr4sYA6OoXSJiLZlZXmaH0+e?=
+ =?us-ascii?Q?5yZmM/D5HGQV6EM4spxwVxCyupQ948gRmHvBZGZSYokShDlDsEUvjjWyQss7?=
+ =?us-ascii?Q?NFqFmhc0fo8bfilOBat9AcTmztXzil0TIGT5bjCuf92ojWOa2rXdYA3gZ4ov?=
+ =?us-ascii?Q?bgy0V3zt5of3aYvuhcaG8iDPjYw619mUoG1d+s+meVUP98ZfD9yURHk8+Jmo?=
+ =?us-ascii?Q?kK+HjMN6tKi6Hj8yKNTYbULAG8hnOEFlcgzc1D4UvnI5/T93h32S+uvYZucK?=
+ =?us-ascii?Q?MWHuv9bPo4DSsBbjzUKITgV2Ur+A9YQUrlYfifsEYtdJRaUywk2EYa/qcSjO?=
+ =?us-ascii?Q?fixG2iqXmdMvjiLUY+k1KeNsey9dftUtgMkfwuUUntGWdKpJ4rpiXnvuR04k?=
+ =?us-ascii?Q?ko4SauCf0QFvC6lDggt4XFq7e1KS0OCL8VNIvdXmP9G+Is8lyouIe5zQP455?=
+ =?us-ascii?Q?3E/bi+wdxgdZPSUYbjoE9zlORI0At55fweN7RNquw8axt9uybEmOXzYtdnjn?=
+ =?us-ascii?Q?KZmUQ34=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:185.189.236.17;CTRY:FR;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:o17.p25.mailjet.com;PTR:o17.p25.mailjet.com;CAT:NONE;SFS:(13230031)(4636009)(1690799017)(451199024)(66899024)(5930299018)(26005)(9686003)(356005)(36756003)(83170400001)(166002)(7596003)(7636003)(966005)(42882007)(83380400001)(7066003)(9316004)(6506007)(58800400005)(33964004)(7696005)(336012)(956004)(6666004)(6486002)(1096003)(4006050)(75640400001)(36736006)(6636002)(76236004)(5660300002)(19810500001)(6916009)(8676002)(1406899027)(4306899006)(76899018)(579004)(19607625013);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR01MB8470
+X-OrganizationHeadersPreserved: CH3PR01MB8470.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb4.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb4.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo21.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 24 Oct 2023 17:21:11.9844
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 00fd1169-1584-4cfd-52dc-08dbd4b59eb4
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: MWH0EPF000971E9.namprd02.prod.outlook.com
+X-CrossPremisesHeadersFiltered: MWH0EPF000971E9.namprd02.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ MWH0EPF000971E9.namprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CY4PEPF0000FCBF.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 3fe373cd-8569-4e90-322f-08dbd4b595b8
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.112;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:w92exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2023 17:21:11.7344
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00fd1169-1584-4cfd-52dc-08dbd4b59eb4
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CY4PEPF0000FCBF.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB7171
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.8770287
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6933.019
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?T2pGSUlhNVozVHFRbG93WFJoUFhsc1N2ZlMzeHBDUURLeElVMWFVQTlpNU1Y?=
+ =?utf-8?B?Z09GaVZJZUY5dTBVOUFuRXJxdCtlRGZrVUNTNFhyd1JnK0diMUNKVzlib3By?=
+ =?utf-8?B?alZjSnNzS0Jnb2poYVVLTmFidm5nMmVrZnM3bE5PQkk1bGVESk1XVlh3Nlhq?=
+ =?utf-8?B?dUIwdVkzME12WFRZYjNhQlMzeGpjbDdWbXpMdXR3TlhFWmFBZXhkMjVQRlM5?=
+ =?utf-8?B?SFoycTBUS3M3a0JxZnNpQSt0dGNmeCtGK3dhZm9JVXR1aUMxdlhOSDdReWpE?=
+ =?utf-8?B?cjRpR1pWelc5WkFNSndVeXRyWXRMQ09uczVkZFRIOTlYNEU1NGljR1p0SHRp?=
+ =?utf-8?B?dWw2WS9qaGlvb3BUdE5wNnFLK0llUk1rVHQrR1lqTEFOSnh3ZVM5VENQc2M0?=
+ =?utf-8?B?QlVzVjJha3hwSDlJZVM3cmE2T2xZd2lTN3N6cWZFNnBsWS91YTJ1RERNNTdh?=
+ =?utf-8?B?cGJQT2dsU1JIT1ZMdVFoUWlxNVVmYmhNSC93RXJDVUMwRHdmZWZ1UnpwVkYz?=
+ =?utf-8?B?L3A4WlMyd0ZVNGtQd0ZCaDd2YVFOczVPQ0p3YUJtRFkxL3BGY2tiYUhqT2R6?=
+ =?utf-8?B?L2EwL0ZnRVNRTVRmaHBORTZrR2kxZW9jSGxaTGxCWlg1dHBNQVlNOHFFRWda?=
+ =?utf-8?B?eXRQbHZYWmVBc21QVnFQQXYxQytaL1RleXh4cEcxY1lYR3NLRkdsT1I2U0Yw?=
+ =?utf-8?B?RW84SVEwR1JWRVhwTXdaT0lMbi9pV0VwZy9tM29mMEhLcncxc3RPQWlLUVNN?=
+ =?utf-8?B?cGRUaWg1Q2FNN1gzSngwSzJzN0FGYWE4MGhHTEt4MzdzSFJLMThxT3NOUVpv?=
+ =?utf-8?B?WTBKZEFMYzZTNVpKNFNzKzFOZTR2d3YwRHpiMlNtTlEwZEdEeGVuampKclR2?=
+ =?utf-8?B?WnZPckw2QmNHc1hpQVNPUVhIdUhGa1IxSG1aYTRZZ0RROXFUU0ZHeDk2V0ti?=
+ =?utf-8?B?aW14S2NacjJDMktOTW9HREVoUWd1RlBVSVhIcVFsUWIvZFpnaTJrZy9UNU84?=
+ =?utf-8?B?S3owM3FzVVJzYStTd1RPTkg1UjZpM09Ed0toNFNleXdOYVd2T0FKNjhRK1VU?=
+ =?utf-8?B?UFZZa1ZRZjdxSnhUbWo5MHpTT09MS0xPN3dJRHhjem9MT2VyeisrYkVuWmhU?=
+ =?utf-8?B?M1FLQUxEbEMxbENwdmdWVUhGdHBkbUZNYlcwZTBtMElqVTlFU1JySmNoQUNS?=
+ =?utf-8?B?WGFNc1lCZmx5Tld2ZFdpSFU2VzZOYU1aZWFSMlNYc0o2MVEveWlveVphN0wz?=
+ =?utf-8?B?K3V2ZzZnd1I4QzhFOWZuYnRxZS9tS2NtTDB1UmZkdnFnb3JMUFArVXMwckRJ?=
+ =?utf-8?B?cFdHVnhiZmxFdFFvWWx4Sk1VZ3RkaDQvRDZBVGZWci94bmR3K0czTUlRbUI5?=
+ =?utf-8?B?amMyVFRZZys5YnVBNVJQNjE4eTZ5QVl2MEYwVm9GaVJRdk9taE9rbEJWRDRG?=
+ =?utf-8?B?dk4rRHh1UHlnb0JqQTl1cDdpeDhLVTgvaDBSVXptZkVZcC9ha3RIclJwWldm?=
+ =?utf-8?B?Y1RITUU0YVlOcG92Um1BcHU5V2J5azV4aXhNcWVTZkRUZnpyZFQrcU9QZzU4?=
+ =?utf-8?B?UEhTU29OSStLenR2N2pSeTFkVmtMSEY4RURteFM5cTBCSGNEcHNPY3g4ZUhT?=
+ =?utf-8?B?dGJnVWNKVUJhSFVMKzZLdE94QkZmOThuY1RldW8yTnRia0ZpYVRWUzRuTFdr?=
+ =?utf-8?B?Zm44MUR4cFpORG1ZcFRRSlN3Z0NBblkvVnFuajVSRlJJaytScnNEaHRjc00z?=
+ =?utf-8?B?eGpaY2hsSnVlc2dBbUw2c3NVQ0dUSWtxeHJCM1E5UU5vRWExQmM3cC9lT2VF?=
+ =?utf-8?B?VkZNQjFGZUpPTVcvd0NyQVErOXVoYkI0aVA3M0J1WS9MNkhBMHJ6UjluNjFt?=
+ =?utf-8?B?QUlGWmN0N3MxT1lvNEZkTTZxa1R2dnZ4UEFOdnVBc2dJSDVMREo4NlZZbFVi?=
+ =?utf-8?B?dE94YVRHQzQrZ1FtaFBLTzZiQWZQV05lMFJhaWd3UUJJb0MySXJZdVQvTWdi?=
+ =?utf-8?B?NXVRRmZOT2NwZGsydTV0Y0lVejFRSUszVElpVzFwbnRIbGpTb0EyZ0Y5Q3dE?=
+ =?utf-8?B?YTFVL1ZUYWx5ZzAwOGtqYXRDSGhvdTlUTWNvYWtHN1RUTkdmbWkzb3NHMFhv?=
+ =?utf-8?B?WFdYcTNSSEpBbHZOZkVuZ0Fpa2w1NFBqcGRRdlBkUktzSGtmRjVlZ0V6UkxO?=
+ =?utf-8?B?cTdUOUNZcjZLeDBXUmVZN1hJN1ZoNzBTcVBWc3lVVEdJL09Zc05oc1JtN2Fi?=
+ =?utf-8?Q?pFnDqDpwDzVG/2V1G2CNxGdkcPs8fWH1GJAlfFDM3U=3D?=
+MIME-Version: 1.0
+
+--=-s7xN2fnHZ5KsjncPnmI6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+New Tax Workshop this week!
+
+View online version http://kysz.mjt.lu/nl3/vNqqisVtbbPt5pf7YdmRtA?m=3DAWwAA=
+CuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks&=
+b=3De0fd82c7&e=3D4ed7b23d&x=3Da7iET_5Bkh8rOy7esnA68A
+
+
+
+<<Logo: Office of Graduate Education>> [http://kysz.mjt.lu/img2/kysz/e581ab=
+88-7aa2-4c10-baf5-a25ef02d7c15/content]
+
+
+
+<<Close up of MaClaurin Dome>> [https://kysz.mjt.lu/img/kysz/b/mjnlu/gu9tj.=
+png]
+
+
+
+Kevin O'Brien
+Director of Graduate Fellowships
+
+Samantha Stettner
+Fellowships Program Assistant
+
+
+
+Reach us at grad-fellowships@mit.edu [grad-fellowships@mit.edu]
+---------------------------------------------------------------------------=
+-----
+
+
+
+Graduate Fellowships Newsflash
+October 2023
+---------------------------------------------------------------------------=
+-----
+New Fall Tax Workshop [https://vpf.mit.edu/tax-workshops]
+
+In addition to their annual spring semester workshop, the Office of the Vic=
+e President for Finance (VPF) is offering a fall workshop this week.
+---------------------------------------------------------------------------=
+-----
+<<Reflections on a campus building>> [https://kysz.mjt.lu/tplimg/kysz/b/l75=
+y3/g567t.png]
+---------------------------------------------------------------------------=
+-----
+Fall Workshop
+VPF Fall Tax Workshop for Graduate Students
+When: Thurs, Oct 26, 2023, 7PM-8PM EST
+Online/Zoom=C2=A0
+LINK [https://mit.zoom.us/j/91213391249]
+
+Open to all MIT graduate students, regardless of residency or citizenship s=
+tatus. No registration is required.=C2=A0
+
+The team encourages graduate students to submit their tax questions in adva=
+nce using this form. These should be general questions that do not include =
+any personal details or information. [https://docs.google.com/spreadsheets/=
+d/1FysmY__reC1SEJhwxsK6uSlxO1b_lQCyyGFJe8kjlEE/edit#gid=3D0]
+
+Topics include:=C2=A0
+
+ * Sprintax Calculus and Sprintax Returns
+ * Whether your payments from MIT are taxable
+ * Your tax residency status
+ * Filing obligations
+ * Tax withholding information
+ * Payroll taxes (FICA)
+ * Tax Treaty benefits
+ * Q&A session
+
+The presentation will be conducted as an online webinar and will be recorde=
+d. The captioned video of the Tax Workshop will be posted to the Tax Guidan=
+ce for Nonresident Aliens [https://vpf.mit.edu/tax-guidance-for-nonresident=
+-aliens] and Tax Guidance for U.S. Residents [https://vpf.mit.edu/tax-guida=
+nce-for-us-residents] pages of the VPF website a few days after the live ev=
+ent.
+---------------------------------------------------------------------------=
+-----
+Additional Online Resources
+
+ * MIT VPF Students Page [https://vpf.mit.edu/by-audience/students]
+ * VPF Tax Guidance for Nonresident Aliens [https://vpf.mit.edu/tax-guidanc=
+e-for-nonresident-aliens]
+ * VPF Tax Guidance for U.S. Residents [https://vpf.mit.edu/tax-guidance-fo=
+r-us-residents]
+ * VPF's Scholarships/Fellowships Payment Guidance [https://vpf.mit.edu/sch=
+olarships-fellowships-and-other-non-payroll-payments]
+ * OGE's Taxes Landing Page [https://oge.mit.edu/student-finances/financial=
+-wellbeing/taxes/]
+ * IRS - Topic: Scholarships, Fellowship Grants, and Other Grants [https://=
+www.irs.gov/taxtopics/tc421]
+---------------------------------------------------------------------------=
+-----
+While we have you, sign up for our Fellowships newsletter!
+
+You can subscribe to the Graduate Fellowships Newsletter [https://oge.mit.e=
+du/fellowships/grad-fellowships-newsletter-signup/] here.
+---------------------------------------------------------------------------=
+-----
+<<A detail shot of a chandelier on campus.>> [https://kysz.mjt.lu/tplimg/ky=
+sz/b/l75y3/g5676.png]
+---------------------------------------------------------------------------=
+-----
+
+
+
+This e-mail has been sent to jiannan@mit.edu; click here to unsubscribe htt=
+p://kysz.mjt.lu/unsub2?hl=3Den&m=3DAWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkV=
+AAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks&b=3De0fd82c7&e=3D4ed7b23d&x=3Da7iET=
+_5Bkh8rOy7esnA68A.
+MIT Office of Graduate Education (OGE)
+77 Massachusetts Ave, 35-332 Cambridge, MA 02139
+
+
+
+[https://www.mailjet.com/?utm_source=3Dfooter&utm_medium=3Demail&utm_campai=
+gn=3Dlogo1]=
+
+--=-s7xN2fnHZ5KsjncPnmI6
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>NEW! Fall Tax Workshop from the VPF</title><!--[if !mso]><!--><meta ht=
+tp-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><!--<![endif]--><meta na=
+me=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=3D1"><style t=
+ype=3D"text/css">#outlook a { padding:0; }
+      body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size=
+-adjust:100%; }
+      table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-table-r=
+space:0pt; }
+      img { border:0;height:auto;line-height:100%; outline:none;text-decora=
+tion:none;-ms-interpolation-mode:bicubic; }
+      p { display:block;margin:13px 0; }</style><!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]--><!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]--><!--[if !mso]><!--><link href=3D"https://fonts.googleapis.c=
+om/css?family=3DUbuntu:300,400,500,700" rel=3D"stylesheet" type=3D"text/css=
+"><link href=3D"https://fonts.googleapis.com/css?family=3Dserif" rel=3D"sty=
+lesheet" type=3D"text/css"><link href=3D"https://fonts.googleapis.com/css?f=
+amily=3D" rel=3D"stylesheet" type=3D"text/css"><style type=3D"text/css">@im=
+port url(https://fonts.googleapis.com/css?family=3DUbuntu:300,400,500,700);
+@import url(https://fonts.googleapis.com/css?family=3Dserif);
+@import url(https://fonts.googleapis.com/css?family=3D);</style><!--<![endi=
+f]--><style type=3D"text/css">@media only screen and (min-width:480px) {
+        .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.mj-column-per-33 { width:33% !important; max-width: 33%; }
+.mj-column-per-100 { width:100% !important; max-width: 100%; }
+.mj-column-per-50 { width:50% !important; max-width: 50%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.moz-text-html .mj-column-per-33 { width:33% !important; max-width: 33%; }
+.moz-text-html .mj-column-per-100 { width:100% !important; max-width: 100%;=
+ }
+.moz-text-html .mj-column-per-50 { width:50% !important; max-width: 50%; }<=
+/style><style type=3D"text/css">[owa] .mj-column-per-67 { width:67% !import=
+ant; max-width: 67%; }
+[owa] .mj-column-per-33 { width:33% !important; max-width: 33%; }
+[owa] .mj-column-per-100 { width:100% !important; max-width: 100%; }
+[owa] .mj-column-per-50 { width:50% !important; max-width: 50%; }</style><s=
+tyle type=3D"text/css">@media only screen and (max-width:479px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style><style type=3D"text/css"></style></head><body style=3D"word-sp=
+acing:normal;background-color:#F4F4F4;"><div style=3D"background-color:#F4F=
+4F4;"><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px=
+;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-h=
+eight-rule:exactly;"><![endif]--><div style=3D"margin:0px auto;max-width:60=
+0px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr><td style=3D"dir=
+ection:ltr;font-size:0px;padding:20px 0px 20px 0px;text-align:center;"><!--=
+[if mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:402px=
+;" ><![endif]--><div class=3D"mj-column-per-67 mj-outlook-group-fix" style=
+=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertic=
+al-align:top;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><=
+tbody><tr><td align=3D"left" style=3D"font-size:0px;padding:0px 0px 0px 25p=
+x;padding-top:0px;padding-bottom:0px;word-break:break-word;"><div style=3D"=
+font-family:Arial, sans-serif;font-size:12px;letter-spacing:normal;line-hei=
+ght:22px;text-align:left;color:#55575d;"><p class=3D"text-build-content" da=
+ta-testid=3D"WRjTJb7nDraOO" style=3D"margin: 10px 0; margin-top: 10px; marg=
+in-bottom: 10px;"><span style=3D"font-size:12px;">New Tax Workshop this wee=
+k!</span></p></div></td></tr></tbody></table></div><!--[if mso | IE]></td><=
+td class=3D"" style=3D"vertical-align:top;width:198px;" ><![endif]--><div c=
+lass=3D"mj-column-per-33 mj-outlook-group-fix" style=3D"font-size:0px;text-=
+align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%=
+;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presenta=
+tion" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"=
+right" style=3D"font-size:0px;padding:0px 25px 0px 0px;padding-top:0px;padd=
+ing-bottom:0px;word-break:break-word;"><div style=3D"font-family:Arial, san=
+s-serif;font-size:11px;letter-spacing:normal;line-height:22px;text-align:ri=
+ght;color:#55575d;"><p class=3D"text-build-content" style=3D"text-align: ri=
+ght; margin: 10px 0; margin-top: 10px; margin-bottom: 10px;"><a target=3D"_=
+blank" href=3D"http://kysz.mjt.lu/nl3/vNqqisVtbbPt5pf7YdmRtA?m=3DAWwAACuNH-=
+sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks&amp;b=
+=3De0fd82c7&amp;e=3D4ed7b23d&amp;x=3Da7iET_5Bkh8rOy7esnA68A" style=3D"; tex=
+t-decoration: none;"><span style=3D"color:#55575d;font-size:13px;line-heigh=
+t:22px;font-family:Arial;">View online version</span></a></p></div></td></t=
+r></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></t=
+d></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><table ali=
+gn=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" r=
+ole=3D"presentation" style=3D"width:600px;" width=3D"600" ><tr><td style=3D=
+"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><=
+div style=3D"margin:0px auto;max-width:600px;"><table align=3D"center" bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D=
+"width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:2=
+0px 0;padding-bottom:0px;padding-top:0px;text-align:center;"><!--[if mso | =
+IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><![end=
+if]--><div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-s=
+ize:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:t=
+op;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr>=
+<td align=3D"center" style=3D"background:#ffffff;font-size:0px;padding:30px=
+ 30px 40px 30px;padding-top:30px;padding-right:30px;padding-bottom:40px;pad=
+ding-left:30px;word-break:break-word;"><table border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" role=3D"presentation" style=3D"border-collapse:collapse=
+;border-spacing:0px;"><tbody><tr><td style=3D"width:540px;"><img alt=3D"Log=
+o: Office of Graduate Education" src=3D"http://kysz.mjt.lu/img2/kysz/e581ab=
+88-7aa2-4c10-baf5-a25ef02d7c15/content" style=3D"border:none;border-radius:=
+px;display:block;outline:none;text-decoration:none;height:auto;width:100%;f=
+ont-size:13px;" width=3D"540" height=3D"auto"></td></tr></tbody></table></t=
+d></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]-=
+-></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><tabl=
+e align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=
+=3D"" role=3D"presentation" style=3D"width:600px;" width=3D"600" ><tr><td s=
+tyle=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![end=
+if]--><div style=3D"margin:0px auto;max-width:600px;"><table align=3D"cente=
+r" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" s=
+tyle=3D"width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;pa=
+dding:0px 0px 0px 0px;padding-bottom:0px;padding-left:0px;padding-right:0px=
+;padding-top:0px;text-align:center;"><!--[if mso | IE]><table role=3D"prese=
+ntation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"=
+" style=3D"vertical-align:top;width:600px;" ><![endif]--><div class=3D"mj-c=
+olumn-per-100 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;=
+direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"center" sty=
+le=3D"background:#ffffff;font-size:0px;padding:10px 25px 10px 25px;padding-=
+right:25px;padding-left:25px;word-break:break-word;"><table border=3D"0" ce=
+llpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"border-col=
+lapse:collapse;border-spacing:0px;"><tbody><tr><td style=3D"width:550px;"><=
+img alt=3D"Close up of MaClaurin Dome" src=3D"https://kysz.mjt.lu/img/kysz/=
+b/mjnlu/gu9tj.png" style=3D"border:none;display:block;outline:none;text-dec=
+oration:none;height:auto;width:100%;font-size:13px;" width=3D"550" height=
+=3D"auto"></td></tr></tbody></table></td></tr></tbody></table></div><!--[if=
+ mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!=
+--[if mso | IE]></td></tr></table><table align=3D"center" border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"w=
+idth:600px;" width=3D"600" bgcolor=3D"#ffffff" ><tr><td style=3D"line-heigh=
+t:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style=
+=3D"background:#ffffff;background-color:#ffffff;margin:0px auto;max-width:6=
+00px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"background:#ffffff;background-color:#=
+ffffff;width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;pad=
+ding:0px 0px 0px 0px;padding-bottom:0px;padding-left:0px;padding-right:0px;=
+padding-top:0px;text-align:center;"><!--[if mso | IE]><table role=3D"presen=
+tation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D""=
+ style=3D"vertical-align:top;width:300px;" ><![endif]--><div class=3D"mj-co=
+lumn-per-50 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;di=
+rection:ltr;display:inline-block;vertical-align:top;width:100%;"><table bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"left" style=
+=3D"background:#ffffff;font-size:0px;padding:0px 25px 0px 25px;padding-top:=
+0px;padding-right:25px;padding-bottom:0px;padding-left:25px;word-break:brea=
+k-word;"><div style=3D"font-family:Arial, sans-serif;font-size:13px;letter-=
+spacing:normal;line-height:1;text-align:left;color:#000000;"><p class=3D"te=
+xt-build-content" data-testid=3D"A6ynYDMTSh2d8Hegg0X4G" style=3D"margin: 10=
+px 0; margin-top: 10px; margin-bottom: 10px;"><span style=3D"font-family:Ar=
+ial;font-size:13px;"><b>Kevin O'Brien</b></span><br><span style=3D"font-fam=
+ily:Arial;font-size:13px;">Director of Graduate Fellowships</span></p></div=
+></td></tr></tbody></table></div><!--[if mso | IE]></td><td class=3D"" styl=
+e=3D"vertical-align:top;width:300px;" ><![endif]--><div class=3D"mj-column-=
+per-50 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;directi=
+on:ltr;display:inline-block;vertical-align:top;width:100%;"><table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"v=
+ertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"left" style=3D"b=
+ackground:#ffffff;font-size:0px;padding:0px 25px 0px 25px;padding-top:0px;p=
+adding-right:25px;padding-bottom:0px;padding-left:25px;word-break:break-wor=
+d;"><div style=3D"font-family:Arial, sans-serif;font-size:13px;letter-spaci=
+ng:normal;line-height:1;text-align:left;color:#000000;"><p class=3D"text-bu=
+ild-content" data-testid=3D"UKjxOPeNRw1IH_HfCniOp" style=3D"margin: 10px 0;=
+ margin-top: 10px; margin-bottom: 10px;"><span style=3D"font-family:Arial;f=
+ont-size:13px;"><b>Samantha Stettner</b></span><br><span style=3D"font-fami=
+ly:Arial;font-size:13px;">Fellowships Program Assistant</span></p></div></t=
+d></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]-=
+-></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><tabl=
+e align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=
+=3D"" role=3D"presentation" style=3D"width:600px;" width=3D"600" ><tr><td s=
+tyle=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![end=
+if]--><div style=3D"margin:0px auto;max-width:600px;"><table align=3D"cente=
+r" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" s=
+tyle=3D"width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;pa=
+dding:0px 0px 0px 0px;padding-bottom:0px;padding-left:0px;padding-right:0px=
+;padding-top:0px;text-align:center;"><!--[if mso | IE]><table role=3D"prese=
+ntation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"=
+" style=3D"vertical-align:top;width:600px;" ><![endif]--><div class=3D"mj-c=
+olumn-per-100 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;=
+direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"left" style=
+=3D"background:#ffffff;font-size:0px;padding:0px 25px 0px 25px;padding-top:=
+0px;padding-right:25px;padding-bottom:0px;padding-left:25px;word-break:brea=
+k-word;"><div style=3D"font-family:Arial, sans-serif;font-size:13px;letter-=
+spacing:normal;line-height:1;text-align:left;color:#000000;"><p class=3D"te=
+xt-build-content" data-testid=3D"B3jVemlySUpvztSkueRqO" style=3D"margin: 10=
+px 0; margin-top: 10px; margin-bottom: 10px;"><span style=3D"font-family:Ar=
+ial;font-size:13px;">Reach us at </span><a class=3D"link-build-content" sty=
+le=3D"color:inherit;text-decoration:none;; text-decoration: none;" href=3D"=
+mailto:grad-fellowships@mit.edu"><span style=3D"color:#750014;font-family:A=
+rial;font-size:13px;"><u>grad-fellowships@mit.edu</u></span></a></p></div><=
+/td></tr><tr><td align=3D"center" style=3D"background:#ffffff;font-size:0px=
+;padding:10px 25px 10px 25px;padding-right:25px;padding-left:25px;word-brea=
+k:break-word;"><p style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margi=
+n:0px auto;width:100%;"></p><!--[if mso | IE]><table align=3D"center" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"border-top:solid 2px #=
+E6E6E6;font-size:1px;margin:0px auto;width:550px;" role=3D"presentation" wi=
+dth=3D"550px" ><tr><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso |=
+ IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if =
+mso | IE]></td></tr></table><table align=3D"center" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:6=
+00px;" width=3D"600" bgcolor=3D"#ffff" ><tr><td style=3D"line-height:0px;fo=
+nt-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style=3D"backgr=
+ound:#ffff;background-color:#ffff;margin:0px auto;max-width:600px;"><table =
+align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" style=3D"background:#ffff;background-color:#ffff;width:100%;">=
+<tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:14px 0px 0px 0p=
+x;padding-left:0px;padding-right:0px;padding-top:14px;text-align:center;"><=
+!--[if mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:60=
+0px;" ><![endif]--><div class=3D"mj-column-per-100 mj-outlook-group-fix" st=
+yle=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;ver=
+tical-align:top;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"vertical-align:top;" width=3D"100%=
+"><tbody><tr><td align=3D"left" style=3D"background:#ffffff;font-size:0px;p=
+adding:0px 25px 0px 25px;padding-top:0px;padding-right:25px;padding-bottom:=
+0px;padding-left:25px;word-break:break-word;"><div style=3D"font-family:Ari=
+al, sans-serif;font-size:34px;letter-spacing:normal;line-height:1;text-alig=
+n:left;color:#000000;"><h1 class=3D"text-build-content" style=3D"line-heigh=
+t:33px;; margin-top: 10px; margin-bottom: 10px; font-weight: normal;" data-=
+testid=3D"kWjPA3Id0S"><span style=3D"color:#750014;font-family:Arial;font-s=
+ize:34px;"><b>Graduate Fellowships Newsflash</b></span></h1></div></td></tr=
+><tr><td align=3D"left" style=3D"background:#ffffff;font-size:0px;padding:0=
+px 25px 10px 25px;padding-top:0px;padding-right:25px;padding-bottom:10px;pa=
+dding-left:25px;word-break:break-word;"><div style=3D"font-family:Ubuntu, H=
+elvetica, Arial, sans-serif;font-size:20px;letter-spacing:normal;line-heigh=
+t:1;text-align:left;color:#000000;"><h2 class=3D"text-build-content" style=
+=3D"line-height:24px;; margin-top: 10px; margin-bottom: 10px; font-weight: =
+normal;" data-testid=3D"rZXK2aOKignzvd96an2uo"><span style=3D"font-family:A=
+rial, sans-serif;font-size:21px;">October 2023</span></h2></div></td></tr><=
+tr><td align=3D"center" style=3D"background:#ffffff;font-size:0px;padding:1=
+0px 25px 10px 25px;padding-right:25px;padding-left:25px;word-break:break-wo=
+rd;"><p style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:0px auto=
+;width:100%;"></p><!--[if mso | IE]><table align=3D"center" border=3D"0" ce=
+llpadding=3D"0" cellspacing=3D"0" style=3D"border-top:solid 2px #E6E6E6;fon=
+t-size:1px;margin:0px auto;width:550px;" role=3D"presentation" width=3D"550=
+px" ><tr><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"left" style=3D"bac=
+kground:#ffffff;font-size:0px;padding:0px 25px 0px 25px;padding-top:0px;pad=
+ding-right:25px;padding-bottom:0px;padding-left:25px;word-break:break-word;=
+"><div style=3D"font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:=
+14px;letter-spacing:normal;line-height:1;text-align:left;color:#000000;"><h=
+2 class=3D"text-build-content" style=3D"line-height:21px;; margin-top: 10px=
+; font-weight: normal;" data-testid=3D"oe489iH2byfPxv56Bwiog"><a class=3D"l=
+ink-build-content" style=3D"color:inherit;text-decoration:none;; text-decor=
+ation: none;" target=3D"_blank" href=3D"http://kysz.mjt.lu/lnk/AWwAACuNH-sA=
+AcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks/1/GZuOW=
+NmmoNT59SxKGyE85Q/aHR0cHM6Ly92cGYubWl0LmVkdS90YXgtd29ya3Nob3Bz"><span style=
+=3D"color:#750014;font-family:Arial;font-size:18px;"><b><u>New Fall Tax Wor=
+kshop</u></b></span></a></h2><p class=3D"text-build-content" style=3D"line-=
+height: 21px; margin: 10px 0; margin-bottom: 10px;" data-testid=3D"oe489iH2=
+byfPxv56Bwiog"><span style=3D"font-family:Arial;font-size:14px;">In additio=
+n to their annual spring semester workshop, the Office of the Vice Presiden=
+t for Finance (VPF) is offering a fall workshop this week.</span></p></div>=
+</td></tr><tr><td align=3D"center" style=3D"background:#ffffff;font-size:0p=
+x;padding:10px 25px 10px 25px;padding-right:25px;padding-left:25px;word-bre=
+ak:break-word;"><p style=3D"border-top:solid 2px #E6E6E6;font-size:1px;marg=
+in:0px auto;width:100%;"></p><!--[if mso | IE]><table align=3D"center" bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"border-top:solid 2px =
+#E6E6E6;font-size:1px;margin:0px auto;width:550px;" role=3D"presentation" w=
+idth=3D"550px" ><tr><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"center" style=3D"b=
+ackground:#ffffff;font-size:0px;padding:10px 25px 10px 25px;padding-right:2=
+5px;padding-left:25px;word-break:break-word;"><table border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"border-collapse:c=
+ollapse;border-spacing:0px;"><tbody><tr><td style=3D"width:550px;"><img alt=
+=3D"Reflections on a campus building" src=3D"https://kysz.mjt.lu/tplimg/kys=
+z/b/l75y3/g567t.png" style=3D"border:none;display:block;outline:none;text-d=
+ecoration:none;height:auto;width:100%;font-size:13px;" width=3D"550" height=
+=3D"auto"></td></tr></tbody></table></td></tr><tr><td align=3D"center" styl=
+e=3D"background:#ffffff;font-size:0px;padding:10px 25px 10px 25px;padding-r=
+ight:25px;padding-left:25px;word-break:break-word;"><p style=3D"border-top:=
+solid 2px #E6E6E6;font-size:1px;margin:0px auto;width:100%;"></p><!--[if ms=
+o | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:0px auto;=
+width:550px;" role=3D"presentation" width=3D"550px" ><tr><td style=3D"heigh=
+t:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"left" style=3D"bac=
+kground:#ffffff;font-size:0px;padding:0px 25px 0px 25px;padding-top:0px;pad=
+ding-right:25px;padding-bottom:0px;padding-left:25px;word-break:break-word;=
+"><div style=3D"font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:=
+18px;letter-spacing:normal;line-height:1;text-align:left;color:#000000;"><h=
+2 class=3D"text-build-content" style=3D"line-height:21px;; margin-top: 10px=
+; margin-bottom: 10px; font-weight: normal;" data-testid=3D"tkShfdHTwTcrxv2=
+JmR-UI"><span style=3D"color:#750014;font-family:Arial, sans-serif;font-siz=
+e:18px;"><b>Fall Workshop</b></span></h2></div></td></tr><tr><td align=3D"l=
+eft" style=3D"background:#ffffff;font-size:0px;padding:0px 25px 0px 25px;pa=
+dding-top:0px;padding-right:25px;padding-bottom:0px;padding-left:25px;word-=
+break:break-word;"><div style=3D"font-family:Ubuntu, Helvetica, Arial, sans=
+-serif;font-size:15px;letter-spacing:normal;line-height:1;text-align:left;c=
+olor:#000000;"><h2 class=3D"text-build-content" style=3D"line-height:21px;;=
+ margin-top: 10px; font-weight: normal;" data-testid=3D"3TEMklEnZM2avnqCm1T=
+FS"><span style=3D"font-family:Arial;font-size:16px;"><b>VPF Fall Tax Works=
+hop for Graduate Students</b></span><br><span style=3D"font-family:Arial;fo=
+nt-size:15px;">When: Thurs, Oct 26, 2023, 7PM-8PM EST</span><br><span style=
+=3D"font-family:Arial;font-size:15px;"><i>Online/Zoom&nbsp;</i></span><br><=
+a class=3D"link-build-content" style=3D"color:inherit;text-decoration:none;=
+; text-decoration: none;" target=3D"_blank" href=3D"http://kysz.mjt.lu/lnk/=
+AWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gA=
+I9Ks/2/wg6KdFpRt2CMXZB47URtsA/aHR0cHM6Ly9taXQuem9vbS51cy9qLzkxMjEzMzkxMjQ5"=
+><span style=3D"color:#750014;font-family:Arial;font-size:15px;"><u>LINK</u=
+></span></a></h2><p class=3D"text-build-content" style=3D"line-height: 21px=
+; margin: 10px 0;" data-testid=3D"3TEMklEnZM2avnqCm1TFS"><span style=3D"fon=
+t-family:Arial;font-size:15px;">Open to all MIT graduate students, regardle=
+ss of residency or citizenship status. No registration is required.&nbsp;</=
+span></p><p class=3D"text-build-content" style=3D"line-height: 21px; margin=
+: 10px 0;" data-testid=3D"3TEMklEnZM2avnqCm1TFS"><a class=3D"link-build-con=
+tent" style=3D"color:inherit;text-decoration:none;; text-decoration: none;"=
+ target=3D"_blank" href=3D"http://kysz.mjt.lu/lnk/AWwAACuNH-sAAcvFPVIAAQHEE=
+AMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks/3/ipMBGY9q5UKLuY1hXN=
+H6QA/aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vc3ByZWFkc2hlZXRzL2QvMUZ5c21ZX19yZUMxU0=
+VKaHd4c0s2dVNseE8xYl9sUUN5eUdGSmU4a2psRUUvZWRpdCNnaWQ9MA#gid=3D0"><span sty=
+le=3D"color:#750014;font-family:Arial;font-size:15px;"><b><u>The team encou=
+rages graduate students to submit their tax questions in advance using this=
+ form.</u></b> </span><span style=3D"color:#000000;font-family:Arial;font-s=
+ize:15px;">These should be general questions that do not include any person=
+al details or information.</span></a></p><p class=3D"text-build-content" st=
+yle=3D"line-height: 21px; margin: 10px 0;" data-testid=3D"3TEMklEnZM2avnqCm=
+1TFS"><span style=3D"background-color:transparent;font-family:Arial;font-si=
+ze:15px;">Topics include:&nbsp;</span></p><ul><li style=3D"line-height:22px=
+;"><span style=3D"font-family:Arial;font-size:15px;">Sprintax Calculus and =
+Sprintax Returns</span></li><li style=3D"line-height:22px;"><span style=3D"=
+font-family:Arial;font-size:15px;">Whether your payments from MIT are taxab=
+le</span></li><li style=3D"line-height:22px;"><span style=3D"font-family:Ar=
+ial;font-size:15px;">Your tax residency status</span></li><li style=3D"line=
+-height:22px;"><span style=3D"font-family:Arial;font-size:15px;">Filing obl=
+igations</span></li><li style=3D"line-height:22px;"><span style=3D"font-fam=
+ily:Arial;font-size:15px;">Tax withholding information</span></li><li style=
+=3D"line-height:22px;"><span style=3D"font-family:Arial;font-size:15px;">Pa=
+yroll taxes (FICA)</span></li><li style=3D"line-height:22px;"><span style=
+=3D"font-family:Arial;font-size:15px;">Tax Treaty benefits</span></li><li s=
+tyle=3D"line-height:22px;"><span style=3D"font-family:Arial;font-size:15px;=
+">Q&amp;A session</span></li></ul><p class=3D"text-build-content" style=3D"=
+line-height: 21px; margin: 10px 0; margin-bottom: 10px;" data-testid=3D"3TE=
+MklEnZM2avnqCm1TFS"><span style=3D"background-color:transparent;color:inher=
+it;font-family:Arial;font-size:15px;">The presentation will be conducted as=
+ an online webinar and will be recorded. The captioned video of the Tax Wor=
+kshop will be posted to the </span><a class=3D"link-build-content" style=3D=
+"color:inherit;text-decoration:none;; text-decoration: none;" target=3D"_bl=
+ank" href=3D"http://kysz.mjt.lu/lnk/AWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQk=
+VAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks/4/nZMGQ36CVjHbuJeWzSB9pw/aHR0cHM6L=
+y92cGYubWl0LmVkdS90YXgtZ3VpZGFuY2UtZm9yLW5vbnJlc2lkZW50LWFsaWVucw"><span st=
+yle=3D"background-color:transparent;color:#750014;font-family:Arial;font-si=
+ze:15px;"><u>Tax Guidance for Nonresident Aliens</u></span></a><span style=
+=3D"background-color:transparent;color:inherit;font-family:Arial;font-size:=
+15px;"> and </span><a class=3D"link-build-content" style=3D"color:inherit;t=
+ext-decoration:none;; text-decoration: none;" target=3D"_blank" href=3D"htt=
+p://kysz.mjt.lu/lnk/AWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Ma=
+f9QuGQYWoqhUmEZYe6gAI9Ks/5/XtOPcnIC7hwbxabT-sG8Bg/aHR0cHM6Ly92cGYubWl0LmVkd=
+S90YXgtZ3VpZGFuY2UtZm9yLXVzLXJlc2lkZW50cw"><span style=3D"background-color:=
+transparent;color:#750014;font-family:Arial;font-size:15px;"><u>Tax Guidanc=
+e for U.S. Residents</u></span></a><span style=3D"background-color:transpar=
+ent;color:inherit;font-family:Arial;font-size:15px;"> pages of the VPF webs=
+ite a few days after the live event.</span></p></div></td></tr><tr><td alig=
+n=3D"center" style=3D"background:#ffffff;font-size:0px;padding:10px 25px 10=
+px 25px;padding-right:25px;padding-left:25px;word-break:break-word;"><p sty=
+le=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:0px auto;width:100%=
+;"></p><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" style=3D"border-top:solid 2px #E6E6E6;font-size:1p=
+x;margin:0px auto;width:550px;" role=3D"presentation" width=3D"550px" ><tr>=
+<td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"left" style=3D"bac=
+kground:#ffffff;font-size:0px;padding:0px 25px 0px 25px;padding-top:0px;pad=
+ding-right:25px;padding-bottom:0px;padding-left:25px;word-break:break-word;=
+"><div style=3D"font-family:Arial, sans-serif;font-size:15px;letter-spacing=
+:normal;line-height:1;text-align:left;color:#000000;"><h2 class=3D"text-bui=
+ld-content" style=3D"line-height:21px;; margin-top: 10px; margin-bottom: 10=
+px; font-weight: normal;" data-testid=3D"UUOt16H8-JRS_8-OgWruB"><span style=
+=3D"color:#750014;font-family:Arial;font-size:18px;"><b>Additional Online R=
+esources</b></span></h2><ul><li style=3D"line-height:22px;"><a class=3D"lin=
+k-build-content" style=3D"color:inherit;text-decoration:none;; text-decorat=
+ion: none;" target=3D"_blank" href=3D"http://kysz.mjt.lu/lnk/AWwAACuNH-sAAc=
+vFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks/6/TLrHhWd=
+Fs5SuGx1GOiblbg/aHR0cHM6Ly92cGYubWl0LmVkdS9ieS1hdWRpZW5jZS9zdHVkZW50cw"><sp=
+an style=3D"color:#750014;font-family:Arial;font-size:15px;"><u>MIT VPF Stu=
+dents Page</u></span></a></li><li style=3D"line-height:22px;"><a class=3D"l=
+ink-build-content" style=3D"color:inherit;text-decoration:none;; text-decor=
+ation: none;" target=3D"_blank" href=3D"http://kysz.mjt.lu/lnk/AWwAACuNH-sA=
+AcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks/7/uw8EP=
+wFVDgReiAxKi-50pg/aHR0cHM6Ly92cGYubWl0LmVkdS90YXgtZ3VpZGFuY2UtZm9yLW5vbnJlc=
+2lkZW50LWFsaWVucw"><span style=3D"color:#750014;font-family:Arial;font-size=
+:15px;"><u>VPF Tax Guidance for Nonresident Aliens</u></span></a></li><li s=
+tyle=3D"line-height:22px;"><a class=3D"link-build-content" style=3D"color:i=
+nherit;text-decoration:none;; text-decoration: none;" target=3D"_blank" hre=
+f=3D"http://kysz.mjt.lu/lnk/AWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKAB=
+lN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks/8/Q5jA0GC54h30tfJ2Zu_ucg/aHR0cHM6Ly92cGYub=
+Wl0LmVkdS90YXgtZ3VpZGFuY2UtZm9yLXVzLXJlc2lkZW50cw"><span style=3D"color:#75=
+0014;font-family:Arial;font-size:15px;"><u>VPF Tax Guidance for U.S. Reside=
+nts</u></span></a></li><li style=3D"line-height:22px;"><a class=3D"link-bui=
+ld-content" style=3D"color:inherit;text-decoration:none;; text-decoration: =
+none;" target=3D"_blank" href=3D"http://kysz.mjt.lu/lnk/AWwAACuNH-sAAcvFPVI=
+AAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks/9/0jEDIJj73cVC=
+uQ8MdmT44A/aHR0cHM6Ly92cGYubWl0LmVkdS9zY2hvbGFyc2hpcHMtZmVsbG93c2hpcHMtYW5k=
+LW90aGVyLW5vbi1wYXlyb2xsLXBheW1lbnRz"><span style=3D"color:#750014;font-fam=
+ily:Arial;font-size:15px;"><u>VPF's Scholarships/Fellowships Payment Guidan=
+ce</u></span></a></li><li style=3D"line-height:22px;"><a class=3D"link-buil=
+d-content" style=3D"color:inherit;text-decoration:none;; text-decoration: n=
+one;" target=3D"_blank" href=3D"http://kysz.mjt.lu/lnk/AWwAACuNH-sAAcvFPVIA=
+AQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks/10/wxzazUswo0lP=
+p0fJL5oURQ/aHR0cHM6Ly9vZ2UubWl0LmVkdS9zdHVkZW50LWZpbmFuY2VzL2ZpbmFuY2lhbC13=
+ZWxsYmVpbmcvdGF4ZXMv"><span style=3D"color:#750014;font-family:Arial;font-s=
+ize:15px;"><u>OGE's Taxes Landing Page</u></span></a></li><li style=3D"line=
+-height:22px;"><a class=3D"link-build-content" style=3D"color:inherit;text-=
+decoration:none;; text-decoration: none;" target=3D"_blank" href=3D"http://=
+kysz.mjt.lu/lnk/AWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9Qu=
+GQYWoqhUmEZYe6gAI9Ks/11/eXOHhSAlEf91dGwN8YtEPg/aHR0cHM6Ly93d3cuaXJzLmdvdi90=
+YXh0b3BpY3MvdGM0MjE"><span style=3D"color:#750014;font-family:Arial;font-si=
+ze:15px;"><u>IRS - Topic: Scholarships, Fellowship Grants, and Other Grants=
+</u></span></a></li></ul></div></td></tr><tr><td align=3D"center" style=3D"=
+background:#ffffff;font-size:0px;padding:10px 25px 10px 25px;padding-right:=
+25px;padding-left:25px;word-break:break-word;"><p style=3D"border-top:solid=
+ 2px #E6E6E6;font-size:1px;margin:0px auto;width:100%;"></p><!--[if mso | I=
+E]><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:0px auto;width:=
+550px;" role=3D"presentation" width=3D"550px" ><tr><td style=3D"height:0;li=
+ne-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"left" style=3D"bac=
+kground:#ffffff;font-size:0px;padding:0px 25px 0px 25px;padding-top:0px;pad=
+ding-right:25px;padding-bottom:0px;padding-left:25px;word-break:break-word;=
+"><div style=3D"font-family:Arial, sans-serif;font-size:14px;letter-spacing=
+:normal;line-height:1;text-align:left;color:#000000;"><h3 class=3D"text-bui=
+ld-content" data-testid=3D"AxEhsY0rx8_7NveL9ctXr" style=3D"margin-top: 10px=
+; font-weight: normal;"><span style=3D"font-family:Arial;font-size:16px;"><=
+b>While we have you, sign up for our Fellowships newsletter!</b></span></h3=
+><p class=3D"text-build-content" data-testid=3D"AxEhsY0rx8_7NveL9ctXr" styl=
+e=3D"margin: 10px 0; margin-bottom: 10px;"><span style=3D"font-family:Arial=
+;font-size:14px;">You can </span><a class=3D"link-build-content" style=3D"c=
+olor:inherit;text-decoration:none;; text-decoration: none;" target=3D"_blan=
+k" href=3D"http://kysz.mjt.lu/lnk/AWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVA=
+AlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks/12/StfS1DYPPkISxaYVmI5GxQ/aHR0cHM6Ly=
+9vZ2UubWl0LmVkdS9mZWxsb3dzaGlwcy9ncmFkLWZlbGxvd3NoaXBzLW5ld3NsZXR0ZXItc2lnb=
+nVwLw"><span style=3D"color:#750014;font-family:Arial;font-size:14px;"><u>s=
+ubscribe to the Graduate Fellowships Newsletter</u></span></a><span style=
+=3D"font-family:Arial;font-size:14px;"> here.</span></p></div></td></tr><tr=
+><td align=3D"center" style=3D"background:#ffffff;font-size:0px;padding:10p=
+x 25px 10px 25px;padding-right:25px;padding-left:25px;word-break:break-word=
+;"><p style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:0px auto;w=
+idth:100%;"></p><!--[if mso | IE]><table align=3D"center" border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" style=3D"border-top:solid 2px #E6E6E6;font-=
+size:1px;margin:0px auto;width:550px;" role=3D"presentation" width=3D"550px=
+" ><tr><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"center" style=3D"b=
+ackground:#ffffff;font-size:0px;padding:10px 25px 10px 25px;padding-right:2=
+5px;padding-left:25px;word-break:break-word;"><table border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"border-collapse:c=
+ollapse;border-spacing:0px;"><tbody><tr><td style=3D"width:550px;"><img alt=
+=3D"A detail shot of a chandelier on campus." src=3D"https://kysz.mjt.lu/tp=
+limg/kysz/b/l75y3/g5676.png" style=3D"border:none;display:block;outline:non=
+e;text-decoration:none;height:auto;width:100%;font-size:13px;" width=3D"550=
+" height=3D"auto"></td></tr></tbody></table></td></tr><tr><td align=3D"cent=
+er" style=3D"background:#ffffff;font-size:0px;padding:10px 25px 10px 25px;p=
+adding-right:25px;padding-left:25px;word-break:break-word;"><p style=3D"bor=
+der-top:solid 2px #E6E6E6;font-size:1px;margin:0px auto;width:100%;"></p><!=
+--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:0p=
+x auto;width:550px;" role=3D"presentation" width=3D"550px" ><tr><td style=
+=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso |=
+ IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if =
+mso | IE]></td></tr></table><table align=3D"center" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:6=
+00px;" width=3D"600" bgcolor=3D"#ffffff" ><tr><td style=3D"line-height:0px;=
+font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style=3D"back=
+ground:#ffffff;background-color:#ffffff;margin:0px auto;max-width:600px;"><=
+table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"background:#ffffff;background-color:#ffffff;wid=
+th:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20px =
+0px 20px 0px;padding-left:0px;padding-right:0px;text-align:center;"><!--[if=
+ mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:600px;" =
+><![endif]--><div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D=
+"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-=
+align:top;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><tbo=
+dy><tr><td align=3D"center" style=3D"background:#ffffff;font-size:0px;paddi=
+ng:0px 20px 0px 20px;padding-top:0px;padding-right:20px;padding-bottom:0px;=
+padding-left:20px;word-break:break-word;"><div style=3D"font-family:Arial, =
+sans-serif;font-size:11px;letter-spacing:normal;line-height:22px;text-align=
+:center;color:#55575d;"><p class=3D"text-build-content" style=3D"text-align=
+: center; margin: 10px 0; margin-top: 10px; margin-bottom: 10px;" data-test=
+id=3D"QmYQS7PleSfMT5"><span style=3D"color:#55575d;font-family:Arial;font-s=
+ize:13px;line-height:22px;">This e-mail has been sent to jiannan@mit.edu; <=
+/span><a class=3D"link-build-content" style=3D"color:inherit;; text-decorat=
+ion: none;" target=3D"_blank" href=3D"http://kysz.mjt.lu/unsub2?hl=3Den&amp=
+;m=3DAWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJQkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZ=
+Ye6gAI9Ks&amp;b=3De0fd82c7&amp;e=3D4ed7b23d&amp;x=3Da7iET_5Bkh8rOy7esnA68A"=
+><span style=3D"color:#55575d;font-family:Arial;font-size:13px;line-height:=
+22px;"><u>click here to unsubscribe</u></span></a><span style=3D"color:#555=
+75d;font-family:Arial;font-size:13px;line-height:22px;">.</span></p></div><=
+/td></tr><tr><td align=3D"center" style=3D"background:#ffffff;font-size:0px=
+;padding:0px 20px 0px 20px;padding-top:0px;padding-right:20px;padding-botto=
+m:0px;padding-left:20px;word-break:break-word;"><div style=3D"font-family:A=
+rial, sans-serif;font-size:11px;letter-spacing:normal;line-height:22px;text=
+-align:center;color:#55575d;"><p class=3D"text-build-content" style=3D"line=
+-height: 15px; text-align: center; margin: 10px 0; margin-top: 10px; margin=
+-bottom: 10px;" data-testid=3D"MKZHuA19JD3Gha"><span style=3D"color:#55575d=
+;font-family:Arial;font-size:13px;">MIT Office of Graduate Education (OGE)<=
+/span><br><span style=3D"color:#55575d;font-family:Arial;font-size:13px;">7=
+7 Massachusetts Ave, 35-332 Cambridge, MA 02139</span></p></div></td></tr><=
+/tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td><=
+/tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><=
+/div>
+<br><img src=3D"http://kysz.mjt.lu/oo/AWwAACuNH-sAAcvFPVIAAQHEEAMAAWqa4NEAJ=
+QkVAAlzKABlN_zn8Maf9QuGQYWoqhUmEZYe6gAI9Ks/4ba01546/e.gif" height=3D"1" wid=
+th=3D"1" alt=3D"" border=3D"0" style=3D"height:1px;width:1px;border:0;">
+</body></html>=
+
+--=-s7xN2fnHZ5KsjncPnmI6--

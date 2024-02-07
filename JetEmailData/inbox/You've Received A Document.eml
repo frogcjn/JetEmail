@@ -1,0 +1,548 @@
+Received: from CH3PR01MB8630.prod.exchangelabs.com (2603:10b6:610:17e::6) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Sat, 25 Nov 2023 09:38:26
+ +0000
+Received: from CY5PR15CA0177.namprd15.prod.outlook.com (2603:10b6:930:81::23)
+ by CH3PR01MB8630.prod.exchangelabs.com (2603:10b6:610:17e::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.25; Sat, 25 Nov 2023 09:38:25 +0000
+Received: from CY4PEPF0000E9DB.namprd05.prod.outlook.com
+ (2603:10b6:930:81:cafe::51) by CY5PR15CA0177.outlook.office365.com
+ (2603:10b6:930:81::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.24 via Frontend
+ Transport; Sat, 25 Nov 2023 09:38:24 +0000
+Authentication-Results: spf=softfail (sender IP is 18.7.71.112)
+ smtp.mailfrom=mandrillapp.com; dkim=pass (signature was verified)
+ header.d=parchment.com;dmarc=pass action=none header.from=parchment.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ mandrillapp.com discourages use of 18.7.71.112 as permitted sender)
+Received: from mail.exchange.mit.edu (18.7.71.112) by
+ CY4PEPF0000E9DB.mail.protection.outlook.com (10.167.241.81) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Sat, 25 Nov 2023 09:38:24 +0000
+Received: from oc11exhyb7.exchange.mit.edu (18.9.1.112) by
+ w92exhyb7.exchange.mit.edu (18.7.71.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Sat, 25 Nov 2023 04:38:23 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Sat, 25 Nov 2023 04:38:23 -0500
+Received: from BL0PR02CA0060.namprd02.prod.outlook.com (2603:10b6:207:3d::37)
+ by PH7PR01MB7932.prod.exchangelabs.com (2603:10b6:510:274::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.25; Sat, 25 Nov 2023 09:38:21 +0000
+Received: from BL02EPF0001A103.namprd05.prod.outlook.com
+ (2603:10b6:207:3d:cafe::e) by BL0PR02CA0060.outlook.office365.com
+ (2603:10b6:207:3d::37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.20 via Frontend
+ Transport; Sat, 25 Nov 2023 09:38:20 +0000
+Authentication-Results-Original: spf=pass (sender IP is 198.2.136.122)
+ smtp.mailfrom=mandrillapp.com; dkim=pass (signature was verified)
+ header.d=parchment.com;dmarc=pass action=none
+ header.from=parchment.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mandrillapp.com
+ designates 198.2.136.122 as permitted sender)
+ receiver=protection.outlook.com; client-ip=198.2.136.122;
+ helo=mandrill.parchment.com; pr=C
+Received: from mandrill.parchment.com (198.2.136.122) by
+ BL02EPF0001A103.mail.protection.outlook.com (10.167.241.133) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Sat, 25 Nov 2023 09:38:20 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=parchment.com;
+	s=mandrill; t=1700905100; x=1701165600; i=noreply@parchment.com;
+	bh=ykrCEvBKcgJ/l3uuew/YoG1Jr8cL1vRzXqpZY6CdXUs=;
+	h=From:Subject:Reply-To:To:Feedback-ID:Message-Id:Date:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:CC:Date:Subject:From;
+	b=h9MTpkFmSmuQIImZLoFfhar748Bc91SLRjA+2umibJ8Q8Lel4OQRcGzNayioAtIPv
+	 QL0LgIwu+LYcOGcLLZq2UN7AAt8KXDafeH3r/+VfYvQsZjVU3j0unqW9EMo1EMLFrx
+	 svpM+nnRnJkEhvGU6j+4GTuMtInbqJha5LfT4Bhg=
+Received: from pmta11.mandrill.prod.atl01.rsglab.com (localhost [127.0.0.1])
+	by mandrill.parchment.com (Mailchimp) with ESMTP id 4ScmxS1RM1zJKF3cp
+	for <jiannan@mit.edu>; Sat, 25 Nov 2023 09:38:20 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandrillapp.com;
+ i=@mandrillapp.com; q=dns/txt; s=mandrill; t=1700905100; h=from :
+ subject : reply-to : to : message-id : date : mime-version :
+ content-type : content-transfer-encoding : from : x-mandrill-user :
+ list-unsubscribe; bh=ykrCEvBKcgJ/l3uuew/YoG1Jr8cL1vRzXqpZY6CdXUs=;
+ b=XCith1yMlJUOFL+3r4g2HhDYKfJM/lBwS69Ojuy8brLa8mT/4/fXy/uEAN90v/HAgAFzC
+ qyJb8BEVuBPOS6glNOI8K/Qtjef/Ot2ArFWXWKW/eASqLZXcaqPzFW2l1f++7cOaz+08ElD
+ J2CpV6BrvZeQsw6CtOFbDcZ7oASGv8c=
+From: Parchment <noreply@parchment.com>
+Subject: =?utf-8?Q?You've=20Received=20A=20Document?=
+Received: from [34.209.190.195] by mandrillapp.com id cd636abf2b2e4de9a4dccb35c5e565ba; Sat, 25 Nov 2023 09:38:20 +0000
+Reply-To: noreply@parchment.com
+To: Jiannan Cao <jiannan@mit.edu>
+X-Native-Encoded: 1
+X-Report-Abuse: =?UTF-8?Q?Please=20forward=20a=20copy=20of=20this=20message,=20including=20all=20headers,=20to=20abuse@mandrill.com.=20You=20can=20also=20report=20abuse=20here:=20https://mandrillapp.com/contact/abuse=3Fid=3D30717337.cd636abf2b2e4de9a4dccb35c5e565ba?=
+X-Mandrill-User: md_30717337
+Feedback-ID: 30717337:30717337.20231125:md
+Message-ID: <30717337.20231125093820.6561c08c15f915.92121804@mandrill.parchment.com>
+Date: Sat, 25 Nov 2023 09:38:20 +0000
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Return-Path:
+ bounce-md_30717337.6561c08c.v1-cd636abf2b2e4de9a4dccb35c5e565ba@mandrillapp.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BL02EPF0001A103:EE_|PH7PR01MB7932:EE_|CY4PEPF0000E9DB:EE_|CH3PR01MB8630:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 580662f7-cdd7-4812-d71e-08dbed9a4567
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:3;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?utf-8?B?bjIzTVMyR0NUdTN5WXdETm5ENU10aTN0cEZQbml3ZTZYeGxCek5BRTJpRzgx?=
+ =?utf-8?B?RW1WZmN1Y3ZyaURCRlR4QW40Q1ZCNUd4cDVEb3g0TndxYkV4TTNhZVhRT3Vr?=
+ =?utf-8?B?ZnBxb09VdXRKaW9IT2hjOTR0c3BDWnUwUEdpZW84NlpWSkQyUUp5RTVnWDZu?=
+ =?utf-8?B?ditJQlZtaGhZQkcwcEN5UDkzLzYrbHlzSnhsMm5zRmh5dXU2Yy8vNlgyRkZF?=
+ =?utf-8?B?ZlFROGRjUVRLcFUxbmphTitoQ3BwcnlDb0V0ajNJQmZ4MEs5VjJKeWxQRVlP?=
+ =?utf-8?B?Smt5T1hKcVVEYnFpQ2NOR2lOdXMwK1VaMG5kR3FpOGxVYnd2Ujh2a083Yzdt?=
+ =?utf-8?B?bGg3OVFkWjhVQUVxUmhyd2pxcGlnd3ZVdFQrU0JOVklMZC8xVEhteGx2aUtr?=
+ =?utf-8?B?MDllcC9ROExOWkJpNEF2MjlrRDVXNXo2V3FjcFMzeUlESktUQUFBdnJ4Tys2?=
+ =?utf-8?B?bU9KYWtHVHpDUndnRS9uUG5GM1J4UjVNRVo5c2hrTXdwQkNiVG5yRk42Q3dP?=
+ =?utf-8?B?dkR4YTNWcFJ1cWx1ZW42OXBLaEV4YkJGY20raUVDc0NHSEVKTjNGUUlzWlRr?=
+ =?utf-8?B?ZjlFdDJqMytwOUZTU0IwWlBjVnI3aWJNM2IrckgraVAwOHpQcTdEMk0xQnNo?=
+ =?utf-8?B?TU9RNWQyMW1kbWoyOU4rdG1QUjdLSjBvVTZiOUNPNk4zS1JEYTZoeUh0YlhG?=
+ =?utf-8?B?aDBlVlppUFY2b2FmZk03aXlWSTF1LzBqQTFIQzcxSTltQ2p2cVhucHJza2VU?=
+ =?utf-8?B?c0llQllTbFN5cHVYU3FUcmJYNmM2c0ZsM2hPY0hUUUZ0WHVIaWxMRkNkNUE1?=
+ =?utf-8?B?UUpYT3ErZ3RmMkVYbGJYUk5vSHdWYWl1enNnZkJJVExwRjUzV21DazVyTUF5?=
+ =?utf-8?B?YVdvdVRYU0p6RE1xRHZTalE5bFp6OGE3ZFRwb1FkajZNTHlrL01RaGd5Yk5k?=
+ =?utf-8?B?YWpRSi9iemRFSU1vR3J0Tlh4NDgrenBLY2tkWU1TaWJaKzhXbU4yZ1BQKzFB?=
+ =?utf-8?B?S2hBZGxvRkNETTRpNWUweUg0cFV4UjdVTHE2SlNSMVFtcVlMT1hKUlRVdG9S?=
+ =?utf-8?B?TlhBSDBhRzVIU3h5ZzNabXEzOHJWNGZ3eHV5aUY5a25aVC9sbzAvbEFwZFFY?=
+ =?utf-8?B?a05OOURlS1RkcSswUGVaamlXYXE1R3dlNktBOU5TVFgwNDFLWWFybWczUElm?=
+ =?utf-8?B?QlM0T0xSaEVlV0pPNTkvMm9HL2VrVnlpZER5YVdRWCtzMDZQNUtWVXoyT0xG?=
+ =?utf-8?B?T3piZFYycExkQkVJK2ZTRm8rYklnRkhyaExQR3NjUGdaRDd4VnZkYzlsYTc1?=
+ =?utf-8?B?ZmhXNzIyWk9xK1BlQ1A0MENzOEJiODVTQUVPNXN5VDlRRkx2TVZBM3pNU1Jw?=
+ =?utf-8?B?Nk12S2xmTk1QUHR6RjlGVGJScXkwamFDK3FjU2Naa20zajRzYlRoOTJxK3d1?=
+ =?utf-8?B?Z29XUk1lcGlPNytGUGZXWU5hdzdZSnZPb00zZjc4cXhNdXB6MERxVnRYUE9G?=
+ =?utf-8?B?RmVtQktHcUpJcDJVTHpNcHdDSkc1ZmExUDFCQXgxd0owNUlVR1ZYd1hHS1F5?=
+ =?utf-8?B?NHp3eHd2a0loNzB3RlpUbjZHUnpsSHkxMGJzdVlnekJzM0s3aDR5Q3BLZGZR?=
+ =?utf-8?B?c2lqditBakg3WldBZFl2eUVZaHp4T1VQT01QSEpUTitBMllFSW9oNzdRTzBs?=
+ =?utf-8?B?S1EyS3FrVmdtTHZ5cjRnZU5DeFIwRVcrK04zK281YW1pYnN6MXkwYi81TXJW?=
+ =?utf-8?B?ZVpCblNEVnVqT0V1eW43M2VGbWFuVGRhMHY3dzRRYndYWHVLUTI1VDAvQnpu?=
+ =?utf-8?B?RWJSRk5oallRVDJHa1NZT2NHU1RFcGhjZCtZbjJxMGJOT2RRc28vU3pGZlRY?=
+ =?utf-8?B?VnEzeUkxMnJCQWJ4cFpoSWhOV1Q4RjZZMGRXaUkxbHFlelFTem9iTHZra0kr?=
+ =?utf-8?B?QkNiaXZ0TlFSVEVFdmt1Y2VEcHRwVkRFUTJWalJvaEhlV3FwdUNYNzQvZElV?=
+ =?utf-8?B?aVQ5Q21walh0bWQ5KzZTckg1bGpjR2JVTWtpdThtMjFZekFlQ3VWSVpUV1Av?=
+ =?utf-8?B?RmR4bVp0dm1FQmtXTWNyRy9lZUxLR05jK0JwTEJRdHZZL21QTGZzY25MQWpq?=
+ =?utf-8?B?cmoyOVJXaElYeXVQRG1zRCtBSW9OODN0Q3NIemtoakpvZzc4OXAvN2JNV0t5?=
+ =?utf-8?B?cnNXdDk2bnU3QStmUHhadHQ0bk05QkMvNkx4NlVXSStHcjdPVWN3cXZUcWtN?=
+ =?utf-8?B?OXVwNXZ0L1c5dEZtOVh5WEdKS0E5WTl1VG5RRE5jcUZrM09sN041TVNoNmJl?=
+ =?utf-8?B?aVVjVjRDL29LVDFXNVJ4YURERkh1d3prNnQ3NjNUeWNFTVFsbkd5Y2Y4S1g1?=
+ =?utf-8?B?eERnamRRamJOdkhEcWtxazVBNElERm1acFBZclBIblFzZnlTaTgydHJNcVVu?=
+ =?utf-8?B?K0JTc1E1ZjZtcDdMRXBPa2FLUUYxY0RxQXFoVWNBaDYxNWhWbW5ZTTI5TzNT?=
+ =?utf-8?B?Y3FUbUpyZDBsTlIvR29TaDZxVC8vQXZSS2VVa04rcHpBaXZqNkprNmd5Yk1w?=
+ =?utf-8?B?azVtSmMyVE8zZzkvZGlpMXBYRzJWdEEwQkhzbGxsK3JIc0s4QnpiRThHTEw0?=
+ =?utf-8?B?SHFtTmMxWXowK2xWWHpYTmdrU29UOXB1aUhoa1ZRU2pDRUp6cE1xWFg1RUJj?=
+ =?utf-8?B?TVVIWVdURHhORWJodFN3NnJ5QjA3U3BiUWcwYzVab0QwS3ZHS2JvMXYvdWVM?=
+ =?utf-8?B?ZER6dmZvV216UnZjd2xjZWhMRWdua0dmWjNZZ0ZydG8zQVhzeS9zNWtMeUJz?=
+ =?utf-8?Q?e8iFSq157gALLAibMqPhBq7rO4EAPRhM9XE2bEgN9N?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:198.2.136.122;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mandrill.parchment.com;PTR:mandrill.parchment.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR01MB7932
+X-OrganizationHeadersPreserved: PH7PR01MB7932.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb7.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb7.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92exhyb7.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 25 Nov 2023 09:38:24.8236
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 580662f7-cdd7-4812-d71e-08dbed9a4567
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: CY4PEPF0000E9DB.namprd05.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CY4PEPF0000E9DB.namprd05.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CY4PEPF0000E9DB.namprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL02EPF0001A103.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ e1e39b3b-67c4-42f6-6d95-08dbed9a42cf
+X-Microsoft-Antispam: BCL:3;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.112;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:w92exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2023 09:38:24.4486
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 580662f7-cdd7-4812-d71e-08dbed9a4567
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL02EPF0001A103.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR01MB8630
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.9023217
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7025.020
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TzZoSEVwYmJXM3k1WnNwWVBTUEgvMmhVNGwzVFlRbFlDckJFY2I5ZkhKbmNJ?=
+ =?utf-8?B?MUdhZzNLeGpKYUg3MFhoVXJpc2JGQ1ZBNGh5cGw2Y2pDNzJZNkNlNXlLTGxo?=
+ =?utf-8?B?eUdBYkh0ZUtXR3pIYTBRVUJscmRFMzY0andtRXVkZEJkU1NhczFKaEpUenNR?=
+ =?utf-8?B?V1JCTlRFTnZvNjdVcldxem4xUHh0YTM4bTdjRjlCbi9xUWNuNVQyUWtOZHNr?=
+ =?utf-8?B?Qmp0UXYzQVJ4Vlh6MmR4ZjBaSCtyNUUxY0xLYVp3dFdZc0Z6RWFEQjIyZ241?=
+ =?utf-8?B?dlEzRkhyTUZLYUhxQ1M5NHFZb1VpcER4TVZrREIvbXRCNm9XdE1IWVJtMHJE?=
+ =?utf-8?B?NkdTckNVNVFKL0pqYkxsd3FWUjZPcjAwcHlDN1ZGU0ZRcXcyU0w2MUY2bmF5?=
+ =?utf-8?B?TWw0dXRoSE9yVGh5NWtSdzFreVZQVmJvZmRjamFXQkc3NnRZSG15N1NRd1NJ?=
+ =?utf-8?B?OTdxQmtzRTB5RkpNUzlVall2Z04xT1k5NUZ5cjZkVElRemtVMzd4aGxPZDRz?=
+ =?utf-8?B?bWgyUGpuaEU3c2tBNmxOSThPVjM5ZUY4TSthejJsMnVsamEyK21TbUlUTi9T?=
+ =?utf-8?B?U2Jmd0JDVVFETnJ2OTJMV3hqcE1GZ2hHdW9ucURobHdEMVZmb0xGbkxDZ0dC?=
+ =?utf-8?B?L2hoVlI1TXlVbGg0Z2hicUxVUHovSk1hVUlsc3JxeCtzWUVZNTVESzRWb09E?=
+ =?utf-8?B?ak5jT3IzTWtGR0NZYmV6cnNYVmxPMElyWFVpYXBmS1hmc1RCQ3JaSytnYjYz?=
+ =?utf-8?B?UXpzczNsS1l6VTJJSDVvOStyeXhPZmw2TmJqbDJQMW14RGpodU9qb1ZFbVVk?=
+ =?utf-8?B?ei9hVVMwVk1VQUx4OVB0cjBnNzB3R2ZFUlRjbEZqU0d6M010VWYyTWpXMnAw?=
+ =?utf-8?B?ZVkvNDhWZllkZmlpcWExSXhHa0hDMy9PR3BBZ1pRcmo5RUUyT0lUSkNhOEpP?=
+ =?utf-8?B?aHJPdXJ5K2JtbzRMSkIvYkhmdkFVa283VWZHUldxZDlESVdRWVIvanhLZnV4?=
+ =?utf-8?B?WjhJbGtVdk9ONFhWRFFVdjZmTXdvR0J6aldkbCthNldhNExqWlJFL1dMcjFM?=
+ =?utf-8?B?YU5HOXdkWUl4UmVKalJLbDlURGtpV0dlWVVMc3NUUXBVeHhiOG0vMEFMbTYv?=
+ =?utf-8?B?Wnl2RzlMVWZWSjdNdDVnUDhnQzBXcXMwS1BjR2RwVTNab28rUWZkUGZyTG5r?=
+ =?utf-8?B?aU1CNXBJYXhlNXh3UE1CQ0pRREROSHBHWGdCUmk0amxzaC9IR0d5ZjV1Qldo?=
+ =?utf-8?B?SmJEeXJYR2hmVGZuTE1ZTnpNVUlITmVpWUp2ZXhnZmhTb3l5TGNVV3g5cmtH?=
+ =?utf-8?B?MkM4OGtoVEVrWWZNd1ZBUy9QTjZVRXZXbHZLNTErVU5qZ2FTV0pLR1BSMUFX?=
+ =?utf-8?B?MzlzRVBxKzFoVEkwOC84SDBoa3preWJrVTc2WnZXcUsxTkc5RE1CZGI3b3g2?=
+ =?utf-8?B?bE9GOW1hbzZFbjVIclN0dnJxSmk2YWNnaTFtU3p1NU5KTTROeG5vMEQva0Fq?=
+ =?utf-8?B?U3ZjNzRwTk14aFA5aVpUekRwN2dmSHIvYlNRR2s1NTR4VUdNNGFXS3NDRmN3?=
+ =?utf-8?B?US9JNFBpQWVMM0xHcU8zSXRreDRDN2piaUhtT3RTdEI1cEx4YjQ3VnlPRk9w?=
+ =?utf-8?B?RFhFanRaVCs3Y0xWcUpqZ0Y4Rzg5aGNUWndyNUx1YnFKN0ZTYmlsTWtxY2xH?=
+ =?utf-8?B?M0k1cUFWaXZLSW1CVTh6VHFJRVVsVFBLMyszdENnTGxoVU1vcmNPTlZ6b0dX?=
+ =?utf-8?B?anp6UEovQzBVL2RNTVFWblhSQitZRmR0V0dUNTRWMEQzZDNrSjhxV0xRcGhk?=
+ =?utf-8?B?TXJNL21tc0hSSVREU3l5R2RxY2hkM0hsTTF2T0dGRGhicCtSTkk5a205aTV4?=
+ =?utf-8?B?ZStldFBUaTVrd0RhaFUva3NUdFBreG1NOTJmTEUzWlhQejJGcCs1MVh3QnMw?=
+ =?utf-8?B?b0dpNXFJd3grQ2MrSkZKT29pUVArang5UDBpalliUTRvaVY2dkFHNXRBSVJ1?=
+ =?utf-8?B?SGtuWHRaOEYycnhhcmFkakQ4V2UvVVh3QXlaMHRFYUM3RHZ2a203N20xWFZi?=
+ =?utf-8?B?WXJISFdOV2xhdWhSdE12eVpqSGtSOGVtZHU1bXloaXRLZmw3WnFnV3FFQzhP?=
+ =?utf-8?B?MDllWGVDT0NhWDJZL3ZGK1FoWWJnYWNVRnlxZjhyS2VHbmJQMXlFeUVrWmlv?=
+ =?utf-8?B?RkoycmpnWUhyc0tDQ004ZU5wbFYwTUtoeXgwcFVVS2F4ODAzU0k5aHhseHo2?=
+ =?utf-8?B?ZTd5OW5oTEZCN3owbzhha2l0Y1M5b2VNVC96UGZpNE9pNlYzRTRqZTE3VWtk?=
+ =?utf-8?B?U2hkaW4xOWlRZmYwR2pSQ2xCNnZqMWpBUFVlVlBWNUR2WVlzODNwVHZpb2ZN?=
+ =?utf-8?B?aG0zdStPYnVibFJwVFFJZXkwTWFJSXpUZXgwZDZVUUwrZjgrb2tZOGpxS2h3?=
+ =?utf-8?B?ckowQlNGWnlHMWdEYklGZHYyYXN1Q0hldUxDV3lQamg3V0M0VUtBRlpzejJN?=
+ =?utf-8?B?QWFmWGxXY2luTlg5OWlVVHZtYjZ0NThvT2Q0ZXZwS1pDMnNhVExycmYyNFZj?=
+ =?utf-8?B?MlZMOC9KWTloSlBNM2c1NDRPenVHTDF3blh1ZlQyOEZQVlNjYUhWeTJYVDVW?=
+ =?utf-8?B?RTg4UWJrbmVVSUtZakJvaUlDUVA4YjZtV1pFSW80TGxvcXNVb1F5T0xuSE8v?=
+ =?utf-8?B?QUZOMDZwZGRkOUU3ZWo0Tkl6bGUyN0N2cDFGRWxPMXFOK1VRZFJSWEEvU0NC?=
+ =?utf-8?B?RTZqcXpDQXl5N25udWxERm12ai9BOWFzS0V0U2VQSkh3TlByUkZXcmRqZDNp?=
+ =?utf-8?B?N21NdktKeEN2ME1hd1JSWDdlTzNkeS9QcVMxcy8xWHFsdU9XTEFRdmlCV1k0?=
+ =?utf-8?B?NlJLOFVUWWFYbkhYaVpJbmRSUT09?=
+MIME-Version: 1.0
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns=3D"http://www.w3.=
+org/1999/xhtml"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=
+=3D1.0">
+
+    <link rel=3D"preconnect" href=3D"https://fonts.googleapis.com">
+    <link rel=3D"preconnect" href=3D"https://fonts.gstatic.com" crossorigin=
+=3D"">
+    <link href=3D"https://fonts.googleapis.com/css2?family=3DOpen+Sans:wght=
+@400;600;700&amp;display=3Dswap" rel=3D"stylesheet">
+
+    <title>Your Credential Order</title>
+
+    <style type=3D"text/css">
+
+      table {
+        border-spacing: 0;
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+      }
+      td {
+        padding: 0;
+      }
+      img {
+        border: 0;
+      }
+      .outer {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 600px;
+        border-spacing: 0;
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        color: #555555;
+      }
+      .logo {
+        margin-left: 50px;
+        border: 0px;
+      }
+
+      </style>
+     =20
+</head>
+
+<body style=3D"margin:0; padding:0; background-color:#E6E6E6;">
+    <center style=3D"table-layout: fixed; background-color: #E6E6E6; paddin=
+g-bottom: 60px;">
+    <div style=3D"max-width: 600px; background-color: #ffffff;">
+<!-- Outer Start -->
+   <table class=3D"outer" align=3D"center">
+         <tr>
+             <td>     =20
+<!-- Main Container Start -->
+               <table width=3D"100%" style=3D"background-color:#ffffff; mar=
+gin: 0; max-width: 100%; border-spacing: 0; font-family: 'Open Sans', Helve=
+tica, Arial, sans-serif; color: #555555;">
+<!-- Header Start -->
+                  <tr>
+                     <td>
+                        <table style=3D"height: 100px" width=3D"100%" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" bgcolor=3D"#0093b2">
+                        <tr>
+                           <td>
+                              <a href=3D"https://mandrillapp.com/track/clic=
+k/30717337/www.parchment.com?p=3DeyJzIjoieS1vbTNGN2lRWTNfUWExN2I3QWk0c1RvLU=
+p3IiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcX=
+C9cXFwvd3d3LnBhcmNobWVudC5jb21cIixcImlkXCI6XCJjZDYzNmFiZjJiMmU0ZGU5YTRkY2Ni=
+MzVjNWU1NjViYVwiLFwidXJsX2lkc1wiOltcIjU4Njc2MjhmYzAyOTJlNTE5MDk3YjIzNTMwZGQ=
+xOGE3NzIxYTYzMDRcIl19In0" target=3D"_blank"><img src=3D"http://www.parchmen=
+t.com/images/parchment-logo.png" alt=3D"parchment.com" title=3D"parchment.c=
+om" width=3D"160" height=3D"30" class=3D"logo"></a>
+                           </td>
+                        </tr>
+                        </table>
+                     </td>
+                  </tr>
+<!-- Header End -->
+<!-- Title Area Start -->
+                  <tr>
+                     <td valign=3D"middle">
+                        <table style=3D"height: 60px !important;" align=3D"=
+center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" bgc=
+olor=3D"#F4F4F4">
+                        <tr>
+                           <td>
+                              <p style=3D"font-family: 'Open Sans', Helveti=
+ca, Arial, sans-serif; font-weight: 400; color: #777; font-size: 20px; line=
+-height: 25px; text-align: center; margin-left: 10px; margin-right: 30px;">=
+<img src=3D"http://www.parchment.com/images/icon-doc-received.png" width=3D=
+"49" height=3D"30" style=3D"margin: 0px 0px -10px 0px;">You've received a  =
+Transcript</p>
+                           </td>
+                        </tr>
+                        </table>
+                     </td>
+                  </tr>
+<!-- Title Area End -->
+<!-- Message Area Start -->
+                  <tr bgcolor=3D"#ffffff">
+                     <td>
+                        <table style=3D"margin: 20px 50px !important;">
+                           <tr>
+                              <td>
+                                    <p style=3D"font-family: 'Open Sans', H=
+elvetica, Arial, sans-serif; font-weight: 400; color: #555555; font-size: 1=
+6px; line-height: 28px;">
+                                      =20
+                                      =20
+
+                                       <b>Massachusetts Institute of Techno=
+logy</b> has sent you a  Transcript with the Parchment Delivery ID (DID) <b=
+>TEESJFWM</b> on behalf of <b>Jiannan Cao</b>.
+                                       This  Transcript is available for yo=
+u to download for 30 days, so your prompt attention is requested. The reque=
+stor of this document will receive an email notification once you access th=
+e  Transcript.
+                                    </p>
+                              </td>
+                           </tr>
+<!--Button and Following Text Start-->
+                             =20
+                           <tr>
+                              <td valign=3D"top">
+                                 <div>
+                                   =20
+                                    <div style=3D"margin: 20px 0px 30px 0px=
+;">
+                                       <center><a type=3D"button" href=3D"h=
+ttps://mandrillapp.com/track/click/30717337/receive.parchment.com?p=3DeyJzI=
+joidGhtODBCdUZTM0Q3NFJ3cDNRSHo1ZU1vZ2VJIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMz=
+NyxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3JlY2VpdmUucGFyY2htZW50LmNvbVx=
+cXC9kZWxpdmVyeT90b2tlbj0yYThkNWQxNy0wOWJhLTQzNmQtYmY0Mi1kNTllNzhmYjczOGUmZW=
+1haWw9amlhbm5hbiU0MG1pdC5lZHVcIixcImlkXCI6XCJjZDYzNmFiZjJiMmU0ZGU5YTRkY2NiM=
+zVjNWU1NjViYVwiLFwidXJsX2lkc1wiOltcImZiODA1Y2FlMzg5NDI4OGI4MzI2NjJkYTNmMWU3=
+M2FmYzMxYmJlMGZcIl19In0" value=3D"Access Transcript" target=3D"_blank" styl=
+e=3D"font-family: 'Open Sans', Helvetica, Arial, sans-serif; color: #fff; t=
+ext-decoration-color: #fff; background-color: #065e91; border: none; border=
+-radius: 5px; padding: 13px 35px; text-align: center; text-decoration: none=
+; display: inline-block; font-size: 16px; font-weight: 600;"><font color=3D=
+"#fff">Access the  Transcript</font></a></center>
+                                    </div>
+                                    <center>
+                                       <p style=3D"font-family: 'Open Sans'=
+, Helvetica, Arial, sans-serif; font-weight: 400; color: #555555; font-size=
+: 14px; line-height: 20px;">
+                                          If the button above does not work=
+, copy and paste the following URL in a browser window<br>
+                                          <font><a href=3D"https://mandrill=
+app.com/track/click/30717337/receive.parchment.com?p=3DeyJzIjoidGhtODBCdUZT=
+M0Q3NFJ3cDNRSHo1ZU1vZ2VJIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFw=
+idXJsXCI6XCJodHRwczpcXFwvXFxcL3JlY2VpdmUucGFyY2htZW50LmNvbVxcXC9kZWxpdmVyeT=
+90b2tlbj0yYThkNWQxNy0wOWJhLTQzNmQtYmY0Mi1kNTllNzhmYjczOGUmZW1haWw9amlhbm5hb=
+iU0MG1pdC5lZHVcIixcImlkXCI6XCJjZDYzNmFiZjJiMmU0ZGU5YTRkY2NiMzVjNWU1NjViYVwi=
+LFwidXJsX2lkc1wiOltcImZiODA1Y2FlMzg5NDI4OGI4MzI2NjJkYTNmMWU3M2FmYzMxYmJlMGZ=
+cIl19In0" target=3D"_blank" style=3D"color: #065e91 !important; font-weight=
+: 700;">https://receive.parchment.com/delivery?token=3D2a8d5d17-09ba-436d-b=
+f42-d59e78fb738e&amp;email=3Djiannan%40mit.edu</a><br><br></font>
+                                       </p>
+                                    </center>
+                                    <p style=3D"font-family: 'Open Sans', H=
+elvetica, Arial, sans-serif; font-weight: 400; color: #555555; font-size: 1=
+6px; line-height: 28px;">
+                                       Thank you,<br>
+                                       The Parchment Team<br>
+                                       <font style=3D"font-size: 12px; font=
+-weight: 600;">Turn Credentials into Opportunities</font> <br><br>
+                                       <!-- For Future Use
+                                          Jiannan<br>
+                                          <br>
+                                          Cao<br>
+                                          <br>
+                                          <br>
+                                          <br>
+                                          Transcript<br>
+                                          Transcript<br>
+                                          <br>
+                                          34534<br>
+                                         =20
+                                          -->=20
+                                    </p>
+                                    <p style=3D"font-family: 'Open Sans', H=
+elvetica, Arial, sans-serif; font-weight: 400; color: #777777; font-size: 1=
+4px; line-height: 20px;">
+                                       <b>About Parchment - The most advanc=
+ed digital credentials service</b><br><br>
+                                       Parchment is the most widely adopted=
+ digital credential service, allowing learners,=20
+                                       academic institutions, and employers=
+ to request, verify, and share credentials in=20
+                                       simple and secure ways. The platform=
+ has helped millions of people and thousands=20
+                                       of schools and universities exchange=
+ more than 30 million transcripts and other=20
+                                       credentials globally.<br><br>
+                                       Please do not respond to this messag=
+e.  This notification has been sent to you by=20
+                                       Parchment on behalf of the Requestor=
+ noted above. Parchment respects your=20
+                                       privacy. This email and any attachme=
+nts are confidential and are intended solely=20
+                                       for the use of the named addressee. =
+If you have received this email in error, please=20
+                                       <a href=3D"https://mandrillapp.com/t=
+rack/click/30717337/parchmentsupport.force.com?p=3DeyJzIjoiU3pJUEVQbGJGRXh5=
+NVZ6Z2JhVmFXMW56cTQwIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJ=
+sXCI6XCJodHRwczpcXFwvXFxcL3BhcmNobWVudHN1cHBvcnQuZm9yY2UuY29tXFxcL3NcXFwvP2=
+xhbmd1YWdlPWVuX1VTXCIsXCJpZFwiOlwiY2Q2MzZhYmYyYjJlNGRlOWE0ZGNjYjM1YzVlNTY1Y=
+mFcIixcInVybF9pZHNcIjpbXCI4ZDliMjJjN2RkYTE3MDAyMDIwYTNiZDQxNmIyZjM4ODY2YTRk=
+MTc4XCJdfSJ9" target=3D"_blank" style=3D"color: #065e91 !important; font-we=
+ight: 700;">contact Parchment</a>. Thank you.=20
+                                    </p>
+                                 </div>
+                              </td>
+                           </tr>
+<!--Button and Following Text End-->
+                        </table>
+                        </td>
+                  </tr>
+<!-- Message Area End -->
+          </table>
+<!-- Main Container End -->
+        </td>
+      </tr>
+<!-- Help Section Start -->
+      <tr style=3D"background-color: #f4f4f4 !important;">
+         <td>
+            <table align=3D"center" width=3D"100%" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0">
+            <div style=3D"margin: 10px 70px;">
+               <p style=3D"font-family: 'Open Sans', Helvetica, Arial, sans=
+-serif; font-weight: 400; color: #555; font-size: 20px; line-height: 25px; =
+text-align: center;"><img src=3D"http://www.parchment.com/images/icon-suppo=
+rt.png" width=3D"64" height=3D"64" style=3D"margin: 10px 0px 15px 0px;"><br=
+>
+                  We're here if you need us
+               </p>
+               <p style=3D"font-family: 'Open Sans', Helvetica, Arial, sans=
+-serif; font-weight: 400; color: #555; font-size: 16px; line-height: 28px; =
+text-align: center;">
+                  The <a href=3D"https://mandrillapp.com/track/click/307173=
+37/parchmentsupport.force.com?p=3DeyJzIjoiU3pJUEVQbGJGRXh5NVZ6Z2JhVmFXMW56c=
+TQwIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwczpc=
+XFwvXFxcL3BhcmNobWVudHN1cHBvcnQuZm9yY2UuY29tXFxcL3NcXFwvP2xhbmd1YWdlPWVuX1V=
+TXCIsXCJpZFwiOlwiY2Q2MzZhYmYyYjJlNGRlOWE0ZGNjYjM1YzVlNTY1YmFcIixcInVybF9pZH=
+NcIjpbXCI4ZDliMjJjN2RkYTE3MDAyMDIwYTNiZDQxNmIyZjM4ODY2YTRkMTc4XCJdfSJ9" tar=
+get=3D"_blank" style=3D"color: #065e91 !important; font-weight: 700;"><b>Pa=
+rchment Help Center</b></a> knowledgebase is packed
+                  with useful help articles, topics, links, FAQs, and suppo=
+rt
+                  resources. Don't hesitate to <a href=3D"https://mandrilla=
+pp.com/track/click/30717337/parchmentsupport.force.com?p=3DeyJzIjoiU3pJUEVQ=
+bGJGRXh5NVZ6Z2JhVmFXMW56cTQwIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjo=
+xLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3BhcmNobWVudHN1cHBvcnQuZm9yY2UuY29tXFxcL3=
+NcXFwvP2xhbmd1YWdlPWVuX1VTXCIsXCJpZFwiOlwiY2Q2MzZhYmYyYjJlNGRlOWE0ZGNjYjM1Y=
+zVlNTY1YmFcIixcInVybF9pZHNcIjpbXCI4ZDliMjJjN2RkYTE3MDAyMDIwYTNiZDQxNmIyZjM4=
+ODY2YTRkMTc4XCJdfSJ9" target=3D"_blank" style=3D"color: #065e91 !important;=
+ font-weight: 700;"><b>check it out</b></a>.
+               </p>
+               <div style=3D"margin: 20px 0px 50px 0px;">
+                  <center><a type=3D"button" href=3D"https://mandrillapp.co=
+m/track/click/30717337/parchmentsupport.force.com?p=3DeyJzIjoiU3pJUEVQbGJGR=
+Xh5NVZ6Z2JhVmFXMW56cTQwIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwi=
+dXJsXCI6XCJodHRwczpcXFwvXFxcL3BhcmNobWVudHN1cHBvcnQuZm9yY2UuY29tXFxcL3NcXFw=
+vP2xhbmd1YWdlPWVuX1VTXCIsXCJpZFwiOlwiY2Q2MzZhYmYyYjJlNGRlOWE0ZGNjYjM1YzVlNT=
+Y1YmFcIixcInVybF9pZHNcIjpbXCI4ZDliMjJjN2RkYTE3MDAyMDIwYTNiZDQxNmIyZjM4ODY2Y=
+TRkMTc4XCJdfSJ9" value=3D"Help Center" target=3D"_blank" style=3D"font-fami=
+ly: 'Open Sans', Helvetica, Arial, sans-serif; color: #fff; text-decoration=
+-color: #fff; background-color: #065e91; border: none; border-radius: 5px; =
+padding: 13px 35px; text-align: center; text-decoration: none; display: inl=
+ine-block; font-size: 16px;"><font color=3D"#fff">Help Center</font></a></c=
+enter>
+               </div>
+            </div>
+         </table>
+         </td>
+      </tr>
+<!-- Help Section End -->
+<!-- Footer Start -->
+      <tr>=20
+       <td>
+        <table style=3D"height: 40px;" align=3D"center" width=3D"100%" bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" bgcolor=3D"#555555">
+          <tr>
+            <td align=3D"center">
+              <span><font style=3D"font-family: 'Open Sans', Helvetica, Ari=
+al, sans-serif; font-weight: 400; color: #ffffff; text-align: center; font-=
+size: 10px; line-height: 13px;">Parchment's <a href=3D"https://mandrillapp.=
+com/track/click/30717337/www.parchment.com?p=3DeyJzIjoiVlZnTE5nUFNTd0hoSjBP=
+eGlIUDNZeGNPUHp3IiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI=
+6XCJodHRwczpcXFwvXFxcL3d3dy5wYXJjaG1lbnQuY29tXFxcL3ByaXZhY3ktcG9saWN5XFxcL1=
+wiLFwiaWRcIjpcImNkNjM2YWJmMmIyZTRkZTlhNGRjY2IzNWM1ZTU2NWJhXCIsXCJ1cmxfaWRzX=
+CI6W1wiN2ViYmRjNGViNmFlNTQxOTczZTkzNjFlNDU5N2Q1ZDU1NjEzOGE1ZVwiXX0ifQ" targ=
+et=3D"_blank" style=3D"color: #ffffff; text-decoration: underline;">Privacy=
+ Policy</a> and <a href=3D"https://mandrillapp.com/track/click/30717337/www=
+.parchment.com?p=3DeyJzIjoibU1CLWxPTlV0cnJfRlhyZV95b3NMcFFCREN3IiwidiI6MSwi=
+cCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5=
+wYXJjaG1lbnQuY29tXFxcL3Rlcm1zLW9mLXVzZVxcXC9cIixcImlkXCI6XCJjZDYzNmFiZjJiMm=
+U0ZGU5YTRkY2NiMzVjNWU1NjViYVwiLFwidXJsX2lkc1wiOltcIjdmNTdiMDkzM2QzZDJkYjhjY=
+zExYWQyMDY5NDcwNGVkNWM4ZWIyZmJcIl19In0" target=3D"_blank" style=3D"color: #=
+ffffff; text-decoration: underline;">Terms of Use</a></font><br>
+              </span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+<!-- Footer End -->
+      </table>
+<!-- Outer End -->         =20
+      </div>
+    </center>
+    <!-- Full Page Container End -->
+  <img src=3D"https://mandrillapp.com/track/open.php?u=3D30717337&amp;id=3D=
+cd636abf2b2e4de9a4dccb35c5e565ba" height=3D"1" width=3D"1" alt=3D""></body>
+</html>
+

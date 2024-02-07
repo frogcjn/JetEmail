@@ -16,7 +16,7 @@ class UserContext {
     var account: MSALAccount { _loginResult.account }
     var accessToken: String { _loginResult.accessToken }
     
-    var mailFoldersRequest: MailFoldersRequestBuilder
+    var mailFoldersRequest: Microsoft.Graph.MailFolder.RequestBuilder
     
     init(appContext: AppContext, loginResult: AppContext.Result) {
         _appContext = appContext
@@ -42,11 +42,11 @@ extension UserContext {
         }
     }
     
-    subscript<Value>(dynamicMember keyPath: KeyPath<MailFoldersRequestBuilder, Value>) -> Value {
+    subscript<Value>(dynamicMember keyPath: KeyPath<Microsoft.Graph.MailFolder.RequestBuilder, Value>) -> Value {
         mailFoldersRequest[keyPath: keyPath]
     }
     
-    subscript<Value>(dynamicMember keyPath: WritableKeyPath<MailFoldersRequestBuilder, Value>) -> Value {
+    subscript<Value>(dynamicMember keyPath: WritableKeyPath<Microsoft.Graph.MailFolder.RequestBuilder, Value>) -> Value {
         get {
             mailFoldersRequest[keyPath: keyPath]
         }

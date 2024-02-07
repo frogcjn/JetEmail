@@ -1,0 +1,464 @@
+Received: from CH0PR01MB7204.prod.exchangelabs.com (2603:10b6:610:f4::24) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Mon, 18 Dec 2023 20:42:57
+ +0000
+Received: from MW4PR03CA0076.namprd03.prod.outlook.com (2603:10b6:303:b6::21)
+ by CH0PR01MB7204.prod.exchangelabs.com (2603:10b6:610:f4::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.38; Mon, 18 Dec 2023 20:42:55 +0000
+Received: from CO1PEPF000042AB.namprd03.prod.outlook.com
+ (2603:10b6:303:b6:cafe::e9) by MW4PR03CA0076.outlook.office365.com
+ (2603:10b6:303:b6::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.38 via Frontend
+ Transport; Mon, 18 Dec 2023 20:42:55 +0000
+Authentication-Results: spf=pass (sender IP is 18.7.21.50)
+ smtp.mailfrom=mit.edu; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.7.21.50 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.7.21.50; helo=mailman.mit.edu; pr=C
+Received: from mailman.mit.edu (18.7.21.50) by
+ CO1PEPF000042AB.mail.protection.outlook.com (10.167.243.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7113.14 via Frontend Transport; Mon, 18 Dec 2023 20:42:55 +0000
+Received: from mailman.mit.edu (localhost [127.0.0.1])
+	by mailman.mit.edu (8.15.2/8.12.8) with ESMTP id 3BIKgq7n677685;
+	Mon, 18 Dec 2023 15:42:54 -0500
+DKIM-Filter: OpenDKIM Filter v2.11.0 unknown-host (unknown-jobid)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=mailman;
+	t=1702932174; bh=Hl/yLtHERWPxbp0zaROKef0X0HaaEym7n4z7CLpQiE4=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+	b=fE1b+dHL/9PgUGMOqQPbn1FaOHCv3MliMAmdGAaF9fgCvHoQbzVzj6zaAdqbQyKXX
+	 GWO4emOHMdEdNxJjPJWMjCWr2b3u5DixMhLh8dxWNUirleioJx+argow+h7UsOo8M/
+	 nvBbwfVgc/D9QDxQrJhcZD/qv7tbF3QgXzMW2J279ONKaBxYHpIZM2y/oh4NOELBii
+	 vJXb3ndzsNrHlxuecEXApuETpTUxoQtqBHQ07Ejz6NivBsXe051/fWEvIoX28czXFv
+	 IZaD+EAOrICS1JBV71EYCov/fWMH3Z4crs/sgUAv4cCv9lLmpxWj3deQmGo7EOiknK
+	 kAfGcCBjcdyFw==
+Received: from outgoing-exchange-5.mit.edu (OUTGOING-EXCHANGE-5.MIT.EDU
+ [18.9.28.59])
+ by mailman.mit.edu (8.15.2/8.12.8) with ESMTPS id 3BGIBpOu086655
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <sidney-pacific-residents@MAILMAN.MIT.EDU>; Sat, 16 Dec 2023 13:11:52 -0500
+DKIM-Filter: OpenDKIM Filter v2.11.0 unknown-host (unknown-jobid)
+Received: from w92exedge3.exchange.mit.edu (W92EXEDGE3.EXCHANGE.MIT.EDU
+ [18.7.73.15])
+ by outgoing-exchange-5.mit.edu (8.14.7/8.12.4) with ESMTP id 3BGIBoUH022256
+ for <sidney-pacific-residents@MAILMAN.MIT.EDU>; Sat, 16 Dec 2023 13:11:51 -0500
+Received: from oc11exhyb5.exchange.mit.edu (18.9.1.110) by
+ w92exedge3.exchange.mit.edu (18.7.73.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Sat, 16 Dec 2023 13:11:47 -0500
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ oc11exhyb5.exchange.mit.edu (18.9.1.110) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Sat, 16 Dec 2023 13:11:50 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Sat, 16 Dec 2023 13:11:50 -0500
+Received: from BN8PR01MB5460.prod.exchangelabs.com (2603:10b6:408:b3::23) by
+ SJ0PR01MB7448.prod.exchangelabs.com (2603:10b6:a03:3dd::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.36; Sat, 16 Dec 2023 18:11:29 +0000
+Received: from BN8PR01MB5460.prod.exchangelabs.com
+ ([fe80::9022:f9e3:df1f:59be]) by BN8PR01MB5460.prod.exchangelabs.com
+ ([fe80::9022:f9e3:df1f:59be%4]) with mapi id 15.20.7091.032; Sat, 16 Dec 2023
+ 18:11:29 +0000
+From: "Harpuneet Singh" <harpsin@mit.edu>
+To: you <you@mit.edu>
+Subject: IAP Food
+Thread-Topic: IAP Food
+Thread-Index: AQHaMEpeQZ/ejjD/Ek2bdGph36+Anw==
+Date: Sat, 16 Dec 2023 18:11:29 +0000
+Message-ID: <BN8PR01MB5460FAB2BF06A801B65072DFAF92A@BN8PR01MB5460.prod.exchangelabs.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mit.edu;
+x-ms-traffictypediagnostic:
+ BN8PR01MB5460:EE_|SJ0PR01MB7448:EE_|CO1PEPF000042AB:EE_|CH0PR01MB7204:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: e443ba4c-098f-461b-10fb-08dc0009e9ba
+x-ld-processed: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b,ExtAddr
+X-MS-Exchange-AtpMessageProperties: SA
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ 76FokikYIimcbehrh/eWa9ZHTRfwTpYWNFY+jKcU3pZrOmtYGYthqWCqm5Llc/+M6rvGb0ODnJvr/s92hdltxbeDizXRqO9BZH/IFdnKxTAblvHiEvKB5KzZA6Az2MRJzuc41CMsS9lQQZ+VVl+f1P9nGp/z2PZY7/jadXMu/wqFKT6iADk4LhOY472KZlro9O2/QAkBgdpagCOdHSABtvn4beFeQ9dE0VJRbf7WfctwWyF73307sMRuAHwQ4CHCcpRnDGlI8p4Q4SH5G0lyq5X+7/hGfYxOq+QvNqCZ+ZO2dmlfSBCiDsgs/WfOPbMIe/D6Dw8C7XyFKvwou6BzmF5bTNJp215GNer2Hww2AHk+wIjhWxZ8Xj9MaXD/IMH918fKKnZwY9b+huASe2QZQTy2n2rE7OUWnarafHgq9u43jErtLctqZzJrHpxDIlbUPcGqWNa/4M8k0pkVuBZfaAGuT+NFQ2NlWV7TbCtKKUPZiAdv/xGJW1LPrc6+Sc5w5MBUoK/aHhIr6H6dEe4MJSV+NTHSvCdI5LgnbGnseWPRpQAldFMR/U9AJGOv90K7PFsaOwgC6JSyz/exjHgsrglCfHeJGTis0JWCGxpxbLQ=
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255; CTRY:; LANG:en;
+ SCL:1; SRV:; IPV:NLI; SFV:NSPM; H:BN8PR01MB5460.prod.exchangelabs.com; PTR:;
+ CAT:NONE;
+ SFS:(13230031)(136003)(39860400002)(346002)(376002)(396003)(366004)(1800799012)(451199024)(64100799003)(186009)(38070700009)(19627405001)(55016003)(66574015)(26005)(2906002)(9686003)(5660300002)(71200400001)(7696005)(6506007)(91956017)(76116006)(66556008)(66946007)(7116003)(52536014)(6862004)(316002)(786003)(6636002)(64756008)(66446008)(66476007)(1015004)(83380400001)(3480700007)(75432002)(166002)(41300700001)(122000001)(966005)(8676002)(8936002)(38100700002)(478600001)(33656002)(86362001);
+ DIR:OUT; SFP:1102; 
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB7448
+X-Mailman-Approved-At: Mon, 18 Dec 2023 15:42:51 -0500
+X-BeenThere: sidney-pacific-residents@mit.edu
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: <sidney-pacific-residents.mit.edu>
+List-Unsubscribe: <https://mailman.mit.edu/mailman/options/sidney-pacific-residents>, 
+ <mailto:sidney-pacific-residents-request@mit.edu?subject=unsubscribe>
+List-Archive: <https://mailman.mit.edu/mailman/private/sidney-pacific-residents/>
+List-Post: <mailto:sidney-pacific-residents@mit.edu>
+List-Help: <mailto:sidney-pacific-residents-request@mit.edu?subject=help>
+List-Subscribe: <https://mailman.mit.edu/mailman/listinfo/sidney-pacific-residents>, 
+ <mailto:sidney-pacific-residents-request@mit.edu?subject=subscribe>
+Content-Type: multipart/mixed; boundary="===============6170518039146221961=="
+Errors-To: sidney-pacific-residents-bounces@mit.edu
+Sender: "sidney-pacific-residents" <sidney-pacific-residents-bounces@mit.edu>
+Return-Path: sidney-pacific-residents-bounces@mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 18 Dec 2023 20:42:55.5758
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ e443ba4c-098f-461b-10fb-08dc0009e9ba
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1PEPF000042AB.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1PEPF000042AB.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: mitprod.onmicrosoft.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 4e65fe5e-be9c-4755-4784-08dbfe626d06
+X-MS-Exchange-Organization-SCL: -1
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.21.50;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:mailman.mit.edu;PTR:mailman.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2023 20:42:55.2321
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e443ba4c-098f-461b-10fb-08dc0009e9ba
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.21.50];Helo=[mailman.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042AB.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB7204
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.7189685
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7091.030
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?Windows-1252?Q?U1OliH4hdL3nmLoExibhvcuNUlkuAq//7l+neI6/RCMcXxohN5oHFQi/?=
+ =?Windows-1252?Q?cNs5dvcj99U/hEryy1AEOg5N1njdIz2tkEJV04DMrJnhf3WNk8m6IO8l?=
+ =?Windows-1252?Q?OVA0Q4t8II0WnsgY6t+4NKJ4NNWVgYWAXytBN8Ouu9qahYhxQgSXMCiX?=
+ =?Windows-1252?Q?R/RKei4gaCCeHOcg0HFS5OuW1vFrjOFSLijpui2uQkbAk7i9LqgYh0+w?=
+ =?Windows-1252?Q?8qWv0La1msgPJytMKy2eXg1wo7oP80k4ZJdQTVnwyJ14WdnkoUk3A5wP?=
+ =?Windows-1252?Q?tgrQF83+alfBsCS7Kc/ESqXFfDEr8HDbLUtS4NUGZeL65Zwz8S70DjgF?=
+ =?Windows-1252?Q?aAkjNQZxzq3TJ6hpG/ZZiThijKjiBmzn1z2gDZhmBapmBKLRIqu2zIZc?=
+ =?Windows-1252?Q?N50bWhmBSQU9B62LJzRKanaPc5IE9R+YWdmyYyG+p0HnBFUsKJsihXf3?=
+ =?Windows-1252?Q?5+2+WhzFiJIS5CjUTR+fvn0wQNuadndyuQzVjtIEJxtwKGoKdibcn+Rp?=
+ =?Windows-1252?Q?ONmHlXRp4MC4QO0B8+VerFQpCH4+6uuJCMBem+i4CNbisBBuAMX72mrx?=
+ =?Windows-1252?Q?DYA/K4KwVXmK0FCU2lc4SyxASSQWQL5oH2aWaIsAIYA5yj2fl0qs0p2z?=
+ =?Windows-1252?Q?IMsNxKKXJjyCqomBUzwFwsuufxokkqNB+AWm9tMLdFO8POzwO6HElAoZ?=
+ =?Windows-1252?Q?U2/kqHpnxJa3/GxHXHcpE7D/ywWIuouxfU8tqBxuoqwBTMAgbZ51t5Bp?=
+ =?Windows-1252?Q?rKiql3froqGm22xD8m4Rjln2n8JAzD1xYm6QR0HvpZUaQF8so4vozjTz?=
+ =?Windows-1252?Q?3plsu1/Wtwnb25CnG0mPBN/tqdXACclZadKqWOF3a63lSImFfw41Y+tw?=
+ =?Windows-1252?Q?8luqrUq+OfGViDstKBEXzwWEzIk0cBsiC63NtihuqGHJoiVRY2ahQ/xE?=
+ =?Windows-1252?Q?pyYrisdAuILlu3xFz+/h6ovlH7DX8F+1UAsXt0voGmo5iMt2vqzSqfl5?=
+ =?Windows-1252?Q?z37ZkC/H4QXLu3tT8lpUWLKuiOxaYqMtytVX9mssdLzNfVwT6i7uJm6j?=
+ =?Windows-1252?Q?2eZ5iMafQ95qTblu9qTB7LQX4c2ceVEsMjpb/wD8QOOJ4EfLMtAPzxCH?=
+ =?Windows-1252?Q?a/KbynUSduGkOwnVFEyNIu2CsAOIowoW2pGvo0FyYfYLmWwCUdfG9NL2?=
+ =?Windows-1252?Q?0Bbg+h4GmC2J/MJjlA8XzbjaZOAisphPitnz0EnAtJqRLCGVLxhS+6a+?=
+ =?Windows-1252?Q?/xxLG4V5Yyg8UcRKt+eOH2JVLhptDHhJ4OpirugIk0Ozd5+meZRJyJcN?=
+ =?Windows-1252?Q?WdtsgHHf9/IeLn8A3AbaqwaczA0FrSllafGrRhUOXBAivgcCTrd+OVfP?=
+ =?Windows-1252?Q?+PrmTd0LtwHA7EOWTo9mPunvyIOjrcacVrT32dsOI4fqmeQnw6B1C6Yi?=
+ =?Windows-1252?Q?95lKuZrpQDCTb6yg+rRr8VLTP2c9XLhFEgwYvIPkqNcgF3ZIqymXPR6G?=
+ =?Windows-1252?Q?+EIxPk9m9RQzPIS4MkG2AQG+9F65FlByIuHpkS8Ty2hXl/u5mauXj40l?=
+ =?Windows-1252?Q?4dyLZ4xiEZLYkJDudk+9mgeu/NEqYBjQKqDRygXBx1p06ozIiQmmDktT?=
+ =?Windows-1252?Q?xhSXttou+Hu0PLdkotym8YVdBDv8uCsIwXoFnpvHLeHMzRe1WaWDZfJb?=
+ =?Windows-1252?Q?zcs8UCBP5SXM8VAGgPAHrVWxeZ8ecYJ4Y+BxdNhcRcuuRm2Ugmkz2Z7W?=
+ =?Windows-1252?Q?8tJH0J+gm4Yb9FZC8mEwtWOBpuL9IWuHsKYqU0Xgqd3rwzZkb5tCQbON?=
+ =?Windows-1252?Q?/UqQd3KsYF2kWr6HtJDPS/qNw1I31QdPrFmBEfSIZWyh/FNJqOHbTXfp?=
+ =?Windows-1252?Q?ebaaorE115NImql6opoxyBd3M4+zSGEZQIDU5UGZpDRV4epJZeq689r8?=
+ =?Windows-1252?Q?hywbDAI9SccKR6v3W6AvnyqjFQIKu7IMx77rDsC9YiwruN+utq3ix5mM?=
+ =?Windows-1252?Q?M8Ph3c538OwctKoFsYrlAQKQrU9fnjunuQsWrrjBIbPX34CUezaDzEYe?=
+ =?Windows-1252?Q?jrZNvJC9ZmVQ2kyxZb5HJ5IjlX+WJEChUnbmTLA/96BlVAIY17qX8JMC?=
+ =?Windows-1252?Q?s28fDfN8Bmf4XyBfyuAEojM5LbifzY9Vgogu2CJrn/vIkhAtw3TT6vi0?=
+ =?Windows-1252?Q?M+fTx//qsRXo2Gxm+jZHDnOR6InfHyiF?=
+MIME-Version: 1.0
+
+--===============6170518039146221961==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_BN8PR01MB5460FAB2BF06A801B65072DFAF92ABN8PR01MB5460prod_"
+
+--_000_BN8PR01MB5460FAB2BF06A801B65072DFAF92ABN8PR01MB5460prod_
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Everyone,
+
+Are you tired of cooking, or struggling to find the time for it? Maybe you'=
+re not on a meal plan and tired of paying high delivery fees? We've got the=
+ perfect solution for you - PrepMate!
+
+What's PrepMate?
+It's a student-led initiative that brings you a variety of delicious meal k=
+its from your favorite local restaurants. With PrepMate, you get:
+
+
+  *   Affordable Meals: Forget those expensive delivery fees and overpriced=
+ meals from DoorDash/UberEats/GrubHub. Enjoy quality food at student-friend=
+ly prices.
+  *   Convenience: Order several days=92 worth of meals at once. All you ne=
+ed to do is heat and eat whenever you're ready.
+  *   Local Variety: Choose from a wide range of meal options from local re=
+staurants you already love.
+
+PrepMate is all about fitting into your busy student life without compromis=
+ing on food quality. Say goodbye to kitchen and dining hall stress and hell=
+o to tasty, effortless meals.
+
+Interested?
+Fill out this form<https://forms.gle/gpJMUwKKnwUTTrvU6>. Link is below in c=
+ase you cannot click the button.
+
+https://forms.gle/gpJMUwKKnwUTTrvU6
+
+Bon App=E9tit,
+
+Harpuneet "Harp" Singh
+Massachusetts Institute of Technology '25
+
+A Simple Human (he/him)
+--------------------------------------------------------------------------
+Sent using the magical phenomena of the human mind
+--------------------------------------------------------------------------
+
+
+--_000_BN8PR01MB5460FAB2BF06A801B65072DFAF92ABN8PR01MB5460prod_
+Content-Type: text/html; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DWindows-1=
+252">
+<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
+ttom:0;} </style>
+</head>
+<body dir=3D"ltr">
+<div class=3D"elementToProof"><span style=3D"letter-spacing: normal; font-f=
+amily: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calibri, Helvetica, =
+sans-serif; font-size: 12pt; font-weight: 400; color: black;">Hi Everyone,<=
+/span></div>
+<div style=3D"margin: 0px; background-color: rgb(255, 255, 255);"></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;"><br>
+</span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;">Are you tired of cooking, or struggling to =
+find the time for it? Maybe you're
+ not on a meal plan and tired of paying high delivery fees? We've got the p=
+erfect solution for you -&nbsp;</span><span style=3D"letter-spacing: normal=
+; font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calibri, Hel=
+vetica, sans-serif; font-size: 12pt; color: black;"><b>PrepMate</b></span><=
+span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFon=
+t, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; fo=
+nt-weight: 400; color: black;">!</span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;"><br>
+</span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: black;"><b>What's PrepMate?</b></span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;">It's a student-led initiative that brings y=
+ou a variety of delicious meal kits
+ from your favorite local restaurants. With PrepMate, you get:</span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;"><br>
+</span></div>
+<ul data-editing-info=3D"{&quot;orderedStyleType&quot;:1,&quot;unorderedSty=
+leType&quot;:2}" style=3D"direction: ltr; text-align: left; background-colo=
+r: rgb(255, 255, 255);">
+<li style=3D"letter-spacing: normal; font-family: &quot;Segoe UI&quot;, &qu=
+ot;Segoe UI Web (West European)&quot;, &quot;Segoe UI&quot;, -apple-system,=
+ BlinkMacSystemFont, Roboto, &quot;Helvetica Neue&quot;, sans-serif; font-s=
+ize: 15px; font-weight: 400; list-style-position: initial; list-style-type:=
+ &quot;- &quot;; color: rgb(36, 36, 36);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: black;"><b>Affordable Meals:</b></span><span style=3D"letter-spacing:=
+ normal; font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calib=
+ri, Helvetica, sans-serif; font-size: 12pt; font-weight: 400; color: black;=
+">&nbsp;Forget
+ those expensive delivery fees and overpriced meals from DoorDash/UberEats/=
+GrubHub. Enjoy quality food at student-friendly prices.</span><span style=
+=3D"letter-spacing: normal; font-family: &quot;Segoe UI&quot;, &quot;Segoe =
+UI Web (West European)&quot;, &quot;Segoe UI&quot;, -apple-system, BlinkMac=
+SystemFont, Roboto, &quot;Helvetica Neue&quot;, sans-serif; font-size: 15px=
+; font-weight: 400; color: rgb(36, 36, 36);"><br>
+</span></li><li style=3D"letter-spacing: normal; font-family: &quot;Segoe U=
+I&quot;, &quot;Segoe UI Web (West European)&quot;, &quot;Segoe UI&quot;, -a=
+pple-system, BlinkMacSystemFont, Roboto, &quot;Helvetica Neue&quot;, sans-s=
+erif; font-size: 15px; font-weight: 400; list-style-position: initial; list=
+-style-type: &quot;- &quot;; color: rgb(36, 36, 36);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: black;"><b>Convenience:</b></span><span style=3D"letter-spacing: norm=
+al; font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calibri, H=
+elvetica, sans-serif; font-size: 12pt; font-weight: 400; color: black;">&nb=
+sp;Order
+ several days=92 worth of meals at once. All you need to do is heat and eat=
+ whenever you're ready.</span><span style=3D"letter-spacing: normal; font-f=
+amily: &quot;Segoe UI&quot;, &quot;Segoe UI Web (West European)&quot;, &quo=
+t;Segoe UI&quot;, -apple-system, BlinkMacSystemFont, Roboto, &quot;Helvetic=
+a Neue&quot;, sans-serif; font-size: 15px; font-weight: 400; color: rgb(36,=
+ 36, 36);"><br>
+</span></li><li style=3D"letter-spacing: normal; font-family: &quot;Segoe U=
+I&quot;, &quot;Segoe UI Web (West European)&quot;, &quot;Segoe UI&quot;, -a=
+pple-system, BlinkMacSystemFont, Roboto, &quot;Helvetica Neue&quot;, sans-s=
+erif; font-size: 15px; font-weight: 400; list-style-position: initial; list=
+-style-type: &quot;- &quot;; color: rgb(36, 36, 36);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: black;"><b>Local Variety:</b></span><span style=3D"letter-spacing: no=
+rmal; font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calibri,=
+ Helvetica, sans-serif; font-size: 12pt; font-weight: 400; color: black;">&=
+nbsp;Choose
+ from a wide range of meal options from local restaurants you already love.=
+</span><span style=3D"letter-spacing: normal; font-family: &quot;Segoe UI&q=
+uot;, &quot;Segoe UI Web (West European)&quot;, &quot;Segoe UI&quot;, -appl=
+e-system, BlinkMacSystemFont, Roboto, &quot;Helvetica Neue&quot;, sans-seri=
+f; font-size: 15px; font-weight: 400; color: rgb(36, 36, 36);"><br>
+</span></li></ul>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;"><br>
+</span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;">PrepMate is all about fitting into your bus=
+y student life without compromising
+ on food quality. Say goodbye to kitchen and dining hall stress and hello t=
+o tasty, effortless meals.</span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;"><br>
+</span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; c=
+olor: black;"><b>Interested?</b></span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;">Fill out this&nbsp;<a href=3D"https://forms=
+.gle/gpJMUwKKnwUTTrvU6" target=3D"_blank" id=3D"OWA4c74b39e-5367-f37e-c8d9-=
+4875a63f9a60" class=3D"OWAAutoLink" title=3D"https://forms.gle/gpJMUwKKnwUT=
+TrvU6" rel=3D"noopener noreferrer" data-auth=3D"NotApplicable" data-loopsty=
+le=3D"linkonly" data-linkindex=3D"0" style=3D"margin: 0px;">form</a>.
+ Link is below in case you cannot click the button.</span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;"><br>
+</span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;"><a href=3D"https://forms.gle/gpJMUwKKnwUTTr=
+vU6" target=3D"_blank" id=3D"OWA3001971f-dea3-9d1a-ee8c-42d33a49882f" class=
+=3D"OWAAutoLink" rel=3D"noopener noreferrer" data-auth=3D"NotApplicable" da=
+ta-loopstyle=3D"linkonly" data-linkindex=3D"1" style=3D"margin: 0px;">https=
+://forms.gle/gpJMUwKKnwUTTrvU6</a></span></div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"letter-spacing: normal; font-family: Aptos, Aptos_EmbeddedFo=
+nt, Aptos_MSFontService, Calibri, Helvetica, sans-serif; font-size: 12pt; f=
+ont-weight: 400; color: black;"><br>
+</span></div>
+<div style=3D"margin: 0px; background-color: rgb(255, 255, 255);">
+<div style=3D"text-align: left; margin: 0px;"><span style=3D"letter-spacing=
+: normal; font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Cali=
+bri, Helvetica, sans-serif; font-size: 12pt; font-weight: 400; color: black=
+;">Bon App=E9tit,</span></div>
+<div style=3D"text-align: left; margin: 0px; font-family: Calibri, Arial, H=
+elvetica, sans-serif; font-size: 12pt; color: black;">
+<span style=3D"letter-spacing: normal; font-weight: 400;"><br>
+</span></div>
+<div style=3D"text-align: left; margin: 0px; font-family: Calibri, Arial, H=
+elvetica, sans-serif; font-size: 12pt; color: black;">
+<span style=3D"letter-spacing: normal; font-weight: 400;">Harpuneet &quot;H=
+arp&quot; Singh</span></div>
+<div style=3D"text-align: left; margin: 0px; font-family: Calibri, Arial, H=
+elvetica, sans-serif; font-size: 12pt; color: black;">
+<span style=3D"letter-spacing: normal; font-weight: 400;">Massachusetts Ins=
+titute of Technology '25</span></div>
+<div style=3D"text-align: left; margin: 0px; font-family: Calibri, Arial, H=
+elvetica, sans-serif; font-size: 12pt; color: black;">
+<span style=3D"letter-spacing: normal; font-weight: 400;"><br>
+</span></div>
+<div style=3D"text-align: left; margin: 0px; font-family: Calibri, Arial, H=
+elvetica, sans-serif; font-size: 12pt; color: black;">
+<span style=3D"letter-spacing: normal; font-weight: 400;">A Simple Human (h=
+e/him)</span></div>
+<div style=3D"text-align: left; margin: 0px; font-family: Calibri, Arial, H=
+elvetica, sans-serif; font-size: 12pt; color: black;">
+<span style=3D"letter-spacing: normal; font-weight: 400; background-color: =
+white;">-------------------------------------------------------------------=
+-------</span></div>
+<div style=3D"text-align: left; margin: 0px; font-family: Calibri, Arial, H=
+elvetica, sans-serif; font-size: 12pt; color: black;">
+<span style=3D"letter-spacing: normal; font-weight: 400;">Sent using the ma=
+gical phenomena of the human mind</span></div>
+<div style=3D"text-align: left; margin: 0px; font-family: Calibri, Arial, H=
+elvetica, sans-serif; font-size: 12pt; color: black;">
+<span style=3D"letter-spacing: normal; font-weight: 400;">-----------------=
+---------------------------------------------------------</span></div>
+</div>
+<div style=3D"direction: ltr; text-align: left; margin: 0px; background-col=
+or: rgb(255, 255, 255);">
+<span style=3D"font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService,=
+ Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"><br=
+>
+</span></div>
+<div id=3D"Signature"></div>
+</body>
+</html>
+
+--_000_BN8PR01MB5460FAB2BF06A801B65072DFAF92ABN8PR01MB5460prod_--
+
+--===============6170518039146221961==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+-- 
+sidney-pacific-residents mailing list
+sidney-pacific-residents@mit.edu
+https://mailman.mit.edu/mailman/listinfo/sidney-pacific-residents
+
+--===============6170518039146221961==--

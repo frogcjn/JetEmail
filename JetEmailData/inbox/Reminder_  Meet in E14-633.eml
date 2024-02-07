@@ -1,0 +1,542 @@
+Received: from MWHPR01MB2223.prod.exchangelabs.com (2603:10b6:300:25::9) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 22 Mar 2023 14:38:17
+ +0000
+Received: from MW4PR04CA0291.namprd04.prod.outlook.com (2603:10b6:303:89::26)
+ by MWHPR01MB2223.prod.exchangelabs.com (2603:10b6:300:25::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.37; Wed, 22 Mar 2023 14:38:15 +0000
+Received: from CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:89:cafe::45) by MW4PR04CA0291.outlook.office365.com
+ (2603:10b6:303:89::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
+ Transport; Wed, 22 Mar 2023 14:38:15 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.113)
+ smtp.mailfrom=mail61.atl91.mcsv.net; dkim=fail (body hash did not verify)
+ header.d=mit.edu;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of mail61.atl91.mcsv.net
+ does not designate 18.9.1.113 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.113;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.113) by
+ CO1NAM11FT035.mail.protection.outlook.com (10.13.175.36) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6222.17 via Frontend Transport; Wed, 22 Mar 2023 14:38:15 +0000
+Received: from w92expo18.exchange.mit.edu (18.7.74.72) by
+ oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 22 Mar 2023 10:37:57 -0400
+Received: from oc11exhyb4.exchange.mit.edu (18.9.1.100) by
+ w92expo18.exchange.mit.edu (18.7.74.72) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 22 Mar 2023 10:37:57 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
+ by oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Wed, 22 Mar 2023 10:37:56 -0400
+Received: from BN9PR03CA0424.namprd03.prod.outlook.com (2603:10b6:408:113::9)
+ by SJ0PR01MB7527.prod.exchangelabs.com (2603:10b6:a03:3da::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.8; Wed, 22 Mar 2023 14:37:48 +0000
+Received: from BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:113:cafe::de) by BN9PR03CA0424.outlook.office365.com
+ (2603:10b6:408:113::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.37 via Frontend
+ Transport; Wed, 22 Mar 2023 14:37:48 +0000
+Authentication-Results-Original: spf=pass (sender IP is 198.2.130.61)
+ smtp.mailfrom=mail61.atl91.mcsv.net; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mail61.atl91.mcsv.net
+ designates 198.2.130.61 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.2.130.61; helo=mail61.atl91.mcsv.net; pr=C
+Received: from mail61.atl91.mcsv.net (198.2.130.61) by
+ BN8NAM11FT053.mail.protection.outlook.com (10.13.177.209) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6222.17 via Frontend Transport; Wed, 22 Mar 2023 14:37:47 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=k3;
+	t=1679495836; x=1679553436; i=dougb5@mit.edu;
+	bh=rr7ZF490x8KtTXwNKLsVde5+D2GLZUqSmct9N7wLHO8=;
+	h=Subject:From:Reply-To:To:Date:Message-ID:X-MC-User:Feedback-ID:
+	 List-ID:List-Unsubscribe:List-Unsubscribe-Post:Content-Type:
+	 MIME-Version:CC:Date:Subject:From;
+	b=Oo7b+mYJkKMPTzCyn3IYj0k54PhfsvoySnWg8jpMvVXBD/IOjzmpvdgBNPHVc6tjw
+	 F+pOa2vGZgAu9hAdqvPjKl6K0WkiaVpSovesH4qlz9l2+sTldHk2KyN1S/4TecFMwD
+	 hh6qhAR9tkIzXZHvemKDNOg5F7mLbZhh8W9iiH5ReNjq+RguCPFm+tM0oGgFJFLWLB
+	 comhHbfbOaSoFZWyhRW5tlioKevspy2WC3bXNevOB1R7wvD3SdxTwuOzGl/KAsyHJJ
+	 6HEuCUDoA1OV9qwXhNObhgPiqJrvlUoBiF88Jr2/4YpUjtcn31c6i4YQu86x73/6UG
+	 gAMoFA3FLhXBg==
+Received: from localhost (localhost [127.0.0.1])
+	by mail61.atl91.mcsv.net (Mailchimp) with ESMTP id 4PhWJr1Q0Yzby4H
+	for <jiannan@mit.edu>; Wed, 22 Mar 2023 14:37:16 +0000 (GMT)
+Subject: =?utf-8?Q?Reminder=3A=20=20Meet=20in=20E14=2D633?=
+From: =?utf-8?Q?Doug=20Beeferman?= <dougb5@mit.edu>
+Reply-To: =?utf-8?Q?Doug=20Beeferman?= <dougb5@mit.edu>
+To: <jiannan@mit.edu>
+Date: Wed, 22 Mar 2023 14:37:13 +0000
+Message-ID: <0b56e043e266fd7919d5c0091.cd7f9efabf.20230322143706.00522a4e5a.33685332@mail61.atl91.mcsv.net>
+X-Mailer: Mailchimp Mailer - **CID00522a4e5acd7f9efabf**
+X-Campaign: mailchimp0b56e043e266fd7919d5c0091.00522a4e5a
+X-campaignid: mailchimp0b56e043e266fd7919d5c0091.00522a4e5a
+X-Report-Abuse: Please report abuse for this campaign here: https://mailchimp.com/contact/abuse/?u=0b56e043e266fd7919d5c0091&id=00522a4e5a&e=cd7f9efabf
+X-MC-User: 0b56e043e266fd7919d5c0091
+Feedback-ID: 187502110:187502110.13855410:us17:mc
+List-ID: 0b56e043e266fd7919d5c0091mc list <0b56e043e266fd7919d5c0091.1360730.list-id.mcsv.net>
+X-Accounttype: pd
+List-Unsubscribe: <https://mit.us17.list-manage.com/unsubscribe?u=0b56e043e266fd7919d5c0091&id=11ecc6afd3&e=cd7f9efabf&c=00522a4e5a>,
+ <mailto:unsubscribe-mc.us17_0b56e043e266fd7919d5c0091.00522a4e5a-cd7f9efabf@unsubscribe.mailchimpapp.net?subject=unsubscribe>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Content-Type: multipart/alternative; boundary="_----------=_MCPart_162562622"
+Return-Path:
+ bounce-mc.us17_187502110.13855410-cd7f9efabf@mail61.atl91.mcsv.net
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BN8NAM11FT053:EE_|SJ0PR01MB7527:EE_|CO1NAM11FT035:EE_|MWHPR01MB2223:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5561162e-5b10-4805-0954-08db2ae3124a
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?UUzAOEHY4Brb+uBuYl3iAsH7B4BQU4kgDw92693lTozupscURdxyRKOQijh9?=
+ =?us-ascii?Q?dlwa5r8o3ULQfstbhKR9eDVNRyIc56JiTikP0AZmJ9p8qnKsjkjTxHoTltsN?=
+ =?us-ascii?Q?Kp03nLShjaq3Fq1vBtzoxZYW/S6ZZUqu5MRG3AdU5i+MC6soaPKNVnX544JL?=
+ =?us-ascii?Q?FQLXesMGCJ7pAnWYqS/PNR8Uez4Ox9bU7UqOzUMrG5f/QMjDUE5IeLBGmk7y?=
+ =?us-ascii?Q?2cGBIJYTTdleUNw9395g7eTlYD5S8IRU6foV+ZvttpHmFSTzYscofHrzO9qF?=
+ =?us-ascii?Q?621UkNrvU6bkqoSj/OyEDaM1OWelbgOKazDRghhmkkSUanSAbFBH4ASJFXqF?=
+ =?us-ascii?Q?1GSKEaFKusLpIJ1AzBD/zHV6nrCKM8ug0xs07sDIVQcSmj8+5Dx/MpFrGhKG?=
+ =?us-ascii?Q?1VAOsxmGiXfuU0uTUovYEJK1z4xkX2r7Pfxk33sqG0Nrj3yZ1u68vYcSHKYE?=
+ =?us-ascii?Q?9d3eRIxrBJP+c/UYP35i9ChqocqPkSf5MbXk49LwJR7MOjPcTkGFRWLk0tNQ?=
+ =?us-ascii?Q?aabRlSW0SqEoIgmrZ1ufvariHvzKhCyPK/NjYJtuz3YgmTAVPXTT+FWqNKqo?=
+ =?us-ascii?Q?E4GwXBlIfq/7L5OdRk+4wgzhcC2PO+nOi8wNVPpTKkWWf4tVEOS8JlDa6u01?=
+ =?us-ascii?Q?NMSn+KaJvoksu8keT7CVxgYn6G2tT6VVzwJcF0vLiccnR0g8XXbM8nydIKWp?=
+ =?us-ascii?Q?pwquRUaFy4AyrK7+tRgKkJaksXd/Id0+CfWRzuAwVfZ08f3HQThOjEeh7axB?=
+ =?us-ascii?Q?T44+RJPc0VdYVj5qV4xxSgDh2LAk04wZCrJLC3mAVpZMQUNPZ9iEbZBngcvF?=
+ =?us-ascii?Q?2W9QGE7n8vmdJkMcRAgYlMMbfRRQu2LEXxi6/35xKuKZXx17bq+yNSqFYP9w?=
+ =?us-ascii?Q?bJBKZV89hNhL8tar4OInqPKagvtUA1ztFzk+JAfBdmFIa0Ii/W0Esi745/+k?=
+ =?us-ascii?Q?FTVG4tgng/2XQGHu21jDG63G0dBW3Zprq/CYKhj4yW0wyVWr0qFmB75EfJ1O?=
+ =?us-ascii?Q?tELzLLfOOYYSlhNX8yDK7PASijt7UYs7lqFnQ0yl6/uvZZ5T4vGm4XRlOrQr?=
+ =?us-ascii?Q?WOmPc6V1K0ujTN7E7Ka+v8CaweDoJV0wV+KFOIYY8ISqj+WAhkkvRoWRcYY+?=
+ =?us-ascii?Q?lQXg+LmWjB24LTHR/nTPayTi9twuzY0rfGh8weFqYHchOXnClREbvpJDFmIa?=
+ =?us-ascii?Q?CHVBLs8vc+E1lnLHMY0aKYKd/lFLVfI10I5Epmfrl8dE1iMxiCc+TWb0ElNT?=
+ =?us-ascii?Q?Q9He/EtmyInHHyzJMhynJ2fhHEJ6KyDM2z6g1Hsltyg+pVNHep5PzJ/PF0Hs?=
+ =?us-ascii?Q?6EpvX2bf7AV+DhC5SfxRw8PykdGzzRUzKEoNBp4NuaqbrAaFKm1JtlIkvI7z?=
+ =?us-ascii?Q?mcMAvlI=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:198.2.130.61;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail61.atl91.mcsv.net;PTR:mail61.atl91.mcsv.net;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB7527
+X-OrganizationHeadersPreserved: SJ0PR01MB7527.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb4.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb4.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo18.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 22 Mar 2023 14:38:15.5841
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 5561162e-5b10-4805-0954-08db2ae3124a
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted:
+ CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1NAM11FT035.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ d190ad89-ddfe-4fff-3d73-08db2ae301d9
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.113;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb8.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2023 14:38:15.3342
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5561162e-5b10-4805-0954-08db2ae3124a
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.113];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BN8NAM11FT053.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR01MB2223
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.9766713
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6222.010
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Q3c3RWJ3UisrWHI2RHowckh6UnlidHFIOCtCVXBIWlVMOFp1bTlqQVBtWEUz?=
+ =?utf-8?B?bXNha1FsbEExRytOZjZwNGN6QmQ5eVB4SHNQZUNtMEh2RXMwd1JXMzNmUWZn?=
+ =?utf-8?B?VkplL2QxVnBJQnQxRUpLaEtYeFlEa1JSQTVVajFhUnRSL1dKemJqUFo3QXB0?=
+ =?utf-8?B?VEFPTkxtUDI3UzI1WWZ4N0t5L29hZDhLVVdBZytTYmU2YWRCaHV3Z3Z1YkZN?=
+ =?utf-8?B?SDg1U1JGb1VWZFlyc2xHeWllWVd3Yy92ZDZqUVZZQy9ibngyaHkySDVUMTJG?=
+ =?utf-8?B?MjFKUDRqTkJ4eXMzYmlBQldGVSt6K1R3bld0SUJzdjduTDBhc0ZuNTV1RWlX?=
+ =?utf-8?B?ZnZzQU5DSCtpL08xRzRwY3hIN3dsSGFUUGZSdnZJZUhpWFQxL3V0NkgwVzlO?=
+ =?utf-8?B?R1hvbTlSb2R1dG1JS0ZpdWxKV3VwYnNBYWdlMjAzMkRSVXJRTkFweWQ2YTR3?=
+ =?utf-8?B?czYzSXBnaDNYVVpxazR5NGRZcy9Vc3d1MGVYNTYvRlRyRVhlNHNEdFYvSmxX?=
+ =?utf-8?B?VDJxZzVaTm5VNlRQd29wc05NV1MxVHBDNW9SOHlNSXZJS0xDckswdU1OVS9o?=
+ =?utf-8?B?OTBJWGZMNTlJdEFkMmlhNmNIV0ZicldVMjRsa3pMclRlREkrblByUFgwNmJM?=
+ =?utf-8?B?aUZ4R3FYd2pYd1hCMzhvSVc2ZVpMVlVSeXFub1VJMzBqbzNZZzZUVmlyRFFF?=
+ =?utf-8?B?ckZMRzZBSzQ5dnpBRHZPb2RUN0NUNlNJZlNmR0Y3ZHVpck1SVDYzTEFlSFF1?=
+ =?utf-8?B?OXMxUjZCVFkwd1EvdGVrVlZQcW9SYkdKd2RiTGEwa3RSR3lBZHk5akYxUnoz?=
+ =?utf-8?B?S29CS1N5RkhRR3NvWGE2VG04Zitya1Q5RWNIWGNZVjdPTGd3M2FwR1dDRkZC?=
+ =?utf-8?B?SUp4VHZRWnJrVndPL2g3cGk5SmlqOVN4YlJiYXVDT0lOekttVXJqdXFkWlhY?=
+ =?utf-8?B?SDZaZi9wK2IwcmhZOHBUWkxNd0d1MFBibi9Mbk13cExSc0JZRzNBS3ArbDdu?=
+ =?utf-8?B?UVJjYm5ac2Y3Y2tXUlEwY0lxRWZnQ2l1R1dNVkVXNk5KOUdmQXQ0STlDR0pt?=
+ =?utf-8?B?SWtFSmtvWTAxcTNEVjE1T2xrN3l0TkxUMEpDZ1VwYTVSeENDRktLUzlQZitV?=
+ =?utf-8?B?N0lhL2UxNEN4WEtjbitkVldTNkFrd3pnWjdSMnRYV00xOEZDNE1GT21YWlBw?=
+ =?utf-8?B?ek9zK1BWSXVUcEpsVjZ2QmdBNElvSnRQN1pQNEdMdHNDeGxidjM5RDRCaTlQ?=
+ =?utf-8?B?bUlBbjJCSHNaQkJrdHJkU2tTcyswL0R5MUh2L2ZDTTNSajY3c2xTL0k2eHpr?=
+ =?utf-8?B?SjRvbkR6MC9PeHFzTVptOHRWSHlUVHFWMkRIMG1WMUE0Qm1HdzlITG13Rkta?=
+ =?utf-8?B?MFFQRktJc1pwTUdaZ01VU0JuSXgwRlNCRlRDT0lvMXBGbUpOczZnQ1poN0RK?=
+ =?utf-8?B?QWxFV3B6MGZmclNUYU9mRUFaMWxuTkxqeENEdnFwenNIUzBNNEdhR3JIZFB0?=
+ =?utf-8?B?eVZHN0hQdmVkcUx0RllqbEs4UG4zUFlzQ0IrVy9oeEpJa1hDRkJSYytMYk55?=
+ =?utf-8?B?QUhhc0p5eHZYS3grSGlTdXZNaXI2U2JQNVEwWU9BVHRxZHJXMFRzeElQU2NY?=
+ =?utf-8?B?ZVVvWU9BbkY0UnljZXRXRGFqblNZZnF2WG1xblVab01GdXVyYjVwcnoxY2pY?=
+ =?utf-8?B?eHY1R2RYcitlQXhSQjZFaUdNb1ljdXNUVENKc1MyZFNSVDMyN2h4RThDRGQ4?=
+ =?utf-8?B?QmtiSVhOa0ZvTGd0bURhQ3cwY3M2Ykh4ZGl4QXFWeGs0eGFwN2FFRXV1eEVH?=
+ =?utf-8?B?WURIRTZjL2h3d3M3aEhNYzE0VG5qUStHVmU4YitnaHB5d0FNeGxDWFlVSW5y?=
+ =?utf-8?B?NmFtV0N5Njk1TVhYT2xUU21ibVAvL3pVd3pQQUpVZ3BFcGcxcmEwd3l1M2FN?=
+ =?utf-8?B?NEJpc3JWY2FJTVREd04wd1dDdXFOWXdMT3lOWFRacElLY3d6bDRRQnNSRGpN?=
+ =?utf-8?B?UENVeEtXWXBBPT0=?=
+MIME-Version: 1.0
+
+--_----------=_MCPart_162562622
+Content-Type: text/plain; charset="utf-8"; format="fixed"
+Content-Transfer-Encoding: quoted-printable
+
+Just want to re-highlight that we'll be meeting in the 6th floor of the Me=
+dia Lab in the lecture hall (E14-633) today!   See you at 2.
+
+________________________________
+From: Hope Schroeder <hopes@mit.edu>
+Sent: Tuesday=2C March 21=2C 2023 10:53 AM
+To: dougb5@media.mit.edu
+Subject: TALK: Mor Naaman 3/22 on the future of AI-Mediated Communication
+
+Hello MAS.S68=2C
+
+We have an exciting guest speaker by Zoom tomorrow at 2! Mor Naaman=2C an=
+ important scholar in AI-mediated communication=2C will connect the dots o=
+n some work we read this week. Feel free to pass along info about this gue=
+st talk to others. The talk will also be recorded and posted.
+In the second hour of class=2C we will discuss past responses on homework=
+ - finally!
+
+Class will be at 2pm on Wednesday as usual=2C but note the location: we wi=
+ll be on the 6th floor of the media lab in the lecture hall (E14-633). We=
+ will likely be here for the rest of the semester.
+
+TALK DETAILS:
+
+"My AI must have been broken": Understanding our Future of AI-Mediated Com=
+munication
+Wednesday=2C 3/22 at 2pm
+Zoom link<https://mit.us17.list-manage.com/track/click?u=3D0b56e043e266fd7=
+919d5c0091&id=3D8c3185c4b5&e=3D3614310b42> (Mor will be remote)
+In person at E14-633 to join the class
+
+From autocomplete and smart replies to video filters and deepfakes=2C we i=
+ncreasingly live in a world where communication between humans is supporte=
+d by artificial intelligence. AI often operates on behalf of a human commu=
+nicator by recommending=2C suggesting=2C modifying=2C or generating messag=
+es to accomplish communication goals. We call this phenomenon AI-Mediated=
+ Communication (or AI-MC). While AI-MC has the potential of making human c=
+ommunication more efficient=2C it impacts other aspects of our communicati=
+on in ways that are not yet well understood. Over the last three years=2C=
+ my collaborators and I have been documenting the impact of AI-MC on commu=
+nication outcomes=2C language use=2C interpersonal trust=2C and more. The=
+ talk will outline early experimental findings from this work: I will cove=
+r research that shows that AI involvement can shift our written content an=
+d even opinions; change the extent to which we take ownership over our mes=
+sages; shift assignment of blame for communication outcomes; and impact ou=
+r evaluation of the trustworthiness of others. Given the impact of AI-MC o=
+n interpersonal evaluations=2C the talk will also cover our recent researc=
+h examining the (mostly false) heuristics humans use when evaluating wheth=
+er text was written by AI. Overall=2C AI-MC raises significant practical a=
+nd ethical concerns as it stands to reshape human communication=2C calling=
+ for new approaches to the development and deployment of these technologie=
+s.
+
+This work is a based on a collaborative effort at Cornell (Cornell Tech an=
+d Ithaca campuses) and Stanford. The research was led by Cornell and Stanf=
+ord PhD students Maurice Jakesch=2C Hannah Mieczkowski=2C and Jess Hohenst=
+ein.
+
+[image.png]
+Bio:
+Mor Naaman is a professor of Information Science at Cornell Tech where he=
+ also serves as the associate dean for technical programs. Mor leads a res=
+earch group focused on the intersection of technology=2C media and democra=
+cy. The group applies multidisciplinary techniques - from machine learning=
+ to qualitative social science - to study our information ecosystem and it=
+s challenges. Before Cornell=2C Mor was on the faculty at the Rutgers Scho=
+ol of Communication and Information=2C led a research team at Yahoo! Resea=
+rch Berkeley=2C received a Ph.D. in Computer Science from the Stanford Uni=
+versity InfoLab=2C and played professional basketball for Hapoel Tel Aviv.=
+ He is also a former startup co-founder=2C and advises startup companies i=
+n social computing and related areas.
+
+
+
+
+
+
+
+
+
+
+This email was sent to dougb5@media.mit.edu<mailto:dougb5@media.mit.edu>
+why did I get this?<https://mit.us17.list-manage.com/about?u=3D0b56e043e26=
+6fd7919d5c0091&id=3D11ecc6afd3&e=3D3614310b42&c=3D2d342b1b30>    unsubscri=
+be from this list<https://mit.us17.list-manage.com/unsubscribe?u=3D0b56e04=
+3e266fd7919d5c0091&id=3D11ecc6afd3&e=3D3614310b42&c=3D2d342b1b30>    updat=
+e subscription preferences<https://mit.us17.list-manage.com/profile?u=3D0b=
+56e043e266fd7919d5c0091&id=3D11ecc6afd3&e=3D3614310b42&c=3D2d342b1b30>
+MIT Center for Constructive Communication =C2=B7 75 Amherst St =C2=B7 Camb=
+ridge=2C MA=2C MA 02139 =C2=B7 USA
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Unsubscribe jiannan@mit.edu from this list:
+https://mit.us17.list-manage.com/unsubscribe?u=3D0b56e043e266fd7919d5c0091=
+&id=3D11ecc6afd3&e=3Dcd7f9efabf&c=3D00522a4e5a
+--_----------=_MCPart_162562622
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+<style type=3D"text/css" style=3D"display:none"><!-- p { margin-top: 0px; m=
+argin-bottom: 0px; }--></style>
+</head>
+<body dir=3D"ltr" style=3D"font-size:12pt;color:#000000;background-color:#F=
+FFFFF;font-family:Calibri,Arial,Helvetica,sans-serif;">
+<p><span style=3D"font-size: 12pt;">Just want to re-highlight that we'll be=
+ meeting in the 6th floor of the
+</span><span style=3D"font-size: 12pt;">Media</span><span style=3D"font-siz=
+e: 12pt;">&nbsp;L</span><span style=3D"font-size: 12pt;">ab in the lecture =
+hall (E14-633)</span><span style=3D"font-size: 12pt;"> today!&nbsp; &nbsp;S=
+ee you at 2.</span><br>
+</p>
+<div><br>
+</div>
+<hr tabindex=3D"-1" style=3D"color: rgb(33, 33, 33); font-size: 12pt; displ=
+ay: inline-block; width: 98%;">
+<div style=3D"color: rgb(33, 33, 33);">
+<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" co=
+lor=3D"#000000" style=3D"font-size:11pt"><b>From:</b> Hope Schroeder &lt;ho=
+pes@mit.edu&gt;<br>
+<b>Sent:</b> Tuesday, March 21, 2023 10:53 AM<br>
+<b>To:</b> dougb5@media.mit.edu<br>
+<b>Subject:</b> TALK: Mor Naaman 3/22 on the future of AI-Mediated Communic=
+ation</font>
+<div>&nbsp;</div>
+</div>
+<div>
+<div dir=3D"ltr">
+<div>Hello MAS.S68,</div>
+<div>&nbsp;</div>
+<div>We have an exciting guest speaker by Zoom tomorrow at 2! Mor Naaman, a=
+n important scholar in AI-mediated communication, will connect the dots on =
+some work we read this week. Feel free to pass along info about this guest =
+talk to others. The talk will also
+ be recorded and posted.</div>
+<div>In the second hour of class, we will discuss past responses on homewor=
+k - finally!</div>
+<div>&nbsp;</div>
+<div>Class will be at 2pm on Wednesday as usual, but note the <strong>locat=
+ion</strong>: we will be on the
+<strong>6th floor of the media lab in the lecture hall (</strong><span styl=
+e=3D"color:rgb(0,0,0); font-size:12px"><strong>E14-633)</strong>. We will l=
+ikely be here for the rest of the semester.</span></div>
+<div>&nbsp;</div>
+<div><strong>TALK DETAILS:</strong></div>
+<div>&nbsp;</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"color:rgb(29,29,29); font-size:11pt">=
+<strong>=E2=80=9CMy AI must have been broken=E2=80=9D: Understanding our Fu=
+ture of AI-Mediated Communication&nbsp;</strong></span></p>
+<p class=3D"MsoNormal"><font color=3D"#000000" face=3D"arial, sans-serif" s=
+ize=3D"1">Wednesday, 3/22 at 2pm</font></p>
+<p class=3D"MsoNormal"><font face=3D"arial, sans-serif" size=3D"1"><span st=
+yle=3D"color:rgb(0,0,0)">Zoom&nbsp;</span><a href=3D"https://mit.us17.list-=
+manage.com/track/click?u=3D0b56e043e266fd7919d5c0091&amp;id=3D157c6204d1&am=
+p;e=3Dcd7f9efabf" target=3D"_blank">link</a>&nbsp;(Mor will be remote)</fon=
+t></p>
+<p class=3D"MsoNormal"><span style=3D"color:rgb(29,29,29)"><font face=3D"ar=
+ial, sans-serif" size=3D"1">In person at E14-633 to join the class</font></=
+span></p>
+<p class=3D"MsoNormal">&nbsp;</p>
+<p class=3D"MsoNormal"><span style=3D"color:rgb(29,29,29); font-size:11pt">=
+From autocomplete and smart replies to video filters and deepfakes, we incr=
+easingly live in a world where communication between humans is supported by=
+ artificial intelligence. AI often operates
+ on behalf of a human communicator by recommending, suggesting, modifying, =
+or generating messages to accomplish communication goals. We call this phen=
+omenon AI-Mediated Communication (or AI-MC). While AI-MC has the potential =
+of making human communication&nbsp;<span>more</span>&nbsp;efficient,
+ it impacts other aspects of our communication in ways that are not yet wel=
+l understood. Over the last three years, my collaborators and I have been d=
+ocumenting the impact of AI-MC on communication outcomes, language use, int=
+erpersonal trust, and&nbsp;<span>more</span>.
+ The talk will outline early experimental findings from this work: I will c=
+over research that shows that AI involvement can shift our written content =
+and even opinions; change the extent to which we take ownership over our me=
+ssages; shift assignment of blame
+ for communication outcomes; and impact our evaluation of the trustworthine=
+ss of others. Given the impact of AI-MC on interpersonal evaluations, the t=
+alk will also cover our recent research examining the (mostly false) heuris=
+tics humans use when evaluating
+ whether text was written by AI. Overall, AI-MC raises significant practica=
+l and ethical concerns as it stands to reshape human communication, calling=
+ for new approaches to the development and deployment of these technologies=
+.&nbsp;</span></p>
+<p class=3D"MsoNormal"><span style=3D"color:rgb(29,29,29); font-size:11pt">=
+&nbsp;</span></p>
+<p class=3D"MsoNormal"><span style=3D"color:rgb(29,29,29); font-size:11pt">=
+This work is a based on a collaborative effort at Cornell (Cornell Tech and=
+ Ithaca campuses) and Stanford. The research was led by Cornell and Stanfor=
+d PhD students Maurice Jakesch, Hannah
+ Mieczkowski, and Jess Hohenstein.</span></p>
+<p class=3D"MsoNormal">&nbsp;</p>
+<p class=3D"MsoNormal"><img alt=3D"image.png" height=3D"230" width=3D"231" =
+style=3D"margin-right:0px" src=3D"https://mcusercontent.com/0b56e043e266fd7=
+919d5c0091/images/9d4b0d78-21db-ebfd-ef70-0f40f6b879a2.png">&nbsp;<br>
+<strong><span style=3D"color:rgb(29,29,29)">Bio:</span></strong><br>
+<span style=3D"color:rgb(29,29,29); font-size:11pt">Mor&nbsp;</span><span s=
+tyle=3D"color:rgb(29,29,29); font-size:11pt">Naaman</span><span style=3D"co=
+lor:rgb(29,29,29); font-size:11pt">&nbsp;</span><span style=3D"color:rgb(29=
+,29,29); font-size:11pt">is a professor of Information
+ Science at Cornell Tech where he also serves as the associate dean for tec=
+hnical programs.</span><span style=3D"color:rgb(29,29,29); font-size:11pt">=
+&nbsp;</span><span style=3D"color:rgb(29,29,29); font-size:11pt">Mor</span>=
+<span style=3D"color:rgb(29,29,29); font-size:11pt">&nbsp;</span><span styl=
+e=3D"color:rgb(29,29,29); font-size:11pt">leads
+ a research group focused on the intersection of technology, media and demo=
+cracy. The group applies multidisciplinary techniques =E2=80=94 from machin=
+e learning to qualitative social science =E2=80=94 to study our information=
+ ecosystem and its challenges. Before Cornell,</span><span style=3D"color:r=
+gb(29,29,29); font-size:11pt">&nbsp;</span><span style=3D"color:rgb(29,29,2=
+9); font-size:11pt">Mor</span><span style=3D"color:rgb(29,29,29); font-size=
+:11pt">&nbsp;</span><span style=3D"color:rgb(29,29,29); font-size:11pt">was
+ on the faculty at the Rutgers School of Communication and Information, led=
+ a research team at Yahoo! Research Berkeley, received a Ph.D. in Computer =
+Science from the Stanford University InfoLab, and played professional baske=
+tball for Hapoel Tel Aviv. He is
+ also a former startup co-founder, and advises startup companies in social =
+computing and related areas.</span></p>
+<p class=3D"MsoNormal"><span style=3D"color:rgb(29,29,29); font-size:11pt">=
+&nbsp;</span></p>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+</div>
+</div>
+<center><br>
+<br>
+<br>
+<br>
+<br>
+&nbsp;
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" id=3D"canspamBarWra=
+pper" width=3D"100%" style=3D"background-color:#FFFFFF; border-top:1px soli=
+d #E5E5E5">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top" style=3D"padding-top:20px; padding-bott=
+om:20px">
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" id=3D"canspamBar">
+<tbody>
+<tr>
+<td align=3D"center" valign=3D"top" style=3D"color:#606060; font-family:Hel=
+vetica,Arial,sans-serif; font-size:11px; line-height:150%; padding-right:20=
+px; padding-bottom:5px; padding-left:20px; text-align:center">
+This email was sent to <a href=3D"mailto:dougb5@media.mit.edu" target=3D"_b=
+lank" style=3D"color:#404040!important">
+dougb5@media.mit.edu</a><br>
+<a href=3D"https://mit.us17.list-manage.com/track/click?u=3D0b56e043e266fd7=
+919d5c0091&amp;id=3Dbb2111b611&amp;e=3Dcd7f9efabf" target=3D"_blank" style=
+=3D"color:#404040!important"><em>why did I get this?</em></a>&nbsp;&nbsp;&n=
+bsp;&nbsp;<a href=3D"https://mit.us17.list-manage.com/track/click?u=3D0b56e=
+043e266fd7919d5c0091&amp;id=3D2a4d6dbdcb&amp;e=3Dcd7f9efabf" style=3D"color=
+:#404040!important">unsubscribe
+ from this list</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=3D"https://mit.us17.list=
+-manage.com/track/click?u=3D0b56e043e266fd7919d5c0091&amp;id=3D9178cf46d1&a=
+mp;e=3Dcd7f9efabf" style=3D"color:#404040!important">update subscription pr=
+eferences</a><br>
+MIT Center for Constructive Communication =C2=B7 75 Amherst St =C2=B7 Cambr=
+idge, MA, MA 02139 =C2=B7 USA<br>
+&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<style type=3D"text/css">
+<!--
+-->
+</style></center>
+<img height=3D"1" width=3D"1" alt=3D"" src=3D"https://mit.us17.list-manage.=
+com/track/open.php?u=3D0b56e043e266fd7919d5c0091&amp;id=3D2d342b1b30&amp;e=
+=3D3614310b42"></div>
+</div>
+            <center>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wid=
+th=3D"100%" id=3D"canspamBarWrapper" style=3D"background-color:#FFFFFF; bor=
+der-top:1px solid #E5E5E5;">
+                    <tr>
+                        <td align=3D"center" valign=3D"top" style=3D"paddin=
+g-top:20px; padding-bottom:20px;">
+                            <table border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" id=3D"canspamBar">
+                                <tr>
+                                    <td align=3D"center" valign=3D"top" sty=
+le=3D"color:#606060; font-family:Helvetica, Arial, sans-serif; font-size:11=
+px; line-height:150%; padding-right:20px; padding-bottom:5px; padding-left:=
+20px; text-align:center;">
+                                        This email was sent to <a href=3D"m=
+ailto:jiannan@mit.edu" target=3D"_blank" style=3D"color:#404040 !important;=
+">jiannan@mit.edu</a>
+                                        <br>
+                                        <a href=3D"https://mit.us17.list-ma=
+nage.com/about?u=3D0b56e043e266fd7919d5c0091&amp;id=3D11ecc6afd3&amp;e=3Dcd=
+7f9efabf&amp;c=3D00522a4e5a" target=3D"_blank" style=3D"color:#404040 !impo=
+rtant;"><em>why did I get this?</em></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=3D"=
+https://mit.us17.list-manage.com/unsubscribe?u=3D0b56e043e266fd7919d5c0091&=
+amp;id=3D11ecc6afd3&amp;e=3Dcd7f9efabf&amp;c=3D00522a4e5a" style=3D"color:#=
+404040 !important;">unsubscribe from this list</a>&nbsp;&nbsp;&nbsp;&nbsp;<=
+a href=3D"https://mit.us17.list-manage.com/profile?u=3D0b56e043e266fd7919d5=
+c0091&amp;id=3D11ecc6afd3&amp;e=3Dcd7f9efabf&amp;c=3D00522a4e5a" style=3D"c=
+olor:#404040 !important;">update subscription preferences</a>
+                                        <br>
+                                        MIT Center for Constructive Communi=
+cation =C2=B7 75 Amherst St =C2=B7 Cambridge, MA, MA 02139 =C2=B7 USA
+                                        <br>
+                                        <br>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <style type=3D"text/css">
+                    @media only screen and (max-width: 480px){
+                        table#canspamBar td{font-size:14px !important;}
+                        table#canspamBar td a{display:block !important; mar=
+gin-top:10px !important;}
+                    }
+                </style>
+            </center><img src=3D"https://mit.us17.list-manage.com/track/ope=
+n.php?u=3D0b56e043e266fd7919d5c0091&amp;id=3D00522a4e5a&amp;e=3Dcd7f9efabf"=
+ height=3D"1" width=3D"1" alt=3D""></body>
+</html>=
+
+--_----------=_MCPart_162562622--

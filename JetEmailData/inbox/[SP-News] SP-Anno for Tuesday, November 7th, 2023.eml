@@ -1,0 +1,498 @@
+Received: from CH0PR01MB7138.prod.exchangelabs.com (2603:10b6:610:eb::16) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 7 Nov 2023 19:40:48
+ +0000
+Received: from BL1PR13CA0399.namprd13.prod.outlook.com (2603:10b6:208:2c2::14)
+ by CH0PR01MB7138.prod.exchangelabs.com (2603:10b6:610:eb::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6954.28; Tue, 7 Nov 2023 19:40:47 +0000
+Received: from BL6PEPF0001AB4B.namprd04.prod.outlook.com
+ (2603:10b6:208:2c2:cafe::38) by BL1PR13CA0399.outlook.office365.com
+ (2603:10b6:208:2c2::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.16 via Frontend
+ Transport; Tue, 7 Nov 2023 19:40:46 +0000
+Authentication-Results: spf=pass (sender IP is 18.7.21.50)
+ smtp.mailfrom=mit.edu; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.7.21.50 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.7.21.50; helo=mailman.mit.edu; pr=C
+Received: from mailman.mit.edu (18.7.21.50) by
+ BL6PEPF0001AB4B.mail.protection.outlook.com (10.167.242.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6977.16 via Frontend Transport; Tue, 7 Nov 2023 19:40:46 +0000
+Received: from mailman.mit.edu (localhost [127.0.0.1])
+	by mailman.mit.edu (8.15.2/8.12.8) with ESMTP id 3A7JehmK1336799;
+	Tue, 7 Nov 2023 14:40:46 -0500
+DKIM-Filter: OpenDKIM Filter v2.11.0 unknown-host (unknown-jobid)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=mailman;
+	t=1699386046; bh=QhtGCgBoj17GiGyjGwP4h/BNxm8vE2KeJ23Jgp14IqI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:Content-Type:From;
+	b=iv/WcV1o1Acz1rnggURSzhiuRiKgt1DvtVWYpZ+NxWBunSBDgApkRhLB2/N8zTuHG
+	 xnIHs262mNd1w2V7UyHoUOq92s9BfBiPUYYKjGMUP4FC3eQrjkcgjDpfYwKmQZftwg
+	 B8DY5yjBaJ1BcE3on5+g5yQFm16PrDJ+sp5Emad5lBcxfYr46rcum5YhQ3Q8sI1uqY
+	 Gi5atvVgpxALfU7AS8KW5iaIE1BzNRshVyTUTvfYmjWBZ1/3N1lw0NoHCoRomxPmKN
+	 hJOi3AhB9k5q/Z2bJiWCk8gXAg6o6W8RFt/SCTpbEqkXpmzeLCt4+3TGpfr9T8Dffr
+	 4Ruwp8zGUXcuw==
+Received: from outgoing-exchange-7.mit.edu (OUTGOING-EXCHANGE-7.MIT.EDU
+ [18.9.28.58])
+ by mailman.mit.edu (8.15.2/8.12.8) with ESMTPS id 3A7Jefpx1336795
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <sp-news@MAILMAN.MIT.EDU>; Tue, 7 Nov 2023 14:40:41 -0500
+DKIM-Filter: OpenDKIM Filter v2.11.0 unknown-host (unknown-jobid)
+Authentication-Results-Original: mailman.mit.edu; dkim=pass (2048-bit key,
+ unprotected) header.d=mit.edu header.i=@mit.edu header.a=rsa-sha256
+ header.s=outgoing header.b=bJXEzn0O
+Received: from oc11exedge1.exchange.mit.edu (OC11EXEDGE1.EXCHANGE.MIT.EDU
+ [18.9.3.17])
+ by outgoing-exchange-7.mit.edu (8.14.7/8.12.4) with ESMTP id 3A7Jee7Z008992
+ for <sp-news@PCH.MIT.EDU>; Tue, 7 Nov 2023 14:40:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+ t=1699386041; bh=7CJd8aU6YXkNveJArjzFOBovMA+LVvRQXDwROJbAiq8=;
+ h=MIME-Version:From:Date:Message-ID:Subject:Content-Type;
+ b=bJXEzn0OUTCHs+2AAnDJv4GBXmxGyCAChs7BLEoQf8Cpd5H2pkyBMHfDpOu7j1Bj7
+ +ZQbIaOJM2z6gR/LRXr07jlcjXs39ELV8IvJoWq8aQyoEKP9tRPospJ+5jj2g/xJv2
+ /ojow66epnyNLGWfjvz49NQIO+np2ixsBPTnvPVCl7z7UiSumfzlj1S8sqemXw1nlj
+ AvRt8S/4Yehchu/cK89xBpbkvaOiWBAWXowpxh9YwDczJ+MAQAzn36ag24chdzcP/V
+ Z0g0ec0mmgOUKr+UBtI/pyMOqFGeRAi26+xzmbT4ev4Pf2H+Moj+D1Zfj93EZgmg2O
+ ikRnNNdEkIrSA==
+Received: from oc11exhyb5.exchange.mit.edu (18.9.1.110) by
+ oc11exedge1.exchange.mit.edu (18.9.3.17) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 7 Nov 2023 14:40:14 -0500
+Received: from oc11exhyb6.exchange.mit.edu (18.9.1.111) by
+ oc11exhyb5.exchange.mit.edu (18.9.1.110) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 7 Nov 2023 14:40:36 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
+ by oc11exhyb6.exchange.mit.edu (18.9.1.111) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Tue, 7 Nov 2023 14:40:36 -0500
+Received: from BLAPR03CA0046.namprd03.prod.outlook.com (2603:10b6:208:32d::21)
+ by BL3PR01MB7098.prod.exchangelabs.com (2603:10b6:208:339::5) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6954.28; Tue, 7 Nov 2023 19:40:28 +0000
+Received: from MN1PEPF0000F0DF.namprd04.prod.outlook.com
+ (2603:10b6:208:32d:cafe::98) by BLAPR03CA0046.outlook.office365.com
+ (2603:10b6:208:32d::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.29 via Frontend
+ Transport; Tue, 7 Nov 2023 19:40:27 +0000
+Authentication-Results-Original: spf=pass (sender IP is 18.9.28.11)
+ smtp.mailfrom=mit.edu; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.9.28.11 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.9.28.11; helo=outgoing.mit.edu; pr=C
+Received: from outgoing.mit.edu (18.9.28.11) by
+ MN1PEPF0000F0DF.mail.protection.outlook.com (10.167.242.37) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6977.16 via Frontend Transport; Tue, 7 Nov 2023 19:40:27 +0000
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com
+ [209.85.208.52]) (authenticated bits=0)
+ (User authenticated as dwang97@ATHENA.MIT.EDU)
+ by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3A7JePuf032456
+ (version=TLSv1/SSLv3 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+ Tue, 7 Nov 2023 14:40:26 -0500
+Received: by mail-ed1-f52.google.com with SMTP id
+ 4fb4d7f45d1cf-53e3b8f906fso10211572a12.2; 
+ Tue, 07 Nov 2023 11:40:26 -0800 (PST)
+X-Gm-Message-State: AOJu0YwTyik+xs7JBGmuxb01d7O7COon1vmBtKe77k4PRBLC0xsj3VtL
+ 8W1N2xaXJTcDd/uJ/+23etk3AlPRUyAKu37LtL8=
+X-Google-Smtp-Source: AGHT+IEcYFUDU3uan8FYCHHi+eZl7w+2Bznrm0Xif7JVsEQxfYenPV5CoEWTiqpVibpJu4qdMBp+jxDk863gQHeGwRs=
+X-Received: by 2002:a05:6402:12c7:b0:53f:b9d0:9818 with SMTP id
+ k7-20020a05640212c700b0053fb9d09818mr20667983edx.42.1699386024816; Tue, 07
+ Nov 2023 11:40:24 -0800 (PST)
+From: "SP Publicity Chair" <sp-publicity-chair@mit.edu>
+Date: Tue, 7 Nov 2023 14:40:13 -0500
+X-Gmail-Original-Message-ID: <CAD5uLHd5WFx39_Sk3YTnFv8B=0ZdeXYQJR8kmUEve4Kh42xQnA@mail.gmail.com>
+Message-ID: <CAD5uLHd5WFx39_Sk3YTnFv8B=0ZdeXYQJR8kmUEve4Kh42xQnA@mail.gmail.com>
+To: <sp-news@mit.edu>
+CC: <sp-publicity-chair@mit.edu>
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ MN1PEPF0000F0DF:EE_|BL3PR01MB7098:EE_|BL6PEPF0001AB4B:EE_|CH0PR01MB7138:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4b451fe5-abab-46b7-4c61-08dbdfc97057
+X-LD-Processed: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b,ExtAddr
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ nKDPs2ZylUJbY5It9iYO64Exh4ECqyIkiVCPtuVg2DHxuindOh3h+DUH7s1W1UixbcuMzgtMQfU4vzHHXQgsDx4sWht7yDn+Jx+jvpRk54qWeo4LhQnDaFuVyiQudbRvvJgjEK1T3wE1P1C7kQJKQeI6tGdlthbrAuwLUaDLd0Ln64prwqcUwBIvgTj6YZv8jjCdrGqQi87e8YIPppPZjj7wWdVIjLEZRoM+i4UtdoCBgbe5eb9rZoWd+1Ir/mhgjnf37UArD2mUhcDBoTX4l2fDLG+dJ/ESQvvncgaAoVhEBKkE5Ldvb8eLKgVtBOUguM3wn7LRvDMIkfc4QbeCLWmyXjVCJfiWNBs/u+We+0+s6fTPJ8g796YgQiZrYHYRCDKWEBJFF/VxWieN4hPW4s0xet9SS1fbe+/aPlQotNfrHNCkSAu3XuaCoZD1/T9LLlOAoHgdbrBo8YPajPhtbvxfRouGamAvJycoZQdlH8IxkU3Yl9VDllluwKvnOAlscrlWj0250VWTynSKoEHGLeHUjJdddXcceHwZvD5yxoGYVUX35Lih/IIKNd4EcUeZE34LKkKw49BK79qn9vIJILxjLq0weyfAnIoXyRkBfhNipRJeQ5LJosH7kSwx4QbruhWKwQirwxWgiQMf1av4SzirmPEGfSVIFCObGFGqFAXwLgke+c90m67kBQj/h+eMNsikP0WM+MEix15aU77ef532NYvhWhcDRNLwPk5XM1uIo0eHOlJBZHC8sO3cJPrKh0qQukWGFpSlNhZVXNDSYnE97xK+5kv/dupuEuYn58E=
+X-Forefront-Antispam-Report-Untrusted: CIP:18.9.28.11; CTRY:US; LANG:en;
+ SCL:1; SRV:; IPV:CAL; SFV:NSPM; H:outgoing.mit.edu;
+ PTR:outgoing-auth-1.mit.edu; CAT:NONE;
+ SFS:(13230031)(4636009)(396003)(346002)(376002)(136003)(39860400002)(64100799003)(451199024)(1800799009)(75432002)(83380400001)(4326008)(34206002)(55446002)(2906002)(16799955002)(86362001)(8676002)(316002)(478600001)(6666004)(33964004)(966005)(6636002)(356005)(786003)(166002)(3480700007)(336012)(68406010)(5660300002)(26005)(70586007)(9686003)(42186006);
+ DIR:OUT; SFP:1102; 
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR01MB7098
+Subject: [SP-News] SP-Anno for Tuesday, November 7th, 2023
+X-BeenThere: sp-news@mit.edu
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: MIT Sidney-Pacific Residents <sp-news.mit.edu>
+List-Unsubscribe: <https://mailman.mit.edu/mailman/options/sp-news>,
+ <mailto:sp-news-request@mit.edu?subject=unsubscribe>
+List-Archive: <https://mailman.mit.edu/mailman/private/sp-news/>
+List-Post: <mailto:sp-news@mit.edu>
+List-Help: <mailto:sp-news-request@mit.edu?subject=help>
+List-Subscribe: <https://mailman.mit.edu/mailman/listinfo/sp-news>,
+ <mailto:sp-news-request@mit.edu?subject=subscribe>
+Content-Type: multipart/mixed; boundary="===============0945027937548491919=="
+Errors-To: sp-news-bounces@mit.edu
+Sender: "SP-News" <sp-news-bounces@mit.edu>
+Return-Path: sp-news-bounces@mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 07 Nov 2023 19:40:46.9247
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 4b451fe5-abab-46b7-4c61-08dbdfc97057
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ BL6PEPF0001AB4B.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL6PEPF0001AB4B.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: mitprod.onmicrosoft.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ f971f193-43f5-4f2d-2d52-08dbdfc964e3
+X-MS-Exchange-Organization-SCL: -1
+X-Microsoft-Antispam: BCL:4;
+X-Forefront-Antispam-Report:
+ CIP:18.7.21.50;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:mailman.mit.edu;PTR:mailman.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2023 19:40:46.3309
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b451fe5-abab-46b7-4c61-08dbdfc97057
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.21.50];Helo=[mailman.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource: BL6PEPF0001AB4B.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB7138
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.3583090
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6954.028
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WVdieHk5RnFXZXp4a3pFYm5GczZna0lPZURZTGJ2VWlkK0RCUGpwZWdoL2t4?=
+ =?utf-8?B?T2lOQnNGL1lUL0FLemIrcExZaEN2SFZqRUJwYi9pS1JCRjd1U0ZrTkJock04?=
+ =?utf-8?B?UFBLelRuRUVsWU5EUjQwQVFMV0ZFS3BVMkQ3MFFBSkZmQWlYWWRzKzU0TXh5?=
+ =?utf-8?B?dTh5OEU2a1RoRjR0NU5MVENseG52K05hRUQvVmlrMmZwSzRBMHJtUm9PM2x4?=
+ =?utf-8?B?a1J6L0NNQWlZTm5YQ0lZUzlTaTVydGl3a0QvV24rbWtISGF5NkczSjNMYUtM?=
+ =?utf-8?B?TFBaMkJwc0JOWTlQYWdiSTdFcEhSVmNqL3FBU3pNNy9pd2FpWFlXbGdxSXph?=
+ =?utf-8?B?YkRLeDZidG9hZ0xNOWZGU2lROWI2djZlRFoyakI5Q1Fzcjg1SkdDY2hjT0xl?=
+ =?utf-8?B?bzFwT2NpNElUbXQzSlFQOVA5MGxjVXhsN2VaVStjZ08waXczWThYd09vRDhJ?=
+ =?utf-8?B?N1lkWHY5ckN4cC9TbkRWN1hJdWgybHFOOWFhL3loRTlVZ1k0OFo1WkNxK2Fr?=
+ =?utf-8?B?aW9qUFhqYU55K2psZC8ySGZPMzRrVTA2Y0QrTFd5TXp3azJhVHlINlRRcklW?=
+ =?utf-8?B?U1lQamgvMENnZ1l1Z0NtVytydkxNWTZTNzh1WVdUdFF4cFJiWmIvcGNPai9W?=
+ =?utf-8?B?Z21Wa2RWMlpxbGlnVm5YUWFuUFNYKzlNZ0dUOUY1SHNzTjJZNVA2UUZjSHJC?=
+ =?utf-8?B?ekllUVUvMUpNY082ZEpDNVBaMHY2aGN4QU00dm5wejVyZlNxb1Y2R2lxOTh3?=
+ =?utf-8?B?QmgzQ28rZWtCWGN1cXlJekpHbEo3cWk2eXFqbDdyTXIxVzlCcVhjMDI3dHE4?=
+ =?utf-8?B?N0hkcFYrOXdYd1BUWE5ab0dnOXZkUitwLy9pT1dmN29wcmhteDJaLy9OU0RQ?=
+ =?utf-8?B?REszOFRIeGp5RDEzUm1TRmhnTko3eVQ1L2dLV2N0cTRpOUFWNlV4N1h5dHpK?=
+ =?utf-8?B?QjZZVHNtNHhGdEFLNWJ4Qk02NHZUNkp0cGhtYlZTYkdFL3V1QTRrWE5QbDdJ?=
+ =?utf-8?B?QlZ2bWhodm1HR3FHVUxKNko2TUJUd2tOaFo0SkRJeDZtVGg5Z0xXWUZ4ODZ1?=
+ =?utf-8?B?NkdQanB5NUp6TFdVZnNXTFlHWWRnS3JpSDhlWndGVEEyR2lrb1ZWUlhRMzZw?=
+ =?utf-8?B?cVVSYlFlZE5BSjZNTytxVlZOWFU2bFRQa1RDeittS1BoUTBIemwrRW5VbEZn?=
+ =?utf-8?B?d2Z1TmdQSWMxamlOb04vUUpzN1pteGphQ0FZazZVaWJmanRqN1hlWkN5Z0pr?=
+ =?utf-8?B?ZGNqSTVFVjhTcE5uQ0Eva3hFam43V0hCbHNPTE9JT2cxWkV4bDRZeW9hbGVo?=
+ =?utf-8?B?TWxra0ZCNXZoMXFrQmdrZGxzQXB4WEpDRkhqNnlSYmphQllJRjB6cUZ4Zzcr?=
+ =?utf-8?B?ZDBWUURPaVRyUEVVQVBSa1ZaUEdrRHJ4SGN1VCt2T292dWFXQVNwRlVuM3pH?=
+ =?utf-8?B?ZDdOWWRGbXJmVTJMdFNyeUEwc295SVNvYmczV0h6MXlkT0xrcHBtaGp0c3Bu?=
+ =?utf-8?B?NytsNzRQQlR2U1R3Z3VQV0pLazRUR1hIRkFVYXdzbFlrSFBHR2xTVVpZOVZD?=
+ =?utf-8?B?WU1XM1dXa1ZicDh2ejQwRmJTZHF1L0h2S2hrZ0t1Ymk4c3dFdTJzd0ZJU2RF?=
+ =?utf-8?B?U1l1cFJGK3RIQWJ1NVVKNWxvQWdEWDBEajFJdGFESjBlemE0L3hrVEVha3JX?=
+ =?utf-8?B?RWtqTzYzRWtrOHRScm9FZXkza0wvekJIc1AwY1JrRGV3Q3lKRmVHbzlORUxS?=
+ =?utf-8?B?ZHloWjRKcHNwaERaRU9XbDNPSUNJeGhOMWQzSWhjZVJiRExzR2JTTXcwRTA3?=
+ =?utf-8?B?OTJtUno3MWhrd2hCVGtBU2p2bmhjUU5TMkhsbUxwWk5FVHFkbVRJYTNycjQ1?=
+ =?utf-8?B?MG83dmtHTmVLOGpkODQ3MlJ6YjRiOW1FZHJFTzZGMHE1Sy9leXMraThSUlBL?=
+ =?utf-8?B?NWlxdERPZmJOdm5POEkwbGFMWWd6VnZ1Y2Nvb1J6WWRJMUV5MGMyTndMUEM5?=
+ =?utf-8?B?b3hwdm9iakY3WVRMSWs3K3JXUTd5TEdkT3BmcEtyZ3h6THB4WXlZN0pTclA5?=
+ =?utf-8?B?MzcrZE9rSzZYUHpWVXFJdU8weno5dDJma3h3Vll4QjVwR2ZIeW1Jdjd5Znp1?=
+ =?utf-8?B?NU93Vk9ZSHlQT3IrNXI5RHhXRVBsamxZeFIrTkdpenRKUlJkNWl1ZUJnMlVk?=
+ =?utf-8?B?amtIZWN4NUVyS2NiS2pOR25RejFucGJkTVpHRDJ3cjZXeExHMkZSUFQ2RjBU?=
+ =?utf-8?B?a2daQ2V3c0dSQTNPTVBnTEM3Z0IwNWlNSlJPcUwvaktYeTg3WE9Nb09OK1J4?=
+ =?utf-8?B?OFlHWGFJNjBjQVZaemU4SGp2OVF3cy94emhmVDJYOUhnK0NSWk1hYW5xOXFt?=
+ =?utf-8?B?Zkkxa2RGdkIrUHhwRlpjU0Mva0Y2MUJPR2JMeDNVdTJmZS8xVDJ4NWwwRjhl?=
+ =?utf-8?B?UUJld1BzaVEvMEpFOUxTcGxxemRFZ2U2OWN0RE1jM3VMbDdBWUFZL2dWRjFa?=
+ =?utf-8?B?OGw1aVFENGJLa09iSjN3YkhhNzFhNzZxYzV4U2ZScGk1SzBzZ3VnUzhIN1Bs?=
+ =?utf-8?B?cW9IVS9MU2ROd25kWkNvdUpxT3A3Rnp3MUFJYjdWdFVqb0dSaWw2dzN2Y1VB?=
+ =?utf-8?B?R25ZazE1Y3ZOV3QwWTJuMi9PSndKM2RqY3ZzU3VqQzBEeEh2aUVLOVZTZ281?=
+ =?utf-8?B?dXdjbnMrMWxKK0xKUGdmVXZ0VkZBMnpzOE1tT0hvdnVuQUR3SFdicmxFRkMz?=
+ =?utf-8?B?MFcvbGVCTkEzUHlIQ01rQkNRckFHQWdGcDJpUGhhaW5QQmF1TFkydmxFaGFR?=
+ =?utf-8?B?PT0=?=
+MIME-Version: 1.0
+
+--===============0945027937548491919==
+Content-Type: multipart/alternative; boundary="0000000000005875ea060995241c"
+
+--0000000000005875ea060995241c
+Content-Type: text/plain; charset="UTF-8"
+
+SP-Anno for Tuesday, November 7th, 2023 Summary
+
+*SP events and notices:*
+
+Friday, Nov 10, noon-4:
+
+TGIF Mini Golf @ SP
+</publicity/anno_view.php#idd5d11fa3b08961f13af5b3855eee4224>
+
+Wednesday, Nov 15, 6-8pm:
+
+CoSI Documentary Watch Party
+</publicity/anno_view.php#idbf8bc445653f6de62ac25dee4f5932bb>
+
+Thursday, Nov 16, 6:30pm:
+
+MIT Graduate Book Club
+</publicity/anno_view.php#id769cd4fec3082ca7bfb52f060bcf18e6>
+
+
+SP Events
+
+*1.  TGIF Mini Golf @ SP*
+Friday, Nov 10, noon-4, Sidney Pacific courtyard.
+
+Get ready for an unforgettable Friday afternoon as Sidney Pacific Graduate
+Community presents "TGIF Mini Golf"! We invite you to join us for a
+thrilling mini golf experience that promises fun, camaraderie, and a
+fantastic start to the weekend. RSVP here (
+https://forms.gle/ek4Rioazk214Mzcn7) for an accurate headcount and free
+feel to ask questions at spec@mit.edu. We look forward to having you with
+us on the greens!  More...
+<anno_view.php?action=extended&Event_ID=d5d11fa3b08961f13af5b3855eee4224>
+
+
+E-mail: sp-president@mit.edu
+------------------------------
+
+*2.  CoSI Documentary Watch Party*
+Wednesday, Nov 15, 6-8pm, Seminar Room.
+
+Come watch the 2016 documentary Kedi with the Sidney-Pacific Committee on
+Scholarly Interactions (CoSI) on Wednesday November 15 from 6pm-8pm! Kedi
+is a documentary about the relationship between humans and cats in the city
+of Istanbul! It was listed as one of Time magazine's top ten films of 2017.
+
+Dinner will be provided for all those who RSVP!
+
+RSVP here <https://forms.gle/G78YdTFKUMX1FCx96>
+E-mail: sp-cosi-chair@mit.edu
+------------------------------
+
+*3.  MIT Graduate Book Club*
+Thursday, Nov 16, 6:30pm, Seminar Room.
+
+Read the book and come to meet the author (Rebecca Saltzer) to know her
+process while writing "Murder Over Broken Bonds"
+If you commit to attend the session you can get a free copy, email
+naomic@mit.edu to get one
+
+
+E-mail: sp-headsofhouse@mit.edu
+------------------------------
+SP-News is a low-volume e-mail list used by the house government to keep
+residents informed of important house activities. We usually send between
+one and two e-mails per week, including the SP-Anno. You can change your
+subscription settings at:
+https://sidpac.mit.edu/secure/user-info/edit_resident.php
+
+--0000000000005875ea060995241c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><h1>SP-Anno for
+Tuesday, November 7th, 2023<span></span></h1>
+
+<h2>Summary<span></span></h2>
+
+<p class=3D"MsoNormal" style=3D"margin-bottom:12pt"><b>SP events and notice=
+s:</b><span></span></p>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"4" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Friday,
+  Nov 10, noon-4:<span></span></p>
+  </td>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><a href=3D"/publicity/anno_view.php#idd5d11fa3b089=
+61f13af5b3855eee4224">TGIF Mini
+  Golf @ SP</a><span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Wednesday,
+  Nov 15, 6-8pm:<span></span></p>
+  </td>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><a href=3D"/publicity/anno_view.php#idbf8bc445653f=
+6de62ac25dee4f5932bb">CoSI
+  Documentary Watch Party</a><span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Thursday,
+  Nov 16, 6:30pm:<span></span></p>
+  </td>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><a href=3D"/publicity/anno_view.php#id769cd4fec308=
+2ca7bfb52f060bcf18e6">MIT
+  Graduate Book Club</a><span></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class=3D"MsoNormal"><span>&nbsp;</span></p>
+
+<h2>SP Events<span></span></h2>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"3" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><b>1.&nbsp;&nbsp;<a name=3D"idd5d11fa3b08961f13af5=
+b3855eee4224"></a>TGIF Mini Golf @ SP</b><br>
+  Friday, Nov 10, noon-4, Sidney Pacific courtyard.<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Get
+  ready for an unforgettable Friday afternoon as Sidney Pacific Graduate
+  Community presents &quot;TGIF Mini Golf&quot;! We invite you to join us f=
+or a
+  thrilling mini golf experience that promises fun, camaraderie, and a
+  fantastic start to the weekend. RSVP here (<a href=3D"https://forms.gle/e=
+k4Rioazk214Mzcn7">https://forms.gle/ek4Rioazk214Mzcn7</a>)
+  for an accurate headcount and free feel to ask questions at <a href=3D"ma=
+ilto:spec@mit.edu">spec@mit.edu</a>. We look forward to having you
+  with us on the greens!&nbsp;&nbsp;<a href=3D"anno_view.php?action=3Dexten=
+ded&amp;Event_ID=3Dd5d11fa3b08961f13af5b3855eee4224">More...</a><span></spa=
+n></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><br>
+  E-mail: <a href=3D"mailto:sp-president@mit.edu">sp-president@mit.edu</a><=
+span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt"></td>
+ </tr>
+</tbody></table>
+
+<div class=3D"MsoNormal" align=3D"center" style=3D"text-align:center">
+
+<hr size=3D"2" width=3D"100%" align=3D"center">
+
+</div>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"3" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><b>2.&nbsp;&nbsp;<a name=3D"idbf8bc445653f6de62ac2=
+5dee4f5932bb"></a>CoSI Documentary Watch Party</b><br>
+  Wednesday, Nov 15, 6-8pm, Seminar Room.<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Come
+  watch the 2016 documentary Kedi with the Sidney-Pacific Committee on
+  Scholarly Interactions (CoSI) on Wednesday November 15 from 6pm-8pm! Kedi=
+ is
+  a documentary about the relationship between humans and cats in the city =
+of
+  Istanbul! It was listed as one of Time magazine's top ten films of 2017.<=
+br>
+  <br>
+  Dinner will be provided for all those who RSVP!<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><a href=3D"https://forms.gle/G78YdTFKUMX1FCx96">RS=
+VP here</a><br>
+  E-mail: <a href=3D"mailto:sp-cosi-chair@mit.edu">sp-cosi-chair@mit.edu</a=
+><span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt"></td>
+ </tr>
+</tbody></table>
+
+<div class=3D"MsoNormal" align=3D"center" style=3D"text-align:center">
+
+<hr size=3D"2" width=3D"100%" align=3D"center">
+
+</div>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"3" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><b>3.&nbsp;&nbsp;<a name=3D"id769cd4fec3082ca7bfb5=
+2f060bcf18e6"></a>MIT Graduate Book Club</b><br>
+  Thursday, Nov 16, 6:30pm, Seminar Room.<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Read
+  the book and come to meet the author (Rebecca Saltzer) to know her proces=
+s
+  while writing &quot;Murder Over Broken Bonds&quot;<br>
+  If you commit to attend the session you can get a free copy, email <a hre=
+f=3D"mailto:naomic@mit.edu">naomic@mit.edu</a> to get one<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><br>
+  E-mail: <a href=3D"mailto:sp-headsofhouse@mit.edu">sp-headsofhouse@mit.ed=
+u</a><span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt"></td>
+ </tr>
+</tbody></table>
+
+<div class=3D"MsoNormal" align=3D"center" style=3D"text-align:center">
+
+<hr size=3D"2" width=3D"100%" align=3D"center"><span style=3D"font-size:13.=
+3333px;font-family:sans-serif">SP-News&nbsp;is a&nbsp;low-volume&nbsp;e-mai=
+l list used by the house government to keep residents informed of important=
+ house activities. We usually send between one and two e-mails per week, in=
+cluding the&nbsp;SP-Anno. You can change your subscription settings at:&nbs=
+p;</span><a href=3D"https://sidpac.mit.edu/secure/user-info/edit_resident.p=
+hp" target=3D"_blank" style=3D"font-size:13.3333px;font-family:sans-serif">=
+https://sidpac.mit.edu/secure/user-info/edit_resident.php</a>
+
+</div></div></div></div>
+
+--0000000000005875ea060995241c--
+
+--===============0945027937548491919==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+SP-News is a low-volume e-mail list used by the house government to
+keep residents informed of important house activites. We usually send
+between one and two e-mails per week, including the SP-Anno.
+You can change your subscription settings at:
+https://s-p.mit.edu/myacct/resident_edit_entry.php
+
+--===============0945027937548491919==--

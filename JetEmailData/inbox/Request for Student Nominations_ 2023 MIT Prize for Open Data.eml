@@ -1,0 +1,597 @@
+Received: from SA3PR01MB7905.prod.exchangelabs.com (2603:10b6:806:315::20) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 16 Aug 2023 15:07:34
+ +0000
+Received: from MW4PR03CA0323.namprd03.prod.outlook.com (2603:10b6:303:dd::28)
+ by SA3PR01MB7905.prod.exchangelabs.com (2603:10b6:806:315::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6652.30; Wed, 16 Aug 2023 15:07:32 +0000
+Received: from CO1PEPF000044F7.namprd21.prod.outlook.com
+ (2603:10b6:303:dd:cafe::ad) by MW4PR03CA0323.outlook.office365.com
+ (2603:10b6:303:dd::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.33 via Frontend
+ Transport; Wed, 16 Aug 2023 15:07:32 +0000
+Authentication-Results: spf=fail (sender IP is 18.7.71.113)
+ smtp.mailfrom=mail96.sea91.rsgsv.net; dkim=fail (body hash did not verify)
+ header.d=mit.edu;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of mail96.sea91.rsgsv.net
+ does not designate 18.7.71.113 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.7.71.113;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.7.71.113) by
+ CO1PEPF000044F7.mail.protection.outlook.com (10.167.241.197) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6723.6 via Frontend Transport; Wed, 16 Aug 2023 15:07:32 +0000
+Received: from w92expo19.exchange.mit.edu (18.7.74.73) by
+ w92exhyb8.exchange.mit.edu (18.7.71.113) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 16 Aug 2023 11:07:16 -0400
+Received: from oc11exhyb8.exchange.mit.edu (18.9.1.113) by
+ w92expo19.exchange.mit.edu (18.7.74.73) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 16 Aug 2023 11:07:16 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Wed, 16 Aug 2023 11:07:16 -0400
+Received: from BYAPR08CA0067.namprd08.prod.outlook.com (2603:10b6:a03:117::44)
+ by PH7PR01MB7655.prod.exchangelabs.com (2603:10b6:510:1d6::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6678.23; Wed, 16 Aug 2023 15:07:14 +0000
+Received: from MWH0EPF000989EA.namprd02.prod.outlook.com
+ (2603:10b6:a03:117:cafe::6d) by BYAPR08CA0067.outlook.office365.com
+ (2603:10b6:a03:117::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.33 via Frontend
+ Transport; Wed, 16 Aug 2023 15:07:14 +0000
+Authentication-Results-Original: spf=pass (sender IP is 148.105.15.96)
+ smtp.mailfrom=mail96.sea91.rsgsv.net; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mail96.sea91.rsgsv.net
+ designates 148.105.15.96 as permitted sender)
+ receiver=protection.outlook.com; client-ip=148.105.15.96;
+ helo=mail96.sea91.rsgsv.net; pr=C
+Received: from mail96.sea91.rsgsv.net (148.105.15.96) by
+ MWH0EPF000989EA.mail.protection.outlook.com (10.167.241.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6699.14 via Frontend Transport; Wed, 16 Aug 2023 15:07:14 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=k2;
+	t=1692198046; x=1692458546; i=open-data-prize@mit.edu;
+	bh=7uoHlqiDN5UxucXNv/YunfYJmU0SD/Vipr2GpmLiwh4=;
+	h=Subject:From:Reply-To:To:Date:Message-ID:X-MC-User:Feedback-ID:
+	 List-ID:List-Unsubscribe:List-Unsubscribe-Post:Content-Type:
+	 MIME-Version:CC:Date:Subject:From;
+	b=pLGF1lWMl4Z68Uwyux5FeHLQkaW0KeFf7ZREdUron9qNttr2hys84TbZoQn9C/1cb
+	 LcQ2HZSw0A0lpFO+4uSf9GGZs3pCrkgQBCg4KvtMbEW/Kny1RSv8uRtL1neAkFwuqO
+	 74usx8KRwF7bKFYa+nQYXrwMzytjC2B4J07y2a5zKvaFxBcy+/Y22m+1eD/kTdwv7l
+	 EqIwE+Yp91nDnZz5puxCj01B7ivdsIPlJm0WhbP3xfQvOh1eHqIf/malQikeL52n6f
+	 Ht8n1l651hn1zeAdPfFdvQfquKhcz0ChQmtXeV7nByRMQkFoi331KQ28lsZdot8Soy
+	 8xy1dCTplCFHA==
+Received: from localhost (localhost [127.0.0.1])
+	by mail96.sea91.rsgsv.net (Mailchimp) with ESMTP id 4RQrt635Y6z4fprJg
+	for <jiannan@MIT.EDU>; Wed, 16 Aug 2023 15:00:46 +0000 (GMT)
+Subject: =?utf-8?Q?Request=20for=20Student=20Nominations=3A=202023=20MIT=20Prize=20for=20Open=20Data?=
+From: =?utf-8?Q?Chris=20Bourg=20&=20Rebecca=20Saxe?= <open-data-prize@mit.edu>
+Reply-To: =?utf-8?Q?Chris=20Bourg=20&=20Rebecca=20Saxe?= <open-data-prize@mit.edu>
+To: <jiannan@MIT.EDU>
+Date: Wed, 16 Aug 2023 15:00:04 +0000
+Message-ID: <88f983a0e3c2a43fb2a2eabd0.d43a4cfd44.20230816145948.02d55bfff6.fbf6d5a4@mail96.sea91.rsgsv.net>
+X-Mailer: Mailchimp Mailer - **CID02d55bfff6d43a4cfd44**
+X-Campaign: mailchimp88f983a0e3c2a43fb2a2eabd0.02d55bfff6
+X-campaignid: mailchimp88f983a0e3c2a43fb2a2eabd0.02d55bfff6
+X-Report-Abuse: Please report abuse for this campaign here: https://mailchimp.com/contact/abuse/?u=88f983a0e3c2a43fb2a2eabd0&id=02d55bfff6&e=d43a4cfd44
+X-MC-User: 88f983a0e3c2a43fb2a2eabd0
+Feedback-ID: 81147954:81147954.1280778:us16:mc
+List-ID: 88f983a0e3c2a43fb2a2eabd0mc list <88f983a0e3c2a43fb2a2eabd0.192602.list-id.mcsv.net>
+X-Accounttype: pd
+List-Unsubscribe: <https://mit.us16.list-manage.com/unsubscribe?u=88f983a0e3c2a43fb2a2eabd0&id=a775644372&e=d43a4cfd44&c=02d55bfff6>,
+ <mailto:unsubscribe-mc.us16_88f983a0e3c2a43fb2a2eabd0.02d55bfff6-d43a4cfd44@unsubscribe.mailchimpapp.net?subject=unsubscribe>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Content-Type: multipart/alternative; boundary="_----------=_MCPart_1302163273"
+Return-Path: bounce-mc.us16_81147954.1280778-d43a4cfd44@mail96.sea91.rsgsv.net
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ MWH0EPF000989EA:EE_|PH7PR01MB7655:EE_|CO1PEPF000044F7:EE_|SA3PR01MB7905:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31ee3571-a66e-48f8-4851-08db9e6a8440
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?pGuYev3384fDZZ2Fgg42cLnWhJi/jaIIe13G05jlMWVB9LREFFwX9oiLWGTC?=
+ =?us-ascii?Q?RNIndE7Hp6GHWm76V0g/UCeemuVeU17kjbhEsz6uJW9Id3p103SS8JDHi4KF?=
+ =?us-ascii?Q?tXO6fcJRaMFxI3T9J1J8BkmbP0ta3OIzqVEr7a9JTNxKk4DvofbqFFqQ/0Zy?=
+ =?us-ascii?Q?NlAiPgjnFQn+YoKNxl6rzuY8NwUBeSbwC/d6zt5/4zX8LwvrxuE1EGuJgLaC?=
+ =?us-ascii?Q?kClfL0vZw7I4alqKL0idKrqzPrIx3LpDVfQw2GybG3heQDritpFrtDpoAWAY?=
+ =?us-ascii?Q?RAKOiuNCKU6L6pLYLTL3VBZpxgPPmgUAmWn6R0wEKjyg3cO7T71gSsmklEFL?=
+ =?us-ascii?Q?zOxnZV+VslbncL6CiF5pZ7YvJfwuf8J2ziKtdYqrBNzidLrpkOlq8FOT11gV?=
+ =?us-ascii?Q?TsXrOiyHO9lwPPL3ikM6e/5hkxegswAzI0ZilaX6jEa3dNtWZpQQdyY2IgoK?=
+ =?us-ascii?Q?8cbAF9uUDndyODxClJ8m7XaiNa6USzhfy2qayWZBS5OCYdnU9qTnFDAkLHhq?=
+ =?us-ascii?Q?ncAjuBSUZOBvFzhabnT7y+AXc+TAn3T5tahBmsJiM5dgfvOrBNznj7doTfsF?=
+ =?us-ascii?Q?W3MMUyy6WgyPyN7mmdbqbe19XiQRPNNhT8btymGAe2QRd5xYYqPBThIZBNI1?=
+ =?us-ascii?Q?FL11iKzQRGtqo36pO7vBfjTCy2GOzFxLKci3yCWbYMrBuYiv6aVkC6QExPgQ?=
+ =?us-ascii?Q?nVeK4wyo3Dh36RQlM7g4jlu6EnX/h33JIFiowEE6zTb3X5zzQZ4ilrk8No5E?=
+ =?us-ascii?Q?tD0WDXZZ0RGjElIWGFGDEdb7tVrlDq74aKE2lCkR5H9AkBOQSq/DMlhnKFXF?=
+ =?us-ascii?Q?3CdxON2r9+1+aKvWPB0mGedOfVd+zKp7L4RntP0QBdhRZ20Ja3hu0QN874pD?=
+ =?us-ascii?Q?nhZfReNHLWr/xQY18fvX5oROVuhXmwZkEFsi5fge9/CKVPvylHg2Gr3kOmUP?=
+ =?us-ascii?Q?Y3czxmCzYRNsYvyVTZPyi/J5UaGvmsOUbPxDkctgijNxO9qVQObGzg9RT9k4?=
+ =?us-ascii?Q?qCK1j0dgBPg7owry5r1ajEyCeYnS4gvVOZJOGUAbBLyf3OGpXxhGH0sPQGcd?=
+ =?us-ascii?Q?5sqBjcbUNzayzc7U6jjm+qJ/DBnp3RGWXOCTuESV8apZCMezc4NUPQdGFsTq?=
+ =?us-ascii?Q?ViCcWjbfQy8+0U6T4p8Ro2wf1+XXYrVKr8y4Qgr/qqn1Ytf/2nL4a1XaR1gS?=
+ =?us-ascii?Q?PcONt5eYh0pLSfF/W3e90NsSxDHoId/upvTrIxX09HRUsKamEqHN+UBtelzS?=
+ =?us-ascii?Q?zw+WhWcG0Wh5r/GVeC30SAF9GOeVgtk/ELHcv121zK3nkudDLaZJvXjnMpa2?=
+ =?us-ascii?Q?T30/DyHkd7EcLlOvo5uKVgRoce0jp0hz0Xd7Bv7M1NWpvmDIe+wA1+GOXWgq?=
+ =?us-ascii?Q?25HRH8TvF3VUmNN/VBB8CsYn3w/BszWXqFfkdH4yqe1pLSBRrQ=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:148.105.15.96;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail96.sea91.rsgsv.net;PTR:mail96.sea91.rsgsv.net;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR01MB7655
+X-OrganizationHeadersPreserved: PH7PR01MB7655.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb8.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb8.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo19.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 16 Aug 2023 15:07:32.5584
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 31ee3571-a66e-48f8-4851-08db9e6a8440
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: CO1PEPF000044F7.namprd21.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CO1PEPF000044F7.namprd21.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1PEPF000044F7.namprd21.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ MWH0EPF000989EA.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 079b85b2-6088-458f-e1e8-08db9e6a7947
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.113;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:w92exhyb8.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2023 15:07:32.3084
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31ee3571-a66e-48f8-4851-08db9e6a8440
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.113];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ MWH0EPF000989EA.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR01MB7905
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.7037909
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6678.027
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eUNOUVFUMER5WkNPOHdtbWtHbTdXUGMwSzFvOTZwTGpvUnloU21lWjdiZ2ZU?=
+ =?utf-8?B?TTU3Ykdub21YcGdYd1IwdjEwbmNFNmVTWkV3eUlqSGZiSmYyK2FjdHpHL0pK?=
+ =?utf-8?B?OWhJTVhNSlh1ejlTNkYyOVJSZjRKcFU1ZSs1NnV4dlpmZGpFS2R3SXdSTDg3?=
+ =?utf-8?B?QkVMSjNwTVNQZ2pVbldUYlZCcWtYd3Z4OUxYVDBvSy8rU09DbXZ4NithQWF1?=
+ =?utf-8?B?V005N3pFRC9tL3d6N1EvL3RSNU9uZmhMdFFGSGU0Z3F6dGUzQXdjbFdhVkpp?=
+ =?utf-8?B?eldWODRmZjJhdUxnWDM0N3J5UDlILytVNmhIcStCbkd5NjZWd21sNG9zT1ZI?=
+ =?utf-8?B?alRMRURGdWl2Z0p3WktwaU5PMks4R2U1NW9qM0lSTkNuanlGYWllajcwcW40?=
+ =?utf-8?B?aENCTDcySTdBQzlvSFZyYk8yY1JJNGZWMmk2Q2pWOXhscjN1YVMraWZPMFRq?=
+ =?utf-8?B?MTdhOGVtcXR5Q09pVk00UTJiYTlVYWVFK3JDTTJQYjNYeE5HV3ZJTzJrRUdq?=
+ =?utf-8?B?M013K2NqQXd1RUNuRmJRc3ZpeGF4ZTJxdGZJcC8rN0lrNkRRNHl5T0hXYzFG?=
+ =?utf-8?B?TDFPRnBMdjM5eldubVlGOXZBaDJVajg4VjVVUFdGcVliajJIUi9CMWYrOUw1?=
+ =?utf-8?B?d3lFTDJKVXR5WjAyTE1vTUt3MUZ1cWZvcTV6YVY5azJYTlBEemtYbGV1aEF4?=
+ =?utf-8?B?UFhBc1U3N0ZiY2FGSXczYUxiTGVEdTlnTElGWWQ2cmJBUHBuR1BrUnlCSklP?=
+ =?utf-8?B?Wkc0a2Urdzd4QzFkKzl6clJqUW1iZzVjLzFVT1RBMWVQYjFxSGQwZUo5QnBo?=
+ =?utf-8?B?cXlNZzBmWENkYVhSY2E0dGNvNW5XR0twbnNtRjQyRVZBc2tHbTU1SW9pREND?=
+ =?utf-8?B?clhJVFhoVUtNcHFnbmVzekpOU2xaRTdETjRiVVFvL25YU2V0UFFNdVZGL2Q2?=
+ =?utf-8?B?NHlJYlpValZ3SWFqbld3NjNXZE43aWRyamNwWWZ1bmhadE1aSGtwc3htZW1a?=
+ =?utf-8?B?NGNkMTdET28yZ2NvSlRsWXIxNzF5YzBxd1RSck93WnlQWFVJa1N3dUJUWWR4?=
+ =?utf-8?B?UmxaaTJqNkp2UXRoeGV4V3VuVUlKOG9MRFNHWkZuOFdKZncrZjU3RVJCbzBq?=
+ =?utf-8?B?N21jTkFVVXBPenM0enZRYWF3cWY0TkZwNk52dTRjKysrZ0lYVFo0SzNLTllK?=
+ =?utf-8?B?R1hXV1dRQTVDc3dNQk1EQWpOakQ5M3M0Sy9rOVh0Q1B5THIrV0l6dVFwTG9U?=
+ =?utf-8?B?UjhaRTFOTGZVK0RXaW5uQ2o0dUxXVk8rUVZSWG45clIvbUtwazdmVzhGa1NG?=
+ =?utf-8?B?N2FXbDMvSExjTnhaa2xxYUpiQ0NhWkxqbGFDeWdBOXErcDlKR0oyekpYa1Fu?=
+ =?utf-8?B?cFljblVEWHJOOHNVVjVlc0lVRm1IUVFTNmZKd0JWQzhlcWNrWWpNT0I5OFZF?=
+ =?utf-8?B?SU5yd0JFYll2eHljYUdjdjNoQ25RWDNDcDVtTHdUeUxmZnNSY29BTmxEZmwx?=
+ =?utf-8?B?OXhvVzdYUXAvZUptbDZ6YjM3TEx4eU9UcUlsc2x4eHdwSmdJM3A5VlpZNk5z?=
+ =?utf-8?B?QXJjMFVwWlhZOFJTblh5czR6MTl4TlMwV2VPNFl4aHFBZ0JmdnU3UnJlR3Zw?=
+ =?utf-8?B?Z0xNSXNFVkFUenVob1A1RnIvRmVaSWpPOWFVdktNTkR3OVp2Q2Urb3VMbmtz?=
+ =?utf-8?B?K01CYk8rOGFwWlZVS0lZNjRIUGZpMloyRmFqamkrcDlyMlB3bmhJNjA3Rmll?=
+ =?utf-8?B?SnU4cWpqTDRmNlNIZkNUWktob084RGNnaGFFZ1UwWXFtU1dTRjlzaEsxaUFH?=
+ =?utf-8?B?QjRRZ1RUWm0xMkdiNlM0WWRUd211OS82RWorMG5lc2hnVzM2VTJRSTVvbjBr?=
+ =?utf-8?B?TUhQbXBLcCtvOVVTakV1emxBWm5CQ2F2ZklqQThhTzJWNDN0UUhYUzY2QW9o?=
+ =?utf-8?B?NmFTd1VpWEtHZE9Fa3R2TFJsbmo1M2xWTnh4WW1EU0YzWWhzZVdTcVkrQWVq?=
+ =?utf-8?B?SG0zMXhtM0NOMW1MUTZ5NFl1R2U1R2dkR2o5bXpRVkhHNDNMblJGVFQ4Mnl6?=
+ =?utf-8?B?MFUyMDBwa0pYb0dmd2JUTjc0cHA3aU1IVDFpajZiK3RlemtvMk9odGgzbVF5?=
+ =?utf-8?B?SUxscEc1ZFpkcmJZSjRBN1B0dU04bTFvdnF3S1N5TzBNaHFkeTlqRjgyQVdr?=
+ =?utf-8?B?U0Y2czFoeTNXVXlEZ2V0dDQrbHh2QXdTcHlqNEczTVhkTVFaZUdnNlJ0clk1?=
+ =?utf-8?Q?mNnrVOZyo79rU2ICdHds7TYuhiWZ1ru5/QzcPWtZxc=3D?=
+MIME-Version: 1.0
+
+--_----------=_MCPart_1302163273
+Content-Type: text/plain; charset="utf-8"; format="fixed"
+Content-Transfer-Encoding: quoted-printable
+
+
+
+View this email in your browser (https://mailchi.mp/89fe3da68032/request-f=
+or-student-nominations-2023-mit-prize-for-open-data?e=3Dd43a4cfd44) .
+
+Dear MIT students=2C
+
+On behalf of the MIT Libraries and the School of Science=2C we are pleased=
+ to announce the 2023 MIT Prize for Open Data. The prize aims to highlight=
+ the value of open data at MIT and to encourage the next generation of res=
+earchers. If you are working with open data -- data that is accessible to=
+ and reusable by other researchers=2C institutions=2C or communities -- we=
+ encourage you to submit a nomination.
+
+Chris Bourg=2C Director=2C MIT Libraries
+
+Rebecca Saxe=2C Associate Dean=2C School of Science
+
+=E2=80=94
+
+The 2023 MIT Prize for Open Data (https://libraries.mit.edu/opendata/open-=
+data-mit-home/mit-prize/)
+
+Winners receive $2=2C500 and an invitation to present their project at the=
+ =E2=80=9COpen Data at MIT=E2=80=9D event on October 24=2C during Open Acc=
+ess Week.
+
+We=E2=80=99re seeking nominations for projects by MIT researchers that:
+* created new open data
+* creatively used existing open data
+* built technologies that advance use or dissemination of open data
+* contained novel theorizing about open data=2C e.g.=2C with respect to so=
+cial and ethical responsibility
+
+Eligibility: Nominees must be conducting research at MIT=2C with preferenc=
+e for trainees (research technicians=2C undergraduate or graduate students=
+=2C post-doctoral researchers). Self-nominations are encouraged.
+
+Nominations due September 15 at 5pm
+
+Submit a nomination (https://libraries.mit.edu/opendata/open-data-mit-home=
+/mit-prize/)
+
+Questions? Email open-data-prize@mit.edu (mailto:open-data-prize@mit.edu?s=
+ubject=3Dnull&body=3Dnull)
+
+Co-sponsored by the School of Science and MIT Libraries
+
+Massachusetts Institute of Technology
+77 Massachusetts Avenue Cambridge=2C MA 02139
+
+Want to change how you receive these emails?
+You can update your preferences (https://mit.us16.list-manage.com/profile?=
+u=3D88f983a0e3c2a43fb2a2eabd0&id=3Da775644372&e=3Dd43a4cfd44&c=3D02d55bfff6)=
+ or unsubscribe from this list (https://mit.us16.list-manage.com/unsubscri=
+be?u=3D88f983a0e3c2a43fb2a2eabd0&id=3Da775644372&e=3Dd43a4cfd44&c=3D02d55bff=
+f6) .
+--_----------=_MCPart_1302163273
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head><!--[if gte mso 15]>
+<xml>
+<o:OfficeDocumentSettings>
+<o:AllowPNG/>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+<meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1"=
+>
+<title>Request for Student Nominations: 2023 MIT Prize for Open Data</title=
+>
+<style>          img{-ms-interpolation-mode:bicubic;}
+          table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;}
+          .mceStandardButton, .mceStandardButton td, .mceStandardButton td =
+a{mso-hide:all !important;}
+          p, a, li, td, blockquote{mso-line-height-rule:exactly;}
+          p, a, li, td, body, table, blockquote{-ms-text-size-adjust:100%; =
+-webkit-text-size-adjust:100%;}
+          @media only screen and (max-width: 480px){
+            body, table, td, p, a, li, blockquote{-webkit-text-size-adjust:=
+none !important;}
+          }
+          .mcnPreviewText{display: none !important;}
+          .bodyCell{margin:0 auto; padding:0; width:100%;}
+          .ExternalClass, .ExternalClass p, .ExternalClass td, .ExternalCla=
+ss div, .ExternalClass span, .ExternalClass font{line-height:100%;}
+          .ReadMsgBody{width:100%;} .ExternalClass{width:100%;}
+          a[x-apple-data-detectors]{color:inherit !important; text-decorati=
+on:none !important; font-size:inherit !important; font-family:inherit !impo=
+rtant; font-weight:inherit !important; line-height:inherit !important;}
+            body{height:100%; margin:0; padding:0; width:100%; background: =
+#ffffff;}
+            p{margin:0; padding:0;}
+            table{border-collapse:collapse;}
+            td, p, a{word-break:break-word;}
+            h1, h2, h3, h4, h5, h6{display:block; margin:0; padding:0;}
+            img, a img{border:0; height:auto; outline:none; text-decoration=
+:none;}
+            a[href^=3D"tel"], a[href^=3D"sms"]{color:inherit; cursor:defaul=
+t; text-decoration:none;}
+            li p {margin: 0 !important;}
+            .ProseMirror a {
+                pointer-events: none;
+            }
+            @media only screen and (max-width: 480px){
+                body{width:100% !important; min-width:100% !important; }
+                body.mobile-native {
+                    -webkit-user-select: none; user-select: none; transitio=
+n: transform 0.2s ease-in; transform-origin: top center;
+                }
+                body.mobile-native.selection-allowed a, body.mobile-native.=
+selection-allowed .ProseMirror {
+                    user-select: auto;
+                    -webkit-user-select: auto;
+                }
+                colgroup{display: none;}
+                img{height: auto !important;}
+                .mceWidthContainer{max-width: 660px !important;}
+                .mceColumn{display: block !important; width: 100% !importan=
+t;}
+                .mceColumn-forceSpan{display: table-cell !important; width:=
+ auto !important;}
+                .mceBlockContainer{padding-right:16px !important; padding-l=
+eft:16px !important;}
+                .mceBlockContainerE2E{padding-right:0px; padding-left:0px;}
+                .mceSpacing-24{padding-right:16px !important; padding-left:=
+16px !important;}
+                .mceFooterSection .mceText, .mceFooterSection .mceText p{fo=
+nt-size: 16px !important; line-height: 140% !important;}
+                .mceText, .mceText p{font-size: 16px !important; line-heigh=
+t: 140% !important;}
+                h1{font-size: 30px !important; line-height: 120% !important=
+;}
+                h2{font-size: 26px !important; line-height: 120% !important=
+;}
+                h3{font-size: 20px !important; line-height: 125% !important=
+;}
+                h4{font-size: 18px !important; line-height: 125% !important=
+;}
+            }
+            @media only screen and (max-width: 640px){
+                .mceClusterLayout td{padding: 4px !important;}
+            }
+            div[contenteditable=3D"true"] {outline: 0;}
+            .ProseMirror .empty-node, .ProseMirror:empty {position: relativ=
+e;}
+            .ProseMirror .empty-node::before, .ProseMirror:empty::before {
+                position: absolute;
+                left: 0;
+                right: 0;
+                color: rgba(0,0,0,0.2);
+                cursor: text;
+            }
+            .ProseMirror .empty-node:hover::before, .ProseMirror:empty:hove=
+r::before {
+                color: rgba(0,0,0,0.3);
+            }
+            .ProseMirror h1.empty-node::before {
+                content: 'Heading';
+            }
+            .ProseMirror p.empty-node:only-child::before, .ProseMirror:empt=
+y::before {
+                content: 'Start typing...';
+            }
+            a .ProseMirror p.empty-node::before, a .ProseMirror:empty::befo=
+re {
+                content: '';
+            }
+            .mceText, .ProseMirror {
+                white-space: pre-wrap;
+            }
+body, #bodyTable { background-color: rgb(250, 250, 250); }.mceText, .mceLab=
+el { font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif; =
+}.mceText, .mceLabel { color: rgb(32, 32, 32); }.mceText p { margin-bottom:=
+ 0px; }.mceText ul { margin-bottom: 0px; }.mceText label { margin-bottom: 0=
+px; }.mceText input { margin-bottom: 0px; }.mceSpacing-12 .mceInput + .mceE=
+rrorMessage { margin-top: -6px; }.mceText p { margin-bottom: 0px; }.mceText=
+ ul { margin-bottom: 0px; }.mceText label { margin-bottom: 0px; }.mceText i=
+nput { margin-bottom: 0px; }.mceSpacing-24 .mceInput + .mceErrorMessage { m=
+argin-top: -12px; }.mceInput { background-color: transparent; border: 2px s=
+olid rgb(208, 208, 208); width: 60%; color: rgb(77, 77, 77); display: block=
+; }.mceInput[type=3D"radio"], .mceInput[type=3D"checkbox"] { float: left; m=
+argin-right: 12px; display: inline; width: auto !important; }.mceLabel > .m=
+ceInput { margin-bottom: 0px; margin-top: 2px; }.mceLabel { display: block;=
+ }.mceText p { color: rgb(32, 32, 32); font-family: "Helvetica Neue", Helve=
+tica, Arial, Verdana, sans-serif; font-size: 16px; font-weight: normal; lin=
+e-height: 1.5; text-align: center; letter-spacing: 0px; direction: ltr; }.m=
+ceText a { color: rgb(41, 83, 221); font-style: normal; font-weight: normal=
+; text-decoration: underline; direction: ltr; }
+@media only screen and (max-width: 480px) {
+            .mceText p { font-size: 16px !important; line-height: 1.5 !impo=
+rtant; }
+          }
+@media only screen and (max-width: 480px) {
+            .mceBlockContainer { padding-left: 16px !important; padding-rig=
+ht: 16px !important; }
+          }
+#dataBlockId-9 p, #dataBlockId-9 h1, #dataBlockId-9 h2, #dataBlockId-9 h3, =
+#dataBlockId-9 h4, #dataBlockId-9 ul { text-align: center; }#dataBlockId-1 =
+p, #dataBlockId-1 h1, #dataBlockId-1 h2, #dataBlockId-1 h3, #dataBlockId-1 =
+h4, #dataBlockId-1 ul { line-height: 1; text-align: left; }#dataBlockId-5 p=
+, #dataBlockId-5 h1, #dataBlockId-5 h2, #dataBlockId-5 h3, #dataBlockId-5 h=
+4, #dataBlockId-5 ul { line-height: 1.5; text-align: left; }#dataBlockId-9 =
+p, #dataBlockId-9 h1, #dataBlockId-9 h2, #dataBlockId-9 h3, #dataBlockId-9 =
+h4, #dataBlockId-9 ul { color: rgb(101, 101, 101); font-family: "Helvetica =
+Neue", Helvetica, Arial, Verdana, sans-serif; line-height: 1.5; text-align:=
+ center; }</style></head>
+<body>
+<!--
+-->
+<center>
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" height=3D"100%" wid=
+th=3D"100%" id=3D"bodyTable" style=3D"background-color: rgb(250, 250, 250);=
+">
+<tbody><tr>
+<td class=3D"bodyCell" align=3D"center" valign=3D"top">
+<table id=3D"root" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%"><tbody data-block-id=3D"13" class=3D"mceWrapper"><tr><td align=3D=
+"center" valign=3D"top" class=3D"mceWrapperOuter"><!--[if (gte mso 9)|(IE)]=
+><table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" w=
+idth=3D"660" style=3D"width:660px;"><tr><td><![endif]--><table border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" style=3D"max-width:660p=
+x" role=3D"presentation"><tbody><tr><td style=3D"background-color:#ffffff;b=
+ackground-position:center;background-repeat:no-repeat;background-size:cover=
+" class=3D"mceWrapperInner" valign=3D"top"><table align=3D"center" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentat=
+ion" data-block-id=3D"2"><tbody><tr class=3D"mceRow"><td style=3D"backgroun=
+d-position:center;background-repeat:no-repeat;background-size:cover" valign=
+=3D"top"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" role=3D"presentation"><tbody><tr><td style=3D"padding-top:0;padding-bo=
+ttom:0" class=3D"mceColumn" data-block-id=3D"-4" valign=3D"top" colspan=3D"=
+12" width=3D"100%"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+width=3D"100%" role=3D"presentation"><tbody><tr><td style=3D"background-col=
+or:#fafafa;padding-top:12px;padding-bottom:12px;padding-right:24px;padding-=
+left:24px" class=3D"mceBlockContainer" valign=3D"top"><div data-block-id=3D=
+"1" class=3D"mceText" id=3D"dataBlockId-1" style=3D"width:100%"><p class=3D=
+"last-child"><a href=3D"https://mailchi.mp/89fe3da68032/request-for-student=
+-nominations-2023-mit-prize-for-open-data?e=3Dd43a4cfd44" target=3D"_blank"=
+><span style=3D"text-decoration:underline;"><span style=3D"font-size: 12px"=
+>View this email in your browser</span></span></a><span style=3D"color:#222=
+222;"><span style=3D"font-size: 12px">.</span></span></p></div></td></tr></=
+tbody></table></td></tr></tbody></table></td></tr></tbody></table><table al=
+ign=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"10=
+0%" role=3D"presentation" data-block-id=3D"4"><tbody><tr class=3D"mceRow"><=
+td style=3D"background-position:center;background-repeat:no-repeat;backgrou=
+nd-size:cover" valign=3D"top"><table border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" width=3D"100%" role=3D"presentation"><tbody><tr><td style=3D"pad=
+ding-top:0;padding-bottom:0" class=3D"mceColumn" data-block-id=3D"-5" valig=
+n=3D"top" colspan=3D"12" width=3D"100%"><table border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tbody><tr><td st=
+yle=3D"background-color:#FFFFFF;padding-top:12px;padding-bottom:12px;paddin=
+g-right:0;padding-left:0" class=3D"mceBlockContainer" align=3D"left" valign=
+=3D"top"><img data-block-id=3D"3" width=3D"564" height=3D"auto" style=3D"wi=
+dth:564px;height:auto;max-width:100%;display:block" alt=3D"" src=3D"https:/=
+/dim.mcusercontent.com/cs/88f983a0e3c2a43fb2a2eabd0/images/2c8f81fe-61c4-54=
+de-c307-a3f96145d5a5.png?w=3D564&amp;dpr=3D2" role=3D"presentation" class=
+=3D"imageDropZone"></td></tr></tbody></table></td></tr></tbody></table></td=
+></tr></tbody></table><table align=3D"center" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" width=3D"100%" role=3D"presentation" data-block-id=3D"7=
+"><tbody><tr class=3D"mceRow"><td style=3D"background-position:center;backg=
+round-repeat:no-repeat;background-size:cover" valign=3D"top"><table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentat=
+ion"><tbody><tr><td style=3D"padding-top:0;padding-bottom:0" class=3D"mceCo=
+lumn" data-block-id=3D"-6" valign=3D"top" colspan=3D"12" width=3D"100%"><ta=
+ble border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D=
+"presentation"><tbody><tr><td style=3D"background-color:#ffffff;padding-top=
+:12px;padding-bottom:12px;padding-right:24px;padding-left:24px" class=3D"mc=
+eBlockContainer" valign=3D"top"><div data-block-id=3D"5" class=3D"mceText" =
+id=3D"dataBlockId-5" style=3D"width:100%"><p><span style=3D"font-size: 14px=
+"><span style=3D"font-family: Arial, 'Helvetica Neue', Helvetica, sans-seri=
+f">Dear MIT students,</span></span></p><p><br></p><p><span style=3D"font-si=
+ze: 14px"><span style=3D"font-family: Arial, 'Helvetica Neue', Helvetica, s=
+ans-serif">On behalf of the MIT Libraries and the School of Science, we are=
+ pleased to announce the 2023 MIT Prize for Open Data. The prize aims to hi=
+ghlight the value of open data at MIT and to encourage the next generation =
+of researchers. If you are working with open data -- data that is accessibl=
+e to and reusable by other researchers, institutions, or communities -- we =
+encourage you to submit a nomination.</span></span></p><p><br></p><p><span =
+style=3D"font-size: 14px"><span style=3D"font-family: Arial, 'Helvetica Neu=
+e', Helvetica, sans-serif">Chris Bourg, Director, MIT Libraries</span></spa=
+n></p><p><span style=3D"font-size: 14px"><span style=3D"font-family: Arial,=
+ 'Helvetica Neue', Helvetica, sans-serif">Rebecca Saxe, Associate Dean, Sch=
+ool of Science&nbsp;</span></span></p><p><br></p><p>=E2=80=94<br></p><p><a =
+href=3D"https://mit.us16.list-manage.com/track/click?u=3D88f983a0e3c2a43fb2=
+a2eabd0&amp;id=3Dda31704498&amp;e=3Dd43a4cfd44"><strong><span style=3D"font=
+-size: 14px"><span style=3D"font-family: Arial, 'Helvetica Neue', Helvetica=
+, sans-serif">The 2023 MIT Prize for Open Data</span></span></strong></a></=
+p><p><span style=3D"font-size: 14px"><span style=3D"font-family: Arial, 'He=
+lvetica Neue', Helvetica, sans-serif">Winners receive $2,500 and an invitat=
+ion to present their project at the =E2=80=9COpen Data at MIT=E2=80=9D even=
+t on October 24, during Open Access Week.</span></span></p><p><br></p><p><s=
+pan style=3D"font-size: 14px"><span style=3D"font-family: Arial, 'Helvetica=
+ Neue', Helvetica, sans-serif">We=E2=80=99re seeking nominations for projec=
+ts by MIT researchers that:&nbsp;</span></span></p><ul><li><p><span style=
+=3D"font-size: 14px"><span style=3D"font-family: Arial, 'Helvetica Neue', H=
+elvetica, sans-serif">created new open data</span></span></p></li><li><p><s=
+pan style=3D"font-size: 14px"><span style=3D"font-family: Arial, 'Helvetica=
+ Neue', Helvetica, sans-serif">creatively used existing open data</span></s=
+pan></p></li><li><p><span style=3D"font-size: 14px"><span style=3D"font-fam=
+ily: Arial, 'Helvetica Neue', Helvetica, sans-serif">built technologies tha=
+t advance use or dissemination of open data&nbsp;</span></span></p></li><li=
+><p><span style=3D"font-size: 14px"><span style=3D"font-family: Arial, 'Hel=
+vetica Neue', Helvetica, sans-serif">contained novel theorizing about open =
+data, e.g., with respect to social and ethical responsibility</span></span>=
+</p></li></ul><p><span style=3D"font-size: 14px"><span style=3D"font-family=
+: Arial, 'Helvetica Neue', Helvetica, sans-serif"><br>Eligibility: Nominees=
+ must be conducting research at MIT, with preference for trainees (research=
+ technicians, undergraduate or graduate students, post-doctoral researchers=
+). Self-nominations are encouraged.</span></span></p><p><br></p><p><span st=
+yle=3D"font-size: 14px"><span style=3D"font-family: Arial, 'Helvetica Neue'=
+, Helvetica, sans-serif">Nominations due September 15 at 5pm</span></span><=
+/p><p><br></p><p><a href=3D"https://mit.us16.list-manage.com/track/click?u=
+=3D88f983a0e3c2a43fb2a2eabd0&amp;id=3D8876c0f540&amp;e=3Dd43a4cfd44"><stron=
+g><span style=3D"font-size: 14px"><span style=3D"font-family: Arial, 'Helve=
+tica Neue', Helvetica, sans-serif">Submit a nomination</span></span></stron=
+g></a></p><p><br></p><p><span style=3D"font-size: 14px"><span style=3D"font=
+-family: Arial, 'Helvetica Neue', Helvetica, sans-serif">Questions? Email <=
+/span></span><a href=3D"mailto:open-data-prize@mit.edu?subject=3Dnull&amp;b=
+ody=3Dnull"><span style=3D"font-size: 14px"><span style=3D"font-family: Ari=
+al, 'Helvetica Neue', Helvetica, sans-serif">open-data-prize@mit.edu</span>=
+</span></a><span style=3D"font-size: 14px"><span style=3D"font-family: Aria=
+l, 'Helvetica Neue', Helvetica, sans-serif">&nbsp;</span></span></p><p><br>=
+</p><p class=3D"last-child"><em><span style=3D"font-size: 14px"><span style=
+=3D"font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif">Co-sponsor=
+ed by the School of Science and MIT Libraries</span></span></em></p></div><=
+/td></tr><tr><td style=3D"background-color:#ffffff;padding-top:0;padding-bo=
+ttom:0;padding-right:0;padding-left:0" class=3D"mceBlockContainer" valign=
+=3D"top"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" style=3D"background-color:#ffffff" role=3D"presentation" data-block-id=
+=3D"6"><tbody><tr><td style=3D"min-width:100%;border-top:27px solid transpa=
+rent" valign=3D"top"></td></tr></tbody></table></td></tr></tbody></table></=
+td></tr></tbody></table></td></tr></tbody></table><table align=3D"center" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"pres=
+entation" data-block-id=3D"12"><tbody><tr class=3D"mceRow"><td style=3D"bac=
+kground-position:center;background-repeat:no-repeat;background-size:cover" =
+valign=3D"top"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" widt=
+h=3D"100%" role=3D"presentation"><tbody><tr><td style=3D"padding-top:0;padd=
+ing-bottom:0" class=3D"mceColumn" data-block-id=3D"-7" valign=3D"top" colsp=
+an=3D"12" width=3D"100%"><table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%" role=3D"presentation"><tbody><tr><td style=3D"padding=
+-top:8px;padding-bottom:8px;padding-right:8px;padding-left:8px" valign=3D"t=
+op"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" width=3D"100%" role=3D"presentation" data-block-id=3D"11" id=3D"section_1=
+d774f36b685fa31fa05fda300d2364f" class=3D"mceFooterSection"><tbody><tr clas=
+s=3D"mceRow"><td style=3D"background-position:center;background-repeat:no-r=
+epeat;background-size:cover" valign=3D"top"><table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"12" width=3D"100%" role=3D"presentation"><tbody><tr><=
+td style=3D"padding-top:0;padding-bottom:0;margin-bottom:12px" class=3D"mce=
+Column" data-block-id=3D"-3" valign=3D"top" colspan=3D"12" width=3D"100%"><=
+table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=
+=3D"presentation"><tbody><tr><td style=3D"background-color:#fafafa;padding-=
+top:12px;padding-bottom:12px;padding-right:16px;padding-left:16px" class=3D=
+"mceBlockContainer" align=3D"center" valign=3D"top"><div data-block-id=3D"9=
+" class=3D"mceText" id=3D"dataBlockId-9" style=3D"display:inline-block;widt=
+h:100%"><p><span style=3D"font-size: 12px">Massachusetts Institute of Techn=
+ology<br>77 Massachusetts Avenue Cambridge, MA 02139</span></p><p class=3D"=
+last-child"><span style=3D"font-size: 12px">Want to change how you receive =
+these emails?<br>You can </span><a href=3D"https://mit.us16.list-manage.com=
+/profile?u=3D88f983a0e3c2a43fb2a2eabd0&amp;id=3Da775644372&amp;e=3Dd43a4cfd=
+44&amp;c=3D02d55bfff6"><span style=3D"font-size: 12px">update your preferen=
+ces</span></a><span style=3D"font-size: 12px"> or </span><a href=3D"https:/=
+/mit.us16.list-manage.com/unsubscribe?u=3D88f983a0e3c2a43fb2a2eabd0&amp;id=
+=3Da775644372&amp;e=3Dd43a4cfd44&amp;c=3D02d55bfff6"><span style=3D"font-si=
+ze: 12px">unsubscribe from this list</span></a><span style=3D"font-size: 12=
+px">.</span><br>&nbsp;</p></div></td></tr><tr><td class=3D"mceLayoutContain=
+er" align=3D"center" valign=3D"top"><table align=3D"center" border=3D"0" ce=
+llpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation" data=
+-block-id=3D"-2"><tbody><tr class=3D"mceRow"><td style=3D"background-positi=
+on:center;background-repeat:no-repeat;background-size:cover;padding-top:0px=
+;padding-bottom:0px" valign=3D"top"><table border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"24" width=3D"100%" role=3D"presentation"><tbody></tbody></tab=
+le></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></=
+table></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody=
+></table></td></tr></tbody></table></td></tr></tbody></table><!--[if (gte m=
+so 9)|(IE)]></td></tr></table><![endif]--></td></tr></tbody></table>
+</td>
+</tr>
+</tbody></table>
+</center>
+<img src=3D"https://mit.us16.list-manage.com/track/open.php?u=3D88f983a0e3c=
+2a43fb2a2eabd0&amp;id=3D02d55bfff6&amp;e=3Dd43a4cfd44" height=3D"1" width=
+=3D"1" alt=3D""></body></html>=
+
+--_----------=_MCPart_1302163273--

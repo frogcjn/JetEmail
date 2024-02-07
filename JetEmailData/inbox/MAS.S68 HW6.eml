@@ -1,0 +1,520 @@
+Received: from DM5PR01MB2489.prod.exchangelabs.com (2603:10b6:3:45::15) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Thu, 16 Mar 2023 04:01:53
+ +0000
+Received: from BN7PR06CA0058.namprd06.prod.outlook.com (2603:10b6:408:34::35)
+ by DM5PR01MB2489.prod.exchangelabs.com (2603:10b6:3:45::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.26; Thu, 16 Mar 2023 04:01:52 +0000
+Received: from BL02EPF000100D2.namprd05.prod.outlook.com
+ (2603:10b6:408:34:cafe::a4) by BN7PR06CA0058.outlook.office365.com
+ (2603:10b6:408:34::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.30 via Frontend
+ Transport; Thu, 16 Mar 2023 04:01:52 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.113)
+ smtp.mailfrom=mail75.suw231.rsgsv.net; dkim=fail (body hash did not verify)
+ header.d=mit.edu;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of mail75.suw231.rsgsv.net
+ does not designate 18.9.1.113 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.113;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.113) by
+ BL02EPF000100D2.mail.protection.outlook.com (10.167.241.206) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6178.30 via Frontend Transport; Thu, 16 Mar 2023 04:01:52 +0000
+Received: from oc11exhyb5.exchange.mit.edu (18.9.1.110) by
+ oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.47; Thu, 16 Mar 2023 00:01:46 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.177)
+ by oc11exhyb5.exchange.mit.edu (18.9.1.110) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.47 via Frontend Transport; Thu, 16 Mar 2023 00:01:45 -0400
+Received: from MW4PR04CA0227.namprd04.prod.outlook.com (2603:10b6:303:87::22)
+ by BY3PR01MB6596.prod.exchangelabs.com (2603:10b6:a03:361::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.26; Thu, 16 Mar 2023 04:01:43 +0000
+Received: from CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:87:cafe::1) by MW4PR04CA0227.outlook.office365.com
+ (2603:10b6:303:87::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29 via Frontend
+ Transport; Thu, 16 Mar 2023 04:01:43 +0000
+Authentication-Results-Original: spf=pass (sender IP is 198.2.174.75)
+ smtp.mailfrom=mail75.suw231.rsgsv.net; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mail75.suw231.rsgsv.net
+ designates 198.2.174.75 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.2.174.75; helo=mail75.suw231.rsgsv.net; pr=C
+Received: from mail75.suw231.rsgsv.net (198.2.174.75) by
+ CO1NAM11FT045.mail.protection.outlook.com (10.13.175.181) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6199.16 via Frontend Transport; Thu, 16 Mar 2023 04:01:43 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=k3;
+	t=1678939256; x=1678996856; i=jkabbara@mit.edu;
+	bh=Mizq/260MjWEIxv3bnA4kKYsQ1Xe7FTGR6WHYmxYJAg=;
+	h=Subject:From:Reply-To:To:Date:Message-ID:X-MC-User:Feedback-ID:
+	 List-ID:List-Unsubscribe:List-Unsubscribe-Post:Content-Type:
+	 MIME-Version:CC:Date:Subject:From;
+	b=T1Py5dvOaVEbk2ubDI8OgzB8hwAMmZqHP6K3Py+NNCwYjd31xbFHfg0ySVZItpBqT
+	 gqEFR+ikiLCfkTL2xajySG2Pm/g6hgOHsXQ/T7zj5c92oVOmfoGQmpLSn67uRq65/0
+	 J1cR+Ztpr7Q232PmAieSfJDirYUrXwN7cOngiG+NKjdEtzoruVkmGHV7RXOQSVkqtQ
+	 eqNAe+8mE6CE9vi6G3rhCEwDuKbnq8N5XAW5YrXLsnoSAipcsCLHfVIQEfSRa7oh0K
+	 4BEvPYtL2EnzzNe2xCJ4RN7zeq+rr/ru4WeNVfZxYTXZyrP67qNXL/mbRE2OLK608g
+	 uAc5Yl0FLeKlw==
+Received: from localhost (localhost [127.0.0.1])
+	by mail75.suw231.rsgsv.net (Mailchimp) with ESMTP id 4PcYTN6028zKswNnC
+	for <jiannan@mit.edu>; Thu, 16 Mar 2023 04:00:56 +0000 (GMT)
+Subject: =?utf-8?Q?MAS.S68=20HW6?=
+From: =?utf-8?Q?Jad=20Kabbara?= <jkabbara@mit.edu>
+Reply-To: =?utf-8?Q?Jad=20Kabbara?= <jkabbara@mit.edu>
+To: <jiannan@mit.edu>
+Date: Thu, 16 Mar 2023 04:00:54 +0000
+Message-ID: <0b56e043e266fd7919d5c0091.cd7f9efabf.20230316040050.129a46a978.0734babf@mail75.suw231.rsgsv.net>
+X-Mailer: Mailchimp Mailer - **CID129a46a978cd7f9efabf**
+X-Campaign: mailchimp0b56e043e266fd7919d5c0091.129a46a978
+X-campaignid: mailchimp0b56e043e266fd7919d5c0091.129a46a978
+X-Report-Abuse: Please report abuse for this campaign here: https://mailchimp.com/contact/abuse/?u=0b56e043e266fd7919d5c0091&id=129a46a978&e=cd7f9efabf
+X-MC-User: 0b56e043e266fd7919d5c0091
+Feedback-ID: 187502110:187502110.13854522:us17:mc
+List-ID: 0b56e043e266fd7919d5c0091mc list <0b56e043e266fd7919d5c0091.1360730.list-id.mcsv.net>
+X-Accounttype: pd
+List-Unsubscribe: <https://mit.us17.list-manage.com/unsubscribe?u=0b56e043e266fd7919d5c0091&id=11ecc6afd3&e=cd7f9efabf&c=129a46a978>,
+ <mailto:unsubscribe-mc.us17_0b56e043e266fd7919d5c0091.129a46a978-cd7f9efabf@unsubscribe.mailchimpapp.net?subject=unsubscribe>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Content-Type: multipart/alternative; boundary="_----------=_MCPart_508186437"
+Return-Path:
+ bounce-mc.us17_187502110.13854522-cd7f9efabf@mail75.suw231.rsgsv.net
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CO1NAM11FT045:EE_|BY3PR01MB6596:EE_|BL02EPF000100D2:EE_|DM5PR01MB2489:EE_
+X-MS-Office365-Filtering-Correlation-Id: baf97065-323b-4302-dec0-08db25d32ce1
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?BwaPAGmsRvpQQ0eN3wW63+OPZ8nNHiW93eJGuiDzt+V4aDBYGf0qyJr7Q2Fx?=
+ =?us-ascii?Q?BAlYA4nRqw+m74LR93zR5xjta1lxc2F/UHwBV2pFM28M9dGQV0qfze7Q4/nF?=
+ =?us-ascii?Q?ETeWOZkaFlLcLhmcDHAI7ByyKfhyc7t50TLhLYNKqj8cJCvxYVAnwH8syKFu?=
+ =?us-ascii?Q?UbDfGv316BqoBI5Xn3dbM1nQUsW5RYlPvqhciQ2qsekKhidoh+LQOhbb/IC8?=
+ =?us-ascii?Q?EjfhcklSasMXbaTGIqBXkmwsZFych2GSSVConl6VhiMfSTf1DPbmdvTJTHju?=
+ =?us-ascii?Q?gMX1y4Qr4J6Q2vQGU+TSgn+RMD4Jly9W1GSVEiwJJl82Muo68rA104vwUc2+?=
+ =?us-ascii?Q?zzac4U+L1hLlkpYuvER5EfiZNqOf+xen6D7m8Wg9VLtxb8Cd1WETZiqHmX5a?=
+ =?us-ascii?Q?Ru5J+sOyiKSJSN8J7ffUBjuapgXnErTFWN2XZweAnWlQsmyIk9NV8ngErl0D?=
+ =?us-ascii?Q?hMwoQE6jCFRpFTq5uTVIwkuRT7//UgOf+jIbP6zbgvzNxJztJDZfSNL7dmO3?=
+ =?us-ascii?Q?0Q8z/Y5ULHD9PnLvKedtD65FSgoVOuFHtxOjb/SA+X4XoPTOWmtfhJiyrDQz?=
+ =?us-ascii?Q?+Wc3z6LifEg/hxvdar/V59iwyZS4oiKp1I6z0NzrwgYfwqsctF9cZ+xxJO6L?=
+ =?us-ascii?Q?Vnw4jSnjbkIKK0nagUclckd0x8iH8LT9MHkHf7PpXJ9VxBt4pmz0fDSofqXI?=
+ =?us-ascii?Q?Zxf814TdHaZTzF8RBTW6qpzTjWCT5EkfmgxwipBMkubyPCrppQbhbRAR8fzl?=
+ =?us-ascii?Q?og2RmWtqV4XGxqlX+d9I+H7dMalfyZaT10ZcgplWVx6ESi75CFEGXdH75w0m?=
+ =?us-ascii?Q?opXgONwGJ8v27S/b/SpPrI8y/Q3eccWZ+VhN8uf6evEL6/5XLpA5N36o6EMw?=
+ =?us-ascii?Q?c4U47h6R93mOaw2qe6BZBxmHezCA436mosHIMkOXfvxzwUHPJlcwk7GcQ8Xt?=
+ =?us-ascii?Q?JozQCkgYTubWiY6w1VkbAIVH5SYF8J3SjR5x8WkRF9j7LnS5SO4MP0H4IJcO?=
+ =?us-ascii?Q?PeKQtPZfGhqsKC9089GjmNiyfrerRiGe5G5cxYsm8S3+IkbYpo3Oz7WUkr4S?=
+ =?us-ascii?Q?Z+EkUeIvzep1/K5ddlNJ63Zb+mcoEJq7a6mY5U4tMtkXzBXqwJjQimUC/46H?=
+ =?us-ascii?Q?g75B2rMmvXpZjfvrU5R3ML2vye6Eq+ByNcc/tkukwHh/xjS2rpbp5qvnuKdD?=
+ =?us-ascii?Q?591gQ++6WkUw7EcF8cQymrnnYstfuatqDXw2S1DJMj001CNKjt8EUZx/yPxF?=
+ =?us-ascii?Q?p1InJJA2+DryP20GEqJ3jevRs3SYKclsOjuTHaS6uhlhTrDL3ANpVGsx1sUf?=
+ =?us-ascii?Q?o/Vb5JC4oZ2dHwp8dpGjgRMZPMwXQvQlAv2LLqZ8NiDpnbLWWGphtzzY17bc?=
+ =?us-ascii?Q?nGN3snM=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:198.2.174.75;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail75.suw231.rsgsv.net;PTR:mail75.suw231.rsgsv.net;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR01MB6596
+X-OrganizationHeadersPreserved: BY3PR01MB6596.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb5.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb5.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb8.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 16 Mar 2023 04:01:52.4384
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ baf97065-323b-4302-dec0-08db25d32ce1
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: BL02EPF000100D2.namprd05.prod.outlook.com
+X-CrossPremisesHeadersFiltered: BL02EPF000100D2.namprd05.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ BL02EPF000100D2.namprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ f55535a8-8f8a-4946-6e99-08db25d327a0
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.113;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb8.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 04:01:52.3446
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: baf97065-323b-4302-dec0-08db25d32ce1
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.113];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR01MB2489
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.3289100
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6178.026
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?US9LYzVVSUhYZ1c1dUQwMFkwQVo4Zjc5Rit0Z25uQW9MN3N0VVQ3Y3pEOXNF?=
+ =?utf-8?B?ZXA0SXAvUXQ4SlROUHFzbWhKUFVqd1hBWkZRWVhqbHk5SFJhbTErZ3dYam5K?=
+ =?utf-8?B?THRLM0ZRZVpMa1k2WXdUUG9RUWxpZlhWVnBUbFFkZk5oRjVKZ0UwQVVKellm?=
+ =?utf-8?B?Y2FlV0JZZzhMK2hyL1FlemJVT0tKazVLSEY5S1ZyenVDcVJyUEJSNmtNU29r?=
+ =?utf-8?B?N0ZQbXZPcGI5cHBZRFVNOGlxVFlwSS9ta0ljaTUyaXNPTDhXMFFRMmpsLzg5?=
+ =?utf-8?B?d3NwbzJMOW1iazZLMy9YcTVSdXNBaEp5cXMwd0NzM3VyWUVoQmNqTDlsVWVa?=
+ =?utf-8?B?OHhIdURZNHBBeTk0TDBGNXlHOHgvU29ZWFFWTFg5YmJyRnZlU3Y1RFExZzdl?=
+ =?utf-8?B?d0Ewa0cxNDlEZ0swR1FUUUIwVld1RFRXSjNoN0w4bjdEWjNQN2tsSm9qRVI1?=
+ =?utf-8?B?cmdkbjZDWlZPemoxUGprYzJMTHloSHFIaFluUGNzRXU2dHQxaURvMitpbzF1?=
+ =?utf-8?B?WE15S2xDakR3eXFUY3laUEJMZit4Y2Rxa1lCbDNDSHFRWUNIbU9ZWUw0UXo5?=
+ =?utf-8?B?OEtITWRubHJvbWs3cEl3VlZUWWlvWHk3TXRyVkRvK29kTkRBY0NsdnZZSGhs?=
+ =?utf-8?B?bTZqNTFub0xUTm1ucjJqZUVZU2xtSENaeWp0cUhLTGdiTklnNE85cUZlRUFZ?=
+ =?utf-8?B?cXdWdld6YTQzR09YbXZuMmdXT25CWHlyS294dlBPRFdRNDhMZ3V2NnV2OEtJ?=
+ =?utf-8?B?T0VsQm1qVnFIdTAyVTN3RXEwVW1oanJGY0FTQm8yMjJFcHFmZ0owTUdEUzNk?=
+ =?utf-8?B?bkp3YXJOYzRYQk1GaWg0end4RWp5bmxwYWZtMTVhcUtTK3pVUGI1VHNMTks3?=
+ =?utf-8?B?dnpSTXFlc0oxQVpjVFBzWjhoQTFXdU9WNjcxcllaUGgxZVUrdGdOdE01NklW?=
+ =?utf-8?B?SVp2eFp2K0E2SklDUUdBbGxaMnA2MWJvU2MybEtmYXVVOXJlTFlCd2VMc0hx?=
+ =?utf-8?B?b0xEbzBtV0lORnF3b3RtbDgxYXQwWS9zRnZQSmVjdG0vSjExQnJUVlU1ODJ3?=
+ =?utf-8?B?dDczS0N2Umxna2VYVlVHdGtiWHJQQUlaemo0Q0swYmhXTzd3bEd0c29wZndE?=
+ =?utf-8?B?VEFGeStadERaeHNYSDVtRUdUZDlKZ3VVVkx1MisveXI2enFEOXlkSjZRWi80?=
+ =?utf-8?B?NEZmdldUcUtJMUtyZHBrL1RkZmhqZEMyVlZVMVVCVlU0eC9QRk9nd3p4YzQy?=
+ =?utf-8?B?R0ZjWFU5emIzV0NDTVZaWVRtT0UvaytmcTFtYUYrQzgwbVl2VVZOaXVldDBD?=
+ =?utf-8?B?eHozdlJJZG9ja2NKMUlibUZDWi9UYlVGRmE1SjZ1cW9WVGxKYlJLQVQ0d1VQ?=
+ =?utf-8?B?L2Y0MzBiYmllZXRGZk5oY3ZUNEJxWjNYMmFhMHNTTmxYeE9va1dPS2d6N1pD?=
+ =?utf-8?B?YmY2UlN6R0JBZnBIcThjeW9EamQrT1laVHpKSUNic0JjTlBka3JTVkJHb2xx?=
+ =?utf-8?B?M2IyTFdhaTFIVmFVVHp1ODJIaVd0a2xwcXByS0liMDBkd1QzTnhCeTBrYTZI?=
+ =?utf-8?B?ekszTTNiY2hWQzZ6MnhYRHQ3MU9xOTRUZ0EycWFmZjdYbnAzUzNVcVNDeDFO?=
+ =?utf-8?B?T25jS3phM01LamRWMTJLa0dRWDhEQ29Bd25IS3oydWUxSGV1STZTNDNwRGlX?=
+ =?utf-8?B?bmxkVGRZeG5JVS9hZzNVejNmbU5rYjBLVUJBS1BPSXI4TGMzc0phUDA2SHEz?=
+ =?utf-8?B?Q1dlanpyVzFFOFdZWHlEQkFnVDNwRHE4R1E1YWVIZmVEdEZxbE1nNUVmbjU5?=
+ =?utf-8?B?ZkcrSEdjNkgxOERPMTVjTFFmNlFlOStoUGdmZlVucXdocHU3Z1N2Zmt2ejVS?=
+ =?utf-8?B?bjR6dkw0ZERvdTVDRTFQVjBUbGdQM0VYcGwxWU5DL1cvRjY5a0hLbm9sWDVG?=
+ =?utf-8?B?SzRqRlBTVFhQL1ErZ084RmtKS3U3djZndWZra1Zrdlk0MVVSaGc3QlI4RU1y?=
+ =?utf-8?B?L2xSREo2blVWUHlNQmpKTGxJTjM4aThBSytLYXFsTVM4TzhRcWZqdzRrckE0?=
+ =?utf-8?B?S1pjdGlneEtKSW45S2dEdE5NSWVjNDR2akh2dXZldGtZb0Z3UVhLSmxhMUlM?=
+ =?utf-8?B?TGZJdm1Ia0hQclM1OWpNSUdJOUhVTVQ2bHQrZU51dVo4V0o5Wk5CMU96cTRS?=
+ =?utf-8?Q?HepbcBpHjbLLzfyMNkAvFbBLJUokOxJPIrXudH6TJt6A?=
+MIME-Version: 1.0
+
+--_----------=_MCPart_508186437
+Content-Type: text/plain; charset="utf-8"; format="fixed"
+Content-Transfer-Encoding: quoted-printable
+
+HW6
+
+Due: Monday March 20 at 7 pm
+
+10 points
+
+
+
+Task 1
+
+3 points
+
+
+
+Read Human Heuristics for AI-Generated Language Are Flawed<https://arxiv.o=
+rg/abs/2206.07271> and AI-Mediated Communication: How the Perception that=
+ Profile Text was Written by AI Affects Trustworthiness<https://dl.acm.org=
+/doi/10.1145/3290605.3300469>
+
+
+
+Submit 2 questions that are related to the paper and which you could ask i=
+n the discussion after Mor Naaman=E2=80=99s<https://mmoorr.github.io/www_p=
+ersonal/> talk.
+
+
+
+Task 2
+
+7 points
+
+
+
+In this homework=2C you explore using ChatGPT as a tool for representing v=
+arious=2C sometimes opposing=2C communities of belief.
+
+
+  1.  Write a short snippet of text that has an underlying political messa=
+ge (1-2 sentences). This could be about something of broad concern to vari=
+ous groups (access to education=2C inflation and rising prices=2C housing=
+ expenses=2C etc) or something more contentious such as gun reforms. These=
+ examples might sound US-centric but feel free to choose topics that are a=
+lso relevant to your country of origin or your interests.
+  2.  With that text in mind=2C think about two opposing groups/views that=
+ could talk about the same content and prompt ChatGPT to rewrite the text=
+ in a language that would appeal to each of the two groups. For example=2C=
+ you can ask ChatGPT to rewrite the text in a liberal/conservative soundin=
+g way=2C or in a way that appeals to Democrats/Republicans or any two (pot=
+entially) opposing groups/views that would be related to the scenario you=
+ envisioned in Question 1. Present the two modified versions here.
+  3.   What observations do you have here? Did ChatGPT alter the text in a=
+ way that does seem to appeal to the concerned groups/views? Or do you bel=
+ieve it did a poor job? Please comment briefly on why you believe it did a=
+ good or bad job.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Unsubscribe jiannan@mit.edu from this list:
+https://mit.us17.list-manage.com/unsubscribe?u=3D0b56e043e266fd7919d5c0091=
+&id=3D11ecc6afd3&e=3Dcd7f9efabf&c=3D129a46a978
+--_----------=_MCPart_508186437
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+</head>
+<body style=3D"overflow-wrap: break-word; -webkit-nbsp-mode: space; line-br=
+eak: after-white-space;">
+<span id=3D"docs-internal-guid-35333768-7fff-7f38-3d8f-dbc789f0105b">
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 20pt; margin-bottom: 6pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">HW6</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">Due:
+ Monday March 20 at 7 pm</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">10
+ points</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">&nbsp;</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 18pt; margin-bottom: 6pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">Task
+ 1</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">3
+ points</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">&nbsp;</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">Read
+</span><a href=3D"https://mit.us17.list-manage.com/track/click?u=3D0b56e043=
+e266fd7919d5c0091&amp;id=3Db687185f0b&amp;e=3Dcd7f9efabf" style=3D"text-dec=
+oration: none;"><span style=3D"font-size: 12pt; font-family: Arial; color: =
+rgb(17, 85, 204); font-variant-ligatures: normal; font-variant-numeric: nor=
+mal; font-variant-alternates: normal; font-variant-east-asian: normal; font=
+-variant-position: normal; text-decoration: underline; text-decoration-skip=
+-ink: none; vertical-align: baseline; white-space: pre-wrap;">Human
+ Heuristics for AI-Generated Language Are Flawed</span></a><span style=3D"f=
+ont-size: 12pt; font-family: Arial; font-variant-ligatures: normal; font-va=
+riant-numeric: normal; font-variant-alternates: normal; font-variant-east-a=
+sian: normal; font-variant-position: normal; vertical-align: baseline; whit=
+e-space: pre-wrap;">
+ and </span><a href=3D"https://mit.us17.list-manage.com/track/click?u=3D0b5=
+6e043e266fd7919d5c0091&amp;id=3D2040bbd2b8&amp;e=3Dcd7f9efabf" style=3D"tex=
+t-decoration: none;"><span style=3D"font-size: 12pt; font-family: Arial; co=
+lor: rgb(17, 85, 204); font-variant-ligatures: normal; font-variant-numeric=
+: normal; font-variant-alternates: normal; font-variant-east-asian: normal;=
+ font-variant-position: normal; text-decoration: underline; text-decoration=
+-skip-ink: none; vertical-align: baseline; white-space: pre-wrap;">AI-Media=
+ted
+ Communication: How the Perception that Profile Text was Written by AI Affe=
+cts Trustworthiness</span></a></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">&nbsp;</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">Submit
+ 2 questions that are related to the paper and which you could ask in the d=
+iscussion after
+</span><a href=3D"https://mit.us17.list-manage.com/track/click?u=3D0b56e043=
+e266fd7919d5c0091&amp;id=3D12fdf86457&amp;e=3Dcd7f9efabf" style=3D"text-dec=
+oration: none;"><span style=3D"font-size: 12pt; font-family: Arial; color: =
+rgb(17, 85, 204); font-variant-ligatures: normal; font-variant-numeric: nor=
+mal; font-variant-alternates: normal; font-variant-east-asian: normal; font=
+-variant-position: normal; text-decoration: underline; text-decoration-skip=
+-ink: none; vertical-align: baseline; white-space: pre-wrap;">Mor
+ Naaman=E2=80=99s</span></a><span style=3D"font-size: 12pt; font-family: Ar=
+ial; font-variant-ligatures: normal; font-variant-numeric: normal; font-var=
+iant-alternates: normal; font-variant-east-asian: normal; font-variant-posi=
+tion: normal; vertical-align: baseline; white-space: pre-wrap;">
+ talk.</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">&nbsp;</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 18pt; margin-bottom: 6pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">Task
+ 2</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">7
+ points</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">&nbsp;</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 12pt; font-family: Arial; font-variant-ligatures:=
+ normal; font-variant-numeric: normal; font-variant-alternates: normal; fon=
+t-variant-east-asian: normal; font-variant-position: normal; vertical-align=
+: baseline; white-space: pre-wrap;">In
+ this homework, you explore using ChatGPT as a tool for representing variou=
+s, sometimes opposing, communities of belief.</span></p>
+<p dir=3D"ltr" style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); lin=
+e-height: 1.38; margin-top: 0pt; margin-bottom: 0pt;">
+<span style=3D"font-size: 11pt; white-space: pre-wrap; font-family: Arial;"=
+><br>
+</span></p>
+<p dir=3D"ltr" style=3D"line-height: 1.38; margin-top: 0pt; margin-bottom: =
+0pt;"></p>
+<ol class=3D"MailOutline">
+<li style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0);"><span style=
+=3D"font-family: Arial; font-size: 11pt; white-space: pre-wrap;">Write a sh=
+ort snippet of text that has an underlying political message (1-2 sentences=
+). This could be about something of broad
+ concern to various groups (access to education, inflation and rising price=
+s, housing expenses, etc) or something more contentious such as gun reforms=
+. These examples might sound US-centric but feel free to choose topics that=
+ are also relevant to your country
+ of origin or your interests.</span></li><li><span style=3D"caret-color: rg=
+b(0, 0, 0); color: rgb(0, 0, 0); font-family: Arial; font-size: 11pt; font-=
+variant-ligatures: normal; font-variant-numeric: normal; font-variant-alter=
+nates: normal; font-variant-east-asian: normal; font-variant-position: norm=
+al; vertical-align: baseline; white-space: pre-wrap;">With
+ that text in mind, think about two opposing groups/views that could talk a=
+bout the same content and prompt ChatGPT to rewrite the text in a language =
+that would appeal to
+</span><span style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-=
+family: Arial; font-size: 11pt; font-variant-ligatures: normal; font-varian=
+t-numeric: normal; font-variant-alternates: normal; font-variant-east-asian=
+: normal; font-variant-position: normal; text-decoration: underline; text-d=
+ecoration-skip-ink: none; vertical-align: baseline; white-space: pre-wrap;"=
+>each</span><span style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); =
+font-family: Arial; font-size: 11pt; font-variant-ligatures: normal; font-v=
+ariant-numeric: normal; font-variant-alternates: normal; font-variant-east-=
+asian: normal; font-variant-position: normal; vertical-align: baseline; whi=
+te-space: pre-wrap;">
+ of the two groups. For example, you can ask ChatGPT to rewrite the text in=
+ a liberal/conservative sounding way, or in a way that appeals to Democrats=
+/Republicans or any two (potentially) opposing groups/views that would be r=
+elated to the scenario you envisioned
+ in Question 1. Present the two modified versions here.</span></li><li><spa=
+n style=3D"caret-color: rgb(0, 0, 0); color: rgb(0, 0, 0); font-size: 7pt; =
+font-family: &quot;Times New Roman&quot;; font-variant-ligatures: normal; f=
+ont-variant-numeric: normal; font-variant-alternates: normal; font-variant-=
+east-asian: normal; font-variant-position: normal; vertical-align: baseline=
+; white-space: pre-wrap;">&nbsp;</span><span style=3D"caret-color: rgb(0, 0=
+, 0); color: rgb(0, 0, 0); font-size: 11pt; font-family: Arial; font-varian=
+t-ligatures: normal; font-variant-numeric: normal; font-variant-alternates:=
+ normal; font-variant-east-asian: normal; font-variant-position: normal; ve=
+rtical-align: baseline; white-space: pre-wrap;">What
+ observations do you have here? Did ChatGPT alter the text in a way that do=
+es seem to appeal to the concerned groups/views? Or do you believe it did a=
+ poor job? Please comment briefly on why you believe it did a good or bad j=
+ob.</span></li></ol>
+<p></p>
+</span>
+            <center>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" wid=
+th=3D"100%" id=3D"canspamBarWrapper" style=3D"background-color:#FFFFFF; bor=
+der-top:1px solid #E5E5E5;">
+                    <tr>
+                        <td align=3D"center" valign=3D"top" style=3D"paddin=
+g-top:20px; padding-bottom:20px;">
+                            <table border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" id=3D"canspamBar">
+                                <tr>
+                                    <td align=3D"center" valign=3D"top" sty=
+le=3D"color:#606060; font-family:Helvetica, Arial, sans-serif; font-size:11=
+px; line-height:150%; padding-right:20px; padding-bottom:5px; padding-left:=
+20px; text-align:center;">
+                                        This email was sent to <a href=3D"m=
+ailto:jiannan@mit.edu" target=3D"_blank" style=3D"color:#404040 !important;=
+">jiannan@mit.edu</a>
+                                        <br>
+                                        <a href=3D"https://mit.us17.list-ma=
+nage.com/about?u=3D0b56e043e266fd7919d5c0091&amp;id=3D11ecc6afd3&amp;e=3Dcd=
+7f9efabf&amp;c=3D129a46a978" target=3D"_blank" style=3D"color:#404040 !impo=
+rtant;"><em>why did I get this?</em></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=3D"=
+https://mit.us17.list-manage.com/unsubscribe?u=3D0b56e043e266fd7919d5c0091&=
+amp;id=3D11ecc6afd3&amp;e=3Dcd7f9efabf&amp;c=3D129a46a978" style=3D"color:#=
+404040 !important;">unsubscribe from this list</a>&nbsp;&nbsp;&nbsp;&nbsp;<=
+a href=3D"https://mit.us17.list-manage.com/profile?u=3D0b56e043e266fd7919d5=
+c0091&amp;id=3D11ecc6afd3&amp;e=3Dcd7f9efabf&amp;c=3D129a46a978" style=3D"c=
+olor:#404040 !important;">update subscription preferences</a>
+                                        <br>
+                                        MIT Center for Constructive Communi=
+cation =C2=B7 75 Amherst St =C2=B7 Cambridge, MA, MA 02139 =C2=B7 USA
+                                        <br>
+                                        <br>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <style type=3D"text/css">
+                    @media only screen and (max-width: 480px){
+                        table#canspamBar td{font-size:14px !important;}
+                        table#canspamBar td a{display:block !important; mar=
+gin-top:10px !important;}
+                    }
+                </style>
+            </center><img src=3D"https://mit.us17.list-manage.com/track/ope=
+n.php?u=3D0b56e043e266fd7919d5c0091&amp;id=3D129a46a978&amp;e=3Dcd7f9efabf"=
+ height=3D"1" width=3D"1" alt=3D""></body>
+</html>=
+
+--_----------=_MCPart_508186437--

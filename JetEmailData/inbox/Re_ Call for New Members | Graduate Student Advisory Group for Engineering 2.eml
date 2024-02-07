@@ -1,0 +1,463 @@
+Received: from SA0PR01MB6409.prod.exchangelabs.com (2603:10b6:806:e3::9) by
+ BL3PR01MB7132.prod.exchangelabs.com with HTTPS; Wed, 13 Dec 2023 21:45:12
+ +0000
+Received: from BL1PR13CA0208.namprd13.prod.outlook.com (2603:10b6:208:2be::33)
+ by SA0PR01MB6409.prod.exchangelabs.com (2603:10b6:806:e3::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.26; Wed, 13 Dec 2023 21:45:10 +0000
+Received: from BL6PEPF0001AB71.namprd02.prod.outlook.com
+ (2603:10b6:208:2be:cafe::48) by BL1PR13CA0208.outlook.office365.com
+ (2603:10b6:208:2be::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26 via Frontend
+ Transport; Wed, 13 Dec 2023 21:45:10 +0000
+Authentication-Results: spf=pass (sender IP is 18.7.21.50)
+ smtp.mailfrom=mit.edu; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.7.21.50 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.7.21.50; helo=mailman.mit.edu; pr=C
+Received: from mailman.mit.edu (18.7.21.50) by
+ BL6PEPF0001AB71.mail.protection.outlook.com (10.167.242.164) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.18 via Frontend Transport; Wed, 13 Dec 2023 21:45:09 +0000
+Received: from mailman.mit.edu (localhost [127.0.0.1])
+	by mailman.mit.edu (8.15.2/8.12.8) with ESMTP id 3BDLilZK3363705;
+	Wed, 13 Dec 2023 16:45:09 -0500
+DKIM-Filter: OpenDKIM Filter v2.11.0 unknown-host (unknown-jobid)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=mailman;
+	t=1702503909; bh=Q39d2rlzJdy6xmD/Lq1h8jFc/N04Ycy3JCv0AOlTuf0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:Reply-To:Content-Type:
+	 From;
+	b=CRlZLdXdjXtbosy4uymF7GUkfqLp6tQMzgUa0TKDs5mLUGQyNVQ1VZcWzW6xUEgmc
+	 tdGKb17lR9SpXitHZFLtlxgHsAbeG7ocg+kR727olBObUyM0qL/S93Q+bT7p/H/GI4
+	 wHgpG9mf2Ht+JF70D5Hzk517kCnTp9+v4cULHZEIj9I9xdrBw04ClT5nOWMsQYBzQN
+	 DzCAcOyefQKkF5AJX0MWNsFd1dXNvniXQTiQgMxKxMiHYxEBZMZqme8KLnvwzJTCfE
+	 EULNsEuQ/jUZWWyvQWBjEXE/+vcMLMTSn+hgj38hkWFg5RUVJyI4VKXTsT/+pS9+0M
+	 cIZD7cthVn3Cw==
+Received: from outgoing-exchange-3.mit.edu (OUTGOING-EXCHANGE-3.MIT.EDU
+ [18.9.28.13])
+ by mailman.mit.edu (8.15.2/8.12.8) with ESMTPS id 3BDLdcGB3362896
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <soe_graduatestudents@MAILMAN.MIT.EDU>; Wed, 13 Dec 2023 16:39:38 -0500
+DKIM-Filter: OpenDKIM Filter v2.11.0 unknown-host (unknown-jobid)
+Authentication-Results-Original: mailman.mit.edu; dkim=pass (2048-bit key,
+ unprotected) header.d=mit.edu header.i=@mit.edu header.a=rsa-sha256
+ header.s=outgoing header.b=KZMa5CV7
+Received: from oc11exedge1.exchange.mit.edu (OC11EXEDGE1.EXCHANGE.MIT.EDU
+ [18.9.3.17])
+ by outgoing-exchange-3.mit.edu (8.14.7/8.12.4) with ESMTP id 3BDLdJYk026851
+ for <soe_graduatestudents@PCH.MIT.EDU>; Wed, 13 Dec 2023 16:39:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+ t=1702503577; bh=ga5XBsLrMUOUA76RP2nfKEMlde3+XozNoAPPNzUigCM=;
+ h=Content-Type:Message-ID:Date:MIME-Version:Reply-To:Subject:From;
+ b=KZMa5CV7zSW/J8krMzjtMe3JheV6jFx4YGSq6VxOc+jSLdpNvzIigumQ+GeH7UwMN
+ C1vZTfUBae21uEhMoUH5jgm8oCuh+qRJZrq8YsyJ6BZ8cJomxtQGeWsP21M5Rh6v6V
+ Ob4WM+/N7O/UUqouSkj9W29UkolT1EYHcdlJb2EKMNEJpAqG4PMXbRjuON6fknGSX7
+ Qmegr9s+szzWQymS9S6/2nujj1rNq5PTHh4FOOYBDw56OXXXxAc/zLm4iSbvWoDbw1
+ L7abUvFwKOL3wjaH80Isri0W6YMTZFDcMhxBy88UTsCTwUsMPkNGAiD2uSkUmrc/b2
+ 1fYlNwZWcv3kg==
+Received: from w92exhyb3.exchange.mit.edu (18.7.71.73) by
+ oc11exedge1.exchange.mit.edu (18.9.3.17) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 13 Dec 2023 16:38:56 -0500
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ w92exhyb3.exchange.mit.edu (18.7.71.73) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 13 Dec 2023 16:39:28 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Wed, 13 Dec 2023 16:39:28 -0500
+Received: from CH0P223CA0009.NAMP223.PROD.OUTLOOK.COM (2603:10b6:610:116::35)
+ by SJ2PR01MB7900.prod.exchangelabs.com (2603:10b6:a03:4c9::15) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.28; Wed, 13 Dec 2023 21:39:25 +0000
+Received: from CO1PEPF000044FD.namprd21.prod.outlook.com
+ (2603:10b6:610:116:cafe::cf) by CH0P223CA0009.outlook.office365.com
+ (2603:10b6:610:116::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26 via Frontend
+ Transport; Wed, 13 Dec 2023 21:39:25 +0000
+Authentication-Results-Original: spf=pass (sender IP is 18.9.28.11)
+ smtp.mailfrom=mit.edu; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.9.28.11 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.9.28.11; helo=outgoing.mit.edu; pr=C
+Received: from outgoing.mit.edu (18.9.28.11) by
+ CO1PEPF000044FD.mail.protection.outlook.com (10.167.241.203) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7113.8 via Frontend Transport; Wed, 13 Dec 2023 21:39:24 +0000
+Received: from [192.168.1.161] (pool-96-252-6-243.bstnma.fios.verizon.net
+ [96.252.6.243]) (authenticated bits=0)
+ (User authenticated as zgoodale@ATHENA.MIT.EDU)
+ by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3BDLdCma015992
+ (version=TLSv1/SSLv3 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+ Wed, 13 Dec 2023 16:39:23 -0500
+Message-ID: <e99ae557-79e1-4877-8ad1-3894e080200b@mit.edu>
+Date: Wed, 13 Dec 2023 16:39:12 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: Call for New Members | Graduate Student Advisory Group for
+ Engineering
+Content-Language: en-US
+To: <soe_graduatestudents@mit.edu>
+CC: <tgiurleo@mit.edu>, <mcyang@mit.edu>, <kstew@mit.edu>
+References: <054afa6f-8723-4bbd-9c4e-f3ba4b2c465a@mit.edu>
+From: "Anantha P. Chandrakasan" <anantha@mit.edu>
+In-Reply-To: <054afa6f-8723-4bbd-9c4e-f3ba4b2c465a@mit.edu>
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CO1PEPF000044FD:EE_|SJ2PR01MB7900:EE_|BL6PEPF0001AB71:EE_|SA0PR01MB6409:EE_|BL3PR01MB7132:EE_
+X-MS-Office365-Filtering-Correlation-Id: ee2aeb57-5dfe-499e-a164-08dbfc24c790
+X-LD-Processed: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b,ExtAddr
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ lks24dOOqVz71be8htelReFc4AoB/ZDy794PHFGfz2JAL546il74+JkOdgrhxmTgpWDHZVXKZjpftQwEkkjaSNKWmkMc23biBDd6sbfZ7hq1KAgydKth58VZFwPyk8kEMOpHGGJP0buiuX3uLZqvPw4OHaaAWsKJOCGhcjOW0El6xfAadFGgb9wayZgbkt39xbJJK2hTO2wDDcrPng33lU/HJVM5u00iV9evk5rw3e3dXE7fZdv6okrU2V0Dtg1qLdBk1YUH/7vIWtYCYeZLf6Q5C+4X3dJmfTxiNKLN7pSMC4AWTfBkFcP0HykypK+KizFr//dMWwYwHdFLm8dISt1Y+cKVYQnxbfP9y9Qme77EpWhpbtoHnzi5RGz8cyBqAu7Pg/qRNzjvA7g1B7l4HrXh0aEyZLXlHvSyDR6Q2yJIrVbovSpfoLmSu/JrPb9dXW9ZFvydro2/Ht96KqUiSsWs8ULqyLvhue882riUnyRKosfrUpL/Eg/g+D0b5fI3qsWBTkr3hwfhyGbCksxw2PFUmDCeHC/iMJ1EGy4cJKxozbpM+u9of4UVy7hhjPoaoCJJQ0lgFd/1+De/nS3kkOiqKwdj9cldK8eHpV5WXvSD7WeTJ+yfbjFEheN5tVu7GeUDuTzg6gpXMw/f+aFrP3/Xq/ikbV/dMB0dUBKpKvH8pN1HT76W7BxYn5/41W4lbNoNESiJU5Tlvr54JfKI9S+Eh9MMwSxYX7eUbmLc103/AKFmWO3dOdMVjpal8J24TPajy1M+EsIk5z8nhth+fCjuzI9bppWR1JlOcUjZBRMWLuvk+VDJcumGAT5ZETPYXg82rUA15UbcjmrPQ5Yx/DS07/uVZRYnnVaxTehunbi6R80mWXAT0kZ6Fnh/Yyjl
+X-Forefront-Antispam-Report-Untrusted: CIP:18.9.28.11; CTRY:; LANG:en; SCL:1;
+ SRV:; IPV:CAL; SFV:NSPM; H:outgoing.mit.edu; PTR:outgoing-auth-1.mit.edu;
+ CAT:NONE;
+ SFS:(13230031)(4636009)(396003)(376002)(136003)(39860400002)(346002)(451199024)(1800799012)(64100799003)(75432002)(426003)(26005)(336012)(83380400001)(33964004)(53546011)(2616005)(956004)(7696005)(8676002)(5660300002)(4326008)(34206002)(3450700001)(2906002)(6666004)(478600001)(37006003)(316002)(786003)(6636002)(68406010)(70586007)(36756003)(86362001)(31696002)(166002)(356005)(31686004)(5930299018)(43740500002)(15940465004);
+ DIR:OUT; SFP:1102; 
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR01MB7900
+X-Mailman-Approved-At: Wed, 13 Dec 2023 16:44:47 -0500
+X-BeenThere: soe_graduatestudents@mit.edu
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: MIT Engineering graduate students list <soe_graduatestudents.mit.edu>
+List-Unsubscribe: <https://mailman.mit.edu/mailman/options/soe_graduatestudents>, 
+ <mailto:soe_graduatestudents-request@mit.edu?subject=unsubscribe>
+List-Archive: <https://mailman.mit.edu/mailman/private/soe_graduatestudents/>
+List-Post: <mailto:soe_graduatestudents@mit.edu>
+List-Help: <mailto:soe_graduatestudents-request@mit.edu?subject=help>
+List-Subscribe: <https://mailman.mit.edu/mailman/listinfo/soe_graduatestudents>, 
+ <mailto:soe_graduatestudents-request@mit.edu?subject=subscribe>
+Reply-To: anantha@mit.edu
+Content-Type: multipart/mixed; boundary="===============7357364410170541210=="
+Errors-To: soe_graduatestudents-bounces@mit.edu
+Sender: "SoE_graduatestudents" <soe_graduatestudents-bounces@mit.edu>
+Return-Path: soe_graduatestudents-bounces@mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 13 Dec 2023 21:45:10.0223
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ ee2aeb57-5dfe-499e-a164-08dbfc24c790
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ BL6PEPF0001AB71.namprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL6PEPF0001AB71.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: mitprod.onmicrosoft.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 418958f7-c356-44f3-809a-08dbfc23fa19
+X-MS-Exchange-Organization-SCL: -1
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.21.50;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:mailman.mit.edu;PTR:mailman.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2023 21:45:09.8973
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee2aeb57-5dfe-499e-a164-08dbfc24c790
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.21.50];Helo=[mailman.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource: BL6PEPF0001AB71.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR01MB6409
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.1971888
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7091.028
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?NjV2aVR4SlVaWTQyUGVRdWRqMHFITTBVU1htQitoOVhGSm5uYUlCN0pIdE9U?=
+ =?utf-8?B?azQvNmo2QzYzTFdhb3dCajU0d2FHWVlGZFQwVkM3RkkzQ0NEQUpiU3huK0dJ?=
+ =?utf-8?B?WDN1S0h2SVVSVk90MVlEd2NucHU2Y2pUaC9nSVU0ZjdGc0o3SEpBUGtMMlRJ?=
+ =?utf-8?B?dlpCbGVjbk5yQituSG9nWGRLVnRDZ1VHMUNZM0JwRnRwTmtXcWJ6UGNSbTQw?=
+ =?utf-8?B?ejFiTnZpTGU4MTJWMlZaaHNqQTRtaGp4RUNwTnNwNEVvaUFEVE9wMEFvOHRT?=
+ =?utf-8?B?VjdBQVY1TDVkN1BOcFdXbUNOSmkxb3BZNHlLbmlWM1U2STcwS3pxK21OQTJo?=
+ =?utf-8?B?Zy9Bd2gzeHNQd096VlptYndiQXlKcW96ZGkxQnBsbmNxZmdvQ05NQjNsL0VO?=
+ =?utf-8?B?anpiVHZ6OWlFa08yd2dTdVpFZFM5amNTM1pnWXBiRWxORGI3VVVUbzQvQ3dw?=
+ =?utf-8?B?NURwb21TdmJGemY0UENLV3Z3d293a3czdWxKeDRnbkxjaUpWakxHY1dEVmcz?=
+ =?utf-8?B?UTlLQVg2K2l4c2J3UWNLc3FiWEViYUZJY2xkYitSV0pTclhwMW5Ga1FtZzdD?=
+ =?utf-8?B?STUxQzhscG5kcm52cDFXTFZweXhVOFJVTzJEdUgwUk9QdlNiY3gwaW5HQ0NU?=
+ =?utf-8?B?TUdzMXJ4SWdld2dMcHhSaHZXRzRycHRHSGcwaFRKUkgzN1NwZlRtU3JMeUM4?=
+ =?utf-8?B?RnA2aHZpZ2tXbUF3cDFucSs1b2pLVW9FM2lGVm1hU0dsWTU2dURHM3pRZ3VL?=
+ =?utf-8?B?dXhGUFIxMWw1blkvbVZjS3czc1Q0VWpPNit2U3lvT01XUFdkZTF6aDZCR2tj?=
+ =?utf-8?B?V1pLV0M3RER2aTZJRFBRMWxNdFVxVzRJNGQ1dkJIZEVjRDVseDYyamY4SUlZ?=
+ =?utf-8?B?aXVjWFl5enhHZnl4ZHB1bE1meVlJY2FmSytkOUM3Q0hLQUpvc0xxTFRaUklj?=
+ =?utf-8?B?MGN4Y1RWdDUzV0ZhWEI4RXdLM002Vzg1TkpUVWJmWE1YRkhDUTJINE55V29t?=
+ =?utf-8?B?eDRPUytQL255R29mV0F2MHp5V0t0RlFPTVcrS1FicXoyZk84VSs3RWRUR1ZR?=
+ =?utf-8?B?NnVzd0Evc1ZTdk9HL1l6Y01kSEpsR3ZVekJNcHRRSFpkN2I2ckd6Zjlpc2c1?=
+ =?utf-8?B?ZCtVaWU0ZUlOdDVUbVRFUmV6VThkcGREUiswQVFCeDQ4YmhlOU5ITlpVemVi?=
+ =?utf-8?B?R1Q1N3NzMUJreUlqdDBEMUNXNFZhcThiMGhLdDhYYWhxckttOW1GMEF1cFBu?=
+ =?utf-8?B?Uy9SbmFqbE1VTDFvaHNuUmgvaHl4TUIxRWJhUmpkNUFpRUE3dU1GZFEwUmhl?=
+ =?utf-8?B?eGRMU0hFcUJaT0JRWDJWTlcwSG9SMWpPV3F5dDMxYm16dUpUdVl3N2lKSGVO?=
+ =?utf-8?B?V3JTYXh6aDVSNUtQUkZBVi82SWF1aEtoNnJHNzJyWEdmc0M5UzluQm9uWkg5?=
+ =?utf-8?B?SDdJSlB3cDI5MGphZlJ5N0Y1RmdvRm1nM1hDS0FRQ0dLOHNJdGRUTjNHT2lZ?=
+ =?utf-8?B?UkJjbmREWVEwQ0puOXhidVQwZVREdWlTUDYrV3M2d2VMeGdGdHVDUzhjS2ZL?=
+ =?utf-8?B?VzNBL1NOa3Z2aFJaUDhWN0F4b2JuRk5GNHh0aXg3WGo0bDNCOE5RckpwQVc3?=
+ =?utf-8?B?by93cllZQU9rVUszRW8zajY5TUkrM1BSVkdiWTk2WXNvL2JOQ21lTmJwSVpT?=
+ =?utf-8?B?aGIrbnpBUWE3Wm5LRWlBMzNOYXNEOERIUmdOeWw0UjVKQXQ3dmJmTVpVcTBX?=
+ =?utf-8?B?VjJId0FYTE5ld1V0UkhaKzNtcGc4ZWVDdFZ2REEzYWNoTUtyTmlSWTU0K3k4?=
+ =?utf-8?B?UVlrODNuNVF2OEpONTQzcGRMNlRhcGQzaEhYdWxTSmYvQjNsZkI4M2R2U3Fn?=
+ =?utf-8?B?MWVielFLbFZBdWpmYmVFQW9rdzFQTjJlV2N3Z2syY243c0dCTGRSTEhqQVZD?=
+ =?utf-8?B?Tk9BeFVmVlRBYXB4REtiTHdvMVpUeWp2bVRaMXBGdm8rVTNGUHhYaUFyRHd0?=
+ =?utf-8?B?SEFDTjFyNlJoMFlKWlJNUkx4cmh1NncyOGZEMGJTQzdCeWp3Q0lDbkI3SDVG?=
+ =?utf-8?B?bi9aMS9NNUltbi9ZVVBZOUdZTENWSHc5bWFuZXF0NWF3Z2hkbzhaaWpOWVI1?=
+ =?utf-8?B?ejBwL0wwRWdCZ2puVUJTdXZoeHU4Yk1xZ1g5aFNmOWZibFA4TnZaUTlRY3lL?=
+ =?utf-8?B?dUdSdDZvMkNXbmdXeXBydXdHOW1uZ1Z3M3pkdGRHZkUvbGxNMytZT2gwVWla?=
+ =?utf-8?B?bWg4eTlBTDU2cWY0VWJLS3BxcTdHVEZDMVJHR2d2Nm5ybWNsZE81V1hVV01J?=
+ =?utf-8?B?WHpuR2o5UDludWdHdUJhYmtRUU5hWm5FR1JsUFBSeDRvUDR4SXh4WWNKcTg4?=
+ =?utf-8?B?M0FmMGpwRzA0WmlvRHZ1SE9nS1VVNmY4bW00VTYzMHBpMURsQmdJRzVNSGJi?=
+ =?utf-8?B?YWZ1UzN6dUR0YzJOVXNIRTdCU2dxS05qWElLd3VGVFRhNUdneGNUdTF1b3A4?=
+ =?utf-8?B?YjZKc1NRY0RHSTZNSWx3N0V1QXFyWTZZa0h3ekIxTXBrelNUQ1hXbFBzME95?=
+ =?utf-8?B?OW90M0R1eVNPcWhrWTFPSWdWTHlJZjYxRGRocUUxVDQ2dU53WjFnaUIreTNx?=
+ =?utf-8?B?RmRxc2pGUTlCczExMlF5NGNsTSs4elNld3UvWEpPbG1wOFlnVEkxSFAvbHZS?=
+ =?utf-8?B?c0ZpQ041QThvbjQvYTlNN0g3OGVrOHhSS1RoV1hQK0JVRkVmNm1kTGNXeEtV?=
+ =?utf-8?B?dWV4RGJxdUdaUEN2SUFrMUZYZ2hiMEJXMGQ4ek1zTkRkT1FnWWFQL2VSMFln?=
+ =?utf-8?B?PT0=?=
+MIME-Version: 1.0
+
+--===============7357364410170541210==
+Content-Type: multipart/alternative;
+ boundary="------------iKbBYNFtwB33t1YvLgrgH6jX"
+Content-Language: en-US
+
+--------------iKbBYNFtwB33t1YvLgrgH6jX
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Dear School of Engineering Undergraduates:
+
+I am writing to remind you to please consider applying to be a member of 
+my undergraduate student advisory group. If you are interested, please 
+*apply here* 
+<https://docs.google.com/forms/d/e/1FAIpQLSfetgoBFyU0CMzlJ0iv5DyVRGTC82Iy82pHaYTcRy8a1EoEXw/viewform?usp=pp_url>**by 
+Friday, December 15th.
+
+
+Sincerely,
+
+Anantha Chandrakasan
+
+Dean, MIT School of Engineering
+
+Vannevar Bush Professor of Electrical Engineering and Computer Science
+
+On 12/6/23 10:37 AM, Anantha P. Chandrakasan wrote:
+>
+> Dear School of Engineering Graduate Students:
+>
+> I invite you to apply to be a member of my graduate student advisory 
+> group.This group is called GradSAGE (Graduate Student Advisory Group 
+> for Engineering), and we will meet 2 to 3 times per semester during 
+> the academic year. Our Deputy Dean and Mechanical Engineering 
+> Professor Maria Yang will take lead on running the meetings and 
+> co-chair both groups alongside me.
+>
+> *Why join GradSAGE?*
+>
+> GradSAGE is charged to provide the Dean with a direct connection to 
+> the graduate student experience and perspective on a broad range of 
+> topics such as education, engagement, research, and graduate student 
+> life. Meetings with me will take place monthly starting in the fall. 
+> GradSAGE members will help shape the meeting agenda. GradSAGE members 
+> can form subgroups to address student needs such as diversity, equity, 
+> and inclusion, student-advisor relationships, and leadership.
+>
+> This past year some of the interest areas of the group included:
+>
+> -Academic non-Core curriculum interests
+>
+> -Academia career mentorship & resources
+>
+> -Diversity equity & inclusion & community
+>
+> *Who should join?*
+>
+> We are looking for students to join the group from all engineering 
+> departments and programs with a wide range of perspectives and 
+> backgrounds.
+>
+> *How do I apply?*
+>
+> If you are interested, please *apply* 
+> <https://forms.gle/pZ22T5VjDtcvLTQYA>*here* 
+> <https://docs.google.com/forms/d/e/1FAIpQLSc3H6E4PCjm6vQo3qkC-3kHxe5gE3e6EOVkyKC7QrRm7zyE3Q/viewform?usp=sf_link> 
+> by Friday, December 15th. The application consists of a written 
+> statement about your interest in joining the group.**
+>
+> I look forward to working with this group to enhance the student 
+> experience within the School of Engineering and across MIT.
+>
+> Sincerely,
+>
+> Anantha P. Chandrakasan
+>
+> Dean, MIT School of Engineering
+>
+> Vannevar Bush Professor of Electrical Engineering and Computer Science
+>
+--------------iKbBYNFtwB33t1YvLgrgH6jX
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<!DOCTYPE html><html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  </head>
+  <body>
+    <p class="MsoNormal"><span lang="EN">Dear School of Engineering
+        Undergraduates:</span></p>
+    <p class="MsoNormal"><span lang="EN"><span style="mso-spacerun:yes">&nbsp;</span></span></p>
+    <p class="MsoNormal"><span lang="EN">I am writing to remind you to
+        please consider applying to be a member of my undergraduate
+        student advisory group. </span><span lang="EN">If you are
+        interested, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfetgoBFyU0CMzlJ0iv5DyVRGTC82Iy82pHaYTcRy8a1EoEXw/viewform?usp=pp_url"><b style="mso-bidi-font-weight:normal">apply here</b></a><b style="mso-bidi-font-weight:
+          normal"> </b>by Friday, December 15th.</span><span lang="EN"></span></p>
+    <p class="MsoNormal"><span lang="EN"><br>
+        Sincerely,</span></p>
+    <p class="MsoNormal"><span lang="EN">&nbsp;</span></p>
+    <p class="MsoNormal"><span lang="EN">Anantha Chandrakasan</span></p>
+    <p class="MsoNormal"><span lang="EN">Dean, MIT School of Engineering</span></p>
+    <p class="MsoNormal"><span lang="EN">Vannevar Bush Professor of
+        Electrical Engineering and Computer Science</span></p>
+    <p></p>
+    <div class="moz-cite-prefix">On 12/6/23 10:37 AM, Anantha P.
+      Chandrakasan wrote:<br>
+    </div>
+    <blockquote type="cite" cite="mid:054afa6f-8723-4bbd-9c4e-f3ba4b2c465a@mit.edu">
+      
+      <p> </p>
+      <p class="MsoNormal"><span lang="EN">Dear School of Engineering
+          Graduate Students:</span></p>
+      <p class="MsoNormal"><span lang="EN">&nbsp;</span></p>
+      <p class="MsoNormal"><span lang="EN">I invite you to apply to be a
+          member of my graduate student advisory group.<span style="mso-spacerun:yes">&nbsp; </span>This group is called
+          GradSAGE (Graduate Student Advisory Group for Engineering),
+          and we will meet 2 to 3 times per semester during the academic
+          year. Our Deputy Dean and Mechanical Engineering Professor
+          Maria Yang will take lead on running the meetings and co-chair
+          both groups alongside me.</span></p>
+      <p class="MsoNormal"><span lang="EN">&nbsp;</span></p>
+      <p class="MsoNormal"><b style="mso-bidi-font-weight:normal"><span lang="EN">Why join GradSAGE?</span></b><span lang="EN"></span></p>
+      <p class="MsoNormal"><span lang="EN">GradSAGE is charged to
+          provide the Dean with a direct connection to the graduate
+          student experience and perspective on a broad range of topics
+          such as education, engagement, research, and graduate student
+          life. Meetings with me will take place monthly starting in the
+          fall. GradSAGE members will help shape the meeting agenda.
+          GradSAGE members can form subgroups to address student needs
+          such as diversity, equity, and inclusion, student-advisor
+          relationships, and leadership.</span></p>
+      <p class="MsoNormal"><span lang="EN">&nbsp;</span></p>
+      <p class="MsoNormal"><span lang="EN">This past year some of the
+          interest areas of the group included:</span></p>
+      <p class="MsoNormal" style="margin-left:.5in;text-indent:-.25in;mso-list:l0 level1 lfo1"><span style="font-family:&quot;Calibri&quot;,sans-serif;mso-fareast-font-family:Calibri;
+mso-ansi-language:EN-US"><span style="mso-list:Ignore">-<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span style="mso-ansi-language:EN-US">Academic non-Core curriculum
+          interests</span></p>
+      <p class="MsoNormal" style="margin-left:.5in;text-indent:-.25in;mso-list:l0 level1 lfo1"><span style="font-family:&quot;Calibri&quot;,sans-serif;mso-fareast-font-family:Calibri;
+mso-ansi-language:EN-US"><span style="mso-list:Ignore">-<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span style="mso-ansi-language:EN-US">Academia career mentorship
+          &amp; resources</span></p>
+      <p class="MsoNormal" style="margin-left:.5in;text-indent:-.25in;mso-list:l0 level1 lfo1"><span style="font-family:&quot;Calibri&quot;,sans-serif;mso-fareast-font-family:Calibri;
+mso-ansi-language:EN-US"><span style="mso-list:Ignore">-<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span style="mso-ansi-language:EN-US">Diversity equity &amp;
+          inclusion &amp; community </span></p>
+      <p class="MsoNormal"><span lang="EN">&nbsp;</span></p>
+      <p class="MsoNormal"><b style="mso-bidi-font-weight:normal"><span lang="EN">Who should join?</span></b></p>
+      <p class="MsoNormal"><span lang="EN">We are looking for students
+          to join the group from all engineering departments and
+          programs with a wide range of perspectives and backgrounds.</span></p>
+      <p class="MsoNormal"><span lang="EN">&nbsp;</span></p>
+      <p class="MsoNormal"><b style="mso-bidi-font-weight:normal"><span lang="EN">How do I apply?</span></b></p>
+      <p class="MsoNormal"><span lang="EN">If you are interested, please
+          <a href="https://forms.gle/pZ22T5VjDtcvLTQYA" moz-do-not-send="true"><b style="mso-bidi-font-weight:normal"><span style="color:#1155CC">apply</span></b></a><a href="https://docs.google.com/forms/d/e/1FAIpQLSc3H6E4PCjm6vQo3qkC-3kHxe5gE3e6EOVkyKC7QrRm7zyE3Q/viewform?usp=sf_link" moz-do-not-send="true"><b style="mso-bidi-font-weight:normal"><span style="color:#1155CC"> here</span></b></a> by Friday,
+          December 15th. </span><span style="font-family:Roboto;
+mso-fareast-font-family:Roboto;mso-bidi-font-family:Roboto;color:#202124;
+background:white;mso-highlight:white" lang="EN">The application consists
+          of a written statement about your interest in joining the
+          group.</span><b style="mso-bidi-font-weight:
+normal"><span lang="EN"></span></b></p>
+      <p class="MsoNormal"><span lang="EN">&nbsp;</span></p>
+      <p class="MsoNormal"><span lang="EN">I look forward to working
+          with this group to enhance the student experience within the
+          School of Engineering and across MIT.</span></p>
+      <p class="MsoNormal"><span lang="EN">&nbsp;</span></p>
+      <p class="MsoNormal"><span lang="EN">Sincerely,</span></p>
+      <p class="MsoNormal"><span lang="EN">Anantha P. Chandrakasan</span></p>
+      <p class="MsoNormal"><span lang="EN">Dean, MIT School of
+          Engineering</span></p>
+      <p class="MsoNormal"><span lang="EN">Vannevar Bush Professor of
+          Electrical Engineering and Computer Science</span></p>
+      <p>
+        <style>@font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;
+	mso-font-charset:77;
+	mso-generic-font-family:decorative;
+	mso-font-pitch:variable;
+	mso-font-signature:3 0 0 0 -2147483647 0;}@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-pitch:variable;
+	mso-font-signature:-536870145 1107305727 0 0 415 0;}@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:-536859905 -1073732485 9 0 511 0;}@font-face
+	{font-family:Roboto;
+	panose-1:2 11 6 4 2 2 2 2 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:-536868097 1342185855 33 0 415 0;}p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-unhide:no;
+	mso-style-qformat:yes;
+	mso-style-parent:"";
+	margin:0in;
+	line-height:115%;
+	mso-pagination:widow-orphan;
+	font-size:11.0pt;
+	font-family:"Arial",sans-serif;
+	mso-fareast-font-family:Arial;
+	mso-ansi-language:EN;}.MsoChpDefault
+	{mso-style-type:export-only;
+	mso-default-props:yes;
+	font-size:11.0pt;
+	mso-ansi-font-size:11.0pt;
+	mso-bidi-font-size:11.0pt;
+	font-family:"Arial",sans-serif;
+	mso-ascii-font-family:Arial;
+	mso-fareast-font-family:Arial;
+	mso-hansi-font-family:Arial;
+	mso-bidi-font-family:Arial;
+	mso-font-kerning:0pt;
+	mso-ligatures:none;
+	mso-ansi-language:EN;}.MsoPapDefault
+	{mso-style-type:export-only;
+	line-height:115%;}div.WordSection1
+	{page:WordSection1;}ol
+	{margin-bottom:0in;}ul
+	{margin-bottom:0in;}</style></p>
+    </blockquote>
+  </body>
+</html>
+
+--------------iKbBYNFtwB33t1YvLgrgH6jX--
+
+--===============7357364410170541210==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+SoE_graduatestudents mailing list
+SoE_graduatestudents@mit.edu
+https://mailman.mit.edu/mailman/listinfo/soe_graduatestudents
+
+--===============7357364410170541210==--

@@ -1,0 +1,583 @@
+Received: from PH7PR01MB7679.prod.exchangelabs.com (2603:10b6:510:1d6::7) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Sat, 2 Sep 2023 16:03:47
+ +0000
+Received: from SN6PR04CA0094.namprd04.prod.outlook.com (2603:10b6:805:f2::35)
+ by PH7PR01MB7679.prod.exchangelabs.com (2603:10b6:510:1d6::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.28; Sat, 2 Sep 2023 16:03:32 +0000
+Received: from SA2PEPF00001506.namprd04.prod.outlook.com
+ (2603:10b6:805:f2:cafe::14) by SN6PR04CA0094.outlook.office365.com
+ (2603:10b6:805:f2::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.28 via Frontend
+ Transport; Sat, 2 Sep 2023 16:03:32 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.110)
+ smtp.mailfrom=a552720.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of a552720.bnc3.mailjet.com
+ does not designate 18.9.1.110 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.110;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.110) by
+ SA2PEPF00001506.mail.protection.outlook.com (10.167.242.38) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6745.17 via Frontend Transport; Sat, 2 Sep 2023 16:03:31 +0000
+Received: from w92expo20.exchange.mit.edu (18.7.74.74) by
+ oc11exhyb5.exchange.mit.edu (18.9.1.110) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Sat, 2 Sep 2023 12:03:16 -0400
+Received: from oc11exhyb1.exchange.mit.edu (18.9.1.60) by
+ w92expo20.exchange.mit.edu (18.7.74.74) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Sat, 2 Sep 2023 12:03:16 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.102)
+ by oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Sat, 2 Sep 2023 12:03:15 -0400
+Received: from CYZPR05CA0045.namprd05.prod.outlook.com (2603:10b6:930:a3::19)
+ by SN7PR01MB8044.prod.exchangelabs.com (2603:10b6:806:347::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.26; Sat, 2 Sep 2023 16:03:08 +0000
+Received: from CY4PEPF0000E9D9.namprd05.prod.outlook.com
+ (2603:10b6:930:a3:cafe::9f) by CYZPR05CA0045.outlook.office365.com
+ (2603:10b6:930:a3::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.18 via Frontend
+ Transport; Sat, 2 Sep 2023 16:03:08 +0000
+Authentication-Results-Original: spf=pass (sender IP is 87.253.233.147)
+ smtp.mailfrom=a552720.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=704
+Received-SPF: Pass (protection.outlook.com: domain of a552720.bnc3.mailjet.com
+ designates 87.253.233.147 as permitted sender)
+ receiver=protection.outlook.com; client-ip=87.253.233.147;
+ helo=o147.p8.mailjet.com; pr=C
+Received: from o147.p8.mailjet.com (87.253.233.147) by
+ CY4PEPF0000E9D9.mail.protection.outlook.com (10.167.241.77) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.17 via Frontend Transport; Sat, 2 Sep 2023 16:03:08 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; q=dns/txt;
+  d=bnc3.mailjet.com; i=medical=3Dmit.edu@a552720.bnc3.mailjet.com; s=mailjet1; x=1693677786;
+  h=message-id:mime-version:from:from:to:to:subject:subject:date:date:list-id:list-unsubscribe-post:
+  list-unsubscribe:feedback-id:precedence:x-campaignid:x-csa-complaints:
+  x-mj-mid:x-mj-smtpguid:x-report-abuse-to:content-type;
+  bh=NEYdp4FSxia4zdtdlR/iDIZ3PO0LA6LmKRlj5RRgP3M=;
+  b=KxhxmSjQ5R62RHB2LIR4z3WZF9ercbNsv8mT/4RBiz8sbhKM+N+7mFbUT
+ deuaRQPm97+R3Tldxqc5e8JJwcWYuVGwd7pLn0ZG+iaZIAV3/eEj1jcpZxwL
+ ZPs5Pme09r1Ad1R7FVLaSiCqcDiztDPrv1zMgFv3a58f8WgdP7yYSs=
+Return-Path:
+ baaee954.AUwAACOIj1wAAc3BQlwAAM105GoAAYCsqhIAnYmFAAhvEABk81y6@a552720.bnc3.mailjet.com
+Message-ID: <baaee954.AUwAACOIj1wAAc3BQlwAAM105GoAAYCsqhIAnYmFAAhvEABk81y6@mailjet.com>
+From: MIT Medical <medical@mit.edu>
+To: jiannan@mit.edu
+Subject: Important info from MIT Medical: Stay healthy this semester
+Date: Sat,  2 Sep 2023 16:03:06 +0000 (UTC)
+List-Id: <medical.mit.edu.iz1w-5kot2.mj>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+List-Unsubscribe: <mailto:unsub-baaee954.iz1w.lp2k0hsw2xx6@bnc3.mailjet.com>,
+	<https://iz1w.mjt.lu/unsub2?m=AUwAACOIj1wAAc3BQlwAAM105GoAAYCsqhIAnYmFAAhvEABk81y6PzzxRY3-R_Ci7URgF48l-QAIBDM&b=baaee954&e=28d89d98&x=a7iET_5Bkh8rOy7esnA68A>
+Feedback-Id: 42.552720.525363:MJ
+Precedence: bulk
+X-CampaignID: 7746962012
+X-CSA-Complaints: csa-complaints@eco.de
+X-MJ-Mid: AUwAACOIj1wAAc3BQlwAAM105GoAAYCsqhIAnYmFAAhvEABk81y6PzzxRY3-R_Ci7URgF48l-QAIBDM
+X-MJ-SMTPGUID: 3f3cf145-8dfe-47f0-a2ed-4460178f25f9
+X-REPORT-ABUSE-TO: Message sent by Mailjet please report to
+	abuse@mailjet.com with a copy of the message
+Content-Type: multipart/alternative; boundary="=-HFTpOl0asMiIbVnawFqa"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CY4PEPF0000E9D9:EE_|SN7PR01MB8044:EE_|SA2PEPF00001506:EE_|PH7PR01MB7679:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a28ad10-171f-4174-e02e-08dbabce27c4
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?T4HtMHZn9KhsIT9MAXgtQMpbNfX+xOM+I2gtbcWzwJsyJW/dEt69L3mHb5G4?=
+ =?us-ascii?Q?R3IO0BTnfAaiWCJoA11XW1JxrZtFMhnWjTDtHarQ1u7hJlwMHwAMmIPdiZL3?=
+ =?us-ascii?Q?0XSmq5he2v5ObTWtdh3TtOll2A+0tIFWZ+AuWsRKBcKRFDNCIZ3uHNa7yc+I?=
+ =?us-ascii?Q?j2iKRyNdWRpZaalp0Xh6IfMgcw5jA/AjjCkkbugUfKZDaHG9VCJD3SxYsTzH?=
+ =?us-ascii?Q?ko/G2zaqM616yo2U7V/TDJV635kX9loze+BvKhew1+K8Jjq/MWEVgtvTP52c?=
+ =?us-ascii?Q?HnKQpDg+3qrybU83z5w4bTLTWjSexC0Y6GTrHwsMFsetf5VbUAFlpsu47Gkp?=
+ =?us-ascii?Q?+VFPS+3PIKjlehyNH5jgGa1U8ULVoVlKtvVLpJLjvGxY/kyStbCfza81v+X5?=
+ =?us-ascii?Q?oPpV50ur7QEK3nR9Rtv/fhTG3Fbfh5n6J9mn5UtqBB0h9cEiNzwBiXCm1nCM?=
+ =?us-ascii?Q?7cnA3tyxfha1DLWnjVTBFKx/AgHjuqCrnBPojTfp9qCc7r4Ln6u2z7DJBZq9?=
+ =?us-ascii?Q?/VioSd+MB9wB5YFBKrWlCVeb72/1cVNnzo4n4e9j8Z7YyUlR5qsTzKNtQ7ZL?=
+ =?us-ascii?Q?89saBR/phzh4tQyC/J+kIEYZ17dP5GLpuT5R3Qz9wK/e7ImHLqSRBG/hte1q?=
+ =?us-ascii?Q?5d6LjpR1orKknLC15h22jevRUluDMxeEgmnrciBgsdZc2WF0v2HGKECeBVoR?=
+ =?us-ascii?Q?0YvSA+I3Ez+xTbQFRL3HyLh/GOeVDjXOuOjgZVOnzcSvlRItRxxyEvcuvqSi?=
+ =?us-ascii?Q?P9tZvdJ7D94RRLJZNx7D1J3QVOuCutsoHy0yvAxUpJ6jWua9UfTQlaLOYwnl?=
+ =?us-ascii?Q?DsnLNnUGUlA8Odpq0oy4D0O68laVRxIV8KR2z943BZjssSidAmk5cUccL9sQ?=
+ =?us-ascii?Q?7G1+53JagkDeBxi4vc1T3R9LDrmfGVl7kdpleye9dNy965NZee0CWEeoO1ZW?=
+ =?us-ascii?Q?GaXBfHbdOUTsClMI2cA5ldXy9ctFF0mnw2w1MRTZc79sKb61brg8Tm1qdbDi?=
+ =?us-ascii?Q?ooMeqafhU5YizRAaM8OEmzGbI/oNkD5tPrGQ/nqqoa+qQYYYXQpvhja/2mr8?=
+ =?us-ascii?Q?yuVJ1K6E0dldWy1tntpR6neU7U/t2fRM1HWmzqBRkQugFm9LLWwLIBzWTcJu?=
+ =?us-ascii?Q?L1eu8v9G8Tj01RjPbhjPw3rCJWdr8tTL5NNZ5zXQawut9luNdq0KpCRqQgZ0?=
+ =?us-ascii?Q?iBb49xKoMLWEWaxg0LvVs8mUUccPbWrVlN8fMpV+hslKA1n6LiMQinwfvfxl?=
+ =?us-ascii?Q?g3Wsj65CMObKst6awi8TRmqt8jo8upmJNQTI2LDrbG/4NGWVImEHACd3zRsV?=
+ =?us-ascii?Q?r/BW4WTDN4qnps+a+UmYgn52?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:87.253.233.147;CTRY:FR;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:o147.p8.mailjet.com;PTR:o147.p8.mailjet.com;CAT:NONE;SFS:(13230031)(4636009)(1690799017)(451199024)(76236004)(83380400001)(66899024)(36756003)(83170400001)(956004)(9316004)(42882007)(336012)(26005)(356005)(6636002)(7636003)(5660300002)(7596003)(166002)(1096003)(8676002)(6916009)(19810500001)(966005)(7696005)(9686003)(6486002)(6506007)(33964004)(36736006)(40140700001)(5006899006)(1406899027)(36813002)(44200200038);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR01MB8044
+X-OrganizationHeadersPreserved: SN7PR01MB8044.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb1.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb1.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo20.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 02 Sep 2023 16:03:32.1883
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 2a28ad10-171f-4174-e02e-08dbabce27c4
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: SA2PEPF00001506.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: SA2PEPF00001506.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ SA2PEPF00001506.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CY4PEPF0000E9D9.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ a48b1b13-7da9-4742-d02a-08dbabce19c7
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.110;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb5.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2023 16:03:31.9696
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a28ad10-171f-4174-e02e-08dbabce27c4
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.110];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CY4PEPF0000E9D9.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR01MB7679
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:15.5740338
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6745.026
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UlZoa1NtbDJ3UUpRRzJvS1JVblJjVldKNitrVlo2WmQwVmd2UU54M2RqalV4?=
+ =?utf-8?B?Z292Vk5kWE5wWUVieFNXSkpMQ0FnTVdqR1NzZlgrZnB1TmhOWDdEWGRXY29q?=
+ =?utf-8?B?YkVKNkMzMzhyc3h0WVhTK0RPTCtqS2hXRSt5YmJkVmFZWEhrVEpnQ2hONTNZ?=
+ =?utf-8?B?MXhUQmczMVcyQncvaFJ6QjhNZExDV0pjeElHWkszWlhWWmZYeVFIaFBoRVJT?=
+ =?utf-8?B?bDFPODl1NUkyb1ZvRy9JbUUyT3UxS2dWYzFkaWxodjEybGNMbFBjKzI1M1pv?=
+ =?utf-8?B?RkxaSTRadlhnZmp5QzJCWm1aQWkyRW9aQXdvYTE1WTQ5MTAxRTI3M2laUXBD?=
+ =?utf-8?B?Mld4RFMzVVhYTGpxNFhaUVQzM3o3ajVmU1E0V2NXK05Tb3ZGN1J2R25BdzZG?=
+ =?utf-8?B?U2Q3ZHVwT0JsbHEzTjRSYWVlWGxiRDZPQnJIallpS25OL0VZemRyM3UySitU?=
+ =?utf-8?B?UGlCaXl1MHdiK2h1czAzcURYYzBNaW9JQ3JkTWhuMzdjb0ZxQ1BzOUhjaEla?=
+ =?utf-8?B?UTNTMFdJUmlkZTc3WCtNSW82Z1hMTVNDSHV2SVpJblN4bHlzWXp5azNuaVdQ?=
+ =?utf-8?B?ai93SlRXV1ZneWdKTGVwVzBLSStMZkd4VFBFd3ZlMWwyV0pLL1VDT1duOTRr?=
+ =?utf-8?B?OE1DS0xRdUVncGxWcUFRSFdlUXdvRWlJdlNnbFdXOWsvdC9WSVU3QVhYTGJ3?=
+ =?utf-8?B?ZkprT01McjJ1S1R4SGZDRkZYZXY5U1JhV3F6b1NpbVF2Z3JpVlhHRVJZZHVq?=
+ =?utf-8?B?QWJLZ0lsanVPdS9RMDU1SUU5Sm84L3hKTWQ4T3Z3VjgwNnE5aFMveWwzR3A3?=
+ =?utf-8?B?V0YrWWxMbGZQbytQd2xIdzdIUmxvWXFTQWNkbmlOMEltUk5oeXJhcjQ5QVdL?=
+ =?utf-8?B?dDVwalVrWmpod01qbHNqK0g0Vlg4K2RpbzdTYU50WUFiSVRBWTRabEs4Q3ZZ?=
+ =?utf-8?B?N0ZjVmNVbkF5NWE4RjFTYmxJd3ZJeE9OV25IOGJNd0N4czhxcHVtL1ZTeHFG?=
+ =?utf-8?B?NHl1R1FuTGR2R080bUNCc3lXSllLbTBqNEZmSHFNNFBpREZwMWtDMWVDdThG?=
+ =?utf-8?B?T3RFUjJUYmFWTGQ3Z28wMkFwWFp6V0Y5ZWNlU1VYczlPek5BallkaGVqeU5C?=
+ =?utf-8?B?dTRBWW44RGxwaFI5OVdyMHRld042STd4L3hGVjB4MmlYZ21saCtwM0hneng5?=
+ =?utf-8?B?cCtjTlpTWE81eHBlYjRXa3RRWGVJTEtCWXFnME5Bbm5YazlKSnoxOEpxZWZw?=
+ =?utf-8?B?MjM3UDgzNVhURWxNZHdMSG1RQVFKbzY5TXRkUFJmVmNZQnlmRGVUTkZRNDhZ?=
+ =?utf-8?B?Q0RZS01HYkFYN2QxRzVpK1ptc3hzcDY2bmdwMW10MnI4M1J4U09VOWtDL0hO?=
+ =?utf-8?B?aHRXdHZzNjN1a0lKa0JsYWoyQUUzcWdkaklvdWJodjRiMjJkdEFOT0VFVjdW?=
+ =?utf-8?B?QUlycnByL0lXMXdqVXhteEpXVHg0bFI1aVFCS2s0QloyUitHMEZtaFJRTHgr?=
+ =?utf-8?B?SzBVUGI3QjE0KzcrYW5zN1o4bVNYTHBYS2hvcE1JM3BCRW9VT0FwS3F3ZXNs?=
+ =?utf-8?B?cm4zb3RibUxwL0Vrazk1MUkzTE5wTHBza2hhNTRHYUJXSGR3cDNOdDh5N29F?=
+ =?utf-8?B?QzQxWXExL2lqM0t6UkR3LzR2TGlDMlJidTZFbjJxRE90cTM3blZMb21Oa3oz?=
+ =?utf-8?B?TGZuUnQ3bG1tSUEzTThHY2lhSTJOa1RlNk9WYW1UZnpON0VhY3RwNWJwSWRH?=
+ =?utf-8?B?Smd6Ri9pUjB6TGl6cXdwb0ZabjNKTVRaOFVEY3h6dnM5KzVDWWRCanJGK3hF?=
+ =?utf-8?B?Wmw4WFdHVGE4eFdsdElRM2xnblh1NWtGbTRTTTdwVVFRL0tic25CWFlsL3JM?=
+ =?utf-8?B?em9DYjdUNjNJTWUxVFNnclFaM25RTTEzaTJreHJTb21xNGtzKzhhdkhsanVz?=
+ =?utf-8?B?VGUzY1gyVW5zaU1pekdaUThRa010V05TRi9RdHQza2xXRDMxbnRDYUZOdjI2?=
+ =?utf-8?B?ZFEzc3N2cVpxRnVWR3J6dkZzVlBBd3BMRnJmM3ZVUHZ4a2NwTWxDVUFwS0Zj?=
+ =?utf-8?B?cFZ5cXk0TW1VYTNXQ29HQUxwOXVwdWJWbUIxaSszRXRRS3NRR0hmWjdMVFdX?=
+ =?utf-8?Q?NRCA=3D?=
+MIME-Version: 1.0
+
+--=-HFTpOl0asMiIbVnawFqa
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<<MIT Medical>> [https://iz1w.mjt.lu/img/iz1w/b/uvqon/7t1kq.png]
+Dear students,
+
+Welcome back! We hope you are settling in as we start the semester.
+
+As these recent chilly mornings indicate, autumn will be here soon =E2=80=
+=94 and, with it, the start of cold and flu season. We are writing to let y=
+ou know what you should do if you, your roommate, or those you live with ge=
+t sick in the coming months. This is particularly important information bec=
+ause COVID-19 is still with us, and individuals who test positive for COVID=
+ need to follow specific rules regarding isolation and masking.
+
+If you get sick
+If you feel ill, you can call MIT Medical=E2=80=99s 24-hour helpline at 617=
+-253-4481 and speak to a triage nurse. Describe your symptoms in detail, so=
+ the nurse can give you advice about what to do next. The nurse may schedul=
+e a same-day appointment, recommend that you come to Urgent Care, or give y=
+ou suggestions for taking care of yourself without coming in. Remember, all=
+ Primary Care and Urgent Care visits at MIT Medical are free for students; =
+they are included with your tuition, even if you waived the MIT SHIP insura=
+nce.
+
+Is it COVID-19? What if I test positive?
+If you are sick, you should wear a mask and take a COVID test. Free, high-q=
+uality masks are available at vending machines across campus [https://ist.m=
+it.edu/ssa] and rapid antigen tests are for sale for $10 each at MedStop, t=
+he over-the-counter medication store located on the first floor of MIT Medi=
+cal, E23, next to Urgent Care. Masks and tests are also available at all ma=
+jor off-campus pharmacies such as the CVS in Kendall Square.
+
+MIT Medical will not provide on-demand testing for COVID-19 for asymptomati=
+c individuals in either Urgent Care or Primary Care. If you test positive =
+=E2=80=94 either with an antigen test or at a doctor=E2=80=99s office =E2=
+=80=94 you will need to follow current CDC guidance [https://www.cdc.gov/co=
+ronavirus/2019-ncov/your-health/isolation.html], which means masking and se=
+lf-isolating for five days. =E2=80=9CDay One=E2=80=9D is the first full day=
+ after your symptoms start. While you are isolating you should avoid eating=
+ with others and wear a mask when picking up food. After five days, you can=
+ attend classes and head out, but you will need to remain masked for five m=
+ore days. Or, if you have two negative antigen tests taken 48 hours apart, =
+you can unmask sooner.
+
+What should I do about food?
+If you live in a dining residence, get your meals at the dining hall and ta=
+ke them back to your room, making sure to wear a mask the whole time you ar=
+e outside of your room. If you live in a cook-for-yourself community, avoid=
+ cooking with others, wear your mask when you get food from your kitchen or=
+ when you pick up food you=E2=80=99ve ordered for delivery, then take it ba=
+ck to your room.
+
+What should I do if someone I live with gets COVID-19?
+MIT Medical=E2=80=99s website has tips for how to stay healthy if your room=
+mate is sick [https://medical.mit.edu/when-your-roommate-gets-sick], and th=
+e advice is the same whether your roommate has a cold, the flu, or COVID-19=
+. You do not need to test if you have been exposed to COVID-19. You should =
+only test if you become symptomatic. MIT does not provide isolation living =
+areas for roommates, but healthy roommates should find ways to isolate. Tha=
+t could mean masking or staying with a friend for a few nights.
+
+If you need a note to be excused from a class or for an extension to comple=
+te academic work:
+
+ * Undergraduates =E2=80=94 Student Support Services (S3) [https://studentl=
+ife.mit.edu/s3] has virtual drop-in hours [https://s3queue.mit.edu/] every =
+weekday from 10-12 and 2-4 or, if it is after hours or the weekend, you can=
+ follow this decision tree [https://mit.co1.qualtrics.com/jfe/form/SV_83b8G=
+AmviQKL4Ca].
+ * Graduate students =E2=80=94 Contact GradSupport at GradSupport@mit.edu [=
+GradSupport@mit.edu].=C2=A0
+
+Note: MIT Medical does not provide notes or excuses for classes, academic w=
+ork, or exams impacted by medical issues.
+
+Get your flu vaccine
+The easiest thing you can do to stay healthy is to get your annual flu vacc=
+ine. The vaccine is free for MIT students, and you can attend the MIT Medic=
+al flu vaccine clinic anytime from October 2=E2=80=936, 8 a.m.=E2=80=934 p.=
+m., in Walker Memorial to get yours. The wait is rarely longer than five mi=
+nutes.
+
+COVID vaccines will not be available at the clinic. When the new vaccines d=
+o become available, we will let the MIT community know the best way to get =
+them.
+
+And finally, be sure to take daily steps to keep yourself and others well. =
+Wash your hands often. Cover your coughs and sneezes. If you feel ill, stay=
+ home. And, again, get your flu vaccine!
+
+As always, we are here to help. Don=E2=80=99t hesitate to get in touch with=
+ us if you have questions or concerns.
+
+Have a healthy semester,=C2=A0
+
+Colleen McDonald F.N.P., Clinical Director Student Health=C2=A0
+Shawn Ferullo M.D., Associate Medical Director, MIT Medical
+
+
+
+This e-mail has been sent to jiannan@mit.edu, click here to unsubscribe htt=
+p://iz1w.mjt.lu/unsub2?hl=3Den&m=3DAUwAACOIj1wAAc3BQlwAAM105GoAAYCsqhIAnYmF=
+AAhvEABk81y6PzzxRY3-R_Ci7URgF48l-QAIBDM&b=3Dbaaee954&e=3D28d89d98&x=3Da7iET=
+_5Bkh8rOy7esnA68A.
+
+
+
+[https://www.mailjet.com/?utm_source=3Dfooter&utm_medium=3Demail&utm_campai=
+gn=3Dlogo1]=
+
+--=-HFTpOl0asMiIbVnawFqa
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>Important info from MIT Medical: Stay healthy this semester</title><!-=
+-[if !mso]><!--><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">=
+<!--<![endif]--><meta name=3D"viewport" content=3D"width=3Ddevice-width,ini=
+tial-scale=3D1"><style type=3D"text/css">#outlook a { padding:0; }
+      body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size=
+-adjust:100%; }
+      table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-table-r=
+space:0pt; }
+      img { border:0;height:auto;line-height:100%; outline:none;text-decora=
+tion:none;-ms-interpolation-mode:bicubic; }
+      p { display:block;margin:13px 0; }</style><!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]--><!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]--><style type=3D"text/css">@media only screen and (min-width:=
+480px) {
+        .mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-100 { width:100% !important; max-width: 100%; }</style><sty=
+le type=3D"text/css">[owa] .mj-column-per-100 { width:100% !important; max-=
+width: 100%; }</style><style type=3D"text/css">@media only screen and (max-=
+width:479px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style><style type=3D"text/css"></style></head><body style=3D"word-sp=
+acing:normal;background-color:#ffffff;"><div style=3D"background-color:#fff=
+fff;"><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px=
+;" width=3D"600" bgcolor=3D"#ffffff" ><tr><td style=3D"line-height:0px;font=
+-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style=3D"backgrou=
+nd:#ffffff;background-color:#ffffff;margin:0px auto;max-width:600px;"><tabl=
+e align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D=
+"presentation" style=3D"background:#ffffff;background-color:#ffffff;width:1=
+00%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20px 0;te=
+xt-align:center;"><!--[if mso | IE]><table role=3D"presentation" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical=
+-align:top;width:600px;" ><![endif]--><div class=3D"mj-column-per-100 mj-ou=
+tlook-group-fix" style=3D"font-size:0px;text-align:left;direction:ltr;displ=
+ay:inline-block;vertical-align:top;width:100%;"><table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"vertical-align:=
+top;" width=3D"100%"><tbody><tr><td align=3D"left" style=3D"font-size:0px;p=
+adding:10px 25px 10px 25px;padding-right:25px;padding-left:25px;word-break:=
+break-word;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"border-collapse:collapse;border-spacing:0px;"><t=
+body><tr><td style=3D"width:550px;"><img alt=3D"MIT Medical" src=3D"https:/=
+/iz1w.mjt.lu/img/iz1w/b/uvqon/7t1kq.png" style=3D"border:none;display:block=
+;outline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" =
+width=3D"550" height=3D"auto"></td></tr></tbody></table></td></tr><tr><td a=
+lign=3D"left" style=3D"font-size:0px;padding:0px 25px 0px 25px;padding-top:=
+0px;padding-right:25px;padding-bottom:0px;padding-left:25px;word-break:brea=
+k-word;"><div style=3D"font-family:Arial, sans-serif;font-size:14px;letter-=
+spacing:normal;line-height:1;text-align:left;color:#000000;"><p class=3D"te=
+xt-build-content" style=3D"line-height: 24px; margin: 10px 0; margin-top: 1=
+0px;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:A=
+rial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">Dear s=
+tudents,</span></p><p class=3D"text-build-content" style=3D"line-height: 24=
+px; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#00000=
+0;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-heigh=
+t:24px;">Welcome back! We hope you are settling in as we start the semester=
+.</span></p><p class=3D"text-build-content" style=3D"line-height: 24px; mar=
+gin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-=
+family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;=
+">As these recent chilly mornings indicate, autumn will be here soon =E2=80=
+=94 and, with it, the start of cold and flu season. We are writing to let y=
+ou know what you should do if you, your roommate, or those you live with ge=
+t sick in the coming months. This is particularly important information bec=
+ause COVID-19 is still with us, and individuals who test positive for COVID=
+ need to follow specific rules regarding isolation and masking.</span></p><=
+p class=3D"text-build-content" style=3D"line-height: 24px; margin: 10px 0;"=
+ data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial,=
+ Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;"><b>If you g=
+et sick</b></span><br><span style=3D"color:#000000;font-family:Arial, Helve=
+tica, Arial, sans-serif;font-size:14px;line-height:24px;">If you feel ill, =
+you can call MIT Medical=E2=80=99s 24-hour helpline at 617-253-4481 and spe=
+ak to a triage nurse. Describe your symptoms in detail, so the nurse can gi=
+ve you advice about what to do next. The nurse may schedule a same-day appo=
+intment, recommend that you come to Urgent Care, or give you suggestions fo=
+r taking care of yourself without coming in. Remember, all Primary Care and=
+ Urgent Care visits at MIT Medical are free for students; they are included=
+ with your tuition, even if you waived the MIT SHIP insurance.</span></p><p=
+ class=3D"text-build-content" style=3D"line-height: 24px; margin: 10px 0;" =
+data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial, =
+Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;"><b>Is it COV=
+ID-19? What if I test positive?</b></span><br><span style=3D"color:#000000;=
+font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:=
+24px;">If you are sick, you should wear a mask and take a COVID test. Free,=
+ high-quality masks are available at </span><a class=3D"link-build-content"=
+ style=3D"color:inherit;text-decoration:none;; text-decoration: none;" targ=
+et=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AUwAACOIj1wAAc3BQlwAAM105GoAAY=
+CsqhIAnYmFAAhvEABk81y6PzzxRY3-R_Ci7URgF48l-QAIBDM/1/HBQlttE9QvdS0t2rQDpNmQ/=
+aHR0cHM6Ly9pc3QubWl0LmVkdS9zc2E"><span style=3D"color:#1c80ff;font-family:A=
+rial;font-size:14px;line-height:24px;"><u>vending machines across campus</u=
+></span></a><span style=3D"color:#000000;font-family:Arial, Helvetica, Aria=
+l, sans-serif;font-size:14px;line-height:24px;"> and rapid antigen tests ar=
+e for sale for $10 each at MedStop, the over-the-counter medication store l=
+ocated on the first floor of MIT Medical, E23, next to Urgent Care. Masks a=
+nd tests are also available at all major off-campus pharmacies such as the =
+CVS in Kendall Square.</span></p><p class=3D"text-build-content" style=3D"l=
+ine-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=
+=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size=
+:14px;line-height:24px;">MIT Medical will not provide on-demand testing for=
+ COVID-19 for asymptomatic individuals in either Urgent Care or Primary Car=
+e. If you test positive =E2=80=94 either with an antigen test or at a docto=
+r=E2=80=99s office =E2=80=94 you will need to follow </span><a class=3D"lin=
+k-build-content" style=3D"color:inherit;text-decoration:none;; text-decorat=
+ion: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AUwAACOIj1wAAc=
+3BQlwAAM105GoAAYCsqhIAnYmFAAhvEABk81y6PzzxRY3-R_Ci7URgF48l-QAIBDM/2/5spZy2D=
+RYbOq0DY7I3sU8g/aHR0cHM6Ly93d3cuY2RjLmdvdi9jb3JvbmF2aXJ1cy8yMDE5LW5jb3YveW9=
+1ci1oZWFsdGgvaXNvbGF0aW9uLmh0bWw"><span style=3D"color:#1c80ff;font-family:=
+Arial;font-size:14px;line-height:24px;"><u>current CDC guidance</u></span><=
+/a><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-s=
+erif;font-size:14px;line-height:24px;">, which means masking and self-isola=
+ting for five days. =E2=80=9CDay One=E2=80=9D is the first full day after y=
+our symptoms start. While you are isolating you should avoid eating with ot=
+hers and wear a mask when picking up food. After five days, you can attend =
+classes and head out, but you will need to remain masked for five more days=
+. Or, if you have two negative antigen tests taken 48 hours apart, you can =
+unmask sooner.</span></p><p class=3D"text-build-content" style=3D"line-heig=
+ht: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:=
+#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line=
+-height:24px;"><b>What should I do about food?</b></span><br><span style=3D=
+"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14=
+px;line-height:24px;">If you live in a dining residence, get your meals at =
+the dining hall and take them back to your room, making sure to wear a mask=
+ the whole time you are outside of your room. If you live in a cook-for-you=
+rself community, avoid cooking with others, wear your mask when you get foo=
+d from your kitchen or when you pick up food you=E2=80=99ve ordered for del=
+ivery, then take it back to your room.</span></p><p class=3D"text-build-con=
+tent" style=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58=
+H"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-s=
+erif;font-size:14px;line-height:24px;"><b>What should I do if someone I liv=
+e with gets COVID-19?</b></span><br><a class=3D"link-build-content" style=
+=3D"color:inherit;text-decoration:none;; text-decoration: none;" target=3D"=
+_blank" href=3D"http://iz1w.mjt.lu/lnk/AUwAACOIj1wAAc3BQlwAAM105GoAAYCsqhIA=
+nYmFAAhvEABk81y6PzzxRY3-R_Ci7URgF48l-QAIBDM/3/9-4vGgSa1VxQsz9ah-NC-w/aHR0cH=
+M6Ly9tZWRpY2FsLm1pdC5lZHUvd2hlbi15b3VyLXJvb21tYXRlLWdldHMtc2ljaw"><span sty=
+le=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:24px;"><u>=
+MIT Medical=E2=80=99s website has tips for how to stay healthy if your room=
+mate is sick</u></span></a><span style=3D"color:#000000;font-family:Arial, =
+Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">, and the ad=
+vice is the same whether your roommate has a cold, the flu, or COVID-19. Yo=
+u do not need to test if you have been exposed to COVID-19. You should only=
+ test if you become symptomatic. MIT does not provide isolation living area=
+s for roommates, but healthy roommates should find ways to isolate. That co=
+uld mean masking or staying with a friend for a few nights.</span></p><p cl=
+ass=3D"text-build-content" style=3D"line-height: 24px; margin: 10px 0;" dat=
+a-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial, Hel=
+vetica, Arial, sans-serif;font-size:14px;line-height:24px;"><b>If you need =
+a note to be excused from a class or for an extension to complete academic =
+work:</b></span></p><ul><li style=3D"line-height:24px;"><span style=3D"colo=
+r:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;li=
+ne-height:24px;"><b>Undergraduates =E2=80=94 </b></span><a class=3D"link-bu=
+ild-content" style=3D"color:inherit;text-decoration:none;; text-decoration:=
+ none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AUwAACOIj1wAAc3BQl=
+wAAM105GoAAYCsqhIAnYmFAAhvEABk81y6PzzxRY3-R_Ci7URgF48l-QAIBDM/4/Zjl7WG69LXk=
+u0uDxTyWe7g/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L3Mz"><span style=3D"color:=
+#1c80ff;font-family:Arial;font-size:14px;line-height:24px;"><u>Student Supp=
+ort Services (S3)</u></span></a><span style=3D"color:#000000;font-family:Ar=
+ial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;"> has </=
+span><a class=3D"link-build-content" style=3D"color:inherit;text-decoration=
+:none;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.l=
+u/lnk/AUwAACOIj1wAAc3BQlwAAM105GoAAYCsqhIAnYmFAAhvEABk81y6PzzxRY3-R_Ci7URgF=
+48l-QAIBDM/5/x4rCtpHlHEOGzCvuySiGeg/aHR0cHM6Ly9zM3F1ZXVlLm1pdC5lZHUv"><span=
+ style=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:24px;"=
+><u>virtual drop-in hours</u></span></a><span style=3D"color:#000000;font-f=
+amily:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;"=
+> every weekday from 10-12 and 2-4 or, if it is after hours or the weekend,=
+ you can </span><a class=3D"link-build-content" style=3D"color:inherit;text=
+-decoration:none;; text-decoration: none;" target=3D"_blank" href=3D"http:/=
+/iz1w.mjt.lu/lnk/AUwAACOIj1wAAc3BQlwAAM105GoAAYCsqhIAnYmFAAhvEABk81y6PzzxRY=
+3-R_Ci7URgF48l-QAIBDM/6/naA1r1pQRr3gNDioPFlNEg/aHR0cHM6Ly9taXQuY28xLnF1YWx0=
+cmljcy5jb20vamZlL2Zvcm0vU1ZfODNiOEdBbXZpUUtMNENh"><span style=3D"color:#1c8=
+0ff;font-family:Arial;font-size:14px;line-height:24px;"><u>follow this deci=
+sion tree</u></span></a><span style=3D"color:#000000;font-family:Arial, Hel=
+vetica, Arial, sans-serif;font-size:14px;line-height:24px;">.</span></li><l=
+i style=3D"line-height:24px;"><span style=3D"color:#000000;font-family:Aria=
+l, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;"><b>Gradua=
+te students =E2=80=94 </b>Contact GradSupport at </span><a class=3D"link-bu=
+ild-content" style=3D"color:inherit;text-decoration:none;; text-decoration:=
+ none;" href=3D"mailto:GradSupport@mit.edu"><span style=3D"color:#1c80ff;fo=
+nt-family:Arial;font-size:14px;line-height:24px;"><u>GradSupport@mit.edu</u=
+></span></a><span style=3D"color:#000000;font-family:Arial, Helvetica, Aria=
+l, sans-serif;font-size:14px;line-height:24px;">.&nbsp;</span></li></ul><p =
+class=3D"text-build-content" style=3D"line-height: 24px; margin: 10px 0;" d=
+ata-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial, H=
+elvetica, Arial, sans-serif;font-size:14px;line-height:24px;"><b>Note: </b>=
+MIT Medical does not provide notes or excuses for classes, academic work, o=
+r exams impacted by medical issues.</span></p><p class=3D"text-build-conten=
+t" style=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H">=
+<span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-seri=
+f;font-size:14px;line-height:24px;"><b>Get your flu vaccine</b></span><br><=
+span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif=
+;font-size:14px;line-height:24px;">The easiest thing you can do to stay hea=
+lthy is to get your annual flu vaccine. The vaccine is free for MIT student=
+s, and you can attend the MIT Medical flu vaccine clinic anytime from Octob=
+er 2=E2=80=936, 8 a.m.=E2=80=934 p.m., in Walker Memorial to get yours. The=
+ wait is rarely longer than five minutes.</span></p><p class=3D"text-build-=
+content" style=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbO=
+W58H"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, san=
+s-serif;font-size:14px;line-height:24px;">COVID vaccines will not be availa=
+ble at the clinic. When the new vaccines do become available, we will let t=
+he MIT community know the best way to get them.</span></p><p class=3D"text-=
+build-content" style=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"=
+PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial, Helvetica, Aria=
+l, sans-serif;font-size:14px;line-height:24px;">And finally, be sure to tak=
+e daily steps to keep yourself and others well. Wash your hands often. Cove=
+r your coughs and sneezes. If you feel ill, stay home. And, again, get your=
+ flu vaccine!</span></p><p class=3D"text-build-content" style=3D"line-heigh=
+t: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#=
+000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-=
+height:24px;">As always, we are here to help. Don=E2=80=99t hesitate to get=
+ in touch with us if you have questions or concerns.</span></p><p class=3D"=
+text-build-content" style=3D"line-height: 24px; margin: 10px 0;" data-testi=
+d=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial, Helvetica,=
+ Arial, sans-serif;font-size:14px;line-height:24px;">Have a healthy semeste=
+r,&nbsp;</span></p><p class=3D"text-build-content" style=3D"line-height: 24=
+px; margin: 10px 0; margin-bottom: 10px;" data-testid=3D"PKVvbOW58H"><span =
+style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font=
+-size:14px;line-height:24px;">Colleen McDonald F.N.P., Clinical Director St=
+udent Health&nbsp;</span><br><span style=3D"color:#000000;font-family:Arial=
+, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">Shawn Feru=
+llo M.D., Associate Medical Director, MIT Medical</span></p></div></td></tr=
+></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td=
+></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><table alig=
+n=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" ro=
+le=3D"presentation" style=3D"width:600px;" width=3D"600" ><tr><td style=3D"=
+line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><d=
+iv style=3D"margin:0px auto;max-width:600px;"><table align=3D"center" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"=
+width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px 20px 0px;text-align:center;"><!--[if mso | IE]><table role=3D"presen=
+tation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D""=
+ style=3D"vertical-align:top;width:600px;" ><![endif]--><div class=3D"mj-co=
+lumn-per-100 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;d=
+irection:ltr;display:inline-block;vertical-align:top;width:100%;"><table bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"left" style=
+=3D"font-size:0px;padding:0px 20px 0px 20px;padding-top:0px;padding-bottom:=
+0px;word-break:break-word;"><div style=3D"font-family:Arial, sans-serif;fon=
+t-size:13px;letter-spacing:normal;line-height:1;text-align:left;color:#0000=
+00;"><p style=3D"text-align: center; margin: 10px 0; margin-top: 10px; marg=
+in-bottom: 10px;"><span style=3D"font-size:10px;text-align:center;color:#5e=
+6977;font-family:Arial;line-height:22px;">This e-mail has been sent to jian=
+nan@mit.edu, </span><a href=3D"http://iz1w.mjt.lu/unsub2?hl=3Den&amp;m=3DAU=
+wAACOIj1wAAc3BQlwAAM105GoAAYCsqhIAnYmFAAhvEABk81y6PzzxRY3-R_Ci7URgF48l-QAIB=
+DM&amp;b=3Dbaaee954&amp;e=3D28d89d98&amp;x=3Da7iET_5Bkh8rOy7esnA68A" target=
+=3D"_blank" style=3D"; text-decoration: none;"><span><span style=3D"font-si=
+ze:10px;text-align:center;color:#0000EE;font-family:Arial;line-height:22px;=
+"><u>click here to unsubscribe</u></span></span></a><span style=3D"font-siz=
+e:10px;text-align:center;color:#5e6977;font-family:Arial;line-height:22px;"=
+>.</span></p></div></td></tr></tbody></table></div><!--[if mso | IE]></td><=
+/tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]><=
+/td></tr></table><![endif]--></div>
+<br><img src=3D"http://iz1w.mjt.lu/oo/AUwAACOIj1wAAc3BQlwAAM105GoAAYCsqhIAn=
+YmFAAhvEABk81y6PzzxRY3-R_Ci7URgF48l-QAIBDM/9fedf6ce/e.gif" height=3D"1" wid=
+th=3D"1" alt=3D"" border=3D"0" style=3D"height:1px;width:1px;border:0;">
+</body></html>=
+
+--=-HFTpOl0asMiIbVnawFqa--

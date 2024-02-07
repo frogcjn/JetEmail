@@ -1,0 +1,533 @@
+Received: from LV2PR01MB7816.prod.exchangelabs.com (2603:10b6:408:14e::9) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 24 Oct 2023 21:31:36
+ +0000
+Received: from BYAPR05CA0049.namprd05.prod.outlook.com (2603:10b6:a03:74::26)
+ by LV2PR01MB7816.prod.exchangelabs.com (2603:10b6:408:14e::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.26; Tue, 24 Oct 2023 21:31:35 +0000
+Received: from CO1PEPF000042AC.namprd03.prod.outlook.com
+ (2603:10b6:a03:74:cafe::11) by BYAPR05CA0049.outlook.office365.com
+ (2603:10b6:a03:74::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.16 via Frontend
+ Transport; Tue, 24 Oct 2023 21:31:35 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.111)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ gmail.com discourages use of 18.9.1.111 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.111) by
+ CO1PEPF000042AC.mail.protection.outlook.com (10.167.243.41) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Tue, 24 Oct 2023 21:31:35 +0000
+Received: from oc11exhyb7.exchange.mit.edu (18.9.1.112) by
+ oc11exhyb6.exchange.mit.edu (18.9.1.111) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 24 Oct 2023 17:31:21 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Tue, 24 Oct 2023 17:31:21 -0400
+Received: from CH2PR05CA0032.namprd05.prod.outlook.com (2603:10b6:610::45) by
+ BY3PR01MB6786.prod.exchangelabs.com (2603:10b6:a03:354::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6933.19; Tue, 24 Oct 2023 21:30:27 +0000
+Received: from DS2PEPF0000343D.namprd02.prod.outlook.com
+ (2603:10b6:610:0:cafe::3e) by CH2PR05CA0032.outlook.office365.com
+ (2603:10b6:610::45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.16 via Frontend
+ Transport; Tue, 24 Oct 2023 21:30:27 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.208.169)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of gmail.com designates
+ 209.85.208.169 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.208.169; helo=mail-lj1-f169.google.com; pr=C
+Received: from mail-lj1-f169.google.com (209.85.208.169) by
+ DS2PEPF0000343D.mail.protection.outlook.com (10.167.18.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Tue, 24 Oct 2023 21:30:27 +0000
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2c54c8934abso70295031fa.0
+        for <jiannan@mit.edu>; Tue, 24 Oct 2023 14:30:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698183025; x=1698787825; darn=mit.edu;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=D735TTCgr4AgqWUgj4fwIDGs1nAsbl17u3GKrgn1zVY=;
+        b=GxvNGs1FmMMY0A0d7xoiu2AvJ9IiH2nC3MYLk4DEl568oG4B4DPRRmWVaIlJS3+vzV
+         JgbRfw3qGVe1628n0NKpoMPlKqvj/5s56N814S+8jZzxZgsoV0WCk8s1DTa5iqd7FVHE
+         k6Eh859xJ41E9ctNz7p6nSoENUP0tnZ/JhA/o9J2dS/3U5m9HS2hC8VN5MY8FDpn4rKi
+         jtRXi1609hWvJpn1XMF4YWGHzlPrJNyUDPWBHyHsnWYl5io2gfORS9vOVcFc6CEDG8TP
+         Wq+xClIkn0yNzZ/E5y3TZMuYTEwoqHQPlcsaAFf46Ohet8XsCXvB/W+AIZ2dBU4dxNBV
+         Ac3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698183025; x=1698787825;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D735TTCgr4AgqWUgj4fwIDGs1nAsbl17u3GKrgn1zVY=;
+        b=usGdFBsy7kLwPLvOAauV9A/TJbwS/KhGL3pM3EqEaQccjDAA2gSt0nOT2ksq0Xm6/9
+         vjiOC2sHmvNfE5pE5WrgMq+UCJjG2hJhsAXHAfWbdBaYo5ss9PCbFJ1MXB6EVHDt7S9c
+         JuH0IIiLKAHIb1eHfq5huXky8Vw0iCgdiWdEF1tgl49lsyTJIID3eZOV9ZyrQGt7Cg0E
+         fXN81OVKsXSR4QE1TGKojtK94uI9xNrP+af20urHh4Ti122fNQLuUFGlF6LKV2cviRWB
+         BBxQWR9Gg0bl1zdJycvh+ERqDYL7XBJOQciFyCz3tQrthoGFMVqfkWBIur/4smJzWBiH
+         KW+Q==
+X-Gm-Message-State: AOJu0YyzWRckNOhSgdQI2rzCS5iyl4Xdc9N6yJI7/JOsq0TYutg6AjsZ
+	C0iXZkGqUaeSBpfEXWAZyi8uWEOuQakeQnT9wWsohl+Zi4E8xw==
+X-Google-Smtp-Source: AGHT+IFHYlWUwDQa+0MSBsItLjNAw31B5B/pWJIFUJrdbr1FHJvdFhWLM0AY3hFAYQts753j8VW8vVwciDh0YXIr/T0=
+X-Received: by 2002:a05:6402:40ce:b0:53e:94f8:85aa with SMTP id
+ z14-20020a05640240ce00b0053e94f885aamr11883281edb.0.1698183004941; Tue, 24
+ Oct 2023 14:30:04 -0700 (PDT)
+From: Nancy Leveson <leveson.nancy8@gmail.com>
+Date: Tue, 24 Oct 2023 17:29:52 -0400
+Message-ID: <CABMQRd5O1Ug=Qd+1c=jVDLxCn3X-Q94=d_=URV4j-EE3ydCLcg@mail.gmail.com>
+Subject: Cruise autonomous autos now banned from San Francisco/California
+To: Nancy Leveson <leveson@mit.edu>
+Content-Type: multipart/alternative; boundary="000000000000c5ef9a06087d0a98"
+BCC: <jiannan@mit.edu>
+Return-Path: leveson.nancy8@gmail.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ DS2PEPF0000343D:EE_|BY3PR01MB6786:EE_|CO1PEPF000042AC:EE_|LV2PR01MB7816:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: bed90947-2246-463b-b01c-08dbd4d89967
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?85WP2A3jVqXWqbev76YJBdFxhsoV0cep2ZBwYYug5BPwUSNvbnPaqBo3rEcY?=
+ =?us-ascii?Q?OoQihIVu7pF/f1mZbR8QXFS2xgHH2Ny4koum03NHzhs4PS6DsFR69IfAsPHI?=
+ =?us-ascii?Q?mY8wwR+G4ul3XNKxiXvkwVhjO5UJhdA+IUY9eymFnIhBcjYVIyfBhESKyZqX?=
+ =?us-ascii?Q?I3Iotv8SNkoqhQH+YY9/hBwiKqqFbN34XTvh4hoQvb9f89kbIMfROqmLTXC7?=
+ =?us-ascii?Q?nvj5S1lpZEkUyKgBelNRwyWHU8fbzKTLC+HG/KRab6PxrKsoBWljE2EIyjbW?=
+ =?us-ascii?Q?N0uuxMJBF6CQyp3qZokI4aaCXXMjS9+0wNfKkcsZPKA47t3RdiSV30hDUWF2?=
+ =?us-ascii?Q?C3fg6kX/FQz8g1s/cfC60URa2kwmMVjCP3WIGuvOv58T5vmN5JFs8xJ0tP4o?=
+ =?us-ascii?Q?42AjwB1UNXumjaVGD/WGROeT8bR+lmxtPNAPo/wNikTV+RoLiyLh1GOJ906S?=
+ =?us-ascii?Q?tQ4wGsmk313NwNwXPSQLZVQhC8WmKegN7j78AjF+iF7XnMXfD8QszqgYjyg5?=
+ =?us-ascii?Q?Kz/1wgZSt9x19ekjF1mLqGE62Sqj9U6qai8Bpz+tHYkSE/+4XoL9rezzlgq4?=
+ =?us-ascii?Q?xsJnJjxPiwtlKuHKTkQvt/RqI4pYidzYfbwxUTonCkK8FXYW0f9isKVGTJx8?=
+ =?us-ascii?Q?6GTK+oY7TUoC/ELhyIbJe3dDyVu2HhBcJgDPB9lfyaMusI66r+P4LDAieDEW?=
+ =?us-ascii?Q?Tkl+wOoQB8cj3DTwM5gybX7fZAyJb9YI7VNGZSRTSicO1olVdQTtGGMgPjsq?=
+ =?us-ascii?Q?HA32wI/xWazNkHfiwFla+PDVVG6ntXTWy9QJ+vvbsh1qqwhIWqeXimiR+Pn+?=
+ =?us-ascii?Q?08Oboi1yLZavUs2Ls17+q2dMtBb8t4+0LyqcqRnHbOozFSVhZnPanjWrUNNC?=
+ =?us-ascii?Q?oQTeDfzBu8aJ27kqtg93oyl4eknJFe2WaLq0i9/QlfB9J/D+C62ovXBye0If?=
+ =?us-ascii?Q?Sqw4zWci26fJVJlh4FfDoa1cZohk+2YVqh5Bsg6xFSNgKWwDXgx+Xs9wPqGm?=
+ =?us-ascii?Q?adu0XwcIqQr1D5gFJKOXst/e+9oNFemSXScMP9n2J7YLilkYdmMGr5/jMOPQ?=
+ =?us-ascii?Q?VQqNQOx1oX44DuXTtjnkpS95yrwTT65lWWjJV7qsaQ1x8gZoVW9ukYD/cFTA?=
+ =?us-ascii?Q?AX4ZicxNMgLoMLFL6Gw5N2i3lerY8qc7SpuqIrwrvqmTWykVmBpFIXqnDjYc?=
+ =?us-ascii?Q?hU8K6cpSsNn6pS+mMnVKz4GTKhhXJ4uz9AJPweR0hCvLC25uVwefrj7hfw+U?=
+ =?us-ascii?Q?gFa5OmM7XjUV5BKRiOnBChSUvmKf4xIuz85aHL48OfquFAk3/dVGRrOk5uUb?=
+ =?us-ascii?Q?Qjkjzur7XEeMkeLevszgWu3LOQ8f8zc1Gw7TFZBP77lAywNSIuv378m9ut7I?=
+ =?us-ascii?Q?GjdPGQftB6e7Tu3EViS8FequxZWFYgiZABImaUaDKqT0qlaUywkhv1+F7dFR?=
+ =?us-ascii?Q?au3DuNvHVqaVxHao4Is4M6i3Q0vUlBwc2661nVP7Z0BmH/xQ0jCUlaENEdlx?=
+ =?us-ascii?Q?2k3gl9TnqI3vgtrTnQ03SmHVj6bTWna87w+C31YZKtRs50yXtUVJBjlcyKEb?=
+ =?us-ascii?Q?KQJZJJh26F/ov4Ju60dyTi4Ar/IeLoKP6h5hDdGO+e5IQtqd1UTHzoTyqCIC?=
+ =?us-ascii?Q?f7Uv1QQa0x2c9ezKdJlPOUg=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.208.169;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-lj1-f169.google.com;PTR:mail-lj1-f169.google.com;CAT:NONE;SFS:(13230031)(4636009)(451199024)(166002)(73392003)(7596003)(336012)(356005)(7636003)(82202003)(16799955002)(26005)(1096003)(6862004)(4006050)(75640400001)(8676002)(5660300002)(21615005)(42186006)(76482006)(33964004)(6666004)(55446002)(86362001)(83380400001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY3PR01MB6786
+X-OrganizationHeadersPreserved: BY3PR01MB6786.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb7.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb7.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb6.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 24 Oct 2023 21:31:35.4790
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ bed90947-2246-463b-b01c-08dbd4d89967
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: CO1PEPF000042AC.namprd03.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CO1PEPF000042AC.namprd03.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1PEPF000042AC.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DS2PEPF0000343D.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 5e96e73b-ba73-42e7-97b7-08dbd4d87099
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.111;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb6.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2023 21:31:35.2447
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bed90947-2246-463b-b01c-08dbd4d89967
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.111];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ DS2PEPF0000343D.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR01MB7816
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.5007503
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6933.019
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RjlSYzNZUVVpQytpMTU1eGVacEo1YnVXZmhWdDlLWnNOaFI2ODlDRmN0a3lL?=
+ =?utf-8?B?TzB6ZHZ6cG4yeUF6ZEkwR0dQZGRjSldySmFFL0RQOWZEeitPeUk5dFdpUzJ6?=
+ =?utf-8?B?SVVWUmdBZXRKekRmQ3NiTXRtYy9SL2Z4VzR0VVdUeVF5RnRUQzU3Tk5yVjJi?=
+ =?utf-8?B?S1R6QjNWYlNONWdJVUt6dzBjUlRRdGVpcCtNTVNpWUdSZi9INi8wc2szcDM3?=
+ =?utf-8?B?TWdpbG9GeWY2aFFYU1dqT0RPOVY3UUo2a3lFd3Qxd2RLOUQvK0huOE1DQnpw?=
+ =?utf-8?B?Z0JRK2svUGdzbitTdTBpZGgxK1RpSE9yU1FCMERzYmgzWWVMSG0zZGh3SnJ5?=
+ =?utf-8?B?UWZvNHMvWFA1THMrYXU1MDZGYWFGb1FIUEVJc2pVMVBPWHQ2WTlmS2RGZ1BL?=
+ =?utf-8?B?L3V0dEhvWDk1M3Z6UWxiYU8wV2h3QnBGZjBOd200OXJjaEFLYm9SbDIyckhE?=
+ =?utf-8?B?bmEzdWJpOGVVWkNBQ1NUNzRCV2pMWFRmb2V1YytZL3ZNQi9UYjROZHI0b3BI?=
+ =?utf-8?B?ZDZHNlZ2SmlEamk2TzRCWWthbUFiYWJFNjVzQzU4NDl1aE5sVS9JRUUrWWhD?=
+ =?utf-8?B?bDdxRkpYSEpsaVZLSjdpd1dCbE05WWhnNEFtUk8yT1c0aU9SSGgvdDkzd1BI?=
+ =?utf-8?B?L28rNWR1SVZYMWhwelYyZFplUGlFdUFpWXVVOElYSUxlZ3cwdFUwRVdSK1lp?=
+ =?utf-8?B?YTRnVEZBZHlqNmxrZXdlSW41cDZDZ0Zua0RDSlArWUFuTTk5VjY3S3lYTDZq?=
+ =?utf-8?B?TGNWS0syNFJTYVZEamZhMkgvUjE5UytTek8zNm96TnVSUmpYTTdLTG1LVzRF?=
+ =?utf-8?B?QnhTRWVuSmQ5N1RlRGt2Z1JKTm40WnJma2NicHpDbldqMDE0Rk82RTI3MGNB?=
+ =?utf-8?B?RUxJdlhRTWd0ZGhRbFdnay90cE5mTGVXWUMzdFQ1V2VTOU40QUtWVmtMTE5Z?=
+ =?utf-8?B?dXVWbkJUemVUMXBzRU14ZGt3M1AxUDRXTkVqVDYzSk1VWTZaZG5nS3hRbm43?=
+ =?utf-8?B?ZmsxVXZEMFgxSWtuMThibWs2clRScHdWQkVCVEdmZVpFR0JBRUwxbTR6Y2tr?=
+ =?utf-8?B?Vk5QQ3FqTlVGaFhUWitlVm5nYzdqSys4SUNyS0lYY0pwbndPV1ZaK3pxM3dH?=
+ =?utf-8?B?c1BZNkNsZFBYMzdEemNnZUM0UklCck53TEFYaXo0NDJrcUo2R2cxcXJXTHM0?=
+ =?utf-8?B?Yk1MRW83Q0hHRmpZQmdUQmwxY0MwZ0N6N2s3c1YwRHlqdmpaNVh1Y3Z2cHU1?=
+ =?utf-8?B?RFR0QXZBTXo1d0x3QThEOEN6eGFRT1B5VUwvSzBTMkdZd3dETDBQZzZ1ZGM2?=
+ =?utf-8?B?L1hQa21KWlVkNmZydVhoczE5U1NEd1phMit3WUFJY2FRUWI0dEZad2pUSEk3?=
+ =?utf-8?B?dzMvcUh6WEd1bHZnQ1dzUm01QStlU2hLdExyZi9aRlBHR3VaTGpBQkRMZ1pR?=
+ =?utf-8?B?WHhrc3AzbE95dmxYQThnanpIRFI4bDFjRVpKL1Y2azFnUGpqYlpyTGNhaFY5?=
+ =?utf-8?B?RmdUekRsWkEvekFxNWdYQWJHdWtlckxWMnNyVzdEL1Y5Ti84VXFSd2ErYXRW?=
+ =?utf-8?B?SEhRN3pDV0p6WTc1WmVjZFZVMGFSVjh5a0x3Vnh5R2Zycm0rZ3lRUkxqZHE4?=
+ =?utf-8?B?emlwallCUWpHWWk1WFBVZU9TNGFiUDVHdGNNdVBJd1QwTFJwd29PNEd1WkRq?=
+ =?utf-8?B?aU5id1FtV1lNVUZlVnFwb2xhRDBPcWR2M1VqZGxrdTRrNGVoeGpNSm1FbXUw?=
+ =?utf-8?B?TzZiTS8wTEZKQUtmMWJXU1FWTmJLcEdnS1NiTjhzbVpWNUlSNWNyZVNDWnVx?=
+ =?utf-8?B?SHNvQUhtVS84MERwTjBWSVJKcWtGdVY0V3oxRmhTcUtMN1lZWkxyZDBQZXFq?=
+ =?utf-8?B?ekE5UGh3bW5xdE5vT2pSWXdXYWEyQ3QzZjFROEd2OWVzZ0N3RUVtVEh0K20y?=
+ =?utf-8?B?RHJlN2dkNlAwUDFXWVpXODBpaFVHOUhMM3FIZFV6a05zdXdOWXhQeUdxWWRi?=
+ =?utf-8?B?Ni9RQzNKTSsyd1VXWUpDaFdtS1RNdUo5ZE05R1BNcmM4bzdKSktIQWpkN3ln?=
+ =?utf-8?B?MThMdHR1eDJnNjR5L2c3WVY2V0w3L0JCZjdhWGVPcC92UzRYTnJVOHJOeTB6?=
+ =?utf-8?Q?EMXk=3D?=
+MIME-Version: 1.0
+
+--000000000000c5ef9a06087d0a98
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+California suspends Cruise driverless taxi test after accident
+
+GM-owned AV company can still operate cars with test driver onboard
+Josh Marcus <https://www.independent.co.uk/author/josh-marcus>
+San Francisco Independent
+1 hour ago
+
+Autonomous carmaker Cruise <https://www.independent.co.uk/topic/cruise> mus=
+t
+suspend its driverless taxi operations
+<https://www.independent.co.uk/news/world/americas/san-francisco-autonomous=
+-vehicles-robotaxis-b2391158.html>
+ in California <https://www.independent.co.uk/topic/california> immediately=
+,
+state motor vehicles regulators announced on Tuesday.
+
+"The California DMV today notified Cruise that the department is suspending
+Cruise=E2=80=99s autonomous vehicle deployment and driverless testing permi=
+ts,
+effective immediately,=E2=80=9D the state Department of Motor Vehicles
+<https://www.independent.co.uk/topic/department-of-motor-vehicles> said
+<https://twitter.com/DavidZipper/status/1716869781608104432/photo/1> in a
+statement.
+
+=E2=80=9CThe DMV has provided Cruise with the steps need to apply to reinst=
+ate its
+suspended permits, which the DMV will not approve until the company has
+fulfilled the requirements to the department=E2=80=99s satisfaction.=E2=80=
+=9D
+
+The regulator said it has the right to pull back permissions when =E2=80=9C=
+there is
+an unreasonable risk to public safety.=E2=80=9D
+
+The suspension, which only applies to Cruise trips where no human safety
+driver is onboard the vehicle, follows an incident earlier this month
+<https://abc7news.com/san-francisco-woman-injured-pedestrian-crash-cruise/1=
+3857047/>,
+where a woman in San Francisco
+<https://www.independent.co.uk/topic/san-francisco> was struck by a human
+driver in a hit-and-run accident that propelled her into the path of a
+Cruise robotaxi.
+
+=E2=80=9CUltimately, we develop and deploy autonomous vehicles in an effort=
+ to save
+lives,=E2=80=9D Cruise said
+<https://abc7news.com/cruise-permit-suspended-dmv-autonomous-vehicle-permit=
+s/13964874/>
+in
+a statement to ABC7. =E2=80=9CIn the incident being reviewed by the DMV, a =
+human
+hit and run driver tragically struck and propelled the pedestrian into the
+path of the AV. The AV braked aggressively before impact and because it
+detected a collision, it attempted to pull over to avoid further safety
+issues. When the AV tried to pull over, it continued before coming to a
+final stop, pulling the pedestrian forward.=E2=80=9D
+
+=E2=80=9COur thoughts continue to be with the victim as we hope for a rapid=
+ and
+complete recovery,=E2=80=9D the company added.
+
+The suspension is a major blow to Cruise, which is owned by General Motors.
+
+Alongside Waymo, a subsidiary of Google parent company Alphabet, Cruise saw
+California, and in particular San Francisco, as a key testing ground of
+driverless taxi technology.
+
+The companies both got permission from state regulators
+<https://www.independent.co.uk/news/world/americas/san-francisco-autonomous=
+-vehicles-robotaxis-b2391158.html>
+in
+August to conduct paid taxi service 24/7 without a safety driver in San
+Francisco, despite vigorous debate in the city over whether the AVs were
+safe enough to operate.
+
+The rollout of robotaxis in San Francisco has been marred with problems
+<https://www.independent.co.uk/news/world/americas/cruise-waymo-san-francis=
+co-accident-b2396034.html>
+.
+
+Driverless cars, in particular Cruise taxis, were accused of causing
+traffic and impeding first responders.
+
+According to data Cruise shared with the state in August
+<https://techcrunch.com/2023/08/09/cpuc-vote-to-define-cruise-waymo-robotax=
+i-future-in-san-francisco/>,
+between January and mid-July of 2023, Cruise AVs temporarily malfunctioned
+or shut down 177 times and required recovery, 26 of which such incidents
+occurred with a passenger inside, while Waymo recorded 58 such events in a
+similar time frame.
+
+Meanwhile, according to the San Francisco Municipal Transit Agency (SFMTA),
+between April 2022 and April 2023, Cruise and Waymo vehicles have been
+involved in over 300 incidents of irregular driving including unexpected
+stops and collisions, while the San Francisco Fire Department says AVs have
+interfered 55 times in their work in 2023.
+
+Last year, Cruise lost contact with its entire fleet for 20 minutes
+according to internal documentation viewed by *WIRED*
+<https://www.wired.com/story/cruises-robot-car-outages/>, and an anonymous
+employee warned California regulators that year the company loses touch
+with its vehicles =E2=80=9Cwith regularity.=E2=80=9D
+
+Since being rolled out in San Francisco, robotaxis have killed a dog
+<https://sfstandard.com/2023/06/06/waymo-kills-small-dog-on-san-francisco-s=
+treet/>,
+caused a mile-long traffic jam during rush hour
+<https://www.sfgate.com/bayarea/article/waymo-rush-hour-traffic-standstill-=
+17739556.php>
+, blocked a traffic lane
+<https://www.latimes.com/business/story/2023-06-22/san-francisco-robotaxis-=
+interfere-with-firetrucks-los-angeles-is-next#:~:text=3DSan%20Francisco%20F=
+ire%20Chief%20Jeanine,robotaxi%20service%20in%20Los%20Angeles.>
+as
+officials responded to a shooting, and driven over fire hoses
+<https://www.sfmta.com/sites/default/files/reports-and-documents/2023/01/20=
+23.01.25_ccsf_23.0125_cpuc_cruise_tier_2_advice_letter_protest_002.pdf>
+.
+Jeffrey Tumlin, San Francisco=E2=80=99s director of transportation, has cal=
+led
+<https://time.com/6293896/why-expanding-driverless-taxi-service-is-facing-p=
+rotests-in-san-francisco/>
+the
+rollout of robotaxis a =E2=80=9Crace to the bottom,=E2=80=9D arguing Cruise=
+ and Waymo
+weren=E2=80=99t yet definitive transit solutions, and instead had only =E2=
+=80=9Cmet the
+requirements for a learner=E2=80=99s permit.=E2=80=9D Others have argued
+<https://www.independent.co.uk/news/world/americas/san-francisco-autonomous=
+-vehicles-robotaxis-b2391158.html>
+the
+introduction of driverless cars in San Francisco and beyond will further
+displace workers pushed out of the taxi industry by companies like Uber and
+Lyft.
+
+--000000000000c5ef9a06087d0a98
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-size:small"><h1 c=
+lass=3D"gmail-sc-1xt8011-0 gmail-sc-qvufca-2 gmail-kuvAAj gmail-cjBrdM" sty=
+le=3D"font-variant-numeric:normal;font-variant-east-asian:normal;font-varia=
+nt-alternates:normal;font-kerning:auto;font-feature-settings:normal;font-st=
+retch:normal;font-size:54px;line-height:58px;font-family:&quot;Indy Serif&q=
+uot;,&quot;Indy Serif Fallback&quot;,serif;letter-spacing:-0.0092em;margin:=
+0px 0px 20px;color:rgb(255,255,255);background-color:rgb(34,34,34)">Califor=
+nia suspends Cruise driverless taxi test after accident</h1><h2 class=3D"gm=
+ail-sc-aeekvc-0 gmail-cbGLLQ" style=3D"font-variant-numeric:normal;font-var=
+iant-east-asian:normal;font-variant-alternates:normal;font-kerning:auto;fon=
+t-feature-settings:normal;font-weight:normal;font-stretch:normal;font-size:=
+20px;line-height:24px;font-family:&quot;Indy Sans&quot;,&quot;Indy Sans Fal=
+lback&quot;,sans-serif;letter-spacing:0.22px;margin:0px 0px 16px;color:rgb(=
+255,255,255);background-color:rgb(34,34,34)"><p style=3D"font-variant-numer=
+ic:normal;font-variant-east-asian:normal;font-variant-alternates:normal;fon=
+t-kerning:auto;font-feature-settings:normal;font-stretch:normal;line-height=
+:24px">GM-owned AV company can still operate cars with test driver onboard<=
+/p></h2><div class=3D"gmail-sc-1qz44j0-13 gmail-ifKfln gmail-sc-1qz44j0-14 =
+ejBhmN" style=3D"padding-top:0px;border-top:0px;border-bottom:0px;display:f=
+lex;padding-bottom:16px;font-family:&quot;Indy Serif&quot;,&quot;Indy Serif=
+ Fallback&quot;,serif;font-size:medium;background-color:rgb(34,34,34)"><div=
+ class=3D"gmail-sc-1qz44j0-0 gmail-dDjKVO" style=3D"display:flex;margin-bot=
+tom:0px;color:rgb(100,100,100);font-family:&quot;Indy Sans&quot;,&quot;Indy=
+ Sans Fallback&quot;,sans-serif;font-size:16px;line-height:24px;width:677.5=
+94px"><a href=3D"https://www.independent.co.uk/author/josh-marcus" class=3D=
+"gmail-sc-1qz44j0-5 gmail-cQcWCU" style=3D"color:rgb(236,26,46);text-decora=
+tion-line:none;display:inline-block;margin:0px 12px 0px 0px;font-weight:700=
+;letter-spacing:-0.5px">Josh Marcus</a><div class=3D"gmail-sc-1qz44j0-6 gma=
+il-sc-1qz44j0-7 gmail-jesPQH gmail-gZrOWh" style=3D"color:rgb(255,255,255)"=
+>San Francisco Independent</div><div id=3D"gmail-article-published-date" cl=
+ass=3D"gmail-sc-1qz44j0-1 gmail-sc-1qz44j0-2 gmail-bYzBmo ednBIk" style=3D"=
+display:flex;height:24px;margin:0px 12px 0px 0px;color:rgb(255,255,255)"><s=
+pan datetime=3D"2023-10-24T19:36:14.000Z" height=3D"21" role=3D"" class=3D"=
+gmail-i-amphtml-layout-fixed-height gmail-i-amphtml-layout-size-defined gma=
+il-i-amphtml-element gmail-i-amphtml-built gmail-i-amphtml-layout" style=3D=
+"display:block;height:21px;overflow:hidden">1 hour ago</span></div><a class=
+=3D"gmail-sc-1qz44j0-8 gmail-sc-1qz44j0-9 gmail-ipYHx gmail-fyGVTT gmail-co=
+mment-count" style=3D"color:rgb(255,255,255);display:flex;margin:0px 4px 0p=
+x 0px"><span class=3D"gmail-plural"><br></span></a></div></div></div><div><=
+div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gmail_signature=
+"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div =
+dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div><p styl=
+e=3D"font-size:19px;line-height:1.44em;margin:16px 0px;font-family:&quot;In=
+dy Serif&quot;,&quot;Indy Serif Fallback&quot;,serif">Autonomous carmaker&n=
+bsp;<a href=3D"https://www.independent.co.uk/topic/cruise" style=3D"color:r=
+gb(236,26,46);text-decoration-line:none">Cruise</a>&nbsp;must suspend its&n=
+bsp;<a href=3D"https://www.independent.co.uk/news/world/americas/san-franci=
+sco-autonomous-vehicles-robotaxis-b2391158.html" style=3D"color:rgb(236,26,=
+46);text-decoration-line:none">driverless taxi operations</a>&nbsp;in&nbsp;=
+<a href=3D"https://www.independent.co.uk/topic/california" style=3D"color:r=
+gb(236,26,46);text-decoration-line:none">California</a>&nbsp;immediately, s=
+tate motor vehicles regulators announced on Tuesday.</p><p style=3D"font-si=
+ze:19px;line-height:1.44em;margin:16px 0px;font-family:&quot;Indy Serif&quo=
+t;,&quot;Indy Serif Fallback&quot;,serif">&quot;The California DMV today no=
+tified Cruise that the department is suspending Cruise=E2=80=99s autonomous=
+ vehicle deployment and driverless testing permits, effective immediately,=
+=E2=80=9D the state&nbsp;<a href=3D"https://www.independent.co.uk/topic/dep=
+artment-of-motor-vehicles" style=3D"color:rgb(236,26,46);text-decoration-li=
+ne:none">Department of Motor Vehicles</a>&nbsp;<a rel=3D"nofollow" target=
+=3D"_blank" href=3D"https://twitter.com/DavidZipper/status/1716869781608104=
+432/photo/1" style=3D"color:rgb(236,26,46);text-decoration-line:none">said<=
+/a>&nbsp;in a statement.</p><div id=3D"gmail-article-im-prompt" style=3D"fo=
+nt-family:&quot;Indy Serif&quot;,&quot;Indy Serif Fallback&quot;,serif;font=
+-size:medium"></div><p style=3D"font-size:19px;line-height:1.44em;margin:16=
+px 0px;font-family:&quot;Indy Serif&quot;,&quot;Indy Serif Fallback&quot;,s=
+erif">=E2=80=9CThe DMV has provided Cruise with the steps need to apply to =
+reinstate its suspended permits, which the DMV will not approve until the c=
+ompany has fulfilled the requirements to the department=E2=80=99s satisfact=
+ion.=E2=80=9D</p><p style=3D"font-size:19px;line-height:1.44em;margin:16px =
+0px;font-family:&quot;Indy Serif&quot;,&quot;Indy Serif Fallback&quot;,seri=
+f"><span class=3D"gmail_default" style=3D"font-size:small"></span>The regul=
+ator said it has the right to pull back permissions when =E2=80=9Cthere is =
+an unreasonable risk to public safety.=E2=80=9D</p><p style=3D"font-size:19=
+px;line-height:1.44em;margin:16px 0px;font-family:&quot;Indy Serif&quot;,&q=
+uot;Indy Serif Fallback&quot;,serif">The suspension, which only applies to =
+Cruise trips where no human safety driver is onboard the vehicle, follows a=
+n&nbsp;<a rel=3D"nofollow" target=3D"_blank" href=3D"https://abc7news.com/s=
+an-francisco-woman-injured-pedestrian-crash-cruise/13857047/" style=3D"colo=
+r:rgb(236,26,46);text-decoration-line:none">incident earlier this month</a>=
+, where a woman in&nbsp;<a href=3D"https://www.independent.co.uk/topic/san-=
+francisco" style=3D"color:rgb(236,26,46);text-decoration-line:none">San Fra=
+ncisco</a>&nbsp;was struck by a human driver in a hit-and-run accident that=
+ propelled her into the path of a Cruise robotaxi.</p><p style=3D"font-size=
+:19px;line-height:1.44em;margin:16px 0px;font-family:&quot;Indy Serif&quot;=
+,&quot;Indy Serif Fallback&quot;,serif">=E2=80=9CUltimately, we develop and=
+ deploy autonomous vehicles in an effort to save lives,=E2=80=9D Cruise&nbs=
+p;<a rel=3D"nofollow" target=3D"_blank" href=3D"https://abc7news.com/cruise=
+-permit-suspended-dmv-autonomous-vehicle-permits/13964874/" style=3D"color:=
+rgb(236,26,46);text-decoration-line:none">said</a>&nbsp;in a statement to A=
+BC7. =E2=80=9CIn the incident being reviewed by the DMV, a human hit and ru=
+n driver tragically struck and propelled the pedestrian into the path of th=
+e AV. The AV braked aggressively before impact and because it detected a co=
+llision, it attempted to pull over to avoid further safety issues. When the=
+ AV tried to pull over, it continued before coming to a final stop, pulling=
+ the pedestrian forward.=E2=80=9D</p><div class=3D"gmail-sc-toncsa-0 gmail-=
+jJThYS" style=3D"font-family:&quot;Indy Serif&quot;,&quot;Indy Serif Fallba=
+ck&quot;,serif;font-size:medium"></div><p style=3D"font-size:19px;line-heig=
+ht:1.44em;margin:16px 0px;font-family:&quot;Indy Serif&quot;,&quot;Indy Ser=
+if Fallback&quot;,serif">=E2=80=9COur thoughts continue to be with the vict=
+im as we hope for a rapid and complete recovery,=E2=80=9D the company added=
+.</p><p style=3D"font-size:19px;line-height:1.44em;margin:16px 0px;font-fam=
+ily:&quot;Indy Serif&quot;,&quot;Indy Serif Fallback&quot;,serif">The suspe=
+nsion is a major blow to Cruise, which is owned by General Motors.</p><p st=
+yle=3D"font-size:19px;line-height:1.44em;margin:16px 0px;font-family:&quot;=
+Indy Serif&quot;,&quot;Indy Serif Fallback&quot;,serif">Alongside Waymo, a =
+subsidiary of Google parent company Alphabet, Cruise saw California, and in=
+ particular San Francisco, as a key testing ground of driverless taxi techn=
+ology.</p><div class=3D"gmail-sc-fwko30-0 gmail-hhDLSf gmail-main-wrapper" =
+style=3D"width:624px;max-width:624px;margin:0px"><div class=3D"gmail-sc-jbi=
+isr-0 gmail-cUUSOX gmail-sc-jbiisr-2 gmail-ifLoCP" id=3D"gmail-main"><p sty=
+le=3D"font-size:19px;line-height:1.44em;margin:16px 0px">The companies both=
+&nbsp;<a href=3D"https://www.independent.co.uk/news/world/americas/san-fran=
+cisco-autonomous-vehicles-robotaxis-b2391158.html" style=3D"color:rgb(236,2=
+6,46);text-decoration-line:none">got permission from state regulators</a>&n=
+bsp;in August to conduct paid taxi service 24/7 without a safety driver in =
+San Francisco, despite vigorous debate in the city over whether the AVs wer=
+e safe enough to operate.</p><p style=3D"font-size:19px;line-height:1.44em;=
+margin:16px 0px">The rollout of robotaxis in San Francisco has been&nbsp;<a=
+ href=3D"https://www.independent.co.uk/news/world/americas/cruise-waymo-san=
+-francisco-accident-b2396034.html" style=3D"color:rgb(236,26,46);text-decor=
+ation-line:none">marred with problems</a>.</p><p style=3D"font-size:19px;li=
+ne-height:1.44em;margin:16px 0px">Driverless cars, in particular Cruise tax=
+is, were accused of causing traffic and impeding first responders.</p><div =
+class=3D"gmail-sc-w27hnf-3 gmail-bFBfD gmail-teads"><div class=3D"gmail-sc-=
+1y9ieyw-0 gmail-zOVTS" style=3D"max-width:100%;margin:0px auto;background-c=
+olor:transparent;clear:both"><div class=3D"gmail-sc-1pfx6hk-0 gmail-bWbZmY"=
+ style=3D"max-width:100%"></div></div></div><p style=3D"font-size:19px;line=
+-height:1.44em;margin:16px 0px">According to data Cruise&nbsp;<a rel=3D"nof=
+ollow" target=3D"_blank" href=3D"https://techcrunch.com/2023/08/09/cpuc-vot=
+e-to-define-cruise-waymo-robotaxi-future-in-san-francisco/" style=3D"color:=
+rgb(236,26,46);text-decoration-line:none">shared with the state in August</=
+a>, between January and mid-July of 2023, Cruise AVs temporarily malfunctio=
+ned or shut down 177 times and required recovery, 26 of which such incident=
+s occurred with a passenger inside, while Waymo recorded 58 such events in =
+a similar time frame.</p><p style=3D"font-size:19px;line-height:1.44em;marg=
+in:16px 0px">Meanwhile, according to the San Francisco Municipal Transit Ag=
+ency (SFMTA), between April 2022 and April 2023, Cruise and Waymo vehicles =
+have been involved in over 300 incidents of irregular driving including une=
+xpected stops and collisions, while the San Francisco Fire Department says =
+AVs have interfered 55 times in their work in 2023.</p><p style=3D"font-siz=
+e:19px;line-height:1.44em;margin:16px 0px">Last year, Cruise lost contact w=
+ith its entire fleet for 20 minutes according to internal documentation&nbs=
+p;<a rel=3D"nofollow" target=3D"_blank" href=3D"https://www.wired.com/story=
+/cruises-robot-car-outages/" style=3D"color:rgb(236,26,46);text-decoration-=
+line:none">viewed by&nbsp;<em>WIRED</em></a>, and an anonymous employee war=
+ned California regulators that year the company loses touch with its vehicl=
+es =E2=80=9Cwith regularity.=E2=80=9D</p><p style=3D"font-size:19px;line-he=
+ight:1.44em;margin:16px 0px">Since being rolled out in San Francisco, robot=
+axis have&nbsp;<a rel=3D"nofollow" target=3D"_blank" href=3D"https://sfstan=
+dard.com/2023/06/06/waymo-kills-small-dog-on-san-francisco-street/" style=
+=3D"color:rgb(236,26,46);text-decoration-line:none">killed a dog</a>, cause=
+d a mile-long&nbsp;<a rel=3D"nofollow" target=3D"_blank" href=3D"https://ww=
+w.sfgate.com/bayarea/article/waymo-rush-hour-traffic-standstill-17739556.ph=
+p" style=3D"color:rgb(236,26,46);text-decoration-line:none">traffic jam dur=
+ing rush hour</a>,&nbsp;<a rel=3D"nofollow" target=3D"_blank" href=3D"https=
+://www.latimes.com/business/story/2023-06-22/san-francisco-robotaxis-interf=
+ere-with-firetrucks-los-angeles-is-next#:~:text=3DSan%20Francisco%20Fire%20=
+Chief%20Jeanine,robotaxi%20service%20in%20Los%20Angeles." style=3D"color:rg=
+b(236,26,46);text-decoration-line:none">blocked a traffic lane</a>&nbsp;as =
+officials responded to a shooting, and&nbsp;<a rel=3D"nofollow" target=3D"_=
+blank" href=3D"https://www.sfmta.com/sites/default/files/reports-and-docume=
+nts/2023/01/2023.01.25_ccsf_23.0125_cpuc_cruise_tier_2_advice_letter_protes=
+t_002.pdf" style=3D"color:rgb(236,26,46);text-decoration-line:none">driven =
+over fire hoses</a>.</p><div id=3D"gmail-taboola-mid-article-thumbnails-iii=
+" class=3D"gmail-sc-1n1mfdd-6 ePneDp" style=3D"min-height:377px"><span styl=
+e=3D"font-size:19px">Jeffrey Tumlin, San Francisco=E2=80=99s director of tr=
+ansportation, has&nbsp;</span><a rel=3D"nofollow" target=3D"_blank" href=3D=
+"https://time.com/6293896/why-expanding-driverless-taxi-service-is-facing-p=
+rotests-in-san-francisco/" style=3D"font-size:19px;color:rgb(236,26,46);tex=
+t-decoration-line:none">called</a><span style=3D"font-size:19px">&nbsp;the =
+rollout of robotaxis a =E2=80=9Crace to the bottom,=E2=80=9D arguing Cruise=
+ and Waymo weren=E2=80=99t yet definitive transit solutions, and instead ha=
+d only =E2=80=9Cmet the requirements for a learner=E2=80=99s permit.=E2=80=
+=9D<span class=3D"gmail_default" style=3D"font-size:small">&nbsp;</span></s=
+pan><span style=3D"font-size:19px">Others have&nbsp;</span><a href=3D"https=
+://www.independent.co.uk/news/world/americas/san-francisco-autonomous-vehic=
+les-robotaxis-b2391158.html" style=3D"font-size:19px;color:rgb(236,26,46);t=
+ext-decoration-line:none">argued</a><span style=3D"font-size:19px">&nbsp;th=
+e introduction of driverless cars in San Francisco and beyond will further =
+displace&nbsp;</span><font size=3D"4"><span style=3D"font-family:&quot;Indy=
+ Serif&quot;,&quot;Indy Serif Fallback&quot;,serif">workers pushed out of t=
+he taxi industry by companies like Uber and Lyft.</span>&nbsp;</font></div>=
+</div></div></div><div><b><br></b><br></div></div></div></div></div></div><=
+/div></div></div></div></div></div>
+
+--000000000000c5ef9a06087d0a98--

@@ -1,0 +1,791 @@
+Received: from SA0PR01MB6458.prod.exchangelabs.com (2603:10b6:806:da::11) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 28 Nov 2023 02:07:26
+ +0000
+Received: from BL1P222CA0027.NAMP222.PROD.OUTLOOK.COM (2603:10b6:208:2c7::32)
+ by SA0PR01MB6458.prod.exchangelabs.com (2603:10b6:806:da::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.26; Tue, 28 Nov 2023 02:07:25 +0000
+Received: from BL02EPF0001A105.namprd05.prod.outlook.com
+ (2603:10b6:208:2c7:cafe::60) by BL1P222CA0027.outlook.office365.com
+ (2603:10b6:208:2c7::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.28 via Frontend
+ Transport; Tue, 28 Nov 2023 02:07:25 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.112)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ gmail.com discourages use of 18.9.1.112 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.112) by
+ BL02EPF0001A105.mail.protection.outlook.com (10.167.241.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Tue, 28 Nov 2023 02:07:25 +0000
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Mon, 27 Nov 2023 21:07:25 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Mon, 27 Nov 2023 21:07:24 -0500
+Received: from CY5PR17CA0031.namprd17.prod.outlook.com (2603:10b6:930:12::7)
+ by SA1PR01MB6653.prod.exchangelabs.com (2603:10b6:806:185::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.28; Tue, 28 Nov 2023 02:07:21 +0000
+Received: from CY4PEPF0000EDD7.namprd03.prod.outlook.com
+ (2603:10b6:930:12:cafe::b7) by CY5PR17CA0031.outlook.office365.com
+ (2603:10b6:930:12::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.29 via Frontend
+ Transport; Tue, 28 Nov 2023 02:07:21 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.219.173)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of gmail.com designates
+ 209.85.219.173 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.219.173; helo=mail-yb1-f173.google.com; pr=C
+Received: from mail-yb1-f173.google.com (209.85.219.173) by
+ CY4PEPF0000EDD7.mail.protection.outlook.com (10.167.241.211) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Tue, 28 Nov 2023 02:07:21 +0000
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-db057de2b77so4464226276.3
+        for <jiannan@mit.edu>; Mon, 27 Nov 2023 18:07:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701137240; x=1701742040; darn=mit.edu;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wLvJbMTfJ7hZsmV3wGHeCFoxTLK/hV5IqODXezZTY8I=;
+        b=SeTLbGxbL8LABfIrmPnix4iYVruxL4sW65HTCa98uYgXgCvNbxCX3SX3tMcT2ZaUpf
+         1nuGXViJkRSygLZ3NHZT8gkx5IiN/su3HDJtH/geAm5voZzxQ+C4vFpzw5NORb3XuEzG
+         vjBkFJnAjkk4W+M6et/1by/8+eXU+m+8FEKF310/kuApU2zUegKTNwzIynm3jwKxazqu
+         FAD/MMHVdYCNlZ6g2oje8mCHTfvS5IYn7qKeiFrJgH3zVn/XkliBv7Oz4vdjLq34j0mS
+         xVH6dSZYruai7txhS8hAUPNwo0mbvfug+sHUOtQ2QSh6OyCq1HCgVqRbN3o6+YlS97Ui
+         Cz7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701137240; x=1701742040;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wLvJbMTfJ7hZsmV3wGHeCFoxTLK/hV5IqODXezZTY8I=;
+        b=XNdjGrzr8V0ijq4q/U5SqInT659jMJq5ME3zts14LyHjZ+Aqgc21eb+VmOMgkAMgVJ
+         /eIcMXutZluRWbddRf8De01LlWUZJFGv1J9lteLpy+FWTitU4g5CDPaO5pB2o80GTa0L
+         zjCHZRQuTRk6ZgFF20Yqkr0+zaazJQ3wl5LJxvVyQliwDHlm0i1xAkoSVvM6zhipb8Yw
+         GRByeE2ZbJ2gZIjF8zIbUJVXAeCXOnCQ80GjcYZDIUwyat8y4bhtG66Ss7vxOsG9wA0m
+         SkujT12kPIBn1uwVxoxsXTNHV+joWB8MwZS1USET0bxdnhOuWXRgkjTlvqiw5EyaaP1L
+         aQOQ==
+X-Gm-Message-State: AOJu0YwFpHI9EJ9cUFYKzJT/LNX+eVb2OkpKSHHX0LJqSVSrTfk8Bl4p
+	eXB4NCpxq7A/TKeD9RQ/SucGXsquAHYxZsZHSJTXCSZ06c3n91UK
+X-Google-Smtp-Source: AGHT+IHGZpYAdnFY46ToADxvgqNADJJT5NPaGVQn9IIW7OxFWu/1XvLJQ8yE6pGYFRTH4LgAP6kBpGUEgbhqnf9rvPE=
+X-Received: by 2002:a25:8407:0:b0:d84:e7a6:fc09 with SMTP id
+ u7-20020a258407000000b00d84e7a6fc09mr13812463ybk.17.1701137240024; Mon, 27
+ Nov 2023 18:07:20 -0800 (PST)
+References: <CALDfuBvs4NzhjyU1w_LmQpxx7LbPhHY-fF0jyq7Jiy5rhgwB+Q@mail.gmail.com>
+ <BN0PR01MB7134BC7E531644E4A161853FBDF8A@BN0PR01MB7134.prod.exchangelabs.com>
+ <CALDfuBvwYcnwoua6qrhFq3LhjjS0BqF0pf4Uth6VxN09VgbjtQ@mail.gmail.com>
+ <BN0PR01MB71349A96AB4094C1D330EC5CBDB6A@BN0PR01MB7134.prod.exchangelabs.com>
+ <CALDfuBunam6hPH7futaOF2vFU0ATbBB+4MncbgtOtweGR3T8vw@mail.gmail.com>
+ <BN0PR01MB7134480F603F9E9CDD0586D3BDB9A@BN0PR01MB7134.prod.exchangelabs.com>
+In-Reply-To: <BN0PR01MB7134480F603F9E9CDD0586D3BDB9A@BN0PR01MB7134.prod.exchangelabs.com>
+From: Kisuh Ahn <kisuhahn@gmail.com>
+Date: Tue, 28 Nov 2023 10:07:08 +0800
+Message-ID: <CALDfuBvLJRM8hA4m1m8mwDg+WTML1dS_4rhn0cLd4uJ_0dPjZA@mail.gmail.com>
+Subject: Re: About reference to apply Apple jobs
+To: Jiannan Cao <jiannan@mit.edu>
+Content-Type: multipart/alternative; boundary="000000000000e7f07a060b2ce0e9"
+Return-Path: kisuhahn@gmail.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CY4PEPF0000EDD7:EE_|SA1PR01MB6653:EE_|BL02EPF0001A105:EE_|SA0PR01MB6458:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9a60ec46-6dcd-4441-c06f-08dbefb6c421
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?2Ijljk2iIpENJybSy+x9if2aMBw4E/7i3O7vv+Khibyt28ipfBd0FAnJihna?=
+ =?us-ascii?Q?DTLM3+E6BbB7pj7BpNGmLKqAxQj711jDPopIjTIIl3+QRRPoQr1SsoxDQWYI?=
+ =?us-ascii?Q?kst9l30m6BjIO0WJgcNfCPCIO/4yyWX+VuQo6omwPmgXdnXvCIIoZgij0YoP?=
+ =?us-ascii?Q?KInu7fEACpQNHO7rWJeO6PqU2zb0BnBO9Mg7X8G+rs4WuKYYPzQAcZzkDFsS?=
+ =?us-ascii?Q?zaxud55ywh0xMGl+Ik+DrlZxksitEnaqokXm3Rci0Weu5SN5UcFQcJqbK1AK?=
+ =?us-ascii?Q?VgGpNvWO8pi1KDSP/AzQY0Lk8FCpzpzfs068Y6Uevhj/BeUd5AaIP11Oet26?=
+ =?us-ascii?Q?w5erO3pWPkeNmyrjWAoGOqy9V9014QbKlB9q6JyqiC9KmqH+1aMNuQ8Jgdu2?=
+ =?us-ascii?Q?Vla2PBYH6s+T9YcEf5xBy79x6zxyfc6TCY/DCApva7MPYrtl4Qa+y6i7EV++?=
+ =?us-ascii?Q?mth9Rl+RD8hwx6bTktEt5DOsoAzmBOSlJSOLWIBGerXFonyMsCU0rhK6UPI+?=
+ =?us-ascii?Q?MdS49mjoqGJT8kyxcy2mF56IxV8T7J/SdS7VLNeg5trtbI7mx1OR2qJuWzxp?=
+ =?us-ascii?Q?Z0EySgVXHuO1Xioy0X9BAXelcUzBCMBIF5+nbCUCAMMQa7EnhkLePHNLE+wX?=
+ =?us-ascii?Q?aYIJJc2r2QyzyPnoOs+1ATlx9Zzaqo5gPTXO35lchne61BRN8dpTN5e50wgj?=
+ =?us-ascii?Q?bmw6sdQS+FhaQNcDQH5s84oVwJ2Ezzndf6vahs9EjY4OO87Bu8sW8g8je94a?=
+ =?us-ascii?Q?t+hTZEO+tKd+tlI/fjv+0l0j7xU4zhlwoc6nNx2lijufgvlp5xAg6+B1f6pn?=
+ =?us-ascii?Q?Na33xgZpYqHq6BO8czhTrikGOSK7XUtWvItmtr7VqwGwarmn2Q07BV3NZee6?=
+ =?us-ascii?Q?uat2ec9zds5Rp16zMBRjvY5H+pnOOqEGBmYd8gFiexBXAAaTAdTb66ogzcRi?=
+ =?us-ascii?Q?aERiVrUGnEkDeb0o3mysimd8SHQ81cOib98ALW2iU4fNcQAeE31epldmum+r?=
+ =?us-ascii?Q?yuUvNJjsOwAtDvoIC881Bq1z8rjdLWStgSGXDzyyZ7MhcAv6Eizsviw2q2HP?=
+ =?us-ascii?Q?5u8qR/IP8Vsk+c+VP/2ZVGJYHoJ27rSwGEL9F3BBRQk1YoDej9mVfG4rQZEM?=
+ =?us-ascii?Q?7jLTVd1oo/GLIUslET/xicz6jgeIIEqnsfoPKb1dhMG3HOfPEvaiSujqlJOa?=
+ =?us-ascii?Q?oWq427J2DE+rga4GpQftL4Jl2ZPXPrFkD7UcEhhxg68bCYfjXBvE2DcpwRiN?=
+ =?us-ascii?Q?5eta/wSHUIRG6o4g0wE6WHmgGpy+xxv1c6zMTtoL3K43P8BvMkbVEX5oc8Vn?=
+ =?us-ascii?Q?UJFDRIL98J6Ssl9Bayc23swO8/TFVAjT6i0eL9JDoykFbWdXHlY/gzhMXrjQ?=
+ =?us-ascii?Q?n4uVtCOF8zYeMkQ+zjwDgjNlVVrDAa0fwQIbbsO9BZXAsVQRse0DPC3yEMju?=
+ =?us-ascii?Q?TZw8cUD5e6t/mqHGL1ummF3+5OAY7uSkVNIcBtIB/e8yBW25BlkeF6+IqvtA?=
+ =?us-ascii?Q?i88pm0+CoAjFZx7RXDsuULtm4Myv503lVoWQP1ftaDuSpSPsGENI/KgeXjZn?=
+ =?us-ascii?Q?V3y500yNZon1tstBJm4ZV2mMKM7pTFWlQfCDP8Z4QCNWZaU+SvqlTy/UYbMz?=
+ =?us-ascii?Q?pWcGNVju6RvpTTzRVSg/gOCnHepuhBckKDVN7w6oAbR/AsZ84B9SgwrpIsPY?=
+ =?us-ascii?Q?J/rL0x4tPpI1lomiyPIk+nL3+N1Jl4dGKGcDFUdiWcMuWJ/Vldk140ueEnUw?=
+ =?us-ascii?Q?QWUsH8Egk/bnzAhhYVarDlYjQCYvpKg5JiusKQbr9ZnJaw859oEjrfzhLBjR?=
+ =?us-ascii?Q?C1RdkLobbgwIMgwqPBQ/meC2IZheu7LrDiSJz7huEglfirprwUznq10y?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.219.173;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-yb1-f173.google.com;PTR:mail-yb1-f173.google.com;CAT:NONE;SFS:(13230031)(4636009)(47660400002)(451199024)(7636003)(7596003)(356005)(55446002)(6666004)(86362001)(33964004)(966005)(166002)(53546011)(26005)(82202003)(5660300002)(76482006)(336012)(75640400001)(42186006)(6916009)(73392003)(83380400001)(4006050)(1096003)(8676002)(46800400005);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB6653
+X-OrganizationHeadersPreserved: SA1PR01MB6653.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb3.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb3.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb7.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 28 Nov 2023 02:07:25.6689
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 9a60ec46-6dcd-4441-c06f-08dbefb6c421
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: BL02EPF0001A105.namprd05.prod.outlook.com
+X-CrossPremisesHeadersFiltered: BL02EPF0001A105.namprd05.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ BL02EPF0001A105.namprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CY4PEPF0000EDD7.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 9cd11778-b309-4cf4-5d78-08dbefb6c160
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.112;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2023 02:07:25.5439
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a60ec46-6dcd-4441-c06f-08dbefb6c421
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CY4PEPF0000EDD7.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR01MB6458
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.3301961
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7025.020
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MmU5Tk9vWUVJdUNSa1V6b0F4QTQxczZhclFzWTVpWWM0M3F2bWw2TStFOWR6?=
+ =?utf-8?B?d0xLZHhLS05heGpiYmRHd0c1TmlSZVZJS3lEQVNScWF6cXc1Q1FHeTYvZEFx?=
+ =?utf-8?B?dXZyUlAwQWhOaDN0cktRQTkxVGx2ejF5WG1GMjMwT2JKOVRaUUxvUnkvWFhp?=
+ =?utf-8?B?ZVRPVnJsQ1c4V2JEcThnR0ZBQmIwaHdrbGlyYmMzLzZrRmtXWHpaVGhLd0tR?=
+ =?utf-8?B?bTJCRkh6QS9sY1V5SHl6WkhJNzNpOTlPOCtRamdndHlHUHhpMnR5QXFKQnhT?=
+ =?utf-8?B?eExySUI1c05HRW82Y1pCVytsTVNISS9MdFZsam9QazNNZnQxSFk4M1k2NEtH?=
+ =?utf-8?B?UHA5d1NETHZ0eCtUVWRjajg0c05wcHR4M01XL2U3UytSTVU4RnhKa2RHdHJQ?=
+ =?utf-8?B?cW83YlB5ZTcxTzl2KzM5bzJqS0xIOEtXWUo2VUk2WGc1b3RvdGdXMmdON3Bw?=
+ =?utf-8?B?SzNtU0M1czRIeFRUZC9nVEJpQXdYcUhxa2NHSk5ZQktMQ3pjTzR4eitSVUR3?=
+ =?utf-8?B?b0FGK2hvM3pFZnMzOStwYkh0dlNOajdUZ2M3cmg1cHZFY2lMcU5wR2FUUkFZ?=
+ =?utf-8?B?d3IrQlVyNGV6cDFVb29kYVBXRlhwTEdOdENOYjAvLzVlTitoc1ZCZ3AxL2JD?=
+ =?utf-8?B?bVFQWnVPZTBSZllFclhaWXRKc3QzUGFzM2ZLTUxINDhBUWdWYS9VYWJReXlz?=
+ =?utf-8?B?RVIrTmQ3V0ptZnlLNVdXMmRIQy9LSUVkSHFqaFhWZU5ZT3h2cTN6RlJzNnhn?=
+ =?utf-8?B?bVEzbnJOSkpiMllxaHB0Z0pTcHBTeDRFMXBZZjUyYWRjMXJtYTNUS2E3Y21s?=
+ =?utf-8?B?QzdVQnpNTzc2a1ZRMk9DK2kzVVBGc291MGRMd3htamlwT3MvaWgvMW4xRzhh?=
+ =?utf-8?B?bkJRUVZRYmhqQXQxVUFGVzlJc2VSL3JwM2VLc0VrOFhZN1I4U1VaakhCN0ho?=
+ =?utf-8?B?UWg0MWlCSDhpMHF6ZktWMVN0TFVVRHdlSnp1a2dFYlBROERDRnpKUlh1U0Vi?=
+ =?utf-8?B?N2UybjVHS2Fodm9DNVkydWc5Wkh0RzJ5WWhvdjNBYnpXaWppUzZZTDdYNjNn?=
+ =?utf-8?B?cGJKZXdsbWpxWlJBYnMzalJnWFVxekdCVmgvbFBYdFRoT2s3bE1tdUFBMFBH?=
+ =?utf-8?B?ZzJRbHIzYmQyRWlUOFNYZ05QMHlSQldlOCtYc3BUa05GU3dLODVqV2sxSGVU?=
+ =?utf-8?B?aldySzZSaVU0QUFBUDE1MFdnVjlzamNaSlRMdnRveXJqa0R2MGlYTWFnU1Qy?=
+ =?utf-8?B?ZmFOZXJZdXpnbzFNcG14QTNPRU5WeHl4N2l1SW5JZnBhWnAxTjNsR0dIN1Fi?=
+ =?utf-8?B?WWFYNy9XMThwVUJ1S0k5VjJCY2J6aXlYekw2TjZVeFgzOU1BUzg4UnF1SGlR?=
+ =?utf-8?B?aFZqeE9QUk5XSE9zV0RGc0lJYmNzTVFwUFlvejhNd3NtcXQ2aExEeE9aaVY4?=
+ =?utf-8?B?SmFmc2tPOEZFWFdKdy91c2YvcFpkb3ZzbWZRRVhBQjFBYml5dERMaTNEM2o1?=
+ =?utf-8?B?bllrczNycXp2ZGd2dlRQa2k0SzFWaG9SVEpidkJqWlRWVkRqZ2xpdEZBWWRn?=
+ =?utf-8?B?NFRKVEpMUEViWlVGRzBJOVZYMk13VFBvNENvODNPaGJlREtDYkhLaVliS2RE?=
+ =?utf-8?B?NWJhc291eVdGdTU0S1FaeTNhUHFhd0ZnRGtiL3JqcGdlNFlHaEtLSDUvKzJr?=
+ =?utf-8?B?cGlOUmtCN3Z1bFYzdVNEbjJ2eFRmWnNvYklDWkdwZjdRTjZHZ2V1ejM3cWxC?=
+ =?utf-8?B?bjZBV0pmUHFVM3hsVmhGSUYydnpNenAxdXNXc0ZtT2RlM2hlNjJxVkp6eUZH?=
+ =?utf-8?B?ZGZlWXE1bFU0QUlGMUhibDVkUkI1NHY0SjFXdFlSZEdocTNERW1XUkRjYVJr?=
+ =?utf-8?B?WDJkV2llSlFwN0N2RmliQjhPd253dm1UN3pDWGlUdGhYVnNURjhlbkZFdVlG?=
+ =?utf-8?B?cXhyTVZmcE81c2c3WmVyQnFOTzh1ZFZucy9EbDM4T0xLdDlwQmN5bkRFU25l?=
+ =?utf-8?B?UkdQbDFXTVczTDY4ZUxHYk1IV2dXbmFsb215YlQ3Y3VMQXhaNG9uT1pNbmFi?=
+ =?utf-8?B?MVd2KzRnY0Mrc2NlZkFFSGJFTnROQWF4M0tzOFp4VDZ5UFdrYUJuODRydjR5?=
+ =?utf-8?B?MS9Bc0gxZkxvOGlhQXYzWFRkMkRWdmg5bHYvUW5oUzFFd3JXY2pBMmIwamVH?=
+ =?utf-8?B?ejZza1ZOMlQxSkl4ZTdMcFphcERoYjExK0U3OW1tTm93S3hISXJIckhaWmFS?=
+ =?utf-8?B?S0M1RWpId01Ca0NSRnJBbjlEanptb3ZNcndMY3VHQkgwNXczNFZzb1dxQnlw?=
+ =?utf-8?B?cVNzOXlRVUhTVmZ6Z0FSNU1SWGxIeUk2a3lISkZkd1pYZWI2NFdHdkRQcW5M?=
+ =?utf-8?B?ZmZ3QlpiWWVSRktxMnl0OVJOM090RXhnTHZZMXhIV0UwS0F3TnI0TTgzNmpR?=
+ =?utf-8?B?bDJFeXYwUG9sUjJyNkE9PQ==?=
+MIME-Version: 1.0
+
+--000000000000e7f07a060b2ce0e9
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Jiannan,
+I have submitted the referral.
+Hope you hear from the recruiter soon.
+
+Best,
+Kisuh
+
+On Thu, Nov 23, 2023 at 8:58=E2=80=AFAM Jiannan Cao <jiannan@mit.edu> wrote=
+:
+
+> Hi Kisuh,
+>
+>
+>
+> Glad to hear back from you. This is my resume for Apple.
+>
+>
+>
+> Thanks!
+>
+> Jiannan
+>
+>
+>
+>
+>
+> *From: *Kisuh Ahn <kisuhahn@gmail.com>
+> *Date: *Wednesday, November 22, 2023 at 17:36
+> *To: *Jiannan Cao <jiannan@mit.edu>
+> *Subject: *Re: About reference to apply Apple jobs
+>
+> Hi Jiannan,
+>
+>
+>
+> sorry for the late reply! I've completely neglected gmail for a while.
+>
+> Sure. I will put you through internal referral from me.
+>
+> I will need your most up-to-date resume which I need to attach to the
+> referral.
+>
+>
+>
+> Best,
+>
+>
+>
+> Kisuh
+>
+>
+>
+>
+>
+>
+>
+> On Sat, Nov 18, 2023 at 12:29=E2=80=AFPM Jiannan Cao <jiannan@mit.edu> wr=
+ote:
+>
+> Hi Kisuh,
+>
+>
+>
+> How are things going recently? I=E2=80=99m really excited and looking for=
+ward to
+> what the next version of Siri.
+>
+>
+>
+> I=E2=80=99m planning to apply NLP related job at Apple, in both U.S. and =
+APAC.
+>
+>
+>
+> Do you think this job a fit? If so, would you like to refer me to this jo=
+b
+> position? It would be grateful for your reference, since the job market i=
+s
+> too hot in the U.S.
+>
+>
+> https://jobs.apple.com/en-us/details/200514982/aiml-ml-research-engineer-=
+mlr
+> <https://jobs.apple.com/en-us/details/200514982/aiml-ml-research-engineer=
+-mlr?team=3DMLAI>
+>
+>
+>
+> Best,
+>
+> Jiannan
+>
+>
+>
+>
+>
+> *From: *Kisuh Ahn <kisuhahn@gmail.com>
+> *Date: *Thursday, September 28, 2023 at 22:52
+> *To: *Jiannan Cao <jiannan@mit.edu>
+> *Subject: *Re: Hi
+>
+> Hi Jiannan,
+>
+>
+>
+> no problem. We all busy and not able to reply right away.
+>
+> Good to hear that you are well back into your study.
+>
+> And thank you for the information about open interpreter project. Very
+> interesting indeed!
+>
+>
+>
+> Hope you have a good weekend.
+>
+> And let's keep in touch!
+>
+>
+>
+> Best,
+>
+>
+>
+> Kisuh
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+> On Thu, Sep 21, 2023 at 11:44=E2=80=AFPM Jiannan Cao <jiannan@mit.edu> wr=
+ote:
+>
+> Hi Kisuh,
+>
+>
+>
+> I=E2=80=99m planning work on related agent LLM project.
+>
+>
+>
+> Recently you could view a project called open interpreter, which is reall=
+y
+> cool. openinterpreter.com
+>
+> It is an open-source project. It could utilize AppleScript to control
+> macOS, which is like Siri.
+>
+>
+>
+> I=E2=80=99m working on homework and more deadline than in company, so sor=
+ry to
+> late reply.
+>
+>
+>
+> Best,
+>
+> Jiannan
+>
+>
+>
+> *From: *Kisuh Ahn <kisuhahn@gmail.com>
+> *Date: *Saturday, September 16, 2023 at 22:16
+> *To: *Jiannan Cao jiannan@mit.edu
+> *Subject: *Hi
+>
+> Hi Jiannan!
+>
+> Kisuh here. How are you doing?
+>
+> Hope you have adjusted back to being a student at MIT :)
+>
+> Thanks to you, I think I'm really gaining some understanding of how LLM i=
+s
+> evolving which is really exciting but also scary.
+>
+> Any ways, wish you all the best in your research and hope to see your nam=
+e
+> as one of the experts in LLM tool learning in not to distant future!
+>
+>
+>
+> Best,
+>
+>
+>
+> Kisuh
+>
+>
+>
+>
+>
+>
+>
+>
+
+--000000000000e7f07a060b2ce0e9
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div>Hi Jiannan,</div><div>I have submitted the referral.</d=
+iv><div>Hope you hear from the recruiter soon.</div><div><br></div><div>Bes=
+t, <br></div><div>Kisuh<br></div></div><br><div class=3D"gmail_quote"><div =
+dir=3D"ltr" class=3D"gmail_attr">On Thu, Nov 23, 2023 at 8:58=E2=80=AFAM Ji=
+annan Cao &lt;<a href=3D"mailto:jiannan@mit.edu">jiannan@mit.edu</a>&gt; wr=
+ote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px=
+ 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><div class=
+=3D"msg2153476124939228412">
+
+
+
+
+
+<div lang=3D"EN-US" style=3D"overflow-wrap: break-word;">
+<div class=3D"m_2153476124939228412WordSection1">
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hi Kisuh,<u></u><u></=
+u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Glad to hear back fro=
+m you. This is my resume for Apple.<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Thanks!<u></u><u></u>=
+</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Jiannan<u></u><u></u>=
+</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+<div id=3D"m_2153476124939228412mail-editor-reference-message-container">
+<div>
+<div style=3D"border-width:1pt medium medium;border-style:solid none none;b=
+order-color:rgb(181,196,223) currentcolor currentcolor;padding:3pt 0cm 0cm"=
+>
+<p class=3D"MsoNormal" style=3D"margin-bottom:12pt"><b><span style=3D"font-=
+size:12pt;font-family:&quot;Aptos&quot;,sans-serif;color:black">From:
+</span></b><span style=3D"font-size:12pt;font-family:&quot;Aptos&quot;,sans=
+-serif;color:black">Kisuh Ahn &lt;<a href=3D"mailto:kisuhahn@gmail.com" tar=
+get=3D"_blank">kisuhahn@gmail.com</a>&gt;<br>
+<b>Date: </b>Wednesday, November 22, 2023 at 17:36<br>
+<b>To: </b>Jiannan Cao &lt;<a href=3D"mailto:jiannan@mit.edu" target=3D"_bl=
+ank">jiannan@mit.edu</a>&gt;<br>
+<b>Subject: </b>Re: About reference to apply Apple jobs<u></u><u></u></span=
+></p>
+</div>
+<div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hi Jiannan,<u></u><u>=
+</u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">sorry for the late re=
+ply! I've completely neglected gmail for a while.<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Sure. I will put you =
+through internal referral from me.<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">I will need your most=
+ up-to-date resume which I need to attach to the referral.<u></u><u></u></s=
+pan></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Best,<u></u><u></u></=
+span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Kisuh<u></u><u></u></=
+span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+</div>
+</div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><u></u>&nbsp;<u></u><=
+/span></p>
+<div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">On Sat, Nov 18, 2023 =
+at 12:29=E2=80=AFPM Jiannan Cao &lt;<a href=3D"mailto:jiannan@mit.edu" targ=
+et=3D"_blank">jiannan@mit.edu</a>&gt; wrote:<u></u><u></u></span></p>
+</div>
+<blockquote style=3D"border-width:medium medium medium 1pt;border-style:non=
+e none none solid;border-color:currentcolor currentcolor currentcolor rgb(2=
+04,204,204);padding:0cm 0cm 0cm 6pt;margin-left:4.8pt;margin-right:0cm">
+<div>
+<div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hi Kisuh,<u></u><u></=
+u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">How are things going =
+recently? I=E2=80=99m really excited and looking forward to what the next v=
+ersion of Siri.<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">I=E2=80=99m planning =
+to apply NLP related job at Apple, in both U.S. and APAC.<u></u><u></u></sp=
+an></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Do you think this job=
+ a fit? If so, would you like to refer me to this job position? It would be=
+ grateful for your reference, since the job market
+ is too hot in the U.S.<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt"><a href=3D"https://jo=
+bs.apple.com/en-us/details/200514982/aiml-ml-research-engineer-mlr?team=3DM=
+LAI" target=3D"_blank">https://jobs.apple.com/en-us/details/200514982/aiml-=
+ml-research-engineer-mlr</a><u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Best,<u></u><u></u></=
+span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Jiannan<u></u><u></u>=
+</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<div id=3D"m_2153476124939228412m_-6143465566823758750mail-editor-reference=
+-message-container">
+<div>
+<div style=3D"border-width:1pt medium medium;border-style:solid none none;p=
+adding:3pt 0cm 0cm;border-color:currentcolor">
+<p class=3D"MsoNormal" style=3D"margin-bottom:12pt"><b><span style=3D"font-=
+size:12pt;color:black">From:
+</span></b><span style=3D"font-size:12pt;color:black">Kisuh Ahn &lt;<a href=
+=3D"mailto:kisuhahn@gmail.com" target=3D"_blank">kisuhahn@gmail.com</a>&gt;=
+<br>
+<b>Date: </b>Thursday, September 28, 2023 at 22:52<br>
+<b>To: </b>Jiannan Cao &lt;<a href=3D"mailto:jiannan@mit.edu" target=3D"_bl=
+ank">jiannan@mit.edu</a>&gt;<br>
+<b>Subject: </b>Re: Hi</span><span style=3D"font-size:11pt"><u></u><u></u><=
+/span></p>
+</div>
+<div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hi Jiannan,<u></u><u>=
+</u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">no problem. We all bu=
+sy and not able to reply right away.<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Good to hear that you=
+ are well back into your study.<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">And thank you for the=
+ information about open interpreter project. Very interesting indeed!<u></u=
+><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hope you have a good =
+weekend.<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">And let's keep in tou=
+ch!<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Best,<u></u><u></u></=
+span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Kisuh<u></u><u></u></=
+span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+</div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">On Thu, Sep 21, 2023 =
+at 11:44=E2=80=AFPM Jiannan Cao &lt;<a href=3D"mailto:jiannan@mit.edu" targ=
+et=3D"_blank">jiannan@mit.edu</a>&gt; wrote:<u></u><u></u></span></p>
+</div>
+<blockquote style=3D"border-width:medium medium medium 1pt;border-style:non=
+e none none solid;padding:0cm 0cm 0cm 6pt;margin:5pt 0cm 5pt 4.8pt;border-c=
+olor:currentcolor currentcolor currentcolor rgb(204,204,204)">
+<div>
+<div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hi Kisuh,<u></u><u></=
+u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">I=E2=80=99m planning =
+work on related agent LLM project.
+<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Recently you could vi=
+ew a project called open interpreter, which is really cool.
+<a href=3D"http://openinterpreter.com" target=3D"_blank">openinterpreter.co=
+m</a><u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">It is an open-source =
+project. It could utilize AppleScript to control macOS, which is like Siri.=
+<u></u><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">I=E2=80=99m working o=
+n homework and more deadline than in company, so sorry to late reply.<u></u=
+><u></u></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Best,<u></u><u></u></=
+span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Jiannan<u></u><u></u>=
+</span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+<div id=3D"m_2153476124939228412m_-6143465566823758750m_1595965148463572756=
+mail-editor-reference-message-container">
+<div>
+<div style=3D"border-width:1pt medium medium;border-style:solid none none;p=
+adding:3pt 0cm 0cm;border-color:currentcolor">
+<p class=3D"MsoNormal" style=3D"margin-bottom:12pt"><b><span style=3D"font-=
+size:12pt;color:black">From:
+</span></b><span style=3D"font-size:12pt;color:black">Kisuh Ahn &lt;<a href=
+=3D"mailto:kisuhahn@gmail.com" target=3D"_blank">kisuhahn@gmail.com</a>&gt;=
+<br>
+<b>Date: </b>Saturday, September 16, 2023 at 22:16<br>
+<b>To: </b>Jiannan Cao <a href=3D"mailto:jiannan@mit.edu" target=3D"_blank"=
+>jiannan@mit.edu</a><br>
+<b>Subject: </b>Hi</span><span style=3D"font-size:11pt"><u></u><u></u></spa=
+n></p>
+</div>
+<div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hi Jiannan!<u></u><u>=
+</u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Kisuh here. How are y=
+ou doing?<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Hope you have adjuste=
+d back to being a student at MIT :)<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Thanks to you, I thin=
+k I'm really gaining some understanding of how LLM is evolving which is rea=
+lly exciting but also scary.<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Any ways, wish you al=
+l the best in your research and hope to see your name as one of the experts=
+ in LLM tool learning in not to distant future!<u></u><u></u></span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Best,<u></u><u></u></=
+span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">Kisuh<u></u><u></u></=
+span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+<div>
+<p class=3D"MsoNormal"><span style=3D"font-size:11pt">&nbsp;<u></u><u></u><=
+/span></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div></blockquote></div>
+
+--000000000000e7f07a060b2ce0e9--

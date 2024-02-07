@@ -1,0 +1,539 @@
+Received: from PH0PR01MB7973.prod.exchangelabs.com (2603:10b6:510:28f::18) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 26 Jul 2023 19:02:16
+ +0000
+Received: from BN9PR03CA0666.namprd03.prod.outlook.com (2603:10b6:408:10e::11)
+ by PH0PR01MB7973.prod.exchangelabs.com (2603:10b6:510:28f::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6631.29; Wed, 26 Jul 2023 19:02:15 +0000
+Received: from BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:10e:cafe::40) by BN9PR03CA0666.outlook.office365.com
+ (2603:10b6:408:10e::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29 via Frontend
+ Transport; Wed, 26 Jul 2023 19:02:14 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.100)
+ smtp.mailfrom=a471056.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of a471056.bnc3.mailjet.com
+ does not designate 18.9.1.100 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.100;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.100) by
+ BN8NAM11FT055.mail.protection.outlook.com (10.13.177.62) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6631.29 via Frontend Transport; Wed, 26 Jul 2023 19:02:14 +0000
+Received: from oc11expo19.exchange.mit.edu (18.9.4.50) by
+ oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 26 Jul 2023 15:02:03 -0400
+Received: from oc11exhyb6.exchange.mit.edu (18.9.1.111) by
+ oc11expo19.exchange.mit.edu (18.9.4.50) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 26 Jul 2023 15:02:03 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.47) by
+ oc11exhyb6.exchange.mit.edu (18.9.1.111) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Wed, 26 Jul 2023 15:02:03 -0400
+Received: from BN9PR03CA0567.namprd03.prod.outlook.com (2603:10b6:408:138::32)
+ by MW6PR01MB8625.prod.exchangelabs.com (2603:10b6:303:245::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6609.33; Wed, 26 Jul 2023 19:02:01 +0000
+Received: from BN8NAM11FT110.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:138:cafe::c0) by BN9PR03CA0567.outlook.office365.com
+ (2603:10b6:408:138::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.29 via Frontend
+ Transport; Wed, 26 Jul 2023 19:02:00 +0000
+Authentication-Results-Original: spf=pass (sender IP is 87.253.236.166)
+ smtp.mailfrom=a471056.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=704
+Received-SPF: Pass (protection.outlook.com: domain of a471056.bnc3.mailjet.com
+ designates 87.253.236.166 as permitted sender)
+ receiver=protection.outlook.com; client-ip=87.253.236.166;
+ helo=o166.p11.mailjet.com; pr=C
+Received: from o166.p11.mailjet.com (87.253.236.166) by
+ BN8NAM11FT110.mail.protection.outlook.com (10.13.176.156) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6631.29 via Frontend Transport; Wed, 26 Jul 2023 19:02:00 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; q=dns/txt;
+  d=bnc3.mailjet.com; i=servicedesk=3Dmit.edu@a471056.bnc3.mailjet.com; s=mailjet2; x=1690405319;
+  h=message-id:mime-version:from:from:reply-to:to:to:subject:subject:date:date:list-id:list-unsubscribe-post:
+  list-unsubscribe:feedback-id:precedence:x-campaignid:x-csa-complaints:
+  x-mj-mid:x-mj-smtpguid:x-report-abuse-to:content-type;
+  bh=x6mDvsOXOX88YCWRgv3nlhMHe/IDy4sjW1auKbTjN0M=;
+  b=lXFld38yovXzs67jvgToRhNPdrRULqFRS1IAcf37dkVQ7TdCKtMhFOC9z
+ s6yZfsPXXPVFWTKUcTmHTYC3TyG8x2lYkoZPCByZCofescusGIscZZIGd/vq
+ nzf59ieVPl8x+rkWgw585rbGh0JbmW0TTiSqyMuWZhUueWWW0YKgM0=
+Return-Path:
+ 2c633c44.AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAAcwEABkwW2n@a471056.bnc3.mailjet.com
+Message-ID: <2c633c44.AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAAcwEABkwW2n@mailjet.com>
+From: Kyle Filipe <servicedesk@mit.edu>
+Reply-To: sn-request-certificate-reminder@mit.edu
+To: jiannan@mit.edu
+Subject: Reminder: MIT Personal Certificates Expire July 30
+Date: Wed, 26 Jul 2023 19:01:59 +0000 (UTC)
+List-Id: <servicedesk.mit.edu.guo7-09zkp.mj>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+List-Unsubscribe: <mailto:unsub-2c633c44.guo7.lvr13p5rlyjx@bnc3.mailjet.com>,
+	<https://guo7.mjt.lu/unsub2?m=AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAAcwEABkwW2nBLwqgtt1RLGXEbO6HF5ChAAG2zM&b=2c633c44&e=d0bd1d16&x=a7iET_5Bkh8rOy7esnA68A>
+Feedback-Id: 42.471056.449331:MJ
+Precedence: bulk
+X-CampaignID: 7671874160
+X-CSA-Complaints: csa-complaints@eco.de
+X-MJ-Mid: AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAAcwEABkwW2nBLwqgtt1RLGXEbO6HF5ChAAG2zM
+X-MJ-SMTPGUID: 04bc2a82-db75-44b1-9711-b3ba1c5e4284
+X-REPORT-ABUSE-TO: Message sent by Mailjet please report to
+	abuse@mailjet.com with a copy of the message
+Content-Type: multipart/alternative; boundary="=-r24WjgjUN45qx1KcAwYp"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BN8NAM11FT110:EE_|MW6PR01MB8625:EE_|BN8NAM11FT055:EE_|PH0PR01MB7973:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: b4cf6020-2852-416e-d54f-08db8e0ad317
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?Tu0AFZD30uINd55ZiurxhjeMFwqPKCM76O/YDJrqVOIlFgMb7eRiFMqk2Nhi?=
+ =?us-ascii?Q?Bf42y6/cJjwHDAX64APPNFCeKJOmM0NapBlNGWw2E2Wi5CUgS+J4N1yBxA2a?=
+ =?us-ascii?Q?9OPx3/qws+uLYrB+yS0XHthHUP9lTP8nFrHH6dQgmghYnsxFn4lsXkeb6Mv8?=
+ =?us-ascii?Q?NxRPW3GBMO2c+OfarrU77OydaRz8nvzUeqoDxw8ATROuxfZbhONmHzMkvoKh?=
+ =?us-ascii?Q?6cA5XB+G0xyL32TckzaCWnASl86Mvwvzo+DtvuUxNf660lgU5EZ3zhilcITF?=
+ =?us-ascii?Q?SuX+VCb+6rjgY8cxY1IenxE97688iMEkhHg0E3pGC5gIzaFg115g9IYX1tox?=
+ =?us-ascii?Q?nOEVs/4t8H8N/5XxS745HuQYEyfqBjFnw+YIBG4o6Y3P/vpCB5ZhQftye5f8?=
+ =?us-ascii?Q?bK+z3gw8Gt0OgH2xZvZ6WybiddtXhVf14kRndjRLmWP1wHChBTJo+qdSeT21?=
+ =?us-ascii?Q?nG3LHa/O82cdk9KgF/xpdSOO9Mt3q8FDph/NiIeCMB/tQoDvy3PZy4w0zEZe?=
+ =?us-ascii?Q?V5zuHe3RuoQmqSrsZljRUi2BqqZDMBkPxdSBYWr/wZ1AMzNWLKeOjOgdzvyQ?=
+ =?us-ascii?Q?GxFKlQhjSDO8zgXTJ1Kz9Iu+PiLMteB/eewsmGdoVJ6u4SQgzgdmsKl04D7b?=
+ =?us-ascii?Q?8vxUDlG+NBx7iwvfCcJmOx0/uLSenoV4X6w9tcKCSQ+h7nv29slvyFHNnbC8?=
+ =?us-ascii?Q?R0xhfrHlIGE8L90OEqny+OP9hlYxDNhvf2A+WOYx/6yzCqCfxGv6I8j93UBC?=
+ =?us-ascii?Q?aMWr3EKsRH2KHLS7YMVv3GGY7wySRV+iupQ9lzRJ78kSU0wh7GdvarfrLjqZ?=
+ =?us-ascii?Q?zKq2dxfOKL6YBg4GT1q186bXVo2PpwfiSPhYaVbmYHHyMoygxdPBokuIvS6w?=
+ =?us-ascii?Q?yBZsvj7XzEYSV1igU49ZIh9bjWjFYBIDk9xiR4Nnl6FPmdNDv8eySFLkcIGV?=
+ =?us-ascii?Q?JreIA/EL6iot7d7LuJ51hUe1T5H7KPtN7nk1TQ1Cpmh8S7D95ZsRwpE0NqBR?=
+ =?us-ascii?Q?ljx4cUvBiIYBgsio4LJ06vzMCibqMzHGaex9BTYB+hq4iq+xNTF7BwzcoIug?=
+ =?us-ascii?Q?ry/KxyIAZ/eveWOatM3AdgGEbH3ajrRj9vrrEaF4spsN/OdAqZayBKs5lUGX?=
+ =?us-ascii?Q?mAHz4kEZGg22GNsc8PbnjApBtOPoSGXVIf5m2t8hC5jIWPEYQIizLClXU/9S?=
+ =?us-ascii?Q?mpi8r1xnNFNcDpeD7gGW1oTIAIlGjrPh6AomenwX3umBpbbXiN/lac7hGbVv?=
+ =?us-ascii?Q?Koe6i9MoqVed3zu+Eh/VwKcaE7yap+jwvNXtA6ThGN1xtLQonpQdKfolOPnl?=
+ =?us-ascii?Q?EnzEfqEpr7xUbeO2am/VVEbOALr0sciz2eOfEoep/Ht47+MOn28ZAwJci7tv?=
+ =?us-ascii?Q?F/VEHYKsPyGGYoZWK69OB4YLxECvhpRpf6o32oSZRf1lRgum58KcPZ1rWNYe?=
+ =?us-ascii?Q?PJ2moWP7Eob1fxMuyRlMpn7RQGfZ9vNZ?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:87.253.236.166;CTRY:FR;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:o166.p11.mailjet.com;PTR:o166.p11.mailjet.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR01MB8625
+X-OrganizationHeadersPreserved: MW6PR01MB8625.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb6.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb6.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo19.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 26 Jul 2023 19:02:14.5272
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ b4cf6020-2852-416e-d54f-08db8e0ad317
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted:
+ BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ BN8NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BN8NAM11FT110.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 3b917c4e-ec12-4006-17e8-08db8e0acad4
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.100;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb4.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jul 2023 19:02:14.4335
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4cf6020-2852-416e-d54f-08db8e0ad317
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.100];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BN8NAM11FT110.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB7973
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.8401545
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6631.026
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZVlMTDVqZUN2V3lmMDNBM3JoVWZoZXk1VVdzdzl3azJ2QmcrUjRqeXpqY2ZS?=
+ =?utf-8?B?TkNublkrZjBBanBzdnIvNjIxeVRjcGZwanN5WkhDKzRNbHhuS2UwWWZYY0dR?=
+ =?utf-8?B?ampaWTF5Mm5kV0Ivcm9TSzJzckF5TnNvbGZ3OU1RZXJmbWVTWG01M3ZkOHlS?=
+ =?utf-8?B?bVlNRnhjeGY0aUZZZ2VHZFlHRHMydFEvVFVaVFpXellQdWJFL2s4aDNuMlc1?=
+ =?utf-8?B?LzVldmdiMFZyV0dQcmlZTFVVVUlhUGg5aVJTM2RrU3VKZHpjMmEyNmIrTmhN?=
+ =?utf-8?B?NnZycXdrNEY1UzVCdmFkSisvYWVpMEY4eERhaHE0Sm5TSWYzNTNrTU92bW5n?=
+ =?utf-8?B?b2JqdDNtQnErcE5rTXhXWkpiUENYV0RXMGVranFJV1E2QnZHUFh4Y24wM3ZD?=
+ =?utf-8?B?OGZ1QzduTWNSWHoxcVlHNUNTZjgrZjkyLzd5YnRrcWlKdUFQaThYazRMVU51?=
+ =?utf-8?B?QTdrSm41Yyt4OXQzdmpydWVuaHVqa3BvOXZBU0cxMWtOZlNjTkJTcC9DUTJF?=
+ =?utf-8?B?QzA1SXlobjY3WHljWlVuTjN1ajNGNVExNkhqTFJLbWExbnBOVDNobTkzcnlM?=
+ =?utf-8?B?NjNTdTZOcFlma3d3UzZQYzBlNjAvL1VRUXYxZ2dnYkpQaVFxalUwQ3pvbkl4?=
+ =?utf-8?B?bFBOZ2hBQmpYYVZtUXo4dXpuZWdUaE9lZnhWWXZpV0xNZy9EenY4Y1dHdkFx?=
+ =?utf-8?B?MHljRFRHdmppVUxkcHFwclovV0d5WUlmTS96YXBvS3BNYjJOdjY3Uk5kTTE2?=
+ =?utf-8?B?aHZkZDR1Ukh0Ri9XSlp4bC81T29CRUZ0K3J3NTd5Q3IwQitmbXRXWlcvSisr?=
+ =?utf-8?B?UlJKblVrOExLdDJTNjZjMVM1bkk0WFdQejJ4VllNSEM4S2txVFhNUVJZakVz?=
+ =?utf-8?B?blVRZ0NLdGZKNjc0OEFGK2VDQjhWRFd1cFVBWm5GcWZuVjk2ZmcySkUwd0xl?=
+ =?utf-8?B?b1BHUVFpRnZvRm8yQktlU3FRdzFwNG1jL2N2T2FsR2gvL1Q2Nk1NSzlhTFJR?=
+ =?utf-8?B?SUlDYStxbWlIN2VSalpEUVVxcVFlK2JiYWVyN3kxcXlpU3FPa2lZWlVrTnh6?=
+ =?utf-8?B?YVBmOTZpY0tOT2MvZzJxSnczQnVqaDJLYWFWVlM4Sk5jTUVXNzNBYzlWSElk?=
+ =?utf-8?B?QXJCQ1c2ZFlkQkFnclFpVTdGQXJFRDdSaDZjc3VCbFAwcmhITHJseTZQSGFV?=
+ =?utf-8?B?MEQ1SjM5RWNSRnFXN1NqRElORGNRTEpPNWwrdW1VbTdqY2w0M1ZYQzVkd1hl?=
+ =?utf-8?B?WnFGRTlqNlNOQ3JSc0FwLzkvTklhV0RtbTZpQjh4Ym04ZzJTNW1JK09YYkFh?=
+ =?utf-8?B?bVlsNkhJYms4THZ2N3VrNlAzdkw1dkIxS2YzV3pnZENUUjZUTVFkSXI5dFlW?=
+ =?utf-8?B?b1VHako1QVpwdjQ5QkNtdWxndHlxaVRlUVdieTd2Z0cxeENpd2JyRXVFa2V1?=
+ =?utf-8?B?YnNBQVpXeDY3N2h4dXZQWEpCTTJnSVNJRHpHcEt4d3NkTGZuMnZTWmNUdlZm?=
+ =?utf-8?B?WVdtSFRQRnkwckEyZjBSSnM0WStGNEZpMU5ZeEtUNjdnMk5sRmk4ekJBREZF?=
+ =?utf-8?B?YlJEeDBnQndwMzZ3RkVDNHRBbEZ6K0FCYktEejhtcmJKV0pQbEpwK2UxdkF3?=
+ =?utf-8?B?blkwaktwM0I3aDUxV2FQUVJEMGRpM1VmQi9xcWc1S3VVbzRNcDgwaVZURSt0?=
+ =?utf-8?B?SXcxNjcrVndvcFg1Wk9qVkJQYTgvTVFYMURNM2tGTlcyNmZmdVNlckgwc2Rp?=
+ =?utf-8?B?Vm9uMVdYbGo3RTQ3amtuQ2RoTXliNDMxTFlEdU5Jd2gybVBZa1pRbVdhZHpY?=
+ =?utf-8?B?eUlJVU8zKzFjOTFkNWNQbFZKUGVNTHZEaWgwRDBLQ2ZQK2xGTVc1b3RKM1Ay?=
+ =?utf-8?B?Nlg1aitZOGVtY21ybzRKTDd3WVBCbWhIVElwaXRUSE1jKzNQd29sT3ptS2lP?=
+ =?utf-8?B?bFh0c2NXQlRnSDVqbzJsNTM0c0NjYUZDTWdTK0JvekowRHRGblJ2WGQrb3pB?=
+ =?utf-8?B?VjhBSzlXUkdwdTczZVlDNHlqN0NnbGFmN0Z3SFpIeGVHWGhQUDJQcWhNZ0I3?=
+ =?utf-8?B?QWlhU2t2RzVnTzlzQnBTa1FpdEFQVHlCbmYxbXArUjJQV1NnRnhMRnNMdGRG?=
+ =?utf-8?B?OVl4MUV0ejlHc2ZQdkxRRGVjSmltOHNnOFhnSFhKN2czRG5uOTIwOG9GZjlz?=
+ =?utf-8?B?amFzcWhIMUkyZGZxL1RKVzN0dXpUZWFzVkVxc1IyZm5jRTh6RE9EOCtJeFlB?=
+ =?utf-8?B?MXcxUFRtRnNDM0FlNFFnSUJGL3BnPT0=?=
+MIME-Version: 1.0
+
+--=-r24WjgjUN45qx1KcAwYp
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<<MIT IS&T>> [https://guo7.mjt.lu/img/guo7/b/m6zky/viok6.png]
+Good day,
+
+Certificates allow you to access secure web services at MIT, such as Atlas =
+and WebSIS, or to access any MIT certificate-protected site. Certificates o=
+btained from Information Systems and Technology (IS&T) within the past year=
+ are set to expire on July 30, 2023.
+
+To ensure continued access to these secured sites, please plan to renew you=
+r certificates on all desktop and mobile devices by July 30, 2023. This ren=
+ewal process is not automatic, and there are some steps you will need to ta=
+ke to get new ones.
+
+Step One: Before obtaining your certificates
+
+ * If your password is over one year old, you will be prompted to change it=
+ during the certificate renewal process. For more information and tips on h=
+ow to choose a strong password, see: Strong Passwords [http://kb.mit.edu/co=
+nfluence/x/3wNt]
+ * Note: If your Windows computer is on the MIT domain and you are not on c=
+ampus, refer to this article about changing your password [http://kb.mit.ed=
+u/confluence/x/ZIayCQ] to make sure you will be able to log into your compu=
+ter with your new password. (You are on the MIT domain if you see "Sign in =
+to: ATHENA.MIT.EDU" at the bottom of the Windows logon screen.)
+ * Have your Duo-equipped phone or device [http://kb.mit.edu/confluence/x/m=
+9YwCQ] handy. The certificate installation process requires Duo two-factor =
+authentication.
+
+Step Two: Obtaining your certificates
+
+ * If you use MacOS or Windows, update your web browser to the most current=
+ version, then download and run the latest version of the CertAid app from =
+IS&T [https://ist.mit.edu/mit-apps/certaid]. Supported browsers include Saf=
+ari, Edge, Chrome, and Firefox.
+ * For iPhone and iPad (iOS) users: See these step-by-step instructions [ht=
+tp://kb.mit.edu/confluence/x/GHgYCQ] in the Knowledge Base.=C2=A0
+ * For Android users: See these step-by-step instructions [http://kb.mit.ed=
+u/confluence/x/ZIHHCQ] in the Knowledge Base.
+
+Please note: If you use multiple devices and browsers, you will need to obt=
+ain a new certificate for each browser on each device. For more information=
+, see: Certificates at MIT [http://ist.mit.edu/certificates/].
+
+Step Three: Deleting your expired certificates
+
+ * It is recommended that, after installing your new certificates, you dele=
+te your expired ones. Failure to do so may cause problems accessing certifi=
+cate-protected sites. We encourage the MIT community to use CertAid, which =
+will prompt you to delete expired certificates if any are detected.
+ * For more information, see: Deleting your expired certificates [http://is=
+t.mit.edu/certificates/delete].
+
+Note for users who encrypt email: Do not delete an expired certificate if y=
+ou have used it to sign or receive encrypted email. For more information on=
+ what to do in that case, see the Export or Back Up Your MIT Personal Certi=
+ficates [http://kb.mit.edu/confluence/display/istcontrib/Export+or+Back+Up+=
+Your+MIT+Personal+Certificates] page.
+
+If you have any questions or concerns, email the IS&T Service Desk at servi=
+cedesk@mit.edu [servicedesk@mit.edu] or call 617-253-1101.
+
+Sincerely,
+
+Kyle Filipe
+Senior Director, IT Support Services
+MIT Information Systems & Technology (IS&T)
+
+A copy of this email is available at: http://kb.mit.edu/confluence/x/pzLSCQ
+Information Systems and Technology
+Massachusetts Institute of Technology
+77 Massachusetts Avenue, Cambridge, MA 02139
+
+
+
+This e-mail has been sent to jiannan@mit.edu, click here to unsubscribe htt=
+p://guo7.mjt.lu/unsub2?hl=3Den&m=3DAV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6M=
+AAcwEABkwW2nBLwqgtt1RLGXEbO6HF5ChAAG2zM&b=3D2c633c44&e=3Dd0bd1d16&x=3Da7iET=
+_5Bkh8rOy7esnA68A.
+
+
+
+[https://www.mailjet.com/?utm_source=3Dfooter&utm_medium=3Demail&utm_campai=
+gn=3Dlogo1]=
+
+--=-r24WjgjUN45qx1KcAwYp
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>Reminder: MIT Personal Certificates Expire July 30</title><!--[if !mso=
+]><!--><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><!--<![en=
+dif]--><meta name=3D"viewport" content=3D"width=3Ddevice-width,initial-scal=
+e=3D1"><style type=3D"text/css">#outlook a { padding:0; }
+      body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size=
+-adjust:100%; }
+      table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-table-r=
+space:0pt; }
+      img { border:0;height:auto;line-height:100%; outline:none;text-decora=
+tion:none;-ms-interpolation-mode:bicubic; }
+      p { display:block;margin:13px 0; }</style><!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]--><!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]--><style type=3D"text/css">@media only screen and (min-width:=
+480px) {
+        .mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-100 { width:100% !important; max-width: 100%; }</style><sty=
+le type=3D"text/css">[owa] .mj-column-per-100 { width:100% !important; max-=
+width: 100%; }</style><style type=3D"text/css">@media only screen and (max-=
+width:479px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style><style type=3D"text/css"></style></head><body style=3D"word-sp=
+acing:normal;background-color:#ffffff;"><div style=3D"background-color:#fff=
+fff;"><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px=
+;" width=3D"600" bgcolor=3D"#ffffff" ><tr><td style=3D"line-height:0px;font=
+-size:0px;mso-line-height-rule:exactly;"><![endif]--><div style=3D"backgrou=
+nd:#ffffff;background-color:#ffffff;margin:0px auto;max-width:600px;"><tabl=
+e align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D=
+"presentation" style=3D"background:#ffffff;background-color:#ffffff;width:1=
+00%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20px 0px =
+20px 0px;text-align:center;"><!--[if mso | IE]><table role=3D"presentation"=
+ border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=
+=3D"vertical-align:top;width:600px;" ><![endif]--><div class=3D"mj-column-p=
+er-100 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;directi=
+on:ltr;display:inline-block;vertical-align:top;width:100%;"><table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"v=
+ertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"center" style=3D=
+"font-size:0px;padding:5px 50px 0px 50px;padding-top:5px;padding-right:50px=
+;padding-bottom:0px;padding-left:50px;word-break:break-word;"><table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"b=
+order-collapse:collapse;border-spacing:0px;"><tbody><tr><td style=3D"width:=
+480px;"><img alt=3D"MIT IS&amp;T" src=3D"https://guo7.mjt.lu/img/guo7/b/m6z=
+ky/viok6.png" style=3D"border:none;display:block;outline:none;text-decorati=
+on:none;height:auto;width:100%;font-size:13px;" width=3D"480" height=3D"aut=
+o"></td></tr></tbody></table></td></tr><tr><td align=3D"left" style=3D"font=
+-size:0px;padding:0px 25px 0px 25px;padding-top:0px;padding-bottom:0px;word=
+-break:break-word;"><div style=3D"font-family:Arial, sans-serif;font-size:1=
+8px;letter-spacing:normal;line-height:1;text-align:left;color:#000000;"><p =
+class=3D"text-build-content" style=3D"line-height: 23px; margin: 10px 0; ma=
+rgin-top: 10px;" data-testid=3D"aAQ_xjFoAu0Si"><span style=3D"font-family:A=
+rial, sans-serif;font-size:16px;">Good day,</span></p><p class=3D"text-buil=
+d-content" style=3D"line-height: 23px; margin: 10px 0;" data-testid=3D"aAQ_=
+xjFoAu0Si"><span style=3D"font-family:Arial;font-size:16px;">Certificates a=
+llow you to access secure web services at MIT, such as Atlas and WebSIS, or=
+ to access any MIT certificate-protected site. Certificates obtained from I=
+nformation Systems and Technology (IS&amp;T) within the past year are set t=
+o expire on July 30, 2023.</span></p><p class=3D"text-build-content" style=
+=3D"line-height: 23px; margin: 10px 0;" data-testid=3D"aAQ_xjFoAu0Si"><span=
+ style=3D"font-family:Arial;font-size:16px;">To ensure continued access to =
+these secured sites, please plan to <b>renew your certificates on all deskt=
+op and mobile devices by July 30, 2023</b>. This renewal process is not aut=
+omatic, and there are some steps you will need to take to get new ones.</sp=
+an></p><p class=3D"text-build-content" style=3D"line-height: 23px; margin: =
+10px 0;" data-testid=3D"aAQ_xjFoAu0Si"><span style=3D"font-family:Arial;fon=
+t-size:16px;"><b>Step One: Before obtaining your certificates</b></span></p=
+><ul><li style=3D"line-height:23px;"><span style=3D"font-family:Arial;font-=
+size:16px;">If your password is over one year old, you will be prompted to =
+change it during the certificate renewal process. For more information and =
+tips on how to choose a strong password, see: </span><a class=3D"link-build=
+-content" style=3D"color:inherit;; text-decoration: none;" target=3D"_blank=
+" href=3D"http://guo7.mjt.lu/lnk/AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAA=
+cwEABkwW2nBLwqgtt1RLGXEbO6HF5ChAAG2zM/1/jgfufiMpxfDbZEnt3ArHJg/aHR0cDovL2ti=
+Lm1pdC5lZHUvY29uZmx1ZW5jZS94LzN3TnQ"><span style=3D"color:#993333;font-fami=
+ly:Arial;font-size:16px;"><u>Strong Passwords</u></span></a></li><li style=
+=3D"line-height:23px;"><span style=3D"font-family:Arial;font-size:16px;"><b=
+>Note:</b> If your Windows computer is on the MIT domain and you are not on=
+ campus, refer to </span><a class=3D"link-build-content" style=3D"color:inh=
+erit;; text-decoration: none;" target=3D"_blank" href=3D"http://guo7.mjt.lu=
+/lnk/AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAAcwEABkwW2nBLwqgtt1RLGXEbO6HF=
+5ChAAG2zM/2/0p9OFKwcATG86_--pxMs2Q/aHR0cDovL2tiLm1pdC5lZHUvY29uZmx1ZW5jZS94=
+L1pJYXlDUQ"><span style=3D"color:#993333;font-family:Arial;font-size:16px;"=
+><u>this article about changing your password</u></span></a><span style=3D"=
+font-family:Arial;font-size:16px;"> to make sure you will be able to log in=
+to your computer with your new password. (You are on the MIT domain if you =
+see &quot;Sign in to: ATHENA.MIT.EDU&quot; at the bottom of the Windows log=
+on screen.)</span></li><li style=3D"line-height:23px;"><span style=3D"font-=
+family:Arial;font-size:16px;">Have your </span><a class=3D"link-build-conte=
+nt" style=3D"color:inherit;; text-decoration: none;" target=3D"_blank" href=
+=3D"http://guo7.mjt.lu/lnk/AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAAcwEABk=
+wW2nBLwqgtt1RLGXEbO6HF5ChAAG2zM/3/Jsz3wtDXyHIOIV4D2-Y6LA/aHR0cDovL2tiLm1pdC=
+5lZHUvY29uZmx1ZW5jZS94L205WXdDUQ"><span style=3D"color:#993333;font-family:=
+Arial;font-size:16px;"><u>Duo-equipped phone or device</u></span></a><span =
+style=3D"font-family:Arial;font-size:16px;"> handy. The certificate install=
+ation process requires Duo two-factor authentication.</span></li></ul><p cl=
+ass=3D"text-build-content" style=3D"line-height: 23px; margin: 10px 0;" dat=
+a-testid=3D"aAQ_xjFoAu0Si"><span style=3D"font-family:Arial;font-size:16px;=
+"><b>Step Two: Obtaining your certificates</b></span></p><ul><li style=3D"l=
+ine-height:23px;"><span style=3D"font-family:Arial;font-size:16px;">If you =
+use MacOS or Windows, update your web browser to the most current version, =
+then download and run the </span><a class=3D"link-build-content" style=3D"c=
+olor:inherit;; text-decoration: none;" target=3D"_blank" href=3D"http://guo=
+7.mjt.lu/lnk/AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAAcwEABkwW2nBLwqgtt1RL=
+GXEbO6HF5ChAAG2zM/4/aUQ7B5WTfJsaFPgrfE1ntw/aHR0cHM6Ly9pc3QubWl0LmVkdS9taXQt=
+YXBwcy9jZXJ0YWlk"><span style=3D"color:#993333;font-family:Arial;font-size:=
+16px;"><u>latest version of the CertAid app from IS&amp;T</u></span></a><sp=
+an style=3D"font-family:Arial;font-size:16px;">. Supported browsers include=
+ Safari, Edge, Chrome, and Firefox.</span></li><li style=3D"line-height:23p=
+x;"><span style=3D"font-family:Arial;font-size:16px;">For iPhone and iPad (=
+iOS) users: See </span><a class=3D"link-build-content" style=3D"color:inher=
+it;; text-decoration: none;" target=3D"_blank" href=3D"http://guo7.mjt.lu/l=
+nk/AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAAcwEABkwW2nBLwqgtt1RLGXEbO6HF5C=
+hAAG2zM/5/i6uKADPvEZzCDh-Nzm5ZjA/aHR0cDovL2tiLm1pdC5lZHUvY29uZmx1ZW5jZS94L0=
+dIZ1lDUQ"><span style=3D"color:#993333;font-family:Arial;font-size:16px;"><=
+u>these step-by-step instructions</u></span></a><span style=3D"font-family:=
+Arial;font-size:16px;"> in the Knowledge Base.&nbsp;</span></li><li style=
+=3D"line-height:23px;"><span style=3D"font-family:Arial;font-size:16px;">Fo=
+r Android users: See </span><a class=3D"link-build-content" style=3D"color:=
+inherit;; text-decoration: none;" target=3D"_blank" href=3D"http://guo7.mjt=
+.lu/lnk/AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAAcwEABkwW2nBLwqgtt1RLGXEbO=
+6HF5ChAAG2zM/6/oQPB1h-ZFVmzolTNK7Xs6A/aHR0cDovL2tiLm1pdC5lZHUvY29uZmx1ZW5jZ=
+S94L1pJSEhDUQ"><span style=3D"color:#993333;font-family:Arial;font-size:16p=
+x;"><u>these step-by-step instructions</u></span></a><span style=3D"font-fa=
+mily:Arial;font-size:16px;"> in the Knowledge Base.</span></li></ul><p clas=
+s=3D"text-build-content" style=3D"line-height: 23px; margin: 10px 0;" data-=
+testid=3D"aAQ_xjFoAu0Si"><span style=3D"font-family:Arial;font-size:16px;">=
+<b>Please note:</b> If you use multiple devices and browsers, you will need=
+ to obtain a new certificate for each browser on each device. For more info=
+rmation, see: </span><a class=3D"link-build-content" style=3D"color:inherit=
+;; text-decoration: none;" target=3D"_blank" href=3D"http://guo7.mjt.lu/lnk=
+/AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAAcwEABkwW2nBLwqgtt1RLGXEbO6HF5ChA=
+AG2zM/7/25dv-_otKN9Ib3t-wWG3Qg/aHR0cDovL2lzdC5taXQuZWR1L2NlcnRpZmljYXRlcy8"=
+><span style=3D"color:#993333;font-family:Arial;font-size:16px;"><u>Certifi=
+cates at MIT</u></span></a><span style=3D"font-family:Arial;font-size:16px;=
+">.</span></p><p class=3D"text-build-content" style=3D"line-height: 23px; m=
+argin: 10px 0;" data-testid=3D"aAQ_xjFoAu0Si"><span style=3D"font-family:Ar=
+ial;font-size:16px;"><b>Step Three: Deleting your expired certificates</b><=
+/span></p><ul><li style=3D"line-height:23px;"><span style=3D"font-family:Ar=
+ial;font-size:16px;">It is recommended that, after installing your new cert=
+ificates, you delete your expired ones. Failure to do so may cause problems=
+ accessing certificate-protected sites. We encourage the MIT community to u=
+se CertAid, which will prompt you to delete expired certificates if any are=
+ detected.</span></li><li style=3D"line-height:23px;"><span style=3D"font-f=
+amily:Arial;font-size:16px;">For more information, see: </span><a class=3D"=
+link-build-content" style=3D"color:inherit;; text-decoration: none;" target=
+=3D"_blank" href=3D"http://guo7.mjt.lu/lnk/AV4AAB9PJ88AAclHgnAAALcweLsAARph=
+tSsAJN6MAAcwEABkwW2nBLwqgtt1RLGXEbO6HF5ChAAG2zM/8/X8iKOvicYr2ijb0MSiTlrw/aH=
+R0cDovL2lzdC5taXQuZWR1L2NlcnRpZmljYXRlcy9kZWxldGU"><span style=3D"color:#99=
+3333;font-family:Arial;font-size:16px;"><u>Deleting your expired certificat=
+es</u></span></a><span style=3D"font-family:Arial;font-size:16px;">.</span>=
+</li></ul><p class=3D"text-build-content" style=3D"line-height: 23px; margi=
+n: 10px 0;" data-testid=3D"aAQ_xjFoAu0Si"><span style=3D"font-family:Arial;=
+font-size:16px;"><b>Note for users who encrypt email:</b> Do not delete an =
+expired certificate if you have used it to sign or receive encrypted email.=
+ For more information on what to do in that case, see the </span><a class=
+=3D"link-build-content" style=3D"color:inherit;; text-decoration: none;" ta=
+rget=3D"_blank" href=3D"http://guo7.mjt.lu/lnk/AV4AAB9PJ88AAclHgnAAALcweLsA=
+ARphtSsAJN6MAAcwEABkwW2nBLwqgtt1RLGXEbO6HF5ChAAG2zM/9/el9pYbRZB2NxEyVJ_QPvw=
+w/aHR0cDovL2tiLm1pdC5lZHUvY29uZmx1ZW5jZS9kaXNwbGF5L2lzdGNvbnRyaWIvRXhwb3J0K=
+29yK0JhY2srVXArWW91citNSVQrUGVyc29uYWwrQ2VydGlmaWNhdGVz"><span style=3D"col=
+or:#993333;font-family:Arial;font-size:16px;"><u>Export or Back Up Your MIT=
+ Personal Certificates</u></span></a><span style=3D"font-family:Arial;font-=
+size:16px;"> page.</span></p><p class=3D"text-build-content" style=3D"line-=
+height: 23px; margin: 10px 0;" data-testid=3D"aAQ_xjFoAu0Si"><span style=3D=
+"font-family:Arial;font-size:16px;">If you have any questions or concerns, =
+email the IS&amp;T Service Desk at </span><a class=3D"link-build-content" s=
+tyle=3D"color:inherit;; text-decoration: none;" href=3D"mailto:servicedesk@=
+mit.edu"><span style=3D"color:#993333;font-family:Arial;font-size:16px;"><u=
+>servicedesk@mit.edu</u></span></a><span style=3D"font-family:Arial;font-si=
+ze:16px;"> or call 617-253-1101.</span></p><p class=3D"text-build-content" =
+style=3D"line-height: 23px; margin: 10px 0;" data-testid=3D"aAQ_xjFoAu0Si">=
+<span style=3D"font-family:Arial, sans-serif;font-size:16px;">Sincerely,</s=
+pan></p><p class=3D"text-build-content" style=3D"line-height: 23px; margin:=
+ 10px 0;" data-testid=3D"aAQ_xjFoAu0Si"><span style=3D"font-family:Arial, s=
+ans-serif;font-size:16px;">Kyle Filipe</span><br><span style=3D"font-family=
+:Arial, sans-serif;font-size:16px;">Senior Director, IT Support Services</s=
+pan><br><span style=3D"font-family:Arial, sans-serif;font-size:16px;">MIT I=
+nformation Systems &amp; Technology (IS&amp;T)</span></p><p class=3D"text-b=
+uild-content" style=3D"line-height: 23px; margin: 10px 0; margin-bottom: 10=
+px;" data-testid=3D"aAQ_xjFoAu0Si"><span style=3D"font-family:Arial, sans-s=
+erif;font-size:16px;"><i>A copy of this email is available at: http://kb.mi=
+t.edu/confluence/x/pzLSCQ</i></span></p></div></td></tr><tr><td align=3D"le=
+ft" style=3D"font-size:0px;padding:0px 20px 0px 20px;padding-top:0px;paddin=
+g-bottom:0px;word-break:break-word;"><div style=3D"font-family:Arial, sans-=
+serif;font-size:13px;letter-spacing:normal;line-height:1;text-align:left;co=
+lor:#000000;"><p class=3D"text-build-content" style=3D"line-height: 23px; t=
+ext-align: center; margin: 10px 0; margin-top: 10px; margin-bottom: 10px;" =
+data-testid=3D"Eeksu7tHk_gPs"><span style=3D"color:#000000;font-family:Aria=
+l;font-size:13px;">Information Systems and Technology</span><br><span style=
+=3D"color:#000000;font-family:Arial;font-size:13px;">Massachusetts Institut=
+e of Technology</span><br><span style=3D"color:#000000;font-family:Arial;fo=
+nt-size:13px;">77 Massachusetts Avenue, Cambridge, MA 02139</span></p></div=
+></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![end=
+if]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><=
+table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cla=
+ss=3D"" role=3D"presentation" style=3D"width:600px;" width=3D"600" ><tr><td=
+ style=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![e=
+ndif]--><div style=3D"margin:0px auto;max-width:600px;"><table align=3D"cen=
+ter" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"=
+ style=3D"width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;=
+padding:20px 0px 20px 0px;text-align:center;"><!--[if mso | IE]><table role=
+=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td =
+class=3D"" style=3D"vertical-align:top;width:600px;" ><![endif]--><div clas=
+s=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-size:0px;text-al=
+ign:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"=
+><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentati=
+on" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"le=
+ft" style=3D"font-size:0px;padding:0px 20px 0px 20px;padding-top:0px;paddin=
+g-bottom:0px;word-break:break-word;"><div style=3D"font-family:Arial, sans-=
+serif;font-size:13px;letter-spacing:normal;line-height:1;text-align:left;co=
+lor:#000000;"><p class=3D"text-build-content" style=3D"line-height: 23px; t=
+ext-align: center; margin: 10px 0; margin-top: 10px; margin-bottom: 10px;" =
+data-testid=3D"4RI5qk3HDYVaD"><span style=3D"color:#000000;font-family:Aria=
+l;font-size:13px;">This e-mail has been sent to jiannan@mit.edu, </span><a =
+class=3D"link-build-content" style=3D"color:inherit;; text-decoration: none=
+;" target=3D"_blank" href=3D"http://guo7.mjt.lu/unsub2?hl=3Den&amp;m=3DAV4A=
+AB9PJ88AAclHgnAAALcweLsAARphtSsAJN6MAAcwEABkwW2nBLwqgtt1RLGXEbO6HF5ChAAG2zM=
+&amp;b=3D2c633c44&amp;e=3Dd0bd1d16&amp;x=3Da7iET_5Bkh8rOy7esnA68A"><span st=
+yle=3D"color:#993333;font-family:Arial;font-size:13px;">click here to unsub=
+scribe</span></a><span style=3D"color:#000000;font-family:Arial;font-size:1=
+3px;">.</span></p></div></td></tr></tbody></table></div><!--[if mso | IE]><=
+/td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | =
+IE]></td></tr></table><![endif]--></div>
+<br><img src=3D"http://guo7.mjt.lu/oo/AV4AAB9PJ88AAclHgnAAALcweLsAARphtSsAJ=
+N6MAAcwEABkwW2nBLwqgtt1RLGXEbO6HF5ChAAG2zM/98415897/e.gif" height=3D"1" wid=
+th=3D"1" alt=3D"" border=3D"0" style=3D"height:1px;width:1px;border:0;">
+</body></html>=
+
+--=-r24WjgjUN45qx1KcAwYp--

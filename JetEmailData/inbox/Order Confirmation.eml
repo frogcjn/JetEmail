@@ -1,0 +1,603 @@
+Received: from MW4PR01MB6259.prod.exchangelabs.com (2603:10b6:303:78::12) by
+ BL3PR01MB7132.prod.exchangelabs.com with HTTPS; Sun, 30 Jul 2023 19:30:28
+ +0000
+Received: from MW4PR04CA0388.namprd04.prod.outlook.com (2603:10b6:303:81::33)
+ by MW4PR01MB6259.prod.exchangelabs.com (2603:10b6:303:78::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6609.33; Sun, 30 Jul 2023 19:30:26 +0000
+Received: from CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:81:cafe::23) by MW4PR04CA0388.outlook.office365.com
+ (2603:10b6:303:81::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.42 via Frontend
+ Transport; Sun, 30 Jul 2023 19:30:26 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.60)
+ smtp.mailfrom=mandrillapp.com; dkim=pass (signature was verified)
+ header.d=parchment.com;dmarc=pass action=none header.from=parchment.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ mandrillapp.com discourages use of 18.9.1.60 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.60) by
+ CO1NAM11FT065.mail.protection.outlook.com (10.13.174.62) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6631.43 via Frontend Transport; Sun, 30 Jul 2023 19:30:26 +0000
+Received: from oc11expo26.exchange.mit.edu (18.9.4.97) by
+ oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Sun, 30 Jul 2023 15:30:25 -0400
+Received: from oc11exhyb4.exchange.mit.edu (18.9.1.100) by
+ oc11expo26.exchange.mit.edu (18.9.4.97) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Sun, 30 Jul 2023 15:30:25 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Sun, 30 Jul 2023 15:30:25 -0400
+Received: from MW4PR03CA0305.namprd03.prod.outlook.com (2603:10b6:303:dd::10)
+ by CYYPR01MB8359.prod.exchangelabs.com (2603:10b6:930:b8::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6609.25; Sun, 30 Jul 2023 19:30:22 +0000
+Received: from CO1NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dd:cafe::b4) by MW4PR03CA0305.outlook.office365.com
+ (2603:10b6:303:dd::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.42 via Frontend
+ Transport; Sun, 30 Jul 2023 19:30:22 +0000
+Authentication-Results-Original: spf=pass (sender IP is 198.2.136.122)
+ smtp.mailfrom=mandrillapp.com; dkim=pass (signature was verified)
+ header.d=parchment.com;dmarc=pass action=none
+ header.from=parchment.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mandrillapp.com
+ designates 198.2.136.122 as permitted sender)
+ receiver=protection.outlook.com; client-ip=198.2.136.122;
+ helo=mandrill.parchment.com; pr=C
+Received: from mandrill.parchment.com (198.2.136.122) by
+ CO1NAM11FT003.mail.protection.outlook.com (10.13.175.93) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6631.43 via Frontend Transport; Sun, 30 Jul 2023 19:30:22 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=parchment.com;
+	s=mandrill; t=1690745421; x=1691005921; i=noreply@parchment.com;
+	bh=VRXlwq7h9uhj6R8X5xIEkh73isz0XumXkjasJsRhQ78=;
+	h=From:Subject:Reply-To:To:Feedback-ID:Message-Id:Date:MIME-Version:
+	 Content-Type:Content-Transfer-Encoding:CC:Date:Subject:From;
+	b=UIKJj3KAWmqtI4gZqNbnMV1NVVAIWQB/H8to+hVe4IBRLFjvOhRpeO/zAmnnmdSJ2
+	 DKo5SeYEoT2m3HFGt2RzIjCAkfaCTfNKNlXxgDc6fgdRGJRz07Tf04GtZe1RLQiSEl
+	 OnvQZH8ZY7/btBaX/WxmbyiyYxZ5RpsvvjnPL9Ww=
+Received: from pmta11.mandrill.prod.atl01.rsglab.com (localhost [127.0.0.1])
+	by mandrill.parchment.com (Mailchimp) with ESMTP id 4RDWg13zSVzJKF7gh
+	for <jiannan@mit.edu>; Sun, 30 Jul 2023 19:30:21 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandrillapp.com; 
+ i=@mandrillapp.com; q=dns/txt; s=mandrill; t=1690745421; h=From : 
+ Subject : Reply-To : To : Message-Id : Date : MIME-Version : 
+ Content-Type : Content-Transfer-Encoding : From : Subject : Date : 
+ X-Mandrill-User : List-Unsubscribe; 
+ bh=VRXlwq7h9uhj6R8X5xIEkh73isz0XumXkjasJsRhQ78=; 
+ b=WWKV6qeiegmJwCmM7iRQqgF8gqTeR2/KhwKWLBEsRW/xKbimBaKNt103Vx0fmmcCY5d4k7
+ fM6UIVQiWQSD3ALdiZp6D5C+4P0Cbq2keh4grPEFEbh07waWTpCspx4ntlXlJoVB4vXCRTYt
+ h38u7D2hJ0IhGeuQTqKBVy6pwFbCQ=
+From: Parchment <noreply@parchment.com>
+Subject: =?utf-8?Q?Order=20Confirmation?=
+Received: from [34.209.190.195] by mandrillapp.com id e8700c2c2588499b994bc4ea88f8a103; Sun, 30 Jul 2023 19:30:21 +0000
+Reply-To: noreply@parchment.com
+To: Jiannan Cao <jiannan@mit.edu>
+X-Native-Encoded: 1
+X-Report-Abuse: =?UTF-8?Q?Please=20forward=20a=20copy=20of=20this=20message,=20including=20all=20headers,=20to=20abuse@mandrill.com.=20You=20can=20also=20report=20abuse=20here:=20https://mandrillapp.com/contact/abuse=3Fid=3D30717337.e8700c2c2588499b994bc4ea88f8a103?=
+X-Mandrill-User: md_30717337
+Feedback-ID: 30717337:30717337.20230730:md
+Message-ID: <30717337.20230730193021.64c6ba4d7ca3e4.88873303@mandrill.parchment.com>
+Date: Sun, 30 Jul 2023 19:30:21 +0000
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Return-Path:
+ bounce-md_30717337.64c6ba4d.v1-e8700c2c2588499b994bc4ea88f8a103@mandrillapp.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CO1NAM11FT003:EE_|CYYPR01MB8359:EE_|CO1NAM11FT065:EE_|MW4PR01MB6259:EE_|BL3PR01MB7132:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3addc53c-7308-48f4-f9e4-08db91336d50
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:3;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?utf-8?B?NVZaNHQ1djAwN3ltRjNvQXlraFhvMlYwdmZkTWJ0N2FYR3JHNTVJSStIMVIy?=
+ =?utf-8?B?N3JUY0NUUHZJaFBxOVFERXFuSTNXU2g4RW5jT0kzcVVDVFhtdnM4dEkvRzdy?=
+ =?utf-8?B?anlZSThZTXl4Vm5Wc3M3dkhjN3ZyUEEyWGFKWHY5NVFsTDZ5VStTdW1qL1RD?=
+ =?utf-8?B?RXdmS29jZWhqMkMzeS94R0dSdjdjcm9heWl5VnhoRDFzQllFSUoweG1DaSta?=
+ =?utf-8?B?a0gwTy9uWXFFODZRQkVaRDQzd1BoMHpFbkZUZEY0ZE5Xbk90dGxnT2xKN1BM?=
+ =?utf-8?B?eGlQQkNXVk1oQkRHYnFXRTZ0aHlyOG40dnhBcW9GcDRpclhNRzhCNHJnNW45?=
+ =?utf-8?B?WmhJUkNJMzNTMHFQZERZU3QwUzZIYkhGOTFLWGd2YmRWT3BGLzE0TWxUV3JP?=
+ =?utf-8?B?YXZCbE5oRmlyVGVnaStVRGR6bUhTcWhPTGx4Y2w3OG0xNEprWWYzc2hEb1RK?=
+ =?utf-8?B?RE5OVVF6YjV1OFoydHpPcDcxZDlSZnNEOGVURjRaR2Q2N29XNERHMUtNMFBi?=
+ =?utf-8?B?Vis3cTJ1WWtnQVJoaE9oc0RDUi91K0VSV3UzN25UY09OK2xEUFhnYXZUTnA4?=
+ =?utf-8?B?RHNyeWJ1RFpWOTRUa2tsb3RKdDhxT1ZBOFVvZnN2cDVMRytKMklUL0tJVVlw?=
+ =?utf-8?B?UGpPZWZzVE9YV1Z3dkpOaW1vaTZ3RU5DU0cwMnhBbnhrRWtvU1pyVEFOZE9N?=
+ =?utf-8?B?QzFHNnZXcituTGx4bDc2UFdWcWdIMStzcSs1ZWZzMUpVVW85dldIVk11VVoy?=
+ =?utf-8?B?QkFEbUcvN2VMejNQWE55S3NsZ2VueDMvSTBOVEZpaFpIZEgza2NyOXNsN1lt?=
+ =?utf-8?B?ZTVVNkpYZ3RKZUxnamt2d2xqK2hKY0d5MWpoVnFpR00vUWpNeFJKY3lmQmcy?=
+ =?utf-8?B?RUd0QjgzM3NNVVNtY1RhVVlia3JDTjliV0EvZmt1Z3FNcWxTQktaOXgzblJO?=
+ =?utf-8?B?K0NiUXZqdzZJcE1DS3VCVHhPYlROVmlSakRDd0R6QzRZTG8rYWZKRVowUWsz?=
+ =?utf-8?B?Wno1bDJ4ZkN0V2JESXRhbTgzaGpqUDhZeElIcE91emdQdGZsYTRsWlRKbUFz?=
+ =?utf-8?B?TU85amdHSU5TT2x3a0oyVDhNMTVGSzcxNWVCdzMraGdnQklyeXhjV01TRWt1?=
+ =?utf-8?B?bmt1a1JsTGh3d1NzTWg0N2lHcktIYkQ4VzhOd21udlNWTWV5azVzMU9zd3Ew?=
+ =?utf-8?B?R0UwUGJFT0Ira3RVK1dub3BGM0VyV0NpRU5BWDVWYjFQMW55Tk05d3RkbVJH?=
+ =?utf-8?B?R21JdGJZclZtRkkxSGJiQWU4T2hnQ0xzbk5QMWVUODNQWXZ1a3gxUnRLUkRD?=
+ =?utf-8?B?TjYremExbFc2RVJnSWhTQ1dmTkE3anlNRkRhUFRwNVZ2MjhjMkhLd2t1ejhz?=
+ =?utf-8?B?R0Fub0pWWC9sWnROOENrb0h1czVxL2M3TXNqTmtvRDJZNyt2amVjT2o1L0RP?=
+ =?utf-8?B?OHRKMlgxck5sdkZOZHE3OWdEMlhBeTF4R05melhxMlpuSWpVRkhRZkhoQU9D?=
+ =?utf-8?B?NmJ3UDhhUTBKK2Rpeld5R3NySnFiREJsK0lQMitPc2FHNE5kcjRYWFk2R25j?=
+ =?utf-8?B?QXErQnZkS2pkenVRWmFSbE9NZjdacXhGU3FHWUFUa2ttclBmdzMwK1FyVlhS?=
+ =?utf-8?B?cXhnRmh4b1p6YnlUS0xkWnNnd2RvdWhvZGpuMTdtOVMya0xOTmFROHJZaGtV?=
+ =?utf-8?B?andERTZmZHNvZVQ3MHF1Kzk0VVB5VkdDaTRiTnp2QVZZUVdoWnpDY1g3WnpB?=
+ =?utf-8?B?WGxUK1dMci9jRFdmNk1kdVpVT0lIcDMzbVlLbU5xQVM1TVA1Q0FNak9KUGJG?=
+ =?utf-8?B?cm5QVTczZFJPVnVZT2xoRkJBczVaNC83U2xxMTBPRktYVWxMWVdUVmhncEVR?=
+ =?utf-8?B?QnA2enFIZUUvWXh1dnhrNzkxYVRZWGIzN3B1V1hTeHBQVWlZbEk1cm1kdlZn?=
+ =?utf-8?B?dWhKYU4yWHJOVDAvWERTUXRtTi96LzlCMVRqNTE3L1I0dFA1NndtNWY1Rzha?=
+ =?utf-8?B?dTZLTWdibzMxSGMvaU94TDVBT1FGZVU5V0RNZy9RMCtvTmlHTnFjUTZSN3Jl?=
+ =?utf-8?B?emYvWm54b083SVpsVWlKQmIwZW1RTFltcU4veWEvZDVxRURVU0pvL1dSa1Yy?=
+ =?utf-8?B?UkpIUk1CcFZLZmZYbW11S0VydU9RMEQzVld3eDRMOWRJQTliajlrRVgzaVgy?=
+ =?utf-8?B?YnF6VGxhZ3hyK1JMd1g0TmZHeVZBbm9tRHRPamE0eVVWRXdsOTIzdHBGdTBU?=
+ =?utf-8?B?WVgxV0xjaFdHc2ZuM1JXbWRNNSszVytEU29lV1Y5cTJpaWgvSlo3MFJVQ0l4?=
+ =?utf-8?B?N1RhWFZ3alVzdi93R1hYZEpYSDdPWURkYUtuQ0lOL1RVemRwbGZSQTBndW5J?=
+ =?utf-8?B?UEI0c1hPRzFmQjhPYjNPK0FBRG9wdXl1TkdNcTBwazB4bnZyandyVFVlUThN?=
+ =?utf-8?B?bmlWYzU2NEUyOWR4M29oY3BZckxKaUxuK0oxd3d3K29nMUNCOGpGWDJ5UXAr?=
+ =?utf-8?B?MS9EY0lpc2pmMk92RVAra0daT1FvS1lGdnpCSWdNc3p6Z1Z2UG4wTVQvbEp2?=
+ =?utf-8?B?REx4VmVUbFlJQVVQUTU0d2t6bCtKcmpvYnFFc0RvR0hRTklIa1NSMm03Z1l1?=
+ =?utf-8?B?Ym9BYnVadz09?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:198.2.136.122;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mandrill.parchment.com;PTR:mandrill.parchment.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR01MB8359
+X-OrganizationHeadersPreserved: CYYPR01MB8359.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb4.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb4.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo26.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 30 Jul 2023 19:30:26.6440
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 3addc53c-7308-48f4-f9e4-08db91336d50
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted:
+ CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 85fa1e19-0eda-430d-e7e4-08db91336abf
+X-Microsoft-Antispam: BCL:3;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.60;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb1.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2023 19:30:26.3159
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3addc53c-7308-48f4-f9e4-08db91336d50
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.60];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6259
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.4788624
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6631.043
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?K2czeTFLcTg1Nm1zSUZtMDVocGZHbnE2Rnl4ZHdrZFYrSVlsbVVhZG5xVTZV?=
+ =?utf-8?B?aEgyajdTTEF1N0JEV054VWUxQzRhL1NCelN4U25jTTE3aHhiRzJlUGhVNVRl?=
+ =?utf-8?B?Y1J2VklZYitta0pUZGI0SEcxQUtkQ1AvSlJ3OXZ5ZWZwUkhCZGkvSEJlVDE0?=
+ =?utf-8?B?bjFuako4SEYycElxZE9Uc3UxTmJkZlFQUEZ5YzVlZGdtMWx6YUVwQ3NRK05J?=
+ =?utf-8?B?U1ppSHloWVN4N0FHTmxLMFVuQjd4ZVdUVzM5dncyTFNyN2Q5am5jaXlPWWFH?=
+ =?utf-8?B?L1JwRktjMklMMGxlbDdaU3hia3lkNk5xQUF2VDUvV2NIRTc3Qnd2eDd0eUc4?=
+ =?utf-8?B?SjFuamZDL0FRRmZnblFQVUEzUmxuaEt6d1ZtWlBNVUsvQW8yQUcwSkhteEJG?=
+ =?utf-8?B?M05EYjVIWXhZQnVCOEJNQ1ZMekc0Q3QwUUFMejltU3ZjSkYzVE54dUN3Y2lV?=
+ =?utf-8?B?VFMxNXlmeGxLdWlBSmxPbTlqb0R5VndIRDFqYmk4d1pNdm81MkZUMU5idURE?=
+ =?utf-8?B?L1l6Ykh5NkVvU3Uvazc3Um9Rd2Y3OHhpNXhqUEJQYVhDc291cHpaNFpyS2JK?=
+ =?utf-8?B?MlY5ejB6ZytCYmwwYkxNRkMyZ1J2bWFkcUh2Um1XdTFTVTNrUEsxelFUMi9a?=
+ =?utf-8?B?VWhkZmo2WlpvanFIYmF5ckx1ZC9TRVdJYkd6MUxrcTdvSlc2NXQ5YTIxbE05?=
+ =?utf-8?B?d1p2Qit1R3NTUFFHQ1VuQVBMNTgweEpkcVRKZ0t5RFZLcEFyek8zK0RQRFRT?=
+ =?utf-8?B?QVVML09xcUo5dERSUWlwdGNiYng3ckRlWXg3NHF6UVdHVDBiQUlMamRtZ2Rh?=
+ =?utf-8?B?R2dtM0RsbDRwa3laQzhpM3lyNmh1YnBtR3BIVithdm9NVHp6bVoxUjZEbm9P?=
+ =?utf-8?B?dHJpRXdsQnJxRUc5V25YS2tBa0ZCR2V0VzJNQWxYL0Z0N1g4UlFweW9jREto?=
+ =?utf-8?B?UFBlY3FBVWsweGxoZmU0bHIyZTk5NEQ1dmFlS2xwYnRtU2dYNG05emtKa2lS?=
+ =?utf-8?B?SjRaenlNWWhCbHF0M1dlVklFNitnQmZWNll1RGkwaHVMWXBhb3JQSE1MM1Zu?=
+ =?utf-8?B?YzZGTGtVZkM3SXlWVjVwcEhsbWZqdktLdG52UFZ0WnpaWGNFWndOYXgrQjky?=
+ =?utf-8?B?aW9rR3V5cTRBdWs5Tk5yVjc5dWYyZWo0UERYYjBBMXVNQmlNNmJuZXlvMFdX?=
+ =?utf-8?B?b1NRenJXbWJqM1NPbVJ1T0dHaEFibGtSalBIaHl4aGlPMjRxZXdmU1RiMjBY?=
+ =?utf-8?B?Slk5K0txTTMvZmQ0dEU5d3R1TVBoZ3ZabjVJU3BVWm9qcjBsVmtBUHNIdjJu?=
+ =?utf-8?B?YzJ0amZNclhHdVd4L3o2cFU0MmFqNjEzRldOek84QW9TK2RTb2YyYmN5c2dv?=
+ =?utf-8?B?U09CRkZpL25nRUx0czlYbTJqWmx5T0V3OEc2bElTOFNUOWl1TEhTY0R3RzBE?=
+ =?utf-8?B?OVEyejE5TlFiRWJ2S2JBNldWNnVGR0dGaUpHTlZ5bUcwZ1hNUDg1ODExL0RQ?=
+ =?utf-8?B?amh3VnpCelpWNFZsKzhuWlA1Sk4zSFBsWkxMVDdBWkE3WkI1cUNKMzZuZmd3?=
+ =?utf-8?B?WVRrS25IS1VNSjNmc25hRnc3cmFFR2FXUTdBVis4WllyR1psQTkrSi91L2ZM?=
+ =?utf-8?B?YlBGdTlqVUdBTm9HbWpwVTBzNWNJdjVwejhuQ1lNZ3RheG4yQWdMb082WHlS?=
+ =?utf-8?B?aDNycjBwMEZwSXpMVXE1SWhNTWZnTS83djFFdzVGaDJpeWJCSmZsWXFSM3lm?=
+ =?utf-8?B?UGREc05SeXVHOTVxMkNUYzl5Z05sdnJ6UVdkck0zeHAwSzRraTRkT0krS3ZR?=
+ =?utf-8?B?WWRUWUwzUXh5dUl4TDZCSEcxajZTb3JlVUE1U3ZRbkVXbnVBWElFT2lrczZ3?=
+ =?utf-8?B?dU1ERUFUa0xRK1VLQ0dFTDVXRWJPVUxVVXFYTXNwekN0MHJMMWQ2c1QzT0ZQ?=
+ =?utf-8?B?VzFTU0ZDWi9MaVNsS2dDSjd2VEcyUnpoSjg5RGVtdnJhSktUWWtxZGRIVHl5?=
+ =?utf-8?B?cjI3MCtNdkJ0d2QveXJ4RnV6VG1KNUM0TW1mRnFIUHJZcGQ5NEIyV3c5N3Mx?=
+ =?utf-8?B?ZkhkNFkwYmE5ZWl0NFBPNGRJbzZMcXZ6RUNaYnlrV0dTWk5YbDZyNE1xZGcr?=
+ =?utf-8?B?WkRVM0FSRmErVW11dGlKMWo0MkhzTGQ1Rk1qNzlRenJIcWlBekw3MWFhTGNl?=
+ =?utf-8?B?aGl1OWhLV1M3RUZ4cTFqYzVMMHhxZGF4Vkhub0JqdUxtQTRBT1JrZXYzSGVs?=
+ =?utf-8?B?SGVEa3NjTzBCL0Z1RDNPQVY3TnVweEJMVmhTU2hMdStpQXV2UEtWeTVoeDRn?=
+ =?utf-8?B?eDNrRlRIREtoeXcvZG96T1NVb0R4cWxvc2M3NUZsZVNFTXdDbmdoMXhRK2VP?=
+ =?utf-8?B?ME9uUVZjY3JmbzEzZ3NaSlJ6bDluWDBvdnN5QnBBVVlMa1pZb3BNWEZTRk5v?=
+ =?utf-8?B?Z0Z2ell2bUdwTjQxMkptNHdrNTZCYWdweFNqbzZ4K2E4dVZ2dDlUVFVXNkxu?=
+ =?utf-8?B?OEYya1IrYk9JTjM0N0N6TjFsbmVMOWV1VVFjMlBvekdrVzBSMkJud3RuemRo?=
+ =?utf-8?Q?HlR99+at1CBvSvXv9sNEVo+itJix01?=
+MIME-Version: 1.0
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet">
+
+    <title>Order Confirmation</title>
+
+    <style type="text/css">
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #E6E6E6;
+      }
+      table {
+        border-spacing: 0;
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+      }
+      td {
+        padding: 0;
+      }
+      img {
+        border: 0;
+      }
+      a:link, a:visited {
+        color: #1dafcc;
+        text-decoration: none;
+        font-weight: 700;
+      }
+      .wrapper {
+        width: 100%;
+        table-layout: fixed;
+        background-color: #E6E6E6;
+        padding-bottom: 60px;
+      }
+      .webkit {
+        max-width: 600px !important;
+        background-color: #ffffff !important;
+      }
+      .outer {
+        Margin: 0 auto;
+        width: 100%;
+        max-width: 600px;
+        border-spacing: 0;
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        color: #555555;
+      }
+      .main {
+        background-color: #ffffff !important;
+        margin: 0 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        border-spacing: 0 !important;
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif !important;
+        color: #555555 !important;
+      }
+      .logo {
+        margin-left: 50px;
+        border: 0px;
+      }
+      p.title {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        color: #555555;
+        font-size: 20px;
+        line-height: 25px;
+        text-align: center;
+        margin-left: 10px;
+        margin-right: 30px;
+      }
+      p.help {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        color: #555555;
+        font-size: 20px;
+        line-height: 25px;
+        text-align: center;
+      }
+      p.subtitle {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        color: #555555;
+        font-size: 16px;
+        line-height: 22px;
+        text-align: center;
+      }
+      p.helpsubtitle {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        color: #555555;
+        font-size: 16px;
+        line-height: 22px;
+        text-align: center;
+        margin-left: 50px;
+        margin-right: 50px;
+      }
+      p.body {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        color: #555555;
+        font-size: 16px;
+        line-height: 28px;
+      }
+      p.bodysmall {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        color: #555555;
+        font-size: 13px;
+        line-height: 16px;
+      }
+      .pagefooter {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        color: #ffffff;
+        text-align: center;
+        font-size: 10px;
+        line-height: 13px;
+      }
+      .pagefooter a:link, a:visited {
+        color: #ffffff !important;
+        text-decoration: underline;
+      }
+      .lineitemlabels {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        color: #555555;
+        font-size: 16px;
+        line-height: 20px;
+      }
+      .lineitem {
+        font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        color: #555555;
+        font-size: 13px;
+        line-height: 22px;
+       }
+       .lineitemlabelstier {
+         font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+         font-weight: 400;
+         color: #555555;
+         font-size: 13px;
+         line-height: 20px;
+       }
+       p.accountnotes {
+         font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+         font-weight: 400;
+         color: #555555;
+         font-size: 13px;
+         white-space: nowrap;
+       }
+       .two-columns {
+         text-align: left;
+         font-size: 0;
+       }
+       .two-columns .column {
+         width: 100% !important;
+         max-width: 230px !important;
+         display: inline-block !important;
+         vertical-align: top !important;
+         padding: 10px 10px;
+         margin-left: 4px;
+       }
+       @media screen and (max-width:600px){
+          .infocell {
+           width: 250px !important;
+           max-width: 250px !important;
+         }
+
+       }
+       @media screen and (max-width:400px){
+        .infocell {
+           width: 500px !important;
+           max-width: 500px !important;
+         }
+       } 
+      </style>
+      
+</head>
+
+<body style="margin:0; padding:0; background-color:#E6E6E6;">
+    <center class="wrapper">
+    <div class="webkit">
+<!-- Outer Start -->
+        <table class="outer" align="center">
+            <tr>
+              <td>      
+<!-- Main Container Start -->
+      <table class="main" width="100%" style="background-color:#ffffff;">
+<!-- Header Start -->
+        <tr>
+          <td>
+            <table style="height: 100px" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#0093b2">
+              <tr>
+                <td>
+                  <a href="https://mandrillapp.com/track/click/30717337/www.parchment.com?p=eyJzIjoiTmV3TF94eC15UTJ4cjlyeFpTVVg0UnNneV93IiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LnBhcmNobWVudC5jb21cIixcImlkXCI6XCJlODcwMGMyYzI1ODg0OTliOTk0YmM0ZWE4OGY4YTEwM1wiLFwidXJsX2lkc1wiOltcIjU4Njc2MjhmYzAyOTJlNTE5MDk3YjIzNTMwZGQxOGE3NzIxYTYzMDRcIl19In0" target="_blank"><img src="http://www.parchment.com/images/parchment-logo.png" alt="parchment.com" title="parchment.com" width="160" height="30" class="logo"></a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+<!-- Header End -->
+<!-- Title Area Start -->
+        <tr>
+          <td valign="middle">
+            <table style="height: 60px !important;" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F4">
+              <tr>
+                <td>
+                  <p class="title">Thank you for your order!</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+<!-- Title Area End -->
+<!-- Message Area Start -->
+        <tr bgcolor="#ffffff">
+          <td>
+            <table style="margin: 20px 50px">
+              <tr>
+                <td>
+                    <p class="body">Hi Jiannan,
+                    <br><br>
+                    
+                    Your order was placed successfully for $10 on 07/30/2023. 
+                    
+                    <br>
+                  </p>
+                </td>
+              </tr>
+            
+    
+        <tr>
+            <td>
+                <p class="bodysmall"><br><img src="http://www.parchment.com/images/icon-account-order.png" width="24" height="16" style="margin-bottom: -3px">  Here is your order summary:</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="height: 1px !important;" width="100%" align="center" bgcolor="#cfcfcf">
+            </td>
+        </tr>
+<!-- Order Details Start -->
+          <tr>
+            <td style="padding: 10px 0; margin: 0 50px">
+                
+                <div>
+                 <!-- Line Item Container Start -->
+                     <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#fff">
+                     
+                        <tr>
+                           <td valign="top">
+                               <!-- Line Item Container Top Row Start -->
+                                     <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#fff">
+                                        <tr>
+                                            <td rowspan="4" valign="top" width="4" height="100%" bgcolor="#555"></td>
+                                            <td rowspan="4" valign="top" width="15" height="100%" bgcolor="#fff"></td>
+                                            <td valign="top" height="100%" width="200" bgcolor="#fff"><font class="lineitemlabelstier"><b>Item Ordered:</b></font></td>
+                                            <td valign="top" width="20" height="100%" bgcolor="#fff"></td>
+                                            <td valign="top" height="100%" width="250" bgcolor="#fff"><font class="lineitem">eTranscript</font></td>
+                                         </tr>
+                                         <tr>
+                                            <td valign="top" height="100%" width="200" bgcolor="#fff"><font class="lineitemlabelstier"><b>For:</b></font></td>
+                                            <td valign="top" width="20" height="100%" bgcolor="#fff"></td>
+                                            <td valign="top" height="100%" width="250" bgcolor="#fff"><font class="lineitem">Jiannan Cao</font></td>
+                                         </tr>
+                                         <tr>
+                                            <td valign="top" height="100%" width="200" bgcolor="#fff"><font class="lineitemlabelstier"><b>Document ID:</b></font></td>
+                                            <td valign="top" width="20" height="100%" bgcolor="#fff"></td> 
+                                            <td valign="top" height="100%" width="250" bgcolor="#fff"><font class="lineitem">TWM0HF2H</font></td>
+                                         </tr>
+                                         <tr>
+                                            <td valign="top" height="100%" width="200" bgcolor="#fff"><font class="lineitemlabelstier"><b>Delivery Method:</b></font></td>
+                                            <td valign="top" width="20" height="100%" bgcolor="#fff"></td> 
+                                            <td valign="top" height="100%" width="20" bgcolor="#fff"><font class="lineitem">
+                                            Electronic</font></td>
+                                        </tr>
+                                        
+                                        <!--Custom message if Hold for Grades or Degree	-->							
+                                        
+                                        
+                                        
+                                        
+                                         
+                                        <!--End Custom Message for Grades or Degree-->
+                                        <tr>
+                                        <td>
+                                        </td>
+                                        </tr>
+                                     </table>
+                               <!-- Line Item Container Top Row End -->
+                               <div style="margin: 30px 0px 40px 0px;">
+                               <!-- Line Item Container Second Row Start -->
+                                     <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#fff">
+                                        <tr colspan="3">
+                                            <td valign="top" width="230" height="100%" bgcolor="#fff"><font class="lineitemlabels"><b>FROM:</b><br>
+                                                </font>
+                                                <font class="lineitem">Massachusetts Institute of Technology<br></font></td>
+                                            <td valign="top" width="20" height="100%" bgcolor="#fff"></td>
+                                            <td valign="top" width="250" height="100%" bgcolor="#fff"><font class="lineitemlabels"><b>TO:</b><br>
+                                                </font>
+                                                <font class="lineitem">Jiannan Cao<br>
+                                                
+                                                
+                                                
+                                                <!--Start email Check-->
+                                                jiannan@mit.edu<br>
+                                                <!--End email Check-->
+                                                
+                                                </font>
+                                            </td>
+                                        </tr>
+                                     </table>
+                               <!-- Line Item Container Second Row End -->
+                               </div>
+                               <hr width="500px" size="1" color="#cfcfcf">
+                               
+                           </td>
+                        </tr>
+                        
+                     </table>
+                 <!-- Line Item Container End -->
+                </div>
+                
+                <div>
+                    <p class="body">
+                      
+                          
+                          Once your order has been processed, we will send the official document to its destination.
+                          
+                        
+                    <!-- Remember that the sender must review and process your order before we can send it. If there is a delay with this, there will be a delay in delivering the document.<br><br> -->
+                    <br><br>
+                    Thank you,
+                    <br> <br>
+                    The Parchment Team<br>
+                    <font style="font-size: 12px; font-weight: 600;">Turn Credentials into Opportunities</font><br><br>
+                </p>
+                </div>
+            </td>
+          </tr>
+
+</table>
+
+</td>
+</tr>
+<!-- Order Details End -->
+          </table>
+<!-- Main Container End -->
+        </td>
+      </tr>
+
+<!-- Footer Start -->
+      <tr> 
+       <td>
+        <table style="height: 40px;" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#0093b2">
+          <tr>
+            <td align="center">
+              <span><font class="pagefooter">Parchment's <a href="https://mandrillapp.com/track/click/30717337/www.parchment.com?p=eyJzIjoiUThyU3pYTW13ZlV4TC12bUZSclRWU19BRmJVIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5wYXJjaG1lbnQuY29tXFxcL3ByaXZhY3ktcG9saWN5XFxcL1wiLFwiaWRcIjpcImU4NzAwYzJjMjU4ODQ5OWI5OTRiYzRlYTg4ZjhhMTAzXCIsXCJ1cmxfaWRzXCI6W1wiN2ViYmRjNGViNmFlNTQxOTczZTkzNjFlNDU5N2Q1ZDU1NjEzOGE1ZVwiXX0ifQ" target="_blank" style="color: #ffffff;">Privacy Policy</a> and <a href="https://mandrillapp.com/track/click/30717337/www.parchment.com?p=eyJzIjoiMUR6UTJId3RuWWwwWDZWVmFfWmU0UjQwV19zIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5wYXJjaG1lbnQuY29tXFxcL3Rlcm1zLW9mLXVzZVxcXC9cIixcImlkXCI6XCJlODcwMGMyYzI1ODg0OTliOTk0YmM0ZWE4OGY4YTEwM1wiLFwidXJsX2lkc1wiOltcIjdmNTdiMDkzM2QzZDJkYjhjYzExYWQyMDY5NDcwNGVkNWM4ZWIyZmJcIl19In0" target="_blank" style="color: #ffffff;">Terms of Use</a></font><br>
+              </span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+<!-- Footer End -->
+      </table>
+<!-- Outer End -->          
+      </div>
+    </center>
+    <!-- Full Page Container End -->
+  <img src="https://mandrillapp.com/track/open.php?u=30717337&amp;id=e8700c2c2588499b994bc4ea88f8a103" height="1" width="1" alt=""></body>
+</html>

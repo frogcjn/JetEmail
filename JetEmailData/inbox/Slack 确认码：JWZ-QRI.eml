@@ -1,0 +1,889 @@
+Received: from LV8PR01MB8429.prod.exchangelabs.com (2603:10b6:408:189::13) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Fri, 8 Sep 2023 19:04:53
+ +0000
+Received: from SA1P222CA0119.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:3c5::18)
+ by LV8PR01MB8429.prod.exchangelabs.com (2603:10b6:408:189::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6745.32; Fri, 8 Sep 2023 19:04:52 +0000
+Received: from SN1PEPF000252A4.namprd05.prod.outlook.com
+ (2603:10b6:806:3c5:cafe::9c) by SA1P222CA0119.outlook.office365.com
+ (2603:10b6:806:3c5::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.31 via Frontend
+ Transport; Fri, 8 Sep 2023 19:04:52 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.98)
+ smtp.mailfrom=mail.slack.com; dkim=pass (signature was verified)
+ header.d=slack.com;dmarc=pass action=none header.from=slack.com;
+Received-SPF: Fail (protection.outlook.com: domain of mail.slack.com does not
+ designate 18.9.1.98 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.9.1.98; helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.98) by
+ SN1PEPF000252A4.mail.protection.outlook.com (10.167.242.11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6792.11 via Frontend Transport; Fri, 8 Sep 2023 19:04:51 +0000
+Received: from oc11exhyb7.exchange.mit.edu (18.9.1.112) by
+ oc11exhyb2.exchange.mit.edu (18.9.1.98) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Fri, 8 Sep 2023 15:04:51 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.172)
+ by oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Fri, 8 Sep 2023 15:04:50 -0400
+Received: from MW4PR03CA0109.namprd03.prod.outlook.com (2603:10b6:303:b7::24)
+ by PH0PR01MB7508.prod.exchangelabs.com (2603:10b6:510:f7::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6768.30; Fri, 8 Sep 2023 19:04:42 +0000
+Received: from CO1PEPF000044F6.namprd21.prod.outlook.com
+ (2603:10b6:303:b7:cafe::4b) by MW4PR03CA0109.outlook.office365.com
+ (2603:10b6:303:b7::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.31 via Frontend
+ Transport; Fri, 8 Sep 2023 19:04:42 +0000
+Authentication-Results-Original: spf=pass (sender IP is 69.169.237.192)
+ smtp.mailfrom=mail.slack.com; dkim=pass (signature was verified)
+ header.d=slack.com;dmarc=pass action=none header.from=slack.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mail.slack.com
+ designates 69.169.237.192 as permitted sender)
+ receiver=protection.outlook.com; client-ip=69.169.237.192;
+ helo=b237-192.smtp-out.us-west-2.amazonses.com; pr=C
+Received: from b237-192.smtp-out.us-west-2.amazonses.com (69.169.237.192) by
+ CO1PEPF000044F6.mail.protection.outlook.com (10.167.241.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.1 via Frontend Transport; Fri, 8 Sep 2023 19:04:42 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=uwk3bwvqdj7skisaka6vhyomezh2btzz; d=slack.com; t=1694199882;
+	h=From:Reply-To:To:Subject:Message-ID:Content-Type:MIME-Version:Date;
+	bh=kcUm+vPn+ux0jZwfPhzZYyPdRtx4JhCA3S4CGnLEUD4=;
+	b=Rz32yI27PaXW1M14HQT+p33CBoEdeXJQlfslCv2axPAx3psiLNnc7Z9tYGrjtqTn
+	k0mC4jEE0mBdQeVb16o02+nVZgi96e+8GyrlWsqJEhznzuAlQh3eKBtzVwCHT+pmKzQ
+	Q9qkJApXQX8w3ZWVwUOKdTRzLd6GbiIR/EgclLjo=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1694199882;
+	h=From:Reply-To:To:Subject:Message-ID:Content-Type:MIME-Version:Date:Feedback-ID;
+	bh=kcUm+vPn+ux0jZwfPhzZYyPdRtx4JhCA3S4CGnLEUD4=;
+	b=hEUvyeO9YO9+mMwx2dcJ3Gjd56YnpSMgXlhjiurmStrVvLtCneIPeCdAe9L2sbKR
+	bc6AxDy2vozWG4/i7DRGMsmUYzpUt8kyibUzYTwkgG5JsU6DrfsEFwM1C85u57Evfw8
+	6GYKikKQHnhUT2lilJvWrwIFe/XDI9yLahGixcco=
+From: Slack <no-reply-XkfsM5WNX8fuIFnZrRKHQY1G@slack.com>
+Reply-To: no-reply-XkfsM5WNX8fuIFnZrRKHQY1G@slack.com
+To: jiannan@mit.edu
+Subject: =?utf-8?Q?Slack_=e7=a1=ae=e8=ae=a4=e7=a0=81=ef=bc=9aJWZ=2dQRI?=
+Message-ID: <0101018a762ea0c1-98fb14d1-3122-403a-a03f-7b34c612b374-000000@us-west-2.amazonses.com>
+Content-Type: multipart/alternative;
+ boundary="=_65327c10-a4fc-46c7-9e16-4758ae58b774"
+Auto-Submitted: auto-generated
+X-Slack-Message-ID: ob-2vjoythxbyvkif4ynbtsiemeae
+Date: Fri, 8 Sep 2023 19:04:41 +0000
+Feedback-ID: 1.us-west-2.yYC5iBNQ02JwTlfWPiYV/5dg9uYAK9tw533hnbqAYig=:AmazonSES
+X-SES-Outgoing: 2023.09.08-69.169.237.192
+Return-Path:
+ 0101018a762ea0c1-98fb14d1-3122-403a-a03f-7b34c612b374-000000@mail.slack.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CO1PEPF000044F6:EE_|PH0PR01MB7508:EE_|SN1PEPF000252A4:EE_|LV8PR01MB8429:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9769af46-0e55-4777-c7ba-08dbb09e7b34
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?Cvg+4pjPTvSLYI19KzDgQVl6Uvq0DUmhg3mPu8l+7tjyxKhHFHFrXQ4e2u7g?=
+ =?us-ascii?Q?iS5l7cJtX1gzm6JWvIW9xa3HROaiFR43T4QDiRrxJUBp2A/3PxEwrcvm3+/+?=
+ =?us-ascii?Q?x68HNI5B83ipgfXppZsn4Je/pk6XIM0By/bmBmt2S5AchpwsHzbUIk9tz/p6?=
+ =?us-ascii?Q?gwDdSrv3CQjitBiwo/qW9JOAYOkA7c67KicX4Jy1tPookW8tcKwvl8L5wZqa?=
+ =?us-ascii?Q?1wLg9zzSTYlb2OfdSO5UUVzcAxLIY1h/8QQXAqyOGiuWfh3/qBZQy42IXjba?=
+ =?us-ascii?Q?bTW9LX2odZn3wTjPgDGH20GPAXpZVg7KASkQ0DgQKArPd6FsXsZGohXUUrjz?=
+ =?us-ascii?Q?KtzACS8TK1GMlad9aPIPj+tYVR07cgjSgd8/pve6u73XdzLmZVJiELX6Y27Q?=
+ =?us-ascii?Q?ReE8iKjZHf9OLWQ93v99z9lwvGOZ1nmgsXXe+diIIkoNQUC2k9x5uqqyBJ7M?=
+ =?us-ascii?Q?uSXiqCZv9ohrH24Z843vmVP74+tGOpp4qhVdt86rbpuo9bKry5UMh3TqKVkd?=
+ =?us-ascii?Q?q3nQO/i/mT2GpbwTsJ/tr8zw8qXVKQuSFG1yErSf4oHrqPcAsmNxy9rrIyEH?=
+ =?us-ascii?Q?lEdlKhsl5Fg7VkC0WV9Dmes8ed+7g9+1Ru6lN8n64eoIar/DfumnxTLxiDw6?=
+ =?us-ascii?Q?tZqUH2S/ywiY1KbUHPOULL9BopOZeEDnXzYV41XfG79fp3CYWc1IC0/TFQJO?=
+ =?us-ascii?Q?ds2Ogtj6bxY4U3ILwyspr5Flrmo4xfVgkQFx0cYL8PVJTGNr6nhQG9nZnSaW?=
+ =?us-ascii?Q?2j8TugHKfceAivoxHI2GzIUj4B+NYM5DrZH+A/DnuFETTsgqi1GYkGmG6JxL?=
+ =?us-ascii?Q?QZjffYXLJoBWWVtos81yvl2LrU/WroW9HIkahn270kXMqPowZOuKaAE9AG9i?=
+ =?us-ascii?Q?WwxbNOKE/gpqZsLoYOpTXvds2s/YKNLBZct2zu1chq2+vxJkT/mOcX5pO1H2?=
+ =?us-ascii?Q?uBpL0kSkqy3ocw3+9BM+M+6mgqMWCKRji4qGj8f7K1YqBpqPSLhiHcmcFDAI?=
+ =?us-ascii?Q?Eql6dtSVFncr+MqalA5AaOem05jm/hQEv6qUxSxJKe0MBzrvBvECvok3dtb9?=
+ =?us-ascii?Q?W065LHmOOeiPkw6A85f5fmp7Cx+hNfZduv7y+Ur7NtOEhtJuuPDLeVZklldf?=
+ =?us-ascii?Q?dPJ81OfNP6wODEu4wHLsNonra08Jqe68EwJf9yUSNLiDCzIPNe8hSAoiXQ6P?=
+ =?us-ascii?Q?RrKuySTzIyJJYDmJU8sLKlKrOkQegAWrHYfE35urYu3H2cRN7x97fB/OYbG/?=
+ =?us-ascii?Q?1JNZhxVYBTBafSXUTN4uQVQ1g1Aej9IBwxQuP6qSeuAh0KpN/CnIlb0ykQZu?=
+ =?us-ascii?Q?rEQHWCOq4Eps64/tUSyxScU/nPPR3dBZ78vr6Fnj8GLrV9U1z9+p4G8odmlP?=
+ =?us-ascii?Q?Jri6BYrWWTmt+iqqUwFjRF1KRlodubm9xUVWjdAdtKuHHqLBOxBEGtq4QIYT?=
+ =?us-ascii?Q?rbeuBVQZubEr4mYdLCdnudHS/9Oigij/QHYQV7YTWpBbF0HCLc3oqtOtD2AT?=
+ =?us-ascii?Q?TdVWeMr8+lJetVdas6EZAurIG4Uwwlq+bQSsrClUYRkvEElEVwcGrsme1bsA?=
+ =?us-ascii?Q?hlqz2cCBwpF30JRXFVYiOWifYT0XfWeEWKavata9LbDrJS9h0GQ3ODMOb1OO?=
+ =?us-ascii?Q?p1i3vlLUGBSxYR8cSQ67+nLMzgZ2cYh+fwjYXoJtXC74PwUZ5RX2K4/V0VQb?=
+ =?us-ascii?Q?KbQgdhNUAzVnwXzOIzf3iNmRWXdP3Q0TnGu+jaDxVIZS9te1Sd83SnqX++F7?=
+ =?us-ascii?Q?gbLnfzkqmzobtTeZE/W+viLzfmPbEGM=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:69.169.237.192;CTRY:US;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:b237-192.smtp-out.us-west-2.amazonses.com;PTR:b237-192.smtp-out.us-west-2.amazonses.com;CAT:NONE;SFS:(13230031)(4636009)(14302899009)(332800013)(47000500020)(1690799017)(451199024)(19627405001)(356005)(33964004)(6486002)(71280400001)(6506007)(7696005)(7596003)(7636003)(224303003)(83170400001)(166002)(79850400001)(3450700001)(956004)(336012)(26005)(9686003)(58800400005)(75640400001)(9316004)(4006050)(5660300002)(1096003)(22186003)(6916009)(36736006)(38122002)(130870200001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB7508
+X-OrganizationHeadersPreserved: PH0PR01MB7508.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb7.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb7.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb2.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 08 Sep 2023 19:04:52.1435
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 9769af46-0e55-4777-c7ba-08dbb09e7b34
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: SN1PEPF000252A4.namprd05.prod.outlook.com
+X-CrossPremisesHeadersFiltered: SN1PEPF000252A4.namprd05.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ SN1PEPF000252A4.namprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1PEPF000044F6.namprd21.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 0840e85b-dc67-46eb-b073-08dbb09e7580
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.98;CTRY:US;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb2.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2023 19:04:51.9247
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9769af46-0e55-4777-c7ba-08dbb09e7b34
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.98];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1PEPF000044F6.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR01MB8429
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.6096246
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6768.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UkZYQmNNcTRYbGk4QmRId3h5RVdBdC9NdWZaNlhWbDdndGNJeFBiZnBWc1py?=
+ =?utf-8?B?Q1VFSmZkTkQ1QSs3cFZEMG9kUThIVHRFeDNJOUtYNlRSeWE1dlQyRkF0aDNk?=
+ =?utf-8?B?S1gvb2N1YUtLWEJmM25uVWw1WC85NFFYV1ZDY25wOG9CeTk0RUU2bFNOM21F?=
+ =?utf-8?B?bldST2xBcW1CY1VPTEtvb2RkT1QrQkxBRWNldStQWUhUcEVCQTgrNEh2cmoy?=
+ =?utf-8?B?ejczQWJ0K1E2d3pPUjFOQ3crTUM2UmVwYjR3Sjl0c2ZMemJmajZtR0ZnRXcx?=
+ =?utf-8?B?eCtyNlp2dHdBU0p2VnVOQkJBK01pTldtTllnRlYrdFNvNUlKOVlGMEovaGRE?=
+ =?utf-8?B?OTFvcUZ4ZEIxaFZIVHRkdFlWdVptVUpCWDJreWNNQ21iTUIzSnVoMXdKZnBW?=
+ =?utf-8?B?MGdGdVNaWm1BN251VHdkWUEvU3pZV0swbWVMQ3hJTEZTNy85MWVQR1JMUkFJ?=
+ =?utf-8?B?TWxVNTZHUy9Kdzl6Nnp2eGJHOHJ3dVhRWTMwK1hmb3d2djNoMHVsZm1FMkF2?=
+ =?utf-8?B?ZURwN2FCUzhGRjdhQ2xuVTRwazVJMm85T0poeHYwZDBBRUs0QURuaW9BRG5i?=
+ =?utf-8?B?TFRCSWIyN3ZCbTNKZFdIVXFvQ1BWTmhPeDlhNzM1VFhpMG1TL1RFc0hKa1dH?=
+ =?utf-8?B?WmsxM212clgvNkhSQjU2TmN3YVFVd3J0aVVsMjljMW4vcGVVamx3UDNnTVZJ?=
+ =?utf-8?B?bTM2ckt6ZVlib3FxWjZvREExZ01PTlN4cFdhaXJ3Q08zNWp1eUhUdFFET25U?=
+ =?utf-8?B?dUVIZTFkdFMxbkk3R0daeUpkSDk2cjcvbkR4M3hwWnZEa2xxbVFYSHB4T3lK?=
+ =?utf-8?B?RlNJd0FCclNOWjlhZlVtSWdlWWpNNzMvSGpSU0VYdVh0cGV6OFBFcW8waWE0?=
+ =?utf-8?B?WjZOOVNCenR2WWRxZDNHcGFyVStGOXpTemdkUmU0dTRSQ2RYWEdXT01FOExD?=
+ =?utf-8?B?UTBLdTlPSmhRY2IrV1Bhc2p0cE0waFBwQk1TU0JpNjBrLzFwVDNwQkNtWGNI?=
+ =?utf-8?B?NENzTlZyemxyUXpreDZXU0Vpd0tpUnYxV1NaNHFiQWNNb0FBR25ZUlc0a1FR?=
+ =?utf-8?B?Vlg2SFNFS0RZWmhsUlk3K2UyRVl6NGhKcVR6cCtLb2llaXluY016R3M0Qmlo?=
+ =?utf-8?B?TUU5Wk1RZ053eUZoNUg2Q1dPOFNxZlNaTU05REdQOWdKWlFvbHZrZzBDK0tS?=
+ =?utf-8?B?REJPTmRKcEVwRFEwdmU0dGFGV2tPemRQQXJRZG5VM3QrNWp0N3VJNTFhZWdq?=
+ =?utf-8?B?STI4azhUeUVpbU80RjRzYkNhYnhlUTlzOEd2dldBRFlaTHlMc3pWaEsxWjdJ?=
+ =?utf-8?B?Q3psLzZXUjJEb253VzRUWWlOSVFtODJMaTBXTDhUZkYwdzl1ditBWmI0NG41?=
+ =?utf-8?B?Z0NCdkJjOXFON2RZQ1Q3cU1zQlRlYkV4eFJBcVFVbzR6QmJDYlpSNXhEb3Yr?=
+ =?utf-8?B?YVowMk0xM2VsellZU0laYUlWYktVMFl0Qy9POGZWeldvR3FYdmxFdDNiSjdy?=
+ =?utf-8?B?RkJzY3d5YlRsUWZSOHhoTGFMYVhzYytNSk5IaUpHUm5vSFlNVTVtR3JaWUlT?=
+ =?utf-8?B?NGFmdkR6TUhBQ2pOeUs2dGovdnROTlJGUEc2SHFoZG54SXIwUlhnR28xM1VI?=
+ =?utf-8?B?S0x6WHA5L2szcGtIS092VDVnL3FwcUVZK2Z2RHlWazUwT2hFWExnbFBqRXJz?=
+ =?utf-8?B?ZWFMNmh0RFJTWUFvQnNCa1A0cWZ0aTZ0eVRHdStMU1B4Vm14NlExWHMrenhW?=
+ =?utf-8?B?K0ptajVpbVRjVzhCMDZPMm9TMHR5WVVsdkw3WlU4N25hTHRTaWVzbXMzLzdL?=
+ =?utf-8?B?TTc5WDdCYy9uRTVydE14L0JiaFlKdTdoM0JUWk8velZjbWc3N2JxWVdwRi9L?=
+ =?utf-8?B?UEh4eTMvTVV0SUc0NTVSNnY5djVMaSt3MFUzSGh3Sjc0c29Qcytmc1BPRklw?=
+ =?utf-8?B?Z01ob0FrQ21xWVd5ODJmS1BVaDBVcVFtSDhTS01YV0QvOGR3VDA5dHdYNVps?=
+ =?utf-8?B?RmhhODRtbGxsaHJsV0NJc2VaT0tEK3FjdDY3TXpWM09zYjhPYVp4T241RDQ3?=
+ =?utf-8?B?RFd5MnFHSlN3R01GZHcyNFdJd3B6RDB6YlJ3NGdFVURyMEVPZzd1bXRJZ1dG?=
+ =?utf-8?B?Q1JjdFpZODU4dzZCSys2RS9Wb0R6Rkg0TG40Zm40elpiRDJwYVAzVVhOT09l?=
+ =?utf-8?B?c0FCRTN2TXd6TU1KeUJ2UkFxMVRiVkFkNmhUeHFzcGNzZUZEZGhxT0d4ZFh2?=
+ =?utf-8?B?aDJVbHFEUlY3WlB2dllqTXNaL3FBPT0=?=
+MIME-Version: 1.0
+
+--=_65327c10-a4fc-46c7-9e16-4758ae58b774
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
+
+56Gu6K6k5L2g55qE55S15a2Q6YKu5Lu25Zyw5Z2ACgrku6XkuIvkuLrkvaDnmoTnoa7orqTnoIHj
+gILor7flsIblhbbovpPlhaXkvaDmiZPlvIDnmoTmtY/op4jlmajnqpflj6PvvIzmiJHku6zkvJrl
+uK7liqnkvaDnmbvlvZXjgIIKCkpXWi1RUkkKCuWmguaenOS9oOacquivt+axguWPkemAgeatpOWw
+geeUteWtkOmCruS7tu+8jOaXoOmcgOaLheW/g++8jOS9oOWPr+aUvuW/g+W/veeVpeOAgg==
+
+--=_65327c10-a4fc-46c7-9e16-4758ae58b774
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns=3D"http://www.w3.org/1999/xht=
+ml"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><m=
+eta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1.0"=
+><link href=3D"https://fonts.googleapis.com/css?family=3DLato:400,700,900" =
+rel=3D"stylesheet"><title>Slack =E7=A1=AE=E8=AE=A4=E7=A0=81=EF=BC=9AJWZ-QRI=
+</title><style type=3D"text/css">/* Global Resets */
+	body, .background_main, p, table, td, div { font-family: 'Lato', 'Helvetic=
+a Neue', Helvetica, Arial, sans-serif; }
+
+	img {
+		border: none;
+		-ms-interpolation-mode: bicubic;
+		max-width: 100%;
+	}
+
+	p {padding-bottom: 2px;}
+
+	body {
+		background: #fff;
+		font-size: 17px;
+		line-height: 24px;
+		margin: 0;
+		padding: 0;
+		-ms-text-size-adjust: 100%;
+		-webkit-text-size-adjust: 100%;
+	}
+
+	table {
+		border-collapse: collapse;
+		mso-table-lspace: 0pt;
+		mso-table-rspace: 0pt;
+		width: 100%;
+	}
+
+	td {
+		font-size: 17px;
+		line-height: 24px;
+		vertical-align: top;
+	}
+
+	/* Footer */
+	.email_footer td, .email_footer p, .email_footer span {
+		font-size: 15px;
+		text-align: center;
+		color: #1d1c1d;
+	}
+
+	.email_footer a {
+		text-decoration: underline;
+	}
+
+	.email_footer td {padding-top: 20px;}
+
+	.footer_logo {
+		width: 40px;
+		height: 40px;
+		padding-bottom: 20px;
+	}
+
+	.footer_title {
+		font-weight: 900;
+	}
+
+	.preheader {
+		display: none;
+		mso-hide: all;
+	}
+
+	/* Typography */
+	h1, h2, h3, h4 {
+		color: #1d1c1d;
+		font-weight: 700;
+		margin: 0;
+		margin-bottom: 12px;
+	}
+
+	h1 {
+		font-size: 36px;
+		line-height: 42px;
+		letter-spacing: -.25px;
+		margin-bottom: 28px;
+		text-align: left;
+		word-break: break-word;
+	}
+
+	h2 {
+		font-size: 24px;
+		line-height: 32px;
+		letter-spacing: -0.75px;
+		margin-bottom: 28px;
+		text-align: left;
+	}
+
+	h3 {
+		font-size: 18px;
+		line-height: 24px;
+		letter-spacing: 0px;
+		margin-bottom: 0px;
+	}
+
+	p, ul, ol {
+		font-size: 17px;
+		line-height: 24px;
+		font-weight: normal;
+		margin: 0;
+		margin-bottom: 15px;
+	}
+
+	ul, ol {
+		padding-left: 40px;
+	}
+
+	p li, ul li, ol li {
+		list-style-position: outside;
+		margin-left: 5px;
+	}
+
+	p {
+		font-size: 16px;
+		letter-spacing: -0.2px;
+	}
+
+	a {
+		color: #1264a3;
+		text-decoration: underline!important;
+	}
+
+	a:hover {text-decoration: underline;}
+
+	.button_link::after {
+		position: absolute;
+		content: '';
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		border-radius: 4px;
+	}
+
+	.button_link:hover::after {
+		box-shadow: inset 0 -2px #237c4a;
+	}
+
+	.button_link.is_secondary:hover::after {
+		box-shadow: none;
+	}
+
+	.button_link.plum:hover {
+		background-color: #4a154b !important;
+		border-color: #4a154b !important;
+	}
+
+	.button_link_wrapper.plum:hover {
+		background-color: #4a154b !important;
+	}
+
+	.button_link.plum:hover::after {
+		box-shadow: none;
+	}
+
+	.preview_text {
+		color: transparent;
+		display: none;
+		height: 0;
+		max-height: 0;
+		max-width: 0;
+		opacity: 0;
+		overflow: hidden;
+		mso-hide: all;
+		visibility: hidden;
+		width: 0;
+		font-size: 1px;
+		line-height:1px;
+	}
+
+	.preview_text a {
+		color: #3AA3E3 !important;
+		font-weight: bold;
+	}
+
+	.sm_visible {
+		display: none;
+	}
+
+	.footer_padding {
+		padding: 0 50px;
+	}
+
+	table[class=3D"background_main"] .social_icon_margin {
+		margin-left: 32px !important;
+	}
+
+	/* Responsive and Mobile Friendly Styles */
+	/* Yahoo Mail has a history of rendering all media query styles with class=
+ selectors unless class is used as an attribute */
+	@media only screen and (max-width: 600px) {
+		table[class=3D"background_main"] .sm_full_width {
+			width: 100% !important;
+		}
+
+		table[class=3D"background_main"] .sm_90_percent_width {
+			width: 90% !important;
+			padding: 16px !important;
+			text-align: center !important;
+			float: none !important;
+		}
+
+		table[class=3D"background_main"] .sm_side_padding {
+			padding-right: 8px !important;
+			padding-left: 8px !important;
+			float: none !important;
+		}
+
+		table[class=3D"background_main"] .sm_small_top_padding {
+			padding-top: 8px !important;
+		}
+
+		table[class=3D"background_main"] .sm_top_padding {
+			padding-top: 16px !important;
+		}
+
+		table[class=3D"background_main"] .sm_auto_width {
+			width: auto !important;
+		}
+
+		table[class=3D"background_main"] .sm_auto_height {
+			height: auto !important;
+		}
+
+		table[class=3D"background_main"] .sm_border_box {
+			box-sizing: border-box !important;
+		}
+
+		table[class=3D"background_main"] .sm_block {
+			display: block !important;
+		}
+
+		table[class=3D"background_main"] .sm_inline_block {
+			display: inline-block !important;
+		}
+
+		table[class=3D"background_main"] .sm_table {
+			display: table !important;
+		}
+
+		table[class=3D"background_main"] .sm_no_side_padding {
+			padding-right: 0 !important;
+			padding-left: 0 !important;
+		}
+
+		table[class=3D"background_main"] .sm_no_border_radius {
+			border-radius: 0 !important;
+		}
+
+		table[class=3D"background_main"] .sm_no_padding {
+			padding-right: 0 !important;
+			padding-left: 0 !important;
+		}
+
+		table[class=3D"background_main"] .sm_os_icons_height {
+			/* this is to make the parent element the same height as the inline-bloc=
+k img inside */
+			height: 44px;
+		}
+
+		table[class=3D"background_main"] .small_icon {
+			width: 20px !important;
+			height: 20px !important;
+		}
+
+		table[class=3D"background_main"] .social_icon_margin {
+			margin-left: 20px !important;
+		}
+
+		table[class=3D"background_main"] .slack_logo_small_icon {
+			width: 80px !important;
+		}
+
+		table[class=3D"background_main"] .slack_logo_small_icon img {
+			 height: 24px !important;
+		}
+
+		.social_img_bottom_margin {
+			/*this class is for social_user_outreach email only*/
+			margin-bottom: 20px !important;
+		}
+
+		.social_p_bottom_margin {
+			/*this class is for social_user_outreach email only*/
+			margin-bottom: 40px !important;
+		}
+
+		/* Common responsive styles for new email design templates #feat-activati=
+on-email-audit */
+		.sm_hidden {
+			display: none!important;
+		}
+
+		.sm_visible {
+			display: inline-block!important;
+		}
+		h1 {
+			font-size: 24px!important;
+			line-height: 30px!important;
+			margin-bottom: 20px!important;
+			word-break: break-word;
+		}
+		h2 {
+			font-size: 16px!important;
+			line-height: 23px!important;
+			margin-bottom: 10px!important;
+		}
+		h3 {
+			font-size: 14px!important;
+			line-height: 20px!important;
+		}
+
+		.hero_paragraph, .bulleted_list {
+			font-size: 14px!important;
+			line-height: 19px!important;
+			margin-bottom: 20px!important;
+			word-break: break-word;
+		}
+
+		.status_paragraph {
+			font-size: 14px!important;
+			line-height: 19px!important;
+			word-break: break-word;
+		}
+		.content_paragraph {
+			font-size: 12px!important;
+			line-height: 18px!important;
+			margin-bottom: 10px!important;
+		}
+		.list_paragraph {
+			font-size: 12px!important;
+			line-height: 18px!important;
+		}
+
+		.restyle_button {
+			font-size: 12px!important;
+			border-top: 10px solid!important;
+			border-bottom: 10px solid!important;
+			border-color: #611f69!important;
+			line-height: 12px!important;
+		}
+
+		.margin_top {
+			margin-top: 20px!important;
+		}
+
+		.lg_margin_left_right {
+			margin-left: 26px!important;
+			margin-right: 26px!important;
+		}
+
+		.xl_margin_bottom {
+			margin-bottom: 30px!important;
+		}
+
+		.xl_margin_top {
+			margin-top: 30px!important;
+		}
+		.hero_block_container {
+			margin-left: 26px!important;
+		}
+
+		.hero_block_left {
+			width: 50%!important;
+		}
+
+		.slack_logo_style {
+			margin-top: -6px!important;
+			margin-bottom: -12px!important;
+		}
+
+		.larger_bottom_margin {
+			margin-bottom: 30px!important;
+		}
+
+		.list_header {
+			font-size: 16px!important;
+		}
+
+		.list_icon_wrapper {
+			width: 55px!important;
+		}
+
+		.list_icon_style {
+			width: 40px!important;
+			height: 40px!important;
+		}
+
+		.list_icon_style_large {
+			width: auto!important;
+			height: 50px!important;
+		}
+
+		.line_height_24 {
+			line-height: 24px!important;
+		}
+
+		.brand_logo_wrapper {
+			width: 78px!important;
+		}
+
+		.brand_logo_style {
+			width: 68px!important;
+			height: 68px!important;
+		}
+
+		.brand_heading {
+			font-size: 14px!important;
+			line-height: 20px!important;
+		}
+
+		.brand_link {
+			font-size: 13px!important;
+			line-height: 18px!important;
+		}
+
+		.grey_box_container {
+			padding: 20px 9px!important;
+		}
+
+		.account_info_wrapper {
+			margin-bottom: 18px!important;
+		}
+
+		.account_info_item {
+			padding: 0px 5px!important;
+		}
+
+		.account_info_avatar {
+			width: 55px!important;
+			height: 55px!important;
+			margin-bottom: 5px!important;
+		}
+		table[class=3D"background_main"] .footer_padding {
+			padding: 0 26px!important;
+		}
+		.footer_padding {
+			padding: 0 26px !important;
+		}
+		.small_font {
+			font-size: 14px!important;
+		}
+
+	}
+
+	/* More client-specific styles */
+	@media all {
+		.ExternalClass {
+			width: 100%;
+		}
+
+		.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass fon=
+t, .ExternalClass td, .ExternalClass div {
+			line-height: 100%;
+		}
+
+		.footer_link {
+			color: #1d1c1d !important;
+			font-family: inherit !important;
+			font-size: inherit !important;
+			font-weight: inherit !important;
+			line-height: inherit !important;
+		}
+	}
+	a:hover {
+		text-decoration: underline !important;
+	}
+
+	pre, code {
+		--saf-0: rgba(var(--sk_foreground_low, 29, 28, 29), 0.13);
+		border: 1px solid var(--saf-0);
+		background: rgba(var(--sk_foreground_min, 29, 28, 29), 0.04);
+		font-family: 'Monaco', 'Menlo', 'Consolas', 'Courier New', monospace !imp=
+ortant;
+		font-size: 12px;
+		line-height: 1.50001;
+		font-variant-ligatures: none;
+		white-space: pre;
+		white-space: pre-wrap;
+		word-wrap: break-word;
+		word-break: normal;
+		-webkit-tab-size: 4;
+		-moz-tab-size: 4;
+		-o-tab-size: 4;
+		tab-size: 4;
+	}
+
+	code {
+		color: #e01e5a;
+		padding: 2px 3px 1px;
+		border-radius: 3px;
+	}
+
+	pre {
+		margin-bottom: 16px;
+		padding: 8px;
+		border-radius: 4px;
+	}
+
+	blockquote {
+		position: relative;
+		margin-bottom: 16px;
+		padding-left: 16px;
+		border-left: rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1);
+		border-left-width: 4px;
+		border-left-style: solid;
+	}
+</style></head><body><div class=3D"preheader plaintext_ignore" style=3D"fon=
+t-size: 1px; display: none !important;"><div>=E7=A1=AE=E8=AE=A4=E4=BD=A0=E7=
+=9A=84=E7=94=B5=E5=AD=90=E9=82=AE=E4=BB=B6=E5=9C=B0=E5=9D=80.  =E4=BB=A5=E4=
+=B8=8B=E4=B8=BA=E4=BD=A0=E7=9A=84=E7=A1=AE=E8=AE=A4=E7=A0=81=E3=80=82=E8=AF=
+=B7=E5=B0=86=E5=85=B6=E8=BE=93=E5=85=A5=E4=BD=A0=E6=89=93=E5=BC=80=E7=9A=84=
+=E6=B5=8F=E8=A7=88=E5=99=A8=E7=AA=97=E5=8F=A3=EF=BC=8C=E6=88=91=E4=BB=AC=E4=
+=BC=9A=E5=B8=AE=E5=8A=A9=E4=BD=A0=E7=99=BB=E5=BD=95=E3=80=82</div></div><di=
+v class=3D"plaintext_ignore" style=3D"display: none; max-height: 0px; overf=
+low: hidden;"> &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C=
+&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C=
+&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C &nbsp;=E2=80=
+=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=
+=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=
+=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C &nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
+p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
+p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C &nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C &nbsp;=E2=80=8C&nbsp;=E2=80=8C&n=
+bsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&n=
+bsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&n=
+bsp;=E2=80=8C&nbsp; &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=
+=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C &nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=
+=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp=
+;=E2=80=8C &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
+p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbs=
+p;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C &nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nb=
+sp;=E2=80=8C&nbsp;=E2=80=8C &nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&n=
+bsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&n=
+bsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&nbsp;=E2=80=8C&n=
+bsp; </div><!--[if mso]><style type=3D"text/css">.background_main, table, t=
+able td, p, div, h1, h2, h3, h4, h5, h6 {
+								font-family: Arial, sans-serif !important;
+							}</style><![endif]--><table style=3D"background-color: #ffffff; padd=
+ing-top: 20px;color: #434245;width: 100%;-webkit-font-smoothing:antialiased=
+; -moz-osx-font-smoothing:grayscale;   border: 0; text-align: center; borde=
+r-collapse: collapse;" class=3D"background_main"><tr><td style=3D"vertical-=
+align: top; padding: 0"><center><table id=3D"body" class=3D"card" style=3D"=
+border: 0; border-collapse: collapse; margin: 0 auto; background: white; bo=
+rder-radius: 8px; margin-bottom: 16px;"><tr><td style=3D"width: 546px; vert=
+ical-align: top; padding-top: 32px"><div style=3D"max-width: 600px; margin:=
+ 0 auto;"><!--[if mso]>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" style=3D"padding: 0=
+; margin: 0; width: 100%;">
+    <tr>
+        <td colspan=3D"3" style=3D"padding: 0; margin: 0; font-size: 20px; =
+height: 20px;" height=3D"20">&nbsp;</td>
+    </tr>
+    <tr>
+        <td style=3D"padding: 0; margin: 0;">&nbsp;</td>
+        <td style=3D"padding: 0; margin: 0;" width=3D"540">
+<![endif]--><div style=3D"margin-left: 50px; margin-right: 50px; margin-bot=
+tom: 72px; margin-bottom: 30px;" class=3D"lg_margin_left_right xl_margin_bo=
+ttom"><div style=3D"margin-top: 18px;" class=3D"slack_logo_style"><img widt=
+h=3D"120" height=3D"36" style=3D"margin-top: 0; margin-right: 0; margin-bot=
+tom: 32px; margin-left: 0px;" src=3D"https://slack.com/x-a5870342262755/img=
+/slack_logo_240.png" alt=3D"Slack =E5=BE=BD=E6=A0=87"></div><h1>=E7=A1=AE=
+=E8=AE=A4=E4=BD=A0=E7=9A=84=E7=94=B5=E5=AD=90=E9=82=AE=E4=BB=B6=E5=9C=B0=E5=
+=9D=80</h1><p style=3D"font-size: 20px; line-height: 28px; letter-spacing: =
+-0.2px; margin-bottom: 28px; word-break: break-word;" class=3D"hero_paragra=
+ph"> =E4=BB=A5=E4=B8=8B=E4=B8=BA=E4=BD=A0=E7=9A=84=E7=A1=AE=E8=AE=A4=E7=A0=
+=81=E3=80=82=E8=AF=B7=E5=B0=86=E5=85=B6=E8=BE=93=E5=85=A5=E4=BD=A0=E6=89=93=
+=E5=BC=80=E7=9A=84=E6=B5=8F=E8=A7=88=E5=99=A8=E7=AA=97=E5=8F=A3=EF=BC=8C=E6=
+=88=91=E4=BB=AC=E4=BC=9A=E5=B8=AE=E5=8A=A9=E4=BD=A0=E7=99=BB=E5=BD=95=E3=80=
+=82</p></div><div style=3D"background: #F5F4F5; box-shadow: 0px 0px 15px rg=
+ba(0, 0, 0, 0.1); border-radius: 4px; padding: 43px 23px; margin-left: 50px=
+; margin-right: 50px; margin-bottom: 72px; margin-bottom: 30px;" class=3D"l=
+g_margin_left_right xl_margin_bottom grey_box_container"><div style=3D"text=
+-align: center; vertical-align: middle; font-size: 30px;">JWZ-QRI</div></di=
+v><div style=3D"margin-left: 50px; margin-right: 50px; margin-bottom: 72px;=
+ margin-bottom: 30px;" class=3D"lg_margin_left_right xl_margin_bottom"><p s=
+tyle=3D"font-size: 16px; line-height: 24px; letter-spacing: -0.2px; margin-=
+bottom: 28px;" class=3D"content_paragraph"></p><p style=3D"font-size: 16px;=
+ line-height: 24px; letter-spacing: -0.2px; margin-bottom: 28px;" class=3D"=
+content_paragraph">=E5=A6=82=E6=9E=9C=E4=BD=A0=E6=9C=AA=E8=AF=B7=E6=B1=82=
+=E5=8F=91=E9=80=81=E6=AD=A4=E5=B0=81=E7=94=B5=E5=AD=90=E9=82=AE=E4=BB=B6=EF=
+=BC=8C=E6=97=A0=E9=9C=80=E6=8B=85=E5=BF=83=EF=BC=8C=E4=BD=A0=E5=8F=AF=E6=94=
+=BE=E5=BF=83=E5=BF=BD=E7=95=A5=E3=80=82</p></div><!--[if mso]>
+		</td>
+		<td style=3D"padding: 0; margin: 0; font-size: 20px; height: 20px;">&nbsp=
+;</td>
+	</tr>
+	<tr>
+		<td colspan=3D"3" style=3D"padding: 0; margin: 0; font-size: 20px; height=
+: 20px; height: 20px;">&nbsp;</td>
+	</tr>
+</table>
+<![endif]--></div></td></tr></table></center></td></tr><tr><td class=3D"ema=
+il_footer" style=3D"font-size: 15px;color: #717274;text-align: center;width=
+: 100%;"><!--[if mso]>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" style=3D"padding: 0=
+; margin: 0; width: 100%;">
+    <tr>
+        <td colspan=3D"3" style=3D"padding: 0; margin: 0; font-size: 20px; =
+height: 20px;" height=3D"20">&nbsp;</td>
+    </tr>
+    <tr>
+        <td style=3D"padding: 0; margin: 0;">&nbsp;</td>
+        <td style=3D"padding: 0; margin: 0;" width=3D"540">
+<![endif]--><center><table style=3D"margin: 20px auto 0; background-color: =
+white; border: 0; text-align: center; border-collapse: collapse;"><tr><td s=
+tyle=3D"width: 546px; vertical-align: top; padding: 0px;"><div style=3D"max=
+-width: 600px; margin: 0 auto;"><div class=3D"footer_padding"><table><tr><t=
+d class=3D"slack_logo_small_icon" style=3D"vertical-align: top; text-align:=
+ left;"><img width=3D"120" height=3D"36" style=3D"margin-top: 0; margin-rig=
+ht: 0; margin-bottom: 32px; margin-left: 0px;" src=3D"https://a.slack-edge.=
+com/80588/img/slack_logo_240_vogue.png" alt=3D"Slack =E5=BE=BD=E6=A0=87"></=
+td><td style=3D"vertical-align: top; text-align: right;"><a href=3D"https:/=
+/twitter.com/slackhq" data-qa=3D"twitter_link" class=3D"social_icon_margin"=
+ style=3D"margin-left: 20px;"><img class=3D"small_icon" src=3D"https://a.sl=
+ack-edge.com/b8be608/marketing/img/icons/icon_colored_twitter.png" width=3D=
+"32" height=3D"32" title=3D"Twitter"></a><a href=3D"https://facebook.com/sl=
+ackhq" data-qa=3D"fb_link" class=3D"social_icon_margin" style=3D"margin-lef=
+t: 20px;"><img class=3D"small_icon" src=3D"https://a.slack-edge.com/b8be608=
+/marketing/img/icons/icon_colored_facebook.png" width=3D"32" height=3D"32" =
+title=3D"Facebook"></a><a href=3D"https://www.linkedin.com/company/tiny-spe=
+c-inc/" data-qa=3D"linkedin_link" class=3D"social_icon_margin" style=3D"mar=
+gin-left: 20px;"><img class=3D"small_icon" src=3D"https://a.slack-edge.com/=
+b8be608/marketing/img/icons/icon_colored_linkedin.png" width=3D"32" height=
+=3D"32" title=3D"LinkedIn"></a></td></tr></table><div style=3D"font-size:12=
+px; opacity:0.5; color:#696969; text-align:left; line-height:15px; margin-b=
+ottom:50px; text-align: left;"><a class=3D"footer_link" href=3D"https://sla=
+ckhq.com" data-qa=3D"slack_blog" style=3D"color: #696969 !important;">=E6=
+=88=91=E4=BB=AC=E7=9A=84=E5=8D=9A=E5=AE=A2</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbs=
+p;&nbsp;<a class=3D"footer_link" href=3D"https://slack.com/legal" data-qa=
+=3D"slack_legal" style=3D"color: #696969 !important;">=E6=94=BF=E7=AD=96</a=
+>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href=3D"https://slack.com/help" cl=
+ass=3D"footer_link" data-qa=3D"slack_help" style=3D"color: #696969 !importa=
+nt;">=E5=B8=AE=E5=8A=A9=E4=B8=AD=E5=BF=83</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp=
+;&nbsp;<a href=3D"https://slack.com/community" class=3D"footer_link" data-q=
+a=3D"slack_commmunity" style=3D"color: #696969 !important;">Slack =E7=A4=BE=
+=E5=8C=BA</a><br><br><div>=C2=A92023 Slack Technologies, LLC=EF=BC=8CSalesf=
+orce =E6=97=97=E4=B8=8B=E5=85=AC=E5=8F=B8=E3=80=82<br>415 Mission Street, S=
+an Francisco, CA 94105</div><br>=E4=BF=9D=E7=95=99=E6=89=80=E6=9C=89=E6=9D=
+=83=E5=88=A9=E3=80=82</div></div></div></td></tr></table></center><!--[if m=
+so]>
+		</td>
+		<td style=3D"padding: 0; margin: 0; font-size: 20px; height: 20px;">&nbsp=
+;</td>
+	</tr>
+	<tr>
+		<td colspan=3D"3" style=3D"padding: 0; margin: 0; font-size: 20px; height=
+: 20px; height: 20px;">&nbsp;</td>
+	</tr>
+</table>
+<![endif]--></td></tr></table></body></html>=
+
+--=_65327c10-a4fc-46c7-9e16-4758ae58b774--

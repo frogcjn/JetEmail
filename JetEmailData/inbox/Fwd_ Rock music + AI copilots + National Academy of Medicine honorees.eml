@@ -1,0 +1,618 @@
+Received: from SA0PR01MB6139.prod.exchangelabs.com (2603:10b6:806:ec::11) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 11 Oct 2023 13:05:19
+ +0000
+Received: from DM6PR05CA0065.namprd05.prod.outlook.com (2603:10b6:5:335::34)
+ by SA0PR01MB6139.prod.exchangelabs.com (2603:10b6:806:ec::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6863.44; Wed, 11 Oct 2023 13:05:18 +0000
+Received: from DS3PEPF000099D3.namprd04.prod.outlook.com
+ (2603:10b6:5:335:cafe::55) by DM6PR05CA0065.outlook.office365.com
+ (2603:10b6:5:335::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.21 via Frontend
+ Transport; Wed, 11 Oct 2023 13:05:18 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.111)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ gmail.com discourages use of 18.9.1.111 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.111) by
+ DS3PEPF000099D3.mail.protection.outlook.com (10.167.17.4) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6838.22 via Frontend Transport; Wed, 11 Oct 2023 13:05:16 +0000
+Received: from oc11expo25.exchange.mit.edu (18.9.4.96) by
+ oc11exhyb6.exchange.mit.edu (18.9.1.111) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 11 Oct 2023 09:04:38 -0400
+Received: from oc11exhyb5.exchange.mit.edu (18.9.1.110) by
+ oc11expo25.exchange.mit.edu (18.9.4.96) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 11 Oct 2023 09:04:38 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by oc11exhyb5.exchange.mit.edu (18.9.1.110) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Wed, 11 Oct 2023 09:04:37 -0400
+Received: from MN2PR07CA0008.namprd07.prod.outlook.com (2603:10b6:208:1a0::18)
+ by SJ2PR01MB8052.prod.exchangelabs.com (2603:10b6:a03:4c7::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6863.38; Wed, 11 Oct 2023 13:04:34 +0000
+Received: from BL02EPF0001A0FD.namprd03.prod.outlook.com
+ (2603:10b6:208:1a0:cafe::94) by MN2PR07CA0008.outlook.office365.com
+ (2603:10b6:208:1a0::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38 via Frontend
+ Transport; Wed, 11 Oct 2023 13:04:33 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.208.54)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of gmail.com designates
+ 209.85.208.54 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.208.54; helo=mail-ed1-f54.google.com; pr=C
+Received: from mail-ed1-f54.google.com (209.85.208.54) by
+ BL02EPF0001A0FD.mail.protection.outlook.com (10.167.242.104) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.22 via Frontend Transport; Wed, 11 Oct 2023 13:04:33 +0000
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-53d82bea507so2949021a12.2;
+        Wed, 11 Oct 2023 06:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697029472; x=1697634272; darn=mit.edu;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4Iia0krCQHeNkpbyHmsVxXvFns12ujcz45V6ey8SIkI=;
+        b=jNsTwkxWalQBi5eWBuusDgFXZO2gSpMv5InV0P5AFa93n/ZgT1pyGtGFB0Ch7y1Ehh
+         3zFgZHFvf/Mz41Gsd2pixlQ+8WW6LXz2o2ik1C4wBcbYKSO5mH5eDyC/8OSAUPCzEPmT
+         UFn5n0P7iP9dQ9DJy2MWaJdpLe1OhpFV1eN+4c4nbhb5Ayw65owxxz73EaOBszIt7z8p
+         7whFLxkrS93vXBuxtfgA6ZFT9y7LMUPQpW6k2f4wY/0KYKca+KNMG9QU8gWEud2uOhU/
+         bgoJZLqvNTQ+evoYQFNZofeC/VjtXSCJibykff5wmvcO48tujl3cdGWBKhY/cBC6o7rI
+         kn3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697029472; x=1697634272;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Iia0krCQHeNkpbyHmsVxXvFns12ujcz45V6ey8SIkI=;
+        b=pEtaRdOKQUlqx7Zmv3x1839wVhgF37BkqfWQGj6M8qR/+2QwNY8/VYm8dLm7wwClkp
+         XD537d3EH47AdCGNhR/wcsD5Jhx4e1Oo1Kfgybor/r4I1FwY3XJqtcu4C4e2dL1Z+Lri
+         voQd5nF/Wzhk4YDCwCSsdorn4avwaNr/F4MU2FlblWzjCQ98Tqr1V+huMo2ofyQVjc/e
+         P9Q/5L0iBb0G8e8qt/viCn/4FpOpG4If4zrdoLAOm7zJ51UcSaEoG7mfoSFmJqds7NfI
+         tE6aSj6rAE9P9DNUslEJgpVMXmjkEOsbRvJigyZrM3/87i1VrSLHfY2ofUjRvODvijLS
+         QNog==
+X-Gm-Message-State: AOJu0YympTZSBR7vPsDVp2EjCedG2WAQUn2IxPdiMIta6lPbBl7YDTzs
+	wqA/f4AVJ1gV0N7rHyG0OkdIen8NvwjcSw2xgVQ=
+X-Google-Smtp-Source: AGHT+IEEBqcQL9C5SbEg5jm9rRcIOAwHJDSmvWo2Ka20AoOUGVN34JO8xW4PGnGJ8bJYD+IxBL9n9U6VWcUUsb+FAzI=
+X-Received: by 2002:aa7:d501:0:b0:52f:2bd3:6f4d with SMTP id
+ y1-20020aa7d501000000b0052f2bd36f4dmr19828452edq.0.1697029472021; Wed, 11 Oct
+ 2023 06:04:32 -0700 (PDT)
+References: <80f62adc67c5889c8cf03eb72.66bea72eda.20231011095943.03ae182187.df093a84@mail230.atl271.mcdlv.net>
+In-Reply-To: <80f62adc67c5889c8cf03eb72.66bea72eda.20231011095943.03ae182187.df093a84@mail230.atl271.mcdlv.net>
+From: Nancy Leveson <leveson.nancy8@gmail.com>
+Date: Wed, 11 Oct 2023 09:04:18 -0400
+Message-ID: <CABMQRd6SU5gWSME7zLFBN0pJ2XgW3QZTigp2-+AyFv2t8JOaog@mail.gmail.com>
+Subject: Fwd: Rock music + AI copilots + National Academy of Medicine honorees
+To: Isabel de Luis <ideluis@olin.edu>, Andrew Kopeikin <kopeikin@mit.edu>, Pauline Harrington <ph1@mit.edu>, 
+	Noam David Eisen <eisenn@mit.edu>, Adam Munekata <AMunekata@outlook.com>, 
+	Cecilia Perez Gago <cecipg@mit.edu>, Lawrence Wong <l_wong@mit.edu>, Elizabeth White Baker <bakerew@vcu.edu>, 
+	Andy Canady <canadyam@mit.edu>, Natalie Basnight <nbasnight75@gmail.com>, John Thomas <jthomas4@mit.edu>, 
+	Rodrigo Lopes Rose <rlrose@mit.edu>, 
+	"WILLIAM E JR Col USAF AETC AWC/DEW YOUNG (william.young.3@us.af.mil)" <wyoung@mit.edu>, Michael Sebasti Schmid <schmidm@mit.edu>, Sarah Summers <sesumme@gmail.com>, 
+	John Thomas Clarke Barstow <jbarstow@mit.edu>, Alexander Hillman <ahillman@mit.edu>, Brittany Bishop <brit901@mit.edu>, 
+	Justin Wei Siang Poh <jpoh@mit.edu>, Kristen Joyce Ammons <kjammons@mit.edu>, naoshima@mit.edu, 
+	Natalie Ann Basnight <natbas35@mit.edu>, Tim Blackford <tblackfd@mit.edu>, 
+	Madison M Bronnimann <bronnima@mit.edu>, Braden Corrigan Brower <bcbrower@mit.edu>, jiannan@mit.edu, 
+	Don Duval <donduval@mit.edu>, Joseph Estep <joeestep@mit.edu>, Leonardo Gallo <leogallo@mit.edu>, 
+	Lauren E Gutierrez <laureng2@mit.edu>, Jack Martin Hamel <jmhamel@mit.edu>, 
+	Francisco Javier Jeldres <fjeldres@mit.edu>, Billy Kline <wkline@mit.edu>, amagzoub@mit.edu, 
+	Ayaka Miyamoto <ayakam@mit.edu>, Connor Daniel Rude <rudc6118@mit.edu>, Ahaana Sarup <asarup@mit.edu>, 
+	Maryam Shamsie <mas097@mit.edu>, Anup Sreekumar <anupsk@mit.edu>, Kensuke Suzuki <ksuzuki1@mit.edu>, zukio@mit.edu, 
+	Christopher Douglas Tommila <ctommila@mit.edu>, vaccaro@mit.edu, Stephanie Walker <steph151@mit.edu>, yutaro22@mit.edu, 
+	bnzhou@mit.edu
+Content-Type: multipart/alternative; boundary="000000000000da72830607707656"
+Return-Path: leveson.nancy8@gmail.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BL02EPF0001A0FD:EE_|SJ2PR01MB8052:EE_|DS3PEPF000099D3:EE_|SA0PR01MB6139:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: d7baf655-8501-4d6f-8e88-08dbca5ab7b6
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?dJf/7LIZbLVsnVx4rMhFX3rd/YDb3hunsRMBjW2BIOWHHr25z64uSHo5RnJe?=
+ =?us-ascii?Q?pbWWuHHYNnbcYcQ7hArIjPMZPeJOGQGBqjvX4jcvjIjfdKmxnXxk1yK8acru?=
+ =?us-ascii?Q?KylT6KCWVyCFpdm5uWefZerffIYRE0ZcfnNdOR+sLsoICYQZ3iiZMfsmdu4m?=
+ =?us-ascii?Q?TPRLjHnNPcP9Yw5macU7qj8Z6qtELlNVdTnj6tdM4HnfgZyQtquuKmSRH70K?=
+ =?us-ascii?Q?5DzD3on+3BEo6UZcqP+34Y0gmvNQYY6Tm56gzZsT3nLRToUMFxvf6KDZw296?=
+ =?us-ascii?Q?BdkCOJcIuKzOK2hKGwWYd0nqmQvlAJgSmQTsrB7oy4GVW+A7VziEC0X96eeo?=
+ =?us-ascii?Q?BbEk9LvNNlX7Ydb5iXHjjsHvjgb9GO0+pll+q/KTp1Y4xo8oH8c3rH7ie3O4?=
+ =?us-ascii?Q?CtN3J7btB9HLb/irv0ntduG6ouVk67SDEREaSqhh/UnOkO/XC+utFh2fAT6+?=
+ =?us-ascii?Q?C3nC2qqU16ArJTOf6EDOpEtufvSRRnGWtevuPhM9Dc2hLdqkiLFgrVHsHqnZ?=
+ =?us-ascii?Q?mRCrVr1ge+uveKS2zRrUXOJVe+BZVytoNd5RCpNv5/sTN/A0CHgAiCl2I0jj?=
+ =?us-ascii?Q?SSFGRww4+3JJRJk1R6HIF367dgqG2InW3m0r1u8XIc2GGQu1sjlk6Zd++DUp?=
+ =?us-ascii?Q?MdqvaV3ALycbyDmhibdruXx50hsytOM4FUKCjR0njdxY0jrA1OG4CrLoEilz?=
+ =?us-ascii?Q?qzbHUxgndXOmMuTk1CmkjwlBRjVc1UViGrGBfqs3AwtjDvEev7TofvIhNOsU?=
+ =?us-ascii?Q?MSdeX0EcTW7BLecXy0oXu/lI32Y0TdQWjCrarHyaFIVgWLdonlRodYjFVVAK?=
+ =?us-ascii?Q?uZ3Dn84WHfg0fHO7jSUcoUZwGBmiJ6FfnLAqRVFYVrDcLd+HeDZZD7mtvzpT?=
+ =?us-ascii?Q?31J2pCZSHQt61SzOUSlivXSuOlIifhvXxzX3ixR4D2nqK3GH1FA75vpXCmfq?=
+ =?us-ascii?Q?MM7F6/1M3mulqhq8e/oCh6MCWkrXg5MaTilGK5N+Fl0jK6JdHQe5Im1M6bUH?=
+ =?us-ascii?Q?uztdn1GlkZYgTu8IZhpVLANuveycI50iSf67ljqNyoLxwRu+pNJ6OZUdYJrp?=
+ =?us-ascii?Q?5SmTub5GNaUOO198kyYWv+8y51rnXGiFZQqXQgl+AO1A/bYa1qQyuW+LE8Xi?=
+ =?us-ascii?Q?Ewb4epf7B+psF85On11DfSkcBZunZIFmrZSFmCXkIxbx4bnFPrGzUlNt6Q9X?=
+ =?us-ascii?Q?JNN2C01my7LWLW3bgjDJN2+1XKJz6MdHk82wOrkgOQt3G8XKlbnxXlcy6zQv?=
+ =?us-ascii?Q?bj3jj54N+F/2HM9Tsg9vhA+mTHaAQ9/xNEjOS6/CwJSHk5H61gJ8UEnGl3ei?=
+ =?us-ascii?Q?onJ8zlAr9zmAnHtmXnlL9QHYUvTKfO0Tolpw1kduj0pYoAwsSYDxk1lhZXas?=
+ =?us-ascii?Q?1QM/XyX+nDEs/Q5YrK1mPLgWvb/tiMPlYSk86YetdYoKd8u1wHK0n1fyvsOZ?=
+ =?us-ascii?Q?OcR7lPQwyt2qtVSpiPVj2OKvNyYB06LrWAhXgJKdO6EFh1bry0zCfbOwCw8G?=
+ =?us-ascii?Q?ue7inOVzcGRqEDbR5Ftal5ln8NHPm4qE6sniHEoGGPkwd6TzIiHEOTdKo3Tk?=
+ =?us-ascii?Q?eKJXgr+pwtTTFnJfs15YK5u95KJq4rk6IJNQoS0+?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.208.54;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-ed1-f54.google.com;PTR:mail-ed1-f54.google.com;CAT:NONE;SFS:(13230031)(4636009)(1690799017)(451199024)(26005)(7416002)(66899024)(7636003)(66574015)(5660300002)(75640400001)(336012)(7596003)(73392003)(166002)(356005)(450100002)(921005)(1096003)(8676002)(76482006)(4006050)(42186006)(33964004)(110136005)(6666004)(82202003)(76236004)(55446002)(16799955002)(86362001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR01MB8052
+X-OrganizationHeadersPreserved: SJ2PR01MB8052.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb5.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb5.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo25.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 11 Oct 2023 13:05:18.1119
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ d7baf655-8501-4d6f-8e88-08dbca5ab7b6
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: DS3PEPF000099D3.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: DS3PEPF000099D3.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DS3PEPF000099D3.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL02EPF0001A0FD.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ d521199c-1f17-48ca-7c29-08dbca5a9d44
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.111;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb6.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2023 13:05:16.8931
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7baf655-8501-4d6f-8e88-08dbca5ab7b6
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.111];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL02EPF0001A0FD.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR01MB6139
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.9163709
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6863.027
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?bkRKejdrT29GN2paTUJ6THBpWHpDSzh6M0VQMjljYm9ZVElYYnk5b3RGVTZt?=
+ =?utf-8?B?QTdtQXdIbllHMWlUNVpkYmdYNHl3ZDh6OGZteE5lU243ekpmR2JaNWxyZm1u?=
+ =?utf-8?B?RlVVR08vcHZWRjNZVkNDa2FmbXc3TUVFdFJvZVd1WjZJRzk0Zmh4S2dvQ0I4?=
+ =?utf-8?B?d0RUS1VkT2JYeGVXVndMZk90UWxSQUVoY2NmTnpaTzhLUkg5V0ZuN01BaU5i?=
+ =?utf-8?B?S2dYYWJNeTg3UzlXTndxYmt1eXZzZjI0UEZRUm0reFQvWWZhNjVxY2k1dEhF?=
+ =?utf-8?B?dW04OWxBQ2ZXY0RuR2xLSEN2V3R0NjVMaVFxRG5oRUU1Q0pGdjRpQjNTZ0RI?=
+ =?utf-8?B?d0swbTJDV0JMMDFQM3ArMndUWmNtNElmZXlzK3ZqM3VQYnB3QmlOeXpaVjVz?=
+ =?utf-8?B?SE5sdHNUUitUdWxVOHJuVmtmblBpS01tYVNqYm1IUTlDMUVIV3hMM1FxSjQr?=
+ =?utf-8?B?ZEhPTmI2NTBBZGxwOU01TXZ4UUh0UmZqK2tUQjVITkU2RzYrazVnTW11QTBB?=
+ =?utf-8?B?SGhSdU93RGJBMHRTemF2blpzSFVkWTNaSFpFd2RWd3hvZFpDcHhaMDdsTUNR?=
+ =?utf-8?B?V3FXeGdUaU1uM3IwbHZydXJhRjc1cTMrOHQ5Z2tsUlM3RmxybC9zMFh3dG5o?=
+ =?utf-8?B?bHRRN2J5WmVzMXlnR0xjZitJVEd1QTY5T0lxYUQxMnVraXNXTVlxVVJsRmRp?=
+ =?utf-8?B?RVpLZ25hZ1JPRXBNK0t3QjhDQmdaSzc3d1NuSHJ2citrUzBOSUN0U0tUSWVn?=
+ =?utf-8?B?NW1XSGJTa0hLcDR0WmNBNkpBTytNR2kyalpIT2NDMDZLKzVEeHgzMjhmZFBX?=
+ =?utf-8?B?NnIzS3B4eGF1LzU4N0l2Y2ZuYzg5VVh6RDlMeXFrRmJYNUIrdXJZNmtmT21Q?=
+ =?utf-8?B?OWVZOXQ0dktzcFNyQkxBU0hMZXJ2Y2Z5TG5ybnk4NDdIb3JKaEdGQnRMcHBr?=
+ =?utf-8?B?K2psMmJtK0Q1aVgxdFFvT2Jic1lXVFJMclBsdS9XSit3WDYxVnNKdjNXVy9Z?=
+ =?utf-8?B?bFVxdXB0MnVLZzVTRFRZZFRyRldlaEpLbFVoWDA4N1oyaGx5N0NLVEZrMUdi?=
+ =?utf-8?B?Z3hUTXdQckQ0QjVuVmI2UEowblA4VVRWWGRXdEpBSFNJcHh1K1ZYdzdtSmVv?=
+ =?utf-8?B?eVI3QUI4aU9LMGpKZGxFYjFYSTFwamgyaHBSaG52bVQ2VEQrdlJHbVJERGp4?=
+ =?utf-8?B?b0hiRld1eDZTRG13SmtJOE1lMkpKc1FIa1E0QjlGOElyR2dmN1FUQVNmSlI4?=
+ =?utf-8?B?K0U2WisvU3k0Y21sTk44RjhYN1kvVzlLTVRCakxxUmhPQXQ3UUVmaUFPVnc3?=
+ =?utf-8?B?ZGM5dXFQUTdzTGQ0aHJCQWFNRUNqMTRvcUdmeDZYbVZ0dUNydVl3blQwSWZE?=
+ =?utf-8?B?cy90YXdRK0pvaSt4ZSthL0NkMGlWZmw0TTdSYVV1Rmt1Rmt1SE5SdzlBK3dP?=
+ =?utf-8?B?amRmazJrbGhNWW9PMWswek5zb2dncFpPa1JpOHBBSjFCbVh2bUFJbHA2aFJn?=
+ =?utf-8?B?eWJSa0pRbm5vRDJzb013MFpReUJKTlJHK3kySTMxT3Jvd0Jkc3ZzWkl1Z04w?=
+ =?utf-8?B?a1NMQlZRRUpDOEFUcXRkMUdnVkhaaXlXQ0FqM24vNHN3eGhnWTF2RXNyQUZO?=
+ =?utf-8?B?dlZlaVBzQVY4b04xZTN0MkNPcVQ5bDJCeDdZMGgzTUVLbzJsYWJiNFNNbzY4?=
+ =?utf-8?B?UU5DOUFiVmpGdFVlRnRJN2hIclhKMDExQVBuQytKWVhNc08xWXJ5RFdMZHJj?=
+ =?utf-8?B?c2NjK0hWeVpWUXhqekpqTkNIYWpNdVhLTkdkTUlUcHJvZzJpVjI3OTVHckhi?=
+ =?utf-8?B?Z2labDNPSGtwZjY3Mk1VdDVGQ3p5Mm1Oajd4Q1VDUENPMjRvTERVKzhZRUFH?=
+ =?utf-8?B?ODJsZWFDM2xyRzhRWG1kTWhyYkUxS3FqTjY4SEZvNGlPZFpZdWg5Q0xtNy9U?=
+ =?utf-8?B?VGhMaExGS1g5M0I1OFZ3TGliMnhNSGJCdU1UVkIySitHb05Nclh5TDlhNWEz?=
+ =?utf-8?B?T0hIc0N5REhibVZwYnkzWkxHQU1lZ2JXWXNTUDFVWVpPeVNON2wzeXpnWDc3?=
+ =?utf-8?B?UG1JWW94cHRzMUdWNTZDUjZoSHhQc3hkRWNWSVRnN1dJYnJ6dEN5K2VvSm5m?=
+ =?utf-8?Q?Y9BU=3D?=
+MIME-Version: 1.0
+
+--000000000000da72830607707656
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+The only good news is that there is probably nobody stupid enough to use
+this on a plane. But why aren't computer science researchers learning
+anything about safety or human factors?
+
+
+view in browser
+<https://mailchi.mp/043dac0ae648/rock-music-ai-copilots-national-academy-of=
+-medicine-honorees?e=3D66bea72eda>
+*MIT* Daily [image: MIT Logo]
+October 11, 2023
+*Greetings!* Here=E2=80=99s the latest from the MIT community.
+
+*Have feedback to share? Email mitdailyeditor@mit.edu
+<mitdailyeditor@mit.edu>.*
+
+
+Top Headlines
+
+AI copilot enhances human precision for safer aviation
+Designed to ensure safer skies, =E2=80=9CAir-Guardian=E2=80=9D blends human=
+ intuition with
+machine precision, creating a more symbiotic relationship between pilot and
+aircraft.
+Full story via MIT News =E2=86=92
+<https://mit.us4.list-manage.com/track/click?u=3D80f62adc67c5889c8cf03eb72&=
+id=3D29dea3f697&e=3D66bea72eda>
+[image: MIT Heat Island]
+<https://mit.us4.list-manage.com/track/click?u=3D80f62adc67c5889c8cf03eb72&=
+id=3Df713f63664&e=3D66bea72eda>
+
+--000000000000da72830607707656
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-size:small">The o=
+nly good news is that there is probably nobody stupid enough to use this on=
+ a plane. But why aren't computer science researchers learning anything abo=
+ut safety or human factors?</div><div><div dir=3D"ltr" class=3D"gmail_signa=
+ture" data-smartmail=3D"gmail_signature"><div dir=3D"ltr"><div><div dir=3D"=
+ltr"><div><div dir=3D"ltr"><div><div dir=3D"ltr"><div dir=3D"ltr"><div dir=
+=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div><br></div></div></div></div=
+></div></div></div></div></div></div></div></div></div></div><div class=3D"=
+gmail_quote"><br><div class=3D"msg5313021638480920692"><u></u>
+
+ =20
+   =20
+   =20
+   =20
+   =20
+   =20
+   =20
+
+ =20
+  <div style=3D"background:#ffffff;color:#000000;font-family:'Helvetica Neu=
+e',Helvetica,Arial,sans-serif;font-size:18px;height:100%;line-height:140%;m=
+argin:0;padding:0;width:100%;background-color:#ffffff" bgcolor=3D"#FFFFFF">
+   =20
+    <center>
+      <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" width=3D"100%" id=3D"m_5313021638480920692bodyTable" style=3D"height:10=
+0%;background:#ffffff;border-collapse:collapse;color:#000000;font-family:'H=
+elvetica Neue',Helvetica,Arial,sans-serif;font-size:18px;line-height:140%;m=
+argin:0;padding:0;width:100%" bgcolor=3D"#FFFFFF">
+        <tbody><tr>
+          <td align=3D"center" valign=3D"top" id=3D"m_5313021638480920692bo=
+dyCell" style=3D"background:#ffffff;color:#000000;font-family:'Helvetica Ne=
+ue',Helvetica,Arial,sans-serif;font-size:18px;height:100%;line-height:140%;=
+margin:0;padding:0;width:100%" bgcolor=3D"#FFFFFF">
+           =20
+           =20
+            <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%" style=3D"border-collapse:collapse">
+              <tbody><tr>
+                <td height=3D"4" bgcolor=3D"#3A6DFF" style=3D"font-size:1pt=
+;line-height:1pt">
+
+                </td>
+              </tr>
+            </tbody></table>
+            <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%" style=3D"border-collapse:collapse;border:0;max-width:600px!import=
+ant">
+              <tbody><tr>
+                <td valign=3D"top" id=3D"m_5313021638480920692template-head=
+er" style=3D"padding:0 15px">
+
+
+                  <table align=3D"left" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" width=3D"100%" class=3D"m_5313021638480920692column-container=
+" style=3D"border-collapse:collapse">
+                    <tbody><tr>
+                      <td height=3D"40" colspan=3D"2" style=3D"text-align:c=
+enter">
+                      <span class=3D"m_5313021638480920692utility-link__con=
+tainer"><a href=3D"https://mailchi.mp/043dac0ae648/rock-music-ai-copilots-n=
+ational-academy-of-medicine-honorees?e=3D66bea72eda" style=3D"color:#3a6dff=
+!important;text-decoration:underline;font-size:12px;line-height:20px!import=
+ant;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif" target=3D"_bla=
+nk">view in browser</a></span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td height=3D"16">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td width=3D"200" valign=3D"middle" style=3D"color:#3=
+a6dff;font-size:30px;font-family:'Helvetica Neue',Helvetica,Arial,sans-seri=
+f;padding-bottom:5px"><strong>MIT</strong> Daily</td>
+                        <td align=3D"right" valign=3D"middle" style=3D"colo=
+r:#666666;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size=
+:12px;line-height:140%">
+                          <img src=3D"https://mcusercontent.com/80f62adc67c=
+5889c8cf03eb72/images/dcd117d6-c428-b015-6ba6-850f479d54c3.png" alt=3D"MIT =
+Logo" width=3D"42" height=3D"22" style=3D"border:0;height:auto;width:42px;m=
+argin-top:0px;outline:none;text-decoration:none">
+                        </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"27" style=3D"color:#666666;font-famil=
+y:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:12px;line-height:14=
+0%">
+                        October 11, 2023
+                        </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"27" colspan=3D"2">
+
+
+                        </td>
+                      </tr>
+                      <tr>
+                        <td align=3D"left" colspan=3D"2" style=3D"font-fami=
+ly:'Helvetica Neue',Helvetica,Arial,sans-serif"><strong>Greetings!</strong>=
+ Here=E2=80=99s the latest from the MIT community.<br>
+&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td align=3D"left" colspan=3D"2" style=3D"font-=
+family:'Helvetica Neue',Helvetica,Arial,sans-serif"><em>Have feedback to sh=
+are? Email <a href=3D"mailto:mitdailyeditor@mit.edu" style=3D"color:#3a6dff=
+" target=3D"_blank">mitdailyeditor@mit.edu</a>.</em></td>
+                          </tr>
+                          <tr>
+                            <td height=3D"40">
+                            </td>
+                          </tr>
+                        </tbody></table>
+                      </td>
+                    </tr>
+                  </tbody></table>
+                 =20
+                 =20
+                  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" w=
+idth=3D"100%" style=3D"border-collapse:collapse;border-spacing:0;margin:0;p=
+adding:0">
+                    <tbody><tr>
+                      <td height=3D"1" bgcolor=3D"#f6f6f6" style=3D"font-si=
+ze:1pt;line-height:1pt"> </td>
+                    </tr>
+                    <tr>
+                      <td height=3D"1" bgcolor=3D"#f7f7f7" style=3D"font-si=
+ze:1pt;line-height:1pt"> </td>
+                    </tr>
+                    <tr>
+                      <td height=3D"1" bgcolor=3D"#f8f8f8" style=3D"font-si=
+ze:1pt;line-height:1pt"> </td>
+                    </tr>
+                    <tr>
+                      <td height=3D"1" bgcolor=3D"#f9f9f9" style=3D"font-si=
+ze:1pt;line-height:1pt"> </td>
+                    </tr>
+                    <tr>
+                      <td height=3D"1" bgcolor=3D"#fafafa" style=3D"font-si=
+ze:1pt;line-height:1pt"> </td>
+                    </tr>
+                    <tr>
+                      <td height=3D"1" bgcolor=3D"#fbfbfb" style=3D"font-si=
+ze:1pt;line-height:1pt"> </td>
+                    </tr>
+                    <tr>
+                      <td height=3D"1" bgcolor=3D"#fcfcfc" style=3D"font-si=
+ze:1pt;line-height:1pt"> </td>
+                    </tr>
+                    <tr>
+                      <td height=3D"1" bgcolor=3D"#fdfdfd" style=3D"font-si=
+ze:1pt;line-height:1pt"> </td>
+                    </tr>
+                    <tr>
+                      <td height=3D"1" bgcolor=3D"#fefefe" style=3D"font-si=
+ze:1pt;line-height:1pt"> </td>
+                    </tr>
+                    <tr>
+                      <td height=3D"30"></td>
+                    </tr>
+                  </tbody></table>
+                 =20
+                 =20
+                  <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" w=
+idth=3D"100%" style=3D"border-collapse:collapse;border:0;max-width:600px!im=
+portant">
+                    <tbody><tr>
+                      <td valign=3D"top" align=3D"center" style=3D"color:#3=
+a6dff;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14p=
+x;font-weight:bold;line-height:140%;padding:0 0 3px"><br></td></tr>
+                      <tr>
+                        <td height=3D"10"><br></td></tr>
+                    </tbody></table>
+                   =20
+                   =20
+                   =20
+                    <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ width=3D"100%" style=3D"border-collapse:collapse;border-spacing:0;margin:0=
+;padding:0">
+                      <tbody><tr>
+                        <td height=3D"1" bgcolor=3D"#f6f6f6" style=3D"font-=
+size:1pt;line-height:1pt"> </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"1" bgcolor=3D"#f7f7f7" style=3D"font-=
+size:1pt;line-height:1pt"> </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"1" bgcolor=3D"#f8f8f8" style=3D"font-=
+size:1pt;line-height:1pt"> </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"1" bgcolor=3D"#f9f9f9" style=3D"font-=
+size:1pt;line-height:1pt"> </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"1" bgcolor=3D"#fafafa" style=3D"font-=
+size:1pt;line-height:1pt"> </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"1" bgcolor=3D"#fbfbfb" style=3D"font-=
+size:1pt;line-height:1pt"> </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"1" bgcolor=3D"#fcfcfc" style=3D"font-=
+size:1pt;line-height:1pt"> </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"1" bgcolor=3D"#fdfdfd" style=3D"font-=
+size:1pt;line-height:1pt"> </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"1" bgcolor=3D"#fefefe" style=3D"font-=
+size:1pt;line-height:1pt"> </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"30"></td>
+                      </tr>
+                    </tbody></table>
+                   =20
+                    <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ width=3D"100%" style=3D"border-collapse:collapse;border:0;max-width:600px!=
+important">
+                      <tbody><tr>
+                        <td valign=3D"top" align=3D"center" style=3D"color:=
+#3a6dff;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:1=
+4px;font-weight:bold;line-height:140%;padding:0 0 3px">
+                          Top Headlines
+                        </td>
+                      </tr>
+                      <tr>
+                        <td valign=3D"top" align=3D"center">
+                          <div style=3D"background:#cccccc;height:30px;widt=
+h:1px"></div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td height=3D"10">
+                        </td>
+                      </tr>
+                    </tbody></table>
+                   =20
+                   =20
+                    <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ width=3D"100%" class=3D"m_5313021638480920692column-container" style=3D"bo=
+rder-collapse:collapse;border:0;max-width:600px!important">
+                      <tbody><tr>
+                        <td style=3D"padding:0 15px">
+                          <table width=3D"100%" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" align=3D"left" style=3D"border-collapse:collapse;max-=
+width:100%">
+                            <tbody><tr>
+                              <td valign=3D"top" style=3D"padding:0 15px 0 =
+0">
+                                <div style=3D"font-weight:bold!important;fo=
+nt-family:'Helvetica Neue',Helvetica,Arial,sans-serif">AI copilot enhances =
+human precision for safer aviation</div>
+                                <div style=3D"color:#666666;font-family:'He=
+lvetica Neue',Helvetica,Arial,sans-serif;font-size:18px;line-height:150%">D=
+esigned to ensure safer skies, =E2=80=9CAir-Guardian=E2=80=9D blends human =
+intuition with machine precision, creating a more symbiotic relationship be=
+tween pilot and aircraft.</div>
+                                <div><a href=3D"https://mit.us4.list-manage=
+.com/track/click?u=3D80f62adc67c5889c8cf03eb72&amp;id=3D29dea3f697&amp;e=3D=
+66bea72eda" style=3D"color:#3a6dff;font-family:'Helvetica Neue',Helvetica,A=
+rial,sans-serif;font-size:14px;line-height:140%" target=3D"_blank">Full sto=
+ry via MIT News<span style=3D"color:#cccccc!important;display:inline-block;=
+text-decoration:none!important"> =E2=86=92</span></a></div>
+                                <div>
+                                </div>
+                              </td>
+                              <td align=3D"right" valign=3D"top" width=3D"3=
+4%" style=3D"padding:5px 10px 5px 0"><a class=3D"m_5313021638480920692top_h=
+eadlines_img_link" href=3D"https://mit.us4.list-manage.com/track/click?u=3D=
+80f62adc67c5889c8cf03eb72&amp;id=3Df713f63664&amp;e=3D66bea72eda" style=3D"=
+color:#3a6dff;text-decoration:none!important" target=3D"_blank"><img alt=3D=
+"MIT Heat Island" height=3D"120" src=3D"https://mcusercontent.com/80f62adc6=
+7c5889c8cf03eb72/images/68c0cd47-468c-2f07-23ed-b91f14cd2741.png" style=3D"=
+border:0px initial;height:120px;outline:none;text-decoration:none;width:180=
+px;margin:0px" width=3D"180"></a></td>
+                              </tr>
+                              <tr>
+                                <td height=3D"30">
+                                </td>
+                              </tr>
+                            </tbody></table>
+                           =20
+                          </td>
+                        </tr>
+                        <tr>
+                          <td height=3D"20"><br></td></tr></tbody></table>
+                       =20
+                       =20
+                       =20
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" width=3D"100%" style=3D"border-collapse:collapse;border-spacing:0;ma=
+rgin:0;padding:0">
+                          <tbody><tr>
+                            <td height=3D"1" bgcolor=3D"#f6f6f6" style=3D"f=
+ont-size:1pt;line-height:1pt"> </td>
+                          </tr>
+                          <tr>
+                            <td height=3D"1" bgcolor=3D"#f7f7f7" style=3D"f=
+ont-size:1pt;line-height:1pt"> </td>
+                          </tr>
+                          <tr>
+                            <td height=3D"1" bgcolor=3D"#f8f8f8" style=3D"f=
+ont-size:1pt;line-height:1pt"> </td>
+                          </tr>
+                          <tr>
+                            <td height=3D"1" bgcolor=3D"#f9f9f9" style=3D"f=
+ont-size:1pt;line-height:1pt"> </td>
+                          </tr>
+                          <tr>
+                            <td height=3D"1" bgcolor=3D"#fafafa" style=3D"f=
+ont-size:1pt;line-height:1pt"> </td>
+                          </tr>
+                          <tr>
+                            <td height=3D"1" bgcolor=3D"#fbfbfb" style=3D"f=
+ont-size:1pt;line-height:1pt"> </td>
+                          </tr>
+                          <tr>
+                            <td height=3D"1" bgcolor=3D"#fcfcfc" style=3D"f=
+ont-size:1pt;line-height:1pt"> </td>
+                          </tr>
+                          <tr>
+                            <td height=3D"1" bgcolor=3D"#fdfdfd" style=3D"f=
+ont-size:1pt;line-height:1pt"> </td>
+                          </tr>
+                          <tr>
+                            <td height=3D"1" bgcolor=3D"#fefefe" style=3D"f=
+ont-size:1pt;line-height:1pt"> </td>
+                          </tr>
+                          <tr>
+                            <td height=3D"30"><span class=3D"gmail_default"=
+ style=3D"font-size:small"></span><br></td></tr></tbody></table><table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" style=3D"border=
+-collapse:collapse;border:0;max-width:600px!important;line-height:18px!impo=
+rtant"><tbody>
+                                                  <tr>
+                                                    <td height=3D"40"></td>
+                                                  </tr>
+                                                </tbody></table>
+                                               =20
+                                               =20
+                                              </td>
+                                            </tr>
+                                          </tbody></table>
+                                        </center>
+                                       =20
+                                      <img src=3D"https://mit.us4.list-mana=
+ge.com/track/open.php?u=3D80f62adc67c5889c8cf03eb72&amp;id=3D03ae182187&amp=
+;e=3D66bea72eda" height=3D"1" width=3D"1" alt=3D""></div>
+</div></div></div>
+
+--000000000000da72830607707656--

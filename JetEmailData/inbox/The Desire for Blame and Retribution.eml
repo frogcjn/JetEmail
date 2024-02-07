@@ -1,0 +1,1310 @@
+Received: from CO6PR01MB7417.prod.exchangelabs.com (2603:10b6:303:134::7) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Mon, 23 Oct 2023 18:07:37
+ +0000
+Received: from DM6PR03CA0011.namprd03.prod.outlook.com (2603:10b6:5:40::24) by
+ CO6PR01MB7417.prod.exchangelabs.com (2603:10b6:303:134::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.33; Mon, 23 Oct 2023 18:07:36 +0000
+Received: from DS3PEPF000099D9.namprd04.prod.outlook.com
+ (2603:10b6:5:40:cafe::6f) by DM6PR03CA0011.outlook.office365.com
+ (2603:10b6:5:40::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33 via Frontend
+ Transport; Mon, 23 Oct 2023 18:07:35 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.100)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ gmail.com discourages use of 18.9.1.100 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.100) by
+ DS3PEPF000099D9.mail.protection.outlook.com (10.167.17.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Mon, 23 Oct 2023 18:07:35 +0000
+Received: from oc11exhyb2.exchange.mit.edu (18.9.1.98) by
+ oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Mon, 23 Oct 2023 14:07:24 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.41) by
+ oc11exhyb2.exchange.mit.edu (18.9.1.98) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Mon, 23 Oct 2023 14:07:24 -0400
+Received: from BN7PR02CA0002.namprd02.prod.outlook.com (2603:10b6:408:20::15)
+ by SA3PR01MB8016.prod.exchangelabs.com (2603:10b6:806:318::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.33; Mon, 23 Oct 2023 18:07:21 +0000
+Received: from SN1PEPF0002529E.namprd05.prod.outlook.com
+ (2603:10b6:408:20:cafe::4) by BN7PR02CA0002.outlook.office365.com
+ (2603:10b6:408:20::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33 via Frontend
+ Transport; Mon, 23 Oct 2023 18:07:21 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.208.52)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of gmail.com designates
+ 209.85.208.52 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.208.52; helo=mail-ed1-f52.google.com; pr=C
+Received: from mail-ed1-f52.google.com (209.85.208.52) by
+ SN1PEPF0002529E.mail.protection.outlook.com (10.167.242.5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Mon, 23 Oct 2023 18:07:21 +0000
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-53de8fc1ad8so5315249a12.0
+        for <jiannan@mit.edu>; Mon, 23 Oct 2023 11:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698084440; x=1698689240; darn=mit.edu;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=gjXYkgbs7As/apxEiLaGhvlnFiWwSb8XXlL99NBHcFQ=;
+        b=nBCglvSzr/PAWIoRrKloivG75ngQKIZUnRLLXPq+NDs6C6j8izOlgtJBfwG+DaWP/K
+         QITCgnegAWTGnO+me2VcrjnlOpDli6Hc88Zj2+F4JPiQIKPJpMl5QKovfmT+HpOfT4Xh
+         E9m6WU6QQZpqwhfWZCiSlDF8FzcqT7WydxE/kOPvafnc999/1Y/Yn7pkPJ01kVSHrJ83
+         idEIiqfG2e/xR1nURITl3rmDgr5bJFtihpTWK6TJvELmARjXQn7z0a5oE8jbyJgyeB62
+         LGzXKXTjJDc9at5ba7XGzyJ/xA8sjDYtNS+w4hD4N1yKPUqqdHqrv7bVULzf3FO9YAWH
+         nZOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698084440; x=1698689240;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gjXYkgbs7As/apxEiLaGhvlnFiWwSb8XXlL99NBHcFQ=;
+        b=Zwgbk0eGf6TCrLAkCeUHM9dimVOJClPITrsOmDlTPWCoi/2xheYwF+JkjpDs9CHywd
+         L2+OBhnx+sfD44dEl0WeP7ArOk5u/bVwDhBe0DOFCMMC36jq4baRwmgNI8DYidQtJZtl
+         68iGAsPDckaqeUUSHzEcYw5S5Cysuk+uQEzzGv1ooOouNQfCjmwG+R3lf649ckWciInb
+         f0gVJI6881EIm+ED3kfZvEzGA9ALQU3YFFuBkmCMLfQBoSHyFDjMII//YGfaALiWKZXz
+         nMc+TTwUCYvQZoYUbrIWFDDhC3QTPo/GuFAunsmaW0isfrUa8dsPMNP6HKiBsUrdAGlk
+         YI4g==
+X-Gm-Message-State: AOJu0Yye+xizxYY8oo/iFaQj8jfW/iCbFqZS1iDZ2nXC7mY7sP582HgH
+	aqi6tl/IWenYpGgvHasso1T5jkjvqLIjufyQRPbMEnmFlC3fNA==
+X-Google-Smtp-Source: AGHT+IEwn4XKiwK/g4b0zPRatJVCst7DyRlAAnbNgW/aqi4oZf+1aFcKwYjw0YycqQXvDV3NgbHB+ze055QgIzttWvo=
+X-Received: by 2002:a05:6402:3507:b0:53f:a88b:e0cc with SMTP id
+ b7-20020a056402350700b0053fa88be0ccmr8613156edd.23.1698084419274; Mon, 23 Oct
+ 2023 11:06:59 -0700 (PDT)
+From: Nancy Leveson <leveson.nancy8@gmail.com>
+Date: Mon, 23 Oct 2023 14:06:46 -0400
+Message-ID: <CABMQRd4zZMGrARDtt2V1sYMn4ajYNF=NHO3y6jNFNj+xs8JDqw@mail.gmail.com>
+Subject: The Desire for Blame and Retribution
+To: Nancy Leveson <leveson@mit.edu>
+Content-Type: multipart/alternative; boundary="0000000000009c0c2b06086616a5"
+BCC: <jiannan@mit.edu>
+Return-Path: leveson.nancy8@gmail.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ SN1PEPF0002529E:EE_|SA3PR01MB8016:EE_|DS3PEPF000099D9:EE_|CO6PR01MB7417:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4fb8b2a3-fc73-49e2-c022-08dbd3f2ef75
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?iEiixeK9XF1e0LEn4hhuoyJ/D+2h+lpp+S5tr8BgwFsI+OOl/ZP2qrjXfCAZ?=
+ =?us-ascii?Q?ImdytrYIdMCas0YjoWJ2mHd8jCL424LBtRm9DxENB2g3FVsRhX1Y4oloANw4?=
+ =?us-ascii?Q?qkYqqNjnpNr7/BDgGaxKK9XP0hNeBoX9jzsaUebSa1OxHmWGTMUfCmb6SHjQ?=
+ =?us-ascii?Q?GryyY1gTIuvbKgajzQxyhLImuQaq3gWJG4BRnsjWstNvcRaNmR09e4qFTWyJ?=
+ =?us-ascii?Q?vcLxWRYhWaEA37+hyHPzssV5AN7ehwYyauxbaCvZPaFGu3OGCoGQ/atgBHpI?=
+ =?us-ascii?Q?vgnY9o7MjQ6SQ+wSRDLPweMiLRJ1nXucnJQ9ye3UMiwWhNMeCBz29kpd9Mcs?=
+ =?us-ascii?Q?PGVhr8IFuJnJ0Is3GjK+yoI1QmqmRKSkKeuXpRHHcP4mHz3wgRnXVEvbwP3B?=
+ =?us-ascii?Q?xgOP5pSfSQutVD8+dtAgbRCb5PPnOf/ihI+ausy3au15JrJWSkdUXJbAZEIq?=
+ =?us-ascii?Q?CFtqir6EdzVVe3hoO0Tn7lKE3avLIwxQIzp5I4q4vgXV3agyB2iSdMvnerXu?=
+ =?us-ascii?Q?KGLdUrEuO6p/J/CJOl9SkkTvRVuiiEjlPs9xsesqQ0zq/JIJdaRSLF0xX+Z+?=
+ =?us-ascii?Q?Q2GcFTKdKmEsxMXFiZjCHVVp8iN1yvyf3kFlIMqiXWAe2eMRZE/WeYM1dn4N?=
+ =?us-ascii?Q?deDNVDoL55KaDpHbEJUSV7Hl5y3Ywq/CFO8F9Ib9bkdDu6Z36EgjbRtiRai6?=
+ =?us-ascii?Q?vX/csDe3OiR2YYKb8Ee5ZKrlfY8B9mlgPGHcPqU2FrV4uVLQ9CrRQlVPTxrp?=
+ =?us-ascii?Q?bI51Ch82zGvBAcnlhiDJyc7CmNDhJfFYdKhJlatTi9CL54SpYqM8q6ATIOa3?=
+ =?us-ascii?Q?GcHPqtKysh7EPO3z1vDGTY0Nj+9GMgcjuCpGZE0eblWu59gHx0yJydGP0hCu?=
+ =?us-ascii?Q?5JOkAuO/CpF9Xq0mzkYrf6eKQvag3w02F9yixrsQeWE0CLkPwN1vJMw3Uuit?=
+ =?us-ascii?Q?c0mKABDOvbrj3+mxNKVixz8yn9H3SeYWGflONtxKf0fPg6PBVMpd3JzYvory?=
+ =?us-ascii?Q?t5WALVXGDzGdBqQFr/gOkuLLFxXPWS7P0Bd+8AGkPoukFya8fx5ZFWHGWHdb?=
+ =?us-ascii?Q?dl2w/xYng9ShvzKgLXeEeU4nHFoTkBAJPY0WlkSdXXDORR9bL+AZRmmMh/E6?=
+ =?us-ascii?Q?hgZUJKdW5/sYu2QoTL4F3VErlwFlq4YHuhQEjOLzowG0ntecahah6l2sUtAA?=
+ =?us-ascii?Q?SDsboYd6z9pamnM+BDEw28Hm4w9JigOtRFEbG+NbB5Wtjon2ldAMLidbZg5t?=
+ =?us-ascii?Q?ZAsK8t9c94e9+THSovhOiVyT11kzMHewxe92hQfYAH5M3UStyk9mY7gO7fE/?=
+ =?us-ascii?Q?fq10wE93fr5z8A2Efe5tg+KMrM2PJt/PA436zRMWKMyoFoioFhD1xQPCZSNn?=
+ =?us-ascii?Q?3d+cI8EJbcDyTJerxegEeYQSucRpmFEVM2Z2Htfz4bzWmnVEWnf0DrqB2Pgs?=
+ =?us-ascii?Q?/FAbAUhBiqklosAxaOM5YvhCe05AyigaiWVLT6gjLhwqL4fy/Ex3GDeDI55X?=
+ =?us-ascii?Q?zv03w1cJCpM3JW99X6KYAAxHfysbAyryokH8dSGHjM4h5hNS92Ri3PbnSHK4?=
+ =?us-ascii?Q?QbblcX7WkWjI4nRqESTmbBtWuIBMd9dX3aDUpxpQPbU9wRz4nODfhEFqb5/h?=
+ =?us-ascii?Q?SNT2Eglheip5pkMlOKX3UpHXtFqRwtR3F7ElA3zQ0A5blefTAW7tpgvxCk8u?=
+ =?us-ascii?Q?kAC1I/IMBy9+CWJbc7kbma5WeOZ8VkrpVZuj/n6nwF/Z91IzabOT4GG1GCeu?=
+ =?us-ascii?Q?j6X8tNnTQg=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.208.52;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-ed1-f52.google.com;PTR:mail-ed1-f52.google.com;CAT:NONE;SFS:(13230031)(4636009)(1690799017)(451199024)(16799955002)(30864003)(166002)(42186006)(76482006)(356005)(6666004)(7596003)(33964004)(82202003)(7636003)(966005)(336012)(83380400001)(66574015)(73392003)(4006050)(55446002)(5660300002)(40140700001)(86362001)(1096003)(6862004)(75640400001)(8676002)(26005)(66899024)(579004)(559001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR01MB8016
+X-OrganizationHeadersPreserved: SA3PR01MB8016.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb2.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb2.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb4.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 23 Oct 2023 18:07:35.6075
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 4fb8b2a3-fc73-49e2-c022-08dbd3f2ef75
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: DS3PEPF000099D9.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: DS3PEPF000099D9.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DS3PEPF000099D9.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ SN1PEPF0002529E.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 75e28622-ac6a-41a8-3801-08dbd3f2e6ee
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.100;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb4.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2023 18:07:35.3887
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4fb8b2a3-fc73-49e2-c022-08dbd3f2ef75
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.100];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ SN1PEPF0002529E.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR01MB7417
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.2014584
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6907.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UVlJSisrUGprYkdEeUZIeW5mZ0hFV1JkbWhSbklkWkZueklXYktyZ0E1SVpJ?=
+ =?utf-8?B?SWlnSXpnUng5TXVOaStkcWMzMlVHT2ZKZXdCMkg0b0xNczhiU0xOc09DQXlW?=
+ =?utf-8?B?TnF1Z2g4cndZWDJUemM3N0QvRlAwbGYwOVRLM1lLNXA2cyt5L0pGL1hzOEJU?=
+ =?utf-8?B?SlFIbW12TWRJekR5aExSNG1tQjY4MjZqaDVpYlVJY0xPMFZYYnhLRnZqMkJI?=
+ =?utf-8?B?ZnRVTUQyUDU5ZUFldkpWWGhZMTBpZDJIalh0TG53NWxzeCtKU1I1UEpkeXJ0?=
+ =?utf-8?B?bDc0NzJlS2lmWWg2WGFRbXU4a2FRSXFtdEhhRUxaU090TEVndWNvRHJSaFVJ?=
+ =?utf-8?B?eFlHbVI2d296ZmxoT2ZBS0hlZ2pUTDNraE00QW9uOE1ucTB4ZGFPU2t1Sk9K?=
+ =?utf-8?B?WGpoeHlMS1pPbmhIdVBVN2F3UWZmSkc2WjFmOFMwMHRRVTh5S2NGbCtTN2F3?=
+ =?utf-8?B?YUMwSHlFbjFtSWFsZU9WL3M0OEYzVHhKQ0REMkdROEw0OUFkcnk2T1gzWS9O?=
+ =?utf-8?B?WEJObkxsRGxWQU9vWFp5d01HV2E2RnlxTmlBdE1mdUF0ZVRHYTRIMWpKTlFW?=
+ =?utf-8?B?Qi9HOC9UR3ZPTEw2c3Z1em13K2JaejIwN0p1VUtnTjVRaUhoeXdORzVwdnBp?=
+ =?utf-8?B?S3NhRHRiMVBSUzN5aWxqNk9RWGYrRzNqd0NFSGhRY2t4cDdPTFF1MW56bk1M?=
+ =?utf-8?B?MUlrRk4vcHlHOTg2TUorYm40VklpMWxYZ2hvcTVDSWdPRllwdm1qbGdhTURH?=
+ =?utf-8?B?cmN0cGpXTExDVytvLzYvY0ZseDRoNEJRN01Zd1NWUWdaUmwxa3V2WTl2Y3NL?=
+ =?utf-8?B?QURBbVM1cVprd0hHcUdRUG9DeHk5MUt4VFBlTVUxMFFqdnltMHhWb0doaUpH?=
+ =?utf-8?B?RWlHRkV4ZVRTV2dDTUkvSWV1STZFM0VJS01pMWVKWkhwVEdGL0liN25WYjFv?=
+ =?utf-8?B?TFlPK2tOaVZPeDhCTjNVUWFOMU8wYkJDRWtjajJTd0R4cHBZSlp5YnRrd2Q0?=
+ =?utf-8?B?Z1pxVWdZUTZ6Mi9CTktEeHJEbGQ5bGVnN3N2QXVjMVlnRGJ6ZmJWa3VhVTVH?=
+ =?utf-8?B?aU8yd0F6V1p6UUF2WnFxYnhWcnlEMVB3bkh1NlVJTzM2M3pWYnlNRHVEVkVJ?=
+ =?utf-8?B?akNuSkhMK1dIRHRiT1pPbXhRUjdPaEVhSCtuWkttbldET3NJaW1zNFZLK0RG?=
+ =?utf-8?B?ZkZyMFJmdkNJSkkrNVJUaDE0QWlqS3AvcEtyamNHNGRwdmlndThxMDM4UFg5?=
+ =?utf-8?B?YWVyQ0hndjViUXBvRHplMlZzc2VZNHFlV0hTalRMRzU1R1FKSmFNZVMxOHkz?=
+ =?utf-8?B?NE82ZU5Fb2FDbG83VE9YT1ZwcUwvZVBaalhxdjIzUXFqL0U3dzZRelVrb1BL?=
+ =?utf-8?B?VUhOVmc3R3JYaW1pdHN3cUZpSGk4NVFwb2ZBQ3F1bUVUM1ZsbGNjVDdkem91?=
+ =?utf-8?B?UGNJaVg5cDE2aURNSUZTaHVBT29BZUl4QW8vZEN3TDdId2pIaEVWTzNuR0xG?=
+ =?utf-8?B?QTNjc2dpTjI1dHhiL0dmYzkvVVQ3UGh6eW9Ub0loam43TmRXMmRBSDIxZTZu?=
+ =?utf-8?B?MzRHckpvNVNZcC93YVhmbzU1TlV2WkdROXpCRHlGYWFQZUEvMU1Gb0VTUE5k?=
+ =?utf-8?B?UDB5Q0RJdUJaZ21hYmZVNzdKeG9UQVpiZGZNOUMrWWUzZEl2ekVaZy9KOEFn?=
+ =?utf-8?B?TlpEZmdBSWxMaEg0M0dRQUlld1dudGRyL3czQlI3SjM3TVFqdEV3VisvWWlC?=
+ =?utf-8?B?NXdEQ3d3NW9Zc1BHc0lBTnJVSWJmelRrZCs5YlNFeWNBN0lTT0FsWUlnWU81?=
+ =?utf-8?B?ck9jQ2Zhelc4S3N4ZTFqQU9BcEErNzRTMTZWdTVuV2FSZ0VPSmo4OFZLOXg1?=
+ =?utf-8?B?bWpLblE1L3BuMU1FdXQxM21BRnd4Uk9vMW82SVVyNWEvMnloS09wMFhFZkkv?=
+ =?utf-8?B?cEZoQVE0LzdxdnRBY3pPVVRwcC9DdjBnUEtYL1hPWm1UemxIMEtSV0o4WkE0?=
+ =?utf-8?B?bkZoMUhaVjd4ZnMxN2VBWGNNS0xYTVdlb2Y2UzZ2N1RKeklVSWNvdVl5WVQ5?=
+ =?utf-8?B?S1Y0K3N3SWR6Q2kwUThJSy9ZNDI4WTlkMjR2emtXbXNpY05CbFNDZjdrUXp6?=
+ =?utf-8?B?VEJlSkJ4LzJYNTRQSkozRCtWdjdDMktWNzV5QnlXNFM0YWdWUVJLaHdmbURo?=
+ =?utf-8?B?WDFQbDRaRnRSa3NhSzVKNWVlSm4wOEJra0R1V2k1UTM4VUdvbjlLc2ZuOHlC?=
+ =?utf-8?B?RE5FVVdTeWt0b3hyR2E1eFAvU2hCMTZBb0tBb0xndzdFMy8xUm9BRXduUDJY?=
+ =?utf-8?B?NFdTV0N6Vk5TbmFRZW1TVXJYOUwvWTJoVW9xV1Vabm5FM1MvMjJXc1pOUFBK?=
+ =?utf-8?Q?3p5cTaek09/CLJ8g=3D?=
+MIME-Version: 1.0
+
+--0000000000009c0c2b06086616a5
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+This is the problem. People want a human to take the blame for accidents
+and not the system. Even if the humans (in this case the pilots) were not
+really at fault (as the NTSB and others have concluded).
+Brazil blames U.S. pilots in crash that killed 154. They=E2=80=99re still f=
+lying.
+By Terrence McCoy
+<https://www.washingtonpost.com/people/terrence-mccoy/?itid=3Dai_top_mccoyt=
+m>
+October 23, 2023 at 5:00 a.m. EDT
+
+BRAS=C3=8DLIA =E2=80=94 In an empty cafeteria outside Brazil=E2=80=99s Just=
+ice Ministry, the
+widow checked the time. She twisted her engagement ring. She sipped her
+coffee. She checked the time again.
+
+=E2=80=9CI=E2=80=99m anxious,=E2=80=9D Rosane Gutjahr said.
+
+She also felt the familiar rage that had guided almost all her actions
+since Sept. 29, 2006. That was when an executive jet flown by two American
+pilots, Jan Paladino and Joseph Lepore, clipped a Brazilian Boeing 737 over
+a remote swath of the Amazon rainforest.
+
+The larger plane =E2=80=94 Gol Flight 1907, from Manaus to Rio de Janeiro =
+=E2=80=94
+disintegrated midair. Every one of its 154 passengers and crew was killed.
+The body of Gutjahr=E2=80=99s husband, Rolf, was found amid the wreckage on=
+ the
+forest floor.
+
+The Embraer Legacy 600, meanwhile, managed to land at a nearby military
+base. None of the seven passengers and crew on board =E2=80=94 all American=
+s =E2=80=94
+suffered injuries.
+
+Today, Gutjahr hoped, she would find out whether justice would finally come
+to the men she blames for her husband=E2=80=99s death.
+
+The question of responsibility in what was then the deadliest aviation
+disaster in Brazil=E2=80=99s history divided the Western Hemisphere=E2=80=
+=99s two most
+populous countries. In the American telling, the collision was caused by
+Brazilian air traffic controllers. The pilots did nothing wrong =E2=80=94 w=
+ere
+heroes, even, for safely landing their jet under extraordinarily
+challenging conditions. After being detained by Brazilian authorities for
+weeks, Paladino and Lepore returned to a triumphant welcome in the United
+States.
+
+=E2=80=9CIt will indeed be a blessed holiday season,=E2=80=9D rejoiced Sen.=
+ Charles E.
+Schumer (D-N.Y.).
+
+But in Brazil, the American pilots were found to be at fault. A criminal co=
+urt
+determined that Paladino and Lepore had flown while the plane=E2=80=99s tra=
+nsponder
+was inactive, effectively blinding traffic controllers to their jet=E2=80=
+=99s
+precise altitude. They were found guilty in 2011 of attacking the security
+of an airplane and sentenced to 40 months of probation.
+
+=E2=80=9CThe pilots=E2=80=99 failure caused the tragedy
+<https://www.cut.org.br/noticias/tragedia-da-gol-falhas-dos-pilotos-norte-a=
+mericanos-sao-reconhecidas-oficialment-56b7>,=E2=80=9D
+future president Dilma Rousseff said as she campaigned for her first term.
+
+Paladino and Lepore have denied all allegations of wrongdoing and have not
+been charged with any crime in the United States. The U.S. National
+Transportation Safety Board said the pilots were unaware of the
+transponder=E2=80=99s =E2=80=9Cinadvertent inactivation=E2=80=9D and did no=
+t violate any regulation.
+
+Paladino, today a pilot for American Airlines, did not return requests for
+comment. Lepore, who also continues to fly professionally, declined to
+comment.
+
+For George Santos, a life in Brazil at odds with his GOP politics
+<https://www.washingtonpost.com/world/2023/08/31/george-santos-brazil/?itid=
+=3Dlk_interstitial_manual_16>
+
+The impasse is now a case study in the difficulty of carrying out criminal
+sentences on foreign nationals living abroad. After all appeals were
+exhausted, Brazil requested the pilots=E2=80=99 extradition in March 2020. =
+But this
+year, the United States rejected the petition. It now appears unlikely the
+pilots will ever return to Brazil to serve their sentences.
+
+=E2=80=9CThe treaty between Brazil and the United States does not provide f=
+or
+extradition for this crime,=E2=80=9D their Brazilian attorney, Theo Dias, s=
+aid in a
+statement to The Washington Post.
+
+Most of the victims=E2=80=99 families have long since given up waiting. But=
+ not
+Gutjahr.
+
+She has dedicated her life to bringing the two pilots to some version of
+Brazilian justice. She has sold her business to eliminate distractions. She
+has joined the prosecutors=E2=80=99 case in an official capacity and spent =
+hundreds
+of thousands of dollars in legal fees to advance it. She has hounded
+officials for status meetings.
+
+Now, weeks after the United States denied Brazil=E2=80=99s extradition requ=
+est,
+Gutjahr, 66, was waiting on her last best chance at redress. The Brazilian
+judge who convicted the pilots had ruled in 2019 that the pilots could
+serve their sentence on American soil. She had a meeting this morning to
+ask a senior justice official if that might still happen.
+
+She finished her coffee. She felt that rage rising again.
+
+=E2=80=9COne hundred fifty-four deaths,=E2=80=9D she said.
+
+She stepped outside the building and lit a cigarette.
+
+=E2=80=9CI will make sure the pilots pay,=E2=80=9D she said. =E2=80=9CI wil=
+l fight until I go
+crazy.=E2=80=9D
+
+Then she blew out a plume of smoke, stamped out her cigarette and headed
+into the justice ministry.
+A midair collision over the jungle
+
+The disaster began with a celebration. The American charter firm ExcelAire
+had just bought an executive jet from the Brazilian manufacturer Embraer.
+So on Sept. 29, 2006, executives from both companies toasted the purchase
+and then prepared for the jet=E2=80=99s inaugural flight from the Brazilian=
+ city of
+S=C3=A3o Jos=C3=A9 dos Campos.
+
+Lepore and Paladino were in the cockpit, Brazil=E2=80=99s Aeronautical Acci=
+dents
+Investigation and Prevention Center would report, to familiarize themselves
+with the route and the aircraft itself. This was their first flight in
+Brazil.
+
+ExcelAire did not respond to a request for comment.
+
+The jet was set to fly at 37,000 feet to Bras=C3=ADlia and then descend to
+36,000 feet. Later, it would climb to 38,000 feet until reaching the
+Amazonian city of Manaus. The flight plan would keep the jet within the
+standard altitude as it transited the two-way air route called UZ6.
+
+But as the jet took off, air traffic controllers authorized the pilots to
+hold steady at 37,000 feet =E2=80=94 placing it at the same altitude as onc=
+oming
+air traffic.
+
+That=E2=80=99s not unusual: Air traffic controllers routinely issue fresh
+directives to pilots midflight. But two failures primed the flight for
+disaster. First, the jet lost radio contact with air traffic control. Then
+its transponder stopped transmitting its signal.
+
+That meant air traffic control couldn=E2=80=99t see its precise altitude. M=
+ore
+crucially, it nullified the plane=E2=80=99s traffic collision avoidance sys=
+tem,
+which relies on the transponder signal to warn nearby pilots of its
+location.
+
+For 55 minutes, the plane flew hundreds of miles effectively in the dark,
+without headlights.
+
+Utopia to blight: Surviving in Henry Ford=E2=80=99s lost jungle town
+<https://www.washingtonpost.com/world/2023/07/28/fordlandia-brazil/?itid=3D=
+lk_interstitial_manual_39>
+
+Still, the ride was smooth, recalled passenger Daniel Bachmann, a dual
+U.S.-Brazilian citizen who worked for Embraer. A journalist was quietly
+working on a piece about the plane=E2=80=99s sale for Business Jet Traveler=
+. The
+American executives were asking questions about the Amazon below.
+
+=E2=80=9CThen I felt this enormous bang,=E2=80=9D Bachman told The Washingt=
+on Post. =E2=80=9CLike
+we were sitting on bleachers and someone had pounded on it with a baseball
+bat.=E2=80=9D
+Alarms went off. The plane started descending. The pilots had no idea what
+they=E2=80=99d struck: =E2=80=9CWhat the hell was that?=E2=80=9D Paladino e=
+xclaimed, according to
+the accident report.
+
+The trees below, Bachman said, were getting closer and closer.
+
+=E2=80=9CWe thought, =E2=80=98This is it.=E2=80=99=E2=80=9D
+
+But the pilots somehow made it to a jungle airstrip. It was a miracle.
+Until it wasn=E2=80=99t: They soon learned they=E2=80=99d clipped a 737, an=
+d all 154 people
+on board were dead.
+
+=E2=80=9CHorrible,=E2=80=9D Paladino would later tell the Today Show=E2=80=
+=99s Matt Lauer. =E2=80=9CJust to
+be involved in something like this. I would never have comprehended that it
+would ever happen.=E2=80=9D
+
+Anger was rising in Brazil. Lepore and Paladino were detained, released and
+returned to the United States, promising to cooperate with the Brazilian
+authorities.
+
+Paladino denied allegations of wrongdoing.
+
+=E2=80=9CThe facts of the case will come out,=E2=80=9D he told Lauer. =E2=
+=80=9CWe just want the
+truth to come out.=E2=80=9D
+
+Then came the trial, the conviction and the sentence. Neither pilot ever
+returned to Brazil.
+=E2=80=98This wasn=E2=80=99t an accident; this was a crime=E2=80=99
+
+The case for extradition was never going to be easy. First, the United
+States did not agree that the pilots had committed wrongdoing. Second, the
+alleged offense did not appear on the 1961 extradition treaty signed
+between the nations. Even if U.S. authorities had wanted to cooperate, they
+would have had no legal basis to act.
+
+=E2=80=9CExtradition is a big deal,=E2=80=9D said John Parry, an extraditio=
+n scholar at the
+Lewis & Clark Law School. =E2=80=9CAnd here, the alleged crime just doesn=
+=E2=80=99t fit
+within the treaty.=E2=80=9D
+
+The Office of International Affairs at the U.S. Department of Justice,
+which manages extradition requests, declined to comment.
+
+Why beef-loving Brazil is so obsessed with an American steakhouse chain
+<https://www.washingtonpost.com/world/2023/06/20/brazil-outback-steakhouse-=
+popular/?itid=3Dlk_interstitial_manual_57>
+
+As it became clear the pilots would not return, Brazilians who lost loved
+ones on the 737 believed they had little choice but to move on. Many
+accepted some type of payout from the airlines amid a flurry of lawsuits,
+but felt powerless to penalize the pilots.
+
+=E2=80=9CIt was better to forget,=E2=80=9D said Jorge Andr=C3=A9 Cavalcante=
+, former president of
+the crash=E2=80=99s victims association, whose nephew died in the crash.
+
+=E2=80=9CSpending your whole life fighting for justice, it was just too pai=
+nful,=E2=80=9D
+said Neusa Felipeto Machado, who lost her husband. Most families, including
+Machado, ultimately accepted payouts from the airlines involved in the
+collision. The association winnowed to just a few members.
+
+Only one person, Machado said, never faltered.
+
+=E2=80=9CRosane.=E2=80=9D
+
+At her home in Curitiba, Gutjahr erected a small shrine to Rolf. She never
+took off her engagement ring. She raised their daughter, 4 at the time of
+the accident, to understand the case as she did.
+
+=E2=80=9CThis wasn=E2=80=99t an accident; this was a crime,=E2=80=9D said L=
+uiza Gutjahr, now 21.
+=E2=80=9CMy father lost his life because of the recklessness of two crimina=
+ls.=E2=80=9D
+
+In interview after interview, year after year, Gutjahr seethed in comments
+that seemed to evince as much thirst for revenge as for justice. In 2012
+<https://www.camara.leg.br/noticias/374773-familiares-de-vitimas-do-voo-190=
+7-pedem-punicao-de-pilotos-americanos/>:
+=E2=80=9CThey say time diminishes pain; I tell you it does not.=E2=80=9D In=
+ 2013
+<https://noticias.uol.com.br/cotidiano/ultimas-noticias/2013/12/12/e-um-abs=
+urdo-diz-viuva-de-uma-das-vitimas-do-acidente-da-gol-sobre-reducao-de-penas=
+.htm>:
+=E2=80=9CThey have to get the maximum penalty.=E2=80=9D In 2021
+<https://www.rdnews.com.br/cidades/conteudos/150235>: =E2=80=9CI want to ta=
+ke their
+home, I want to take their car, I want to take everything,=E2=80=9D she sai=
+d. =E2=80=9CIt
+won=E2=80=99t bring back my husband, but they are living normally.=E2=80=9D
+
+In U.S., most UFO documentation is classified. Not so in other countries.
+<https://www.washingtonpost.com/world/2023/09/06/ufo-brazil-documents-class=
+ified/?itid=3Dlk_interstitial_manual_68>
+
+Attorney Daniel Roller, who for years represented Gutjahr in her quest,
+said he has tried at several moments to counsel her that what she wanted
+was not possible. The magnitude of penalty was unlikely to ever match the
+magnitude of her loss. Perhaps, he once told her gently, it would be best
+to let it go. Focus her life elsewhere.
+
+She would hear none of it.
+
+=E2=80=9CI=E2=80=99ve never seen anyone so determined,=E2=80=9D he said.
+A long and lonely quest
+
+But as she sat in an expansive office at the Brazilian justice ministry,
+her determination was put to the test. The news was not good.
+
+Augusto Botelho, Brazil=E2=80=99s national secretary of justice, told her t=
+he
+government supported her. But that wouldn=E2=80=99t be enough to bring the =
+pilots
+to justice. That would be up to the United States, which was unlikely to
+enforce a Brazilian sentence in its territory.
+
+Botelho apologized that he couldn=E2=80=99t do more, wished Gutjahr the bes=
+t and
+led her out of the room.
+
+
+She was alone again. These were the moments when she most wished Rolf were
+still alive. There had been such joy to him. He would have known what to
+say to make her feel better.
+
+She stepped outside and lit another cigarette.
+
+=E2=80=9CThere were 154 deaths,=E2=80=9D she said. =E2=80=9CSuch a complete=
+ lack of respect by the
+American justice system.=E2=80=9D
+
+She perceived discrimination.
+
+=E2=80=9CIs it because we=E2=80=99re from the Third World?=E2=80=9D she sai=
+d. =E2=80=9CBecause we=E2=80=99re not so
+strong like the Americans? But we have the same bodies, same pains, same
+everything.=E2=80=9D
+
+But the moment, when she allowed doubt and defeat to weaken her resolve,
+quickly passed. She stubbed out the cigarette and was on to next steps. If
+the federal judge presiding over the case issued a fresh injunction
+ordering the sentence to be served in the United States, the government
+would have fresh motive to pressure the Americans.
+
+=E2=80=9CI will write the judge,=E2=80=9D she said. =E2=80=9CI will ask for=
+ a meeting.=E2=80=9D
+
+She wasn=E2=80=99t ready to give up her life=E2=80=99s purpose. Not yet.
+
+=E2=80=9COne hundred fifty-four deaths,=E2=80=9D she repeated. =E2=80=9CI w=
+ill not forget.=E2=80=9D
+
+*Marina Dias in Bras=C3=ADlia contributed to this report.*
+
+
+Warm Regards, Nancy
+
+Prof. Nancy Leveson
+Jerome C. Hunsaker Professor in Aeronautics and Astronautics
+Engineering Systems Laboratory
+MIT, Room 33-412
+77 Massachusetts Ave.
+Cambridge, MA 02142
+
+Telephone: 617-258-0505 (MIT)
+Mobile: 617-460-5749
+
+Email: leveson@mit.edu
+URL: http://sunnyday.mit.edu
+
+--0000000000009c0c2b06086616a5
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-size:small">This =
+is the problem. People want a human to take the blame for accidents and not=
+ the system. Even if the humans (in this case the pilots) were not really a=
+t fault (as the NTSB and others have concluded).</div><div class=3D"gmail_d=
+efault" style=3D"font-size:small"><div class=3D"gmail-PJLV gmail-PJLV-iPJLV=
+-css gmail-grid-center gmail-w-100" style=3D"box-sizing:border-box;width:12=
+00px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-=
+size:medium;text-align:center"><h1 id=3D"gmail-main-content" class=3D"gmail=
+-PJLV gmail-PJLV-ieZCrgm-css gmail-ml-auto gmail-mr-auto gmail-font--headli=
+ne gmail-headline gmail-offblack" style=3D"box-sizing:border-box;font-size:=
+3.5rem;margin-top:0px;margin-right:auto;margin-left:auto;font-family:Poston=
+i,garamond,serif;line-height:1.1;max-width:1000px">Brazil blames U.S. pilot=
+s in crash that killed 154. They=E2=80=99re still flying.</h1></div><div cl=
+ass=3D"gmail-PJLV gmail-PJLV-iPJLV-css gmail-grid-center gmail-w-100" style=
+=3D"box-sizing:border-box;width:1200px;color:rgb(0,0,0);font-family:Frankli=
+n,Arial,Helvetica,sans-serif;font-size:medium;text-align:center"><div class=
+=3D"gmail-flex gmail-print-byline gmail-print-mt-none gmail-justify-center =
+gmail-justify-center-ns" style=3D"box-sizing:border-box;display:flex"><div =
+class=3D"gmail-byline-wrapper gmail-flex-column gmail-flex gmail-items-cent=
+er" style=3D"box-sizing:border-box;display:flex;max-width:600px"><div class=
+=3D"gmail-PJLV gmail-PJLV-ihSmMVC-css" style=3D"box-sizing:border-box"><div=
+ class=3D"gmail-PJLV gmail-PJLV-iPJLV-css gmail-mb-xxs gmail-overrideStyles=
+" style=3D"box-sizing:border-box;margin-bottom:4px"><span class=3D"gmail-wp=
+ds-c-PJLV" style=3D"box-sizing:border-box"><div class=3D"gmail-flex gmail-i=
+tems-center" style=3D"box-sizing:border-box;display:flex"><div class=3D"gma=
+il-mr-sm gmail-flex gmail-lh-0" style=3D"box-sizing:border-box;margin-right=
+:16px;line-height:0;display:flex"><div class=3D"gmail-wpds-c-iTcer" style=
+=3D"box-sizing:border-box;width:56px;height:56px"><img src=3D"https://www.w=
+ashingtonpost.com/wp-apps/imrs.php?src=3Dhttps://s3.amazonaws.com/arc-autho=
+rs/washpost/ef0c0e90-b7f5-46d6-8096-e5f95d540068.png&amp;w=3D196&amp;h=3D19=
+6" alt=3D"" class=3D"gmail-wpds-c-dgBqAZ" style=3D"box-sizing: border-box; =
+max-width: 100%; height: auto; border-radius: 50%;"></div></div><span class=
+=3D"gmail-left" style=3D"box-sizing:border-box;text-align:left"><div class=
+=3D"gmail-flex" style=3D"box-sizing:border-box;display:flex"><div class=3D"=
+gmail-dib gmail-font-xxs" style=3D"box-sizing:border-box;font-size:1rem;dis=
+play:inline-block"><span class=3D"gmail-wpds-c-cNdzuP" style=3D"box-sizing:=
+border-box">By&nbsp;</span><a href=3D"https://www.washingtonpost.com/people=
+/terrence-mccoy/?itid=3Dai_top_mccoytm" rel=3D"author" class=3D"gmail-wpds-=
+c-cNdzuP gmail-wpds-c-cNdzuP-ejzZdU-isLink-true" style=3D"box-sizing:border=
+-box">Terrence McCoy</a></div></div></span></div></span></div></div><div cl=
+ass=3D"gmail-wpds-c-kgabfe gmail-wpds-c-kgabfe-igLjcUH-css" style=3D"box-si=
+zing:border-box;opacity:0.83"><span class=3D"gmail-wpds-c-iKQyrV" style=3D"=
+box-sizing:border-box">October 23, 2023 at 5:00 a.m. EDT</span></div></div>=
+</div></div></div><div class=3D"gmail_default" style=3D"font-size:small"><b=
+r></div><div><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"g=
+mail_signature"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=
+=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr=
+"><div><div class=3D"gmail-teaser-content gmail-grid-center" style=3D"box-s=
+izing:border-box;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans=
+-serif;font-size:medium"><div class=3D"gmail-article-body gmail-grid-center=
+ gmail-grid-body" style=3D"box-sizing:border-box;max-width:640px;margin-lef=
+t:auto;margin-right:auto;width:640px"><p class=3D"gmail-wpds-c-cYdRxM gmail=
+-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null"=
+ style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">BRAS=C3=8DLIA=
+ =E2=80=94 In an empty cafeteria outside Brazil=E2=80=99s Justice Ministry,=
+ the widow checked the time. She twisted her engagement ring. She sipped he=
+r coffee. She checked the time again.</p></div><div class=3D"gmail-article-=
+body gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-=
+width:640px;margin-left:auto;margin-right:auto;width:640px"><p class=3D"gma=
+il-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-f=
+ont-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:=
+1.25rem">=E2=80=9CI=E2=80=99m anxious,=E2=80=9D Rosane Gutjahr said.</p></d=
+iv><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" styl=
+e=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right:au=
+to;width:640px"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-c=
+ss gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:b=
+order-box;margin:0px;font-size:1.25rem">She also felt the<span style=3D"box=
+-sizing:border-box;font-weight:bolder">&nbsp;</span>familiar rage that had =
+guided almost all her actions since Sept. 29, 2006. That was when an execut=
+ive jet flown by two American pilots, Jan Paladino and Joseph Lepore, clipp=
+ed a Brazilian Boeing 737 over a remote swath of the<span style=3D"box-sizi=
+ng:border-box;font-weight:bolder">&nbsp;</span>Amazon rainforest.</p></div>=
+</div><div class=3D"gmail-article-body gmail-grid-full-bleed" style=3D"box-=
+sizing:border-box;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,san=
+s-serif;font-size:medium"></div><div class=3D"gmail-article-body gmail-grid=
+-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:640px;mar=
+gin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-family:Fr=
+anklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-=
+c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy=
+" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem"=
+>The larger plane =E2=80=94 Gol Flight 1907, from Manaus to Rio de Janeiro =
+=E2=80=94 disintegrated midair. Every one of its 154 passengers and crew wa=
+s killed. The body of Gutjahr=E2=80=99s husband, Rolf, was found amid the w=
+reckage on the forest floor.</p></div><div class=3D"gmail-article-body gmai=
+l-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:640=
+px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-fam=
+ily:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail=
+-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-fon=
+t-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:1.=
+25rem">The Embraer Legacy 600, meanwhile, managed to land at a nearby milit=
+ary base. None of the seven passengers and crew on board =E2=80=94 all Amer=
+icans =E2=80=94 suffered injuries.</p></div><div class=3D"gmail-article-bod=
+y gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-wid=
+th:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);fo=
+nt-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D=
+"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gma=
+il-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-s=
+ize:1.25rem">Today, Gutjahr hoped, she would find out whether justice would=
+ finally come to the men she blames for her husband=E2=80=99s death.</p></d=
+iv><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body gmail=
+-grid-tablet-full-bleed" style=3D"box-sizing:border-box;max-width:640px;mar=
+gin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-family:Fr=
+anklin,Arial,Helvetica,sans-serif;font-size:medium"><div class=3D"gmail-PJL=
+V gmail-PJLV-iPJLV-css gmail-hide-for-print" style=3D"box-sizing:border-box=
+"><br></div></div><div class=3D"gmail-article-body gmail-grid-center gmail-=
+grid-body" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;=
+margin-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,H=
+elvetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail=
+-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null"=
+ style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">The question =
+of responsibility in what was then the deadliest aviation disaster in Brazi=
+l=E2=80=99s history divided the Western Hemisphere=E2=80=99s two most popul=
+ous countries. In the American telling, the collision was caused by Brazili=
+an<span style=3D"box-sizing:border-box;font-weight:bolder">&nbsp;</span>air=
+ traffic controllers. The pilots did nothing wrong =E2=80=94 were heroes, e=
+ven, for safely landing their jet under extraordinarily challenging conditi=
+ons. After being detained by Brazilian authorities for weeks, Paladino and =
+Lepore returned to a triumphant welcome in the United States.</p></div><div=
+ class=3D"gmail-article-body gmail-grid-center gmail-grid-body" style=3D"bo=
+x-sizing:border-box;max-width:640px;margin-left:auto;margin-right:auto;widt=
+h:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;fo=
+nt-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-c=
+ss gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:b=
+order-box;margin:0px;font-size:1.25rem">=E2=80=9CIt will indeed be a blesse=
+d holiday season,=E2=80=9D rejoiced Sen. Charles E. Schumer (D-N.Y.).</p></=
+div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" sty=
+le=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right:a=
+uto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-=
+serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM=
+-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-=
+sizing:border-box;margin:0px;font-size:1.25rem">But in Brazil, the American=
+ pilots were found to be at fault. A criminal<span style=3D"box-sizing:bord=
+er-box;font-weight:bolder">&nbsp;</span>court determined that<span style=3D=
+"box-sizing:border-box;font-weight:bolder">&nbsp;</span>Paladino and Lepore=
+ had flown while the plane=E2=80=99s transponder was inactive, effectively =
+blinding traffic controllers to their jet=E2=80=99s precise altitude. They =
+were found guilty in 2011 of attacking the security of an airplane and sent=
+enced to 40 months of probation.</p></div><div class=3D"gmail-article-body =
+gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-width=
+:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font=
+-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"g=
+mail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail=
+-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-siz=
+e:1.25rem">=E2=80=9CThe pilots=E2=80=99 failure&nbsp;<a href=3D"https://www=
+.cut.org.br/noticias/tragedia-da-gol-falhas-dos-pilotos-norte-americanos-sa=
+o-reconhecidas-oficialment-56b7" target=3D"_blank" style=3D"box-sizing:bord=
+er-box;color:rgb(42,42,42);text-decoration-color:rgb(42,42,42);border-botto=
+m:0px">caused the tragedy</a>,=E2=80=9D future president Dilma Rousseff sai=
+d as she campaigned for her first term.</p></div><div class=3D"gmail-articl=
+e-body gmail-grid-full-bleed" style=3D"box-sizing:border-box;color:rgb(0,0,=
+0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"></div>=
+<div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" style=
+=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right:aut=
+o;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-se=
+rif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-i=
+PJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-si=
+zing:border-box;margin:0px;font-size:1.25rem">Paladino and Lepore have deni=
+ed all allegations of wrongdoing and have not been charged with any crime i=
+n the United States. The U.S.<span style=3D"box-sizing:border-box;font-weig=
+ht:bolder">&nbsp;</span>National Transportation Safety Board said the pilot=
+s were unaware of the transponder=E2=80=99s =E2=80=9Cinadvertent inactivati=
+on=E2=80=9D and did not violate any regulation.</p></div><div class=3D"gmai=
+l-article-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:borde=
+r-box;max-width:640px;margin-left:auto;margin-right:auto;width:640px;color:=
+rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium=
+"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overr=
+ideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;marg=
+in:0px;font-size:1.25rem">Paladino, today a pilot for American Airlines, di=
+d not return requests for comment. Lepore, who also continues to fly profes=
+sionally, declined to comment.</p></div><div class=3D"gmail-article-body gm=
+ail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:6=
+40px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-f=
+amily:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p style=3D"box=
+-sizing:border-box;margin:0px"><span class=3D"gmail-wpds-c-sFUaP gmail-wpds=
+-c-sFUaP-jtHNGr-variant-interstitial gmail-wpds-c-sFUaP-iPJLV-css gmail-hid=
+e-for-print" style=3D"box-sizing:border-box;margin:0px;display:block"><a hr=
+ef=3D"https://www.washingtonpost.com/world/2023/08/31/george-santos-brazil/=
+?itid=3Dlk_interstitial_manual_16" style=3D"box-sizing:border-box;color:rgb=
+(42,42,42);text-decoration-color:rgb(42,42,42);font-style:italic;border-bot=
+tom:0px">For George Santos, a life in Brazil at odds with his GOP politics<=
+/a></span></p></div><div class=3D"gmail-article-body gmail-grid-center gmai=
+l-grid-body" style=3D"box-sizing:border-box;max-width:640px;margin-left:aut=
+o;margin-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial=
+,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gma=
+il-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"nul=
+l" style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">The impasse=
+ is now a case study in the difficulty of carrying out criminal sentences o=
+n foreign nationals living abroad. After all appeals were exhausted, Brazil=
+ requested the pilots=E2=80=99 extradition in March 2020. But this year, th=
+e United States rejected the petition. It now appears unlikely the pilots w=
+ill ever return to Brazil to serve their sentences.</p></div><div class=3D"=
+gmail-article-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:b=
+order-box;max-width:640px;margin-left:auto;margin-right:auto;width:640px;co=
+lor:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:me=
+dium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-o=
+verrideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;=
+margin:0px;font-size:1.25rem">=E2=80=9CThe treaty between Brazil and the Un=
+ited States does not provide for extradition for this crime,=E2=80=9D their=
+ Brazilian attorney, Theo Dias, said in a statement to The Washington Post.=
+</p></div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-bod=
+y" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-r=
+ight:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica=
+,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-=
+cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=
+=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">Most of the victims=
+=E2=80=99 families have long since given up waiting. But not Gutjahr.</p></=
+div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" sty=
+le=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right:a=
+uto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-=
+serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM=
+-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-=
+sizing:border-box;margin:0px;font-size:1.25rem">She has dedicated her life =
+to bringing the two pilots to some version of Brazilian justice. She has so=
+ld her business to eliminate distractions. She has joined the prosecutors=
+=E2=80=99 case in an official capacity and spent hundreds of thousands of d=
+ollars in legal fees to advance it. She has hounded officials for status me=
+etings.</p></div><div class=3D"gmail-article-body gmail-grid-center gmail-g=
+rid-body" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;m=
+argin-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,He=
+lvetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-=
+wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" =
+style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">Now, weeks aft=
+er the United States denied Brazil=E2=80=99s extradition request, Gutjahr, =
+66, was waiting on her last best chance at redress. The Brazilian judge who=
+ convicted the pilots had ruled in 2019 that the pilots could serve their s=
+entence on American soil. She had a meeting this morning to ask a senior ju=
+stice official if that might still happen.</p></div><div class=3D"gmail-art=
+icle-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-box=
+;max-width:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0=
+,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p =
+class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideSt=
+yles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0p=
+x;font-size:1.25rem">She finished her coffee. She felt that rage rising aga=
+in.</p></div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-=
+body" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margi=
+n-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvet=
+ica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds=
+-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" styl=
+e=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">=E2=80=9COne hundr=
+ed fifty-four deaths,=E2=80=9D she said.</p></div><div class=3D"gmail-artic=
+le-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;m=
+ax-width:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0=
+,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p cl=
+ass=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyl=
+es gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;=
+font-size:1.25rem">She stepped outside the building and lit a cigarette.</p=
+></div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" =
+style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-righ=
+t:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sa=
+ns-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYd=
+RxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"b=
+ox-sizing:border-box;margin:0px;font-size:1.25rem">=E2=80=9CI will make sur=
+e the pilots pay,=E2=80=9D she said. =E2=80=9CI will fight until I go crazy=
+.=E2=80=9D</p></div><div class=3D"gmail-article-body gmail-grid-center gmai=
+l-grid-body" style=3D"box-sizing:border-box;max-width:640px;margin-left:aut=
+o;margin-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial=
+,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gma=
+il-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"nul=
+l" style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">Then she bl=
+ew out a plume of smoke, stamped out her cigarette and headed into the just=
+ice ministry.<span class=3D"gmail_default" style=3D"font-size:small">&nbsp;=
+</span></p></div><div class=3D"gmail-article-body gmail-grid-center gmail-g=
+rid-body" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;m=
+argin-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,He=
+lvetica,sans-serif;font-size:medium"><h3 class=3D"gmail-pb-sm gmail-pt-md" =
+id=3D"gmail-UNONNXRJGRCNNMSRHISVVOBX5E" style=3D"box-sizing:border-box;marg=
+in:0px;padding-bottom:16px;padding-top:24px;font-size:2rem;font-family:Post=
+oni,BodoniSvtyTwoITCTT-Book,georgia,serif;line-height:1.25"><div style=3D"b=
+ox-sizing:border-box">A midair collision over the jungle</div></h3></div><d=
+iv class=3D"gmail-article-body gmail-grid-center gmail-grid-body" style=3D"=
+box-sizing:border-box;max-width:640px;margin-left:auto;margin-right:auto;wi=
+dth:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;=
+font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV=
+-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing=
+:border-box;margin:0px;font-size:1.25rem">The disaster began with a celebra=
+tion. The American charter firm ExcelAire had just bought an executive jet =
+from the Brazilian manufacturer Embraer. So on Sept. 29, 2006, executives f=
+rom both companies toasted the purchase and then prepared for the jet=E2=80=
+=99s inaugural flight from the Brazilian city of S=C3=A3o Jos=C3=A9 dos Cam=
+pos.</p></div><div class=3D"gmail-article-body gmail-grid-center gmail-grid=
+-body" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;marg=
+in-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helve=
+tica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpd=
+s-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" sty=
+le=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">Lepore and Paladi=
+no were in the cockpit, Brazil=E2=80=99s Aeronautical Accidents Investigati=
+on and Prevention Center would report, to familiarize themselves with the r=
+oute and the aircraft itself. This was their first flight in Brazil.</p></d=
+iv><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" styl=
+e=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right:au=
+to;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-s=
+erif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-=
+iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-s=
+izing:border-box;margin:0px;font-size:1.25rem">ExcelAire did not respond to=
+ a request for comment.</p></div><div class=3D"gmail-article-body gmail-gri=
+d-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:640px;ma=
+rgin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-family:F=
+ranklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds=
+-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-cop=
+y" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem=
+">The jet was set to fly at 37,000 feet to Bras=C3=ADlia and then descend t=
+o 36,000 feet. Later, it would climb to 38,000 feet until reaching the Amaz=
+onian city of Manaus. The flight<span style=3D"box-sizing:border-box;font-w=
+eight:bolder">&nbsp;</span>plan would keep the jet within the standard alti=
+tude as it transited the two-way air route called UZ6.</p></div><div class=
+=3D"gmail-article-body gmail-grid-center gmail-grid-body" style=3D"box-sizi=
+ng:border-box;max-width:640px;margin-left:auto;margin-right:auto;width:640p=
+x;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-siz=
+e:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gma=
+il-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-=
+box;margin:0px;font-size:1.25rem">But as the jet took off, air traffic cont=
+rollers authorized the pilots to hold steady at 37,000 feet =E2=80=94 placi=
+ng it at the same altitude as oncoming air traffic.<span class=3D"gmail_def=
+ault" style=3D"font-size:small">&nbsp;</span></p></div><div class=3D"gmail-=
+article-body gmail-grid-full-bleed" style=3D"box-sizing:border-box;color:rg=
+b(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium">=
+</div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" s=
+tyle=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right=
+:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,san=
+s-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdR=
+xM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"bo=
+x-sizing:border-box;margin:0px;font-size:1.25rem">That=E2=80=99s not unusua=
+l:<span style=3D"box-sizing:border-box;font-weight:bolder">&nbsp;</span>Air=
+ traffic controllers routinely issue fresh directives to pilots midflight. =
+But two failures primed the flight for disaster. First, the jet lost radio =
+contact with air traffic control. Then its<span style=3D"box-sizing:border-=
+box;font-weight:bolder">&nbsp;</span>transponder stopped transmitting its s=
+ignal.</p></div><div class=3D"gmail-article-body gmail-grid-center gmail-gr=
+id-body" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;ma=
+rgin-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Hel=
+vetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-w=
+pds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" s=
+tyle=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">That meant air =
+traffic control couldn=E2=80=99t see its precise altitude. More crucially, =
+it nullified the plane=E2=80=99s traffic collision avoidance system, which =
+relies on the transponder signal to warn nearby pilots of its location.</p>=
+</div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" s=
+tyle=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right=
+:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,san=
+s-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdR=
+xM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"bo=
+x-sizing:border-box;margin:0px;font-size:1.25rem">For 55 minutes, the plane=
+ flew hundreds of miles effectively in the dark, without headlights.</p></d=
+iv><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" styl=
+e=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right:au=
+to;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-s=
+erif;font-size:medium"><p style=3D"box-sizing:border-box;margin:0px"><span =
+class=3D"gmail-wpds-c-sFUaP gmail-wpds-c-sFUaP-jtHNGr-variant-interstitial =
+gmail-wpds-c-sFUaP-iPJLV-css gmail-hide-for-print" style=3D"box-sizing:bord=
+er-box;margin:0px;display:block"><a href=3D"https://www.washingtonpost.com/=
+world/2023/07/28/fordlandia-brazil/?itid=3Dlk_interstitial_manual_39" style=
+=3D"box-sizing:border-box;color:rgb(42,42,42);text-decoration-color:rgb(42,=
+42,42);font-style:italic;border-bottom:0px">Utopia to blight: Surviving in =
+Henry Ford=E2=80=99s lost jungle town</a></span></p></div><div class=3D"gma=
+il-article-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:bord=
+er-box;max-width:640px;margin-left:auto;margin-right:auto;width:640px;color=
+:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:mediu=
+m"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-over=
+rideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;mar=
+gin:0px;font-size:1.25rem">Still, the ride was smooth, recalled passenger D=
+aniel Bachmann, a dual U.S.-Brazilian<span style=3D"box-sizing:border-box;f=
+ont-weight:bolder">&nbsp;</span>citizen who worked for Embraer.<span style=
+=3D"box-sizing:border-box;font-weight:bolder">&nbsp;</span>A journalist was=
+ quietly working on a piece about the plane=E2=80=99s sale for Business Jet=
+ Traveler. The American executives were asking questions about the Amazon b=
+elow.</p></div><div class=3D"gmail-article-body gmail-grid-center gmail-gri=
+d-body" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;mar=
+gin-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helv=
+etica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wp=
+ds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" st=
+yle=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">=E2=80=9CThen I =
+felt this enormous bang,=E2=80=9D Bachman told The Washington Post. =E2=80=
+=9CLike we were sitting on bleachers and someone had pounded on it with a b=
+aseball bat.=E2=80=9D<span class=3D"gmail_default" style=3D"font-size:small=
+">&nbsp;</span></p></div><div class=3D"gmail-article-body gmail-grid-center=
+ gmail-grid-body gmail-grid-tablet-full-bleed" style=3D"box-sizing:border-b=
+ox;max-width:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb=
+(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><=
+div class=3D"gmail-PJLV gmail-PJLV-iPJLV-css gmail-hide-for-print" style=3D=
+"box-sizing:border-box"><span style=3D"font-size:1.25rem;font-family:Frankl=
+in,Arial,Helvetica,sans-serif">Alarms went off. The plane started descendin=
+g.</span><span style=3D"font-size:1.25rem;font-family:Franklin,Arial,Helvet=
+ica,sans-serif;box-sizing:border-box;font-weight:bolder">&nbsp;</span><span=
+ style=3D"font-size:1.25rem;font-family:Franklin,Arial,Helvetica,sans-serif=
+">The pilots had no idea what they=E2=80=99d struck: =E2=80=9CWhat the hell=
+ was that?=E2=80=9D Paladino exclaimed, according to the accident report.</=
+span><br></div></div><div class=3D"gmail-article-body gmail-grid-center gma=
+il-grid-body" style=3D"box-sizing:border-box;max-width:640px;margin-left:au=
+to;margin-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Aria=
+l,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gm=
+ail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"nu=
+ll" style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">The trees =
+below, Bachman said, were getting closer and closer.</p></div><div class=3D=
+"gmail-article-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:=
+border-box;max-width:640px;margin-left:auto;margin-right:auto;width:640px;c=
+olor:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:m=
+edium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-=
+overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box=
+;margin:0px;font-size:1.25rem">=E2=80=9CWe thought, =E2=80=98This is it.=E2=
+=80=99=E2=80=9D</p></div><div class=3D"gmail-article-body gmail-grid-center=
+ gmail-grid-body" style=3D"box-sizing:border-box;max-width:640px;margin-lef=
+t:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,=
+Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRx=
+M gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=
+=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">But =
+the pilots somehow made it to a jungle airstrip. It was a miracle. Until it=
+ wasn=E2=80=99t: They soon learned they=E2=80=99d clipped a 737, and all 15=
+4 people on board were dead.</p></div><div class=3D"gmail-article-body gmai=
+l-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:640=
+px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-fam=
+ily:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail=
+-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-fon=
+t-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:1.=
+25rem">=E2=80=9CHorrible,=E2=80=9D Paladino would later tell the Today Show=
+=E2=80=99s Matt Lauer. =E2=80=9CJust to be involved in something like this.=
+ I would never have comprehended that it would ever happen.=E2=80=9D</p></d=
+iv><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" styl=
+e=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right:au=
+to;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-s=
+erif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-=
+iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-s=
+izing:border-box;margin:0px;font-size:1.25rem">Anger was rising in Brazil. =
+Lepore and Paladino were detained, released and returned to the United Stat=
+es, promising to cooperate with the Brazilian authorities.</p></div><div cl=
+ass=3D"gmail-article-body gmail-grid-center gmail-grid-body" style=3D"box-s=
+izing:border-box;max-width:640px;margin-left:auto;margin-right:auto;width:6=
+40px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-=
+size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css =
+gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:bord=
+er-box;margin:0px;font-size:1.25rem">Paladino denied allegations of wrongdo=
+ing.</p></div><div class=3D"gmail-article-body gmail-grid-center gmail-grid=
+-body" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;marg=
+in-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helve=
+tica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpd=
+s-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" sty=
+le=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">=E2=80=9CThe fact=
+s of the case will come out,=E2=80=9D he told Lauer. =E2=80=9CWe just want =
+the truth to come out.=E2=80=9D</p></div><div class=3D"gmail-article-body g=
+mail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:=
+640px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-=
+family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gm=
+ail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-=
+font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size=
+:1.25rem">Then came the trial, the conviction and the sentence. Neither pil=
+ot ever returned to Brazil.</p></div><div class=3D"gmail-article-body gmail=
+-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:640p=
+x;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-fami=
+ly:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><h3 class=3D"gmail=
+-pb-sm gmail-pt-md" id=3D"gmail-3D2WFKLUNJHTRKFIGQB4WMOBXE" style=3D"box-si=
+zing:border-box;margin:0px;padding-bottom:16px;padding-top:24px;font-size:2=
+rem;font-family:Postoni,BodoniSvtyTwoITCTT-Book,georgia,serif;line-height:1=
+.25"><div style=3D"box-sizing:border-box"><span class=3D"gmail_default" sty=
+le=3D"font-size:small"></span>=E2=80=98This wasn=E2=80=99t an accident; thi=
+s was a crime=E2=80=99</div></h3></div><div class=3D"gmail-article-body gma=
+il-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:64=
+0px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-fa=
+mily:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gmai=
+l-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-fo=
+nt-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:1=
+.25rem">The case for extradition was never going to be easy. First, the Uni=
+ted States did not agree that the pilots had committed wrongdoing. Second, =
+the alleged offense did not appear on the 1961 extradition treaty signed be=
+tween the nations. Even if U.S. authorities had wanted to cooperate, they w=
+ould have had no legal basis to act.</p></div><div class=3D"gmail-article-b=
+ody gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-w=
+idth:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);=
+font-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=
+=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles =
+gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;fon=
+t-size:1.25rem">=E2=80=9CExtradition is a big deal,=E2=80=9D said John Parr=
+y, an extradition scholar at the Lewis &amp; Clark Law School. =E2=80=9CAnd=
+ here, the alleged crime just doesn=E2=80=99t fit within the treaty.=E2=80=
+=9D</p></div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-=
+body" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margi=
+n-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvet=
+ica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds=
+-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" styl=
+e=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">The Office of Inte=
+rnational Affairs at the U.S. Department of Justice, which manages extradit=
+ion requests, declined to comment.</p></div><div class=3D"gmail-article-bod=
+y gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-wid=
+th:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);fo=
+nt-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p style=3D=
+"box-sizing:border-box;margin:0px"><span class=3D"gmail-wpds-c-sFUaP gmail-=
+wpds-c-sFUaP-jtHNGr-variant-interstitial gmail-wpds-c-sFUaP-iPJLV-css gmail=
+-hide-for-print" style=3D"box-sizing:border-box;margin:0px;display:block"><=
+a href=3D"https://www.washingtonpost.com/world/2023/06/20/brazil-outback-st=
+eakhouse-popular/?itid=3Dlk_interstitial_manual_57" style=3D"box-sizing:bor=
+der-box;color:rgb(42,42,42);text-decoration-color:rgb(42,42,42);font-style:=
+italic;border-bottom:0px">Why beef-loving Brazil is so obsessed with an Ame=
+rican steakhouse chain</a></span></p></div><div class=3D"gmail-article-body=
+ gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-widt=
+h:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);fon=
+t-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"=
+gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmai=
+l-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-si=
+ze:1.25rem">As it became clear the pilots would not return, Brazilians who =
+lost loved ones on the 737 believed they had little choice but to move on. =
+Many accepted some type of payout from the airlines amid a flurry of lawsui=
+ts, but felt powerless to penalize the pilots.</p></div><div class=3D"gmail=
+-article-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:border=
+-box;max-width:640px;margin-left:auto;margin-right:auto;width:640px;color:r=
+gb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"=
+><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overri=
+deStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margi=
+n:0px;font-size:1.25rem">=E2=80=9CIt was better to forget,=E2=80=9D said Jo=
+rge Andr=C3=A9 Cavalcante, former president of the crash=E2=80=99s victims =
+association, whose nephew died in the crash.</p></div><div class=3D"gmail-a=
+rticle-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-b=
+ox;max-width:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb=
+(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><=
+p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-override=
+Styles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:=
+0px;font-size:1.25rem">=E2=80=9CSpending your whole life fighting for justi=
+ce, it was just too painful,=E2=80=9D said Neusa Felipeto Machado, who lost=
+ her<span style=3D"box-sizing:border-box;font-weight:bolder">&nbsp;</span>h=
+usband. Most families, including Machado, ultimately accepted payouts from =
+the airlines involved in the collision. The association winnowed to just a =
+few members.<span class=3D"gmail_default" style=3D"font-size:small">&nbsp;<=
+/span></p></div><div class=3D"gmail-article-body gmail-grid-center gmail-gr=
+id-body" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;ma=
+rgin-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Hel=
+vetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-w=
+pds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" s=
+tyle=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">Only one person=
+, Machado said, never faltered.</p></div><div class=3D"gmail-article-body g=
+mail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:=
+640px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-=
+family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gm=
+ail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-=
+font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size=
+:1.25rem">=E2=80=9CRosane.=E2=80=9D</p></div><div class=3D"gmail-article-bo=
+dy gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-wi=
+dth:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);f=
+ont-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=
+=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles =
+gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;fon=
+t-size:1.25rem">At her home in Curitiba,<span style=3D"box-sizing:border-bo=
+x;font-weight:bolder">&nbsp;</span>Gutjahr erected a small shrine to Rolf. =
+She never took off her engagement ring. She<span style=3D"box-sizing:border=
+-box;font-weight:bolder">&nbsp;</span>raised their daughter, 4 at the time =
+of the accident, to understand the case as she did.</p></div><div class=3D"=
+gmail-article-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:b=
+order-box;max-width:640px;margin-left:auto;margin-right:auto;width:640px;co=
+lor:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:me=
+dium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-o=
+verrideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;=
+margin:0px;font-size:1.25rem">=E2=80=9CThis wasn=E2=80=99t an accident; thi=
+s was a crime,=E2=80=9D said<span style=3D"box-sizing:border-box;font-weigh=
+t:bolder">&nbsp;</span>Luiza Gutjahr, now<span style=3D"box-sizing:border-b=
+ox;font-weight:bolder">&nbsp;</span>21. =E2=80=9CMy father lost his life be=
+cause of the recklessness of two criminals.=E2=80=9D</p></div><div class=3D=
+"gmail-article-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:=
+border-box;max-width:640px;margin-left:auto;margin-right:auto;width:640px;c=
+olor:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:m=
+edium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-=
+overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box=
+;margin:0px;font-size:1.25rem">In interview after interview, year after yea=
+r, Gutjahr seethed in comments that seemed to evince as much thirst for rev=
+enge as for<span style=3D"box-sizing:border-box;font-weight:bolder">&nbsp;<=
+/span>justice.&nbsp;<a href=3D"https://www.camara.leg.br/noticias/374773-fa=
+miliares-de-vitimas-do-voo-1907-pedem-punicao-de-pilotos-americanos/" targe=
+t=3D"_blank" style=3D"box-sizing:border-box;color:rgb(42,42,42);text-decora=
+tion-color:rgb(42,42,42);border-bottom:0px">In 2012</a>: =E2=80=9CThey say =
+time diminishes pain; I tell you it does not.=E2=80=9D&nbsp;<a href=3D"http=
+s://noticias.uol.com.br/cotidiano/ultimas-noticias/2013/12/12/e-um-absurdo-=
+diz-viuva-de-uma-das-vitimas-do-acidente-da-gol-sobre-reducao-de-penas.htm"=
+ target=3D"_blank" style=3D"box-sizing:border-box;color:rgb(42,42,42);text-=
+decoration-color:rgb(42,42,42);border-bottom:0px">In 2013</a>: =E2=80=9CThe=
+y have to get the maximum penalty.=E2=80=9D&nbsp;<a href=3D"https://www.rdn=
+ews.com.br/cidades/conteudos/150235" target=3D"_blank" style=3D"box-sizing:=
+border-box;color:rgb(42,42,42);text-decoration-color:rgb(42,42,42);border-b=
+ottom:0px">In 2021</a>: =E2=80=9CI want to take their home, I want to take =
+their car, I want to take everything,=E2=80=9D she said. =E2=80=9CIt won=E2=
+=80=99t bring back my husband, but they are living normally.=E2=80=9D</p></=
+div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" sty=
+le=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right:a=
+uto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-=
+serif;font-size:medium"><p style=3D"box-sizing:border-box;margin:0px"><span=
+ class=3D"gmail-wpds-c-sFUaP gmail-wpds-c-sFUaP-jtHNGr-variant-interstitial=
+ gmail-wpds-c-sFUaP-iPJLV-css gmail-hide-for-print" style=3D"box-sizing:bor=
+der-box;margin:0px;display:block"><a href=3D"https://www.washingtonpost.com=
+/world/2023/09/06/ufo-brazil-documents-classified/?itid=3Dlk_interstitial_m=
+anual_68" style=3D"box-sizing:border-box;color:rgb(42,42,42);text-decoratio=
+n-color:rgb(42,42,42);font-style:italic;border-bottom:0px">In U.S., most UF=
+O documentation is classified. Not so in other countries.</a></span></p></d=
+iv><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" styl=
+e=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right:au=
+to;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-s=
+erif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-=
+iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-s=
+izing:border-box;margin:0px;font-size:1.25rem">Attorney Daniel Roller, who =
+for years represented Gutjahr in her quest, said he has tried at several mo=
+ments to counsel her that what she wanted was not possible. The magnitude o=
+f penalty was unlikely to ever match the magnitude of her loss. Perhaps, he=
+ once<span style=3D"box-sizing:border-box;font-weight:bolder">&nbsp;</span>=
+told her gently, it would be best to let it go. Focus her life elsewhere.</=
+p></div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body"=
+ style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-rig=
+ht:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,s=
+ans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cY=
+dRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"=
+box-sizing:border-box;margin:0px;font-size:1.25rem">She would hear none of =
+it.</p></div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-=
+body" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margi=
+n-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvet=
+ica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds=
+-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" styl=
+e=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">=E2=80=9CI=E2=80=
+=99ve never seen anyone so determined,=E2=80=9D he said.<span class=3D"gmai=
+l_default" style=3D"font-size:small">&nbsp;</span></p></div><div class=3D"g=
+mail-article-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:bo=
+rder-box;max-width:640px;margin-left:auto;margin-right:auto;width:640px;col=
+or:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:med=
+ium"><h3 class=3D"gmail-pb-sm gmail-pt-md" id=3D"gmail-JGJRPHP65REXFHI3A27U=
+4ZQMWY" style=3D"box-sizing:border-box;margin:0px;padding-bottom:16px;paddi=
+ng-top:24px;font-size:2rem;font-family:Postoni,BodoniSvtyTwoITCTT-Book,geor=
+gia,serif;line-height:1.25"><div style=3D"box-sizing:border-box">A long and=
+ lonely quest</div></h3></div><div class=3D"gmail-article-body gmail-grid-c=
+enter gmail-grid-body" style=3D"box-sizing:border-box;max-width:640px;margi=
+n-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-family:Fran=
+klin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-=
+cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" =
+dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">B=
+ut as she sat in an expansive office at the Brazilian justice ministry, her=
+ determination was put to the test. The news was not good.</p></div><div cl=
+ass=3D"gmail-article-body gmail-grid-center gmail-grid-body" style=3D"box-s=
+izing:border-box;max-width:640px;margin-left:auto;margin-right:auto;width:6=
+40px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-=
+size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css =
+gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:bord=
+er-box;margin:0px;font-size:1.25rem">Augusto Botelho, Brazil=E2=80=99s nati=
+onal secretary of justice, told her the government supported her. But that =
+wouldn=E2=80=99t be enough to bring the pilots to justice. That would be up=
+ to the United States, which was unlikely to enforce a Brazilian sentence i=
+n its territory.</p></div><div class=3D"gmail-article-body gmail-grid-cente=
+r gmail-grid-body" style=3D"box-sizing:border-box;max-width:640px;margin-le=
+ft:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin=
+,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdR=
+xM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=
+=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">Bote=
+lho<span style=3D"box-sizing:border-box;font-weight:bolder">&nbsp;</span>ap=
+ologized that he couldn=E2=80=99t do more, wished Gutjahr the best and led =
+her out of the room.</p></div><div class=3D"gmail-article-body gmail-grid-c=
+enter gmail-grid-body" style=3D"box-sizing:border-box;max-width:640px;margi=
+n-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-family:Fran=
+klin,Arial,Helvetica,sans-serif;font-size:medium"><p style=3D"box-sizing:bo=
+rder-box;margin:0px"><span class=3D"gmail-wpds-c-sFUaP gmail-wpds-c-sFUaP-j=
+tHNGr-variant-interstitial gmail-wpds-c-sFUaP-iPJLV-css gmail-hide-for-prin=
+t" style=3D"box-sizing:border-box;margin:0px;display:block"><br></span></p>=
+</div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" s=
+tyle=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right=
+:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,san=
+s-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdR=
+xM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"bo=
+x-sizing:border-box;margin:0px;font-size:1.25rem">She was alone again. Thes=
+e were the moments when she most wished Rolf were still alive. There had be=
+en such joy to him. He would have known what to say to make her feel better=
+.</p></div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-bo=
+dy" style=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-=
+right:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetic=
+a,sans-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c=
+-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=
+=3D"box-sizing:border-box;margin:0px;font-size:1.25rem">She stepped outside=
+ and lit another cigarette.</p></div><div class=3D"gmail-article-body gmail=
+-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:640p=
+x;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-fami=
+ly:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail-=
+wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font=
+-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:1.2=
+5rem">=E2=80=9CThere were 154 deaths,=E2=80=9D she said. =E2=80=9CSuch a co=
+mplete lack of respect by the American justice system.=E2=80=9D</p></div><d=
+iv class=3D"gmail-article-body gmail-grid-center gmail-grid-body" style=3D"=
+box-sizing:border-box;max-width:640px;margin-left:auto;margin-right:auto;wi=
+dth:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;=
+font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV=
+-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing=
+:border-box;margin:0px;font-size:1.25rem">She perceived discrimination.</p>=
+</div><div class=3D"gmail-article-body gmail-grid-center gmail-grid-body" s=
+tyle=3D"box-sizing:border-box;max-width:640px;margin-left:auto;margin-right=
+:auto;width:640px;color:rgb(0,0,0);font-family:Franklin,Arial,Helvetica,san=
+s-serif;font-size:medium"><p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdR=
+xM-iPJLV-css gmail-overrideStyles gmail-font-copy" dir=3D"null" style=3D"bo=
+x-sizing:border-box;margin:0px;font-size:1.25rem">=E2=80=9CIs it because we=
+=E2=80=99re from the Third World?=E2=80=9D she said. =E2=80=9CBecause we=E2=
+=80=99re not so strong like the Americans? But we have the same bodies, sam=
+e pains, same everything.=E2=80=9D</p></div><div class=3D"gmail-article-bod=
+y gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-box;max-wid=
+th:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);fo=
+nt-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D=
+"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gma=
+il-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-s=
+ize:1.25rem">But the<span style=3D"box-sizing:border-box;font-weight:bolder=
+">&nbsp;</span>moment, when she allowed doubt and defeat to weaken her reso=
+lve, quickly passed. She stubbed out the cigarette and was on to next steps=
+. If the federal judge presiding over the case issued a fresh injunction or=
+dering the sentence to be served in the United States, the government would=
+ have fresh motive to pressure the Americans.</p></div><div class=3D"gmail-=
+article-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-=
+box;max-width:640px;margin-left:auto;margin-right:auto;width:640px;color:rg=
+b(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium">=
+<p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrid=
+eStyles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin=
+:0px;font-size:1.25rem">=E2=80=9CI will write the judge,=E2=80=9D she said.=
+ =E2=80=9CI will ask for a meeting.=E2=80=9D</p></div><div class=3D"gmail-a=
+rticle-body gmail-grid-center gmail-grid-body" style=3D"box-sizing:border-b=
+ox;max-width:640px;margin-left:auto;margin-right:auto;width:640px;color:rgb=
+(0,0,0);font-family:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><=
+p class=3D"gmail-wpds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-override=
+Styles gmail-font-copy" dir=3D"null" style=3D"box-sizing:border-box;margin:=
+0px;font-size:1.25rem">She wasn=E2=80=99t ready to give up her life=E2=80=
+=99s purpose. Not yet.</p></div><div class=3D"gmail-article-body gmail-grid=
+-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:640px;mar=
+gin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-family:Fr=
+anklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail-wpds-=
+c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-copy=
+" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:1.25rem"=
+>=E2=80=9COne hundred fifty-four deaths,=E2=80=9D she repeated. =E2=80=9CI =
+will not forget.=E2=80=9D</p></div><div class=3D"gmail-article-body gmail-g=
+rid-center gmail-grid-body" style=3D"box-sizing:border-box;max-width:640px;=
+margin-left:auto;margin-right:auto;width:640px;color:rgb(0,0,0);font-family=
+:Franklin,Arial,Helvetica,sans-serif;font-size:medium"><p class=3D"gmail-wp=
+ds-c-cYdRxM gmail-wpds-c-cYdRxM-iPJLV-css gmail-overrideStyles gmail-font-c=
+opy" dir=3D"null" style=3D"box-sizing:border-box;margin:0px;font-size:1.25r=
+em"><i style=3D"box-sizing:border-box">Marina Dias in Bras=C3=ADlia contrib=
+uted to this report.</i></p></div></div><div><font face=3D"comic sans ms, s=
+ans-serif"><br></font></div><div><br></div><div><font face=3D"comic sans ms=
+, sans-serif">Warm Regards, Nancy</font></div><div><br></div><div>Prof. Nan=
+cy Leveson<br></div><div>Jerome C. Hunsaker Professor in Aeronautics and As=
+tronautics</div><div>Engineering Systems Laboratory</div><div>MIT, Room 33-=
+412<br>77 Massachusetts Ave.<br>Cambridge, MA 02142<br><br>Telephone: 617-2=
+58-0505 (MIT)</div><div>Mobile: 617-460-5749</div><div><br>Email: <a href=
+=3D"mailto:leveson@mit.edu" target=3D"_blank">leveson@mit.edu</a><br>URL: <=
+a href=3D"http://sunnyday.mit.edu" target=3D"_blank">http://sunnyday.mit.ed=
+u<br></a><br></div></div></div></div></div></div></div></div></div></div></=
+div></div>
+
+--0000000000009c0c2b06086616a5--

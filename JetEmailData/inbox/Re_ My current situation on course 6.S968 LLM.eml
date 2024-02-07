@@ -1,0 +1,386 @@
+Received: from DM5PR0101MB2857.prod.exchangelabs.com (2603:10b6:4:2b::10) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 12 Apr 2023 15:48:57
+ +0000
+Received: from DM6PR01CA0002.prod.exchangelabs.com (2603:10b6:5:296::7) by
+ DM5PR0101MB2857.prod.exchangelabs.com (2603:10b6:4:2b::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.25; Wed, 12 Apr 2023 15:48:56 +0000
+Received: from DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:296:cafe::10) by DM6PR01CA0002.outlook.office365.com
+ (2603:10b6:5:296::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6277.38 via Frontend
+ Transport; Wed, 12 Apr 2023 15:48:56 +0000
+Authentication-Results: spf=pass (sender IP is 18.7.71.112)
+ smtp.mailfrom=mit.edu; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.7.71.112 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.7.71.112; helo=mail.exchange.mit.edu; pr=C
+Received: from mail.exchange.mit.edu (18.7.71.112) by
+ DM6NAM11FT039.mail.protection.outlook.com (10.13.172.83) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6298.31 via Frontend Transport; Wed, 12 Apr 2023 15:48:56 +0000
+Received: from w92expo27.exchange.mit.edu (18.7.74.33) by
+ w92exhyb7.exchange.mit.edu (18.7.71.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 12 Apr 2023 11:48:52 -0400
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ w92expo27.exchange.mit.edu (18.7.74.33) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 12 Apr 2023 11:48:52 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
+ oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Wed, 12 Apr 2023 11:48:52 -0400
+Received: from MW4PR03CA0192.namprd03.prod.outlook.com (2603:10b6:303:b8::17)
+ by SN6PR01MB4352.prod.exchangelabs.com (2603:10b6:805:e6::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.18; Wed, 12 Apr 2023 15:48:50 +0000
+Received: from CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b8:cafe::52) by MW4PR03CA0192.outlook.office365.com
+ (2603:10b6:303:b8::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.30 via Frontend
+ Transport; Wed, 12 Apr 2023 15:48:50 +0000
+Authentication-Results-Original: spf=pass (sender IP is 18.9.28.11)
+ smtp.mailfrom=mit.edu; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.9.28.11 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.9.28.11; helo=outgoing.mit.edu; pr=C
+Received: from outgoing.mit.edu (18.9.28.11) by
+ CO1NAM11FT040.mail.protection.outlook.com (10.13.174.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.30 via Frontend Transport; Wed, 12 Apr 2023 15:48:49 +0000
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+	(authenticated bits=0)
+        (User authenticated as yoonhkim@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 33CFmlpJ024356
+	(version=TLSv1/SSLv3 cipher=AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <jiannan@mit.edu>; Wed, 12 Apr 2023 11:48:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+	t=1681314528; bh=7stOAJsbiEJXDIxhTAgMhBvA09GMoctIf5t7t8f9uUc=;
+	h=References:In-Reply-To:From:Date:Subject:To;
+	b=PLuAgLzrB7rRyGSGBz34sWCXJRO0bG1RrnzfssZT7YgNzpOotcJvuTSproXZziDH4
+	 jHzxaXHmdxUSxEEU/gAIBKs41SK/Edy9PBJ2aCJ7o6sRZJi8+BzAxYC1zAsxOdq12R
+	 xZ86z66TV7eytJxK2L8ApRklgBIVuHBejSaDc5p2zE2ZJNyxr0W1GX6hCxnC9sGmyz
+	 bXwSCMOLTTUMkYg+dDpnXMoDBtTYI1Jbju/e2oUDXHB/gabl7CjX0IdpOK+2s4z26U
+	 BxEhDNTTcOdyVHxdSCsxEkwY4mHq5W1kwSqzOF20hn6CMxqaGtKFYrPJHGNVZOg7nT
+	 PKEq/xbef/zSw==
+Received: by mail-oi1-f170.google.com with SMTP id e9so7956580oig.7
+        for <jiannan@mit.edu>; Wed, 12 Apr 2023 08:48:48 -0700 (PDT)
+X-Gm-Message-State: AAQBX9feBNODWWSbxRAA3msi9Psyhftt6C/ctjuFi7cE0mi/4G6W3rZ+
+	4zdQxcBEUTpfNwzjhbf/Vo5oPgpF1a0D+vVrecK+pw==
+X-Google-Smtp-Source: AKy350aDOsguGUqo2Q00lfjJqZ5OIAuranZqf/CCIQjWuVBiFZ8rjg6L7tejpdw3mnUgKQI2VEvvngt8ryZ3ENwu7Zg=
+X-Received: by 2002:aca:221a:0:b0:384:d02d:5f07 with SMTP id
+ b26-20020aca221a000000b00384d02d5f07mr4874148oic.10.1681314527148; Wed, 12
+ Apr 2023 08:48:47 -0700 (PDT)
+References: <7CBF876D-0127-4534-80F9-DC9839AA899E@mit.edu>
+ <CAJ37bJV+1ncSVeKjiMM7-Q1dgmRzKbN5r3we3Pp4_QcNL3HHrg@mail.gmail.com>
+ <CAJ37bJW2vLygSLs7Tep1kXik-H+CfnUGG5gEiAY4ge39hsshNQ@mail.gmail.com>
+ <62D7FC37-2710-4EAF-B920-083E964DF551@mit.edu>
+ <CAJ37bJV0CF2rKigT5YNBXKXG26A8G2YaecYK2nciC7BropV7hQ@mail.gmail.com>
+In-Reply-To: <CAJ37bJV0CF2rKigT5YNBXKXG26A8G2YaecYK2nciC7BropV7hQ@mail.gmail.com>
+From: Yoon Kim <yoonkim@mit.edu>
+Date: Wed, 12 Apr 2023 11:48:36 -0400
+X-Gmail-Original-Message-ID: <CAJ37bJVNg-S2HDz2e-dMT+r6+fbzkQeDrEo91GsWbvphr7bUrA@mail.gmail.com>
+Message-ID: <CAJ37bJVNg-S2HDz2e-dMT+r6+fbzkQeDrEo91GsWbvphr7bUrA@mail.gmail.com>
+Subject: Re: My current situation on course 6.S968 LLM
+To: Jiannan Cao <jiannan@mit.edu>
+Content-Type: multipart/alternative; boundary="00000000000025a2e505f9258bb5"
+Return-Path: yoonkim@mit.edu
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CO1NAM11FT040:EE_|SN6PR01MB4352:EE_|DM6NAM11FT039:EE_|DM5PR0101MB2857:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3887b8ee-93f7-4b54-2d0f-08db3b6d6cce
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?6iol47Eb3MLvUgLrb+uSY0vaURRnPgV1K0HdX7n9BB9BR2wFJXdXPLiam9bP?=
+ =?us-ascii?Q?aVKwRgKxIJUgpyYO/CCvFVE9OWdizcGN/BOBpJ1ynqVjUheDbn05nOcddoUo?=
+ =?us-ascii?Q?xnaQA/yNeuUnoZ9x6DKRD8//NJmtJbJiNwkeXl39KMqqYBug8GzzxLw5YlVD?=
+ =?us-ascii?Q?RtsGM2EaN2DGqDdp1q4D0Pf6WQ/no3/l+vZBZ3NJ+1UUYtxhKpODj8o+hpI/?=
+ =?us-ascii?Q?FwPXXtbL5EY7Nw+lH9Ily7oZbNHWpA1pbWPXUi6u7Fa9F/ih3kMOwDa8FwhY?=
+ =?us-ascii?Q?RI25ricOJiGjXddnytbk05O2P5zxAHhmuiE2aYxgDsA5qaJM07+1PTBSs0Ga?=
+ =?us-ascii?Q?8o9XRGbetQ81ItLAW2S32BSmzuKiGeykynySmBPmAt8FQ0f4Ua2wXZYipzlA?=
+ =?us-ascii?Q?aZNAZ4mqMwHEpRNZV5gbggZw4N9J3fYIm+/g6DFNbOfOPV9YcAP3jlnnUVxh?=
+ =?us-ascii?Q?gUEu6sBnWaNr3sMAk5KoJnndd9cEFk2wDKsgZ/8HLnhx13vB4gYpLH5B1Pfq?=
+ =?us-ascii?Q?8r2h/pCGoRyl4N6e6cgIZIkDg61u3v+AgA9qcP1fHksUGzvzLQZXoOqjH1lf?=
+ =?us-ascii?Q?lLDZ9s/6kDzNp4sIvN16Iyo4Ctzr6h22v9ne6fY88osFF02RoeVB8PX+L9oB?=
+ =?us-ascii?Q?q5w+GyoxGtT4kXoAJCyL8gCR7daYvIzvF9O6uslzdwF7aQ8an6uaxjV2bscZ?=
+ =?us-ascii?Q?02lhS3BzuuZ85ov298+xgn6kV3OppLEVkC3jlGAEwjtF1zPUCqUnhhbgMmAR?=
+ =?us-ascii?Q?d6cOnarlq1Ka97Vs2yZ/IrsnAxS0cI/+ot29OcLfC/+l/KLRgHdm2XJVq9+S?=
+ =?us-ascii?Q?AboY/05jpnaXe1Wo0N25XmBm/wzmVWW9ShRHUOfYo8/a+tyJl53foV3quVM1?=
+ =?us-ascii?Q?cRKAhwCJ3CSy0xONsOMNaoHBYSuUeUWoILyvKZG78NpjphGP7A3XqhWkBTcY?=
+ =?us-ascii?Q?OBqedjETPCFld6dbZa2Dv5V2A8uGelnCmtCu9uUSYhUN6yQ2dXkkufQCfv9C?=
+ =?us-ascii?Q?borLJPfJ/+loRAUJTV5FlPNcUy3IH75pY64vO8ZMtb+LtBnk82kxF7ggWDSW?=
+ =?us-ascii?Q?dgCAYVs3McN358ebHhQ5JOphGHoPJqfaJj5x4rtzbas5jYa4NtBLnqM5ySqn?=
+ =?us-ascii?Q?SoI8r5RF7FU3uq39GosLA20QUneX754W9w=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:18.9.28.11;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:outgoing.mit.edu;PTR:outgoing-auth-1.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR01MB4352
+X-OrganizationHeadersPreserved: SN6PR01MB4352.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb3.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb3.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo27.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 12 Apr 2023 15:48:56.5982
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 3887b8ee-93f7-4b54-2d0f-08db3b6d6cce
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted:
+ DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 60fa7d02-801f-473f-5ef7-08db3b6d68db
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.112;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:w92exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2023 15:48:56.3951
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3887b8ee-93f7-4b54-2d0f-08db3b6d6cce
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR0101MB2857
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:00.9209600
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6298.030
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dDE0dDFrZ3hiRlZUOXpjdmx6eTZmYjgyMFp5UGgzY1FLSmtGUjZYTDU3eTFM?=
+ =?utf-8?B?Q3g5b2tvaVhwbTdySCtwc0lQQmhoZUJhYkVXZFhHY1JCbVhLU3F6dE5SUGwy?=
+ =?utf-8?B?cWlkelVaM3pwM0FtYlFxRWdLMFNSRGpoN2E0T0ZjU3JMdlBNSTY1Y2FzcUVv?=
+ =?utf-8?B?aEl1K3NhRStsMG43ZndmVmoxQlQwMHMzZjFXZGE5dDZRMjhCZ1E1SktuK202?=
+ =?utf-8?B?MU5acm9ucFYxekRLeXY2R0lHbVdPNnoxL2Mwd1NJQi9tTzA5UUgxMVc3a09a?=
+ =?utf-8?B?V1B1ZGQxV3lPVWdPbWJ5bmVtRjE3MEhkWXY4RFg1WlB4QWpZcE1IVUsxQ3FK?=
+ =?utf-8?B?KytHbFRESTlBVS9kSXlIMHRZZjN6RFpZVU1QRU04d1NnNVdmSDZTcjQrWVRk?=
+ =?utf-8?B?MzFOa3pkNjlxbDRvU1BnNUh4eEpwUnZFM1ZZeHZUYzhoUU9IbGFZRTl3WS9K?=
+ =?utf-8?B?bkE2VU8yamtvdWhDR29zdTB3RGZUQTY4RENmUlhIMkZiN2tMTUlwT0NXTmlV?=
+ =?utf-8?B?MVNLNXBVY0pkMm9kTkFjWDNiVFNIdm5nV1c2NzRRMmd3ZHV2UGl3WVZpSUFE?=
+ =?utf-8?B?S1FseHRlVHZBbEd1Sld1VHFZcElxQ2tZSGR5Uy9OQnRoak9yZnZIblVGSDFk?=
+ =?utf-8?B?YkJYajBoVVRkaGREc3VBQW1kc2lVRUR5THU2U0FKcjkybFNDVnVheVdaU0pK?=
+ =?utf-8?B?cm9NOWpHa0dJY0EydTYrVnZpdUpVTnI4MUJTMlVnNGIyeWZONjJNSHBVNFFG?=
+ =?utf-8?B?N2c1S3ZuOHlYdnhrUUdCMDYyRkJtWEhCNE1oVGdXbzZ2cmlCc3Z3TUJSMmJa?=
+ =?utf-8?B?TmxWL04xMFp3bjJudEIvNEtwMGx3UVpCSWxRWGRqS2RoNm44VkkxazhhWVg3?=
+ =?utf-8?B?WUlqOUlMNVF3VWNYbThMNFdkSW1LM09QaDBFNW9PM1dwekdsaW82cVBienJl?=
+ =?utf-8?B?VjlHOFd1VXF0WEpCWnVlQ2wyTitmK0VEaml5V09KY21iaGhIbHdvS283Y3Vr?=
+ =?utf-8?B?OHVmKyt1UDV0STV2SXFKdG5XVTNtWkJYMTdpTGdtTGFvR3UxbEpONjVRcTdx?=
+ =?utf-8?B?NXhBZ0d0TFI4WG1jWTZzVmt1eDJjSzFhNnZ4cktrcWp0WWt6cml2MVh3b1Nv?=
+ =?utf-8?B?SHJhdEpWYU5hd1BUUkxLM3Qvbk4zTkY5cVl6aHFCVldNdHVXTldydnZyR3JJ?=
+ =?utf-8?B?RFJ0MGMrdEpqUmJmeVZVMUZsVXJsNGd5eWpqQ1p5cG1kbFJQOERWWDFKYXRF?=
+ =?utf-8?B?SUJjQXduekUxa20raUl1Zm5ONksvTmFYVEpFbHJsYnBqbnVQS01RS2lvQ3lL?=
+ =?utf-8?B?cURjMnhwL0FyUkczdTlKUkNBREJ6enY3dGdVZkZuWGhDZ2VKNmR1RXNLdE44?=
+ =?utf-8?B?WlBrMmVrMnBVUElDcEN4NjVPQzRZdThaYXBIalZZRGxtQUpIKzU3czFJYTUx?=
+ =?utf-8?B?SjhFcUUxdklmeUVZU2J4S0M1emlTOHk2cjJ5THV6RmljbEFweVN2YTBnZEhp?=
+ =?utf-8?B?bXlKOXB5ZDhBZzJETHVvc3U4QjN4WjdXTGEyZzkvMGtJUFlwY29WMzVUMDdS?=
+ =?utf-8?B?U1Z4bXVuaFQwZUYvME10TW5YWEZsYWMxb21TRGRtWjJLWjVSTy85Z3N6U2JG?=
+ =?utf-8?B?dnpKaVJhc3ZUQVZsR2FuOFJZRzZ4RnUyMkFOc2Z2aUZhK3Bta0ZoZEFpbFpM?=
+ =?utf-8?B?TWc0WkQ1TTh3a3lyS3ArcVhZNGlwSkUvd0NqZmtHRG5PN2hIdFF0QmM4SUw2?=
+ =?utf-8?B?Q2hZZjNYd2hFWisxeTFvK0dYd1pRZW4vQmY5N25oMkdzai9nVWJaS2RFOUl3?=
+ =?utf-8?B?cmhia1hUaG8rSDBpYXVLTTlKSmpPQUhjcS9sd2JSejFyaXdyRzdhWC9JdWRG?=
+ =?utf-8?Q?8m1eLv0yqOYZY?=
+MIME-Version: 1.0
+
+--00000000000025a2e505f9258bb5
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+We are actually running a little late so will likely get started around
+12:30!
+
+On Wed, Apr 12, 2023, 10:40 AM Yoon Kim <yoonkim@mit.edu> wrote:
+
+> Ok, please prepare to join around 12:20 then.
+>
+> Best,
+> Yoon
+>
+> On Wed, Apr 12, 2023 at 10:33=E2=80=AFAM Jiannan Cao <jiannan@mit.edu> wr=
+ote:
+>
+>> Hi Yoon,
+>>
+>> I could prepare more enough if you could allow me finish my part at 4th
+>> one in today's lecture.
+>> Currently I need more time to prepare. Could you arrange me to the 4th
+>> one?
+>>
+>> Thanks!
+>> Jiannan
+>>
+>> 2023=E5=B9=B44=E6=9C=8812=E6=97=A5 06:45=EF=BC=8CYoon Kim <yoonkim@mit.e=
+du> =E5=86=99=E9=81=93=EF=BC=9A
+>>
+>> Hi Jiannan, let's use the following for your presentation:
+>> https://mit.zoom.us/j/7369805889
+>> Please join around 11am (EST).
+>>
+>> Best,
+>> Yoon
+>>
+>> On Fri, Mar 31, 2023 at 9:59=E2=80=AFAM Yoon Kim <yoonkim@mit.edu> wrote=
+:
+>>
+>>> Hi Jiannan, very sorry to hear about your family. Yes, we can have you
+>>> present your paper remotely. I will be in touch about logistics closer =
+to
+>>> the date.
+>>>
+>>> Best,
+>>> Yoon
+>>>
+>>> On Fri, Mar 31, 2023 at 9:34=E2=80=AFAM Jiannan Cao <jiannan@mit.edu> w=
+rote:
+>>>
+>>>> Hi Prof. Kim,
+>>>>
+>>>> I returned to Beijing on this Monday, since one of my family members
+>>>> just encountered a heart attack issue on Sunday evening and finished a
+>>>> successful operation this Monday.
+>>>>
+>>>> (By the way, I transferred my trip by Incheon Airport; it is such a
+>>>> modern airport, leaving me with a deep impression. I want to travel to
+>>>> Seoul in the future:)
+>>>>
+>>>> Since I need time accompany my family, I can not participate in the
+>>>> course in person in the second half of the term, including the paper
+>>>> presentation.
+>>>> I could continue working with my teammates to finish our team project.
+>>>>
+>>>> Could I present the paper A Watermark for Large Language Models (4/12)
+>>>> remotely?
+>>>> Should I adjust my status for this course? (e.g., adjust to listener
+>>>> status)
+>>>>
+>>>> Best,
+>>>> Jiannan
+>>>
+>>>
+>>
+
+--00000000000025a2e505f9258bb5
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"auto">We are actually running a little late so will likely get st=
+arted around 12:30!</div><br><div class=3D"gmail_quote"><div dir=3D"ltr" cl=
+ass=3D"gmail_attr">On Wed, Apr 12, 2023, 10:40 AM Yoon Kim &lt;<a href=3D"m=
+ailto:yoonkim@mit.edu">yoonkim@mit.edu</a>&gt; wrote:<br></div><blockquote =
+class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid=
+;padding-left:1ex"><div dir=3D"ltr">Ok, please prepare to join around 12:20=
+ then.<div><br></div><div>Best,</div><div>Yoon</div></div><br><div class=3D=
+"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Wed, Apr 12, 2023 at=
+ 10:33=E2=80=AFAM Jiannan Cao &lt;<a href=3D"mailto:jiannan@mit.edu" target=
+=3D"_blank" rel=3D"noreferrer">jiannan@mit.edu</a>&gt; wrote:<br></div><blo=
+ckquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left=
+:1px solid rgb(204,204,204);padding-left:1ex">
+
+
+
+<div>
+Hi Yoon,
+<div><br>
+</div>
+<div>I could prepare more enough if you could allow me finish my part at 4t=
+h one in today's lecture.</div>
+<div>Currently I need more time to prepare. Could you arrange me to the 4th=
+ one?</div>
+<div><br>
+</div>
+<div>Thanks!</div>
+<div>Jiannan<br>
+<div>
+<div><br>
+<blockquote type=3D"cite">
+<div>2023=E5=B9=B44=E6=9C=8812=E6=97=A5 06:45=EF=BC=8CYoon Kim &lt;<a href=
+=3D"mailto:yoonkim@mit.edu" target=3D"_blank" rel=3D"noreferrer">yoonkim@mi=
+t.edu</a>&gt; =E5=86=99=E9=81=93=EF=BC=9A</div>
+<br>
+<div>
+<div dir=3D"ltr">Hi Jiannan, let's use the following for your presentation:=
+&nbsp;<a rel=3D"noreferrer noopener noreferrer" href=3D"https://mit.zoom.us=
+/j/7369805889" style=3D"color:inherit;outline:none;font-family:Roboto,Arial=
+,sans-serif;font-size:14px;letter-spacing:0.2px;white-space:nowrap" target=
+=3D"_blank">https://mit.zoom.us/j/7369805889</a>
+<div>Please join around 11am (EST).<br>
+<div><br>
+</div>
+<div>Best,</div>
+<div>Yoon</div>
+</div>
+</div>
+<br>
+<div class=3D"gmail_quote">
+<div dir=3D"ltr" class=3D"gmail_attr">On Fri, Mar 31, 2023 at 9:59=E2=80=AF=
+AM Yoon Kim &lt;<a href=3D"mailto:yoonkim@mit.edu" target=3D"_blank" rel=3D=
+"noreferrer">yoonkim@mit.edu</a>&gt; wrote:<br>
+</div>
+<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
+left:1px solid rgb(204,204,204);padding-left:1ex">
+<div dir=3D"ltr">Hi Jiannan, very sorry to hear about your family. Yes, we =
+can have you present your paper remotely. I will be in touch about logistic=
+s closer&nbsp;to the date.
+<div><br>
+</div>
+<div>Best,</div>
+<div>Yoon</div>
+</div>
+<br>
+<div class=3D"gmail_quote">
+<div dir=3D"ltr" class=3D"gmail_attr">On Fri, Mar 31, 2023 at 9:34=E2=80=AF=
+AM Jiannan Cao &lt;<a href=3D"mailto:jiannan@mit.edu" target=3D"_blank" rel=
+=3D"noreferrer">jiannan@mit.edu</a>&gt; wrote:<br>
+</div>
+<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
+left:1px solid rgb(204,204,204);padding-left:1ex">
+Hi Prof. Kim,<br>
+<br>
+I returned to Beijing on this Monday, since one of my family members just e=
+ncountered a heart attack issue on Sunday evening and finished a successful=
+ operation this Monday.<br>
+<br>
+(By the way, I transferred my trip by Incheon Airport; it is such a modern =
+airport, leaving me with a deep impression. I want to travel to Seoul in th=
+e future:)<br>
+<br>
+Since I need time accompany my family, I can not participate in the course =
+in person in the second half of the term, including the paper presentation.=
+<br>
+I could continue working with my teammates to finish our team project. <br>
+<br>
+Could I present the paper A Watermark for Large Language Models (4/12) remo=
+tely? <br>
+Should I adjust my status for this course? (e.g., adjust to listener status=
+)<br>
+<br>
+Best,<br>
+Jiannan</blockquote>
+</div>
+</blockquote>
+</div>
+</div>
+</blockquote>
+</div>
+<br>
+</div>
+</div>
+</div>
+
+</blockquote></div>
+</blockquote></div>
+
+--00000000000025a2e505f9258bb5--

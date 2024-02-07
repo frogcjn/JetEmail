@@ -1,0 +1,2835 @@
+Received: from BYAPR01MB5558.prod.exchangelabs.com (::1) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 4 Apr 2023 07:20:41
+ +0000
+Received: from BN0PR07CA0029.namprd07.prod.outlook.com (2603:10b6:408:141::11)
+ by BYAPR01MB5558.prod.exchangelabs.com (2603:10b6:a03:123::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6277.28; Tue, 4 Apr 2023 07:20:36 +0000
+Received: from BN8NAM11FT112.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:141:cafe::82) by BN0PR07CA0029.outlook.office365.com
+ (2603:10b6:408:141::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.20 via Frontend
+ Transport; Tue, 4 Apr 2023 07:20:36 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.60)
+ smtp.mailfrom=hotmail.com; dkim=pass (signature was verified)
+ header.d=hotmail.com;dmarc=pass action=none header.from=hotmail.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ hotmail.com discourages use of 18.9.1.60 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.60) by
+ BN8NAM11FT112.mail.protection.outlook.com (10.13.176.210) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6277.16 via Frontend Transport; Tue, 4 Apr 2023 07:20:35 +0000
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 4 Apr 2023 03:20:34 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
+ by oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Tue, 4 Apr 2023 03:20:34 -0400
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=d4Q8ad9EuAmBBVdGw5tC8T460gNS03yXxYlk4slU4gr8vTzpa31t/27ZcTbMjhKQAk0yTyEIVTWXKnlqQbP0E5E6VqoXNpQXFuwZwf2sUD/Z8ofCq4KCrBw8KlHgyVFkBOMtTVQETGfIb01Icpv6/i/38emwHsflK9vSGSUoAFZJ+MkbuhB7y8tzzrFNEKpKf1ztaOXOpJ2pskEB+e89NQ2j/LIMRo6KOSDpenGOMhERrTQSRff8YPUzQQHFE9zqCQ7C3cuORCkN2PXbbxtigDwHksWtVYmoa9zxxZP2cXkLl+xhaBlvjdiez3q/UpYE3pzIkuQcPD11D8zMXpWPBg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BTP+r/xvYhr29nfFljwuz1U9y0Xwee8gYbyxyYChZG8=;
+ b=dUV/cCE7WRo+l+rzcqfhelaI+Yky3yjIOxCoTcJXMZ005814/wXCo1HDOghAAA7i3uBafT4uk4TE5lmyOul5it0jF3FEHEaOCMcTAY19lcZtCapJZ7ojCnidstrc+4QYhOrwDcLhO11MhnrtTJSnmRHSTnXWVmHT4YQ/MUwVCQJiWAlH9Nc552kaxUtHX/JILIHX9lQcRa9Ol5aE+xNN+WMJBcL2nhCBbg3iJZVXoAk5NcNPPXiJKLKEf+3iiOF9WC0Ip4TyPDRcx0S4LpIOJMG8WW4dE8BHyjPO1vHJSjBTKnfs+hR2iiFeaPpFa75IT6uaniI+COwoKN2x59n10g==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 40.92.21.102) smtp.rcpttodomain=mit.edu smtp.mailfrom=hotmail.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=hotmail.com; dkim=pass
+ (signature was verified) header.d=hotmail.com; arc=pass (0 oda=0 ltdi=1)
+Received: from DM6PR02CA0160.namprd02.prod.outlook.com (2603:10b6:5:332::27)
+ by BN0PR01MB6845.prod.exchangelabs.com (2603:10b6:408:14a::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6277.28; Tue, 4 Apr 2023 07:20:13 +0000
+Received: from DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:332:cafe::48) by DM6PR02CA0160.outlook.office365.com
+ (2603:10b6:5:332::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.22 via Frontend
+ Transport; Tue, 4 Apr 2023 07:20:13 +0000
+Authentication-Results-Original: spf=pass (sender IP is 40.92.21.102)
+ smtp.mailfrom=hotmail.com; dkim=pass (signature was verified)
+ header.d=hotmail.com;dmarc=pass action=none
+ header.from=hotmail.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of hotmail.com designates
+ 40.92.21.102 as permitted sender) receiver=protection.outlook.com;
+ client-ip=40.92.21.102; helo=NAM12-BN8-obe.outbound.protection.outlook.com;
+ pr=C
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (40.92.21.102) by
+ DM6NAM11FT005.mail.protection.outlook.com (10.13.172.238) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6277.16 via Frontend Transport; Tue, 4 Apr 2023 07:20:12 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ICADUYurJ+duCWY80mbKgt7qDfGxMzfAsBejf2PsSbkfS5B1viKwF9qtXR5IoJlkqxPYcP/RCzl1ACYEwZmbB9Th/ZFX+hj7lVunuz7mt0sUu2N/gV+R94z64H0EEa2O5SrFmnDs8hTwFF0XbB4VK39+W6T84gvgs0oIlIqKon7XyDDqcvYRvFfR23TFyMEosVmEqsl7sL2u6FsLybHHdBbAwRFSibEyvOBR4SVkkunkH6L/Xs/dFUgQljcgzO5Yw4hCF77hypsj8uDFxI++xdzs3kZnWGFa4Oj3Zh6MKAMsqInfH+0wIDNGwIko2nj4FQcB2SS/R3yL8IcreRC9/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BTP+r/xvYhr29nfFljwuz1U9y0Xwee8gYbyxyYChZG8=;
+ b=a9pr3dWR3MCUx/vEr4NkgVL+JB/rGv8jep+PNAT5855lMZ6MZ7C6d55vfM/f9DBIIt6GbOvl/pMUjczS0HirDs0ybgxHDVOfb7cxKeu272uYz47bA4j8UbHmVTYWHiRksPwY1bhk/bRBoiivkK+elWKzIwSq/HJCWUDJrFq5YEqNXLnAp+ub/36d/TePJWQMwFUwgex60BFebFPFpujJzXU4pZofR/RlCyQOGDvx0I8zgE/onMPZBK0nM7n7LdNZd2SFRyKrZBqrnseigBftHb0OYJ28slwQBVFt36k4K5u2BTrgAa+HX0i/qxxVuZ8s6Hr5hENIvG2Vpy62pqP+bw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BTP+r/xvYhr29nfFljwuz1U9y0Xwee8gYbyxyYChZG8=;
+ b=quyQHiIJH6MtS0vHwN2lDk6suHeP7DtpHAoqHyiRLdLUirGaEk/cbpBynUFgGVZZQwd3DtmMh+vN/wI1B1TF6E+/lqwlO6sK1kqcEblrVml//D4RRdfjwSMfzn0sfTls6fDQ2PyWlrUbVxE+Jvq+ePu6ZYxD0qgOYU8J3FRyvu/DWz8stn0ZbZuQmsg4G/nDSLdpC1GIMpARQCUO+HsS1bpqC/w0ytxlwKIs99OGxALR9rNiokhj7Y2j2WnzWJideX1vGIoVyCtQu7/JoyETQlY74j+V8lEU01holnKb2vAi0K5664uMMHPK5kV6hr9P3sDpBhLY0hWjvFPhc7sY6w==
+Received: from CH0P223MB0380.NAMP223.PROD.OUTLOOK.COM (2603:10b6:610:f2::8) by
+ CY5P223MB0442.NAMP223.PROD.OUTLOOK.COM (2603:10b6:930:2a::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6254.33; Tue, 4 Apr 2023 07:20:03 +0000
+Received: from CH0P223MB0380.NAMP223.PROD.OUTLOOK.COM
+ ([fe80::742a:ae29:c7ef:dcab]) by CH0P223MB0380.NAMP223.PROD.OUTLOOK.COM
+ ([fe80::742a:ae29:c7ef:dcab%4]) with mapi id 15.20.6254.035; Tue, 4 Apr 2023
+ 07:20:02 +0000
+From: Tony T <hannibaltony@hotmail.com>
+To: "chewx@mit.edu" <chewx@mit.edu>, "emunaaim@mit.edu" <emunaaim@mit.edu>,
+	"annachau@mit.edu" <annachau@mit.edu>, "echau@mit.edu" <echau@mit.edu>,
+	"pchau@mit.edu" <pchau@mit.edu>, "miachao@mit.edu" <miachao@mit.edu>,
+	"chaor@mit.edu" <chaor@mit.edu>, "yuchenc@mit.edu" <yuchenc@mit.edu>,
+	"lchao@med.mit.edu" <lchao@med.mit.edu>, "brychao@mit.edu" <brychao@mit.edu>,
+	"corsonc@mit.edu" <corsonc@mit.edu>, "echao_03@mit.edu" <echao_03@mit.edu>,
+	"chaom@mit.edu" <chaom@mit.edu>, "ecalex@mit.edu" <ecalex@mit.edu>,
+	"aachang@ll.mit.edu" <aachang@ll.mit.edu>, "anjchang@mit.edu"
+	<anjchang@mit.edu>, "anthony.chang@ll.mit.edu" <anthony.chang@ll.mit.edu>,
+	"aprilcha@mit.edu" <aprilcha@mit.edu>, "changb@mit.edu" <changb@mit.edu>,
+	"bychang@mit.edu" <bychang@mit.edu>, "cathyy8c@mit.edu" <cathyy8c@mit.edu>,
+	"celesta@mit.edu" <celesta@mit.edu>, "chengc68@mit.edu" <chengc68@mit.edu>,
+	"ckchang@mit.edu" <ckchang@mit.edu>, "damiench@mit.edu" <damiench@mit.edu>,
+	"echang25@mit.edu" <echang25@mit.edu>, "gkchang@mit.edu" <gkchang@mit.edu>,
+	"gc1@mit.edu" <gc1@mit.edu>, "hengjui@mit.edu" <hengjui@mit.edu>,
+	"hjc31119@mit.edu" <hjc31119@mit.edu>, "hilarych@mit.edu" <hilarych@mit.edu>,
+	"hfchang@mit.edu" <hfchang@mit.edu>, "ivychang@mit.edu" <ivychang@mit.edu>,
+	"jdchang@mit.edu" <jdchang@mit.edu>, "jessica.chang@ll.mit.edu"
+	<jessica.chang@ll.mit.edu>, "chestnut@ll.mit.edu" <chestnut@ll.mit.edu>,
+	"norbertc@mit.edu" <norbertc@mit.edu>, "csaphi@mit.edu" <csaphi@mit.edu>,
+	"rachelch@mit.edu" <rachelch@mit.edu>, "rebchang@mit.edu" <rebchang@mit.edu>,
+	"renee177@mit.edu" <renee177@mit.edu>, "rychang@mit.edu" <rychang@mit.edu>,
+	"chang_s@mit.edu" <chang_s@mit.edu>, "shchangj@mit.edu" <shchangj@mit.edu>,
+	"tsc@space.mit.edu" <tsc@space.mit.edu>, "wenchang@mit.edu"
+	<wenchang@mit.edu>, "whchang2@mit.edu" <whchang2@mit.edu>, "cying@mit.edu"
+	<cying@mit.edu>, "yufengch@mit.edu" <yufengch@mit.edu>, "yschang@mit.edu"
+	<yschang@mit.edu>, "zysc@mit.edu" <zysc@mit.edu>, "adelene@mit.edu"
+	<adelene@mit.edu>, "awchan@mit.edu" <awchan@mit.edu>, "chan@med.mit.edu"
+	<chan@med.mit.edu>, "alvvchan@mit.edu" <alvvchan@mit.edu>, "alvincgw@mit.edu"
+	<alvincgw@mit.edu>, "aochan@mit.edu" <aochan@mit.edu>, "annachan@mit.edu"
+	<annachan@mit.edu>, "carlos.chan@ll.mit.edu" <carlos.chan@ll.mit.edu>,
+	"cmchan@mit.edu" <cmchan@mit.edu>, "chanch@mit.edu" <chanch@mit.edu>,
+	"chancm@mit.edu" <chancm@mit.edu>, "chand@mit.edu" <chand@mit.edu>,
+	"ethancha@mit.edu" <ethancha@mit.edu>, "gchan40@mit.edu" <gchan40@mit.edu>,
+	"hschan@mit.edu" <hschan@mit.edu>, "kkulakow@mit.edu" <kkulakow@mit.edu>,
+	"katcha22@mit.edu" <katcha22@mit.edu>, "lynxc@mit.edu" <lynxc@mit.edu>,
+	"mchann@mit.edu" <mchann@mit.edu>, "martinch@mit.edu" <martinch@mit.edu>,
+	"michael.chan@ll.mit.edu" <michael.chan@ll.mit.edu>, "mchan@ll.mit.edu"
+	<mchan@ll.mit.edu>, "mishchan@mit.edu" <mishchan@mit.edu>, "mochan@mit.edu"
+	<mochan@mit.edu>, "pchan@mit.edu" <pchan@mit.edu>, "szeyi.chan@ll.mit.edu"
+	<szeyi.chan@ll.mit.edu>, "swtchan@mit.edu" <swtchan@mit.edu>,
+	"samchan2@mit.edu" <samchan2@mit.edu>, "serenach@mit.edu" <serenach@mit.edu>,
+	"sheknga@mit.edu" <sheknga@mit.edu>, "tinachan@mit.edu" <tinachan@mit.edu>,
+	"bendit@mit.edu" <bendit@mit.edu>, "valinda@mit.edu" <valinda@mit.edu>,
+	"chan@mit.edu" <chan@mit.edu>, "windyc@mit.edu" <windyc@mit.edu>,
+	"ymchan@mit.edu" <ymchan@mit.edu>, "yiksiuc@mit.edu" <yiksiuc@mit.edu>,
+	"cyndic@mit.edu" <cyndic@mit.edu>, "rosew@mit.edu" <rosew@mit.edu>,
+	"ascao@mit.edu" <ascao@mit.edu>, "yxcao61@mit.edu" <yxcao61@mit.edu>,
+	"changcao@mit.edu" <changcao@mit.edu>, "caocc@mit.edu" <caocc@mit.edu>,
+	"cc122@mit.edu" <cc122@mit.edu>, "ccao25@mit.edu" <ccao25@mit.edu>,
+	"ecao1206@mit.edu" <ecao1206@mit.edu>, "honghao@mit.edu" <honghao@mit.edu>,
+	"jiannan@mit.edu" <jiannan@mit.edu>, "jianshu@mit.edu" <jianshu@mit.edu>,
+	"jingcao@mit.edu" <jingcao@mit.edu>, "jycao@mit.edu" <jycao@mit.edu>,
+	"kcao@mit.edu" <kcao@mit.edu>, "ncao1023@mit.edu" <ncao1023@mit.edu>,
+	"pengcao@mit.edu" <pengcao@mit.edu>, "rinacao@mit.edu" <rinacao@mit.edu>,
+	"rjcao@mit.edu" <rjcao@mit.edu>, "syxcao@mit.edu" <syxcao@mit.edu>,
+	"trcao@mit.edu" <trcao@mit.edu>, "serenc@mit.edu" <serenc@mit.edu>,
+	"caos03@mit.edu" <caos03@mit.edu>, "caoty038@mit.edu" <caoty038@mit.edu>,
+	"elviscao@mit.edu" <elviscao@mit.edu>, "cao@ll.mit.edu" <cao@ll.mit.edu>,
+	"yifanc@mit.edu" <yifanc@mit.edu>, "alicecao@mit.edu" <alicecao@mit.edu>,
+	"ycao@mit.edu" <ycao@mit.edu>, "gcaol@mit.edu" <gcaol@mit.edu>,
+	"caia@mit.edu" <caia@mit.edu>, "andcai@mit.edu" <andcai@mit.edu>,
+	"caic@mit.edu" <caic@mit.edu>, "evacai@mit.edu" <evacai@mit.edu>,
+	"evelyn03@mit.edu" <evelyn03@mit.edu>, "fcai@mit.edu" <fcai@mit.edu>,
+	"hancai@mit.edu" <hancai@mit.edu>, "hrcai@mit.edu" <hrcai@mit.edu>,
+	"hc7@mit.edu" <hc7@mit.edu>, "hengcai@mit.edu" <hengcai@mit.edu>,
+	"jcai18@mit.edu" <jcai18@mit.edu>, "jxcai@mit.edu" <jxcai@mit.edu>,
+	"cail@mit.edu" <cail@mit.edu>, "jcai1@mit.edu" <jcai1@mit.edu>,
+	"mercai@mit.edu" <mercai@mit.edu>, "mjcai@mit.edu" <mjcai@mit.edu>,
+	"pengfeic@mit.edu" <pengfeic@mit.edu>, "qingyuca@mit.edu" <qingyuca@mit.edu>,
+	"rachcai@mit.edu" <rachcai@mit.edu>, "sjcai@mit.edu" <sjcai@mit.edu>,
+	"szcai@mit.edu" <szcai@mit.edu>, "caitaot@mit.edu" <caitaot@mit.edu>,
+	"wenxic00@mit.edu" <wenxic00@mit.edu>, "xycai@mit.edu" <xycai@mit.edu>,
+	"yifancai@mit.edu" <yifancai@mit.edu>, "yubincai@mit.edu" <yubincai@mit.edu>,
+	"ycai309@mit.edu" <ycai309@mit.edu>, "mbai@mit.edu" <mbai@mit.edu>,
+	"muqingb@mit.edu" <muqingb@mit.edu>, "xuebai@mit.edu" <xuebai@mit.edu>,
+	"yhb@mit.edu" <yhb@mit.edu>, Jim Willie <mach400@hotmail.com>,
+	"tonymon45s@yahoo.com" <tonymon45s@yahoo.com>, "johnmon33@aol.com"
+	<johnmon33@aol.com>, "johnmon38@aol.com" <johnmon38@aol.com>,
+	"danmon45@aol.com" <danmon45@aol.com>, "tonymon_1@hotmail.com"
+	<tonymon_1@hotmail.com>, Tony T <hannibaltony@hotmail.com>,
+	"tonymon10mm@yahoo.com" <tonymon10mm@yahoo.com>, "tonymon6.5gren@yahoo.com"
+	<tonymon6.5gren@yahoo.com>, "danmon38@yahoo.com" <danmon38@yahoo.com>,
+	"totalwarz@yahoo.com" <totalwarz@yahoo.com>, "tonymon9mm@yahoo.com"
+	<tonymon9mm@yahoo.com>
+Subject: COVID-19 Evidence
+Thread-Topic: COVID-19 Evidence
+Thread-Index: AQHZY50xKNLeTqesa0mJiSDqIXdv3a8UebUAgAADLICAAuIDAIAAGXYAgAAv9wCAAHkxNoAADUeAgACfCNqAABqWAIAAXTSAgAAUgYCAAVnqFoAAD2eAgAAApA8=
+Date: Tue, 4 Apr 2023 07:20:02 +0000
+Message-ID: <CH0P223MB03800BD15622702CD7278F47CC939@CH0P223MB0380.NAMP223.PROD.OUTLOOK.COM>
+References: <981058948.1066463.1680243277910.ref@mail.yahoo.com>
+ <981058948.1066463.1680243277910@mail.yahoo.com>
+ <351565903.1850266.1680243971974@mail.yahoo.com>
+ <736355141.1845612.1680245456251@mail.yahoo.com>
+ <1667178528.1847818.1680246884872@mail.yahoo.com>
+ <2083692975.3329096.1680247565485@mail.yahoo.com>
+ <1810907444.2221949.1680406052296@mail.yahoo.com>
+ <SJ0PR17MB56558229E6EE2F4AB8DB6F78FC8D9@SJ0PR17MB5655.namprd17.prod.outlook.com>
+ <614802140.2244912.1680421820624@mail.yahoo.com>
+ <1721010803.2249590.1680422771947@mail.yahoo.com>
+ <SJ0PR17MB5655A87A1FC0912B1D8B1048FC8D9@SJ0PR17MB5655.namprd17.prod.outlook.com>
+ <1334285719.2277680.1680450697987@mail.yahoo.com>
+ <CH0P223MB03808E34FE1EBA51EA1ED279CC929@CH0P223MB0380.NAMP223.PROD.OUTLOOK.COM>
+ <SN6PR07MB479806CB25DAC9916E0B717EC1929@SN6PR07MB4798.namprd07.prod.outlook.com>
+ <DM5PR11MB18998DC936121949F2322C9AAE929@DM5PR11MB1899.namprd11.prod.outlook.com>
+ <DM5PR11MB1899DC402E74B7F7C704917DAE929@DM5PR11MB1899.namprd11.prod.outlook.com>
+ <C
+ H0P223MB0380C22521E9F0E57F69D357CC929@CH0P223MB0380.NAMP223.PROD.OUTLOOK.COM>
+ <427218180.2425019.1680519480733@mail.yahoo.com>
+ <SN6PR07MB47987B2165633F21CE09266DC1939@SN6PR07MB4798.namprd07.prod.outlook.com>
+ <393562388.2735454.1680589128898@mail.yahoo.com>
+ <1645152127.2721817.1680592569217@mail.yahoo.com>
+In-Reply-To: <1645152127.2721817.1680592569217@mail.yahoo.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn: [b4JJ/Qw8Qu6Y9XcKpV+AYFZfoP6m0YwSQ3YibHRqsH8TXxBnUuCKn3G+gOVgDik0]
+x-ms-traffictypediagnostic:
+ CH0P223MB0380:EE_|CY5P223MB0442:EE_|DM6NAM11FT005:EE_|BN0PR01MB6845:EE_|BN8NAM11FT112:EE_|BYAPR01MB5558:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: a4670e2d-837b-4806-32b9-08db34dd1586
+x-ms-exchange-slblob-mailprops: =?gb2312?B?K3hwc01FaWNvZHlhd2J4ZndxRFpKSzRuNTVieVg3V3RCdkQzYkE3WnhlM3RB?=
+ =?gb2312?B?Q1hMOWpqQVBBRmhTRDFyOUVOaXRQQUkrNWtHSVBicUhCaWM2TmFFU1lIY01V?=
+ =?gb2312?B?OC9oeGVITVozRkE5eVdKNU1rREwrTG5BTnhKSmVpV3R6VkxkSkVVMHM1MlJG?=
+ =?gb2312?B?NkdpU3RldVhkdlNnd3N1Z1p4allTUGRQdzZTYWRNcFgzVlpGeXdVdHFiNDdj?=
+ =?gb2312?B?bWRtZzdlNTlvZnk0UGxSbXIrdjJZOWJzdjlIN2FxYjJocWZmNFNnbHJZcU9B?=
+ =?gb2312?B?b2p4RTE3WnNZYXBtNTRZZDRydlRlVkp3SUlJUWFPT3Z6TVZWWFIxcnozNnZy?=
+ =?gb2312?B?R2hJQXI2S2ZIWk9mbmhoUHlxOVErTm9QQnc4c2xQZTQ5N2dhcDMrSTVFMjZY?=
+ =?gb2312?B?VGJhRlVERXV4M0xaRWN0ek1EUDlyRWZUVVh5Ym1wbTRCZUJ3ZGp2VTlqbXpU?=
+ =?gb2312?B?MXdkUk5CcXk3eGZrd3JPTndVN3kvUkhXSUtxZ2NtYTN6MFpzNFpXRUEvY2lH?=
+ =?gb2312?B?enBRSFpIU1RHNnJabXhCU1ZBTXk4NEpOWTNXSklPUG4vMmlveDlMK2pmMU8v?=
+ =?gb2312?B?SURYOU83dDg5S2JvQ0JLZFp2REpXTENaUlpOTy90ejZvN2VyKzlURE92bFg4?=
+ =?gb2312?B?NDhDWER6ZHJHL0NUZHByK1UxaEtSZGV6V1Q5NmR4TnY0NCtrZlB2dTh2OElo?=
+ =?gb2312?B?ZDhTSnhIc2lmQXRLZkdVK2UrNXk1Q1dEUVVydFlJZWRXRmpGSS8xT2d1WHhD?=
+ =?gb2312?B?NE0vY2FPcmxjaFg3bXVkQmVGYkpQaWh6RUZZVzljTFNYSWx0LzhoNGVhTnho?=
+ =?gb2312?B?SXJCUk9ScDNUWWpUeHUxV1NQWWZDMGRsWjRRSU9mczIxTUdvbkNRSjUwWlh6?=
+ =?gb2312?B?NUQxd3hQQjdZRktiWGdXcURhMnJLT2hTY1BEWmZpenF0OU9BeHNDMXM1QnRY?=
+ =?gb2312?B?aTY5R1ZXb05sekxzNkpWSUVjamRJcmFqRGZGYUlqUUFNM29OanlTV0RNaTFn?=
+ =?gb2312?B?L1llM1crTWhXSHhMYjJ3T1IyaXl2d29DenVUZ2FmQzlNU09iRnFOS1hJdTJn?=
+ =?gb2312?B?OGwrZFZPVUJ4NitGZERkTmxmTzVyUkRlWkV2a0Q1YXlxYXdtRXNBbVVCTHFO?=
+ =?gb2312?B?cnpYQXR1ekdwa052aFpNOWk3U2ZjbHNIQ0doTFAyZERrYzZsVTRja0syTjgr?=
+ =?gb2312?B?enNSYlBvUTN0YjRUcVVwWFpKbi9pU01ONm1wNWlSM3I5UlVhVUFKcXF2bTh3?=
+ =?gb2312?B?QS92a1kxamluV0dRZU5SQlA5anVFUXpiVlkxYVZSL2ZZVmx5aG1ZSUg5a0Rh?=
+ =?gb2312?B?T29YVjFUaUV4U25OQzIzd2E3SUxYZDl1L0M3R2U5VnU4YnBkZUpTMHU2U01O?=
+ =?gb2312?B?cGJubUtpT0lwcmNrcWxINEsxc3g4aGxGQkxlNzkzR0dleDExVy96bVVEM1BW?=
+ =?gb2312?B?L1hyTDkxQnAwb3pKZm5uVzQrQkpVSEpZdEk5V2h3PT0=?=
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: =?us-ascii?Q?JfiUpaCh9R00EgDoqCKGS3F0bzGix+u67W0UPSfZd8d54PxN6X17jyAjeZ1U?=
+ =?us-ascii?Q?DbeV8AgSoVW01RPDXWAqcHxKiuYpAQ+ks7tRUnEznEpk6GrxeAgy9IAs4dRX?=
+ =?us-ascii?Q?pMPcPXDVYjumT9+6hZIeBrT38UJIjgGZxQ4FKBAPo5a+fq9keE1NjNrNR70k?=
+ =?us-ascii?Q?EI31Wi090asomUGtfWl28CXEWu8p7cO8TG0RgT1V7oyI5js3rLyhQKXLDcdh?=
+ =?us-ascii?Q?ejNfZTkSWZ5M93o0U/c40lj1OsBe5zDvF/UYPdltloRTqarCzy/FcIlFxsSh?=
+ =?us-ascii?Q?SzRGrhRB0RCuQDdYUmTEhFBe5Wed9OGk1Lj8B4z46hpRLZW0fxpNqp/8zqTT?=
+ =?us-ascii?Q?4OUrAc/7fNhn33b67yWSiUuiy+oHs2Vo3QnmfzkYanpBfFXXZErjqHzbOORA?=
+ =?us-ascii?Q?sho2q8yw0D0ElrPaPVTgmezGJKDKFueRXcc1mk6BEd7XVxy1hD6BJ8mRNPNP?=
+ =?us-ascii?Q?zK8vDIRHMH48geqAeLpMJBHBXLZnJK83adWsSvgtDt6BMO4K6spqW5UXruws?=
+ =?us-ascii?Q?sHbWREqjlX3PTl7bhso5IctHGPUrTTTmDxH3IC1NL1Y+oJDGyU3mXqS/LAtf?=
+ =?us-ascii?Q?JT6PCRRF2um0dRXhC3GiW8ocxLfR60heNP6PW7iOMO+4fWMyAnZTi6QzbLyO?=
+ =?us-ascii?Q?RldgkWY33ECrU6pzu/gqYaXhcUCUOL/4SLnC5WYBcHh7Yc+mGCRJy2rISBKu?=
+ =?us-ascii?Q?yQOBsXbsg3YoLQHnfVJ1tUb8DzSGc8yA1qvQUd324fwqC9gEhODtxbUMtX2z?=
+ =?us-ascii?Q?NAExdVsRf3FSjZT6TBQSTtwyxJZbgCtX4bZBs759o77pbHd2o2m9xr5LSHrZ?=
+ =?us-ascii?Q?ERx1xRxhEofj3LsjSlCGdP6WuH/4op6hXBp4xaFFtSSlF74r/9X1WuSk4n9c?=
+ =?us-ascii?Q?kDwPD44dAxgZKOdrkW1mH28SIdyBu1HUeG7OjMz7Ulg2TiRnH2fd0fWO6b+P?=
+ =?us-ascii?Q?sy3iML2jxJW4P2wqmDCn+DVSYCi/iFAjcUXVXSdRerLnRzitOtCaPTAmAEDq?=
+ =?us-ascii?Q?wdQFtZkhIn6deVNJLwYdzzb5u5OsFZmsHJg0sUfN4T+LjJh1vWBGYqofoXZM?=
+ =?us-ascii?Q?CjD2TxaOccjg8dxurMZVvthGYIM4uYA7dj65EdjMqI3qcVR4K2g8RY8o2nzW?=
+ =?us-ascii?Q?N6wuGiM0gKnO/ZOny1vIq8k/IQhwGksUAQZDmiy0KbXiaF7x/FHtCFlpYNH2?=
+ =?us-ascii?Q?r4em3s1lq8cxOA3m5qH9Pv5qY/GxEz0gKfc2LUGbQENhqc3/aBJEozd+nA5I?=
+ =?us-ascii?Q?GrUDPuIIwpoVS3H5Bs6NYEDFqQYHd7k0p28rsNaT1rOoLjjouLqhoWBGsGZw?=
+ =?us-ascii?Q?/bBJslYLIUxcgTsQcihQWbY6xgHMTQwBz3H+VkG1CVzk+VX5+qWR36IDDwAI?=
+ =?us-ascii?Q?ssoBrfo=3D?=
+X-MS-Exchange-AntiSpam-MessageData-Original-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-Original-0: =?gb2312?B?OTNET0lDVEc0SDk4SFB2NHYyZGttckJTMkFLeUYzT0dzWHNaWUhyZ3RBMjR2?=
+ =?gb2312?B?d09nd3JOMitDYnpFbTZETDQ5QU9tRFVNeGNoS1hqcEpTU1FPUmRxWE4wcW9p?=
+ =?gb2312?B?ZFVLWjZmc3FmREJOZ0JHM1orU2ZXNHhVMVR6RGVKT0V4d3kyWFlWc2JYQ1Vu?=
+ =?gb2312?B?SXBPL1RxU0ZJTnl5OVRna1hCMFNKZXVEZnRHL3RTN2lMaEoyN2xoSGdvdS91?=
+ =?gb2312?B?RDNZMm5rZlVBSkpPR3RwQS9mTXVYR0Y1VzQvOGpWckR3M1lsN3hUUlJiU3Mv?=
+ =?gb2312?B?NEkvd2d0UkNuRkFEK2lmV1lKdVYwUTZadm9WckMyZjV4RVkvNGMyUmF5Qlg1?=
+ =?gb2312?B?Y0pRek0ydUdVR2ZvK1o3bHJrVDRwWjZvbVU1a0FIVjV4UGUyWmsvbWxoMVZq?=
+ =?gb2312?B?SjlHR0xkMU0ycGtESVFnRlJCWWdHYlJFcmRvTXhtTEFPVU9XdE8rVkk3bkZT?=
+ =?gb2312?B?RjA5WU15Sk1wcHBoK1VyS1Y4YzV6MFQ4MDEwT3FvNlRQSFp4NFJTUGc4UVox?=
+ =?gb2312?B?OXJzUm83TVpQMDBJYzQyS1FkY3pwdFkzNjFjZFpua3Q5SmFVTDZxSlZ4WDFB?=
+ =?gb2312?B?NEdMMGM5ZC9iRjFrNFlZNUlUMTlMWjNIdWphTWEvcnF1Y1JBUGhiUnBHZk9i?=
+ =?gb2312?B?V1dKMEJrVlcvRzJaYVhuS2MwWEhXN2NrL3BDQTkxZ2t0RDBmV1NUbGlmQXFR?=
+ =?gb2312?B?Y0cyS1NldmRQY3FBUHRQd0dsQU1yUksxcDAzWHorZ1g4azBUVHlDeDNhaHZw?=
+ =?gb2312?B?YVF6REw1bm51NzI2VWg4L3BwbmtqUXdRTVNERUkyb3RyZEVZQmloRW1JNHN0?=
+ =?gb2312?B?cGZvdUhFUkNmTFVPUFdjYXFkeWFHczhCd2xUTEhkVUtMK3ozTmpXSEp4S0RG?=
+ =?gb2312?B?UUVGQUZQWVVSQXA1YTFTYTYxdm1DcVZ1WnRsZmROMTAyYkpRZTN0eC9tVVY4?=
+ =?gb2312?B?aWduRTlwbUJCSkpLbXJtZUlmb3RibCtQc3Z5Qzg4aFVqK1pVVVU4WURUYnZH?=
+ =?gb2312?B?WUpVc0p3Sm9SZEJiQmNpTXNUaWM5SnY5UElKMi9VeEFaelJ4VzN6OWVoM2ht?=
+ =?gb2312?B?T0FPWjUySDZ3b2R0OG5LQzZMalF1S1pPbHZsbThXRW1PTjBlNjZRQU1DT0ti?=
+ =?gb2312?B?Q1F5emRxbmRQQ0cxM1dZaUhSVDB1UWdwbmhKbzVnSnBXcTRJUWdMWXJsc1VF?=
+ =?gb2312?B?UmNZazFHb1ZEOGFRNnBFOUhBYTMzeVRpTGlYLytTRDk0UDNkQzl5QWRBanBz?=
+ =?gb2312?B?UjZrTjNrc3pXK295dVNLVnp0VW9DMWNoMkRzSThQRkcxSWNMMWZCUVd1c28w?=
+ =?gb2312?B?RGc2eVNZdWxod3BZblBKdnN0eG5XOThzMTRLWjdQekp1MFNHUXZzUWx0eUVJ?=
+ =?gb2312?B?K2hhNG9VbVlTVmh2d2RYbUw4YlNMZlh2MG1jd2Vzd2pYUFBZUk9Gb3NZNHVo?=
+ =?gb2312?B?L0Z4ODJna04xdG1WdVkwV3VveEZBcWNoeEJCVytmSll0a1NkSFJzZHJaQ0NI?=
+ =?gb2312?B?NmY0Z2pVREl2Q0Nhd1AwMnNBVEJVS1NBU3JYOTNhdHpPaHc4YkkvVWN6M3pH?=
+ =?gb2312?B?cjVUU2hLdHBDZnFoRjIxcmpweWlKLzZwMHVSTXZvT1B1TEI0di9uUHo1N2Rl?=
+ =?gb2312?B?RFVyV3c4M3pYcU5VRzhPdWRwYjNPRGRRVUpDZUhFUVhpWHVDbElHdVB5OVdM?=
+ =?gb2312?B?cEZZaXk2WDJRd1FtMllha1k0S2l1M0dDWFR1U3FLZndWRmozUWRsUUF3PT0=?=
+Content-Type: multipart/alternative;
+	boundary="_000_CH0P223MB03800BD15622702CD7278F47CC939CH0P223MB0380NAMP_"
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5P223MB0442
+Return-Path: hannibaltony@hotmail.com
+X-EOPAttributedMessage: 1
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersPromoted: DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 382ab9a1-7244-4387-30da-08db34dd01b3
+X-LD-Processed: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b,ExtAddr
+X-MS-Exchange-AtpMessageProperties: SA
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:40.92.21.102;CTRY:US;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:NAM12-BN8-obe.outbound.protection.outlook.com;PTR:mail-bn8nam12olkn2102.outbound.protection.outlook.com;CAT:SPM;SFS:(13230028)(4636009)(451199021)(1690799014)(58800400005)(55016003)(8676002)(7696005)(966005)(110136005)(83380400001)(336012)(66574015)(82202003)(26005)(6506007)(9686003)(7406005)(7336002)(7366002)(7416002)(5660300002)(4006050)(52536014)(1191002)(22186003)(30864003)(450100002)(75640400001)(1096003)(7636003)(166002)(356005)(921005)(86362001)(82870400002)(33656002)(19627405001)(579004)(559001)(19627285001);DIR:INB;
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?STs4sE/hjViWPh1Y9+YBxkhpsYIW4UdHwcWJ68fZiFt8umgsbyVHeZGcfmfi?=
+ =?us-ascii?Q?aUT2EhgGQvo6AGa7kP23DA0hw11z+xmvXgNiAXBR4Y3wBCRsqrs065e+VHDw?=
+ =?us-ascii?Q?TKrHcpSiBGGppfQSndu1zqd8nzZxjTI/ZhNgg2Q3BQEXqqZN10XCF+K280Ze?=
+ =?us-ascii?Q?8qQ5lRTmt2iSAZeO6INkhKFlVUQg6mbOMossVvbw4DZj1jw+GJNfuDD/9jdA?=
+ =?us-ascii?Q?22VOg0mqKZymWvpVcDtng55ePLCa3dd5kCik3dBFhKCUmXNhs+qeFG4Yca64?=
+ =?us-ascii?Q?EU9/AFfncIoTokxXw9/J6AX4N49P0lHv+mWVBaZMtEWCEyzdQLe2UDudzqQr?=
+ =?us-ascii?Q?2Lu+2VCIhENkFyHY1hfwjCmR665ZcuusbvmGxrhvOjNJax05qio/dSux26LQ?=
+ =?us-ascii?Q?9KUWnuLZ28gfDxZLasIc65ZFQd5O8/xFsEYj6rBJraLlmaurHIylQxWiK0Bt?=
+ =?us-ascii?Q?P+8NnKUV0YVgS3VSshVrZiF1Vlc2eKa8Ts2jb8M5sm8lsxV85r/t2FF/4gKD?=
+ =?us-ascii?Q?wybXvwkYyQ+8oonVO6kbMIAhzxNAOqU3lSNMSFHLrWN+UxmT0FbKsjjrxaRF?=
+ =?us-ascii?Q?oNH7qiLh9GfsLfDxX7Ro3Lf/bz83PMQqiUdQp74cdtcmEL5i4P7/zJ4O/bqa?=
+ =?us-ascii?Q?jMWNYMdS0x4i42pb6AUMf96fLMxPMpFSR3/anv9XwpGdl5OcVjgdhmjuC4GN?=
+ =?us-ascii?Q?VVsVcPPeP8Gcab8E0uWMOqnNvn0V3B2dNDVZ5HsXNyR4EIwhpvzf4NmCpuHu?=
+ =?us-ascii?Q?3NFlkM6QTQ+QtZVuWU2B4TRjfuIryaCamIpVRbovYe/arlq80hThQNVFXNMD?=
+ =?us-ascii?Q?zb2IXPp3P2odUX/w+hkpHzFHyAdj/tLz/NFPOUiEpCh3eoBqDLnq7NRbRlRa?=
+ =?us-ascii?Q?h3riIRxnn8lVDnXko8qedtrKyRUbRmDiHtCrJ+X74UkBid7APBG5DVGpH772?=
+ =?us-ascii?Q?Gr1CvY+r59eAcPUe5tExtyTI72Mc5ld1iO69r3RzmGNEiB1Ynu28cE10sqmP?=
+ =?us-ascii?Q?NN7+1QLUxHOXVx7kWulB0GL1lntqw03NGpSCSVYlNI/Sx5lCDa8dRHDsGXNd?=
+ =?us-ascii?Q?odNGFhCvXpRfC+F8KNRTT/w6NbUuENYzo120LJvzA6Lng+rVfZ2NL2t73Zl0?=
+ =?us-ascii?Q?/2Bi0knYB0KyFURWNTa0ctj+NbMKqRhJYKX9wtgMsNHjsaNUk2RFXjYIdQhn?=
+ =?us-ascii?Q?iVplTTnZBSLH3IxtGLn3IcXu0Q/o9BhvS3XbUdJ2Xiv3MJQJaaK/yzKpPQh7?=
+ =?us-ascii?Q?0QF8eb2XXgCSQTRO4QSBYSAAfdwjTU9Qtm9EUTOTlJnq5U57eJIzDqTFvAnk?=
+ =?us-ascii?Q?HGLesDH0JjsLljzNS/CBvvacBILYVPAKfrvJasK1AlpPpt4ML7IvQbzg19y/?=
+ =?us-ascii?Q?QZ9nuIY1IgKGka8W+/KLodyRnfyL792hRzymtONtKlkXYNsjID0Ldwbmv7Xz?=
+ =?us-ascii?Q?PHGt52/SuDCCbctZ6LcdZdxTIIDgTm1zORPmb7BBZ5jVr9Cg4WJwWxZ3COpQ?=
+ =?us-ascii?Q?kbGR8CIlhJVt3UFIzhLSPY/zXnBBzH5AhJxWntjdlquM4ewKPVHSl2vcZN4q?=
+ =?us-ascii?Q?hRr5uEpKPCcoyVrba7Vnt0wApZj755J+hl1zkm7zmWrgIqUtNHQy2lwQMql3?=
+ =?us-ascii?Q?KGGZDOa/9mG989Y6dN7yoZFf+0ZOJJ0bMkES/1MlKOtTh+4ec+/iDqSUxCJ0?=
+ =?us-ascii?Q?MkSZk3zM9VyIib2Ex+U14Oa5+aJPFAtsOwUSAFSgyyyKTcbb5b+TIpn1pKIP?=
+ =?us-ascii?Q?4HSamNR/iQenCyEVpxatiRWaGrumpQ3G5s1xG4axZI/FiL7BI+L4s0ujLSAX?=
+ =?us-ascii?Q?nsLULJp7PEqoGw9HCQ6CHqHAUxF617J00hoFtjljsJ2gZAl+nnsq38pwvl/u?=
+ =?us-ascii?Q?f6p/MbLVinPSCkSvwJvr36s1aCAEwKo+n40L9YzDJEnJWZV96zVR0lw5tCvn?=
+ =?us-ascii?Q?SyJu36XEdHl4PWKv3NbW86NeYDUTopQFXA55DFAZwzC2cc9FoRnkA20SZDz8?=
+ =?us-ascii?Q?fIAIuGzLDJJ0GC48Y3y4RCJta6fpyQMDb7elvm5bbpr5UUAyluAz7elyKB/j?=
+ =?us-ascii?Q?UuXA//zHuElBnOBC7u9ZN1cMQw/ABTJuWD5QjxtSgoJefW+YZOxIyC7FmOzH?=
+ =?us-ascii?Q?T3V1RUbmtJitdVfwD1j6CwShVgX4Yw4ryy0fmhTbIR0o7nUVA7gIhN9PLmj5?=
+ =?us-ascii?Q?gA4kMqHUkjJy5ZAMIa15kz8tAjsh5XvvBJy6j/stxVBTiVDPuTNZw7utmW8?=
+ =?us-ascii?Q?=3D?=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR01MB6845
+X-OrganizationHeadersPreserved: BN0PR01MB6845.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb3.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb3.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb1.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 04 Apr 2023 07:20:35.6590
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ a4670e2d-837b-4806-32b9-08db34dd1586
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 6
+X-CrossPremisesHeadersPromoted:
+ BN8NAM11FT112.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ BN8NAM11FT112.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ BN8NAM11FT112.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ a54d8204-b831-4311-0dc4-08db34dd0815
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.60;CTRY:US;LANG:en;SCL:6;SRV:;IPV:NLI;SFV:SKS;H:mail.exchange.mit.edu;PTR:oc11exhyb1.exchange.mit.edu;CAT:SPM;SFS:;DIR:INB;
+X-Microsoft-Antispam: BCL:0;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 07:20:35.5184
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4670e2d-837b-4806-32b9-08db34dd1586
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.60];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ DM6NAM11FT005.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB5558
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:06.0928142
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6277.026
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:J;OFR:SpamFilterAuthJ;ENG:(910001)(944506478)(944626604)(920097)(930097)(3100021);RF:JunkEmail;
+X-Microsoft-Antispam-Message-Info:
+	=?gb2312?B?L1BsY09mWWdhVWZWbzlNaHNtMzgxMUcweXRzclphNTBhRzd1cDNZdXVBYWhF?=
+ =?gb2312?B?Q3o5TXpwSVVMcGVJR3dvZUJPaWM1QVE3RldqKzBiSnJGZStPbFN4bk1GeWQ4?=
+ =?gb2312?B?NUJ4T2dHc3lDdVVhK0hMaWZNeERVRk9DRkQrenpoODBsUmpCL0N4U1N2THNP?=
+ =?gb2312?B?OHJsWklDWHdHTkcyV2hrT3VCbFpBT2lRd1FTcFJVS1lCM3VLazEyVkF3UmlI?=
+ =?gb2312?B?azBtbEJmV29PdEJvbWlSMWl4MGErSDZvSHY0dkhTU3JkRGFVRzROdlc1R0JC?=
+ =?gb2312?B?TjRHN3RYeWdEb2ErSlowQUpSdEtCenp1VjFld0V3R3ZuOTE1NnhuOUN0bExh?=
+ =?gb2312?B?WmhCRklCNklKeGRGMnV5QmhDcTBMNEtwWUZqOHVkREpFcVZtV2tGdnhDdEpK?=
+ =?gb2312?B?R2pJK000cXducFJxdnBuMVBuU1NkNGJveUQrYTBYOXpCUDlKbmo0ODcwa0h2?=
+ =?gb2312?B?WFlmODhLUXdqVDFmWDlCQnlNdkkyTjBLVzdpckl2ZU8vcFV3Yks1b1MvWjdT?=
+ =?gb2312?B?R3ZmMHBON1BCZXltNkFoTEFYMG5ZbHBvMkI0RStGNlZST2RnMUtJLzR1VU5t?=
+ =?gb2312?B?N2RNZHJlVEpJeWxURHJHUXg4QzBndFVxWTFNTXpNQS9hRFprSU43ODRsOXdY?=
+ =?gb2312?B?V2NRalBhYWltQmJ1eXRhZnJhcVcwWlV4eDBuVU1sOStWRnIvcnVnVDVjNHVv?=
+ =?gb2312?B?NHF1Si9JWXg5MTdQRXpMaGphRHVCR3FIaWtJWUZsSVJNUWZTN2I2WFJKb1Vl?=
+ =?gb2312?B?a3pMNVlJZm1RbTF6YjdmbzJkenNBeEx1b01IVUF3RWxLZ2dyYlFoSHY5SUov?=
+ =?gb2312?B?WnR2NC90cGVuMVhzOUVuTEM0UjNHNDY0bVFTSEdkeDNnUngxSmxRMWlqcm8r?=
+ =?gb2312?B?VlhkQWtiVUFCV2NtWXduWWJtUm14RTlMbmNiYzZrVHBGNFR1T0VUK0xvUW0r?=
+ =?gb2312?B?b3R2R3R2R05wWm9RTlpteDhlSHVhYUZIU3JqZmVNZUtBZlNKNE8vVEI0V3NO?=
+ =?gb2312?B?eUF5Z3kyWHVqWmlvcXY0dE8ybFBzSVU1Q2NsU3orY3MwNUZ2REZwZk52em1S?=
+ =?gb2312?B?NzR2QitWMlpkbkFnRUkyVWM0dE03ekJBV0J4M1FuMkhjVmVmTUlBbERJbC8z?=
+ =?gb2312?B?K2R1dWd4Y2NQYnZ2YVlhZm12TEV0d3BNaDEzVytEbnVuczFpZUlOM2ZIbW1u?=
+ =?gb2312?B?Qmw0N2JkRENFTFlHRHRreGZ4M09XOGtwMW5WSDJwWjluUWJGQlNCTTZmY2lx?=
+ =?gb2312?B?TXNlMUtueW94a1M1Ly9rVWtoNkpMNUJWb1RVbVRZZGtmNTdSUnpaSkM0MHBU?=
+ =?gb2312?B?ZHY0L0ViQ2RncHpDTHpYa3JZVE9qK09HcEFpdzhMeFJRTHdJejE0NDJFeGFy?=
+ =?gb2312?B?MUpUNUlnRVJFYlMvUzJaSmhrWllqZ0tJbkpIUUNEbXcrNUp5bEZlYzEzSm5D?=
+ =?gb2312?B?MHk3ZUYwUDRQM3F0VkpoN2tGWkVNVWVSdW9yVE9NTS9CaU56bHU3NWtETkxB?=
+ =?gb2312?B?VkpnRyt4Y2ovQmJHOUt3RHZZRDV2cWN1cEhpMUxPYTlaelJGVGppbzczL3NM?=
+ =?gb2312?B?clVCVzJ6aWNnTVVVa01vM3c4WGpwcWpUMkp2MmQ0eGF1d3dqZzJWSWtNMEI0?=
+ =?gb2312?B?alhmak92KzR3NVE4dGhVT2tWaHF1RVN2UWVycC9wci84OTFKZzF2NkdwZWl2?=
+ =?gb2312?B?cmFPWW0rbVpURTFkdlgvb2VzLzEvaE9EcTNSam5yL0h2cC80TTBlLzZWUEF3?=
+ =?gb2312?B?elpuYi9kZHJXTTNIeGxsL295MVVVWTdmdFRPeHNYWURMMWtZNXlDVkthV0lo?=
+ =?gb2312?B?emNQUEhPZStpWlBhTFN1S3Z1NHlhK21oR1JWYTZXN2tvQmdpNHhJUFVya3RV?=
+ =?gb2312?B?MklYMEFKZWVnT1BnYUtEaC9SZE1YcEdUdHZ1ekdjRlRWcFNGYzl2NXp0YktY?=
+ =?gb2312?B?b21IS2EzUzlHeFZ6bzFUNzB5dCtpRVlHQVpiNkVCaHIxbTZrWHQvenI2QjJS?=
+ =?gb2312?B?MEtYRjRFRTl1VS9XWU82UUpOb0wxYUovcTZ0SlozUFR2MkNaRFRvOG9BZFNj?=
+ =?gb2312?B?SUhBQkI1dkkvRTBST3R6NUkreGhDa21xYnBxYWRZZG42ZTZQU1I2eTg2Z2N4?=
+ =?gb2312?B?eUx3YkRabjNhWUNjRXp4Zk81alZNR2tLWmVVT25mUmV5eFcvT3ZwTmFBdXNj?=
+ =?gb2312?B?VWdMSXlMckVPbEZGbnQ1Z2gvTmpmNGlzTzRxRzRSeVBOQjNBOVdqYzR3NmZh?=
+ =?gb2312?B?MkZnTzFYNkRwYWovZkxseWlkTjc5bVRwdExXbWJKQ3dhcEVrL28rUUZFSVBT?=
+ =?gb2312?B?cVYreXJJdDFIVGs3NFpqdTVwY0Y0cEpRaU1wbnZmU3QzQ0xFcGl6TU5iSjNu?=
+ =?gb2312?B?czJUTC9Sa01raDU4ZzZHNld4SDRsajJsRmVPUWRGczVKa05mVUxhQU50UWEr?=
+ =?gb2312?B?aDVUdkUwd3JPQ0lkM2dSNk1sOHlSZVl5RzVnazR0dmlESDBSa3ZYNGFCREl4?=
+ =?gb2312?B?THRpTzVjL0RaaldCYUw5b2crN3c2VWFzdFJJVVhYbTZnPT0=?=
+MIME-Version: 1.0
+
+--_000_CH0P223MB03800BD15622702CD7278F47CC939CH0P223MB0380NAMP_
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
+
+U3ByZWFkICYgU2hhcmUgVG8gTWFueSBBcyBQb3NzaWJsZSBBbmQgR29kIEJsZXNzZWQuDQpWaXNp
+dCBodHRwczovL3BlZG8tYnVzdC5jb20vIEZvciBBc2lhbiBOZXdzDQoNCmh0dHBzOi8vY292aWQx
+OWV2aWRlbmNlLndvcmRwcmVzcy5jb20vMjAyMy8wMy8yNS9jb3ZpZDE5LWV2aWRlbmNlLw0KW2h0
+dHA6Ly9pbWcueW91dHViZS5jb20vdmkvRGZzN3Z1LTNDeUkvMC5qcGddPGh0dHBzOi8vY292aWQx
+OWV2aWRlbmNlLndvcmRwcmVzcy5jb20vMjAyMy8wMy8yNS9jb3ZpZDE5LWV2aWRlbmNlLz4NCkNv
+dmlkMTktRXZpZGVuY2U8aHR0cHM6Ly9jb3ZpZDE5ZXZpZGVuY2Uud29yZHByZXNzLmNvbS8yMDIz
+LzAzLzI1L2NvdmlkMTktZXZpZGVuY2UvPg0KU3ByZWFkICYgU2hhcmUgVG8gTWFueSBBcyBQb3Nz
+aWJsZSBBbmQgR29kIEJsZXNzZWQuVmlzaXQgRm9yIEFzaWFuIE5ld3MgSGVyZSBBcmUgU2l4IEFj
+Y2lkZW50cyBVTkMgUmVzZWFyY2hlcnMgSGFkIFdpdGggTGFiLUNyZWF0ZWQgQ29yb25hdmlydXNl
+cyChsEZlYnJ1YXJ5IDIwMTY6IEEgbW91c2UgaW5mZWN0ZWQgd2l0aCBhbiChrQ0KY292aWQxOWV2
+aWRlbmNlLndvcmRwcmVzcy5jb20NCg0KQ29weSBhbGwgbGlua3MgaW4gY2FzZSBzaXRlIGlzIHNo
+dXRkb3duLg0KR2xvY2sgRzQzLCBHMjYtMjcgR2VuMywgRzE5LTIzLTE3LTIyIEdlbjMsIEcyMC0y
+MSBTRiBPRU0NCkxvd2VyIFBhcnQgS2l0IDcwLjAwIEZSRUUgU0hJUC4NCg0KDQpIZXJlIEFyZSBT
+aXggQWNjaWRlbnRzIFVOQyBSZXNlYXJjaGVycyBIYWQgV2l0aCBMYWItQ3JlYXRlZCBDb3JvbmF2
+aXJ1c2VzDQpodHRwczovL3d3dy5wcm9wdWJsaWNhLm9yZy9hcnRpY2xlL2hlcmUtYXJlLXNpeC1h
+Y2NpZGVudHMtdW5jLXJlc2VhcmNoZXJzLWhhZC13aXRoLWxhYi1jcmVhdGVkLWNvcm9uYXZpcnVz
+ZXMNCiJGZWJydWFyeSAyMDE2OiBBIG1vdXNlIGluZmVjdGVkIHdpdGggYW4gdW5kaXNjbG9zZWQg
+obBtb3VzZSBhZGFwdGVkobEgdmlydXMgYml0IGEgcmVzZWFyY2hlcqGvcyBmaW5nZXIgdGhyb3Vn
+aCB0d28gbGF5ZXJzIG9mIGdsb3ZlcyBhcyBzaGUgdHJpZWQgdG8gd2VpZ2ggaXQgaW4gYSBiaW9z
+YWZldHkgbGV2ZWwgMyBsYWIuIE5JSCBvZmZpY2lhbHMgdG9sZCBQcm9QdWJsaWNhIHRoYXQgdGhl
+IGluY2lkZW50IGludm9sdmVkIGEgdHlwZSBvZiBTQVJTLWFzc29jaWF0ZWQgY29yb25hdmlydXMu
+Ig0KDQoiQXByaWwgMjAyMDogQSBVTkMgc2NpZW50aXN0IHVuZGVyd2VudCAxNCBkYXlzIG9mIHNl
+bGYtcXVhcmFudGluZSBhdCBob21lIGFmdGVyIGEgbW91c2UgYml0ZSBjYXVzZWQgcG90ZW50aWFs
+IGV4cG9zdXJlIHRvIGEgc3RyYWluIG9mIFNBUlMtQ29WLTIsIHRoZSB2aXJ1cyB0aGF0IGNhdXNl
+cyBDT1ZJRC0xOSwgdGhhdCBoYWQgYmVlbiBhZGFwdGVkIGZvciBncm93dGggaW4gbWljZS4gVGhl
+IGluY2lkZW50IGluIGEgYmlvc2FmZXR5IGxldmVsIDMgbGFiIGhhcHBlbmVkIHdoZW4gYSByZXNl
+YXJjaGVyIGF0dGVtcHRlZCB0byByZWFkIHRoZSBJRCBudW1iZXIgb24gYSB0YWcgb24gYSBtb3Vz
+ZaGvcyBlYXIuIFRoZSBtb3VzZSBmbGlwcGVkIG92ZXIgaW4gdGhlIHJlc2VhcmNoZXKhr3MgaGFu
+ZCBhbmQgYml0IGFuIGluZGV4IGZpbmdlciB0aHJvdWdoIHR3byBsYXllcnMgb2YgZ2xvdmVzLiAi
+DQoNCk5lYXIgTWlzc2VzIGF0IFVOQyBDaGFwZWwgSGlsbKGvcyBIaWdoLVNlY3VyaXR5IExhYiBJ
+bGx1c3RyYXRlIFJpc2sgb2YgQWNjaWRlbnRzIFdpdGggQ29yb25hdmlydXNlcw0KaHR0cHM6Ly93
+d3cud3VuYy5vcmcvaGVhbHRoLzIwMjAtMDgtMTkvbmVhci1taXNzZXMtYXQtdW5jLWNoYXBlbC1o
+aWxscy1oaWdoLXNlY3VyaXR5LWxhYi1pbGx1c3RyYXRlLXJpc2stb2YtYWNjaWRlbnRzLXdpdGgt
+Y29yb25hdmlydXNlcw0KIkFzIHNoZSBjYXJyaWVkIHRoZSBtb3VzZSwgaXQgY2xpbWJlZCB1cCBp
+dHMgdGFpbCBhbmQgYml0IGhlciBoYXJkLCBicmVha2luZyB0aHJvdWdoIHRoZSBnbG92ZXMgYW5k
+IHBsdW5naW5nIGl0cyB0ZWV0aCChqiBhbmQgcG90ZW50aWFsbHkgdGhlIHZpcnVzIKGqIGludG8g
+aGVyIHJpbmcgZmluZ2VyLiINCiJUaGVuLCBpbnN0ZWFkIG9mIHF1YXJhbnRpbmluZyB0byB3YWl0
+IGZvciBzaWducyBvZiBpbmZlY3Rpb24sIHRoZSBzY2llbnRpc3Qgd2FzIGFsbG93ZWQgdG8gZ28g
+YWJvdXQgaGVyIGxpZmUgaW4gcHVibGljIGZvciB0aGUgbmV4dCAxMCBkYXlzLCB3ZWFyaW5nIGEg
+c3VyZ2ljYWwgbWFzayBhbmQgcmVwb3J0aW5nIGhlciB0ZW1wZXJhdHVyZSB0d2ljZSBkYWlseSwg
+bmV3bHkgb2J0YWluZWQgcmVjb3JkcyBzaG93LiINCg0KIlJlY29yZHMgc2hvdyB0aGF0IGR1cmlu
+ZyB0aGUgZml2ZSB5ZWFycyBiZWZvcmUgdGhlIHBhbmRlbWljIGJlZ2FuLCBhdCBsZWFzdCBzaXgg
+VU5DIHJlc2VhcmNoZXJzIHdlcmUgcmVxdWlyZWQgdG8gdW5kZXJnbyBtZWRpY2FsIG1vbml0b3Jp
+bmcgZm9sbG93aW5nIGZvdXIgaW5jaWRlbnRzIHdoZXJlIHRoZXkgd2VyZSBwb3RlbnRpYWxseSBl
+eHBvc2VkIHRvIHdoYXQgdGhlIE5JSCBub3cgY29uZmlybXMgd2VyZSB0eXBlcyBvZiBsYWItY3Jl
+YXRlZCBTQVJTIGNvcm9uYXZpcnVzZXMuIg0KDQoiVU5DIG9mZmljaWFscyB3b3VsZCBub3Qgc2F5
+IHdoZXRoZXIgdGhlIDIwMTYgbW91c2UtYml0ZSBpbmNpZGVudCwgd2hpY2ggb2NjdXJyZWQgdGhy
+ZWUgbW9udGhzIGFmdGVyIHRoZSBwYXBlciB3YXMgcHVibGlzaGVkLCBpbnZvbHZlZCBhIFNBUlMg
+Y2hpbWVyYSB2aXJ1cyBsaWtlIHRoZSBvbmUgaW4gdGhlIDIwMTUgcGFwZXIuIg0KDQpOZWFyIG1p
+c3NlcyBhdCBVTkOhr3MgaGlnaC1zZWN1cml0eSBsYWIgaWxsdXN0cmF0ZSByaXNrIG9mIGFjY2lk
+ZW50cyB3aXRoIGNvcm9uYXZpcnVzZXMNCmh0dHBzOi8vd3d3LnRoZXN0YXRlLmNvbS9uZXdzL3N0
+YXRlL25vcnRoLWNhcm9saW5hL2FydGljbGUyNDUwNTMxMDUuaHRtbA0KDQpGQUNUOiBUaGUgQ09W
+SUQgVmlydXMgd2FzIG1hZGUgaW4gYSBCaW9MYWIgJiBGYXVjaSwgQmlsbCBHYXRlcyAmIE1vZGVy
+bmEgYXJlIGFsbCByZXNwb25zaWJsZQ0KaHR0cHM6Ly9leHBvc2UtbmV3cy5jb20vMjAyMy8wMy8x
+Ni9jb3ZpZC13YXMtbWFkZS1pbi1hLWJpb2xhYi1mYXVjaS1nYXRlcy1tb2Rlcm5hLWFyZS1yZXNw
+b25zaWJsZS8NClRvdGFsIE5JQUlEIGZ1bmRpbmcgZm9yIFJhbHBoIEJhcmljIGF0IFVuaXZlcnNp
+dHkgb2YgTm9ydGggQ2Fyb2xpbmEgd2FzICQ0Niw5NTgsNDE0LiAoaHR0cHM6Ly9ncmFudG9tZS5j
+b20gYWxsIGdyYW50cyB0byBCYXJpYywgUmFscGgpDQoNCidSZXNwaXJhdG9yeSBvdXRicmVhaycg
+YmVpbmcgaW52ZXN0aWdhdGVkIGF0IHJldGlyZW1lbnQgY29tbXVuaXR5IGFmdGVyIDU0IHJlc2lk
+ZW50cyBmYWxsIGlsbCAtIEFCQyBOZXdzDQpodHRwczovL2FiY25ld3MuZ28uY29tL1VTL3Jlc3Bp
+cmF0b3J5LW91dGJyZWFrLWludmVzdGlnYXRlZC1yZXRpcmVtZW50LWNvbW11bml0eS01NC1yZXNp
+ZGVudHMtZmFsbC9zdG9yeT9pZD02NDI3NTg2NQ0KDQpUaHJlZSBkZWFkIGFtaWQgcmVzcGlyYXRv
+cnkgaWxsbmVzcyBvdXRicmVhayBpbiBTcHJpbmdmaWVsZCBHYXJkZW4gUmlkZ2UgRmFjaWxpdHkN
+Cmh0dHBzOi8vd3d3LmZhaXJmYXh0aW1lcy5jb20vYXJ0aWNsZXMvdGhyZWUtZGVhZC1hbWlkLXJl
+c3BpcmF0b3J5LWlsbG5lc3Mtb3V0YnJlYWstaW4tc3ByaW5nZmllbGQvYXJ0aWNsZV9jZTJjNGIx
+NC1hZmQ4LTExZTktOTU5Yi03ZjZmZTAzODE3Y2EuaHRtbA0KobBidXQgYXMgb2YgSnVseSAxOSwg
+dGhlIGFnZW5jeSBoYWQgbm90IGJlZW4gYWJsZSB0byBpZGVudGlmeSBhIHNwZWNpZmljIGNhdXNl
+IGZvciB0aGUgc3VkZGVuIHVwdGljayBpbiByZXNwaXJhdG9yeSBpbGxuZXNzIGZyb20gZWl0aGVy
+IHRoYXQgaW5pdGlhbCB0ZXN0aW5nIG9yIGFkZGl0aW9uYWwgbGFib3JhdG9yeSB0ZXN0aW5nLqGw
+DQoNCg0KU2Vjb25kIEZhaXJmYXggQ291bnR5IEhlYXRoZXJ3b29kIHJldGlyZW1lbnQgY29tbXVu
+aXR5IHN1ZmZlcnMgcmVzcGlyYXRvcnkgaWxsbmVzcyBvdXRicmVhaw0KaHR0cHM6Ly93amxhLmNv
+bS9uZXdzL2xvY2FsL3NlY29uZC1mYWlyZmF4LWNvLXJldGlyZW1lbnQtY29tbXVuaXR5LXN1ZmZl
+cnMtcmVzcGlyYXRvcnktaWxsbmVzcy1vdXRicmVhaw0KobBPZiB0aGUgb3V0YnJlYWtzIHRoYXQg
+YXJlIG5vdCBmbHUsIHRoZXJlIGFyZSBzb21lIHdoZXJlIHdlIG5ldmVyIGlkZW50aWZ5IFt0aGVt
+XSyhsSBTY2h3YXJ0eiBzYWlkLiChsEl0oa9zIGp1c3QgZGlmZmljdWx0IHRvIGRvIHRoZSB0ZXN0
+aW5nIGFuZCB0byBpZGVudGlmeSB0aGUgY2F1c2UgaW4gb2xkZXIgYWR1bHRzLqGxDQoNClJlc3Bp
+cmF0b3J5IGlsbG5lc3Mgb3V0YnJlYWsgYXQgcmV0aXJlbWVudCBob21lIGtpbGxzIDIgYW5kIHNp
+Y2tlbnMgZG96ZW5zIG1vcmUNCmh0dHBzOi8vd3d3LmNubi5jb20vMjAxOS8wNy8xMS91cy92aXJn
+aW5pYS1yZXRpcmVtZW50LWNvbW11bml0eS1yZXNwaXJhdG9yeS1pbGxuZXNzLW91dGJyZWFrL2lu
+ZGV4Lmh0bWwNCg0KUG5ldW1vbmlhIG91dGJyZWFrIGluIENlbnRyYWwgVmlyZ2luaWE7IDE1IGNv
+bmZpcm1lZCBjYXNlcyAoMjAxNikNCmh0dHBzOi8veW91dHUuYmUvQThZRENVVjd6MGMNCg0KQXJt
+eSBnZXJtIGxhYiBzaHV0IGRvd24gYnkgQ0RDIGluIDIwMTkgaGFkIHNldmVyYWwgJ3NlcmlvdXMn
+IHByb3RvY29sIHZpb2xhdGlvbnMgdGhhdCB5ZWFyDQpodHRwczovL3dqbGEuY29tL25ld3MvbG9j
+YWwvY2RjLXNodXQtZG93bi1hcm15LWdlcm0tbGFiLWhlYWx0aC1jb25jZXJucw0KQUJDNyBoYXMg
+cmVjZWl2ZWQgZG9jdW1lbnRzIGZyb20gdGhlIENEQyBvdXRsaW5pbmcgdmlvbGF0aW9ucyB0aGV5
+IGRpc2NvdmVyZWQgZHVyaW5nIGEgc2VyaWVzIG9mIGluc3BlY3Rpb25zIHRoYXQgeWVhciwgc29t
+ZSAoNCkgb2Ygd2hpY2ggd2VyZSBsYWJlbGVkICJzZXJpb3VzLiINCg0KRGVhZGx5IEdlcm0gUmVz
+ZWFyY2ggSXMgU2h1dCBEb3duIGF0IEFybXkgTGFiIE92ZXIgU2FmZXR5IENvbmNlcm5zIC0gVGhl
+IE5ldyBZb3JrIFRpbWVzDQpodHRwczovL3d3dy5ueXRpbWVzLmNvbS8yMDE5LzA4LzA1L2hlYWx0
+aC9nZXJtcy1mb3J0LWRldHJpY2stYmlvaGF6YXJkLmh0bWwNCg0KQXJteSBsYWIgZmlnaHRzIGNv
+cm9uYXZpcnVzIGFuZCBpdHMgb3duIGRlbW9ucw0KaHR0cHM6Ly9yb2xsY2FsbC5jb20vMjAyMC8w
+My8yNi9hcm15LWxhYi1maWdodHMtY29yb25hdmlydXMtYW5kLWl0cy1vd24tZGVtb25zLw0KDQox
+MCBpbmNpZGVudHMgZGlzY292ZXJlZCBhdCB0aGUgbmF0aW9uJ3MgYmlvbGFicw0KaHR0cHM6Ly93
+d3cudXNhdG9kYXkuY29tL3N0b3J5L25ld3MvMjAxNS8wNS8yOS9zb21lLXJlY2VudC11cy1sYWIt
+aW5jaWRlbnRzLzI1MjU4MjM3Lw0KDQpGYWN0IGNoZWNrOiBSZXNlYXJjaGVycyBmb3VuZCBjb3Jv
+bmF2aXJ1cyBpbiBNYXJjaCAyMDE5IHdhc3Rld2F0ZXI7IG1vcmUgc3R1ZHkgbmVlZGVkDQpodHRw
+czovL3d3dy51c2F0b2RheS5jb20vc3RvcnkvbmV3cy9mYWN0Y2hlY2svMjAyMC8wNy8wNy9mYWN0
+LWNoZWNrLWNvcm9uYXZpcnVzLWZvdW5kLW1hcmNoLTIwMTktd2FzdGV3YXRlci1zYW1wbGUvNTM1
+MDg3ODAwMi8NCg0KV2FzIGNvcm9uYXZpcnVzIHJlYWxseSBpbiBFdXJvcGUgaW4gTWFyY2ggMjAx
+OT8NCmh0dHBzOi8vdGhlY29udmVyc2F0aW9uLmNvbS93YXMtY29yb25hdmlydXMtcmVhbGx5LWlu
+LWV1cm9wZS1pbi1tYXJjaC0yMDE5LTE0MTU4Mg0KDQpDb3JvbmF2aXJ1cyB0cmFjZXMgZm91bmQg
+aW4gTWFyY2ggMjAxOSBzZXdhZ2Ugc2FtcGxlLCBTcGFuaXNoIHN0dWR5IHNob3dzDQpodHRwczov
+L3d3dy5yZXV0ZXJzLmNvbS9hcnRpY2xlL3VzLWhlYWx0aC1jb3JvbmF2aXJ1cy1zcGFpbi1zY2ll
+bmNlL2Nvcm9uYXZpcnVzLXRyYWNlcy1mb3VuZC1pbi1tYXJjaC0yMDE5LXNld2FnZS1zYW1wbGUt
+c3BhbmlzaC1zdHVkeS1zaG93cy1pZFVTS0JOMjNYMkhRDQoNCkNvcm9uYXZpcnVzIHRyYWNlcyBm
+b3VuZCBpbiBTcGFuaXNoIHNld2FnZSBzYW1wbGUgZnJvbSBNYXJjaCAyMDE5DQpodHRwczovL2ds
+b2JhbG5ld3MuY2EvbmV3cy83MTE5ODU2L2Nvcm9uYXZpcnVzLXNld2FnZS1iYXJjZWxvbmEtbWFy
+Y2gtMjAxOS8NCg0KQ29yb25hdmlydXM6IFNwYW5pc2ggcmVzZWFyY2hlcnMgc2F5IHRoZXkndmUg
+Zm91bmQgY29yb25hdmlydXMgdHJhY2UgaW4gTWFyY2ggMjAxOSB3YXRlciBzYW1wbGUNCmh0dHBz
+Oi8vbmV3cy5za3kuY29tL3N0b3J5L2Nvcm9uYXZpcnVzLXNwYWluLWhhZC1jb3ZpZC0xOS1pbi1t
+YXJjaC0yMDE5LXNjaWVudGlzdHMtY2xhaW0tYWZ0ZXItd2FzdGUtd2F0ZXItdGVzdC0xMjAxNTYx
+Mg0KDQpDT1ZJRC0xOSB3YXMgaW4gU3BhaW4gYSB5ZWFyIGJlZm9yZSBicmVha291dA0KaHR0cHM6
+Ly93d3cuZXVyYWN0aXYuY29tL3NlY3Rpb24vYWxsL3Nob3J0X25ld3MvY292aWQtMTktd2FzLWlu
+LXNwYWluLWEteWVhci1iZWZvcmUtYnJlYWtvdXQvDQpUaGUgY29yb25hdmlydXMgd2FzIGFscmVh
+ZHkgaW4gU3BhaW4gYSB5ZWFyIGJlZm9yZSB0aGUgcGFuZGVtaWMgobBvZmZpY2lhbGx5obEgYnJv
+a2Ugb3V0LCBhY2NvcmRpbmcgdG8gYSBzdHVkeSBieSBCYXJjZWxvbmEgVW5pdmVyc2l0eSAoVUIp
+IHRoYXQgaGFzIGRldGVjdGVkIFNBUlMtQ29WLTIgaW4gc2FtcGxlcyBvZiB3YXN0ZXdhdGVyIGNv
+bGxlY3RlZCBpbiB0aGUgQ2F0YWxhbiBjYXBpdGFsIG9uIDEyIE1hcmNoIDIwMTksIEVVUkFDVElW
+oa9zIHBhcnRuZXIgRUZFIHJlcG9ydGVkLg0KDQpJdGFsaWFuIHN0dWR5IGZpbmRzIFNBUlMtQ29W
+LTIgaW4gY2xpbmljYWwgc2FtcGxlcyBjb2xsZWN0ZWQgYmVmb3JlIERlY2VtYmVyIDIwMTkNCmh0
+dHBzOi8vd3d3Lm5ld3MtbWVkaWNhbC5uZXQvbmV3cy8yMDIyMDgzMC9JdGFsaWFuLXN0dWR5LWZp
+bmRzLVNBUlMtQ29WLTItaW4tY2xpbmljYWwtc2FtcGxlcy1jb2xsZWN0ZWQtYmVmb3JlLURlY2Vt
+YmVyLTIwMTkuYXNweA0KSW1wb3J0YW50bHksIG5vbmUgb2YgdGhlIHNhbXBsZXMgdGhhdCB0ZXN0
+ZWQgcG9zaXRpdmUgZm9yIFNBUlMtQ29WLTIgd2VyZSBvYnRhaW5lZCBmcm9tIHBhdGllbnRzIHdp
+dGggYSBoaXN0b3J5IG9mIGludGVybmF0aW9uYWwgdHJhdmVsLg0KDQpDT1ZJRC0xOSB3YXMgcHJl
+c2VudCBpbiBJdGFseSBzaW5jZSB0aGUgc3VtbWVyIG9mIDIwMTkNCmh0dHBzOi8vd3d3LmV1cmFj
+dGl2LmNvbS9zZWN0aW9uL3BvbGl0aWNzL3Nob3J0X25ld3MvY292aWQtMTktd2FzLXByZXNlbnQt
+aW4taXRhbHktc2luY2UtdGhlLXN1bW1lci1vZi0yMDE5Lw0KQW1vbmcgdGhvc2Ugd2hvIHZvbHVu
+dGVlcmVkIGluIGV4cGVyaW1lbnRhbCBjYW5jZXIgdGhlcmFweSwgMTQlIHdlcmUgZm91bmQgdG8g
+aGF2ZSBoYWQgYW50aWJvZGllcyBmb3IgQ09WSUQtMTksIG1lYW5pbmcgdGhhdCB0aGUgdmlydXMg
+d2FzIHByZXNlbnQgaW4gSXRhbHkgc2luY2UgdGhlIHN1bW1lciBvZiAyMDE5LiBUaG9zZSB3aG8g
+dGVzdGVkIHBvc2l0aXZlIGNhbWUgZnJvbSAxMyBkaWZmZXJlbnQgSXRhbGlhbiByZWdpb25zLCB0
+aGUgbWFqb3JpdHkgb2Ygd2hvbSB3ZXJlIGZyb20gTG9tYmFyZHkuDQoNCkNPVklELTE5IGNpcmN1
+bGF0aW5nIGluIEl0YWx5IGFzIGVhcmx5IGFzIFNlcHRlbWJlciAyMDE5LCBzY2llbnRpc3RzIGNs
+YWltDQpodHRwczovL25ld3Muc2t5LmNvbS9zdG9yeS9jb3ZpZC0xOS1jaXJjdWxhdGluZy1pbi1p
+dGFseS1hcy1lYXJseS1hcy1zZXB0ZW1iZXItMjAxOS1zY2llbnRpc3RzLWNsYWltLTEyMTMzODI1
+DQoNCkhvdyBlYXJseSB3YXMgdGhlIGNvcm9uYXZpcnVzIHJlYWxseSBjaXJjdWxhdGluZyBpbiBJ
+dGFseT8NCmh0dHBzOi8vd3d3LmxpdmVzY2llbmNlLmNvbS9jb3JvbmF2aXJ1cy1jaXJjdWxhdGlu
+Zy1pdGFseS1lYXJsaWVyLXRob3VnaHQuaHRtbA0KVGhlIG5ldyBjb3JvbmF2aXJ1cyBtYXkgaGF2
+ZSBiZWVuIGNpcmN1bGF0aW5nIGluIEl0YWx5IHNpbmNlIFNlcHRlbWJlciAyMDE5LCBtb250aHMg
+YmVmb3JlIHRoZSBmaXJzdCBvZmZpY2lhbCBjYXNlIHdhcyBkZXRlY3RlZCBpbiB0aGUgY291bnRy
+eSwgYWNjb3JkaW5nIHRvIGEgbmV3IHN0dWR5IGZyb20gSXRhbHkuDQoNClRyYWNpbmcgdGhlIG9y
+aWdpbiBvZiBTZXZlcmUgYWN1dGUgcmVzcGlyYXRvcnkgc3luZHJvbWUgY29yb25hdmlydXMtMiAo
+U0FSUy1Db1YtMik6IEEgc3lzdGVtYXRpYyByZXZpZXcgYW5kIG5hcnJhdGl2ZSBzeW50aGVzaXMu
+DQpodHRwczovL2V1cm9wZXBtYy5vcmcvYXJ0aWNsZS9NRUQvMzU5NDUxOTANCmkuIE5vbmUgb2Yg
+dGhlIGVwaWRlbWljcyB3ZXJlIGNhdXNlZCBieSBhIG5vdmVsIHZpcnVzIGVzY2FwaW5nIGZyb20g
+YSBsYWJvcmF0b3J5DQppaS4gQWZ0ZXIgYSB0aG9yb3VnaCBpbnZlc3RpZ2F0aW9uIGFuZCB0cmFj
+a2luZyBvZiBlYXJseSBpbnN0YW5jZXMgb2YgdGhlIENPVklEqVwxOSBlcGlkZW1pYywgbm9uZSBv
+ZiB0aGUgZXBpc29kZXMgaGF2ZSBiZWVuIGxpbmtlZCB0byB0aGUgc3RhZmYgd29ya2luZyBhdCB0
+aGUgV0lWIGxhYm9yYXRvcnkNCmlpaS4gQWNjb3JkaW5nIHRvIHRoZSByZXBvcnRzIG9mIHByZXZp
+b3VzIHN0dWRpZXMsIHRoZSBXSVYgaGFzIHN1Y2Nlc3NmdWxseSBpc29sYXRlZCB0aHJlZSBTQVJT
+IGNvcm9uYXZpcnVzZXMgZnJvbSBiYXRzIChXSVYxLCBXSVYxNiwgYW5kIFJzNDg3NCkNCg0KRmFs
+c2UtcG9zaXRpdmUgcmVzdWx0cyBvZiBTQVJTLUNvVi0yIElnTS9JZ0cgYW50aWJvZHkgdGVzdHMg
+aW4gc2VyYSBzdG9yZWQgYmVmb3JlIHRoZSAyMDIwIHBhbmRlbWljIGluIEl0YWx5Lg0KaHR0cHM6
+Ly93d3cuaWppZG9ubGluZS5jb20vYXJ0aWNsZS9TMTIwMS05NzEyKDIwKTMyNTkxLTEvZnVsbHRl
+eHQNClRoZSBwcmVzZW50IGludmVzdGlnYXRpb24gZm91bmQgdGhhdCAyMSBvdXQgb2YgYSB0b3Rh
+bCBvZiAxMTUwIHNlcnVtIHNhbXBsZXMgdGVzdGVkIHBvc2l0aXZlIHVzaW5nIHRoZSBDT1ZJRC0x
+OSBJZ00vSWdHIHJhcGlkIHRlc3Qga2l0LiBUaGVzZSBzYW1wbGVzIGhhZCBiZWVuIHN0b3JlZCBp
+biAyMDE4IGFuZCAyMDE5LCB3ZWxsIGJlZm9yZSB0aGUgMjAyMCBwYW5kZW1pYyBpbiBJdGFseS4N
+Cg0KRWFybHkgRXZpZGVuY2Ugb2YgQ2lyY3VsYXRpbmcgU0FSUy1Db1YtMiBpbiBVbnZhY2NpbmF0
+ZWQgYW5kIFZhY2NpbmF0ZWQgTWVhc2xlcyBQYXRpZW50cywgU2VwdGVtYmVyIDIwMTktRmVicnVh
+cnkgMjAyMC4NCmh0dHBzOi8vd3d3LmRvdmVwcmVzcy5jb20vZWFybHktZXZpZGVuY2Utb2YtY2ly
+Y3VsYXRpbmctc2Fycy1jb3YtMi1pbi11bnZhY2NpbmF0ZWQtYW5kLXZhY2NpbmF0ZS1wZWVyLXJl
+dmlld2VkLWZ1bGx0ZXh0LWFydGljbGUtSURSDQogT3VyIGZpbmRpbmdzIGRlbW9uc3RyYXRlIHRo
+YXQgU0FSUy1Db1YtMi1yZWFjdGl2ZSBhbnRpYm9kaWVzIHdlcmUgZGV0ZWN0ZWQgaW4gNDAgb3V0
+IG9mIDQ0MiBzcGVjaW1lbnMsIGFzIGVhcmx5IGFzIFNlcHRlbWJlciAyMywgMjAxOS4NCg0KU1RF
+VyBQRVRFUlMgTmV0d29yayBFWENMVVNJVkU6IEZvcm1lciBQZml6ZXIgRW1wbG95ZWUgTEVBS1Mg
+Q09ORklERU5USUFMIERPQ1VNRU5UDQpodHRwczovL3J1bWJsZS5jb20vdjJibTc5by1zdGV3LXBl
+dGVycy1uZXR3b3JrLWV4Y2x1c2l2ZS1mb3JtZXItcGZpemVyLWVtcGxveWVlLWxlYWtzLWNvbmZp
+ZGVudGlhbC1kb2MuaHRtbA0KDQpIZXJloa9zIHdoYXQgdGhlIFdIT6GvcyBjb3JvbmF2aXJ1cyBl
+eHBlcnRzIGxlYXJuZWQgZnJvbSB0aGVpciB2aXNpdCB0byBXdWhhbg0KaHR0cHM6Ly9nbG9iYWxu
+ZXdzLmNhL25ld3MvNzYzMTc4Ni93aG8tY29yb25hdmlydXMtd3VoYW4tY2hpbmEtZXhwZXJ0cy1s
+ZWFybmVkLw0KSW4gbWFraW5nIGl0cyBkZXRlcm1pbmF0aW9uLCB0aGUgdGVhbSBzYWlkIHRoYXQg
+c3VjaCBsZWFrcyBhcmUgZXh0cmVtZWx5IHJhcmUgYW5kIHRoZXJloa9zIG5vIGV2aWRlbmNlIHRo
+ZSB2aXJ1cyBleGlzdGVkIGluIHRoYXQgbGFiIG9yIGFueSBsYWIgYW55d2hlcmUgaW4gdGhlIHdv
+cmxkIHdoZW4gdGhlIHBhbmRlbWljIGJlZ2FuLg0KDQpVbmxpa2VseSBDT1ZJRC0xOSBsZWFrZWQg
+ZnJvbSBsYWIgaW4gQ2hpbmEsIFdITyBzYXlzDQpodHRwczovL2dsb2JhbG5ld3MuY2EvbmV3cy83
+NjI5MDkxL3doby1leHBlcnRzLWNoaW5hLWxhYi1jb3ZpZC1vcmdpbnMvDQpUaGUgV0hPIHRlYW0g
+oaogd2hpY2ggaW5jbHVkZXMgZXhwZXJ0cyBmcm9tIDEwIGNvdW50cmllcw0KobBIb3dldmVyLCB0
+aGUgZmluZGluZ3Mgc3VnZ2VzdCB0aGF0IHRoZSBsYWJvcmF0b3J5IGluY2lkZW50cyBoeXBvdGhl
+c2lzIGlzIGV4dHJlbWVseSB1bmxpa2VseSB0byBleHBsYWluIHRoZSBpbnRyb2R1Y3Rpb24gb2Yg
+dGhlIHZpcnVzIHRvIHRoZSBodW1hbiBwb3B1bGF0aW9uobEgYW5kIHdpbGwgbm90IGJlIHN1Z2dl
+c3RlZCBhcyBhbiBhdmVudWUgb2YgZnV0dXJlIHN0dWR5LCBFbWJhcmVrLg0KDQpGYWxzZSBDbGFp
+bTogSmFwYW5lc2UgTm9iZWwgbGF1cmVhdGUgVGFzdWt1IEhvbmpvIHNhaWQgY29yb25hdmlydXMg
+d2FzIG1hbnVmYWN0dXJlZA0KaHR0cHM6Ly93d3cucmV1dGVycy5jb20vYXJ0aWNsZS91ay1mYWN0
+Y2hlY2stamFwYW5lc2Utbm9iZWwtY29yb25hdmlydXMtaWRVU0tCTjIyRzFYRQ0KUHJvZmVzc29y
+IFRhc3VrbyBIb25qbyBoYXMgcmVmdXRlZCB0aGUgYWxsZWdlZCBxdW90ZSwgZGVzY3JpYmluZyB0
+aGUgY2xhaW0gYXMgobBmYWxzZSBhY2N1c2F0aW9ucyBhbmQgbWlzaW5mb3JtYXRpb26hsS4gSGlz
+IHN0YXRlbWVudCwgcHVibGlzaGVkIGJ5IEt5b3RvIFVuaXZlcnNpdHkgb24gQXByaWwgMjcsIDIw
+MjAsIGlzIHZpc2libGUgaGVyZSAuDQpodHRwczovL3d3dy5reW90by11LmFjLmpwL2VuL2Fib3V0
+L2V2ZW50c19uZXdzL2RlcGFydG1lbnQva290by1rZW5reXUtaW4vbmV3cy8yMDIwLzIwMDQyN18x
+Lmh0bWwNCg0KRmF1Y2kgV2FybmVkIFRydW1wIEFkbWluaXN0cmF0aW9uIGEgJ1N1cnByaXNlIE91
+dGJyZWFrJyBXYXMgQ29taW5nIGluIDIwMTcNCmh0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNo
+P3Y9S2gzdHdZb244cGMNCg0KSG9zcGl0YWxzIG9uIGFsZXJ0IGZvciBteXN0ZXJ5IHJlc3BpcmF0
+b3J5IGlsbG5lc3Mgc3RyaWtpbmcgY2hpbGRyZW4NCmh0dHBzOi8veW91dHUuYmUvZlpmYlVmcG56
+U28NCg0KTm8gbWFuIGlzIGFuIGlzbGFuZDogZS1jaWdhcmV0dGUsIG9yIHZhcGluZywgYXNzb2Np
+YXRlZCBsdW5nIGluanVyeSBpbiBFdXJvcGUNCmh0dHBzOi8vZXJqLmVyc2pvdXJuYWxzLmNvbS9j
+b250ZW50LzU1LzIvMTkwMjQxOQ0KIHRoZSBvdXRicmVhayB0aGlzIHN1bW1lciB3YXMgcmVtYXJr
+YWJsZSBpbiB0aGUgbGFyZ2UgbnVtYmVyIG9mIHBhdGllbnRzIGFmZmVjdGVkICgyNDA5IHJlcG9y
+dGVkIGhvc3BpdGFsaXNlZCB3aXRoIDUyIGRlYXRocyBhcyBvZiAxMyBEZWNlbWJlciwgMjAxOSBp
+biB0aGUgVVNBIGFsb25lIFsxXSkgYW5kIHRoZSBzZXZlcml0eSBvZiBsdW5nIGluanVyeS4gQWx0
+aG91Z2ggZS1jaWdhcmV0dGUgdXNlIGlzIHF1aXRlIGNvbW1vbiBpbiBFdXJvcGUgWzNdLCB0byBk
+YXRlIG5vIGNhc2VzIG9mIEVWQUxJIHRoYXQgZGV2ZWxvcGVkIGluIEV1cm9wZSBoYXZlIGJlZW4g
+cmVwb3J0ZWQuDQoNCiAxMCBwZW9wbGUgdHJlYXRlZCBpbiBUZW5uZXNzZWUgZm9yIHZhcGluZy1y
+ZWxhdGVkIGlsbG5lc3MNCmh0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9MW1USEtXbE92
+bnMNCg0KDQoNCg0KDQoNCg==
+
+--_000_CH0P223MB03800BD15622702CD7278F47CC939CH0P223MB0380NAMP_
+Content-Type: text/html; charset="gb2312"
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dgb2312">
+<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
+ttom:0;} </style>
+</head>
+<body dir=3D"ltr">
+<div style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt;=
+ color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);" class=3D"eleme=
+ntToProof">
+<span style=3D"font-size: 14pt; color: rgb(38, 40, 42);">Spread &amp; Share=
+ To Many As Possible And God Blessed.</span><br>
+</div>
+<div>
+<div id=3D"x_ydp89edc7fcyahoo_quoted_0808126793" class=3D"x_ydp89edc7fcyaho=
+o_quoted">
+<div style=3D"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sa=
+ns-serif; font-size: 13px; color: rgb(38, 40, 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946">
+<div>
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yahoo-style-wrap" style=
+=3D"font-family:Helvetica Neue,Helvetica,Arial,sans-serif; font-size:16px">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyah=
+oo_quoted_1204919825" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863=
+336296ydp779d0b8dyahoo_quoted">
+<div style=3D"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sa=
+ns-serif; font-size: 13px; color: rgb(38, 40, 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000">
+<div>
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000yahoo-style-wrap" style=3D"font-family:Helvetica Neue,Helvetic=
+a,Arial,sans-serif; font-size:16px">
+<div style=3D"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sa=
+ns-serif; font-size: 13px; color: rgb(38, 40, 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209">
+<div dir=3D"ltr">
+<div dir=3D"ltr">
+<div dir=3D"ltr">
+<div dir=3D"ltr">
+<div dir=3D"ltr">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yahoo_quoted_0801282606" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459=
+yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv=
+1865649209x_x_x_x_x_ydpe5eb9fc2yahoo_quoted">
+<div style=3D"font-family: Helvetica, Arial, sans-serif; font-size: 13px; c=
+olor: rgb(38, 40, 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yahoo_quoted_1400956743" class=3D"x_ydp89edc7fc=
+yiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv=
+3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88=
+fcf7yahoo_quoted">
+<div style=3D"font-family: Helvetica, Arial, sans-serif; font-size: 13px; c=
+olor: rgb(38, 40, 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080yqtfd65068" class=3D"x_ydp89edc7fc=
+yiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv=
+3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88=
+fcf7yiv4506829080yqt7553604564">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyahoo_quoted_1377739731=
+" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyahoo_quoted">
+<div style=3D"font-family: Helvetica, Arial, sans-serif; font-size: 13px; c=
+olor: rgb(38, 40, 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152yqtfd56304=
+" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152yqt2962755=
+652">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yahoo_quoted_1115710118" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv=
+1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv186=
+5649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438=
+dyiv8468624152ydp491f6c55yahoo_quoted">
+<div style=3D"font-family: Helvetica, Arial, sans-serif; font-size: 13px; c=
+olor: rgb(38, 40, 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228yqtfd06539" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv=
+1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv186=
+5649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438=
+dyiv8468624152ydp491f6c55yiv5381698228yqt4696688975">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yahoo_quoted_0553891945" class=3D"x_ydp89edc7fcyiv=
+9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv325=
+8130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf=
+7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5ya=
+hoo_quoted">
+<div style=3D"font-family: Helvetica, Arial, sans-serif; font-size: 13px; c=
+olor: rgb(38, 40, 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061yqtfd62708" class=3D"x_ydp89edc7fcyiv=
+9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv325=
+8130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf=
+7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yi=
+v1301113061yqt4572753654">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yahoo_quoted_1258964145" c=
+lass=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv586=
+7601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc=
+2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yi=
+v5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yahoo_quoted">
+<div style=3D"font-family: Helvetica, Arial, sans-serif; color: rgb(38, 40,=
+ 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786">
+<div style=3D"font-style:normal; font-weight:normal; font-stretch:normal; l=
+ine-height:normal; font-family:Helvetica Neue">
+<div style=3D"font-family: arial, helvetica; color: black;">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eya=
+hoo_quoted_0631153604" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv186=
+3336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv186564=
+9209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyi=
+v8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv95=
+86852786ydpa29b624eyahoo_quoted">
+<div style=3D"font-family: Helvetica, Arial, sans-serif; color: rgb(38, 40,=
+ 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299yqtfd79581" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv186=
+3336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv186564=
+9209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyi=
+v8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv95=
+86852786ydpa29b624eyiv9583902299yqt2818183402">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yahoo_quoted_0761510769" class=3D"x_ydp89edc7fcyiv950=
+9986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv325813=
+0412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yi=
+v4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv13=
+01113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yahoo_qu=
+oted">
+<div style=3D"font-family: Helvetica, Arial, sans-serif; color: rgb(38, 40,=
+ 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyahoo_quoted_0941426734" clas=
+s=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv586760=
+1000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yi=
+v3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv53=
+81698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv95839=
+02299ydp5c3709a9yiv7045066787ydpfa29204dyahoo_quoted">
+<div style=3D"font-family: Helvetica, Arial, sans-serif; color: rgb(38, 40,=
+ 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236">
+<div style=3D"font-style:normal; font-weight:normal; font-stretch:normal; l=
+ine-height:normal; font-family:Helvetica Neue">
+<div>
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+ahoo_quoted_0771309609" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv18=
+63336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv18656=
+49209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dy=
+iv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9=
+586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210=
+328236x_x_ydp61598711yahoo_quoted" style=3D"border-color:currentcolor; bord=
+er-style:none; border-width:0px; font-style:inherit; font-weight:inherit; f=
+ont-stretch:inherit; line-height:inherit; font-family:inherit; margin:0px; =
+padding:0px; vertical-align:baseline">
+<div style=3D"border-color: currentcolor; border-style: none; border-width:=
+ 0px; font-style: inherit; font-weight: inherit; font-stretch: inherit; lin=
+e-height: inherit; font-family: Helvetica, Arial, sans-serif; margin: 0px; =
+padding: 0px; vertical-align: baseline; color: rgb(38, 40, 42);">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079" style=3D"border-color:currentcolor; border-style:none; border=
+-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inherit; =
+line-height:inherit; font-family:inherit; margin:0px; padding:0px; vertical=
+-align:baseline">
+<div dir=3D"ltr" style=3D"border-color:currentcolor; border-style:none; bor=
+der-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inheri=
+t; line-height:inherit; font-family:inherit; margin:0px; padding:0px; verti=
+cal-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyahoo_quoted_0533740488" class=3D"x_ydp89edc7fcyiv=
+9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv325=
+8130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf=
+7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yi=
+v1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv70=
+45066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp5874ba6fya=
+hoo_quoted" style=3D"border-color:currentcolor; border-style:none; border-w=
+idth:0px; font-style:inherit; font-weight:inherit; font-stretch:inherit; li=
+ne-height:inherit; font-family:inherit; margin:0px; padding:0px; vertical-a=
+lign:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307" style=3D"border-color:currentcolor;=
+ border-style:none; border-width:0px; font-style:inherit; font-weight:inher=
+it; font-stretch:inherit; line-height:inherit; font-family:inherit; margin:=
+0px; padding:0px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307yqtfd53794" class=3D"x_ydp89edc7fcyiv=
+9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv325=
+8130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf=
+7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yi=
+v1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv70=
+45066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp5874ba6fyi=
+v8637821307yqt7113315333" style=3D"border-color:currentcolor; border-style:=
+none; border-width:0px; font-style:inherit; font-weight:inherit; font-stret=
+ch:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0=
+px; vertical-align:baseline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307yahoo-style-wrap" style=3D"border-=
+color:currentcolor; border-style:none; border-width:0px; font-style:inherit=
+; font-weight:inherit; font-stretch:inherit; line-height:inherit; font-fami=
+ly:Helvetica,Arial,sans-serif; margin:0px; padding:0px; vertical-align:base=
+line">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063" style=3D"bo=
+rder-color:currentcolor; border-style:none; border-width:0px; font-style:in=
+herit; font-weight:inherit; font-stretch:inherit; line-height:inherit; font=
+-family:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063yqtfd33932" c=
+lass=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv586=
+7601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc=
+2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yi=
+v5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv95=
+83902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7=
+294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063yqt7785275896" s=
+tyle=3D"border-color:currentcolor; border-style:none; border-width:0px; fon=
+t-style:inherit; font-weight:inherit; font-stretch:inherit; line-height:inh=
+erit; font-family:inherit; margin:0px; padding:0px; vertical-align:baseline=
+">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063yahoo-styl=
+e-wrap" style=3D"border-color:currentcolor; border-style:none; border-width=
+:0px; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-h=
+eight:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:=
+0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441" style=3D"border-color:currentcolor; border-style:none; border-=
+width:0px; font-style:inherit; font-weight:inherit; font-stretch:inherit; l=
+ine-height:inherit; font-family:inherit; margin:0px; padding:0px; vertical-=
+align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441yqtfd71192" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv186=
+3336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv186564=
+9209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyi=
+v8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv95=
+86852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv82103=
+28236x_x_ydp61598711yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv73=
+40743063ydp2d7a3af7yiv3584400441yqt8343981785" style=3D"border-color:curren=
+tcolor; border-style:none; border-width:0px; font-style:inherit; font-weigh=
+t:inherit; font-stretch:inherit; line-height:inherit; font-family:inherit; =
+margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441yahoo-style-wrap" style=3D"border-color:currentcolor; border-=
+style:none; border-width:0px; font-style:inherit; font-weight:inherit; font=
+-stretch:inherit; line-height:inherit; font-family:Helvetica,Arial,sans-ser=
+if; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411" style=3D"border-color:currentcolor; bo=
+rder-style:none; border-width:0px; font-style:inherit; font-weight:inherit;=
+ font-stretch:inherit; line-height:inherit; font-family:inherit; margin:0px=
+; padding:0px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411yqtfd15277" class=3D"x_ydp89edc7fcyiv950=
+9986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv325813=
+0412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yi=
+v4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv13=
+01113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv70450=
+66787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp5874ba6fyiv86=
+37821307ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441ydp3892ab67yiv69149=
+66411yqt1647808240" style=3D"border-color:currentcolor; border-style:none; =
+border-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inh=
+erit; line-height:inherit; font-family:inherit; margin:0px; padding:0px; ve=
+rtical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411yahoo-style-wrap" style=3D"border-col=
+or:currentcolor; border-style:none; border-width:0px; font-style:inherit; f=
+ont-weight:inherit; font-stretch:inherit; line-height:inherit; font-family:=
+Helvetica,Arial,sans-serif; margin:0px; padding:0px; vertical-align:baselin=
+e">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931" style=3D"borde=
+r-color:currentcolor; border-style:none; border-width:0px; font-style:inher=
+it; font-weight:inherit; font-stretch:inherit; line-height:inherit; font-fa=
+mily:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931yqtfd84476" clas=
+s=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv586760=
+1000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yi=
+v3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv53=
+81698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv95839=
+02299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294=
+773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yiv35844=
+00441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931yqt6697883646" style=
+=3D"border-color:currentcolor; border-style:none; border-width:0px; font-st=
+yle:inherit; font-weight:inherit; font-stretch:inherit; line-height:inherit=
+; font-family:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931yahoo-style-w=
+rap" style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307" style=3D"border-color:currentcolor; border-style:none; border-wid=
+th:0px; font-style:inherit; font-weight:inherit; font-stretch:inherit; line=
+-height:inherit; font-family:inherit; margin:0px; padding:0px; vertical-ali=
+gn:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307yqtfd87066" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv186333=
+6296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv186564920=
+9x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv84=
+68624152ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv95868=
+52786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv82103282=
+36x_x_ydp61598711yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv73407=
+43063ydp2d7a3af7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv02274779=
+31ydpcca6c3b5yiv6316137307yqt4782429341" style=3D"border-color:currentcolor=
+; border-style:none; border-width:0px; font-style:inherit; font-weight:inhe=
+rit; font-stretch:inherit; line-height:inherit; font-family:inherit; margin=
+:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307yahoo-style-wrap" style=3D"border-color:currentcolor; border-sty=
+le:none; border-width:0px; font-style:inherit; font-weight:inherit; font-st=
+retch:inherit; line-height:inherit; font-family:Helvetica,Arial,sans-serif;=
+ margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731" style=3D"border-color:currentcolor; border-s=
+tyle:none; border-width:0px; font-style:inherit; font-weight:inherit; font-=
+stretch:inherit; line-height:inherit; font-family:inherit; margin:0px; padd=
+ing:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731yahoo-style-wrap" style=3D"border-color:cur=
+rentcolor; border-style:none; border-width:0px; font-style:inherit; font-we=
+ight:inherit; font-stretch:inherit; line-height:inherit; font-family:Helvet=
+ica,Arial,sans-serif; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949" style=3D"border-colo=
+r:currentcolor; border-style:none; border-width:0px; font-style:inherit; fo=
+nt-weight:inherit; font-stretch:inherit; line-height:inherit; font-family:i=
+nherit; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949yahoo-style-wrap" s=
+tyle=3D"border-color:currentcolor; border-style:none; border-width:0px; fon=
+t-style:inherit; font-weight:inherit; font-stretch:inherit; line-height:inh=
+erit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px; vert=
+ical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89" style=3D"border-color:currentcolor; border-style:none; border-width:0px=
+; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heigh=
+t:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:bas=
+eline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89yqtfd22593" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296yd=
+p779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x=
+_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv84686241=
+52ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786y=
+dpa29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_=
+ydp61598711yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063y=
+dp2d7a3af7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpc=
+ca6c3b5yiv6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f=
+9252yiv0010169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295=
+dyiv7680822389yqt6997945027" style=3D"border-color:currentcolor; border-sty=
+le:none; border-width:0px; font-style:inherit; font-weight:inherit; font-st=
+retch:inherit; line-height:inherit; font-family:inherit; margin:0px; paddin=
+g:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808=
+22389yahoo-style-wrap" style=3D"border-color:currentcolor; border-style:non=
+e; border-width:0px; font-style:inherit; font-weight:inherit; font-stretch:=
+inherit; line-height:inherit; font-family:Helvetica,Arial,sans-serif; margi=
+n:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140" style=3D"border-color:currentcolor; border-styl=
+e:none; border-width:0px; font-style:inherit; font-weight:inherit; font-str=
+etch:inherit; line-height:inherit; font-family:inherit; margin:0px; padding=
+:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; line-heig=
+ht:inherit; font-family:inherit; margin:0px; padding:0px; vertical-align:ba=
+seline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808=
+22389ydp4f1ebf89yiv6413177140yahoo-style-wrap" style=3D"border-color:curren=
+tcolor; border-style:none; border-width:0px; font-style:inherit; font-weigh=
+t:inherit; font-stretch:inherit; line-height:inherit; font-family:Helvetica=
+,Arial,sans-serif; margin:0px; padding:0px; vertical-align:baseline">
+<div dir=3D"ltr" style=3D"border-color:currentcolor; border-style:none; bor=
+der-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inheri=
+t; line-height:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px;=
+ padding:0px; vertical-align:baseline">
+<div style=3D"font-size:inherit; border-color:currentcolor; border-style:no=
+ne; border-width:0px; font-style:inherit; font-weight:inherit; font-stretch=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div dir=3D"ltr" style=3D"border-color:currentcolor; border-style:none; bor=
+der-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inheri=
+t; font-size:inherit; line-height:inherit; font-family:inherit; margin:0px;=
+ padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<font size=3D"3">Visit&nbsp;<b>https://pedo-bust.com/</b>&nbsp;For Asian Ne=
+ws</font>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949yqtfd13833" class=3D"x=
+_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000yd=
+p3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv33814=
+39955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv53816982=
+28ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299y=
+dp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079=
+x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441y=
+dp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd=
+8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv0010169196ydpbe32=
+9a02yiv0823211731ydpaab43999yiv7315720949yqt6933398300" style=3D"border-col=
+or:currentcolor; border-style:none; border-width:0px; font-style:inherit; f=
+ont-weight:inherit; font-stretch:inherit; font-size:inherit; line-height:in=
+herit; font-family:inherit; margin:0px; padding:0px; vertical-align:baselin=
+e">
+<br clear=3D"none">
+</div>
+</div>
+</div>
+</div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949yqtfd42083" class=3D"x=
+_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000yd=
+p3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv33814=
+39955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv53816982=
+28ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299y=
+dp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079=
+x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441y=
+dp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd=
+8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv0010169196ydpbe32=
+9a02yiv0823211731ydpaab43999yiv7315720949yqt6933398300 x_ydp89edc7fcyiv9509=
+986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130=
+412ydp45cf9e1fyiv1865649209x_x_x_elementToProof" style=3D"border-color:curr=
+entcolor; border-style:none; border-width:0px; font-style:inherit; font-wei=
+ght:inherit; font-stretch:inherit; line-height:inherit; font-family:inherit=
+; margin:0px; padding:0px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140yqtfd55989" class=3D"x_ydp89edc7fcyiv9509986946yd=
+p5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45=
+cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv45068290=
+80ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061y=
+dp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpf=
+a29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp5874ba6fyiv8637821307y=
+dp8c679314yiv7340743063ydp2d7a3af7yiv3584400441ydp3892ab67yiv6914966411ydp8=
+4538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd8ebbd3eyiv2332532652ydpea88=
+6297yiv4831745617ydp868f9252yiv0010169196ydpbe329a02yiv0823211731ydpaab4399=
+9yiv7315720949ydp7344295dyiv7680822389ydp4f1ebf89yiv6413177140yqt3517571488=
+ x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000=
+ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv338=
+1439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv538169=
+8228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv958390229=
+9ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv72947730=
+79elementToProof" style=3D"font-size:inherit; border-color:currentcolor; bo=
+rder-style:none; border-width:0px; font-style:inherit; font-weight:inherit;=
+ font-stretch:inherit; line-height:inherit; font-family:inherit; margin:0px=
+; padding:0px; vertical-align:baseline">
+<font size=3D"3"><b><a href=3D"https://covid19evidence.wordpress.com/2023/0=
+3/25/covid19-evidence/" data-auth=3D"NotApplicable" shape=3D"rect" id=3D"x_=
+ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp=
+3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv338143=
+9955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv538169822=
+8ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299yd=
+p5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079L=
+PlnkOWALinkPreview" style=3D"border-color:currentcolor; border-style:none; =
+border-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inh=
+erit; font-size:inherit; line-height:inherit; font-family:inherit; margin:0=
+px; padding:0px; vertical-align:baseline">https://covid19evidence.wordpress=
+.com/2023/03/25/covid19-evidence/</a><br clear=3D"none">
+</b></font></div>
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079_Entity x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296yd=
+p779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x=
+_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv84686241=
+52ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786y=
+dpa29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_=
+ydp61598711yiv7294773079_EType_OWALinkPreview x_ydp89edc7fcyiv9509986946ydp=
+5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45c=
+f9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv450682908=
+0ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061yd=
+p1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpfa=
+29204dyiv8210328236x_x_ydp61598711yiv7294773079_EId_OWALinkPreview x_ydp89e=
+dc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d=
+2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955yd=
+p4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe5=
+27fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c370=
+9a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079_EReado=
+nly_1" style=3D"font-size:inherit; border-color:currentcolor; border-style:=
+none; border-width:0px; font-style:inherit; font-weight:inherit; font-stret=
+ch:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0=
+px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079LPBorder_GTaHR0cHM6Ly9jb3ZpZDE5ZXZpZGVuY2Uud29yZHByZXNzLmNvbS8y=
+MDIzLzAzLzI1L2NvdmlkMTktZXZpZGVuY2Uv" class=3D"x_ydp89edc7fcyiv9509986946yd=
+p5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45=
+cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv45068290=
+80ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061y=
+dp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpf=
+a29204dyiv8210328236x_x_ydp61598711yiv7294773079LPBorder628265" style=3D"bo=
+rder-color:currentcolor; border-style:none; border-width:0px; font-style:in=
+herit; font-weight:inherit; font-stretch:inherit; font-size:inherit; line-h=
+eight:inherit; font-family:inherit; margin:16px 0px; padding:0px; vertical-=
+align:baseline; width:424px; max-width:800px; min-width:424px">
+<table id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dy=
+iv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5=
+eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6=
+c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624e=
+yiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp6159871=
+1yiv7294773079LPContainer628265" style=3D"font-style:inherit; font-weight:i=
+nherit; font-stretch:inherit; font-size:inherit; line-height:inherit; font-=
+family:inherit; padding:12px 36px 12px 12px; width:511.047px; border-width:=
+1px; border-style:solid; border-color:rgb(200,200,200); border-radius:2px">
+<tbody>
+<tr valign=3D"top">
+<td colspan=3D"1" rowspan=3D"1">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079LPImageContainer628265" style=3D"border-color:currentcolor; bor=
+der-style:none; border-width:0px; font-style:inherit; font-weight:inherit; =
+font-stretch:inherit; font-size:inherit; line-height:inherit; font-family:i=
+nherit; margin:0px 12px 0px 0px; padding:0px; vertical-align:baseline; min-=
+height:180px; width:240px">
+<a href=3D"https://covid19evidence.wordpress.com/2023/03/25/covid19-evidenc=
+e/" data-auth=3D"NotApplicable" shape=3D"rect" id=3D"x_ydp89edc7fcyiv950998=
+6946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv325813041=
+2ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv45=
+06829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv13011=
+13061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv70450667=
+87ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079LPImageAnchor628265" =
+style=3D"border-color:currentcolor; border-style:none; border-width:0px; fo=
+nt-style:inherit; font-weight:inherit; font-stretch:inherit; font-size:inhe=
+rit; line-height:inherit; font-family:inherit; margin:0px; padding:0px; ver=
+tical-align:baseline"><img id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv18=
+63336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv18656=
+49209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dy=
+iv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9=
+586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210=
+328236x_x_ydp61598711yiv7294773079LPThumbnailImageId628265" alt=3D"" class=
+=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601=
+000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_elementToProof" da=
+ta-id=3D"1680592539322" style=3D"border-color:currentcolor; border-style:no=
+ne; border-width:0px; font-style:inherit; font-weight:inherit; font-stretch=
+:inherit; font-size:inherit; line-height:inherit; font-family:inherit; marg=
+in:0px; padding:0px; vertical-align:baseline; display:block; width:240px; m=
+ax-width:480px" src=3D"http://img.youtube.com/vi/Dfs7vu-3CyI/0.jpg"></a></d=
+iv>
+</td>
+<td colspan=3D"1" rowspan=3D"1" style=3D"width:199.047px">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079LPTitle628265" style=3D"border-color:currentcolor; border-style=
+:none; border-width:0px; font-style:inherit; font-stretch:inherit; font-siz=
+e:21px; line-height:inherit; font-family:sans-serif; margin:0px 8px 12px 0p=
+x; padding:0px; vertical-align:baseline">
+<a href=3D"https://covid19evidence.wordpress.com/2023/03/25/covid19-evidenc=
+e/" data-auth=3D"NotApplicable" shape=3D"rect" id=3D"x_ydp89edc7fcyiv950998=
+6946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv325813041=
+2ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv45=
+06829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv13011=
+13061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv70450667=
+87ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079LPUrlAnchor628265" st=
+yle=3D"border-color:currentcolor; border-style:none; border-width:0px; font=
+-style:inherit; font-weight:inherit; font-stretch:inherit; font-size:inheri=
+t; line-height:inherit; font-family:inherit; margin:0px; padding:0px; verti=
+cal-align:baseline">Covid19-Evidence</a></div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079LPDescription628265" style=3D"border-color: currentcolor; borde=
+r-style: none; border-width: 0px; font-style: inherit; font-weight: inherit=
+; font-stretch: inherit; font-size: 14px; line-height: inherit; font-family=
+: Tahoma, Arial, sans-serif; margin: 0px 8px 12px 0px; padding: 0px; vertic=
+al-align: baseline; min-height: 100px; color: rgb(102, 102, 102);">
+Spread &amp; Share To Many As Possible And God Blessed.Visit For Asian News=
+ Here Are Six Accidents UNC Researchers Had With Lab-Created Coronaviruses =
+=A1=B0February 2016: A mouse infected with an =A1=AD</div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079LPMetadata628265" style=3D"border-color: currentcolor; border-s=
+tyle: none; border-width: 0px; font-style: inherit; font-stretch: inherit; =
+font-size: 14px; line-height: inherit; font-family: Tahoma, Arial, sans-ser=
+if; margin: 0px; padding: 0px; vertical-align: baseline; color: rgb(166, 16=
+6, 166);">
+covid19evidence.wordpress.com</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<br clear=3D"none">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808=
+22389ydp4f1ebf89yiv6413177140yqt3517571488 x_ydp89edc7fcyiv9509986946ydp5a3=
+d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e=
+1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080yd=
+p5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1e=
+b37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpfa292=
+04dyiv8210328236x_x_ydp61598711yiv7294773079elementToProof" style=3D"border=
+-color:currentcolor; border-style:none; border-width:0px; font-style:inheri=
+t; font-weight:inherit; font-stretch:inherit; line-height:inherit; font-fam=
+ily:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<font size=3D"3"><b>Copy all links in case site is shutdown. </b></font>
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079ContentPasted0" style=3D"border-color:currentcolor; border-s=
+tyle:none; border-width:0px; font-style:inherit; font-weight:inherit; font-=
+stretch:inherit; line-height:inherit; font-family:inherit; margin:0px; padd=
+ing:0px; vertical-align:baseline">
+<font size=3D"3"><span style=3D"font-family:inherit; font-style:inherit; fo=
+nt-weight:inherit">Glock G43, G26-27 Gen3, G19-23-17-22 Gen3, G20-21 SF OEM=
+</span><br clear=3D"none">
+</font></div>
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079ContentPasted0" style=3D"border-color:currentcolor; border-s=
+tyle:none; border-width:0px; font-style:inherit; font-weight:inherit; font-=
+stretch:inherit; line-height:inherit; font-family:inherit; margin:0px; padd=
+ing:0px; vertical-align:baseline">
+<font size=3D"3">Lower Part Kit 70.00 FREE SHIP.</font></div>
+<br clear=3D"none">
+</div>
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808=
+22389ydp4f1ebf89yiv6413177140yqt3517571488" style=3D"font-size:inherit; bor=
+der-color:currentcolor; border-style:none; border-width:0px; font-style:inh=
+erit; font-weight:inherit; font-stretch:inherit; line-height:inherit; font-=
+family:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226" style=3D"border-color:c=
+urrentcolor; border-style:none; border-width:0px; font-style:inherit; font-=
+weight:inherit; font-stretch:inherit; font-size:inherit; line-height:inheri=
+t; font-family:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808=
+22389ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226yahoo-style-wrap" styl=
+e=3D"border-color:currentcolor; border-style:none; border-width:0px; font-s=
+tyle:inherit; font-weight:inherit; font-stretch:inherit; font-size:16px; li=
+ne-height:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; padd=
+ing:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:Helvetica,Arial,sans-serif; marg=
+in:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696"=
+ style=3D"border-color:currentcolor; border-style:none; border-width:0px; f=
+ont-style:inherit; font-weight:inherit; font-stretch:inherit; font-size:inh=
+erit; line-height:inherit; font-family:inherit; margin:0px; padding:0px; ve=
+rtical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808=
+22389ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv27101196=
+96yahoo-style-wrap" style=3D"border-color:currentcolor; border-style:none; =
+border-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inh=
+erit; font-size:inherit; line-height:inherit; font-family:Helvetica,Arial,s=
+ans-serif; margin:0px; padding:0px; vertical-align:baseline">
+<div dir=3D"ltr" style=3D"border-color:currentcolor; border-style:none; bor=
+der-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inheri=
+t; font-size:inherit; line-height:inherit; font-family:Helvetica,Arial,sans=
+-serif; margin:0px; padding:0px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226yqtfd05054" class=3D"x_yd=
+p89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3c=
+b96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv33814399=
+55ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228y=
+dpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5=
+c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_y=
+dp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441ydp3=
+892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd8eb=
+bd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv0010169196ydpbe329a0=
+2yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv7680822389ydp4f1ebf89yi=
+v6413177140ydp414e30e4yiv6938183226yqt4613437478" style=3D"border-color:cur=
+rentcolor; border-style:none; border-width:0px; font-style:inherit; font-we=
+ight:inherit; font-stretch:inherit; font-size:inherit; line-height:inherit;=
+ font-family:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+qtfd30123" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp77=
+9d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_=
+x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152y=
+dp491f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa=
+29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp=
+61598711yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2=
+d7a3af7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6=
+c3b5yiv6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f925=
+2yiv0010169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyi=
+v7680822389ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv27=
+10119696yqt0611759095" style=3D"border-color:currentcolor; border-style:non=
+e; border-width:0px; font-style:inherit; font-weight:inherit; font-stretch:=
+inherit; font-size:inherit; line-height:inherit; font-family:inherit; margi=
+n:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+dpa560501yiv2125051731" style=3D"border-color:currentcolor; border-style:no=
+ne; border-width:0px; font-style:inherit; font-weight:inherit; font-stretch=
+:inherit; font-size:inherit; line-height:inherit; font-family:inherit; marg=
+in:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808=
+22389ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv27101196=
+96ydpa560501yiv2125051731yahoo-style-wrap" style=3D"border-color:currentcol=
+or; border-style:none; border-width:0px; font-style:inherit; font-weight:in=
+herit; font-stretch:inherit; font-size:inherit; line-height:inherit; font-f=
+amily:Helvetica,Arial,sans-serif; margin:0px; padding:0px; vertical-align:b=
+aseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+dpa560501yiv2125051731ydp6d0967e9yahoo_quoted_0312434377" class=3D"x_ydp89e=
+dc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d=
+2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955yd=
+p4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe5=
+27fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c370=
+9a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp58=
+74ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441ydp3892a=
+b67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd8ebbd3e=
+yiv2332532652ydpea886297yiv4831745617ydp868f9252yiv0010169196ydpbe329a02yiv=
+0823211731ydpaab43999yiv7315720949ydp7344295dyiv7680822389ydp4f1ebf89yiv641=
+3177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696ydpa560501yiv2125051=
+731ydp6d0967e9yahoo_quoted" style=3D"border-color:currentcolor; border-styl=
+e:none; border-width:0px; font-style:inherit; font-weight:inherit; font-str=
+etch:inherit; font-size:inherit; line-height:inherit; font-family:inherit; =
+margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:Helvetica,Arial,sans-serif; marg=
+in:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+dpa560501yiv2125051731ydp6d0967e9yiv1557507452" style=3D"border-color:curre=
+ntcolor; border-style:none; border-width:0px; font-style:inherit; font-weig=
+ht:inherit; font-stretch:inherit; font-size:inherit; line-height:inherit; f=
+ont-family:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808=
+22389ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv27101196=
+96ydpa560501yiv2125051731ydp6d0967e9yiv1557507452yahoo-style-wrap" style=3D=
+"border-color:currentcolor; border-style:none; border-width:0px; font-style=
+:inherit; font-weight:inherit; font-stretch:inherit; font-size:inherit; lin=
+e-height:inherit; font-family:Helvetica,Arial,sans-serif; margin:0px; paddi=
+ng:0px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+dpa560501yiv2125051731ydp6d0967e9yiv1557507452ydpc07a8954yahoo_quoted_09807=
+96171" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b=
+8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_yd=
+pe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp49=
+1f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b6=
+24eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp6159=
+8711yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3=
+af7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5=
+yiv6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv=
+0010169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv768=
+0822389ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv271011=
+9696ydpa560501yiv2125051731ydp6d0967e9yiv1557507452ydpc07a8954yahoo_quoted"=
+ style=3D"border-color:currentcolor; border-style:none; border-width:0px; f=
+ont-style:inherit; font-weight:inherit; font-stretch:inherit; font-size:inh=
+erit; line-height:inherit; font-family:inherit; margin:0px; padding:0px; ve=
+rtical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:Helvetica,Arial,sans-serif; marg=
+in:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+dpa560501yiv2125051731ydp6d0967e9yiv1557507452ydpc07a8954yiv5505528894" sty=
+le=3D"border-color:currentcolor; border-style:none; border-width:0px; font-=
+style:inherit; font-weight:inherit; font-stretch:inherit; font-size:inherit=
+; line-height:inherit; font-family:inherit; margin:0px; padding:0px; vertic=
+al-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+dpa560501yiv2125051731ydp6d0967e9yiv1557507452ydpc07a8954yiv5505528894yqtfd=
+90488" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b=
+8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_yd=
+pe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp49=
+1f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b6=
+24eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp6159=
+8711yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3=
+af7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5=
+yiv6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv=
+0010169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv768=
+0822389ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv271011=
+9696ydpa560501yiv2125051731ydp6d0967e9yiv1557507452ydpc07a8954yiv5505528894=
+yqt8229286804" style=3D"border-color:currentcolor; border-style:none; borde=
+r-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inherit;=
+ font-size:inherit; line-height:inherit; font-family:inherit; margin:0px; p=
+adding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808=
+22389ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv27101196=
+96ydpa560501yiv2125051731ydp6d0967e9yiv1557507452ydpc07a8954yiv5505528894ya=
+hoo-style-wrap" style=3D"border-color:currentcolor; border-style:none; bord=
+er-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inherit=
+; font-size:inherit; line-height:inherit; font-family:Helvetica,Arial,sans-=
+serif; margin:0px; padding:0px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+dpa560501yiv2125051731ydp6d0967e9yiv1557507452ydpc07a8954yiv5505528894ydp19=
+2789f3yahoo_quoted_0527040554" class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d74=
+59yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fy=
+iv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp56=
+12438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37=
+b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204d=
+yiv8210328236x_x_ydp61598711yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679=
+314yiv7340743063ydp2d7a3af7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2a=
+yiv0227477931ydpcca6c3b5yiv6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv=
+4831745617ydp868f9252yiv0010169196ydpbe329a02yiv0823211731ydpaab43999yiv731=
+5720949ydp7344295dyiv7680822389ydp4f1ebf89yiv6413177140ydp414e30e4yiv693818=
+3226ydpc009b695yiv2710119696ydpa560501yiv2125051731ydp6d0967e9yiv1557507452=
+ydpc07a8954yiv5505528894ydp192789f3yahoo_quoted" style=3D"border-color:curr=
+entcolor; border-style:none; border-width:0px; font-style:inherit; font-wei=
+ght:inherit; font-stretch:inherit; font-size:inherit; line-height:inherit; =
+font-family:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:Helvetica,Arial,sans-serif; marg=
+in:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+dpa560501yiv2125051731ydp6d0967e9yiv1557507452ydpc07a8954yiv5505528894ydp19=
+2789f3yiv6266416650" style=3D"border-color:currentcolor; border-style:none;=
+ border-width:0px; font-style:inherit; font-weight:inherit; font-stretch:in=
+herit; font-size:inherit; line-height:inherit; font-family:inherit; margin:=
+0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808=
+22389ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv27101196=
+96ydpa560501yiv2125051731ydp6d0967e9yiv1557507452ydpc07a8954yiv5505528894yd=
+p192789f3yiv6266416650ydp3a97e3efyahoo-style-wrap" style=3D"border-color:cu=
+rrentcolor; border-style:none; border-width:0px; font-style:inherit; font-w=
+eight:inherit; font-stretch:inherit; font-size:inherit; line-height:inherit=
+; font-family:Helvetica,Arial,sans-serif; margin:0px; padding:0px; vertical=
+-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<div dir=3D"ltr" style=3D"border-color:currentcolor; border-style:none; bor=
+der-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inheri=
+t; font-size:inherit; line-height:inherit; font-family:inherit; margin:0px;=
+ padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<font size=3D"3"><br clear=3D"none">
+</font></div>
+<div dir=3D"ltr" style=3D"border-color:currentcolor; border-style:none; bor=
+der-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inheri=
+t; font-size:inherit; line-height:inherit; font-family:inherit; margin:0px;=
+ padding:0px; vertical-align:baseline">
+<div dir=3D"ltr" style=3D"border-color:currentcolor; border-style:none; bor=
+der-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inheri=
+t; font-size:inherit; line-height:inherit; font-family:inherit; margin:0px;=
+ padding:0px; vertical-align:baseline">
+<font size=3D"3">Here Are Six Accidents UNC Researchers Had With Lab-Create=
+d Coronaviruses<br clear=3D"none">
+<b>https://www.propublica.org/article/here-are-six-accidents-unc-researcher=
+s-had-with-lab-created-coronaviruses</b><br clear=3D"none">
+<b>&quot;February 2016: A mouse infected with an undisclosed =A1=B0mouse ad=
+apted=A1=B1 virus bit a researcher=A1=AFs finger through two layers of glov=
+es as she tried to weigh it in a biosafety level 3 lab. NIH officials told =
+ProPublica that the incident involved a type of SARS-associated
+ coronavirus.&quot;</b><br clear=3D"none">
+<br clear=3D"none">
+<b>&quot;April 2020: A UNC scientist underwent 14 days of self-quarantine a=
+t home after a mouse bite caused potential exposure to a strain of SARS-CoV=
+-2, the virus that causes COVID-19, that had been adapted for growth in mic=
+e. The incident in a biosafety level
+ 3 lab happened when a researcher attempted to read the ID number on a tag =
+on a mouse=A1=AFs ear. The mouse flipped over in the researcher=A1=AFs hand=
+ and bit an index finger through two layers of gloves. &quot;</b><br clear=
+=3D"none">
+<br clear=3D"none">
+<b>Near Misses at UNC Chapel Hill=A1=AFs High-Security Lab Illustrate Risk =
+of Accidents With Coronaviruses</b><br clear=3D"none">
+https://www.wunc.org/health/2020-08-19/near-misses-at-unc-chapel-hills-high=
+-security-lab-illustrate-risk-of-accidents-with-coronaviruses<br clear=3D"n=
+one">
+<b>&quot;As she carried the mouse, it climbed up its tail and bit her hard,=
+ breaking through the gloves and plunging its teeth =A1=AA and potentially =
+the virus =A1=AA into her ring finger.&quot;<br clear=3D"none">
+&quot;Then, instead of quarantining to wait for signs of infection, the sci=
+entist was allowed to go about her life in public for the next 10 days, wea=
+ring a surgical mask and reporting her temperature twice daily, newly obtai=
+ned records show.&quot;</b><br clear=3D"none">
+<br clear=3D"none">
+<b>&quot;Records show that during the five years before the pandemic began,=
+ at least six UNC researchers were required to undergo medical monitoring f=
+ollowing four incidents where they were potentially exposed to what the NIH=
+ now confirms were types of lab-created
+ SARS coronaviruses.&quot;</b><br clear=3D"none">
+<br clear=3D"none">
+<b>&quot;UNC officials would not say whether the 2016 mouse-bite incident, =
+which occurred three months after the paper was published, involved a SARS =
+chimera virus like the one in the 2015 paper.&quot;</b><br clear=3D"none">
+<br clear=3D"none">
+<b>Near misses at UNC=A1=AFs high-security lab illustrate risk of accidents=
+ with coronaviruses<br clear=3D"none">
+https://www.thestate.com/news/state/north-carolina/article245053105.html</b=
+><br clear=3D"none">
+<br clear=3D"none">
+<b>FACT: The COVID Virus was made in a BioLab &amp; Fauci, Bill Gates &amp;=
+ Moderna are all responsible<br clear=3D"none">
+https://expose-news.com/2023/03/16/covid-was-made-in-a-biolab-fauci-gates-m=
+oderna-are-responsible/</b><br clear=3D"none">
+Total NIAID funding for Ralph Baric at University of North Carolina was&nbs=
+p;<b>$46,958,414</b>. (https://grantome.com all grants to Baric, Ralph)<br =
+clear=3D"none">
+<br clear=3D"none">
+<b>'Respiratory outbreak' being investigated at retirement community after =
+54 residents fall ill - ABC News<br clear=3D"none">
+https://abcnews.go.com/US/respiratory-outbreak-investigated-retirement-comm=
+unity-54-residents-fall/story?id=3D64275865</b><br clear=3D"none">
+<br clear=3D"none">
+<b>Three dead amid respiratory illness outbreak in Springfield&nbsp;<span s=
+tyle=3D"border-color:currentcolor; border-style:none; border-width:0px; fon=
+t-style:inherit; font-weight:inherit; font-stretch:inherit; font-size:inher=
+it; line-height:inherit; font-family:inherit; margin:0px; padding:0px; vert=
+ical-align:baseline">Garden
+ Ridge Facility</span><br clear=3D"none">
+</b></font>
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<b><font size=3D"3">https://www.fairfaxtimes.com/articles/three-dead-amid-r=
+espiratory-illness-outbreak-in-springfield/article_ce2c4b14-afd8-11e9-959b-=
+7f6fe03817ca.html</font></b></div>
+</div>
+<div dir=3D"ltr" style=3D"border-color:currentcolor; border-style:none; bor=
+der-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inheri=
+t; font-size:inherit; line-height:inherit; font-family:inherit; margin:0px;=
+ padding:0px; vertical-align:baseline">
+<span style=3D"border-color:currentcolor; border-style:none; border-width:0=
+px; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-siz=
+e:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0p=
+x; vertical-align:baseline">=A1=B0but as
+ of July 19, the&nbsp;<strong>agency had not been able to identify a specif=
+ic cause</strong>&nbsp;for the sudden uptick in respiratory illness from ei=
+ther that initial testing or additional laboratory testing<strong>.</strong=
+>=A1=B0</span>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731yqtfd22442" class=3D"x_ydp89edc7fcyiv950998694=
+6ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412yd=
+p45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv45068=
+29080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv13011130=
+61ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787y=
+dpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp5874ba6fyiv86378213=
+07ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441ydp3892ab67yiv6914966411y=
+dp84538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd8ebbd3eyiv2332532652ydpe=
+a886297yiv4831745617ydp868f9252yiv0010169196ydpbe329a02yiv0823211731yqt4516=
+168639" style=3D"border-color:currentcolor; border-style:none; border-width=
+:0px; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-s=
+ize:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:=
+0px; vertical-align:baseline">
+<br clear=3D"none">
+</div>
+</div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731yqtfd69913" class=3D"x_ydp89edc7fcyiv950998694=
+6ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412yd=
+p45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv45068=
+29080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv13011130=
+61ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787y=
+dpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp5874ba6fyiv86378213=
+07ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441ydp3892ab67yiv6914966411y=
+dp84538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd8ebbd3eyiv2332532652ydpe=
+a886297yiv4831745617ydp868f9252yiv0010169196ydpbe329a02yiv0823211731yqt4516=
+168639" style=3D"border-color:currentcolor; border-style:none; border-width=
+:0px; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-s=
+ize:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:=
+0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<br clear=3D"none">
+</div>
+<div dir=3D"ltr" style=3D"border-color:currentcolor; border-style:none; bor=
+der-width:0px; font-style:inherit; font-weight:inherit; font-stretch:inheri=
+t; font-size:inherit; line-height:inherit; font-family:inherit; margin:0px;=
+ padding:0px; vertical-align:baseline">
+<font size=3D"3"><b>Second Fairfax County&nbsp;<span style=3D"border-color:=
+currentcolor; border-style:none; border-width:0px; font-style:inherit; font=
+-weight:inherit; font-stretch:inherit; font-size:inherit; line-height:inher=
+it; font-family:inherit; margin:0px; padding:0px; vertical-align:baseline">=
+Heatherwood&nbsp;</span>retirement
+ community suffers respiratory illness outbreak<br clear=3D"none">
+https://wjla.com/news/local/second-fairfax-co-retirement-community-suffers-=
+respiratory-illness-outbreak</b><br clear=3D"none">
+=A1=B0Of the outbreaks that are not flu,&nbsp;<b>there are some where we ne=
+ver identify [them]</b>,=A1=B1 Schwartz said. =A1=B0It=A1=AFs just difficul=
+t to do the testing and to identify the cause in older adults.=A1=B1<br cle=
+ar=3D"none">
+<br clear=3D"none">
+<b>Respiratory illness outbreak at retirement home kills 2 and sickens doze=
+ns more<br clear=3D"none">
+https://www.cnn.com/2019/07/11/us/virginia-retirement-community-respiratory=
+-illness-outbreak/index.html<br clear=3D"none">
+<br clear=3D"none">
+Pneumonia outbreak in Central Virginia; 15 confirmed cases (2016)</b><br cl=
+ear=3D"none">
+https://youtu.be/A8YDCUV7z0c<br clear=3D"none">
+<br clear=3D"none">
+<b>Army germ lab shut down by CDC in 2019 had several 'serious' protocol vi=
+olations that year<br clear=3D"none">
+https://wjla.com/news/local/cdc-shut-down-army-germ-lab-health-concerns</b>=
+<br clear=3D"none">
+ABC7 has received documents from the CDC outlining violations they discover=
+ed during a series of inspections that year,&nbsp;<b>some (4) of which were=
+ labeled &quot;serious.&quot;</b><br clear=3D"none">
+<br clear=3D"none">
+<b>Deadly Germ Research Is Shut Down at Army Lab Over Safety Concerns - The=
+ New York Times<br clear=3D"none">
+https://www.nytimes.com/2019/08/05/health/germs-fort-detrick-biohazard.html=
+<br clear=3D"none">
+<br clear=3D"none">
+Army lab fights coronavirus and its own demons<br clear=3D"none">
+https://rollcall.com/2020/03/26/army-lab-fights-coronavirus-and-its-own-dem=
+ons/<br clear=3D"none">
+<br clear=3D"none">
+10 incidents discovered at the nation's biolabs<br clear=3D"none">
+https://www.usatoday.com/story/news/2015/05/29/some-recent-us-lab-incidents=
+/25258237/</b><br clear=3D"none">
+<br clear=3D"none">
+<b>Fact check: Researchers found coronavirus in March 2019 wastewater; more=
+ study needed<br clear=3D"none">
+https://www.usatoday.com/story/news/factcheck/2020/07/07/fact-check-coronav=
+irus-found-march-2019-wastewater-sample/5350878002/<br clear=3D"none">
+<br clear=3D"none">
+Was coronavirus really in Europe in March&nbsp;2019?<br clear=3D"none">
+https://theconversation.com/was-coronavirus-really-in-europe-in-march-2019-=
+141582<br clear=3D"none">
+<br clear=3D"none">
+Coronavirus traces found in March 2019 sewage sample, Spanish study shows<b=
+r clear=3D"none">
+https://www.reuters.com/article/us-health-coronavirus-spain-science/coronav=
+irus-traces-found-in-march-2019-sewage-sample-spanish-study-shows-idUSKBN23=
+X2HQ<br clear=3D"none">
+<br clear=3D"none">
+Coronavirus traces found in Spanish sewage sample from March 2019<br clear=
+=3D"none">
+https://globalnews.ca/news/7119856/coronavirus-sewage-barcelona-march-2019/=
+<br clear=3D"none">
+<br clear=3D"none">
+Coronavirus: Spanish researchers say they've found coronavirus trace in Mar=
+ch 2019 water sample<br clear=3D"none">
+https://news.sky.com/story/coronavirus-spain-had-covid-19-in-march-2019-sci=
+entists-claim-after-waste-water-test-12015612</b><br clear=3D"none">
+<br clear=3D"none">
+<b>COVID-19 was in Spain a year before breakout<br clear=3D"none">
+https://www.euractiv.com/section/all/short_news/covid-19-was-in-spain-a-yea=
+r-before-breakout/</b><br clear=3D"none">
+The&nbsp;<b>coronavirus was already in Spain a year before the pandemic =A1=
+=B0officially=A1=B1 broke out</b>, according to a study by Barcelona Univer=
+sity (UB) that has detected SARS-CoV-2 in samples of wastewater collected i=
+n the Catalan capital on 12 March 2019, EURACTIV=A1=AFs
+ partner EFE reported.<br clear=3D"none">
+<br clear=3D"none">
+<b>Italian study finds SARS-CoV-2 in clinical samples collected before Dece=
+mber 2019<br clear=3D"none">
+https://www.news-medical.net/news/20220830/Italian-study-finds-SARS-CoV-2-i=
+n-clinical-samples-collected-before-December-2019.aspx</b><br clear=3D"none=
+">
+Importantly,&nbsp;<b>none of the samples that tested positive for SARS-CoV-=
+2 were obtained from patients with a history of international travel</b>.<b=
+r clear=3D"none">
+<br clear=3D"none">
+<b>COVID-19 was present in Italy since the summer of 2019<br clear=3D"none"=
+>
+https://www.euractiv.com/section/politics/short_news/covid-19-was-present-i=
+n-italy-since-the-summer-of-2019/</b><br clear=3D"none">
+Among those who volunteered in experimental cancer therapy,&nbsp;<b>14% wer=
+e found to have had antibodies for COVID-19, meaning that the virus was pre=
+sent in Italy since the summer of 2019</b>. Those who tested positive came =
+from 13 different Italian regions, the
+ majority of whom were from Lombardy.<br clear=3D"none">
+<br clear=3D"none">
+<b>COVID-19 circulating in Italy as early as September 2019, scientists cla=
+im<br clear=3D"none">
+https://news.sky.com/story/covid-19-circulating-in-italy-as-early-as-septem=
+ber-2019-scientists-claim-12133825</b><br clear=3D"none">
+<br clear=3D"none">
+<b>How early was the coronavirus really circulating in Italy?<br clear=3D"n=
+one">
+https://www.livescience.com/coronavirus-circulating-italy-earlier-thought.h=
+tml</b><br clear=3D"none">
+The new&nbsp;<b>coronavirus may have been circulating in Italy since Septem=
+ber 2019</b>, months before the first official case was detected in the cou=
+ntry, according to a new study from Italy.<br clear=3D"none">
+<br clear=3D"none">
+<b>Tracing the origin of Severe acute respiratory syndrome coronavirus-2 (S=
+ARS-CoV-2): A systematic review and narrative synthesis.</b><br clear=3D"no=
+ne">
+https://europepmc.org/article/MED/35945190<br clear=3D"none">
+<b>i. None of the epidemics were caused by a novel virus escaping from a la=
+boratory<br clear=3D"none">
+ii. After a thorough investigation and tracking of early instances of the C=
+OVID=A9\19 epidemic, none of the episodes have been linked to the staff wor=
+king at the WIV laboratory<br clear=3D"none">
+iii. According to the reports of previous studies, the WIV has successfully=
+ isolated three SARS coronaviruses from bats (WIV1, WIV16, and Rs4874)<br c=
+lear=3D"none">
+</b><br clear=3D"none">
+<b>False-positive results of SARS-CoV-2 IgM/IgG antibody tests in sera stor=
+ed before the 2020 pandemic in Italy.<br clear=3D"none">
+https://www.ijidonline.com/article/S1201-9712(20)32591-1/fulltext</b><br cl=
+ear=3D"none">
+The present investigation found that 21 out of a total of 1150 serum sample=
+s tested positive using the COVID-19 IgM/IgG rapid test kit.&nbsp;<b>These =
+samples had been stored in 2018 and 2019, well before the 2020 pandemic in =
+Italy.</b><br clear=3D"none">
+<br clear=3D"none">
+<b>Early Evidence of Circulating SARS-CoV-2 in Unvaccinated and Vaccinated =
+Measles Patients, September 2019-February 2020.<br clear=3D"none">
+https://www.dovepress.com/early-evidence-of-circulating-sars-cov-2-in-unvac=
+cinated-and-vaccinate-peer-reviewed-fulltext-article-IDR</b><br clear=3D"no=
+ne">
+&nbsp;Our findings demonstrate that SARS-CoV-2-reactive antibodies were det=
+ected in&nbsp;<b>40 out of 442 specimens, as early as September 23, 2019.</=
+b><br clear=3D"none">
+<br clear=3D"none">
+<b>STEW PETERS Network EXCLUSIVE: Former Pfizer Employee LEAKS CONFIDENTIAL=
+ DOCUMENT<br clear=3D"none">
+https://rumble.com/v2bm79o-stew-peters-network-exclusive-former-pfizer-empl=
+oyee-leaks-confidential-doc.html<br clear=3D"none">
+<br clear=3D"none">
+Here=A1=AFs what the WHO=A1=AFs coronavirus experts learned from their visi=
+t to Wuhan</b><br clear=3D"none">
+https://globalnews.ca/news/7631786/who-coronavirus-wuhan-china-experts-lear=
+ned/<br clear=3D"none">
+<b>In making its determination, the team said that such leaks are extremely=
+ rare and there=A1=AFs no evidence the virus existed in that lab or any lab=
+ anywhere in the world when the pandemic began.</b><br clear=3D"none">
+<br clear=3D"none">
+<b>Unlikely COVID-19 leaked from lab in China, WHO says<br clear=3D"none">
+https://globalnews.ca/news/7629091/who-experts-china-lab-covid-orgins/</b><=
+br clear=3D"none">
+The WHO team =A1=AA which includes experts from 10 countries<br clear=3D"no=
+ne">
+<b>=A1=B0However, the findings suggest that the laboratory incidents hypoth=
+esis is extremely unlikely to explain the introduction of the virus to the =
+human population=A1=B1 and will not be suggested as an avenue of future stu=
+dy, Embarek.</b><br clear=3D"none">
+<br clear=3D"none">
+<b>False Claim: Japanese Nobel laureate Tasuku Honjo said coronavirus was m=
+anufactured</b><br clear=3D"none">
+https://www.reuters.com/article/uk-factcheck-japanese-nobel-coronavirus-idU=
+SKBN22G1XE<br clear=3D"none">
+<b>Professor Tasuko Honjo has refuted the alleged quote, describing the cla=
+im as =A1=B0false accusations and misinformation=A1=B1</b>. His statement, =
+published by Kyoto University on April 27, 2020, is visible here .<br clear=
+=3D"none">
+<b>https://www.kyoto-u.ac.jp/en/about/events_news/department/koto-kenkyu-in=
+/news/2020/200427_1.html</b><br clear=3D"none">
+<br clear=3D"none">
+<b>Fauci Warned Trump Administration a 'Surprise Outbreak' Was Coming in 20=
+17<br clear=3D"none">
+https://www.youtube.com/watch?v=3DKh3twYon8pc<br clear=3D"none">
+<br clear=3D"none">
+Hospitals on alert for mystery respiratory illness striking children<br cle=
+ar=3D"none">
+https://youtu.be/fZfbUfpnzSo</b><br clear=3D"none">
+<br clear=3D"none">
+<b>No man is an island: e-cigarette, or vaping, associated lung injury in E=
+urope<br clear=3D"none">
+https://erj.ersjournals.com/content/55/2/1902419</b><br clear=3D"none">
+&nbsp;the outbreak this summer was remarkable in the large number of patien=
+ts affected (2409 reported hospitalised with 52 deaths as of 13 December, 2=
+019 in the USA alone [1]) and the severity of lung injury. Although e-cigar=
+ette use is quite common in Europe [3],&nbsp;<b>to
+ date no cases of EVALI that developed in Europe have been reported.</b><br=
+ clear=3D"none">
+<br clear=3D"none">
+&nbsp;<b>10 people treated in Tennessee for vaping-related illness<br clear=
+=3D"none">
+https://www.youtube.com/watch?v=3D1mTHKWlOvns</b></font></div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+dpa560501yiv2125051731ydp6d0967e9yiv1557507452yqtfd78037" class=3D"x_ydp89e=
+dc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d=
+2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955yd=
+p4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe5=
+27fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c370=
+9a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp58=
+74ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441ydp3892a=
+b67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd8ebbd3e=
+yiv2332532652ydpea886297yiv4831745617ydp868f9252yiv0010169196ydpbe329a02yiv=
+0823211731ydpaab43999yiv7315720949ydp7344295dyiv7680822389ydp4f1ebf89yiv641=
+3177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696ydpa560501yiv2125051=
+731ydp6d0967e9yiv1557507452yqt1883472652" style=3D"border-color:currentcolo=
+r; border-style:none; border-width:0px; font-style:inherit; font-weight:inh=
+erit; font-stretch:inherit; font-size:inherit; line-height:inherit; font-fa=
+mily:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<font size=3D"3"><br clear=3D"none">
+</font></div>
+</div>
+</div>
+</div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731yqtfd00461" class=3D"x_ydp89edc7fcyiv950998694=
+6ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412yd=
+p45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv45068=
+29080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv13011130=
+61ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787y=
+dpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp5874ba6fyiv86378213=
+07ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441ydp3892ab67yiv6914966411y=
+dp84538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd8ebbd3eyiv2332532652ydpe=
+a886297yiv4831745617ydp868f9252yiv0010169196ydpbe329a02yiv0823211731yqt4516=
+168639" style=3D"border-color:currentcolor; border-style:none; border-width=
+:0px; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-s=
+ize:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:=
+0px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+dpa560501yiv2125051731ydp6d0967e9yiv1557507452yqtfd84616" class=3D"x_ydp89e=
+dc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d=
+2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955yd=
+p4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe5=
+27fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c370=
+9a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp58=
+74ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441ydp3892a=
+b67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd8ebbd3e=
+yiv2332532652ydpea886297yiv4831745617ydp868f9252yiv0010169196ydpbe329a02yiv=
+0823211731ydpaab43999yiv7315720949ydp7344295dyiv7680822389ydp4f1ebf89yiv641=
+3177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696ydpa560501yiv2125051=
+731ydp6d0967e9yiv1557507452yqt1883472652" style=3D"border-color:currentcolo=
+r; border-style:none; border-width:0px; font-style:inherit; font-weight:inh=
+erit; font-stretch:inherit; font-size:inherit; line-height:inherit; font-fa=
+mily:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<font size=3D"3"><br clear=3D"none">
+</font></div>
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<font size=3D"3"><br clear=3D"none">
+</font></div>
+</div>
+</div>
+</div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731yqtfd10697" class=3D"x_ydp89edc7fcyiv950998694=
+6ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byiv3258130412yd=
+p45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955ydp4d88fcf7yiv45068=
+29080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe527fdd5yiv13011130=
+61ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c3709a9yiv7045066787y=
+dpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp5874ba6fyiv86378213=
+07ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441ydp3892ab67yiv6914966411y=
+dp84538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd8ebbd3eyiv2332532652ydpe=
+a886297yiv4831745617ydp868f9252yiv0010169196ydpbe329a02yiv0823211731yqt4516=
+168639" style=3D"border-color:currentcolor; border-style:none; border-width=
+:0px; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-s=
+ize:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:=
+0px; vertical-align:baseline">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb=
+9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c5=
+5yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyi=
+v9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711y=
+iv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yi=
+v3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv63=
+16137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00101=
+69196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808223=
+89ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696y=
+dpa560501yiv2125051731ydp6d0967e9yiv1557507452yqtfd39264" class=3D"x_ydp89e=
+dc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d=
+2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe5eb9fc2yiv3381439955yd=
+p4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f6c55yiv5381698228ydpe5=
+27fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624eyiv9583902299ydp5c370=
+9a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp61598711yiv7294773079x_ydp58=
+74ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af7yiv3584400441ydp3892a=
+b67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yiv6316137307ydpd8ebbd3e=
+yiv2332532652ydpea886297yiv4831745617ydp868f9252yiv0010169196ydpbe329a02yiv=
+0823211731ydpaab43999yiv7315720949ydp7344295dyiv7680822389ydp4f1ebf89yiv641=
+3177140ydp414e30e4yiv6938183226ydpc009b695yiv2710119696ydpa560501yiv2125051=
+731ydp6d0967e9yiv1557507452yqt1883472652" style=3D"border-color:currentcolo=
+r; border-style:none; border-width:0px; font-style:inherit; font-weight:inh=
+erit; font-stretch:inherit; font-size:inherit; line-height:inherit; font-fa=
+mily:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<font size=3D"3"><br clear=3D"none">
+</font></div>
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyiv1865649209x_x_x_x_x_ydpe=
+5eb9fc2yiv3381439955ydp4d88fcf7yiv4506829080ydp5612438dyiv8468624152ydp491f=
+6c55yiv5381698228ydpe527fdd5yiv1301113061ydp1eb37b27yiv9586852786ydpa29b624=
+eyiv9583902299ydp5c3709a9yiv7045066787ydpfa29204dyiv8210328236x_x_ydp615987=
+11yiv7294773079x_ydp5874ba6fyiv8637821307ydp8c679314yiv7340743063ydp2d7a3af=
+7yiv3584400441ydp3892ab67yiv6914966411ydp84538a2ayiv0227477931ydpcca6c3b5yi=
+v6316137307ydpd8ebbd3eyiv2332532652ydpea886297yiv4831745617ydp868f9252yiv00=
+10169196ydpbe329a02yiv0823211731ydpaab43999yiv7315720949ydp7344295dyiv76808=
+22389ydp4f1ebf89yiv6413177140ydp414e30e4yiv6938183226ydpc009b695yiv27101196=
+96ydpa560501yiv2125051731ydp6d0967e9yiv1557507452ydpc07a8954yiv5505528894yd=
+p192789f3yiv6266416650ydp3a97e3efsignature" style=3D"border-color:currentco=
+lor; border-style:none; border-width:0px; font-style:inherit; font-weight:i=
+nherit; font-stretch:inherit; font-size:inherit; line-height:inherit; font-=
+family:inherit; margin:0px; padding:0px; vertical-align:baseline">
+<div style=3D"border-color:currentcolor; border-style:none; border-width:0p=
+x; font-style:inherit; font-weight:inherit; font-stretch:inherit; font-size=
+:inherit; line-height:inherit; font-family:inherit; margin:0px; padding:0px=
+; vertical-align:baseline">
+<font size=3D"3"><span style=3D"border-color:currentcolor; border-style:non=
+e; border-width:0px; font-style:italic; font-weight:inherit; font-stretch:i=
+nherit; font-size:inherit; line-height:inherit; font-family:arial,helvetica=
+,sans-serif; margin:0px; padding:0px; vertical-align:baseline">&nbsp;<br cl=
+ear=3D"none">
+</span></font></div>
+<font size=3D"3"><br clear=3D"none">
+</font></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byahoo_quoted_1137045217" class=3D"x_ydp89edc7fcyiv9509=
+986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601000ydp3cb96d2byahoo_quot=
+ed">
+<div style=3D"font-family: &quot;Helvetica Neue&quot;, Helvetica, Arial, sa=
+ns-serif; font-size: 13px; color: rgb(38, 40, 42);">
+<div>
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412">
+<div>
+<div class=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8d=
+yiv5867601000ydp3cb96d2byiv3258130412yahoo-style-wrap" style=3D"font-family=
+:Helvetica Neue,Helvetica,Arial,sans-serif; font-size:16px">
+<div id=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv=
+5867601000ydp3cb96d2byiv3258130412ydp45cf9e1fyahoo_quoted_0540009968" class=
+=3D"x_ydp89edc7fcyiv9509986946ydp5a3d7459yiv1863336296ydp779d0b8dyiv5867601=
+000ydp3cb96d2byiv3258130412ydp45cf9e1fyahoo_quoted">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
+
+--_000_CH0P223MB03800BD15622702CD7278F47CC939CH0P223MB0380NAMP_--

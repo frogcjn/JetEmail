@@ -1,0 +1,966 @@
+Received: from SJ0PR01MB6366.prod.exchangelabs.com (2603:10b6:a03:2a3::17) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Sat, 16 Sep 2023 14:16:45
+ +0000
+Received: from SN7PR04CA0084.namprd04.prod.outlook.com (2603:10b6:806:121::29)
+ by SJ0PR01MB6366.prod.exchangelabs.com (2603:10b6:a03:2a3::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.19; Sat, 16 Sep 2023 14:16:43 +0000
+Received: from SN1PEPF0002BA4B.namprd03.prod.outlook.com
+ (2603:10b6:806:121:cafe::d2) by SN7PR04CA0084.outlook.office365.com
+ (2603:10b6:806:121::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.24 via Frontend
+ Transport; Sat, 16 Sep 2023 14:16:43 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.112)
+ smtp.mailfrom=bounce.aard.mit.edu; dkim=pass (signature was verified)
+ header.d=aard.mit.edu;dmarc=pass action=none header.from=aard.mit.edu;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ bounce.aard.mit.edu discourages use of 18.9.1.112 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.112) by
+ SN1PEPF0002BA4B.mail.protection.outlook.com (10.167.242.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6792.19 via Frontend Transport; Sat, 16 Sep 2023 14:16:43 +0000
+Received: from w92expo9.exchange.mit.edu (18.7.74.63) by
+ oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Sat, 16 Sep 2023 10:16:27 -0400
+Received: from oc11exhyb4.exchange.mit.edu (18.9.1.100) by
+ w92expo9.exchange.mit.edu (18.7.74.63) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Sat, 16 Sep 2023 10:16:26 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
+ by oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Sat, 16 Sep 2023 10:16:26 -0400
+Received: from SA1PR04CA0008.namprd04.prod.outlook.com (2603:10b6:806:2ce::13)
+ by BL1PR01MB7650.prod.exchangelabs.com (2603:10b6:208:395::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6768.35; Sat, 16 Sep 2023 14:16:24 +0000
+Received: from SN1PEPF000252A0.namprd05.prod.outlook.com
+ (2603:10b6:806:2ce:cafe::8a) by SA1PR04CA0008.outlook.office365.com
+ (2603:10b6:806:2ce::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.23 via Frontend
+ Transport; Sat, 16 Sep 2023 14:16:23 +0000
+Authentication-Results-Original: spf=pass (sender IP is 74.112.70.19)
+ smtp.mailfrom=bounce.aard.mit.edu; dkim=pass (signature was verified)
+ header.d=aard.mit.edu;dmarc=pass action=none
+ header.from=aard.mit.edu;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of bounce.aard.mit.edu
+ designates 74.112.70.19 as permitted sender) receiver=protection.outlook.com;
+ client-ip=74.112.70.19; helo=mail10634.aard.mit.edu; pr=C
+Received: from mail10634.aard.mit.edu (74.112.70.19) by
+ SN1PEPF000252A0.mail.protection.outlook.com (10.167.242.7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.20 via Frontend Transport; Sat, 16 Sep 2023 14:16:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=spop1024; d=aard.mit.edu;
+ h=Date:From:Reply-To:To:Message-ID:Subject:MIME-Version:Content-Type:
+ X-CSA-Complaints:List-Unsubscribe; i=annual_giving@aard.mit.edu;
+ bh=g535AWs12EsLnlR1I9B8gTCNVWmx6TJ1ujVO+mJtLTA=;
+ b=AJTxioxnwMeuj9n1auTfvDXZ6V+6TwyRfFhoSLy4Vzf2tNqiap/ky85Wuqn+kygQlmIeNwA0yCrk
+   emigwOX4TMcwkRc1/pIRU0Sz7ABxcCg8aK2AJpETn/yL0zHRGn4eLXc2yTU6PKbk/ZXFRm4ngsw+
+   byFGNO4V6e8IoRGE4Z0=
+Received: by bg32-ca-ue1.prod.awspr id h0msbe2vq6gf for <jiannan@mit.edu>; Fri, 15 Sep 2023 16:05:33 +0000 (envelope-from <v-coiedbg_bdbohfgfglh_jhicokle_jhicokle_a@bounce.aard.mit.edu>)
+Date: Fri, 15 Sep 2023 16:05:33 +0000 (GMT)
+From: =?UTF-8?Q?David_Fung_=E2=80=9985=2C_MIT_Annual_Giving?=
+ <annual_giving@aard.mit.edu>
+Reply-To: annual_giving@mit.edu
+To: jiannan@mit.edu
+Message-ID: <802558202.132885465.1694793933358@nvirginia-se-email-delivery-67f4dcf4f4-strrx>
+Subject: A message from MIT President Kornbluth
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_132885434_889178957.1694793933355"
+x-mid: 48775958
+X-CSA-Complaints: csa-complaints@eco.de
+x-rpcampaign: sp48775958
+List-Unsubscribe: <http://links.aard.mit.edu/luoo/v1/TG5yaGt5T1d0bTFzYm5jejhvMVU1OUtRTytON0lsNUJwTWpJZWw0VTZmbEdpZ2U0N2ZKRWhHQkxPSHRRdzQrNUxwZVViNGl5SmdiRytqdERuRjZVOHo2Z0hQaEc4MndsS0>,
+ <mailto:v-coiedbg_bdbohfgfglh_jhicokle_jhicokle_a@bounce.aard.mit.edu?subject=Unsubscribe>
+x-job: 48775958
+Return-Path: v-coiedbg_bdbohfgfglh_jhicokle_jhicokle_a@bounce.aard.mit.edu
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ SN1PEPF000252A0:EE_|BL1PR01MB7650:EE_|SN1PEPF0002BA4B:EE_|SJ0PR01MB6366:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: f88dc267-9c83-4102-ca4b-08dbb6bf8db9
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?ncCyBKzxQrcB8go0e7N0GMMtKo1YBUQ1Lg8F6mViPVPiq6pN57dJOGEGisq2?=
+ =?us-ascii?Q?KviDUGosz+5odvyOb5W/HDVowcjwFOxpQevvdQ7FUn96aqRruOJNg26+0oLK?=
+ =?us-ascii?Q?YMjJsinZsDanLZWhDQKC8bgVkxbwyEKrqV+cD4BN11hwLvccJvoQw6k0Db29?=
+ =?us-ascii?Q?szdF76BdavE1SE+b3dNLGC6t4GMhOkmUShcKkHgTE4rEY2Dlw9UNf3AouvCe?=
+ =?us-ascii?Q?MBViSspQRIrwBD/8me8t2lUG9D+d/85Jz6fMIERAX7vZScuC/zUkJf4/67qN?=
+ =?us-ascii?Q?IDuGVrWJTOoaPXB4NL6LF03+94MNBD6sj8ZleD/AR51pIthT4p1LevpL+3gO?=
+ =?us-ascii?Q?YoJ4ga7eeslzp5weG/muohbBXut9WrDaU6wF5ir3+R042Sxdasw8JlY94ko0?=
+ =?us-ascii?Q?vwtwy72TwARsDVPO/g8us/g1jDgxZGx/pWFCchArYIniXy48YF7AezfOYDI/?=
+ =?us-ascii?Q?Gvj38uYCHNhReMXmKj+zgIygNHbnvIuApcCJ/G7NwXZ3HreKWpTwgwHrbr6i?=
+ =?us-ascii?Q?dWbMiBak/mjXoS+6gEKLOZB1DAWcoGZXM1lb1UE3KmCTmmSqGgXZU0X5aMak?=
+ =?us-ascii?Q?ZSqbrz2CaEgxgPWksKDVnL2V9ynaRtINdVJAzG9sJyhtQHHRyf/fzuC/FiqT?=
+ =?us-ascii?Q?hVa2d4ixe9N3qUxXbZyi91zicZjKxEkcANj3jnd3ZbrR1toGdJBNP18abIQU?=
+ =?us-ascii?Q?cHtceojOflFTGnSc1ZEhKzgWXJ7fm/bRJHARyTaZR0iaEaRh+8/FmAx56OOc?=
+ =?us-ascii?Q?7vqAmMssaWfYo/9BxnqK2G2a9XUwEFsZTCv7j+H6QyRMH4b1kfY+Xw8NRcR8?=
+ =?us-ascii?Q?G0OU8O4sjuv2iVkZH1WGGt8tJqBPML8XESo78ZYiVHdBU8eZ0X0JmimykEc3?=
+ =?us-ascii?Q?GyFkbT2ZVjJjkjoxemgDT0xX/sNe3cqIGSCE+gzxattm97qY1LtS66CCQDv9?=
+ =?us-ascii?Q?oqmJPTeLp1HmiEL4+7/08VOfn0LusJYt1TMzIUMEg10tE2WEzmcprz+Kg+nO?=
+ =?us-ascii?Q?S22Gg8to5Rmb/wTxtTvKnJVypIs7chCZ3clwEX+4sh4IRdxejzrmgng8Egof?=
+ =?us-ascii?Q?WRx8QcUeFZWglo04PCzd9cAVWIiLLYud2yE6C3fCBKWHCqS+QeP3ZVxeTpjj?=
+ =?us-ascii?Q?8l+LjwjS7kTyENzD99i19tQhJqzkxMZ9QFMp8UoiAGdCltDdhLJyOAuppwr0?=
+ =?us-ascii?Q?GHP3s3JEdWHQiHQGYj97zUu6k19fbOPJfqEb+UbTw+z7PoKtsEnpTtBbwlpK?=
+ =?us-ascii?Q?AE4ADFZTJxIXflAXhkz0IbiXxmq4ZUKaFsfQIXtG91qbMExm1mOqrRFvdtBi?=
+ =?us-ascii?Q?6CWbLFM1MPHNWdq4n3phZxLcS9XfWHZFL6+i7BN4Nr1fDkTJI7VmGi/V+fAf?=
+ =?us-ascii?Q?yCWONWtfmqpcWBW0WPlmdHmE4Rhjztx0EoNY4YBIWR/9EzT2iQ6/YolIaKai?=
+ =?us-ascii?Q?Wjj2m8KWRUCTKD3FG3AeTsk/pQFYpdrO/QL+exObKHkUb40tApSenpBFSSmc?=
+ =?us-ascii?Q?wEaiXKJndwfqehYtREWMn6k6h1VUAtBEv5kOLnZozSRZ/vXYklHKZDuyp7d2?=
+ =?us-ascii?Q?D5eoNqN5R3OqcCLoPBKqT4DeRwvx6FLuPRwa2Mwp5JtwQwIXHtAUsnvNwIBk?=
+ =?us-ascii?Q?OQpGFJUWtx8THho4LYplhUpu56X9LO6Q+oqTFNCU07iCMFczFzaanu8jt+yy?=
+ =?us-ascii?Q?iEWQaboQOHPLRSqrh3LgnD4huHUZDigSng7+NjPPFQbs9mYM?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:74.112.70.19;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail10634.aard.mit.edu;PTR:mail10634.aard.mit.edu;CAT:NONE;SFS:(13230031)(4636009)(1690799017)(451199024)(82310400011)(19627405001)(7596003)(66899024)(33716001)(40140700001)(336012)(8676002)(75432002)(356005)(166002)(83170400001)(15650500001)(83380400001)(5660300002)(966005)(6916009)(33964004)(16670700002)(66574015)(75640400001)(1096003)(26005)(5426002)(4006050)(9686003)(42186006)(58800400005)(1406899027)(10680200003);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR01MB7650
+X-OrganizationHeadersPreserved: BL1PR01MB7650.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb4.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb4.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo9.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 16 Sep 2023 14:16:43.5829
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ f88dc267-9c83-4102-ca4b-08dbb6bf8db9
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: SN1PEPF0002BA4B.namprd03.prod.outlook.com
+X-CrossPremisesHeadersFiltered: SN1PEPF0002BA4B.namprd03.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ SN1PEPF0002BA4B.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ SN1PEPF000252A0.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 99aaaec9-766a-45f4-82a3-08dbb6bf81e2
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.112;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2023 14:16:43.3798
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f88dc267-9c83-4102-ca4b-08dbb6bf8db9
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ SN1PEPF000252A0.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB6366
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.6369511
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6792.022
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?V3poVVU5azlyczF4T2cwdjNvNWo3MkkxNkFIcjlRaGpkTGJGVHZJTGVtbnJQ?=
+ =?utf-8?B?czRqUi83YzRTUGw1RURMbmloNUhhWHcwcUpmRE14eGNnaHFXS3V4SW5EODN1?=
+ =?utf-8?B?V3R2NWQ0ZG1LNTc4Q1VRTEVTNmgrVEwyOVQ2YSs4dVdNNHZZWCtIREt4WTVm?=
+ =?utf-8?B?NkcxWUtRZHdpTm4xSTdJa2VBeGUveHRBN1VQbjBUZ3o3aEorRTRZQmdaOGVV?=
+ =?utf-8?B?Sld2V3RjeUcxdUVTUDQ2bnoyKzVTbC9RUkVwc0xwR2lLRUVveFZtSjlOVzhO?=
+ =?utf-8?B?czI0S1I5STVXS28wLy9Uak5ZU0Z0N1gwc2o4SkRPZ3FKSENaUUpaSGh1Yzd2?=
+ =?utf-8?B?UEdtclo4NmdGRmtacVpwbWJXczM0empPWXF5MHZUbVBBV1ZSTU1oUFFEdXJu?=
+ =?utf-8?B?ZjM0SUlsbVVZa2RnMUhNVVRPdmlDcFdwcnBVTVZWdE12YjhkSTE0TTgvVTMw?=
+ =?utf-8?B?STdPMkVGaHI4R2tuK2JYNWthcUsrZ3hRS0pqYm5UaDZENkJTbDRXRkFVOU8r?=
+ =?utf-8?B?RDJCR0lxbEdyYlE3UzFWVFRNbm1PNGo0WU1nVk1RQ1Q5UnR0OXo3NkJMd1ZQ?=
+ =?utf-8?B?YnMrYlRlQXFUVkpJN0J3WGkweXVTdWtkUGR2cE0vU2hOeDhaR1NtMHRFdFVt?=
+ =?utf-8?B?MFMybGRKeGd4OUdHUDR1M1RNUlhJOWk3ajRGMjRmcjNTNExYeVowbjdyZWNX?=
+ =?utf-8?B?VnNDeG16K01ndVVTSDZiVUlzQ3U4cFFqWUV4ZmdrN0tjdkJ1VDA1OVVNU2po?=
+ =?utf-8?B?UllzUXhrbzg3Zng3a3EwNFFDOS9EcXpsTGFnVzJpSk1kK2dQQjNsOEJ1Nllz?=
+ =?utf-8?B?RmVpOGdPTHVZS1NrUFU3Q0JVNkw0Ti9YRlBDNUE4eUZjNlYrS01oVWdkbnJs?=
+ =?utf-8?B?Snh4aHBSMnlXODVqM2tZOXAwZ3BHYW9JRElWeUxrVGRvOHNEUWFpdkw1TjZx?=
+ =?utf-8?B?anFJTHR2NThyblUxdGdVY3Y3a1dhZ0Z0S0tCYkZST1VCQTdjcE5teTc5Qm5y?=
+ =?utf-8?B?aXpRMjcxKy9CTnlKRnRkUVdZczZpMkFTejNoMFNpY3FlRjlqcysxRUQ1cVcy?=
+ =?utf-8?B?aUtCVDdBU0tCUExrUjZ0TXJDc2hCSmFtdHlYT3BPT1hqejBPTDdzcThKY0Qy?=
+ =?utf-8?B?TUEvd3J3ckZxZUFkSnpsU0pqRVY1SnI3RHBVUG8vb3VCQUNJeEE4dHVzbm00?=
+ =?utf-8?B?SVM4a0VxdjNjSjJjVEZXZk4xQ0Vybjh0aWlET0RJNGY1SEhJeHRMc2NkalRv?=
+ =?utf-8?B?QTdDa1JwZHRCOVd3ZU0rTU0zMkVQYkltbFZQeTJoN3dnY3hNRlpYQkRFa3Iw?=
+ =?utf-8?B?WCt1VW5wa2RzM1ROS1pSbFY0N21EblZlczVvK1IyakJ3TDN5Q05rOUt4c3NP?=
+ =?utf-8?B?UWtvNHZmeVpxTVFPNzJtbzBrVUQwKzNCR1BMNmx6TkxIbkdpLytOUXM1dmph?=
+ =?utf-8?B?dk5GajZZZHRCYVFCY2czYTdyaFNvTXNPWnJYMzM1NGZ2SXdBbzRIVTYySUxH?=
+ =?utf-8?B?OURSMmZGVTlwNnJ2RFhWNkEzZDgvWkRkcjAzRFdBUmo4K2NPVXpxSGN2Qlg0?=
+ =?utf-8?B?V0FGQUkzTENVRlZTbEJpdzZnVXVDNDFkMERFWnVpTXdtSWV5YklYV0dkR1Jk?=
+ =?utf-8?B?bnYvcU5GenlMNUJCdzVVR0RMRmZhZ3Z2Ti8vYWxPR3pFUVFETVNjWHJ0bkdM?=
+ =?utf-8?B?Y3BJc0FwTkxtczlKeTEyZXQ4YnF5RFNjT2xzZVpSK1RCK0R3NDUwcElDaFZ2?=
+ =?utf-8?B?Y0E3SFhnMGFQK0RhRFVVaVB6T2o0VVB1cFp6Sm80bEErUlhxQzZHWk9iS2pU?=
+ =?utf-8?B?TWNnOTR0Y0tvMnloYkRhTFpqNU9QUkFGSG5iN3lFTjJSTmp3VG1lRE5uTHpR?=
+ =?utf-8?B?RTdMQlFlWnpVNTZHZG80WEYxQ0R3Q2R4WXM3MFVjczRTRFN5WHh0bWRZMWFN?=
+ =?utf-8?B?TVRwdUx2UmRHNk0wRE44aWNtVUVLYnpDRmlhSytQNWRDRlFHZ3dlbkFVZG9G?=
+ =?utf-8?B?MUZGemd1ekROeWkvRE9laVVlWHhvN2FzVFlob2pHT0M0OG1XNUFQUTJDQU8v?=
+ =?utf-8?B?Vm1uQmxvZUVtTm9IOEpMYVBhbnFKOGVQUWZsR1I1UGxDRXBQWjRvWXZmRDlx?=
+ =?utf-8?B?SVh2c2I5TVh6Y21OK1RtUUE1UGFNanpKZDlVQnJ4ZGVnWGN5MGE4dkhUMzlF?=
+ =?utf-8?B?QUVHMTRiOXhoWXFJNWw5bUhvU09ZWHVBTkl1TUh6bHRWV1k2NUwzb3ZlVktJ?=
+ =?utf-8?Q?WQSuof5Z5GhnO8B4q3GyFtu75/aHRDJqnmdyL/17TE=3D?=
+MIME-Version: 1.0
+
+------=_Part_132885434_889178957.1694793933355
+Content-Type: multipart/related; 
+	boundary="----=_Part_132885435_2093480964.1694793933355"
+
+------=_Part_132885435_2093480964.1694793933355
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_132885436_667057692.1694793933355"
+
+------=_Part_132885436_667057692.1694793933355
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+To view this mail in a browser, copy https://links.aard.mit.edu/servlet/Mai=
+lView?ms=3DNDg3NzU5NTgS1&r=3DMTMxMzg0NjIyMDQ3MQS2&j=3DMjU0MTkzOTM4MAS2&mt=
+=3D1&rt=3D0 into your browser.
+Dear Jiannan,=C2=A0
+
+I=E2=80=99m pleased to share a special message from MIT=E2=80=99s 18th pres=
+ident, Sally Kornbluth. The letter underscores President Kornbluth=E2=80=99=
+s appreciation for the unique qualities of the Institute and the sense of h=
+ope that is everywhere in the MIT community.=C2=A0=C2=A0                   =
+                                        =20
+ =20
+Read Now https://links.aard.mit.edu/els/v2/gp69Me-br6M8/SFNUN1Y0UnJOMzlaSlk=
+4bmpQREYwWkZZaWVZT1g4TGw3N2RJZE9pUjJUbVRqZlVKUURtYlhoUW1uKzM4NTZtbE5CU1p2ZE=
+RxZmdBQTlINm5GajlnZG5VWFkxUHIzNTdnUHBrT0U3bnYyMi92b2pubFJ6K3JVZz09S0/      =
+                                                     =20
+Sincerely,=C2=A0
+David Fung =E2=80=9985=C2=A0
+Chair, MIT Annual Giving Board=C2=A0
+
+600 Memorial Drive, W98 I Cambridge, MA 02139-4822 I
+giving@mit.edu=C2=A0 mailto:giving@mit.edu?subject=3D I 617-253-0129
+
+If you wish to be removed from this mailing list,click here https://www.pag=
+es03.net/mit/unsubscribe/MIT_Alumni_Association_Opt_Out_Page_2017?spMailing=
+ID=3D48775958&spUserID=3DMTMxMzg0NjIyMDQ3MQS2&spJobID=3DMjU0MTkzOTM4MAS2&sp=
+ReportId=3DMjU0MTkzOTM4MAS2.
+------=_Part_132885436_667057692.1694793933355
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/htm=
+l4/strict.dtd"><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"></=
+head>
+<head>
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=
+=3D1.0">
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:AllowPNG/>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
+    <title key=3D"1">A message from MIT President Kornbluth</title>
+    <style key=3D"2" type=3D"text/css">
+        .layout-table a:link{color:blue;text-decoration:underline;}.layout-=
+table a:visited{color:purple;text-decoration:underline;}.layout-table a:lin=
+k:active{color:red}.layout-table a:visited:active{color:purple}.layout-tabl=
+e address{display:block;font-style:italic}.layout-table area{}.layout-table=
+ article{display:block}.layout-table aside{display:block}.layout-table b{fo=
+nt-weight:700}.layout-table bdo{unicode-bidi:bidi-override}.layout-table bl=
+ockquote{display:block;margin:1em 40px}.layout-table body{margin:8px}.layou=
+t-table body:focus{outline:none}.layout-table caption{display:table-caption=
+;text-align:center}.layout-table cite{font-style:italic}.layout-table code{=
+font-family:monospace}.layout-table col{display:table-column}.layout-table =
+colgroup{display:table-column-group}.layout-table datalist{}.layout-table d=
+d{display:block;margin-left:40px}.layout-table del{text-decoration:line-thr=
+ough}.layout-table details{display:block}.layout-table dfn{font-style:itali=
+c}.layout-table div{display:block; margin: 0}.layout-table dl{display:block=
+;margin:1em 0}.layout-table dt{display:block}.layout-table em{font-style:it=
+alic}.layout-table embed:focus{outline:none}.layout-table fieldset{display:=
+block;margin-left:2px;margin-right:2px;border:2px groove;padding:.35em .75e=
+m .625em}.layout-table figcaption{display:block}.layout-table figure{displa=
+y:block;margin:1em 40px}.layout-table footer{display:block}.layout-table fo=
+rm{display:block;margin-top:0}.layout-table h1{display:block;font-weight:40=
+0;margin:0 0}.layout-table h2{display:block;font-weight:400;margin:0 0}.lay=
+out-table h3{display:block;font-weight:400;margin:0 0}.layout-table h4{disp=
+lay:block;font-weight:400;margin:0 0}.layout-table h5{display:block;font-we=
+ight:400;margin:0 0}.layout-table h6{display:block;font-weight:400;margin:0=
+ 0}.layout-table head{}.layout-table header{display:block}.layout-table hr{=
+display:block;border-style:inset;border-width:1px;margin:.5em auto}.layout-=
+table html{display:block}.layout-table html:focus{outline:none}.layout-tabl=
+e i{font-style:italic}.layout-table iframe:focus{outline:none}.layout-table=
+ iframe[seamless]{display:block}.layout-table img{display:inline-block; max=
+-width: 100%;}.layout-table ins{text-decoration:underline}.layout-table kbd=
+{font-family:monospace}.layout-table label{cursor:default}.layout-table leg=
+end{display:block;padding-left:2px;padding-right:2px;border:none}.layout-ta=
+ble li{display:list-item}.layout-table link{}.layout-table map{display:inli=
+ne}.layout-table menu{display:block;list-style-type:disc;padding-left:40px;=
+margin:1em 0}.layout-table nav{display:block}.layout-table object:focus{out=
+line:none}.layout-table ol{display:block;list-style-type:decimal;padding-le=
+ft:40px;}.layout-table output{display:inline}.layout-table p{display:block;=
+margin:0 0}.layout-table param{}.layout-table pre{display:block;font-family=
+:monospace;white-space:pre-wrap;margin:0 0}.layout-table q{display:inline}.=
+layout-table q::before{content:open-quote}.layout-table q::after{content:cl=
+ose-quote}.layout-table rt{line-height:normal}.layout-table s{text-decorati=
+on:line-through}.layout-table samp{font-family:monospace}.layout-table scri=
+pt{}.layout-table section{display:block}.layout-table small{}.layout-table =
+strike{text-decoration:line-through}.layout-table strong{font-weight:700}.l=
+ayout-table style{}.layout-table sub{vertical-align:sub;}.layout-table summ=
+ary{display:block}.layout-table sup{vertical-align:super;}.layout-table tab=
+le{display:table;border-collapse:separate;border-spacing:2px;border-color:g=
+ray}.layout-table tbody{display:table-row-group;vertical-align:middle;borde=
+r-color:inherit}.layout-table td{display:table-cell;vertical-align:inherit}=
+.layout-table tfoot{display:table-footer-group;vertical-align:middle;border=
+-color:inherit}.layout-table th{display:table-cell;vertical-align:inherit;f=
+ont-weight:700;text-align:center}.layout-table thead{display:table-header-g=
+roup;vertical-align:middle;border-color:inherit}.layout-table title{}.layou=
+t-table tr{display:table-row;vertical-align:inherit;border-color:inherit}.l=
+ayout-table u{text-decoration:underline}.layout-table ul{display:block;list=
+-style-type:disc;padding-left:40px;margin:1em 0 1px em 0}.layout-table var{=
+font-style:italic}
+        .layout-table .noBorderSpacing{border-spacing:0!important;}
+        div, p, a, li, td {-webkit-text-size-adjust:none; -ms-text-size-adj=
+ust:none;}
+        #outlook a {padding:0;}
+        .ReadMsgBody {width:100%;}
+        .ExternalClass {width:100%;}
+        .ExternalClass * {line-height:110%;}
+        .align-center-column {width: 50%;}
+        @media screen and (max-width: 480px) {
+            table.layout-table { height:unset !important; }
+            .layout-grid-cell { height: auto !important; width: 100% !impor=
+tant; }
+            tr { display: table-row !important; display: grid !important; }
+            colgroup.displayNone, tr.displayNone, td.displayNone, div.displ=
+ayNone {display:none !important;}
+            .w100per {width: 100% !important;}
+            .image-group-cell {width: initial !important}
+        }
+        @media screen and (max-width: 480px) {
+            .hide-on-mobile{display:none !important;}
+            table.hide-on-mobile{display:none !important;}
+            tr.hide-on-mobile{display:none !important;}
+            .layout-grid-cell-content-mso {width: auto !important;}
+            .layout-table .hide-on-desktop{display:block !important;}
+            .layout-table table.hide-on-desktop{display:table !important;}
+            .layout-table tr.hide-on-desktop{display:table-row !important;}
+            .layout-table tr.hide-on-desktop.displayBlock{display:grid !imp=
+ortant;}=20
+        }
+        @media screen and (min-width: 480px) {
+            .hide-on-mobile{display:block !important;}
+            table.hide-on-mobile{display:table !important;}
+            tr.hide-on-mobile{display:table-row !important;}
+            .layout-table .hide-on-desktop{display:none !important;}
+            .layout-table table.hide-on-desktop{display:none !important;}
+            .layout-table tr.hide-on-desktop{display:none !important;}
+            .content-editor .layout-table .hide-on-desktop{display:block !i=
+mportant;}
+            .content-editor .layout-table table.hide-on-desktop{display:tab=
+le !important;}
+            .content-editor .layout-table tr.hide-on-desktop{display:table-=
+row !important;}
+        }
+    </style>
+    <!--[if gte mso 9]>
+    <style key=3D"3" type=3D"text/css">
+            .fzg12gh8nr {font-family: ;}
+            .tofev7 {font-family: Arial, Helvetica, sans-serif;}
+            .zgzb9ab {font-family: arial:bold;}
+            .b82pehb {font-family: arial:normal;}
+            .a8oizd {font-family: helvetica;}
+            .vg1kgq {font-family: helvetica:bold;}
+            .heiu97 {font-family: helvetica:normal;}
+            .ktr83o {font-family: sans-serif;}
+            .qeqa3w {font-family: sans-serif:bold;}
+            .xdhjelb {font-family: sans-serif:normal;}
+    </style>
+    <![endif]-->
+    <!--[if gte mso 9]>
+        <style type=3D"text/css">
+            .layout-body .hide-on-desktop,
+            .layout-body .hide-on-desktop table,
+            .layout-body .hide-on-desktop td,
+            .layout-body .hide-on-desktop tr,
+            .layout-body .hide-on-desktop a,
+            .layout-body .hide-on-desktop span,
+            .layout-body .hide-on-desktop p,
+            .layout-body .hide-on-desktop div {background-color: transparen=
+t !important;display: none !important;max-height: 0 !important;line-height:=
+ 0 !important;mso-hide:all !important; margin: 0 !important; padding: 0 !im=
+portant; height: 0 !important;}
+        </style>
+    <![endif]-->
+    <!--[if gt mso 14]>
+    <style type=3D"text/css" media=3D"all">
+    /* Outlook 2013 weird horizontal lines fix */
+    tr {line-height: 0px; border-collapse: collapse;}
+    </style>
+    <![endif]-->
+</head>
+<body class=3D"layout-body" style=3D"background-color:transparent;"><center=
+><font size=3D"1" color=3D"#000000" face=3D"ARIAL">If you are unable to see=
+ the message below, <a href=3D"https://links.aard.mit.edu/servlet/MailView?=
+ms=3DNDg3NzU5NTgS1&amp;r=3DMTMxMzg0NjIyMDQ3MQS2&amp;j=3DMjU0MTkzOTM4MAS2&am=
+p;mt=3D1&amp;rt=3D0">click here to view</a>.</font><font face=3D"ARIAL" col=
+or=3D"#808080" size=3D"2"><br></font></center>
+
+<table class=3D"layout-table" key=3D"3" align=3D"center" style=3D"table-lay=
+out:fixed;height:auto;width:100% !important;background-color:transparent;" =
+cellspacing=3D"0" cellpadding=3D"0">
+    <colgroup class=3D"displayNone" key=3D"1">
+        <col class=3D"align-center-column" key=3D"0">
+        <col width=3D"100px" key=3D"1">
+        <col width=3D"100px" key=3D"2">
+        <col width=3D"100px" key=3D"3">
+        <col width=3D"100px" key=3D"4">
+        <col width=3D"100px" key=3D"5">
+        <col width=3D"100px" key=3D"6">
+        <col class=3D"align-center-column" key=3D"7">
+    </colgroup>
+   =20
+           =20
+                <tr class=3D"layout-grid-row displayBlock " style=3D"height=
+:100%;" data-content-item-id=3D"abcb753e-c4dc-4aea-8e5e-4b78c7367218">
+                    <td class=3D"layout-grid-section-cell displayNone" key=
+=3D"before"></td>
+                        <!--[if gte mso 9][!tonline]>
+                        <td class=3D"layout-grid-cell target source" colSpa=
+n=3D"6" width=3D"600" valign=3D"top" style=3D"width:600px; height:100%;vert=
+ical-align:top;padding-top:0px;padding-left:0px;padding-right:0px;padding-b=
+ottom:0px;            background-color:#FFFFFF;">
+                        <![endif]-->
+                        <!--[if !gte mso 9]><!-->
+                        <td class=3D"layout-grid-cell displayBlock target s=
+ource" colspan=3D"6" valign=3D"top" style=3D"width:600px; height:100%;verti=
+cal-align:top;padding-top:0px;padding-left:0px;padding-right:0px;padding-bo=
+ttom:0px;             background-color:#FFFFFF;" data-content-item-id=3D"ab=
+cb753e-c4dc-4aea-8e5e-4b78c7367218">
+                        <!-- <![endif] hidden -->   =20
+                           =20
+                                <div class=3D"layout-grid-cell-content layo=
+ut-grid-cell-content-mso" style=3D"            width: 600px;
+overflow-wrap:anywhere;overflow:hidden;" data-content-item-id=3D"abcb753e-c=
+4dc-4aea-8e5e-4b78c7367218">
+                                    <div>
+
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" data-content-item-i=
+d=3D"abcb753e-c4dc-4aea-8e5e-4b78c7367218" style=3D"width:100%;border-spaci=
+ng:0!important;box-sizing:border-box;">
+   =20
+        <tr>
+            <td>
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" sty=
+le=3D"width:100%;border-spacing:0!important;background-color:#ce1126;">
+                   =20
+                        <tr>
+                            <td>
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" style=3D"width:100%;border-spacing:0!important;padding-left:20=
+px;padding-right:20px;padding-top:20px;box-sizing:border-box;">
+                                   =20
+                                        <tr>
+                                            <td align=3D"left">            =
+    <img data-content-item-id=3D"abcb753e-c4dc-4aea-8e5e-4b78c7367218" src=
+=3D"https://content-us-1.content-cms.com/c87b5394-90d9-4ecb-ad10-64a17144ad=
+2b/dxdyn/48775958/20354e6f-6262-44ff-afbf-4c453979be6f.png?" border=3D"0" s=
+tyle=3D"width:100%;display:block;max-width:100%!important;" width=3D"560">
+                                               =20
+                                            </td>
+                                        </tr>
+                                   =20
+                                </table>
+                            </td>
+                        </tr>
+                   =20
+                </table>
+            </td>
+        </tr>
+   =20
+</table>
+
+</div>
+
+                                </div>
+                           =20
+                                <div class=3D"layout-grid-cell-content layo=
+ut-grid-cell-content-mso" style=3D"            width: 600px;
+overflow-wrap:anywhere;overflow:hidden;" data-content-item-id=3D"abcb753e-c=
+4dc-4aea-8e5e-4b78c7367218">
+                                    <div>
+<table data-content-item-id=3D"abcb753e-c4dc-4aea-8e5e-4b78c7367218" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"width:100%;border-spaci=
+ng:0!important;padding-top:10px;padding-bottom:10px;padding-left:10px;paddi=
+ng-right:10px;box-sizing:border-box;">
+   =20
+        <tr>
+            <td>
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" sty=
+le=3D"width:100%;border-spacing:0!important;background-color:transparent;">
+                   =20
+                        <tr>
+                            <td>                                <table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"width:100%;border-spa=
+cing:0!important;height:100%;">
+                                   =20
+                                        <tr>
+                                            <td style=3D"padding-right:10px=
+;padding-top:10px;padding-bottom:10px;padding-left:10px;">
+                                                <!--[if gte mso 9][!tonline=
+]>
+                                                <div style=3D"height:100%;w=
+ord-break: break-word;mso-line-height-rule: exactly;font-family:Arial, Helv=
+etica, sans-serif!important;font-size:16px;font-weight:normal;color: #00000=
+0;background-color:transparent;line-height: 130%;" class=3D"tofev7">
+                                                <![endif]-->
+                                                    <!--[if !gte mso 9]><!-=
+->
+                                                    <div data-content-item-=
+id=3D"abcb753e-c4dc-4aea-8e5e-4b78c7367218" style=3D"height:100%;word-break=
+: break-word;mso-line-height-rule: exactly;font-family:Arial, Helvetica, sa=
+ns-serif!important;font-size:16px;font-weight:normal;color: #000000;backgro=
+und-color:transparent;line-height:1.3;" class=3D"tofev7"><!-- <![endif] hid=
+den --><p>&nbsp;</p><p><span style=3D"color:rgb( 0 , 0 , 0 );font-family:'n=
+euehaasgrotesktext pro' , , , sans-serif;font-size:11pt">Dear Jiannan,&nbsp=
+;</span></p><p><span style=3D"color:rgb( 0 , 0 , 0 );font-family:'neuehaasg=
+rotesktext pro' , , , sans-serif;font-size:11pt">&nbsp;&nbsp;</span></p><p>=
+<span style=3D"color:rgb( 0 , 0 , 0 );font-family:'neuehaasgrotesktext pro'=
+ , , , sans-serif;font-size:11pt">I=E2=80=99m pleased to share a special me=
+ssage from MIT=E2=80=99s 18th president, Sally Kornbluth. The letter unders=
+cores President Kornbluth=E2=80=99s appreciation for the unique qualities o=
+f the Institute and the sense of hope that is everywhere in the MIT communi=
+ty.&nbsp;&nbsp;</span></p></div>
+                                            </td>
+                                        </tr>
+                                   =20
+                                </table>
+                            </td>
+                        </tr>
+                   =20
+                </table>
+            </td>
+        </tr>
+   =20
+</table>
+
+</div>
+
+                                </div>
+                           =20
+                                <div class=3D"layout-grid-cell-content layo=
+ut-grid-cell-content-mso" style=3D"            width: 600px;
+overflow-wrap:anywhere;overflow:hidden;" data-content-item-id=3D"abcb753e-c=
+4dc-4aea-8e5e-4b78c7367218">
+                                    <div>
+<table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"width:100%;min-width:100%;box-sizing:border-box;=
+border-spacing:0!important;">
+ =20
+    <tr>
+      <td>
+        <table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"width:100%;min-width:100%;box-sizing:bor=
+der-box;border-spacing:0!important;">
+         =20
+            <tr>
+              <td bgcolor=3D"transparent" style=3D"background:transparent;"=
+>
+                <table width=3D"100%" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" role=3D"presentation" style=3D"width:100%;min-width:100%;box-si=
+zing:border-box;border-spacing:0!important;padding-left:20px;padding-right:=
+10px;padding-top:20px;padding-bottom:20px;mso-padding-left-alt:0;mso-paddin=
+g-right-alt:0;">
+                 =20
+                    <tr>
+                      <td align=3D"center">
+                        <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"box-sizing:border-box;border-spacing:=
+0!important;">
+                         =20
+                            <tr>
+                              <!--[if gte mso 9][!tonline]>
+                              <td style=3D"width:20px;"></td>
+                              <![endif]-->
+                              <!--[if !gte mso 9]><!--><!-- <![endif] hidde=
+n -->
+                              <td bgcolor=3D"#ce1226" align=3D"center" styl=
+e=3D"padding-top:10px;padding-bottom:10px;padding-left:10px;padding-right:1=
+0px;color:#FFFFFF;border-top-left-radius:0px;border-top-right-radius:0px;bo=
+rder-bottom-left-radius:0px;border-bottom-right-radius:0px;">              =
+                  <a key=3D"button-abcb753e-c4dc-4aea-8e5e-4b78c7367218" na=
+me=3D"Read Now" href=3D"https://links.aard.mit.edu/els/v2/Z6pVsKjzkWfN/SFln=
+blV6Q2tmdGtGR2RTN0NOOVVGVkozdnVFT0RURFRXOTR0c2xXdkZvaFd6azBxYzVyM1RLZXk2REh=
+4WnhSMngzTEFhVjRIc1dYQzh3NGZGZWY1ZW5PWkFUaENtM3YxMHA1TmVMZVNXQVlmM2phaG1TeV=
+hrZz09S0/" target=3D"_blank" class=3D"tofev7" style=3D"display:block;text-a=
+lign:center;text-decoration:none;cursor:pointer;font-family:Arial, Helvetic=
+a, sans-serif !important;font-size:16px;font-weight:bold;color:#FFFFFF;">
+                                  <span data-content-item-id=3D"abcb753e-c4=
+dc-4aea-8e5e-4b78c7367218">Read Now</span>
+                                </a>
+                              </td>
+                              <!--[if gte mso 9][!tonline]>
+                              <td style=3D"width:10px;"></td>
+                              <![endif]-->
+                              <!--[if !gte mso 9]><!--><!-- <![endif] hidde=
+n -->
+                            </tr>
+                         =20
+                        </table>
+                      </td>
+                    </tr>
+                 =20
+                </table>
+              </td>
+            </tr>
+         =20
+        </table>
+      </td>
+    </tr>
+ =20
+</table>
+
+</div>
+
+                                </div>
+                           =20
+                                <div class=3D"layout-grid-cell-content layo=
+ut-grid-cell-content-mso" style=3D"            width: 600px;
+overflow-wrap:anywhere;overflow:hidden;" data-content-item-id=3D"abcb753e-c=
+4dc-4aea-8e5e-4b78c7367218">
+                                    <div>
+<table data-content-item-id=3D"abcb753e-c4dc-4aea-8e5e-4b78c7367218" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"width:100%;border-spaci=
+ng:0!important;padding-top:10px;padding-bottom:10px;padding-left:10px;paddi=
+ng-right:10px;box-sizing:border-box;">
+   =20
+        <tr>
+            <td>
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" sty=
+le=3D"width:100%;border-spacing:0!important;background-color:transparent;">
+                   =20
+                        <tr>
+                            <td>                                <table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"width:100%;border-spa=
+cing:0!important;height:100%;">
+                                   =20
+                                        <tr>
+                                            <td style=3D"padding-right:10px=
+;padding-top:10px;padding-bottom:10px;padding-left:10px;">
+                                                <!--[if gte mso 9][!tonline=
+]>
+                                                <div style=3D"height:100%;w=
+ord-break: break-word;mso-line-height-rule: exactly;font-family:Arial, Helv=
+etica, sans-serif!important;font-size:16px;font-weight:normal;color: #00000=
+0;background-color:transparent;line-height: 130%;" class=3D"tofev7">
+                                                <![endif]-->
+                                                    <!--[if !gte mso 9]><!-=
+->
+                                                    <div data-content-item-=
+id=3D"abcb753e-c4dc-4aea-8e5e-4b78c7367218" style=3D"height:100%;word-break=
+: break-word;mso-line-height-rule: exactly;font-family:Arial, Helvetica, sa=
+ns-serif!important;font-size:16px;font-weight:normal;color: #000000;backgro=
+und-color:transparent;line-height:1.3;" class=3D"tofev7"><!-- <![endif] hid=
+den --><p><span style=3D"color:rgb( 0 , 0 , 0 );font-family:'neuehaasgrotes=
+ktext pro' , , , sans-serif;font-size:11pt">Sincerely,&nbsp;</span></p><p><=
+span style=3D"color:rgb( 0 , 0 , 0 );font-family:'neuehaasgrotesktext pro' =
+, , , sans-serif;font-size:11pt">David Fung =E2=80=9985&nbsp;</span></p><p>=
+<span style=3D"color:rgb( 0 , 0 , 0 );font-family:'neuehaasgrotesktext pro'=
+ , , , sans-serif;font-size:11pt">Chair, MIT Annual Giving Board&nbsp;</spa=
+n></p><p><span style=3D"color:rgb( 0 , 0 , 0 );font-family:'neuehaasgrotesk=
+text pro' , , , sans-serif;font-size:11pt">&nbsp;</span></p></div>
+                                            </td>
+                                        </tr>
+                                   =20
+                                </table>
+                            </td>
+                        </tr>
+                   =20
+                </table>
+            </td>
+        </tr>
+   =20
+</table>
+
+</div>
+
+                                </div>
+                           =20
+                                <div class=3D"layout-grid-cell-content layo=
+ut-grid-cell-content-mso" style=3D"            width: 600px;
+overflow-wrap:anywhere;overflow:hidden;" data-content-item-id=3D"abcb753e-c=
+4dc-4aea-8e5e-4b78c7367218">
+                                    <div>
+<table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"width:100%;min-width:100%;box-sizing:border-box;=
+border-spacing:0!important;">
+   =20
+      <tr>
+        <td bgcolor=3D"transparent" style=3D"background:transparent">
+        <table width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"width:100%;min-width:100%;box-sizing:bor=
+der-box;border-spacing:0!important;padding-left:10px;padding-right:10px;pad=
+ding-top:10px;padding-bottom:10px;">
+         =20
+            <tr>
+              <td align=3D"center">                <!--[if gte mso 9][!tonl=
+ine]>
+          <table bgcolor=3D"transparent" style=3D"padding-top:8px;padding-b=
+ottom:8px;mso-padding-alt: 8px 0px 8px 0px;">=20
+           =20
+              <tr>
+                 <td>
+                  <table align=3D"center" width=3D"580" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" role=3D"presentation">
+                   =20
+                      <tr>
+                        <td data-content-item-id=3D"abcb753e-c4dc-4aea-8e5e=
+-4b78c7367218" style=3D"margin-left:0;margin-right:0;opacity:1;border-width=
+:2px 0px 0px 0px;border-color:#dcdcdc;border-style:solid;;border-bottom:non=
+e;border-left:none;border-right:none;line-height:0">&nbsp;</td>=20
+                      </tr>
+                   =20
+                  </table>
+                      </td>
+                   </tr>
+                =20
+              </table>
+                  <![endif]-->
+                <!--[if !gte mso 9]><!-->
+                <hr data-content-item-id=3D"abcb753e-c4dc-4aea-8e5e-4b78c73=
+67218" align=3D"center" width=3D"100%" style=3D"margin-left:0;margin-right:=
+0;opacity:1;border-width:2px 0px 0px 0px;border-color:#dcdcdc;border-style:=
+solid;">
+                <!-- <![endif] hidden -->
+              </td>
+            </tr>
+         =20
+        </table>
+      </td>
+    </tr>
+ =20
+</table>
+
+</div>
+
+                                </div>
+                           =20
+                                <div class=3D"layout-grid-cell-content layo=
+ut-grid-cell-content-mso" style=3D"            width: 600px;
+overflow-wrap:anywhere;overflow:hidden;" data-content-item-id=3D"abcb753e-c=
+4dc-4aea-8e5e-4b78c7367218">
+                                    <div>
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" data-content-item-i=
+d=3D"abcb753e-c4dc-4aea-8e5e-4b78c7367218" style=3D"width:100%;border-spaci=
+ng:0!important;padding-top:0px; padding-bottom:0px;box-sizing:border-box;">
+   =20
+        <tr>
+            <td>
+                <table class=3D"image-text-component" border=3D"0" cellpadd=
+ing=3D"0" cellspacing=3D"0" style=3D"width:100%;border-spacing:0!important;=
+background-color:transparent">
+                   =20
+                        <tr>
+                            <td>                                <table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"width:100%;border-spa=
+cing:0!important;">
+                                   =20
+                                        <tr>
+                                            <td data-content-item-id=3D"abc=
+b753e-c4dc-4aea-8e5e-4b78c7367218" class=3D"displayBlock w100per" style=3D"=
+vertical-align:top;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" style=3D"width:100%;border-spacing:0!important=
+;">
+                                                   =20
+                                                        <tr>
+                                                            <td align=3D"le=
+ft" style=3D"padding-top:20px;padding-bottom:0px;">
+                                                                    <img cl=
+ass=3D"complex-block-img" width=3D"600" border=3D"0" style=3D"width:100%;di=
+splay:block;max-width:100%!important;" data-content-item-id=3D"abcb753e-c4d=
+c-4aea-8e5e-4b78c7367218" src=3D"https://content-us-1.content-cms.com/c87b5=
+394-90d9-4ecb-ad10-64a17144ad2b/dxdyn/48775958/f9bce07b-ed13-4c63-a589-55bd=
+530c9500.png?">
+                                                            </td>
+                                                        </tr>
+                                                   =20
+                                                </table>                   =
+                         </td>
+                                        </tr>
+                                        <tr>
+                                            <td data-content-item-id=3D"abc=
+b753e-c4dc-4aea-8e5e-4b78c7367218" class=3D"displayBlock w100per" style=3D"=
+vertical-align:top;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" style=3D"width:100%;border-spacing:0!important=
+;">
+                                                   =20
+                                                        <tr>
+                                                            <td>
+                                                                <table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"width:100%;border-spa=
+cing:0!important;height:100%;">
+                                                                   =20
+                                                                        <tr=
+>
+                                                                           =
+ <td style=3D"padding-right:20px;padding-top:0px;padding-bottom:0px;padding=
+-left:20px;">
+                                                                           =
+     <!--[if gte mso 9][!tonline]>
+                                                                           =
+     <div style=3D"height:100%;word-break: break-word; mso-line-height-rule=
+:exactly;font-family:Arial, Helvetica, sans-serif !important;font-size:16px=
+;font-weight:normal;color:#000000;line-height:100%;" class=3D"tofev7">
+                                                                           =
+     <![endif]-->
+                                                                           =
+     <!--[if !gte mso 9]><!-->
+                                                                           =
+     <div data-content-item-id=3D"abcb753e-c4dc-4aea-8e5e-4b78c7367218" sty=
+le=3D"height:100%;word-break: break-word; mso-line-height-rule:exactly;font=
+-family:Arial, Helvetica, sans-serif !important;font-size:16px;font-weight:=
+normal;color:#000000;line-height:1;" class=3D"tofev7"><!-- <![endif] hidden=
+ --><p><span style=3D"font-size:10px">600 Memorial Drive, W98 I Cambridge, =
+MA 02139-4822 I</span></p><p><a style=3D"color:rgb( 0 , 104 , 255 );text-de=
+coration:underline" href=3D"mailto:giving@mit.edu?subject=3D" name=3D"Text =
+Link 413668415 givingmitedu" data-key=3D"13d7be56-8f60-4c0e-bbce-d49a1e57cd=
+46:1778255f-4959-4168-80b6-589664227406" target=3D"_blank" rel=3D"noopener =
+noreferrer noopener noreferrer noopener noreferrer noopener noreferrer noop=
+ener noreferrer noopener noreferrer noopener noreferrer noopener noreferrer=
+ noopener noreferrer noopener noreferrer noopener noreferrer noopener noref=
+errer noopener noreferrer noopener noreferrer noopener noreferrer noopener =
+noreferrer noopener noreferrer noopener noreferrer noopener noreferrer noop=
+ener noreferrer noopener noreferrer noopener noreferrer noopener noreferrer=
+ noopener noreferrer noopener noreferrer noopener noreferrer noopener noref=
+errer noopener noreferrer noopener noreferrer noopener noreferrer noopener =
+noreferrer noopener noreferrer noopener noreferrer noopener noreferrer noop=
+ener noreferrer noopener noreferrer noopener noreferrer noopener noreferrer=
+ noopener noreferrer noopener noreferrer noopener noreferrer noopener noref=
+errer noopener noreferrer noopener noreferrer noopener noreferrer noopener =
+noreferrer noopener noreferrer noopener noreferrer noopener noreferrer noop=
+ener noreferrer noopener noreferrer noopener noreferrer noopener noreferrer=
+ noopener noreferrer noopener noreferrer noopener noreferrer noopener noref=
+errer noopener noreferrer noopener noreferrer noopener noreferrer noopener =
+noreferrer"><span style=3D"font-size:10px">giving@mit.edu&nbsp;</span></a><=
+span style=3D"font-size:10px"> I 617-253-0129</span></p><p>&nbsp;</p></div>
+                                                                           =
+ </td>
+                                                                        </t=
+r>
+                                                                   =20
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                   =20
+                                                </table>
+                                            </td>
+                                        </tr>
+                                   =20
+                                </table>
+                            </td>
+                        </tr>
+                   =20
+                </table>
+            </td>
+        </tr>
+   =20
+</table>
+
+</div>
+
+                                </div>
+                           =20
+                                <div class=3D"layout-grid-cell-content layo=
+ut-grid-cell-content-mso" style=3D"            width: 600px;
+overflow-wrap:anywhere;overflow:hidden;" data-content-item-id=3D"abcb753e-c=
+4dc-4aea-8e5e-4b78c7367218">
+                                    <div>
+<table data-content-item-id=3D"abcb753e-c4dc-4aea-8e5e-4b78c7367218" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"width:100%;border-spaci=
+ng:0!important;padding-top:10px;padding-bottom:10px;padding-left:10px;paddi=
+ng-right:10px;box-sizing:border-box;">
+   =20
+        <tr>
+            <td>
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" sty=
+le=3D"width:100%;border-spacing:0!important;background-color:transparent;">
+                   =20
+                        <tr>
+                            <td>                                <table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"width:100%;border-spa=
+cing:0!important;height:100%;">
+                                   =20
+                                        <tr>
+                                            <td style=3D"padding-right:10px=
+;padding-top:10px;padding-bottom:10px;padding-left:10px;">
+                                                <!--[if gte mso 9][!tonline=
+]>
+                                                <div style=3D"height:100%;w=
+ord-break: break-word;mso-line-height-rule: exactly;font-family:Arial, Helv=
+etica, sans-serif!important;font-size:16px;font-weight:normal;color: #00000=
+0;background-color:transparent;line-height: 100%;" class=3D"tofev7">
+                                                <![endif]-->
+                                                    <!--[if !gte mso 9]><!-=
+->
+                                                    <div data-content-item-=
+id=3D"abcb753e-c4dc-4aea-8e5e-4b78c7367218" style=3D"height:100%;word-break=
+: break-word;mso-line-height-rule: exactly;font-family:Arial, Helvetica, sa=
+ns-serif!important;font-size:16px;font-weight:normal;color: #000000;backgro=
+und-color:transparent;line-height:1;" class=3D"tofev7"><!-- <![endif] hidde=
+n --><p style=3D"text-align:center"><span style=3D"background-color:rgb( 25=
+5 , 255 , 255 );color:rgb( 0 , 0 , 0 );font-family:'arial' , 'helvetica' , =
+sans-serif;font-size:10px">If you wish to be removed from this mailing list=
+, </span><a style=3D"color:#0068ff;text-decoration:underline" href=3D"https=
+://www.pages03.net/mit/unsubscribe/MIT_Alumni_Association_Opt_Out_Page_2017=
+?spMailingID=3D48775958&amp;spUserID=3DMTMxMzg0NjIyMDQ3MQS2&amp;spJobID=3DM=
+jU0MTkzOTM4MAS2&amp;spReportId=3DMjU0MTkzOTM4MAS2" name=3D"Text Link 146655=
+928 click here" data-key=3D"13c69494-5609-4189-bc8c-d196128406d2:2a598745-c=
+bae-4ad2-9ac1-afdd30ad1869" target=3D"_blank" xt=3D"LPWEBFORMOPTOUT" rel=3D=
+"noopener noreferrer noopener noreferrer noopener noreferrer noopener noref=
+errer noopener noreferrer noopener noreferrer noopener noreferrer noopener =
+noreferrer noopener noreferrer noopener noreferrer noopener noreferrer noop=
+ener noreferrer noopener noreferrer noopener noreferrer noopener noreferrer=
+ noopener noreferrer noopener noreferrer noopener noreferrer noopener noref=
+errer noopener noreferrer noopener noreferrer noopener noreferrer noopener =
+noreferrer noopener noreferrer noopener noreferrer noopener noreferrer noop=
+ener noreferrer noopener noreferrer noopener noreferrer noopener noreferrer=
+ noopener noreferrer noopener noreferrer noopener noreferrer noopener noref=
+errer noopener noreferrer noopener noreferrer noopener noreferrer noopener =
+noreferrer noopener noreferrer noopener noreferrer noopener noreferrer noop=
+ener noreferrer noopener noreferrer noopener noreferrer noopener noreferrer=
+ noopener noreferrer noopener noreferrer noopener noreferrer noopener noref=
+errer" data-xtwebform-name=3D"MIT_Alumni_Association_Opt_Out_Page_2017" xtw=
+ebform=3D"8191096" xtwebform=3D"8191096"><span style=3D"font-family:'arial'=
+ , 'helvetica' , sans-serif;font-size:10px"><u>click here</u></span></a><sp=
+an style=3D"background-color:rgb( 255 , 255 , 255 );color:rgb( 0 , 0 , 0 );=
+font-family:'arial' , 'helvetica' , sans-serif;font-size:10px">.</span></p>=
+</div>
+                                            </td>
+                                        </tr>
+                                   =20
+                                </table>
+                            </td>
+                        </tr>
+                   =20
+                </table>
+            </td>
+        </tr>
+   =20
+</table>
+
+</div>
+
+                                </div>
+                        </td>
+                    <td class=3D"layout-grid-section-cell displayNone" key=
+=3D"after"></td>
+                </tr>
+           =20
+   =20
+</table>
+<img src=3D"https://links.aard.mit.edu/eos/v1/a3NPdzZIWlVtVDJ2MTRHUHEyM052M=
+3AyblR3NkwxLy9WMis2MmZQMWlmNHlRK2dhSXdXY0JLWkFQVlBvQ1NOcE13NmQzYmE2RnVPK0Mx=
+UFJsSTZiZkl0cWljeGVlYXAyaHFYTHZOdHdOVGpweTBzRmxzMUdVbHIyY3V4bmpiK3ZFMTNZT25=
+VWXIwVVQrcHNNWXk4dGlOb2srYWJWV0F2anN1YUltalBxU3MxbDlTcyswcHBxUnc9PQS2" styl=
+e=3D"display: none"></body>
+</html>
+
+------=_Part_132885436_667057692.1694793933355--
+
+------=_Part_132885435_2093480964.1694793933355--
+
+------=_Part_132885434_889178957.1694793933355--

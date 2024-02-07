@@ -1,0 +1,622 @@
+Received: from DM8PR01MB6838.prod.exchangelabs.com (2603:10b6:8:23::11) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Thu, 1 Jun 2023 10:39:33
+ +0000
+Received: from MW4PR04CA0241.namprd04.prod.outlook.com (2603:10b6:303:88::6)
+ by DM8PR01MB6838.prod.exchangelabs.com (2603:10b6:8:23::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.23; Thu, 1 Jun 2023 10:39:32 +0000
+Received: from CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:88:cafe::89) by MW4PR04CA0241.outlook.office365.com
+ (2603:10b6:303:88::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.28 via Frontend
+ Transport; Thu, 1 Jun 2023 10:39:32 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.100)
+ smtp.mailfrom=bounce.send.grammarly.com; dkim=fail (body hash did not verify)
+ header.d=security.grammarly.com;dmarc=fail action=oreject
+ header.from=security.grammarly.com;
+Received-SPF: Fail (protection.outlook.com: domain of
+ bounce.send.grammarly.com does not designate 18.9.1.100 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.100;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.100) by
+ CO1NAM11FT066.mail.protection.outlook.com (10.13.175.18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6455.23 via Frontend Transport; Thu, 1 Jun 2023 10:39:31 +0000
+Received: from w92expo14.exchange.mit.edu (18.7.74.68) by
+ oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Thu, 1 Jun 2023 06:39:27 -0400
+Received: from oc11exhyb8.exchange.mit.edu (18.9.1.113) by
+ w92expo14.exchange.mit.edu (18.7.74.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Thu, 1 Jun 2023 06:39:27 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
+ by oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Thu, 1 Jun 2023 06:39:27 -0400
+Received: from DS7PR03CA0283.namprd03.prod.outlook.com (2603:10b6:5:3ad::18)
+ by BL1PR01MB7748.prod.exchangelabs.com (2603:10b6:208:39b::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.25; Thu, 1 Jun 2023 10:39:24 +0000
+Received: from DM6NAM11FT058.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3ad:cafe::ed) by DS7PR03CA0283.outlook.office365.com
+ (2603:10b6:5:3ad::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23 via Frontend
+ Transport; Thu, 1 Jun 2023 10:39:24 +0000
+Authentication-Results-Original: spf=pass (sender IP is 13.111.6.89)
+ smtp.mailfrom=bounce.send.grammarly.com; dkim=pass (signature was verified)
+ header.d=security.grammarly.com;dmarc=pass action=none
+ header.from=security.grammarly.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of
+ bounce.send.grammarly.com designates 13.111.6.89 as permitted sender)
+ receiver=protection.outlook.com; client-ip=13.111.6.89;
+ helo=mta3.send.grammarly.com; pr=C
+Received: from mta3.send.grammarly.com (13.111.6.89) by
+ DM6NAM11FT058.mail.protection.outlook.com (10.13.172.216) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.23 via Frontend Transport; Thu, 1 Jun 2023 10:39:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=gram2048; d=security.grammarly.com;
+ h=From:To:Subject:Date:List-Help:MIME-Version:Reply-To:List-ID:
+ X-CSA-Complaints:Message-ID:Content-Type; i=info@security.grammarly.com;
+ bh=bKf7w8pgkpNJWOetpyE//pocdzr+vV7xgHhiQyLkhkw=;
+ b=fgLs5XoBQWQ/v8sRLcJOLT043aw1Dk6udQDt683SvN4wjJJ84C6K0LrWDY8k6nLAzeWu3RHfRhYQ
+   QhfK1fcybHE8o3EzxRqwGVU65kpNG1KaGCyZaWAGJ/ZMhDxytQcl4S89FzwOS1zJYOXpNZJfbw4k
+   3kNb5ErjVmxGG4wDEW9Mu81EI/1kj2TGm0smklLK9mar3jyifXR0t5KxfYVcmcgtcxpii+A/0S9l
+   QhP19jkNZWyDDDt+rz1doED9jt5dqftiwlyI8MCAWILrBqzdLxACLgZcvZ0M3NLaFBDXghjjJzP1
+   ColWIPjnyXnSCV9mfWyhzdBCRkfSpTc8HpjLbw==
+Received: by mta3.send.grammarly.com id hf1qlo2fmd4q for <jiannan@mit.edu>; Thu, 1 Jun 2023 10:39:23 +0000 (envelope-from <bounce-45825_HTML-663927135-4253769-6424583-401501@bounce.send.grammarly.com>)
+From: "Grammarly Security" <info@security.grammarly.com>
+To: <jiannan@mit.edu>
+Subject: New Login to Grammarly
+Date: Thu, 01 Jun 2023 04:39:23 -0600
+List-Help: <https://click.send.grammarly.com/subscription_center.aspx?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtaWQiOiI2NDI0NTgzIiwicyI6IjY2MzkyNzEzNSIsImxpZCI6IjQ1ODI1IiwiaiI6IjQyNTM3NjkiLCJqYiI6IjQwMTUwMSIsImQiOiI2MDIxOSJ9.XoNZZokkFQ9hdHBPSJz_FkdB279NKw4-g8AZ3kkWL44>
+x-CSA-Compliance-Source: SFMC
+Reply-To: "No Reply" <reply-fe8b10727067037b7c-45825_HTML-663927135-6424583-401501@send.grammarly.com>
+List-ID: <6424583.xt.local>
+X-CSA-Complaints: csa-complaints@eco.de
+x-messageKey: qHwDJ6O3lEmtmZG0vEUXcA
+X-Delivery: Transactional
+X-SFMC-Stack: 6
+x-job: 6424583_4253769
+Message-ID: <9cbbbdcc-1156-4d7c-98df-86e3d2eb3594@ind1s06mta1343.xt.local>
+Content-Type: multipart/alternative;
+	boundary="lWxLA5SbkHCn=_?:"
+Return-Path:
+ bounce-45825_HTML-663927135-4253769-6424583-401501@bounce.send.grammarly.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ DM6NAM11FT058:EE_|BL1PR01MB7748:EE_|CO1NAM11FT066:EE_|DM8PR01MB6838:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54e1bd2a-8e5d-4f2e-780c-08db628c7c24
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:3;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?e8UUic/mU5TqbsAi/Px49sIRLpn1ypYJaAd23mRurXq7K6QLW85Vtm6XgVah?=
+ =?us-ascii?Q?KUIw+3YQpnx/j/D+yd2/gFOZD8fe1xuC3cRlExaKedWLqiAuhCX3yaMr0+kl?=
+ =?us-ascii?Q?jsEN4SaOxDU+WWyVn6aAz7RBoC3XPGLtV3bYnMvaEtL9XutjrgSZSBjox/KM?=
+ =?us-ascii?Q?QQvx/wQYItKb/7qdso9BKjJtb+zj+Rn4+czgIcXV7cSFZtMDRRu+4myMmcI8?=
+ =?us-ascii?Q?juwlb7Nh4ZkJBnRgqf1bIzyNXSGoHM9mbTv7D+hHibOc3XfYXCTjaV0iTo91?=
+ =?us-ascii?Q?GQoByPod9XLZ3m7DRW8HhGDQ7fqpTdP0jGmTUc8YcgD/j84+undwXGGquqL7?=
+ =?us-ascii?Q?Ks12Fsp1QCQAegiFWSjDLmAWyPXsPTDR2AAY5d6mMvoQt34oTeXZm9oGuJmT?=
+ =?us-ascii?Q?X4vOIKJROlg6EcnVtl4ipA//yP90A9MTQEs1j9RD6+g/bRchIfUZSzpuX/gw?=
+ =?us-ascii?Q?ROEX6B+aosaG/sbvJlvjjuVNHuM4WdX+UQNkcDHQKjaPyoe0tCCtYxKYqfbn?=
+ =?us-ascii?Q?0dAHhacefe6mp0ozPjISYzC4ZbokhPkyqvke4PmMAd2wULbLLdG8yMwCWzmp?=
+ =?us-ascii?Q?+lL6olrTTvkb/vs/+wzfLX4IaAQ5V5FltpXe5LHZo30flzBCsd2hAQRGQiST?=
+ =?us-ascii?Q?0HmqO0Vg+UXjuYhlwIB+4Q00MzNMfriEW1k8EROkvyUAbqQPLuEKFZ0R9AWu?=
+ =?us-ascii?Q?RNONSoqE1aDqWDV4pSGxAnC/OTQaU3iLpku4erIwdrdXdvQXB11WhIhBLXNA?=
+ =?us-ascii?Q?3UMMLiIuQW7eETp9RrGQH9K9fW+rLo5OIioYwsjr1pe/g5Tv6ft8Kp0+hPbB?=
+ =?us-ascii?Q?9X6iULQKTwfd0sbnyo4+ufeG8J96V4AIUwwc8a4iz3DxLZzKVIjlqE87dyr+?=
+ =?us-ascii?Q?67MH8PoVkf9nbXb5OQUL8PTf+GZmqw6+k2vIp+MTYcsCDim3h/PFJHrL7V1Y?=
+ =?us-ascii?Q?kW094rIUxcEwRDpHfrLc8moZluA2+J25TUeFUNJ3f1cLArlh0NRivJr4nRvj?=
+ =?us-ascii?Q?/0fnfprKeUWVoYm+kATgoeEwlJgU4gnyg3FvI+ZpMmzgDWWgKE1sAvHeN20a?=
+ =?us-ascii?Q?H/rltol3RxYflyU1GtPbuVrn8dkq61LNVBHqdHYYDZgZvqbCVADipY4+4qEW?=
+ =?us-ascii?Q?aqG6xcykVqnb6GqdQAr6zWAi1YhkIOkJstU+7AgC2JBbAPtodabh2e/wW9YK?=
+ =?us-ascii?Q?tyiGmiQtF+uG+ecD/Bc7ZZRAdRxWDJ+LtCv1UGa52HXwCG1Yn5FGhPIqFXGA?=
+ =?us-ascii?Q?LuOqf0kM2Rp/DfHX5pJg3lOd/gS52OxvDNV9V45yXeGtHkVVkWjkj1BT34qH?=
+ =?us-ascii?Q?Wm/7wEk5o1bp1HhB1exD970YnHVuy52RIck1BpLNN+Pw8W3dYP5vJ3/Vwlxc?=
+ =?us-ascii?Q?Q5jUpS3alJhSQzhrICeB1RRIrhOanQ6i2d/EqCtWH7xXaj3jjGgCnZX2O/TR?=
+ =?us-ascii?Q?ZZdGuyhLNpUUfWiAU3C3kSe6sntgHvDH8E0sL/4Oe70XC1rHWXcWw8wrIbMF?=
+ =?us-ascii?Q?DrMTdt+M71z0Ysy7FipyglQeG6WcOhzE3qddBk6bim9UairsX7YuFgdGD0KQ?=
+ =?us-ascii?Q?pi82CRT/nP2dCOIWgxSzI9iVnmJL8Cop1vq2Iyfl91aRXp4GVPDOZRhV88qK?=
+ =?us-ascii?Q?ziUjHtrbKMikE+IwisjOwoSLGTzhsgb3ZYXivgYH5b39gk6PnNyZExfEw4/J?=
+ =?us-ascii?Q?9WGv7zqfvBHnnu+zGkLCpQO2ywegt6klcJ/Lu+l91HEbWk/adf6Y34HZ/mQ4?=
+ =?us-ascii?Q?skLOEzQMh38IUg0bmWKRYZcrzexhLWiF7cf14RCl2XoFT35AnPbi?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:13.111.6.89;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta3.send.grammarly.com;PTR:mta3.send.grammarly.com;CAT:NONE;SFS:(13230028)(4636009)(286005)(451199021)(1690799014)(75640400001)(42186006)(18074004)(8676002)(4006050)(1096003)(42882007)(5426002)(83380400001)(19810500001)(31696002)(26005)(336012)(6916009)(9686003)(356005)(166002)(83170400001)(76236004)(7596003)(3480700007)(58800400005)(966005)(33964004)(7636003)(19627405001)(31686004)(66899021)(76899015)(43540500003)(38960500002);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR01MB7748
+X-OrganizationHeadersPreserved: BL1PR01MB7748.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb8.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb8.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo14.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 01 Jun 2023 10:39:32.0765
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 54e1bd2a-8e5d-4f2e-780c-08db628c7c24
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted:
+ CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1NAM11FT066.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DM6NAM11FT058.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 26c4b2f6-cd7d-4849-4521-08db628c775e
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.100;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb4.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2023 10:39:31.8109
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54e1bd2a-8e5d-4f2e-780c-08db628c7c24
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.100];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ DM6NAM11FT058.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR01MB6838
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.9442910
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6455.015
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eTRUUmo4MnZ2QW02NElVZmdVSDZ1YjVzMi8rUWVZR2tHRHlEeWNGQUF6YXV0?=
+ =?utf-8?B?b3UzWjNsa1hrRjBYYll6dGdnSVMyeHlyaHpQM1l2cm9mYmwzcVlGNlVIODAy?=
+ =?utf-8?B?N0JhWUdlZHJKRjNFSWVGS2NLNU5kaHhhMWY4L0QxSlM5RTJCR3pCcDhsQ2pT?=
+ =?utf-8?B?THpEb2t0WkoweW02bWkzUGhjbFVreENTaURqb2VYTUttNFh4UEpaTTlFazIr?=
+ =?utf-8?B?VTlGSWFJWGxCdDd2QVQwUDJBcm5rN2NJY2Eyci9BYzFoYzN5aDFpYWlDcVFy?=
+ =?utf-8?B?dUtyWmQ1bHNkYVhjY2Q1MWRCSTF0c0Ewd0EwTGFSTlhoU1lDbmtvZWVzRnlw?=
+ =?utf-8?B?OCtGRnpZSnl4OGRNbmFQWWRJbm5DUVl6ZTkwY3FGdkR1OWdtQXRvaW55YStU?=
+ =?utf-8?B?cExXQ2xQcmhJcmdPN3lERWg1OE0yUjdUTzl6RGN5R0pESEZQbmM5Q1V0aDVk?=
+ =?utf-8?B?dUYrM0V3QVBsTkxaNDhtdFRSbVhiRlpTa1RFcDFsbUNvSGVBdFlsVXB5Y21W?=
+ =?utf-8?B?QUt6YVM3Z25rOGlOaDZzWUFOVldPQW0vL3VGcWJSM1RCZWpSS0lLSGgxWnJI?=
+ =?utf-8?B?TERaZzFXVDltTEhnZ0xuYUdoTEFWOWRUY2MyaG9LSUxBd0RBUmt0ekRMbmVs?=
+ =?utf-8?B?QWdCaHVqMVU1QVczNFJoaDJmV3AwZUgrWTd1ZjZiNG9TcG5qTUk0T3ZKMlRK?=
+ =?utf-8?B?OWhIT2NHbVVsd0lJWGR0M2NmaTRWcmJxOHFjck9mRDk3bDZIRDdheDE1TmM5?=
+ =?utf-8?B?NU1rTnVzRGs2d09YRHNmSFlYS1ZJemlwdDROc0VkVXcxMGwyOGlvRmx1ZDhV?=
+ =?utf-8?B?V0pYdEVCYXFFSmZOdjdlN0ZuNi84VDZGRFlXVUkxMGRtdmNGMi84bE1Pb0xK?=
+ =?utf-8?B?STYzZlJsRG1KRUVyQTcyV3VHVllKNjFYN090ZjNQOTBaQkE3L3hIcnpQd3B6?=
+ =?utf-8?B?Wkt0YmpScGR4MldMeFZ2b3R1Y0lXQlBBL2xoeVhyQmV6cnRHOGtTV0xNN3p4?=
+ =?utf-8?B?SWEzYlZZdmVXVGtsRlpGYUVZVFVaQTd2dUMrZWlVbkNkT1pmc1lGdzJDWkZ1?=
+ =?utf-8?B?SDg0NW9sL0VYNkttVGlicHJmR1A1Z0M3dmh1NmxzR1FsYXZYdjJTc1U5SGZk?=
+ =?utf-8?B?NTVWaTJRRTJYL2paVHd3Lzc1dXk3bHVhWW1mdnNkKzFpbklEQm94RGpPUUtm?=
+ =?utf-8?B?c3RYN0FtSy9rS0NtNlVVbjJBcFdXTDBxQVl6b0RyelA3alpLY2tKMTRGWnp0?=
+ =?utf-8?B?VEhEZUNNYTNrWXpRdm1vWUY5N1lpNWRGRmpaZXJzcmNJdFZTdEVHTEVSejlv?=
+ =?utf-8?B?QXBLYnc3V0trV3FkamJaZHUyMzQvUnhxb203dzB1MFJtWlZFb0VSN2pCWGEz?=
+ =?utf-8?B?c0d4aEFvSEtUUHBnUjRoV3FHMjlqY0ptcmN0MmZlN3d5SXpoRzROdGpBdVFw?=
+ =?utf-8?B?b0t5Mk1JdXBOMXY3emxBejFjbjFlYU9xbTdXczNWWUxRN3Nrd2drLzJXbjlY?=
+ =?utf-8?B?RGtTRW1qK2NvbzJqR2VzZnhML0djQXZyTzdIcWJYOTN6dTBiZ1MzcTkrcCto?=
+ =?utf-8?B?bUxCRHZGcHNyUVlrNldxeHg1WUVhSi9lVmJzYzB3ZVZwUk10b05FdW1TeEYx?=
+ =?utf-8?B?bHdiUENGSFhhMkxIYVNTR2dtcjBqdVhOMFptNzJWU05sVTVtVkRoMWkxU3V3?=
+ =?utf-8?B?dFB5amdKR1RFMmdnK1owdkEvVnp0MkczQTNNWjZTU21XZ1V2ckxRQksvOHVa?=
+ =?utf-8?B?Q3hJYWdxcG1tZERIcUZEUktvZkhxYWNwMUFGVkhKVTE2VCt6aThvbTlrbTQz?=
+ =?utf-8?B?cnRzMVMwSHFwN1VOcUU4eDNueFVmbitDOUdKOUxBbVRqbnJoa2ZFN2dnNzVy?=
+ =?utf-8?B?bmtSRVdoWkZNWENEQWdXaWt1RjZUSzFpcFY2RWMvR0ZpWTVqOTlMeTJvK2Zn?=
+ =?utf-8?B?WXgvT0dCZ2J0Z0M3TGtXaUtKM2dpUEwwRExHYzQrRTEzOE9zTEl2WEpMR2Y0?=
+ =?utf-8?B?dE9KaWZ0dTRtQlhoQmxOclR5UXBNS04vSkU5SHpvcEN3aVNRdTZEcVpFSlRm?=
+ =?utf-8?B?V0thVlc0UGgzSlFCN0oyKzlzQ2pBWEFZVEtNb1ZMVEtDYjVwRHpoblcwQmZJ?=
+ =?utf-8?B?V3F0TjFLN29RclR4eEdaL3NKZ2hOZ0R1c0pEQXNwZ3lGRWZNMjBmRzRqQnlW?=
+ =?utf-8?B?cW5QVjNrOWZBam40bzk1WVBuNm1KTHVYbTNTYTNlRWZJWFpWOWNhbzlraDA0?=
+ =?utf-8?B?a0FZRm80SW1OVllDbHJnOEQ2bVJnPT0=?=
+MIME-Version: 1.0
+
+--lWxLA5SbkHCn=_?:
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+Grammarly
+ 
+
+ 
+
+ 
+
+ 
+ 
+
+New Login to Grammarly
+ 
+
+Hello, Cao, Jiannan. There was a new login to your Grammarly account. We wanted to make sure it was you. Here are some details:
+
+Location: Near Osaka, Japan
+Device: Safari on Mac OS X
+Date: 07:39 PM, 01 June 2023 (JST)
+IP: 185.212.59.186
+If you don’t recognize this activity, click the button below to learn more about how to secure your account.
+ 
+
+https://click.send.grammarly.com/?qs=2fe9c40aa38937d315bd6993fa8441f56ed2b3fc9cb4981d93af9bba5a5a3211028e55923bc4514dd8a1dbf3d9db2c3ee8b1491870a82061 
+It wasn't me 
+
+ 
+
+Have any further questions?
+Please contact us at 
+https://click.send.grammarly.com/?qs=5cc3e639b3f41f9502096decd50dd76314719d5bd9f0a1f8b87d4ab703bd8eeaaa9314323a2611f1df5b1a066e57c9c61b40e490a1d15dd2 
+https://click.send.grammarly.com/?qs=8b61f90f6c3e1ebcb8f6f4c95a6edb0a3717d19552272bfc4467976fb0b74acdedd423fede3a5c20b6b6224950a539badce4b90329a07659 .
+ 
+
+  
+  
+
+https://click.send.grammarly.com/?qs=0a27be3eb43730ca0b5746f04b76c6e8f3d4b08fc454e6b9f2ca0aa19bfe5794af0f6a90dd5580169234f4c85fa3b7250ae60600be29d051 
+
+https://click.send.grammarly.com/?qs=fa0fcebdf79de8d18d2e37a0de8ee65d7dfd9a32ff28671bd77f42bc7cac8e8b55bb741beadebbce5034e234ba344657446a6e3c1c1e8fda 
+
+https://click.send.grammarly.com/?qs=624b92f29585bd21be13a95ce454df4d74c492a7f33b4503a0dc0d7d2d1c7dcedab9bc468a151d434a84c78d4bc6d78690969ad10c12fb82 
+
+https://click.send.grammarly.com/?qs=fc4d0f765f6d566a1ccc28b363dfc4180020cde6c6a35ea8c3bee8f8a359d42cfe483adc75b2d343725510b52da1a27e6f52508d99220be8 
+
+
+  
+
+  
+
+  
+
+https://view.send.grammarly.com/?qs=4c8a1878516411425565c2bff4c087f2786afea1c71753191b4b792156ee348c3924f2fe945fe1bfce0671deecca0be1c87fbf3bd7b1d7407cee515de36fe304c2f81e4d18b7f314c51a06ccb419ca30cd902eebcea13ace 
+View Web Version  . 
+https://click.send.grammarly.com/?qs=69064d476b5cbd67d89cb0a0cc69550587bb1b05fd64bb9fd4e63509ac68ec5fd25915be18e379412cfbbc9ffab2a699efb01d74d80bf56fb9efb7d226836d12 
+Email Preferences 
+
+
+ You received this alert because we recently detected a new login to your Grammarly account.  The location is approximate and determined by your IP address.
+
+
+ (c) 2023 Grammarly, Inc. 548 Market St. #35410, San Francisco, CA 94104
+
+
+  
+
+
+
+--lWxLA5SbkHCn=_?:
+Content-Type: text/html;
+	charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+<!--  --><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><!--[if gte mso 9]><xml>  <o:OfficeDocumentSettings>   <o:AllowPNG/>   <o:PixelsPerInch>96</o:PixelsPerInch>  </o:OfficeDocumentSettings> </xml><![endif]-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="format-detection" content="date=no">
+<meta name="format-detection" content="address=no">
+<meta name="format-detection" content="email=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="“robots”" content="“noindex”">
+<title>Grammarly</title>
+<!--[if mso]>  <style type="text/css">  body, table, td, h1, h2, h3, a, span {font-family: Helvetica, Arial, sans-serif !important;}  </style>  <![endif]-->
+<style type="text/css">
+u + #body a {
+    color: #4C7AF1;
+    text-decoration: none;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+}
+   @media only screen and (max-width: 480px) {
+  div > u + #body .stylingblock-content-wrapper.camarker-inner {padding:0px 16px !important;}
+     div > u + #body .stylingblock-content-wrapper.camarker-inner table {min-width:100% !important;}
+  }
+</style>
+<style type="text/css">
+a[x-apple-data-detectors] {
+ color: #4C7AF1 !important;
+ text-decoration: none !important;
+ font-size: inherit !important;
+ font-family: inherit !important;
+ font-weight: inherit !important;
+ line-height: inherit !important;
+}
+</style>
+<style type="text/css">
+/*Font Settings*/
+@font-face {
+ font-family: 'Circular';
+ font-style: normal;
+ font-weight: 700;
+ src: url('https://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/circular/circular-bold.woff2') format('woff2'),
+ url('https://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/circular/circular-bold.ttf') format('truetype');
+}
+
+@font-face {
+ font-family: 'Inter';
+ font-style: normal;
+ font-weight: 400;
+ src: url('https://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/inter/inter-regular.otf') format('otf'),
+ url('https://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/inter/inter-regular.woff2') format('woff2');
+}
+
+@font-face {
+ font-family: 'Inter';
+ font-style: normal;
+ font-weight: 700;
+ src: url('https://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/inter/inter-bold.otf') format('otf'),
+ url('https://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/inter/inter-bold.woff2') format('woff2');
+}
+
+@font-face {
+ font-family: 'Inter';
+ font-style: italic;
+ font-weight: 400;
+ src: url('https://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/inter/inter-italic.otf') format('otf'),
+ url('https://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/inter/inter-italic.woff2') format('woff2');
+}
+ 
+@font-face {
+ font-family: 'Inter';
+ font-style: italic;
+ font-weight: 700;
+ src: url('https://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/inter/inter-bold-italic.otf') format('otf'),
+ url('https://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/inter/inter-bold-italic.woff2') format('woff2');
+}
+  
+@font-face {
+  font-family:'Akkurat';
+  font-style: normal;
+  font-weight: 400;
+  src:url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-regular.eot?#iefix');
+  src:url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-regular.eot?#iefix') format('eot'),
+    url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-regular.woff2') format('woff2'),
+    url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-regular.woff') format('woff'),
+    url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-regular.ttf') format('truetype');
+  }
+  
+@font-face {
+  font-family:'Akkurat Bold';
+  font-style: normal;
+  font-weight: 700;
+  src:url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-bold.eot?#iefix');
+  src:url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-bold.eot?#iefix') format('eot'),
+    url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-bold.woff2') format('woff2'),
+    url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-bold.woff') format('woff'),
+    url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-bold.ttf') format('truetype');
+  }
+  
+@font-face {
+  font-family:'Akkurat Italic';
+  font-style: italic;
+  font-weight: 400;
+  src:url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-italic.eot?#iefix');
+  src:url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-italic.eot?#iefix') format('eot'),
+    url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-italic.woff2') format('woff2'),
+    url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-italic.woff') format('woff'),
+    url('http://grammarly-marketing.s3.amazonaws.com/emails-images/fonts/akkurat-italic.ttf') format('truetype');
+  }
+ 
+ReadMsgBody{ width: 100%;}
+.ExternalClass {width: 100%;}
+.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;}
+body {-webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;margin:0 !important;}
+* {padding: 0px;margin: 0px;}
+html {-webkit-text-size-adjust: none;-webkit-font-smoothing: antialiased;}
+a {outline: 0;}
+img {display: block;outline:0;}
+img + div { display:none; }
+a img {border:none;}
+/*td {mso-line-height-rule: exactly;}*/
+table td {border-collapse: collapse;}
+  a[x-apple-data-detectors] {
+ color: inherit !important;
+ text-decoration: none !important;
+ font-size: inherit !important;
+ font-family: inherit !important;
+ font-weight: inherit !important;
+ line-height: inherit !important;
+}
+/**Template CSS**/
+/* TYPOGRAPHY */
+h1 {
+ font-family: 'Circular', Helvetica, Arial, sans-serif;
+ font-weight: bold;
+ font-size:32px;
+ line-height: 48px;
+ color:#2E3543;} 
+h2 {
+ font-family: 'Circular', Helvetica, Arial, sans-serif;
+ font-weight: bold;
+ font-size:24px;
+ line-height: 32px;
+ color:#2E3543;} 
+h3 {
+ font-family: 'Inter', Helvetica, Arial, sans-serif;
+ font-weight: bold;
+ font-size:18px;
+ line-height: 24px;
+ color:#2E3543;}
+ 
+td, p, li {
+ font-family: 'Inter', Helvetica, Arial, sans-serif;
+ font-weight: normal;
+ font-size:16px;
+ line-height: 24px;
+ color:#60657B;}
+a {
+ font-family: 'Inter', Helvetica, Arial, sans-serif;
+ font-weight: normal;
+ font-size:16px;
+ line-height: 24px;
+ color:#4C7AF1;
+ text-decoration:none;}
+.cta {
+ font-family: 'Inter', Helvetica, Arial, sans-serif;
+ font-weight: normal;
+ font-size:18px;
+ line-height: 24px;
+ color:#ffffff;}
+
+</style>
+<style type="text/css">
+@media only screen and (max-width: 480px) {
+/*CB STYLES*/
+ .container {width: 100% !important;}
+ .footer { width:auto !important; margin-left:0; }
+ .mobile-hidden { display:none !important; }
+ .logo { display:block !important; padding:0 !important; }
+ img { max-width:100% !important; height:auto !important; max-height:auto !important;}
+ .header img{max-width:100% !important;height:auto !important; max-height:auto !important;}
+ .photo img { width:100% !important; max-width:100% !important; height:auto !important;}
+ .drop { display:block !important; width: 100% !important; float:left; clear:both;}
+ .footerlogo { display:block !important; width: 100% !important; padding-top:15px; float:left; clear:both;}
+ .nav4, .nav5, .nav6 { display: none !important; }
+ .tableBlock {width:100% !important;}
+ .responsive-td {width:100% !important; display:block !important; padding:0 !important; }
+ .fluid, .fluid-centered {
+   width: 100% !important;
+   max-width: 100% !important;
+   height: auto !important;
+   margin-left: auto !important;
+   margin-right: auto !important;
+ }
+ .fluid-centered {
+   margin-left: auto !important;
+   margin-right: auto !important;
+ }
+ * { -webkit-text-size-adjust: none; -ms-text-size-adjust: none; -webkit-font-smoothing: antialiased;}/*Stop iproducts from auto-resizing text*/
+ .height {height:auto !important;}
+ .hide {display:none !important;}
+ .stack  {display:block !important;width:100% !important;}
+ .w100P {width:100% !important; height:auto !important;}
+ .blockOnly {display:block !important;}
+ .w95P {width:95% !important;}
+ .textC {text-align:center !important;}
+ .stylingblock-content-wrapper.camarker-inner {padding:0px 16px !important;}
+ .sp4024 {height:24px !important;line-height:24px !important;font-size:24px !important;}
+ .sp4032 {height:32px !important;line-height:32px !important;font-size:32px !important;}
+  }
+    </style>
+</head>
+
+<body id="body" bgcolor="#f4f5fb" style="-webkit-text-size-adjust: none; -ms-text-size-adjust: none; -webkit-font-smoothing: antialiased; padding:0;"><style type="text/css">
+div.preheader 
+{ display: none !important; } 
+</style>
+<div class="preheader" style="font-size: 1px; display: none !important;">Please verify your login request.</div>
+    <table cellpadding="0" cellspacing="0" border="0" align="center" width="100%" bgcolor="#f4f5fb">
+        <tr>
+            <td align="center" valign="top">
+                <table cellpadding="0" cellspacing="0" border="0" align="center" width="600" bgcolor="#f4f5fb" class="container" style="margin:0 auto;">
+                    <tr>
+                        <td valign="top">
+
+                         <!--Body-->
+                         <table cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"></td></tr></table><table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+         <td height="23" style="mso-line-height-rule: exactly;line-height:23px; font-size:23px;">&nbsp;</td>
+    </tr>
+</table><table cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"><table width="100%" cellspacing="0" cellpadding="0"><tr><td align="left" class="logoPadding" style="line-height: 45px;"><img data-assetid="27661" src="https://image.send.grammarly.com/lib/fe8f12747760017576/m/1/456da1a8-4da6-4fb3-85bb-9561ae13103a.png" alt="" height="34" width="142" style="display: block; padding: 0px; text-align: left; height: 34px; width: 142px; border: 0px;"></td></tr></table></td></tr></table><table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+         <td height="23" style="mso-line-height-rule: exactly;line-height:23px; font-size:23px;">&nbsp;</td>
+    </tr>
+</table><table cellpadding="0" cellspacing="0" align="center" bgcolor="#ffffff" border="0" class="devicewidth" width="100%" style="border-top: 4px solid #15C39A"><table cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; min-width: 100%; " class="stylingblock-content-wrapper"><tr><td style="padding: 0px; " class="stylingblock-content-wrapper camarker-inner"><table cellpadding="0" cellspacing="0" border="0" width="100%">
+  <br>  <tr>
+         <td bgcolor="#ffffff" height="0" style="mso-line-height-rule: exactly;line-height:15px; font-size:15px;">&nbsp;</td>
+    </tr>
+</table></td></tr></table><table cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; min-width: 100%; " class="stylingblock-content-wrapper"><tr><td style="padding: 0px 40px; " class="stylingblock-content-wrapper camarker-inner"><table width="100%" cellspacing="0" cellpadding="0"><tr><td align="center" style="line-height: 55px;"><img data-assetid="27660" src="https://image.send.grammarly.com/lib/fe8f12747760017576/m/1/e8b4ecaf-4b2c-4138-a14d-7310db4857f0.png" alt="" height="110" width="60" style="display: block; padding: 0px; text-align: center; height: px; width: 110px; border: px;"></td></tr>  <tr>
+         <td bgcolor="#ffffff" height="0" style="mso-line-height-rule: exactly;line-height:15px; font-size:15px;">&nbsp;</td>
+    </tr>  <tr>
+         <td bgcolor="#ffffff" height="0" style="mso-line-height-rule: exactly;line-height:12px; font-size:12px;">&nbsp;</td>
+    </tr></table><h2 style="font-family: Circular, Helvetica, Arial, sans-serif; font-weight: bold; font-size: 24px; line-height: 32px; color: rgb(46, 53, 67); margin: 0px; text-align: center;">
+New Login to Grammarly</h2></td></tr></table><table cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; min-width: 100%; " class="stylingblock-content-wrapper"><tr><td style="padding: 0px; " class="stylingblock-content-wrapper camarker-inner"><table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+         <td bgcolor="#ffffff" height="32" style="mso-line-height-rule: exactly;line-height:32px; font-size:32px;">&nbsp;</td>
+    </tr>
+</table></td></tr></table><table cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; min-width: 100%; " class="stylingblock-content-wrapper"><tr><td style="padding: 0px 40px; " class="stylingblock-content-wrapper camarker-inner"><span style="mso-line-height-rule: exactly;font-family: 'Inter', Helvetica, Arial, sans-serif;  font-weight: normal;  font-size:16px;  line-height: 24px;  color:#60657B;">Hello, Cao, Jiannan. There was a new login to your Grammarly account. We wanted to make sure it was you. Here are some details:</span></td></tr></table><table cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; min-width: 100%; " class="stylingblock-content-wrapper"><tr><td style="padding: 0px 40px 30px; " class="stylingblock-content-wrapper camarker-inner"><div>
+<span style="mso-line-height-rule: exactly;font-family: 'Inter', Helvetica, Arial, sans-serif;  font-weight: normal;  font-size:16px;  line-height: 24px;  color:#60657B;">
+ <br>
+ <b>Location: </b>Near Osaka, Japan<br>
+ <b>Device: </b>Safari on Mac OS X<br>
+ <b>Date:</b> 07:39 PM, 01 June 2023 (JST)<br>
+ <b>IP:</b> 185.212.59.186</span></div><br><span style="mso-line-height-rule: exactly;font-family: 'Inter', Helvetica, Arial, sans-serif;  font-weight: normal;  font-size:16px;  line-height: 24px;  color:#60657B;">If you don’t recognize this activity, click the button below to learn more about how to secure your account.</span></td></tr></table><table cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; min-width: 100%; " class="stylingblock-content-wrapper"><tr><td style="padding: 0px; " class="stylingblock-content-wrapper camarker-inner"><table cellpadding="0" cellspacing="0" border="0" width="100%">
+             <td align="center" class="stylingblock-content-wrapper">
+          <table cellpadding="0" cellspacing="0" border="0" width="300" class="w95P">
+                          <tr>
+         <td bgcolor="#ffffff" height="" style="mso-line-height-rule: exactly;line-height:12px; font-size:32px;">&nbsp;</td>
+    </tr>
+                          
+                         </table></td></tr></table><table cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%; " class="stylingblock-content-wrapper"><tr><td class="stylingblock-content-wrapper camarker-inner"><table cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#ffffff">
+                 <td align="center" class="stylingblock-content-wrapper">
+          <table cellpadding="0" cellspacing="0" border="0" width="300" class="w95P">
+                          <tr>
+         <td align="center" class="stylingblock-content-wrapper">
+          <table cellpadding="0" cellspacing="0" border="0" width="300" class="w95P">
+            <tr>
+           <td align="center" style="-webkit-border-radius: 25px; -moz-border-radius: 25px; border-radius: 25px;" bgcolor="#F0F2FC"><a href="https://click.send.grammarly.com/?qs=fbdf4811c355bbad901b2fa2118ed173944f5cad159ce7dfae1b7ff8cf1fe12c502d52ac7596b92b9ed0fbda05a52f424d370de9c4378f9c" target="_blank" style="font-size: 18px; font-family:'Inter', Helvetica, Arial, sans-serif; color: #4A6EE0; text-decoration: none; -webkit-border-radius: 24px; -moz-border-radius: 24px; border-radius: 24px; padding: 10px 12px; display: inline-block;font-weight:normal;width:300px;" class="cta">It wasn't me</a></td>
+            </tr>
+          </table>
+         </td>
+        </tr>
+       </table></td></tr></table><table cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; min-width: 100%; " class="stylingblock-content-wrapper"><tr><td style="padding: 0px; " class="stylingblock-content-wrapper camarker-inner"><table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+         <td bgcolor="#ffffff" height="46" style="mso-line-height-rule: exactly;line-height:46px; font-size:32px;">&nbsp;</td>
+    </tr>
+</table></td></tr></table>
+                          
+                          
+                          
+                          <table cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; min-width: 100%; " class="stylingblock-content-wrapper"><tr><td style="padding: 0px 40px; " class="stylingblock-content-wrapper camarker-inner"><span style="mso-line-height-rule: exactly;font-family: 'Inter', Helvetica, Arial, sans-serif;  font-weight: normal;  font-size:16px;  line-height: 24px;  color:#60657B;"></span>
+<span style="font-size:16px"><span style="font-family:'Inter', Helvetica, Arial, sans-serif"><span style="font-weight:normal"><span style="line-height:20px"><span style="color:#60657b"><b>Have any further questions?</b></u></span></span></span></span></span><br>
+<span style="font-size:16px"><span style="font-family:'Inter', Helvetica, Arial, sans-serif"><span style="font-weight:normal"><span style="line-height:24px"><span style="color:#60657b">Please contact us at <a href="https://click.send.grammarly.com/?qs=b34945507423b77e441a37264ca2573a0f4c3dea07ec5758e6d154d24cc7fc3485fcd0d5f20cae366c9d42f03407c5238f704d36ff513ced" style="text-decoration:none;" title="support@grammarly.com">https://support.grammarly.com</a>.</span></span></span></span></span></td></tr></table><table cellpadding="0" cellspacing="0" width="100%" style="background-color: #FFFFFF; min-width: 100%; " class="stylingblock-content-wrapper"><tr><td style="padding: 0px; " class="stylingblock-content-wrapper camarker-inner"><table cellpadding="0" cellspacing="0" border="0" width="100%">
+    <tr>
+         <td bgcolor="#ffffff" height="32" style="mso-line-height-rule: exactly;line-height:32px; font-size:32px;">&nbsp;</td>
+    </tr>
+</table></td></tr></table><table cellpadding="0" cellspacing="0" width="100%" style="background-color: #F4F5FB; min-width: 100%; " class="stylingblock-content-wrapper"><tr><td style="padding: 0px; " class="stylingblock-content-wrapper camarker-inner">  <table border="0" cellpadding="0" cellspacing="0" width="100%">
+ 
+  <tr>
+   <td align="center">
+    <table border="0" cellpadding="0" cellspacing="0" class="w95P" width="520">
+     
+      <tr>
+       <td height="35" style="mso-line-height-rule: exactly;line-height:35px; font-size:35px;">
+        &nbsp;</td></tr><tr>
+       <td align="center">
+        <table border="0" cellpadding="0" cellspacing="0">
+         
+          <tr>
+           <td align="left" valign="top">
+            <a href="https://click.send.grammarly.com/?qs=fee95baed9bf1e7ee76c8b21daad36af447c6774bd84cb306b8fce3729bc63cff0d972491ea5de2acdea0e7ff71c51be5dc4dfd0af09e779" target="_blank" title="facebook"><img alt="Facebook" border="0" height="24" src="https://image.send.grammarly.com/lib/fe8f12747760017576/m/1/f28f4cfb-7401-4fec-942d-ff6a898696a4.png" style="display: block;" title="Facebook" width="24"></a></td><td align="left" valign="top" width="48">
+           </td><td align="left" valign="top">
+            <a href="https://click.send.grammarly.com/?qs=d1481aa41bcf2f524ef63684ab45a91dd392d4783e323529574a5ef00baf31f8d7cf33fe29994900f4a68a8267cba68c3aafbc35ec24e24c" target="_blank" title="instagram"><img alt="instagram" border="0" height="24" src="https://image.send.grammarly.com/lib/fe8f12747760017576/m/1/6d75f28e-d537-4e2a-9286-5626aabd288e.png" style="display: block;" title="instagram" width="24"></a></td><td align="left" valign="top" width="48">
+           </td><td align="left" valign="top">
+            <a href="https://click.send.grammarly.com/?qs=aa093583263ee7b6389a7293900a3e7bd39b7dbe9b4d0b2c72b38a3df1caea48e6f5f02702294d11669c023db67bf974491dd6ff196e69ee" target="_blank" title="linkedin"><img alt="linkedin" border="0" height="24" src="https://image.send.grammarly.com/lib/fe8f12747760017576/m/1/59b05305-37fb-4ef8-ba68-2a49203b3b06.png" style="display: block;" title="linkedin" width="24"></a></td><td align="left" valign="top" width="48">
+           </td><td align="left" valign="top">
+            <a href="https://click.send.grammarly.com/?qs=1059d5b992767ad2b26b70f2a91b725a833d751cb2c708732ce160d2f5d8d12eccbb5fae7b258c423e78e0559ba57616bc8b470c7b8671f1" target="_blank" title="twitter"><img alt="twitter" border="0" height="24" src="https://image.send.grammarly.com/lib/fe8f12747760017576/m/1/b7f9945d-efdb-4c48-9930-421af58ff970.png" style="display: block;" title="twitter" width="24"></a></td></tr></table></td></tr><tr>
+       <td height="35" style="mso-line-height-rule: exactly;line-height:35px; font-size:35px;">
+        &nbsp;</td></tr></table><table border="0" cellpadding="0" cellspacing="0" class="w95P" width="520">
+     
+      <tr>
+       <td bgcolor="#E4E6F2" height="1" style="mso-line-height-rule: exactly;line-height:1px; font-size:1px;">
+        &nbsp;</td></tr><tr>
+       <td height="35" style="mso-line-height-rule: exactly;line-height:35px; font-size:35px;">
+        &nbsp;</td></tr></table><table border="0" cellpadding="0" cellspacing="0" class="w95P" width="520">
+     
+      <tr>
+       <td align="center" style="mso-line-height-rule: exactly;font-family: 'Inter', Helvetica, Arial, sans-serif;color:#8189A9;font-size: 14px;line-height:20px;" valign="top">
+        <a href="https://view.send.grammarly.com/?qs=4c8a1878516411425565c2bff4c087f2786afea1c71753191b4b792156ee348c3924f2fe945fe1bfce0671deecca0be1c87fbf3bd7b1d7407cee515de36fe304c2f81e4d18b7f314707b4bf2d4f056cb2e213defaf865fed" style="color:#8189A9;" target="_blank">View Web Version</a> · <a href="https://click.send.grammarly.com/?qs=7772e7e115a79469bb40b4df28038608c39cae47e17e9e0a3b47fe51147eb3016a118e65d08597afeae68644be81c50d51c96f8c59ada2da807496a65f9b606e" style="color:#8189A9;" target="_blank">Email Preferences</a><br>
+        <br>
+        You received this alert because we recently detected a new login to your Grammarly account.&nbsp; The location is approximate and determined by your IP address.<br>
+        <br>
+        © 2023 Grammarly, Inc. 548 Market St. #35410, San Francisco, CA 94104</td></tr></table></td></tr><tr>
+   <td height="48" style="mso-line-height-rule: exactly;line-height:48px; font-size:48px;">
+    &nbsp;</td></tr></table> <img border="0" height="1" src="https://gnar.grammarly.com/email-pixel?userId=&amp;email=jiannan@mit.edu&amp;templateName=202010_LoginNotificationNew_V2&amp;sentTime=6/1/2023%204:39:23%20AM" style="display:none" width="1"></td></tr></table>
+                         <!--/Body-->
+
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+<img src="https://click.send.grammarly.com/open.aspx?ffcb10-fe8b10727067037b7c-fdee1576736d0c7974127774-fe8f12747760017576-fef710757d6601-fe251276766d067a741775-fed410707461047c&amp;d=60219&amp;bmt=0" width="1" height="1" alt="">
+</body>
+</html>
+
+--lWxLA5SbkHCn=_?:--

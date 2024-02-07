@@ -10,6 +10,8 @@ import SwiftUI
 @dynamicMemberLookup
 @Observable
 class MailFolderViewModel {
+    
+    typealias MailFolder = Microsoft.Graph.MailFolder
     // init
     var _windowViewModel: WindowViewModel
     var _mailFolder: MailFolder

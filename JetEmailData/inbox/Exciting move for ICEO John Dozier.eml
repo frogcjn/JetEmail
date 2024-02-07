@@ -1,0 +1,637 @@
+Received: from DS7PR01MB7542.prod.exchangelabs.com (2603:10b6:8:71::7) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Thu, 20 Apr 2023 20:54:28
+ +0000
+Received: from DM6PR06CA0078.namprd06.prod.outlook.com (2603:10b6:5:336::11)
+ by DS7PR01MB7542.prod.exchangelabs.com (2603:10b6:8:71::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.11; Thu, 20 Apr 2023 20:54:27 +0000
+Received: from DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:336:cafe::41) by DM6PR06CA0078.outlook.office365.com
+ (2603:10b6:5:336::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.25 via Frontend
+ Transport; Thu, 20 Apr 2023 20:54:27 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.99)
+ smtp.mailfrom=a561359.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of a561359.bnc3.mailjet.com
+ does not designate 18.9.1.99 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.99;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.99) by
+ DM6NAM11FT027.mail.protection.outlook.com (10.13.172.205) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6319.26 via Frontend Transport; Thu, 20 Apr 2023 20:54:27 +0000
+Received: from w92expo23.exchange.mit.edu (18.7.74.77) by
+ oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Thu, 20 Apr 2023 16:54:09 -0400
+Received: from oc11exhyb7.exchange.mit.edu (18.9.1.112) by
+ w92expo23.exchange.mit.edu (18.7.74.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Thu, 20 Apr 2023 16:54:09 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
+ by oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Thu, 20 Apr 2023 16:54:09 -0400
+Received: from MN2PR01CA0013.prod.exchangelabs.com (2603:10b6:208:10c::26) by
+ SN4PR01MB7453.prod.exchangelabs.com (2603:10b6:806:200::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.20; Thu, 20 Apr 2023 20:52:23 +0000
+Received: from BL02EPF000145BB.namprd05.prod.outlook.com
+ (2603:10b6:208:10c:cafe::3e) by MN2PR01CA0013.outlook.office365.com
+ (2603:10b6:208:10c::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.25 via Frontend
+ Transport; Thu, 20 Apr 2023 20:52:22 +0000
+Authentication-Results-Original: spf=pass (sender IP is 87.253.236.214)
+ smtp.mailfrom=a561359.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=704
+Received-SPF: Pass (protection.outlook.com: domain of a561359.bnc3.mailjet.com
+ designates 87.253.236.214 as permitted sender)
+ receiver=protection.outlook.com; client-ip=87.253.236.214;
+ helo=o214.p11.mailjet.com; pr=C
+Received: from o214.p11.mailjet.com (87.253.236.214) by
+ BL02EPF000145BB.mail.protection.outlook.com (10.167.241.211) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.14 via Frontend Transport; Thu, 20 Apr 2023 20:52:22 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; q=dns/txt;
+  d=bnc3.mailjet.com; i=president-and-provost=3Dmit.edu@a561359.bnc3.mailjet.com; s=mailjet2; x=1682033941;
+  h=message-id:mime-version:from:from:to:to:subject:subject:date:date:list-id:list-unsubscribe:
+  list-unsubscribe-post:feedback-id:precedence:x-campaignid:x-csa-complaints:
+  x-mj-mid:x-mj-smtpguid:x-report-abuse-to:content-type;
+  bh=0SquAVkBUNG6p0asydGV1fko7ZC1yQf/NzwgKwSUivQ=;
+  b=pGw2mVM4PDolMMNMqDvNrCm3NRz2KeFofnYT9GJpOodvnehnYCyOJEX7v
+ tTWRl4ePm2+SDGdatjxqrYO+tHGCUMOd+WvBFwCaTMyNupfVD06fCk2kHdSs
+ IGTU8edzkE201cTlZyZ76tBFbnp1ml9x+2dNWbmY5e0vBG9Od+bZyc=
+Return-Path:
+ 911c56d8.AVkAABPLrCwAAcrs_uQAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYF@a561359.bnc3.mailjet.com
+Message-ID: <911c56d8.AVkAABPLrCwAAcrs_uQAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYF@mailjet.com>
+From: Sally Kornbluth and Cynthia Barnhart <president-and-provost@mit.edu>
+To: jiannan@mit.edu
+Subject: Exciting move for ICEO John Dozier
+Date: Thu, 20 Apr 2023 20:52:21 +0000 (UTC)
+List-Id: <president-and-provost.mit.edu.inj9-sxivh.mj>
+List-Unsubscribe: <mailto:unsub-911c56d8.inj9.lzuh25nwzzn6@bnc3.mailjet.com>,
+	<https://inj9.mjt.lu/unsub2?m=AVkAABPLrCwAAcrs_uQAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc&b=911c56d8&e=06b1d8a8&x=a7iET_5Bkh8rOy7esnA68A>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Feedback-Id: 42.561359.532839:MJ
+Precedence: bulk
+X-CampaignID: 7699496676
+X-CSA-Complaints: csa-complaints@eco.de
+X-MJ-Mid: AVkAABPLrCwAAcrs_uQAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc
+X-MJ-SMTPGUID: 110aae8c-a55e-4c8e-ac93-061448f24f9b
+X-REPORT-ABUSE-TO: Message sent by Mailjet please report to
+	abuse@mailjet.com with a copy of the message
+Content-Type: multipart/alternative; boundary="=-MxlJnKh7nW0Kokv22JUS"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BL02EPF000145BB:EE_|SN4PR01MB7453:EE_|DM6NAM11FT027:EE_|DS7PR01MB7542:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: cad93eff-86c2-4257-cb0a-08db41e16e10
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?+7O26x6YfWRRl4KLBfZnu4EWV9mr4rrhtZEVZS24DHNK+GXqVqgZ+q3KpJYB?=
+ =?us-ascii?Q?SIR+MA16SXu3pSYpeG4teL4gbZfqBsU5xy4ShPej74XVKu2cshgb3hNz6+Pn?=
+ =?us-ascii?Q?F+uoptS1H8ZYBbSFHixXhl0xMB04u1Xt+eKrlA/5UcqkaMnNRo+iOZAEdeph?=
+ =?us-ascii?Q?5tE4XFbmj47AHtAx1hsLEFxTJyq0bseQxbEtgVlyCgXkshaGjKaAePIV4Fi6?=
+ =?us-ascii?Q?gikr/h2/E8u2gEq/kTJOHIeZKkynPqSUM9KucueqgeBbTmUp2Ad+0oYiiIRc?=
+ =?us-ascii?Q?oMQ8CEdlsp0p6WJDtaQC9bdl9c7OHfI1YxjcToBmKLhgq01KHo0JoFTTpeoT?=
+ =?us-ascii?Q?2eNw+6lhINcp/j7+LWlHBBOT4mkUyZxORNUUjLadjqDstJduaI4KKwPbv5Np?=
+ =?us-ascii?Q?GKMuAYGlE2e2v10eD7jirBXvx64S88r2WPha1KFZxYHhI22V0YcgAdJvDIjV?=
+ =?us-ascii?Q?WKvI3Jz3ordS9hiq5VmoDSqGksoEjqlkvdGMG9hIJ2NUWYXyg2hxsVY1tg8+?=
+ =?us-ascii?Q?C7wwM7tW1YUWOSEkcoKrxiLkfAFsBQqQxPg6v5IdQsUmsY5Q9eykRD3+lLQL?=
+ =?us-ascii?Q?rBpriNxqX8N/qhgONCLNGQh4O6udIa6VwtLr4+WHuMGxY8eXXUzXP5hog1fQ?=
+ =?us-ascii?Q?zP/m+Yjzaisms7HZx+1B8jCiNTBxnxByoed6uOWg4bP2FEDkx41E52muNRyG?=
+ =?us-ascii?Q?zUGYgWHlsNh96f3PoBQIhGvlAT+uG7eTmV8PgUp5eyxkDm0Tog+ytQbQuM+L?=
+ =?us-ascii?Q?7toZsQ61e7sT9BhaIIGav+9mBeSxAp1Y5oqVSQkC8TPtCgHQZW1KZJPa1lIT?=
+ =?us-ascii?Q?L/iPfit2OpK+oSR5XGO9N6Zz06hJhTsbqwfU3ZQ2kJIUBK2Pqf3lqDlywLEa?=
+ =?us-ascii?Q?QLuF+rlcz0Y3wzxNaJbm1d5uY6zVmpOmr4Kovi5XmTle1DNR2k1xBy9qLngn?=
+ =?us-ascii?Q?4VV8MBlCKV/5VkGalBrUgLYjVc1+ZmhoCoSJx99ZQvCwAuK9WBbJ20VP05vE?=
+ =?us-ascii?Q?uhSYnKTRY1pXdyav84/PHWdtJ8C4bLtesAfhRDBBR38yfJtySghYyOZJ+6ZJ?=
+ =?us-ascii?Q?yoivAR8AEqDA0psFdqADgcOH82KBm8dB5qYCjHtI6KWQ2M9+R10fBYSqVI8n?=
+ =?us-ascii?Q?5LAxDQAedYFewHyhvGEC6wsh7XzDZozL+Y+lY2AMWD+VZ1aO0kDkJqjGqUgI?=
+ =?us-ascii?Q?0kH/FfqExfq8Ij+xmkOho+9W+g2wTzPq/fMBm5NLklhV3OugiFbF6XArLfkc?=
+ =?us-ascii?Q?COreNZRZe+TsiAJmlMOCjJYRg6BlOqNyLFq3MUZQmZeCAY9KiBGlkQimxmhU?=
+ =?us-ascii?Q?vo5FtICyD73DrME9iEU6Fy3kKaqLs1OS801f1Zl6URNEbmoPJo3AMrDnoFGI?=
+ =?us-ascii?Q?30wnc3vce+MC3nyDUOjb3joTNEUbZqV/ikG1bKUhtyJctJHiqQ=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:87.253.236.214;CTRY:FR;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:o214.p11.mailjet.com;PTR:o214.p11.mailjet.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR01MB7453
+X-OrganizationHeadersPreserved: SN4PR01MB7453.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb7.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb7.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo23.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 20 Apr 2023 20:54:27.3098
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ cad93eff-86c2-4257-cb0a-08db41e16e10
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted:
+ DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL02EPF000145BB.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 25ca2fc7-5b87-41ff-5f2e-08db41e123c5
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.99;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb3.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Apr 2023 20:54:27.0754
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cad93eff-86c2-4257-cb0a-08db41e16e10
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.99];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL02EPF000145BB.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR01MB7542
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.4353327
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6340.011
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WFZMNzNmOUhlSFBTcVM5aFdRMU40S3FPY3V4UVR6UXJDdlJSdU8yVW5xRWVo?=
+ =?utf-8?B?Ylo4ZjlTUDNqUW1WbGEwQWxybXh6dzFTbWJKT3ZHOXhrdlQzWGNlRGhHajRp?=
+ =?utf-8?B?N3R1R3UybzdlU2g0VWJGc1ZPSnRjeDBLVDJpNXExWEpueHhpZkZXQlVTUkNu?=
+ =?utf-8?B?SW5KckZYSFoweXZ0cHZ1VlgzNTN5ZDVnZzBraG9lMmpqRThkdUIrUkM1VzhQ?=
+ =?utf-8?B?c1R5dit4VWcvWkMyc0U3c0tHemVoV1N1aHgzSFZNS0lKL0t0L2swY3Zid2xt?=
+ =?utf-8?B?eEFod1RaV1hhZGpzcUIweU1MTlY0MXQ1NlhvRjNmS2wzcVFZMVhGVC9maVF2?=
+ =?utf-8?B?cUk2T2tOM05pTmRwVUhacGJQY0Y2UjAvbXM3UFFaK1FTZnhzRzhYUnVKR3d0?=
+ =?utf-8?B?OFBXRHZGTjRlbmxwOEMzWkJLWGhHbjhtVkN4OGZGS3dvTHBvZEFGbXNRTGlP?=
+ =?utf-8?B?b01hc0hYejJpR0luOEszNmFIYVJtOGs4eVhWU3dEMnNBTzZrck5HRG90Ykxn?=
+ =?utf-8?B?cnlVdWtwUFNKMXRPaG91M3ZoTG9FQXM4dlBNL2tkWnRSSkdIcjFhb2FSeUo5?=
+ =?utf-8?B?NkNFL3h5bG51RXNQNGNRTVZKYlZUMHRWYXNYYlpqb3hML29wRG5zMmlIOE1F?=
+ =?utf-8?B?dHpsUUNNTThWNGZ5c1VmbGRCb3pXT1JYejdSVTRDRVBqQ0V1YllQOGMyT25u?=
+ =?utf-8?B?eW1mSkF4NTVQRkpWSFNXZUIvZGRhR3hsQ1JabWdlaTRUa1pGejBpR1Y0VW5W?=
+ =?utf-8?B?QlplL3Rxdnc2MlU0WTNySG5ZZzFWYVdCY0wvUjFJb1lHeC9jN2hKRlQ4am9n?=
+ =?utf-8?B?cENuaXdFRXFNNloyMmE3aW5hQUlWT1VNUkZsQXh2QzdqT0YrU3NGeWFtdDM5?=
+ =?utf-8?B?UFZpcHNja1NHTGdWVS9ta2xGZkZXV0YvSDllU0RDWC9hZXVQZ2UwMFR0UGNL?=
+ =?utf-8?B?TlZORVFQdVFmWGF4UG0yZ0V6K1hWNWlLWS9SVDhMc0E1bXI0NlRhSER6NUUv?=
+ =?utf-8?B?Zkk3WXlKVFU4SkllSWNKWnE3T29XeDQrd0VCSG1GMnVLQXh0ZzBwTUN6b1BT?=
+ =?utf-8?B?WTFrNXNQSjMxdVZiNStTNE9rcFh5NTkySkY0SFlya2JxYlBRTXVnYTZ6WnMy?=
+ =?utf-8?B?bjhhaU5pc1VaMDFFemZoQ2E1WEE1NFB1SmtsRXJ0QW9wODFTSDJxWlErR3FG?=
+ =?utf-8?B?Rkp6d1VTUkorbno4U1FnMUlaNGkwTUpOOEhkZkFTZ1RKZXZGdXpmVFZrS1No?=
+ =?utf-8?B?VDVJV2tHR2w1R1FoY2VUd05kM1BtOUhhclNveEhjdTAxeEhBV0t1OWlUN3ky?=
+ =?utf-8?B?OVA5eFRidmZBbjRxd25yTTFqNm1QYUFlbm05alFZUHRLM1hIelE4cURzUGc5?=
+ =?utf-8?B?cm9YYk9PdjZOUGdwZ1N6TW00Qmk0U1VPNzFnUmpyQzlYeVp2YnBsWi84RHFP?=
+ =?utf-8?B?dmVnSWxOOGVza3FDQlJ0a1pEOVBBS0M5dUhIc29wblo1T2F2NVNYK3AxbE9h?=
+ =?utf-8?B?bWdoTjBpS29hOFZkSWdkOGovNG9NdWd6Y3h6K1l1aG40ZHhtOWlScE9odnEz?=
+ =?utf-8?B?MXkxYjdYU1JyYVdrRzRkaWRzajZleHlBNTFzUkJ3NU5WQytIc2g0UGRyVTls?=
+ =?utf-8?B?S0hob01oeVFHamV6ejNvSkVGcUJiUVY4OTN4WVh6SEFON2F6VlhTRDhrTnpZ?=
+ =?utf-8?B?bjRwbG5CTk1zODRaaDB4VUxsN01IWmtsME5SenNBbXVtOHljRDBMSTlGTHU0?=
+ =?utf-8?B?NVVWQUdQK2lML2swbHhCWVREekZHQjFqRUR4VUZ2eHlPUWdXbG1qVHM1WVVo?=
+ =?utf-8?B?d1JkSmptVzlZeHNRZCtGOUhiUGNUdDlpZkE5US95cUVUN01lbERPYi9CK3hQ?=
+ =?utf-8?B?VzVFMDR4YS9tNUY0QUlEc3Q2a2hGUXl5ZHRXVjBjazQ2NXNWc2JtTHRzTDht?=
+ =?utf-8?B?aFhhdDlwSTdWL2RhKzdYcjRzd3VkNEZyZFp0dDFYVU5iajMwazN1SU1jY3pT?=
+ =?utf-8?B?ODhNVGlGWW01MjVObndzVStmb0NJbXd6U01uQmp3UElsSFRkSjJlNm5EU2Nr?=
+ =?utf-8?B?SG1HR1RqaERCWjFzVUtIMXhxZ0d1dHV4WDJueFRJdFZVSjhxeEZEalRQOFhs?=
+ =?utf-8?B?bjYxRUs0bW5CQ1k1am1YcThocllmZFhETU5LQVU0V2Jhc3JIZlZuTHE2VGlu?=
+ =?utf-8?B?MXFqL0UwWnZ1akl4VjBqOTRMT0lsVWFJeGtlTFM2dHF6TEFTd1l0M3JNM28y?=
+ =?utf-8?B?MUJGL1NURE5YMVhDZTlvdVhKUUNmNTlDcTRrSUlnYXJjS0pFUDZ0ajFjcm85?=
+ =?utf-8?B?UURRQk9yMjZzeUZNVFovN1FLcndEU1dJZGlTS0VML3luRjU5eUttN0Q4RGNM?=
+ =?utf-8?B?YnVMeW1mcG5laUJ6R05EM3pjL29xam8zZFY3dlVLazVOc1ZGYnZZVkFWbU9z?=
+ =?utf-8?B?bjFNZS9zTWY3NzhiaDFSUXlnWWFVZHc3VktMQURhSTVyekh4OGhoUmlIZWxX?=
+ =?utf-8?B?QVppdFZud2xkUTFmL3NLU2RFaXcvMnliVmV5dU5pamRzTm9hUlpGTlB5ZG1o?=
+ =?utf-8?Q?L9ZI0JTBrN5nE5OQkigyLwpcpQBeTc?=
+MIME-Version: 1.0
+
+--=-MxlJnKh7nW0Kokv22JUS
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+ICEO John Dozier to become president of Columbia College
+
+View online version http://inj9.mjt.lu/nl3/w_iXzRh0JLBPes_IRaFCGw?m=3DAVkAA=
+BPLrCwAAcrs_uQAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc&=
+b=3D911c56d8&e=3D06b1d8a8&x=3Da7iET_5Bkh8rOy7esnA68A
+
+
+
+<<MIT President Sally Kornbluth and Provost Cynthia Barnhart letterhead>> [=
+https://inj9.mjt.lu/img/inj9/b/mkx3t/glr5x.png]
+
+
+
+Dear members of the MIT community,
+
+We write to convey the bittersweet news that John Dozier will step down as =
+Institute Community and Equity Officer (ICEO) on June 30 to become presiden=
+t of Columbia College, a private liberal arts college in Columbia, South Ca=
+rolina. Before his time at MIT, John served as president of Kennedy-King Co=
+llege in Chicago. He will now take on a presidential role again, this time =
+at the college his mother attended in the city that has been his family=E2=
+=80=99s hometown for generations. Although we=E2=80=99re very sorry John wi=
+ll be leaving us, we greatly appreciate his important work on behalf of MIT=
+, and we celebrate with him this extraordinary new personal opportunity.
+
+
+John=E2=80=99s record of accomplishment
+
+John=E2=80=99s first day at MIT was March 15, 2020, just as the pandemic sc=
+attered the community he had arrived to serve. It=E2=80=99s a mark of John=
+=E2=80=99s exceptional qualities as a person and a leader =E2=80=93 his war=
+mth, kindness, curiosity, sense of humor and emotional insight =E2=80=93 th=
+at he quickly built close working relationships across the Institute, almos=
+t entirely over Zoom. Countless people in every role across the Institute w=
+ill miss his wisdom and his friendship.
+
+With his astute judgment and grace under pressure, John has helped our comm=
+unity navigate intense challenges, including the pandemic and a national re=
+ckoning on race, and he has been an invaluable advisor to senior leaders in=
+ handling crises and building community trust. He was the primary architect=
+ and driver of the Institute-wide consultations that shaped the Strategic A=
+ction Plan on Belonging, Achievement, and Composition [https://actionplan.m=
+it.edu/], and he served as a voice for the community and liaison to the adm=
+inistration for many key committees, initiatives and working groups, includ=
+ing the MIT Values Statement Committee [http://web.mit.edu/valuescomm-repor=
+t/mit-values-committee-final-report-1.pdf], the Indigenous Working Group [h=
+ttps://reif.mit.edu/sites/default/files/Indigenous_Working_Group_Report.pdf=
+], the Racism Research Fund [https://iceo.mit.edu/racism-research-fund/], t=
+he Gender Identity Initiative [https://iceo.mit.edu/gender-identity-initiat=
+ive/], and the Ad Hoc Committee on Arts, Culture, and DEI [https://iceo.mit=
+.edu/wp-content/uploads/2023/04/2022-12-16-Ad-Hoc-Report-MIT.pdf].
+
+John also expanded the MLK Visiting Professors and Scholars Program [https:=
+//mlkscholars.mit.edu/], helped lead the hiring of assistant deans focused =
+on inclusion in each school and the college, and fostered a sense of teamwo=
+rk and professionalism in the Institute Community and Equity Office and rel=
+ated groups across MIT. Recently, as our community turned to important ques=
+tions around freedom of expression, John launched Dialogues Across Differen=
+ce [https://news.mit.edu/2023/3q-john-dozier-dialogues-across-difference-03=
+15], a new speaker series designed to demonstrate practical ways to take on=
+ difficult subjects across differences of opinion, background, viewpoint an=
+d life experience.
+
+
+Next steps
+
+The best way to honor John=E2=80=99s contributions to our community is to b=
+uild on the momentum he=E2=80=99s helped generate. We will immediately begi=
+n a national search, informed by input from the community. For now, if you =
+have ideas or insights about the role or candidates to propose, you may sub=
+mit them to us confidentially at iceo-search@mit.edu [iceo-search@mit.edu].
+
+Because a search at this level can take time, as soon as possible we will n=
+ame an interim ICEO to serve upon John=E2=80=99s departure.
+
+We hope you will join us in expressing our warmest gratitude to John for hi=
+s service and in sending him every good wish as he returns home to South Ca=
+rolina.
+
+Sincerely,
+
+Sally Kornbluth
+President
+
+Cynthia Barnhart
+Provost
+---------------------------------------------------------------------------=
+-----
+
+
+
+Massachusetts Institute of Technology
+77 Massachusetts Ave | Cambridge, MA 02139
+
+This email has been sent to jiannan@mit.edu.=C2=A0
+You received this email because you are a member of MIT's faculty or staff,=
+ or an MIT student.
+Click here to unsubscribe http://inj9.mjt.lu/unsub2?hl=3Den&m=3DAVkAABPLrCw=
+AAcrs_uQAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc&b=3D91=
+1c56d8&e=3D06b1d8a8&x=3Da7iET_5Bkh8rOy7esnA68A. Report an issue with this e=
+mail [report-announcement-issue@mit.edu].
+
+
+
+[https://www.mailjet.com/?utm_source=3Dfooter&utm_medium=3Demail&utm_campai=
+gn=3Dlogo1]=
+
+--=-MxlJnKh7nW0Kokv22JUS
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>Exciting move for ICEO John Dozier</title><!--[if !mso]><!--><meta htt=
+p-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><!--<![endif]--><meta nam=
+e=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=3D1"><style ty=
+pe=3D"text/css">#outlook a { padding:0; }
+          body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-=
+size-adjust:100%; }
+          table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-tab=
+le-rspace:0pt; }
+          img { border:0;height:auto;line-height:100%; outline:none;text-de=
+coration:none;-ms-interpolation-mode:bicubic; }
+          p { display:block;margin:13px 0; }</style><!--[if mso]>
+        <noscript>
+        <xml>
+        <o:OfficeDocumentSettings>
+          <o:AllowPNG/>
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+        </xml>
+        </noscript>
+        <![endif]--><!--[if lte mso 11]>
+        <style type=3D"text/css">
+          .mj-outlook-group-fix { width:100% !important; }
+        </style>
+        <![endif]--><!--[if !mso]><!--><link href=3D"https://fonts.googleap=
+is.com/css?family=3DUbuntu:300,400,500,700" rel=3D"stylesheet" type=3D"text=
+/css"><style type=3D"text/css">@import url(https://fonts.googleapis.com/css=
+?family=3DUbuntu:300,400,500,700);</style><!--<![endif]--><style type=3D"te=
+xt/css">@media only screen and (min-width:480px) {
+        .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.mj-column-per-33 { width:33% !important; max-width: 33%; }
+.mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.moz-text-html .mj-column-per-33 { width:33% !important; max-width: 33%; }
+.moz-text-html .mj-column-per-100 { width:100% !important; max-width: 100%;=
+ }</style><style type=3D"text/css">[owa] .mj-column-per-67 { width:67% !imp=
+ortant; max-width: 67%; }
+[owa] .mj-column-per-33 { width:33% !important; max-width: 33%; }
+[owa] .mj-column-per-100 { width:100% !important; max-width: 100%; }</style=
+><style type=3D"text/css">@media only screen and (max-width:480px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style></head><body style=3D"word-spacing:normal;background-color:#ff=
+ffff;"><div style=3D"background-color:#ffffff;"><!--[if mso | IE]><table al=
+ign=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" =
+role=3D"presentation" style=3D"width:600px;" width=3D"600" ><tr><td style=
+=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-=
+-><div style=3D"margin:0px auto;max-width:600px;"><table align=3D"center" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;paddin=
+g:20px 0px 20px 0px;padding-left:0px;padding-right:0px;text-align:center;">=
+<!--[if mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-align:bottom;widt=
+h:402px;" ><![endif]--><div class=3D"mj-column-per-67 mj-outlook-group-fix"=
+ style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;=
+vertical-align:bottom;width:100%;"><table border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" role=3D"presentation" style=3D"vertical-align:bottom;" widt=
+h=3D"100%"><tbody><tr><td align=3D"left" style=3D"font-size:0px;padding:0px=
+ 0px 0px 25px;padding-top:0px;padding-bottom:0px;word-break:break-word;"><d=
+iv style=3D"font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:12px=
+;letter-spacing:normal;line-height:1;text-align:left;color:#000000;"><p cla=
+ss=3D"text-build-content" data-testid=3D"8fHBsxdIpP7" style=3D"margin: 10px=
+ 0; margin-top: 10px; margin-bottom: 10px;"><span style=3D"font-family:Aria=
+l, sans-serif;font-size:12px;">ICEO John Dozier to become president of Colu=
+mbia College</span></p></div></td></tr></tbody></table></div><!--[if mso | =
+IE]></td><td class=3D"" style=3D"vertical-align:bottom;width:198px;" ><![en=
+dif]--><div class=3D"mj-column-per-33 mj-outlook-group-fix" style=3D"font-s=
+ize:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:b=
+ottom;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"vertical-align:bottom;" width=3D"100%"><tbod=
+y><tr><td align=3D"left" style=3D"font-size:0px;padding:0px 25px 0px 0px;pa=
+dding-top:0px;padding-bottom:0px;word-break:break-word;"><div style=3D"font=
+-family:Arial, sans-serif;font-size:13px;letter-spacing:normal;line-height:=
+1;text-align:left;color:#000000;"><p style=3D"text-align: right; margin: 10=
+px 0; margin-top: 10px; margin-bottom: 10px;"><a href=3D"http://inj9.mjt.lu=
+/nl3/w_iXzRh0JLBPes_IRaFCGw?m=3DAVkAABPLrCwAAcrs_uQAAMlryacAAYCrBXMAJcXrAAi=
+QzwBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc&amp;b=3D911c56d8&amp;e=3D06b1d8a8&amp;=
+x=3Da7iET_5Bkh8rOy7esnA68A" target=3D"_blank" style=3D"; text-decoration: n=
+one;"><span><u><span style=3D"line-height:22px;text-align:right;font-size:1=
+2px;letter-spacing:normal;text-align:left;color:#0056ee;font-family:Arial;"=
+><u>View online version</u></span></u></span></a></p></div></td></tr></tbod=
+y></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr><=
+/tbody></table></div><!--[if mso | IE]></td></tr></table><table align=3D"ce=
+nter" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"p=
+resentation" style=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-he=
+ight:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div styl=
+e=3D"margin:0px auto;max-width:600px;"><table align=3D"center" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"width:1=
+00%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20px 0;pa=
+dding-bottom:0px;padding-top:0px;text-align:center;"><!--[if mso | IE]><tab=
+le role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><=
+tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><![endif]--><d=
+iv class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-size:0px;=
+text-align:left;direction:ltr;display:inline-block;vertical-align:top;width=
+:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pre=
+sentation" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td alig=
+n=3D"center" style=3D"font-size:0px;padding:0px 0px 10px 0px;padding-top:0p=
+x;padding-right:0px;padding-bottom:10px;padding-left:0px;word-break:break-w=
+ord;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"prese=
+ntation" style=3D"border-collapse:collapse;border-spacing:0px;"><tbody><tr>=
+<td style=3D"width:600px;"><img alt=3D"MIT President Sally Kornbluth and Pr=
+ovost Cynthia Barnhart letterhead" height=3D"auto" src=3D"https://inj9.mjt.=
+lu/img/inj9/b/mkx3t/glr5x.png" style=3D"border:none;border-radius:px;displa=
+y:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:=
+13px;" width=3D"600"></td></tr></tbody></table></td></tr></tbody></table></=
+div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></tab=
+le></div><!--[if mso | IE]></td></tr></table><table align=3D"center" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation"=
+ style=3D"width:600px;" width=3D"600" bgcolor=3D"#ffffff" ><tr><td style=3D=
+"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><=
+div style=3D"background:#ffffff;background-color:#ffffff;margin:0px auto;ma=
+x-width:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" role=3D"presentation" style=3D"background:#ffffff;background-=
+color:#ffffff;width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:=
+0px;padding:0px 0px 20px 0px;padding-left:0px;padding-right:0px;padding-top=
+:0px;text-align:center;"><!--[if mso | IE]><table role=3D"presentation" bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"v=
+ertical-align:top;width:600px;" ><![endif]--><div class=3D"mj-column-per-10=
+0 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;direction:lt=
+r;display:inline-block;vertical-align:top;width:100%;"><table border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"vertical=
+-align:top;" width=3D"100%"><tbody><tr><td align=3D"left" style=3D"font-siz=
+e:0px;padding:0px 25px 0px 25px;padding-top:0px;padding-right:25px;padding-=
+bottom:0px;padding-left:25px;word-break:break-word;"><div style=3D"font-fam=
+ily:Arial, sans-serif;font-size:13px;letter-spacing:normal;line-height:1;te=
+xt-align:left;color:#000000;"><p class=3D"text-build-content" style=3D"line=
+-height: 22px; margin: 10px 0; margin-top: 10px;" data-testid=3D"ykwUBMl-WY=
+"><span style=3D"color:#333333;font-family:Arial;font-size:14px;">Dear memb=
+ers of the MIT community,</span></p><p class=3D"text-build-content" style=
+=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span st=
+yle=3D"color:#333333;font-family:Arial;font-size:14px;">We write to convey =
+the bittersweet news that John Dozier will step down as Institute Community=
+ and Equity Officer (ICEO) on June 30 to become president of Columbia Colle=
+ge, a private liberal arts college in Columbia, South Carolina. Before his =
+time at MIT, John served as president of Kennedy-King College in Chicago. H=
+e will now take on a presidential role again, this time at the college his =
+mother attended in the city that has been his family=E2=80=99s hometown for=
+ generations. Although we=E2=80=99re very sorry John will be leaving us, we=
+ greatly appreciate his important work on behalf of MIT, and we celebrate w=
+ith him this extraordinary new personal opportunity.</span></p><h2 class=3D=
+"text-build-content" data-testid=3D"ykwUBMl-WY" style=3D"; font-weight: nor=
+mal;"><span style=3D"color:#333333;font-family:Arial;font-size:15px;"><b>Jo=
+hn=E2=80=99s record of accomplishment</b></span></h2><p class=3D"text-build=
+-content" style=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"ykwUB=
+Ml-WY"><span style=3D"color:#333333;font-family:Arial;font-size:14px;">John=
+=E2=80=99s first day at MIT was March 15, 2020, just as the pandemic scatte=
+red the community he had arrived to serve. It=E2=80=99s a mark of John=E2=
+=80=99s exceptional qualities as a person and a leader =E2=80=93 his warmth=
+, kindness, curiosity, sense of humor and emotional insight =E2=80=93 that =
+he quickly built close working relationships across the Institute, almost e=
+ntirely over Zoom. Countless people in every role across the Institute will=
+ miss his wisdom and his friendship.</span></p><p class=3D"text-build-conte=
+nt" style=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"=
+><span style=3D"color:#333333;font-family:Arial;font-size:14px;">With his a=
+stute judgment and grace under pressure, John has helped our community navi=
+gate intense challenges, including the pandemic and a national reckoning on=
+ race, and he has been an invaluable advisor to senior leaders in handling =
+crises and building community trust. He was the primary architect and drive=
+r of the Institute-wide consultations that shaped the </span><a class=3D"li=
+nk-build-content" style=3D"color:inherit;; text-decoration: none;" target=
+=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVkAABPLrCwAAcrs_uQAAMlryacAAYCr=
+BXMAJcXrAAiQzwBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc/1/dOTz7fArlxXDkfvRzh8CMw/aH=
+R0cHM6Ly9hY3Rpb25wbGFuLm1pdC5lZHUv"><span style=3D"color:#0056ee;font-famil=
+y:Arial;font-size:14px;"><u>Strategic Action Plan on Belonging, Achievement=
+, and Composition</u></span></a><span style=3D"color:#333333;font-family:Ar=
+ial;font-size:14px;">, and he served as a voice for the community and liais=
+on to the administration for many key committees, initiatives and working g=
+roups, including the </span><a class=3D"link-build-content" style=3D"color:=
+inherit;; text-decoration: none;" target=3D"_blank" href=3D"http://inj9.mjt=
+.lu/lnk/AVkAABPLrCwAAcrs_uQAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYFEQqujKVeTI6skwY=
+USPJPmwAIIWc/2/VQb2-J6WM48ztC5wIbHOfQ/aHR0cDovL3dlYi5taXQuZWR1L3ZhbHVlc2Nvb=
+W0tcmVwb3J0L21pdC12YWx1ZXMtY29tbWl0dGVlLWZpbmFsLXJlcG9ydC0xLnBkZg"><span st=
+yle=3D"color:#0056ee;font-family:Arial;font-size:14px;"><u>MIT Values State=
+ment Committee</u></span></a><span style=3D"color:#333333;font-family:Arial=
+;font-size:14px;">, the </span><a class=3D"link-build-content" style=3D"col=
+or:inherit;; text-decoration: none;" target=3D"_blank" href=3D"http://inj9.=
+mjt.lu/lnk/AVkAABPLrCwAAcrs_uQAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYFEQqujKVeTI6s=
+kwYUSPJPmwAIIWc/3/UNQZISXCDFrQRigtAnYM0Q/aHR0cHM6Ly9yZWlmLm1pdC5lZHUvc2l0ZX=
+MvZGVmYXVsdC9maWxlcy9JbmRpZ2Vub3VzX1dvcmtpbmdfR3JvdXBfUmVwb3J0LnBkZg"><span=
+ style=3D"color:#0056ee;font-family:Arial;font-size:14px;"><u>Indigenous Wo=
+rking Group</u></span></a><span style=3D"color:#333333;font-family:Arial;fo=
+nt-size:14px;">, the </span><a class=3D"link-build-content" style=3D"color:=
+inherit;; text-decoration: none;" target=3D"_blank" href=3D"http://inj9.mjt=
+.lu/lnk/AVkAABPLrCwAAcrs_uQAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYFEQqujKVeTI6skwY=
+USPJPmwAIIWc/4/S8ppadEIybo_i2VSjDryJg/aHR0cHM6Ly9pY2VvLm1pdC5lZHUvcmFjaXNtL=
+XJlc2VhcmNoLWZ1bmQv"><span style=3D"color:#0056ee;font-family:Arial;font-si=
+ze:14px;"><u>Racism Research Fund</u></span></a><span style=3D"color:#33333=
+3;font-family:Arial;font-size:14px;">, the </span><a class=3D"link-build-co=
+ntent" style=3D"color:inherit;; text-decoration: none;" target=3D"_blank" h=
+ref=3D"http://inj9.mjt.lu/lnk/AVkAABPLrCwAAcrs_uQAAMlryacAAYCrBXMAJcXrAAiQz=
+wBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc/5/_fDUL35ujT9Si3CMP303Qg/aHR0cHM6Ly9pY2V=
+vLm1pdC5lZHUvZ2VuZGVyLWlkZW50aXR5LWluaXRpYXRpdmUv"><span style=3D"color:#00=
+56ee;font-family:Arial;font-size:14px;"><u>Gender Identity Initiative</u></=
+span></a><span style=3D"color:#333333;font-family:Arial;font-size:14px;">, =
+and the </span><a class=3D"link-build-content" style=3D"color:inherit;; tex=
+t-decoration: none;" target=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVkAA=
+BPLrCwAAcrs_uQAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc/=
+6/Qhzvar4ZN-py-ef8VVYHOQ/aHR0cHM6Ly9pY2VvLm1pdC5lZHUvd3AtY29udGVudC91cGxvYW=
+RzLzIwMjMvMDQvMjAyMi0xMi0xNi1BZC1Ib2MtUmVwb3J0LU1JVC5wZGY"><span style=3D"c=
+olor:#0056ee;font-family:Arial;font-size:14px;"><u>Ad Hoc Committee on Arts=
+, Culture, and DEI</u></span></a><span style=3D"color:#333333;font-family:A=
+rial;font-size:14px;">.</span></p><p class=3D"text-build-content" style=3D"=
+line-height: 22px; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span style=
+=3D"color:#333333;font-family:Arial;font-size:14px;">John also expanded the=
+ </span><a class=3D"link-build-content" style=3D"color:inherit;; text-decor=
+ation: none;" target=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVkAABPLrCwA=
+Acrs_uQAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc/7/6gKMi=
+0DdODHKymtElbd8Sg/aHR0cHM6Ly9tbGtzY2hvbGFycy5taXQuZWR1Lw"><span style=3D"co=
+lor:#0056ee;font-family:Arial;font-size:14px;"><u>MLK Visiting Professors a=
+nd Scholars Program</u></span></a><span style=3D"color:#333333;font-family:=
+Arial;font-size:14px;">, helped lead the hiring of assistant deans focused =
+on inclusion in each school and the college, and fostered a sense of teamwo=
+rk and professionalism in the Institute Community and Equity Office and rel=
+ated groups across MIT. Recently, as our community turned to important ques=
+tions around freedom of expression, John launched </span><a class=3D"link-b=
+uild-content" style=3D"color:inherit;; text-decoration: none;" target=3D"_b=
+lank" href=3D"http://inj9.mjt.lu/lnk/AVkAABPLrCwAAcrs_uQAAMlryacAAYCrBXMAJc=
+XrAAiQzwBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc/8/ZlmFkkra4yJwUwRiOVytWw/aHR0cHM6=
+Ly9uZXdzLm1pdC5lZHUvMjAyMy8zcS1qb2huLWRvemllci1kaWFsb2d1ZXMtYWNyb3NzLWRpZmZ=
+lcmVuY2UtMDMxNQ"><span style=3D"color:#0056ee;font-family:Arial;font-size:1=
+4px;"><u>Dialogues Across Difference</u></span></a><span style=3D"color:#33=
+3333;font-family:Arial;font-size:14px;">, a new speaker series designed to =
+demonstrate practical ways to take on difficult subjects across differences=
+ of opinion, background, viewpoint and life experience.</span></p><h2 class=
+=3D"text-build-content" data-testid=3D"ykwUBMl-WY" style=3D"; font-weight: =
+normal;"><span style=3D"color:#333333;font-family:Arial;font-size:15px;"><b=
+>Next steps</b></span></h2><p class=3D"text-build-content" style=3D"line-he=
+ight: 22px; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"colo=
+r:#333333;font-family:Arial;font-size:14px;">The best way to honor John=E2=
+=80=99s contributions to our community is to build on the momentum he=E2=80=
+=99s helped generate. We will immediately begin a national search, informed=
+ by input from the community. For now, if you have ideas or insights about =
+the role or candidates to propose, you may submit them to us confidentially=
+ at </span><a class=3D"link-build-content" style=3D"color:inherit;; text-de=
+coration: none;" href=3D"mailto:iceo-search@mit.edu"><span style=3D"color:#=
+0056ee;font-family:Arial;font-size:14px;"><u>iceo-search@mit.edu</u></span>=
+</a><span style=3D"color:#333333;font-family:Arial;font-size:14px;">.</span=
+></p><p class=3D"text-build-content" style=3D"line-height: 22px; margin: 10=
+px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-family:=
+Arial;font-size:14px;">Because a search at this level can take time, as soo=
+n as possible we will name an interim ICEO to serve upon John=E2=80=99s dep=
+arture.</span></p><p class=3D"text-build-content" style=3D"line-height: 22p=
+x; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333=
+;font-family:Arial;font-size:14px;">We hope you will join us in expressing =
+our warmest gratitude to John for his service and in sending him every good=
+ wish as he returns home to South Carolina.</span></p><p class=3D"text-buil=
+d-content" style=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"ykwU=
+BMl-WY"><span style=3D"color:#333333;font-family:Arial;font-size:14px;">Sin=
+cerely,</span></p><p class=3D"text-build-content" style=3D"line-height: 22p=
+x; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333=
+;font-family:Arial;font-size:14px;">Sally Kornbluth</span><br><span style=
+=3D"color:#333333;font-family:Arial;font-size:14px;">President</span></p><p=
+ class=3D"text-build-content" style=3D"line-height: 22px; margin: 10px 0; m=
+argin-bottom: 10px;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#33333=
+3;font-family:Arial;font-size:14px;">Cynthia Barnhart</span><br><span style=
+=3D"color:#333333;font-family:Arial;font-size:14px;">Provost</span></p></di=
+v></td></tr><tr><td align=3D"center" style=3D"font-size:0px;padding:10px 25=
+px;word-break:break-word;"><p style=3D"border-top:solid 2px #E6E6E6;font-si=
+ze:1px;margin:0px auto;width:100%;"></p><!--[if mso | IE]><table align=3D"c=
+enter" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"border-top=
+:solid 2px #E6E6E6;font-size:1px;margin:0px auto;width:550px;" role=3D"pres=
+entation" width=3D"550px" ><tr><td style=3D"height:0;line-height:0;"> &nbsp=
+;
+</td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso |=
+ IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if =
+mso | IE]></td></tr></table><table align=3D"center" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:6=
+00px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-li=
+ne-height-rule:exactly;"><![endif]--><div style=3D"margin:0px auto;max-widt=
+h:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr><td style=3D=
+"direction:ltr;font-size:0px;padding:20px 0px 20px 0px;text-align:center;">=
+<!--[if mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:6=
+00px;" ><![endif]--><div class=3D"mj-column-per-100 mj-outlook-group-fix" s=
+tyle=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;ve=
+rtical-align:top;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" role=3D"presentation" style=3D"vertical-align:top;" width=3D"100=
+%"><tbody><tr><td align=3D"left" style=3D"font-size:0px;padding:0px 20px 0p=
+x 20px;padding-top:0px;padding-bottom:0px;word-break:break-word;"><div styl=
+e=3D"font-family:Arial, sans-serif;font-size:11px;letter-spacing:normal;lin=
+e-height:1;text-align:left;color:#000000;"><p class=3D"text-build-content" =
+style=3D"text-align: center; margin: 10px 0; margin-top: 10px;" data-testid=
+=3D"A5rER0v1Z-"><span style=3D"color:#333333;font-family:Arial;font-size:11=
+px;line-height:14px;">Massachusetts Institute of Technology</span><br><span=
+ style=3D"color:#333333;font-family:Arial;font-size:11px;line-height:14px;"=
+>77 Massachusetts Ave | Cambridge, MA 02139</span></p><p class=3D"text-buil=
+d-content" style=3D"text-align: center; margin: 10px 0; margin-bottom: 10px=
+;" data-testid=3D"A5rER0v1Z-"><span style=3D"color:#333333;font-family:Aria=
+l;font-size:11px;line-height:14px;">This email has been sent to jiannan@mit=
+.edu.&nbsp;</span><br><span style=3D"color:#333333;font-family:Arial;font-s=
+ize:11px;line-height:14px;">You received this email because you are a membe=
+r of MIT's faculty or staff, or an MIT student.</span><br><a class=3D"link-=
+build-content" style=3D"color:inherit;; text-decoration: none;" target=3D"_=
+blank" href=3D"http://inj9.mjt.lu/unsub2?hl=3Den&amp;m=3DAVkAABPLrCwAAcrs_u=
+QAAMlryacAAYCrBXMAJcXrAAiQzwBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc&amp;b=3D911c5=
+6d8&amp;e=3D06b1d8a8&amp;x=3Da7iET_5Bkh8rOy7esnA68A"><span style=3D"color:#=
+0056ee;font-family:Arial;font-size:11px;line-height:14px;"><u>Click here to=
+ unsubscribe</u></span></a><span style=3D"color:#333333;font-family:Arial;f=
+ont-size:11px;line-height:14px;">. </span><a class=3D"link-build-content" s=
+tyle=3D"color:inherit;; text-decoration: none;" href=3D"mailto:report-annou=
+ncement-issue@mit.edu"><span style=3D"color:#0056ee;font-family:Arial;font-=
+size:11px;line-height:14px;"><u>Report an issue with this email</u></span><=
+/a><span style=3D"color:#333333;font-family:Arial;font-size:11px;line-heigh=
+t:14px;">.</span></p></div></td></tr></tbody></table></div><!--[if mso | IE=
+]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso=
+ | IE]></td></tr></table><![endif]--></div>
+<br><img src=3D"http://inj9.mjt.lu/oo/AVkAABPLrCwAAcrs_uQAAMlryacAAYCrBXMAJ=
+cXrAAiQzwBkQaYFEQqujKVeTI6skwYUSPJPmwAIIWc/99479e04/e.gif" height=3D"1" wid=
+th=3D"1" alt=3D"" border=3D"0" style=3D"height:1px;width:1px;border:0;">
+</body></html>=
+
+--=-MxlJnKh7nW0Kokv22JUS--

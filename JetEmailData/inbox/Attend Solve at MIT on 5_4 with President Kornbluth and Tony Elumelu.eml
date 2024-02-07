@@ -1,0 +1,593 @@
+Received: from SN6PR01MB5135.prod.exchangelabs.com (2603:10b6:805:c5::20) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 25 Apr 2023 14:53:56
+ +0000
+Received: from DS7PR05CA0043.namprd05.prod.outlook.com (2603:10b6:8:2f::22) by
+ SN6PR01MB5135.prod.exchangelabs.com (2603:10b6:805:c5::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.19; Tue, 25 Apr 2023 14:53:55 +0000
+Received: from DS1PEPF0000E645.namprd02.prod.outlook.com
+ (2603:10b6:8:2f:cafe::c9) by DS7PR05CA0043.outlook.office365.com
+ (2603:10b6:8:2f::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.20 via Frontend
+ Transport; Tue, 25 Apr 2023 14:53:54 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.113)
+ smtp.mailfrom=a561359.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of a561359.bnc3.mailjet.com
+ does not designate 18.9.1.113 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.113;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.113) by
+ DS1PEPF0000E645.mail.protection.outlook.com (10.167.17.203) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6340.16 via Frontend Transport; Tue, 25 Apr 2023 14:53:54 +0000
+Received: from w92expo27.exchange.mit.edu (18.7.74.33) by
+ oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 25 Apr 2023 10:53:39 -0400
+Received: from oc11exhyb6.exchange.mit.edu (18.9.1.111) by
+ w92expo27.exchange.mit.edu (18.7.74.33) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Tue, 25 Apr 2023 10:53:38 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.104)
+ by oc11exhyb6.exchange.mit.edu (18.9.1.111) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Tue, 25 Apr 2023 10:53:38 -0400
+Received: from BL1PR13CA0299.namprd13.prod.outlook.com (2603:10b6:208:2bc::34)
+ by SN6PR01MB5088.prod.exchangelabs.com (2603:10b6:805:bb::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.19; Tue, 25 Apr 2023 14:53:31 +0000
+Received: from BL02EPF00010208.namprd05.prod.outlook.com
+ (2603:10b6:208:2bc:cafe::d6) by BL1PR13CA0299.outlook.office365.com
+ (2603:10b6:208:2bc::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.20 via Frontend
+ Transport; Tue, 25 Apr 2023 14:53:31 +0000
+Authentication-Results-Original: spf=pass (sender IP is 87.253.236.214)
+ smtp.mailfrom=a561359.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=704
+Received-SPF: Pass (protection.outlook.com: domain of a561359.bnc3.mailjet.com
+ designates 87.253.236.214 as permitted sender)
+ receiver=protection.outlook.com; client-ip=87.253.236.214;
+ helo=o214.p11.mailjet.com; pr=C
+Received: from o214.p11.mailjet.com (87.253.236.214) by
+ BL02EPF00010208.mail.protection.outlook.com (10.167.241.199) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.15 via Frontend Transport; Tue, 25 Apr 2023 14:53:30 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; q=dns/txt;
+  d=bnc3.mailjet.com; i=provost-reply=3Dmit.edu@a561359.bnc3.mailjet.com; s=mailjet1; x=1682444410;
+  h=message-id:mime-version:from:from:to:to:subject:subject:date:date:list-id:list-unsubscribe-post:
+  list-unsubscribe:feedback-id:precedence:x-campaignid:x-csa-complaints:
+  x-mj-mid:x-mj-smtpguid:x-report-abuse-to:content-type;
+  bh=cp/rBdYdiFpm8Bt6dBW6fCKciIDVIe9jrztYq9Kat1w=;
+  b=qIepT4BrciwnQuQ50MfuBbXrWLoBW3xaW4kVZEryV/Xef8JtWr31NtORC
+ sUbGO0vreugK6G4yhc9XIr4yfCF5ndv06OzZ5QpSjyxB0r8o0BLZorj/KLfq
+ ahBi3AVh+9tAbI99oMUW3BpK+qbe0P3IscAMc3wyMU8p9jXQvsU+TE=
+Return-Path:
+ 2b5d7670.AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lq@a561359.bnc3.mailjet.com
+Message-ID: <2b5d7670.AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lq@mailjet.com>
+From: Cynthia Barnhart <provost-reply@mit.edu>
+To: jiannan@mit.edu
+Subject: Attend Solve at MIT on 5/4 with President Kornbluth and Tony
+ Elumelu
+Date: Tue, 25 Apr 2023 14:53:30 +0000 (UTC)
+List-Id: <provost-reply.mit.edu.inj9-sxi6r.mj>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+List-Unsubscribe: <mailto:unsub-2b5d7670.inj9.lz8y2nrtuii9@bnc3.mailjet.com>,
+	<https://inj9.mjt.lu/unsub2?m=AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc&b=2b5d7670&e=0ae70500&x=a7iET_5Bkh8rOy7esnA68A>
+Feedback-Id: 42.561359.532839:MJ
+Precedence: bulk
+X-CampaignID: 7699496778
+X-CSA-Complaints: csa-complaints@eco.de
+X-MJ-Mid: AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc
+X-MJ-SMTPGUID: 375fda7b-70ae-48b0-803d-10d1f49f5d1b
+X-REPORT-ABUSE-TO: Message sent by Mailjet please report to
+	abuse@mailjet.com with a copy of the message
+Content-Type: multipart/alternative; boundary="=-Xx1/r+mqxotfdAjLT9I/"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BL02EPF00010208:EE_|SN6PR01MB5088:EE_|DS1PEPF0000E645:EE_|SN6PR01MB5135:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 202d2c34-66f3-460f-00c8-08db459ce43e
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?Fstrh7kKCzyXBJmyL1EOe9ZpqzyXMpU3g/0TCi62iVLzTI+mKOcY2BOvp1qk?=
+ =?us-ascii?Q?IMaRCdnyYQNHWzNNv/m9J+ri1GI+uohf/RSCwAxBaxqFvQXiiKOna2iURTGe?=
+ =?us-ascii?Q?aEtuQAMiwHYu75oGGFENLMO5kgwGoMOV8mIVrifJk6HbwFbcuN55A9V/sDl6?=
+ =?us-ascii?Q?Sal58ZmiEVYuMlIdtiWWhVOg8l0Pi/lYCZ/RLrnxNWitaz3/BNlL8R5K80At?=
+ =?us-ascii?Q?O1nTd1sFWw0ylQon00ityRQiilIj5gn8p7VGXAlFZsZFZKgj0uvVZLo5wS9O?=
+ =?us-ascii?Q?69gu86vfjgxhaHUT850PKg2u9cTu86qq+GJEkHj3Jp7G/CW9bidh2upBJHHl?=
+ =?us-ascii?Q?ZEhbia/Or9DBa48zdi0OZGs4uEeMZ9/cIZG5Hiy4h0lXjWvJgstiuzZmNyoC?=
+ =?us-ascii?Q?1m0MehBV9pG/Swla+D8/1ckni2wn+pk1qjns/u55pEl2VyVKNtE0sVArxD2y?=
+ =?us-ascii?Q?UARJlM5KaDz4FFKITIn1f5Y1XzCYbwSZybZp5Hhfnvb/EdmKTxFqiskSlTr4?=
+ =?us-ascii?Q?MYR5ALgR7rLp7i96F8EwfTv/hbttvMmbgPoZoGuUxRMoIGwgbf7BtKkmeaUs?=
+ =?us-ascii?Q?KepqYoyXuRZgDbN7nyA/FYuWQXUHQA0295r8eZyiaLLF765gA55eRvpwb47S?=
+ =?us-ascii?Q?j9+D/zBzpp2pRNQtt0UofNzxlIAcQcre2I869KQCKk4465RaswUdcihtIOzp?=
+ =?us-ascii?Q?GBuVL7760PwYDBRcdXqIVQAlOkkSnDT2KdnXVImpLQQYy1a0rurgiIhVy4/a?=
+ =?us-ascii?Q?qu2oU8M6eeL+o8ddEjxX8pXJv8s0dB7MyV/EAGedkD1GihzxRfdoNInfezxH?=
+ =?us-ascii?Q?4DDK6FSi5up8x/+U9+4iqQMw0dIR+pR/o1W7MENQNL3AZCM8/ecO4bEJljCb?=
+ =?us-ascii?Q?aCdPF54nxiqxkwktS5qgWe/z+l7rwyvoOPI5rVA1ADHaPz/jUg5oHaUnU+Ba?=
+ =?us-ascii?Q?GHk0eZv8J63jERTqTW+KZYVExW9nn/k99rbZBwpgvdxEwa1YUFgMAvhiCNKr?=
+ =?us-ascii?Q?cHr74XL3/SquXBUNxauS8m2u39NAlYV7XkFquDkLs5cJca2lLUYX72sIC4+t?=
+ =?us-ascii?Q?8pbAoat9yXpBeg95udc0emnwshug6/UujkC/bVpXd/aPeIRcwMK8lP+ObU7E?=
+ =?us-ascii?Q?OYaJc7gWB/6LRnsi0o09LGAHUiHUYSV3xkAKZOzgPnMNsAi7uwT8H0pxkWeW?=
+ =?us-ascii?Q?Zt6TH3+dklKbE8PY7k8jv2HOYyZkjOqLrn5mBxyl4RGBLfXyq5JyTcpFUXtZ?=
+ =?us-ascii?Q?kccSaO1dPj9E+T/PMwBXpUr26PyKJUneFBuRFq+ruO7/BrhIYJAghrGq5L79?=
+ =?us-ascii?Q?lIVMAGiZ4X8O/3lG+E28ysftdsTYtUmCYuWNl3bmUMOeFA=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:87.253.236.214;CTRY:FR;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:o214.p11.mailjet.com;PTR:o214.p11.mailjet.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR01MB5088
+X-OrganizationHeadersPreserved: SN6PR01MB5088.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb6.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb6.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo27.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 25 Apr 2023 14:53:54.9540
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 202d2c34-66f3-460f-00c8-08db459ce43e
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: DS1PEPF0000E645.namprd02.prod.outlook.com
+X-CrossPremisesHeadersFiltered: DS1PEPF0000E645.namprd02.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DS1PEPF0000E645.namprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL02EPF00010208.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 04152b64-7bea-4dc3-1e76-08db459cd619
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.113;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb8.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2023 14:53:54.7353
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 202d2c34-66f3-460f-00c8-08db459ce43e
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.113];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL02EPF00010208.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR01MB5135
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.4198701
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6340.018
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MkN0ZmR2b1NDM0p0NDE1cklFa2ZPZWptbFpaT1A0WHdHSVI2em9iVDJKbFZx?=
+ =?utf-8?B?VXpsb3RScE5NRWpFUGZ4K1BjcXQ0QzJXc2tFcGVVZk9td0o3Q2VjcFJHMWRR?=
+ =?utf-8?B?MXFjVTFDeTJZTG1jV28rbHk5WUVoWWlUKzlHUG90Ym9HSDZQbWowQlBaVElp?=
+ =?utf-8?B?L2tMWlMzM2J1MFRGVVFtQzNLTnhrWXJzaFd6WFg3SWZqaTRCMVc1cTlweHpm?=
+ =?utf-8?B?ZjRIUVZVeGRzajFrbzZOWkdKY1BGYTJ5T0gxVUNVclYreVZuekIwb2Q0ZERZ?=
+ =?utf-8?B?WVRESjgyN0V3UXFvK2dGL2k1ajc4VUNoOUZKTXNhaFNQekMwUm45SkNUMGw0?=
+ =?utf-8?B?ZExVTzdzYkFzbTVOWFdmTEFad1RSNmkxTXZKcTM1dVhxNjVGNHUvRmNFV0hz?=
+ =?utf-8?B?VU5idDh1K1JhUFpJVGJ1RlMyNnNUdEFra3FzNGpScmxiMTB1UWFUd212d2p4?=
+ =?utf-8?B?RCt5V08vV29SVmFWR2xMNFplTldEbzhmVlEwN29FbnlsRVBwNUtMblZEdnNr?=
+ =?utf-8?B?cmR1S292cEw1Zm9XKzBKVEtSWWdSOUlmM0p4MEFCcEVjYTd3enQzd0dXMzF4?=
+ =?utf-8?B?SnRqaTc4QVY5MWJLSnNLVHhIZHltZ2EwOC9LNVVKVzRBK3o4bzRUYXZ4N0Zl?=
+ =?utf-8?B?TnkwRzE0eWhZaXlRNktLaTRNNFZmbUhWYjBaK0NtT0RQK2o2OHQzOEtyVHdZ?=
+ =?utf-8?B?QWl6SlFETkhMOUlCdWNhYzNRY1FzQUlMY3dUdFZkZWIycnJFMXc0eVJRTG1h?=
+ =?utf-8?B?b0dUUDFCVTQreHVBUHRyRnJWeHNuWERyajF4QkFGUHcwd3FJMk9XTk1NMjM4?=
+ =?utf-8?B?V003cHJkelBpN3dCNld6VHAwbDFjQmtlM2hpbzVVZnFjUmw5RUluT3BUM1ZE?=
+ =?utf-8?B?QUdjWEk2RFluTnBlYkdyaFJUS1ZCUmZZNEZsZ1hEV2E1ckxjVnVuQk5mbHBW?=
+ =?utf-8?B?QXkxeExaQXBnSXlNQnBhZytCa1RQYlhFUXN0aW0zR2pWRkNuamM5cmZORDJT?=
+ =?utf-8?B?aW8ra01NTnFCRUFNQjM5bzVEbWVkREltNzVMbDVFTlBtZmhkenI4WURnR0Fy?=
+ =?utf-8?B?TFJJV3BUUkNLb1NBWUNxMkZzU3BBelhRNEU1MlpQOWJHYTdXT0t6L1pGQVBR?=
+ =?utf-8?B?TWlmR2pmdDRJamdwZlJVcHNpUkxiK3VZR2Y5bnlCdXlsQlNBQVhUQmw1dkNK?=
+ =?utf-8?B?LzNYU2FlNUd0djZQSVZ0TXpwMU9ENXk2RjdDRWdFKzJ2SjRIaW9sTjJzSTYv?=
+ =?utf-8?B?dzgwZEFHVEJvdGlNajAzS09hV2Z5ZldZTVFGaWFZZmVud2c3ZVFrWEhKYS81?=
+ =?utf-8?B?TWN4dWZOemhmOTV0S0dGSTVxVVZJRk1uU2d6RzFIWHlsaVRIVzV5YlFJcENu?=
+ =?utf-8?B?MHFTWllFZXkyV0piRzhVbzFkbDNybVRmUnlNNmg3aWc3K3I0NlE5K0Q1d1pX?=
+ =?utf-8?B?VXYrdHBqZ01BTTd0VWRPZlp1dkl0dStrMW9JZURlQzhzQzRqRFh3YmR0NDBo?=
+ =?utf-8?B?endPckdoZU9XYnppYUxlSUxsbDRCdnZRckpxdXAza25TY0gxSVhuVjdnbU9l?=
+ =?utf-8?B?L2MwZ1dtbE5vOWxmcGpLb3RkWk5RKzNUTmZhWlQzc0RQZjZhMEZzWWIxWGtM?=
+ =?utf-8?B?anhkaDIwb2pyeW1MUmY0YUxkQU1pcHFIYkJCVTlaZzNYVFRiU1RveFJmSlE5?=
+ =?utf-8?B?bTJwQzhhL0E5aGtsbDZ6THhHTjRSVm04dUFQUVZMdDc1WDBoSE45Vk16MU1p?=
+ =?utf-8?B?aEpPN1BDTUlKcjZYSm9qYUtlYlVZTzU4NWlxWU1CSmZGeFRNbVhiY3Z1YjBJ?=
+ =?utf-8?B?d2Q3MWlvK0lsUWxBR0d0K25nV3NhWElQSENSK2dueWxZa2dUa1V3T2lQUDlv?=
+ =?utf-8?B?ME9kd1lDTnRoTlFyWFI1TmhBQkhrdmpPNkpkemVNME10cVJlVEdPcExIdGdu?=
+ =?utf-8?B?NThyT0ZRbHcvMVdrMS9ybGU2MnlyUnVYRDVKRTMrdER6LzhPTitZTi9PTWI0?=
+ =?utf-8?B?Z1lybE1wbmswOEdtZlNGbXExNUhCM01aRm5UNEg0TXdHSUsvTnFCdk4zWll5?=
+ =?utf-8?B?SnNxeUV3ZGFiY1RacnFmZUluZjNoWlc0YXJrZz09?=
+MIME-Version: 1.0
+
+--=-Xx1/r+mqxotfdAjLT9I/
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Unlocking our collective potential
+
+View online version http://inj9.mjt.lu/nl3/xcoGUreIlp-5_Qn4ytZ_ew?m=3DAVoAA=
+BP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc&=
+b=3D2b5d7670&e=3D0ae70500&x=3Da7iET_5Bkh8rOy7esnA68A
+
+
+
+<<MIT letterhead for Cynthia Barnhart, Provost>> [https://inj9.mjt.lu/img/i=
+nj9/b/mkx4k/gl7wu.png]
+
+
+
+To the members of the MIT community,
+
+I write today to invite you to attend the public opening plenary [https://s=
+olve.mit.edu/events/solve-at-mit-2023/schedule#page-subnav] of Solve at MIT=
+ 2023 [https://solve.mit.edu/events/solve-at-mit-2023], featuring world-ren=
+owned artists and thought leaders tackling some of the world's most complex=
+ challenges, including climate change and the impact of generative AI on ou=
+r society.
+
+During the plenary, President Sally Kornbluth will join Beatie Wolfe, a glo=
+bally recognized musical artist; Tony Elumelu, one of Africa's leading inve=
+stors and philanthropists; K Allado-McDowell, co-founder of Google=E2=80=99=
+s Artists + Machine Intelligence program; and Adrianne Haslet, Boston Marat=
+hon bombing survivor, among others [https://solve.mit.edu/events/solve-at-m=
+it-2023/speakers#page-subnav].
+Opening Plenary: "Unlocking Our Collective Potential" [https://solve.mit.ed=
+u/events/solve-at-mit-2023/schedule#page-subnav]
+Thursday, May 4
+1:00 to 2:30 p.m. EDT
+Kresge Auditorium (W16 [https://whereis.mit.edu/?go=3DW16])
+Register here [https://solve.mit.edu/events/solve-at-mit-2023/custom/public=
+-plenary#page-subnav]
+In addition to the public plenary, you can register to watch two plenaries =
+via livestream [https://solve.mit.edu/events/solve-at-mit-2023/custom/atten=
+d-the-livestream#page-subnav]: =E2=80=9CEnsuring a Just Transition to Net Z=
+ero [https://solve.mit.edu/events/solve-at-mit-2023/schedule#page-subnav]=
+=E2=80=9D on Friday, May 5, and =E2=80=9CBringing Us Together or Tearing Us=
+ Apart [https://solve.mit.edu/events/solve-at-mit-2023/schedule#page-subnav=
+]=E2=80=9D on Saturday, May 6.
+
+For those innovators inspired to get more involved, MIT Solve [https://solv=
+e.mit.edu/] is seeking applications by May 9 to Solve's 2023 Global Challen=
+ges [https://solve.mit.edu/challenges] to address issues related to financi=
+al inclusion, civic action, climate adaptation and low-carbon housing alter=
+natives, health care in fragile contexts, and Indigenous communities. There=
+ is more than $1 million in prize funding available.
+
+I hope you will join MIT Solve for these inspiring opportunities.
+
+Sincerely,
+
+Cynthia Barnhart
+Provost
+
+
+
+---------------------------------------------------------------------------=
+-----
+Massachusetts Institute of Technology
+77 Massachusetts Ave | Cambridge, MA 02139
+
+This email has been sent to jiannan@mit.edu.=C2=A0
+You received this email because you are a member of MIT's faculty or staff,=
+ or an MIT student.
+Click here to unsubscribe http://inj9.mjt.lu/unsub2?hl=3Den&m=3DAVoAABP5t-0=
+AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc&b=3D2b=
+5d7670&e=3D0ae70500&x=3Da7iET_5Bkh8rOy7esnA68A. Report an issue with this e=
+mail [report-announcement-issue@mit.edu].
+
+
+
+[https://www.mailjet.com/?utm_source=3Dfooter&utm_medium=3Demail&utm_campai=
+gn=3Dlogo1]=
+
+--=-Xx1/r+mqxotfdAjLT9I/
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>Attend Solve at MIT on 5/4 with President Kornbluth and Tony Elumelu</=
+title><!--[if !mso]><!--><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=
+=3Dedge"><!--<![endif]--><meta name=3D"viewport" content=3D"width=3Ddevice-=
+width,initial-scale=3D1"><style type=3D"text/css">#outlook a { padding:0; }
+          body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-=
+size-adjust:100%; }
+          table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-tab=
+le-rspace:0pt; }
+          img { border:0;height:auto;line-height:100%; outline:none;text-de=
+coration:none;-ms-interpolation-mode:bicubic; }
+          p { display:block;margin:13px 0; }</style><!--[if mso]>
+        <noscript>
+        <xml>
+        <o:OfficeDocumentSettings>
+          <o:AllowPNG/>
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+        </xml>
+        </noscript>
+        <![endif]--><!--[if lte mso 11]>
+        <style type=3D"text/css">
+          .mj-outlook-group-fix { width:100% !important; }
+        </style>
+        <![endif]--><!--[if !mso]><!--><link href=3D"https://fonts.googleap=
+is.com/css?family=3DUbuntu:300,400,500,700" rel=3D"stylesheet" type=3D"text=
+/css"><style type=3D"text/css">@import url(https://fonts.googleapis.com/css=
+?family=3DUbuntu:300,400,500,700);</style><!--<![endif]--><style type=3D"te=
+xt/css">@media only screen and (min-width:480px) {
+        .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.mj-column-per-33 { width:33% !important; max-width: 33%; }
+.mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.moz-text-html .mj-column-per-33 { width:33% !important; max-width: 33%; }
+.moz-text-html .mj-column-per-100 { width:100% !important; max-width: 100%;=
+ }</style><style type=3D"text/css">[owa] .mj-column-per-67 { width:67% !imp=
+ortant; max-width: 67%; }
+[owa] .mj-column-per-33 { width:33% !important; max-width: 33%; }
+[owa] .mj-column-per-100 { width:100% !important; max-width: 100%; }</style=
+><style type=3D"text/css">@media only screen and (max-width:480px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style></head><body style=3D"word-spacing:normal;background-color:#ff=
+ffff;"><div style=3D"background-color:#ffffff;"><!--[if mso | IE]><table al=
+ign=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" =
+role=3D"presentation" style=3D"width:600px;" width=3D"600" ><tr><td style=
+=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-=
+-><div style=3D"margin:0px auto;max-width:600px;"><table align=3D"center" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;paddin=
+g:20px 0px 20px 0px;padding-left:0px;padding-right:0px;text-align:center;">=
+<!--[if mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-align:middle;widt=
+h:402px;" ><![endif]--><div class=3D"mj-column-per-67 mj-outlook-group-fix"=
+ style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;=
+vertical-align:middle;width:100%;"><table border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" role=3D"presentation" style=3D"vertical-align:middle;" widt=
+h=3D"100%"><tbody><tr><td align=3D"left" style=3D"font-size:0px;padding:0px=
+ 0px 0px 25px;padding-top:0px;padding-right:0px;padding-bottom:0px;word-bre=
+ak:break-word;"><div style=3D"font-family:Ubuntu, Helvetica, Arial, sans-se=
+rif;font-size:12px;letter-spacing:normal;line-height:1;text-align:left;colo=
+r:#000000;"><p class=3D"text-build-content" style=3D"line-height: 22px; mar=
+gin: 10px 0; margin-top: 10px; margin-bottom: 10px;" data-testid=3D"uvnhl3I=
+GEWt"><span style=3D"font-family:Arial, sans-serif;font-size:12px;">Unlocki=
+ng our collective potential</span></p></div></td></tr></tbody></table></div=
+><!--[if mso | IE]></td><td class=3D"" style=3D"vertical-align:middle;width=
+:198px;" ><![endif]--><div class=3D"mj-column-per-33 mj-outlook-group-fix" =
+style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;v=
+ertical-align:middle;width:100%;"><table border=3D"0" cellpadding=3D"0" cel=
+lspacing=3D"0" role=3D"presentation" style=3D"vertical-align:middle;" width=
+=3D"100%"><tbody><tr><td align=3D"left" style=3D"font-size:0px;padding:0px =
+25px 0px 0px;padding-top:0px;padding-right:25px;padding-bottom:0px;word-bre=
+ak:break-word;"><div style=3D"font-family:Arial, sans-serif;font-size:13px;=
+letter-spacing:normal;line-height:1;text-align:left;color:#000000;"><p styl=
+e=3D"text-align: right; margin: 10px 0; margin-top: 10px; margin-bottom: 10=
+px;"><a href=3D"http://inj9.mjt.lu/nl3/xcoGUreIlp-5_Qn4ytZ_ew?m=3DAVoAABP5t=
+-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc&amp;=
+b=3D2b5d7670&amp;e=3D0ae70500&amp;x=3Da7iET_5Bkh8rOy7esnA68A" target=3D"_bl=
+ank" style=3D"; text-decoration: none;"><span><u><span style=3D"line-height=
+:22px;text-align:right;font-size:12px;letter-spacing:normal;text-align:left=
+;color:#0056ee;font-family:Arial;"><u>View online version</u></span></u></s=
+pan></a></p></div></td></tr></tbody></table></div><!--[if mso | IE]></td></=
+tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></=
+td></tr></table><table align=3D"center" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px;" width=
+=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-height-ru=
+le:exactly;"><![endif]--><div style=3D"margin:0px auto;max-width:600px;"><t=
+able align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"width:100%;"><tbody><tr><td style=3D"direction:l=
+tr;font-size:0px;padding:20px 0;padding-bottom:0px;padding-top:0px;text-ali=
+gn:center;"><!--[if mso | IE]><table role=3D"presentation" border=3D"0" cel=
+lpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-align=
+:top;width:600px;" ><![endif]--><div class=3D"mj-column-per-100 mj-outlook-=
+group-fix" style=3D"font-size:0px;text-align:left;direction:ltr;display:inl=
+ine-block;vertical-align:top;width:100%;"><table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"vertical-align:top;=
+" width=3D"100%"><tbody><tr><td align=3D"center" style=3D"font-size:0px;pad=
+ding:0px 4px 0px 4px;padding-top:0px;padding-right:4px;padding-bottom:0px;p=
+adding-left:4px;word-break:break-word;"><table border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" role=3D"presentation" style=3D"border-collapse:collaps=
+e;border-spacing:0px;"><tbody><tr><td style=3D"width:592px;"><img alt=3D"MI=
+T letterhead for Cynthia Barnhart, Provost" height=3D"auto" src=3D"https://=
+inj9.mjt.lu/img/inj9/b/mkx4k/gl7wu.png" style=3D"border:none;border-radius:=
+px;display:block;outline:none;text-decoration:none;height:auto;width:100%;f=
+ont-size:13px;" width=3D"592"></td></tr></tbody></table></td></tr></tbody><=
+/table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tb=
+ody></table></div><!--[if mso | IE]></td></tr></table><table align=3D"cente=
+r" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"pres=
+entation" style=3D"width:600px;" width=3D"600" bgcolor=3D"#ffffff" ><tr><td=
+ style=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![e=
+ndif]--><div style=3D"background:#ffffff;background-color:#ffffff;margin:0p=
+x auto;max-width:600px;"><table align=3D"center" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"background:#ffffff;=
+background-color:#ffffff;width:100%;"><tbody><tr><td style=3D"direction:ltr=
+;font-size:0px;padding:0px 0px 20px 0px;padding-left:0px;padding-right:0px;=
+padding-top:0px;text-align:center;"><!--[if mso | IE]><table role=3D"presen=
+tation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D""=
+ style=3D"vertical-align:top;width:600px;" ><![endif]--><div class=3D"mj-co=
+lumn-per-100 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;d=
+irection:ltr;display:inline-block;vertical-align:top;width:100%;"><table bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"left" style=
+=3D"font-size:0px;padding:0px 25px 0px 25px;padding-top:0px;padding-right:2=
+5px;padding-bottom:0px;padding-left:25px;word-break:break-word;"><div style=
+=3D"font-family:Arial, sans-serif;font-size:13px;letter-spacing:normal;line=
+-height:1;text-align:left;color:#000000;"><p class=3D"text-build-content" s=
+tyle=3D"line-height: 22px; margin: 10px 0; margin-top: 10px;" data-testid=
+=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-family:Arial;font-size:14=
+px;">To the members of the MIT community,</span></p><p class=3D"text-build-=
+content" style=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"ykwUBM=
+l-WY"><span style=3D"color:#333333;font-family:Arial;font-size:14px;">I wri=
+te today to invite you to attend the </span><a class=3D"link-build-content"=
+ style=3D"color:inherit;; text-decoration: none;" target=3D"_blank" href=3D=
+"http://inj9.mjt.lu/lnk/AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-l=
+qN1_ae3CuSLCAPRDR9J9dGwAIIWc/1/F7xsbdux_d6gO15MOJM0ug/aHR0cHM6Ly9zb2x2ZS5ta=
+XQuZWR1L2V2ZW50cy9zb2x2ZS1hdC1taXQtMjAyMy9zY2hlZHVsZSNwYWdlLXN1Ym5hdg#page-=
+subnav"><span style=3D"color:#0056ee;font-family:Arial;font-size:14px;"><u>=
+public opening plenary</u></span></a><span style=3D"color:#333333;font-fami=
+ly:Arial;font-size:14px;"> of </span><a class=3D"link-build-content" style=
+=3D"color:inherit;; text-decoration: none;" target=3D"_blank" href=3D"http:=
+//inj9.mjt.lu/lnk/AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lqN1_ae=
+3CuSLCAPRDR9J9dGwAIIWc/2/3fn5Hbyfaxvqt7sDMmrQ6A/aHR0cHM6Ly9zb2x2ZS5taXQuZWR=
+1L2V2ZW50cy9zb2x2ZS1hdC1taXQtMjAyMw"><span style=3D"color:#0056ee;font-fami=
+ly:Arial;font-size:14px;"><u>Solve at MIT 2023</u></span></a><span style=3D=
+"color:#333333;font-family:Arial;font-size:14px;">, featuring world-renowne=
+d artists and thought leaders tackling some of the world's most complex cha=
+llenges, including climate change and the impact of generative AI on our so=
+ciety.</span></p><p class=3D"text-build-content" style=3D"line-height: 22px=
+; margin: 10px 0; margin-bottom: 10px;" data-testid=3D"ykwUBMl-WY"><span st=
+yle=3D"color:#333333;font-family:Arial;font-size:14px;">During the plenary,=
+ President Sally Kornbluth will join Beatie Wolfe, a globally recognized mu=
+sical artist; Tony Elumelu, one of Africa's leading investors and philanthr=
+opists; K Allado-McDowell, co-founder of Google=E2=80=99s Artists + Machine=
+ Intelligence program; and Adrianne Haslet, Boston Marathon bombing survivo=
+r, </span><a class=3D"link-build-content" style=3D"color:inherit;; text-dec=
+oration: none;" target=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVoAABP5t-=
+0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc/3/4kT=
+pzfZBtY4gOeTfP6GfKA/aHR0cHM6Ly9zb2x2ZS5taXQuZWR1L2V2ZW50cy9zb2x2ZS1hdC1taXQ=
+tMjAyMy9zcGVha2VycyNwYWdlLXN1Ym5hdg#page-subnav"><span style=3D"color:#0056=
+ee;font-family:Arial;font-size:14px;"><u>among others</u></span></a><span s=
+tyle=3D"color:#333333;font-family:Arial;font-size:14px;">.</span></p></div>=
+</td></tr><tr><td align=3D"left" style=3D"font-size:0px;padding:0px 45px 0p=
+x 45px;padding-top:0px;padding-right:45px;padding-bottom:0px;padding-left:4=
+5px;word-break:break-word;"><div style=3D"font-family:Arial, sans-serif;fon=
+t-size:13px;letter-spacing:normal;line-height:1;text-align:left;color:#0000=
+00;"><p class=3D"text-build-content" data-testid=3D"rDn8jBZSuUj_Qrbg-Mf-3" =
+style=3D"margin: 10px 0; margin-top: 10px; margin-bottom: 10px;"><a class=
+=3D"link-build-content" style=3D"color:inherit;; text-decoration: none;" ta=
+rget=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVoAABP5t-0AAcrs_0oAAMlryacA=
+AAAAHAEAJcYtAAiQzwBkR-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc/4/ycHGKUVDUW9uS4lRKJW5M=
+A/aHR0cHM6Ly9zb2x2ZS5taXQuZWR1L2V2ZW50cy9zb2x2ZS1hdC1taXQtMjAyMy9zY2hlZHVsZ=
+SNwYWdlLXN1Ym5hdg#page-subnav"><span style=3D"color:#0056ee;font-family:Ari=
+al;font-size:14px;line-height:22px;"><b><u>Opening Plenary: &quot;Unlocking=
+ Our Collective Potential&quot;</u></b></span></a><br><span style=3D"color:=
+#333333;font-family:Arial;font-size:14px;line-height:22px;">Thursday, May 4=
+</span><br><span style=3D"color:#333333;font-family:Arial;font-size:14px;li=
+ne-height:22px;">1:00 to 2:30 p.m. EDT</span><br><span style=3D"color:#3333=
+33;font-family:Arial;font-size:14px;line-height:22px;">Kresge Auditorium (<=
+/span><a class=3D"link-build-content" style=3D"color:inherit;; text-decorat=
+ion: none;" target=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVoAABP5t-0AAc=
+rs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc/5/0ho9r1V=
+XrsNrwdt21TW11w/aHR0cHM6Ly93aGVyZWlzLm1pdC5lZHUvP2dvPVcxNg"><span style=3D"=
+color:#0056ee;font-family:Arial;font-size:14px;line-height:22px;"><u>W16</u=
+></span></a><span style=3D"color:#333333;font-family:Arial;font-size:14px;l=
+ine-height:22px;">)</span><br><a class=3D"link-build-content" style=3D"colo=
+r:inherit;; text-decoration: none;" target=3D"_blank" href=3D"http://inj9.m=
+jt.lu/lnk/AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lqN1_ae3CuSLCAP=
+RDR9J9dGwAIIWc/6/GaencTSLepWZ1SJla3UaXQ/aHR0cHM6Ly9zb2x2ZS5taXQuZWR1L2V2ZW5=
+0cy9zb2x2ZS1hdC1taXQtMjAyMy9jdXN0b20vcHVibGljLXBsZW5hcnkjcGFnZS1zdWJuYXY#pa=
+ge-subnav"><span style=3D"color:#0056ee;font-family:Arial;font-size:14px;li=
+ne-height:22px;"><u>Register here</u></span></a></p></div></td></tr><tr><td=
+ align=3D"left" style=3D"font-size:0px;padding:10px 25px;padding-top:0px;pa=
+dding-bottom:0px;word-break:break-word;"><div style=3D"font-family:Arial, s=
+ans-serif;font-size:13px;letter-spacing:normal;line-height:1;text-align:lef=
+t;color:#000000;"><p class=3D"text-build-content" data-testid=3D"1OvrKUhjdM=
+PFmWArqJAh7" style=3D"margin: 10px 0; margin-top: 10px;"><span style=3D"col=
+or:#333333;font-family:Arial;font-size:14px;line-height:22px;">In addition =
+to the public plenary, you can </span><a class=3D"link-build-content" style=
+=3D"color:inherit;; text-decoration: none;" target=3D"_blank" href=3D"http:=
+//inj9.mjt.lu/lnk/AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lqN1_ae=
+3CuSLCAPRDR9J9dGwAIIWc/7/5KDD4U56VH9n8GB5RXvrxg/aHR0cHM6Ly9zb2x2ZS5taXQuZWR=
+1L2V2ZW50cy9zb2x2ZS1hdC1taXQtMjAyMy9jdXN0b20vYXR0ZW5kLXRoZS1saXZlc3RyZWFtI3=
+BhZ2Utc3VibmF2#page-subnav"><span style=3D"color:#0056ee;font-family:Arial;=
+font-size:14px;line-height:22px;"><u>register to watch two plenaries via li=
+vestream</u></span></a><span style=3D"color:#333333;font-family:Arial;font-=
+size:14px;line-height:22px;">: =E2=80=9C</span><a class=3D"link-build-conte=
+nt" style=3D"color:inherit;; text-decoration: none;" target=3D"_blank" href=
+=3D"http://inj9.mjt.lu/lnk/AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBk=
+R-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc/8/p-2F1tv50QfxDNyAWmm7gQ/aHR0cHM6Ly9zb2x2ZS=
+5taXQuZWR1L2V2ZW50cy9zb2x2ZS1hdC1taXQtMjAyMy9zY2hlZHVsZSNwYWdlLXN1Ym5hdg#pa=
+ge-subnav"><span style=3D"color:#0056ee;font-family:Arial;font-size:14px;li=
+ne-height:22px;"><u>Ensuring a Just Transition to Net Zero</u></span></a><s=
+pan style=3D"color:#333333;font-family:Arial;font-size:14px;line-height:22p=
+x;">=E2=80=9D on Friday, May 5, and =E2=80=9C</span><a class=3D"link-build-=
+content" style=3D"color:inherit;; text-decoration: none;" target=3D"_blank"=
+ href=3D"http://inj9.mjt.lu/lnk/AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAi=
+QzwBkR-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc/9/5VA6WjqdOKidgsMYyY1cRw/aHR0cHM6Ly9zb=
+2x2ZS5taXQuZWR1L2V2ZW50cy9zb2x2ZS1hdC1taXQtMjAyMy9zY2hlZHVsZSNwYWdlLXN1Ym5h=
+dg#page-subnav"><span style=3D"color:#0056ee;font-family:Arial;font-size:14=
+px;line-height:22px;"><u>Bringing Us Together or Tearing Us Apart</u></span=
+></a><span style=3D"color:#333333;font-family:Arial;font-size:14px;line-hei=
+ght:22px;">=E2=80=9D on Saturday, May 6.</span></p><p class=3D"text-build-c=
+ontent" data-testid=3D"1OvrKUhjdMPFmWArqJAh7" style=3D"margin: 10px 0;"><sp=
+an style=3D"color:#333333;font-family:Arial;font-size:14px;line-height:22px=
+;">For those innovators inspired to get more involved, </span><a class=3D"l=
+ink-build-content" style=3D"color:inherit;; text-decoration: none;" target=
+=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVoAABP5t-0AAcrs_0oAAMlryacAAAAA=
+HAEAJcYtAAiQzwBkR-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc/10/KHOdII9DTieOKzNODJe0Vg/a=
+HR0cHM6Ly9zb2x2ZS5taXQuZWR1Lw"><span style=3D"color:#0056ee;font-family:Ari=
+al;font-size:14px;line-height:22px;"><u>MIT Solve</u></span></a><span style=
+=3D"color:#333333;font-family:Arial;font-size:14px;line-height:22px;"> is s=
+eeking applications by <b>May 9</b> to </span><a class=3D"link-build-conten=
+t" style=3D"color:inherit;; text-decoration: none;" target=3D"_blank" href=
+=3D"http://inj9.mjt.lu/lnk/AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBk=
+R-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc/11/D3WeNp5YLIMa-GjNcCjcpQ/aHR0cHM6Ly9zb2x2Z=
+S5taXQuZWR1L2NoYWxsZW5nZXM"><span style=3D"color:#0056ee;font-family:Arial;=
+font-size:14px;line-height:22px;"><u>Solve's 2023 Global Challenges</u></sp=
+an></a><span style=3D"color:#333333;font-family:Arial;font-size:14px;line-h=
+eight:22px;"> to address issues related to financial inclusion, civic actio=
+n, climate adaptation and low-carbon housing alternatives, health care in f=
+ragile contexts, and Indigenous communities. There is more than $1 million =
+in prize funding available.</span></p><p class=3D"text-build-content" data-=
+testid=3D"1OvrKUhjdMPFmWArqJAh7" style=3D"margin: 10px 0;"><span style=3D"c=
+olor:#333333;font-family:Arial;font-size:14px;line-height:22px;">I hope you=
+ will join MIT Solve for these inspiring opportunities.</span></p><p class=
+=3D"text-build-content" data-testid=3D"1OvrKUhjdMPFmWArqJAh7" style=3D"marg=
+in: 10px 0;"><span style=3D"color:#333333;font-family:Arial;font-size:14px;=
+line-height:22px;">Sincerely,</span></p><p class=3D"text-build-content" dat=
+a-testid=3D"1OvrKUhjdMPFmWArqJAh7" style=3D"margin: 10px 0; margin-bottom: =
+10px;"><span style=3D"color:#333333;font-family:Arial;font-size:14px;line-h=
+eight:22px;">Cynthia Barnhart</span><br><span style=3D"color:#333333;font-f=
+amily:Arial;font-size:14px;line-height:22px;">Provost</span></p></div></td>=
+</tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]-->=
+</td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><table =
+align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"=
+" role=3D"presentation" style=3D"width:600px;" width=3D"600" ><tr><td style=
+=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-=
+-><div style=3D"margin:0px auto;max-width:600px;"><table align=3D"center" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;paddin=
+g:20px 0px 20px 0px;text-align:center;"><!--[if mso | IE]><table role=3D"pr=
+esentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=
+=3D"" style=3D"vertical-align:top;width:600px;" ><![endif]--><div class=3D"=
+mj-column-per-100 mj-outlook-group-fix" style=3D"font-size:0px;text-align:l=
+eft;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><tab=
+le border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" s=
+tyle=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"center"=
+ style=3D"font-size:0px;padding:0px 25px 10px 25px;padding-top:0px;padding-=
+right:25px;padding-left:25px;word-break:break-word;"><p style=3D"border-top=
+:solid 2px #E6E6E6;font-size:1px;margin:0px auto;width:100%;"></p><!--[if m=
+so | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:0px auto;=
+width:550px;" role=3D"presentation" width=3D"550px" ><tr><td style=3D"heigh=
+t:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"left" style=3D"fon=
+t-size:0px;padding:0px 20px 0px 20px;padding-top:0px;padding-bottom:0px;wor=
+d-break:break-word;"><div style=3D"font-family:Arial, sans-serif;font-size:=
+11px;letter-spacing:normal;line-height:1;text-align:left;color:#000000;"><p=
+ class=3D"text-build-content" style=3D"text-align: center; margin: 10px 0; =
+margin-top: 10px;" data-testid=3D"A5rER0v1Z-"><span style=3D"color:#333333;=
+font-family:Arial;font-size:11px;line-height:14px;">Massachusetts Institute=
+ of Technology</span><br><span style=3D"color:#333333;font-family:Arial;fon=
+t-size:11px;line-height:14px;">77 Massachusetts Ave | Cambridge, MA 02139</=
+span></p><p class=3D"text-build-content" style=3D"text-align: center; margi=
+n: 10px 0; margin-bottom: 10px;" data-testid=3D"A5rER0v1Z-"><span style=3D"=
+color:#333333;font-family:Arial;font-size:11px;line-height:14px;">This emai=
+l has been sent to jiannan@mit.edu.&nbsp;</span><br><span style=3D"color:#3=
+33333;font-family:Arial;font-size:11px;line-height:14px;">You received this=
+ email because you are a member of MIT's faculty or staff, or an MIT studen=
+t.</span><br><a class=3D"link-build-content" style=3D"color:inherit;; text-=
+decoration: none;" target=3D"_blank" href=3D"http://inj9.mjt.lu/unsub2?hl=
+=3Den&amp;m=3DAVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJcYtAAiQzwBkR-lqN1_ae3CuS=
+LCAPRDR9J9dGwAIIWc&amp;b=3D2b5d7670&amp;e=3D0ae70500&amp;x=3Da7iET_5Bkh8rOy=
+7esnA68A"><span style=3D"color:#0056ee;font-family:Arial;font-size:11px;lin=
+e-height:14px;"><u>Click here to unsubscribe</u></span></a><span style=3D"c=
+olor:#333333;font-family:Arial;font-size:11px;line-height:14px;">. </span><=
+a class=3D"link-build-content" style=3D"color:inherit;; text-decoration: no=
+ne;" href=3D"mailto:report-announcement-issue@mit.edu"><span style=3D"color=
+:#0056ee;font-family:Arial;font-size:11px;line-height:14px;"><u>Report an i=
+ssue with this email</u></span></a><span style=3D"color:#333333;font-family=
+:Arial;font-size:11px;line-height:14px;">.</span></p></div></td></tr></tbod=
+y></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr><=
+/tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div>
+<br><img src=3D"http://inj9.mjt.lu/oo/AVoAABP5t-0AAcrs_0oAAMlryacAAAAAHAEAJ=
+cYtAAiQzwBkR-lqN1_ae3CuSLCAPRDR9J9dGwAIIWc/e223454d/e.gif" height=3D"1" wid=
+th=3D"1" alt=3D"" border=3D"0" style=3D"height:1px;width:1px;border:0;">
+</body></html>=
+
+--=-Xx1/r+mqxotfdAjLT9I/--

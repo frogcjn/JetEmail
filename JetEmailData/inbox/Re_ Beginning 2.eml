@@ -1,0 +1,446 @@
+Received: from MN0PR01MB7753.prod.exchangelabs.com (2603:10b6:208:37c::13) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Mon, 20 Nov 2023 16:57:55
+ +0000
+Received: from MN2PR01CA0052.prod.exchangelabs.com (2603:10b6:208:23f::21) by
+ MN0PR01MB7753.prod.exchangelabs.com (2603:10b6:208:37c::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7002.20; Mon, 20 Nov 2023 16:57:54 +0000
+Received: from BL6PEPF0001AB51.namprd04.prod.outlook.com
+ (2603:10b6:208:23f:cafe::58) by MN2PR01CA0052.outlook.office365.com
+ (2603:10b6:208:23f::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.27 via Frontend
+ Transport; Mon, 20 Nov 2023 16:57:53 +0000
+Authentication-Results: spf=fail (sender IP is 18.7.71.112)
+ smtp.mailfrom=mail.huji.ac.il; dkim=test (signature was verified)
+ header.d=mail.huji.ac.il;dmarc=pass action=none header.from=mail.huji.ac.il;
+Received-SPF: Fail (protection.outlook.com: domain of mail.huji.ac.il does not
+ designate 18.7.71.112 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.7.71.112; helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.7.71.112) by
+ BL6PEPF0001AB51.mail.protection.outlook.com (10.167.242.75) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7025.12 via Frontend Transport; Mon, 20 Nov 2023 16:57:53 +0000
+Received: from oc11exhyb8.exchange.mit.edu (18.9.1.113) by
+ w92exhyb7.exchange.mit.edu (18.7.71.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Mon, 20 Nov 2023 11:57:45 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Mon, 20 Nov 2023 11:57:45 -0500
+Received: from BLAPR03CA0056.namprd03.prod.outlook.com (2603:10b6:208:32d::31)
+ by MN0PR01MB7731.prod.exchangelabs.com (2603:10b6:208:37b::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7002.26; Mon, 20 Nov 2023 16:57:43 +0000
+Received: from MN1PEPF0000ECD8.namprd02.prod.outlook.com
+ (2603:10b6:208:32d:cafe::a0) by BLAPR03CA0056.outlook.office365.com
+ (2603:10b6:208:32d::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.27 via Frontend
+ Transport; Mon, 20 Nov 2023 16:57:42 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.216.47)
+ smtp.mailfrom=mail.huji.ac.il; dkim=test (signature was verified)
+ header.d=mail.huji.ac.il;dmarc=pass action=none
+ header.from=mail.huji.ac.il;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mail.huji.ac.il
+ designates 209.85.216.47 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.216.47;
+ helo=mail-pj1-f47.google.com; pr=C
+Received: from mail-pj1-f47.google.com (209.85.216.47) by
+ MN1PEPF0000ECD8.mail.protection.outlook.com (10.167.242.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.12 via Frontend Transport; Mon, 20 Nov 2023 16:57:42 +0000
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2839b418f7fso1919394a91.2
+        for <jiannan@mit.edu>; Mon, 20 Nov 2023 08:57:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mail.huji.ac.il; s=mailhuji; t=1700499461; x=1701104261; darn=mit.edu;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oz2VMM3+3GGvGjI+FgrrkXf/9AHJKJV7vnLz3rho6bs=;
+        b=JQakiBYjTs00oHnQn1LqoQvPxkLCSKtNbnj/3SixNWgr085ToOsX5H1ZVSsSPYdAtK
+         VjeXidKQgQwsGAPs5W+UFp2KxLCGxWwehGnYmPlw1Z1L5CeWQWsX1l4uFQWzMRIQ5skv
+         IRwrdODSito5HtEOEif26kHs5n4KSoOPvzd7M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700499461; x=1701104261;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oz2VMM3+3GGvGjI+FgrrkXf/9AHJKJV7vnLz3rho6bs=;
+        b=LEwnp2OqBWVIQCgPiYgDRUjCudeOydlo/CoIQMLU8BAewIa/cr5E22M9G9pyzmnP6B
+         AzTIUnjah3ecvBqKVOTfoqrjaMDWI0Ig1eUY7jYn9As+80h3KX0b5E704R737oMNfZjZ
+         tDh9Q6utUzNGnIvHJnQv0YGvpN8mtiKBlPau0bazdY4QrWsFrTeHrjuA9z4GyoHhTYox
+         rP6gXK6w/F62xvXBWJYSKyK9G0eGnrXNx4hc0QTTa0SWA4ZN5p7bbjKdARESJ3z8dCfZ
+         kfVBOw1CEr50AgJDr8/9iJx5Td3sf8tABx2W/kkAc2u+er/rUteqQ7Q8lAiq1bXBt0tc
+         8Fcg==
+X-Gm-Message-State: AOJu0YyN7ubBemQxfFCRTkhKM0QRglsAXnTotwHZ/dHcfWu5MvdA1q9r
+	UoJ2Mj764vjZWo1bUIH65N25AKMsPVA1EmjIcVWm5P10oj632/9bsfA=
+X-Google-Smtp-Source: AGHT+IF3S4UEZn6RYjk3tnD4QzYuKqXvmlfkIxrfsQ9SC/DAdr7cXXhMFkL6sBMeTPEgxGOuSxMNKNb+jq8rta2AvWs=
+X-Received: by 2002:a17:90b:38cb:b0:27d:306d:71c9 with SMTP id
+ nn11-20020a17090b38cb00b0027d306d71c9mr4455808pjb.49.1700499461128; Mon, 20
+ Nov 2023 08:57:41 -0800 (PST)
+References: <CAFW_fcfWTrARV2si=AUTZ1xR-hOf62uu=cwE3DNBMGGHUWiO0g@mail.gmail.com>
+ <CAFW_fcfPgzSi7WUkAOBnrZ4LF_K0RaFAkqvBK6d67MPWqPX+jg@mail.gmail.com>
+In-Reply-To: <CAFW_fcfPgzSi7WUkAOBnrZ4LF_K0RaFAkqvBK6d67MPWqPX+jg@mail.gmail.com>
+From: Leshem Choshen <leshem.choshen@mail.huji.ac.il>
+Date: Mon, 20 Nov 2023 11:57:30 -0500
+Message-ID: <CAFW_fccjcU=jq0esijoQyVhvZacpTdcpzVy5RfoqEbNx5h6pfg@mail.gmail.com>
+Subject: Re: Beginning
+To: Jiannan Cao <jiannan@mit.edu>
+Content-Type: multipart/alternative; boundary="000000000000526767060a9862ca"
+Return-Path: leshem.choshen@mail.huji.ac.il
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ MN1PEPF0000ECD8:EE_|MN0PR01MB7731:EE_|BL6PEPF0001AB51:EE_|MN0PR01MB7753:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0b6eb07c-e9e2-496a-6e5a-08dbe9e9d632
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?O+tp0ksfTa8ZuMYwGACei1QcVvGbEfX8htzjJ4FtGjLVTW5FE+q/aSqZr76i?=
+ =?us-ascii?Q?NzWTf0p/RJoSP+lbB1pZcoJutQ++7KHl7Y94B4dCXrMqU6Q7zaoSVxdBJigs?=
+ =?us-ascii?Q?/+nwp4ufdSzkkkrM66A0mG3unVBCTIv1CDLZMVv+9/SG43J5cmUl/Ha7/4+q?=
+ =?us-ascii?Q?bzMHFiNZhL1PzCQQxnlii3eY/qAgFVkJxYa9uYQbn9BncgCy7dx9tx0FKky0?=
+ =?us-ascii?Q?d5pYl8tSvR2G1wjIPuRaNlyn5gXymAjiMp+h+vJMVgoqMxUjbaTeGLcBUrkp?=
+ =?us-ascii?Q?15rWRXdqt6VIl2b/z00pbbi/2ktc//nrZl1mLrtL5RDQB+ee16IXaoR8BOey?=
+ =?us-ascii?Q?naUqQrinyhKZYlFnd0R11GLAjKFhx6r9e2x4ZfkBeCZwP9aUMq0hYS0wO1IJ?=
+ =?us-ascii?Q?2fej0GRqT1jeNpa7f4MrktM4foGcz7vHAkGGgmIflTJT6WTukXizEnch4ALo?=
+ =?us-ascii?Q?UjHV+gCO4khjHcRt7coMN5KLQDz4YZkBOmWTH7jf7eS3UMoNKTizdw+4fR7g?=
+ =?us-ascii?Q?EM9pEHL309OesSVnaycxahbROkyyxUWmYxGjtHEnU3/0cFpW5BAU3LJz2Q0i?=
+ =?us-ascii?Q?7vPzkcWcVSMZLLdIBP/4R8PDGlv3SVQndWwe75M31e28azMYvR+w6ut6lSPY?=
+ =?us-ascii?Q?/zm549QShMiWviVr5w1hV+XD/07UdR/8eZetSTmPl2Mc58ZteStD42m/d5v2?=
+ =?us-ascii?Q?uv2xVuKlCCdLdzX7fdt0lMh+uA2DP5rSArVAu/jaXq7vTVasct6eZKf4OPPR?=
+ =?us-ascii?Q?2uu7KRXDGR0VLTB8xfMpWKHTvVLAM4yZ9IU9QfyvcbR3O6HU/s8PX2vFx0go?=
+ =?us-ascii?Q?JoFBJqb+ix1IrZf7lBetMI/DCak/8EtBiofndtzxJ1BUriml4Ito1BvHUBbc?=
+ =?us-ascii?Q?h8nEIGt7SnbMR45lGmVkIgAvJt/6uxiPA7Mp+06zwYOGUkoPNyfTAoLvE9J5?=
+ =?us-ascii?Q?vc9wokT/EZj5yhYJP9Tqc/J96CJ0A4bcxtpTLwHJboRJDrDJFwPIm08v91iY?=
+ =?us-ascii?Q?oHu9BeUdgXxbjYuLRNjXRfIF2CdoGSqFuTI70jBPjhC0LcJMdvJWqMG7ZL4d?=
+ =?us-ascii?Q?LYuRhFgr18QffIbJ+Co0df2zlasUUDqb8JM9DTblJQQk4388PY7g/wYs8EXy?=
+ =?us-ascii?Q?DhVwCmKLNrHqrrd+kSzWut9JWijkKd2VksYQdQVggd9su3ifPnr+mvgydRyh?=
+ =?us-ascii?Q?fL1WgUOcKnnWFLhwBHjcpEn3fUByGcDMMjc3HowcmYN3SR5FkDv4SZyi/p23?=
+ =?us-ascii?Q?kwOlaLWy5ZeiuJkFwSqzXKiAxq9SSNQYZ/50jDkMIxRxzwAj85/UPDosGdoD?=
+ =?us-ascii?Q?/oizGzGtdfC1nxKqc4bwLyjPYVD8Qh3wp7/EYnXb2WkOatVmDM7ROsVKPCxJ?=
+ =?us-ascii?Q?N+wNf+Qna+7RWzc9gFhLkmYHPYzFz79b2tG5M3L3tbGlwJ3efPPOadr7wpKf?=
+ =?us-ascii?Q?5wCOxGWTcxDssf/PxS23mfLqmMQw939D3qSB3wLl705fmb4h/zxHUd4p6MMM?=
+ =?us-ascii?Q?RtNwKGWW7Xhq5pkPUtE1MwEqAr06clRmlu30oRetJXXPpuIzTz9JvPrFBB3m?=
+ =?us-ascii?Q?kWs3tjJq2TRT+JgYj9qrtcHeHqMLGiR/U2VEUy0cFiVaUjmDNU/7PB9+npqj?=
+ =?us-ascii?Q?5TDOIUELessAQIY+FaENV7FQFskYaIvgN8BBIWX7boUr9iIBsihO1HXDCjtF?=
+ =?us-ascii?Q?qyLe3X9jtfPL0PDiL/nFzqtuH7+XxRO8nhHWq/k1KjYzORI6g7KdjXjE6xEE?=
+ =?us-ascii?Q?+2E53xxJ4FpQo35qNF1ZStNIYLkIscWhkJ/u10OUR9+eeMRi7lFlREixrAPx?=
+ =?us-ascii?Q?RahqeAfW8uWrW9fQnEMEeP5pOg5o/JDSwYs=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.216.47;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-pj1-f47.google.com;PTR:mail-pj1-f47.google.com;CAT:NONE;SFS:(13230031)(4636009)(1690799017)(451199024)(7116003)(44832011)(4006050)(75640400001)(1096003)(8676002)(5660300002)(86362001)(55446002)(356005)(7596003)(7636003)(6666004)(33964004)(966005)(26005)(83380400001)(336012)(9686003)(6916009)(3480700007)(42186006)(166002)(76236004);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR01MB7731
+X-OrganizationHeadersPreserved: MN0PR01MB7731.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb8.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb8.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92exhyb7.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 20 Nov 2023 16:57:53.3338
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 0b6eb07c-e9e2-496a-6e5a-08dbe9e9d632
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: BL6PEPF0001AB51.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: BL6PEPF0001AB51.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ BL6PEPF0001AB51.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ MN1PEPF0000ECD8.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 805e9820-ca81-4760-3342-08dbe9e9cfc9
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.112;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:w92exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2023 16:57:53.2556
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b6eb07c-e9e2-496a-6e5a-08dbe9e9d632
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ MN1PEPF0000ECD8.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR01MB7753
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.7132507
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7002.027
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Qm5GTXJnQnl6OGJXY2dHK0NVNUE3VkFaVEloUW5jMURXbEVjZ1pFaTNWaWMx?=
+ =?utf-8?B?V2lsVy82UStSSDhYbHFiVVp1YVFMQUN4Zy9laVZPM2c0OU9hbngvdEdDSTRU?=
+ =?utf-8?B?QXJlVW9Ra3ZjVU1sbXEyb2tyUHJpUlhYVUhUb2xBR3lPZk5vTXIxb3VvNjdL?=
+ =?utf-8?B?Sm1WMnFURENFeENXV0xlU0plU2dJSERxUzhPWjIxTjVpWUdvb0IxYlYxOG9n?=
+ =?utf-8?B?QjJYdnpDeDFnWDgyUG12TWJFdUdTUmRBK2o1WGxOc042OGJXVlo2RU9Md25p?=
+ =?utf-8?B?ZGZUdEQxUkM4ZURVN3NKMnpXMGZrWlAwS0FlMHFGS3pRaWcxVlNXdDNNcG9U?=
+ =?utf-8?B?dEpYa3IyRUZDWHV1eEFPa1hQZ01FNjVnQXVDaXFHMG5JckF3a21zT1JZS0Vn?=
+ =?utf-8?B?NVc2UFI2QlJpamF1emVSNWMwZi92R2JoQzZKL2JTMi9vT25ORG5Dc3dhY1Yw?=
+ =?utf-8?B?aFpHdERVZU5uTTZveUJMMk9SR0J1azN1ZHhiY0w0TExyWmZmUSsvZys4YmE3?=
+ =?utf-8?B?VXVHTklRSVpQUUk1OW9ZNG5BKy9za25yYzBxZ2E4VmsyYzh2WDVCZVI4NDFC?=
+ =?utf-8?B?OHlYK3NNMnFTVmZqVUdxOHViek1GeXUvWWtZOW1HdWlrM1IrL3VPNmlqL3R0?=
+ =?utf-8?B?cXovUzNFaWV4WDNwc1RpWDV1ek9WVFZhQUlhUG5hZW00T3dXOVJNZVdud2Ji?=
+ =?utf-8?B?ZmgrT3hRVTgrSTRNWXZ6eGFXZFdUMXE1SlBpYUJ3KzUvWUN2c3pERzJQRmti?=
+ =?utf-8?B?NC9MM1pOYnhXMmJMQmIva3puUW5nYlk2eXBkSS83dFIwaGY4ZnIwZ2RYVEJX?=
+ =?utf-8?B?QlF4UEVTZVc0VncvRWR1cXNpVDBlemxKTHNUTlNZQ0dIQm9aZjZ3Q05rZjRQ?=
+ =?utf-8?B?V0pEZTlpK2ZXd29jTWNhOThTMkIyWjZiZnlwLzVWdzB2bnB3bWhGNUJmbnM1?=
+ =?utf-8?B?aVdtaHJTTUZPRU1SNzFPR1R2cTNqNHdKQkR5c2JKOTdUQW9nc09sRW5pclhj?=
+ =?utf-8?B?MjdMK3RweVMrWi8xT2xOUm5FRjd1aFltVy9NUXpmSjNHYlp2YnQvMUxMNFho?=
+ =?utf-8?B?aTBaSmtFOGM1eVl6bjFCZk16SFc4NW1WUHFHQ1hOKzkycEhvMnpuaVpuNGZS?=
+ =?utf-8?B?YXNuT2JBYTJjQkhoVkE0UnUvNGg0bFJ2T3dReGplTXhVbk1iNHcrNGhrTElp?=
+ =?utf-8?B?bUJZOFZXU3ZzL1hKYm9uNFgyTGdORHFRbFJjckpnSHhtTFNJV3pkK2FNUm4v?=
+ =?utf-8?B?bkxoQjNGSVRaY1o2SDF3RWRJWDhOYVdVQmRZU3FNTC9ZbHVWMUJ4Q2IxV2VZ?=
+ =?utf-8?B?emxrWUdWZXBtb0JGd2ZTTWg5Y2loc3Rvd29zQ0s2a1VjaDQ1YUlSZ0doZzJQ?=
+ =?utf-8?B?Tkh6MEMxblpkMkJ5Z3ZFT3BadFNINW5TNWsxWGdkQ2pvRFN2bTFVYlN2VDNH?=
+ =?utf-8?B?aFV2SWF0YjRBTXNpSldNQzNFa0o5aDFxT0RTTVF1OXJWN3EzTmZlT0piQlh3?=
+ =?utf-8?B?OXlDUVFISnB6VzR0L1dWQ1A2amE3L29ITDZYby8zWTFSVnI3R05Gem5mSzlz?=
+ =?utf-8?B?U3V4YnQ5VDlPR2JIOG5BaUNTZ2xWcWxsZU5rSzlSVjFGdm1rNVZDTmM1RU00?=
+ =?utf-8?B?WnphY3FWSjFoQ3ZBcjhVeEp6RjhMRTh4ZjNTcnFlbndncDJZVUk4ZG8xMDlU?=
+ =?utf-8?B?L2ZxeExBN1FMenNKYUIwaWZNVmN6aGg5TUY3WkIzSFZVekRBekJmT2FCeDFy?=
+ =?utf-8?B?ak9NQ0xxRzBFQi9tZlN3dWFRdEFYMWMxbTU4ZVo3WEY2MkVTaWdXc0FCRWRq?=
+ =?utf-8?B?WkxSVm41SmdPckg5MU9XN210eTJnYWk5NmIvL1hIK0IxMVdzMEhwSXhENndI?=
+ =?utf-8?B?QVNRTVYwdElmb3JhbC9zcXpWQi9qK3JBNnZ6ekMzeVE3Nm1PNVJnSWNRUnVG?=
+ =?utf-8?B?Z1ZLdkNKc0w4cU91eGtQYzVOLzAyWVh6MnF6Vm5yZmRjNVRNdEN4d3RmMnl4?=
+ =?utf-8?B?em1KL0FDc0pLbHZkNUhNKzEvYWVwcWdpektjZnY0cS9xMDQ3aG13eVFHdmFz?=
+ =?utf-8?B?alpYZ0hDbTNiOHJaWVNFTXo3aHBXL2pQL3c3ck9IT1R4NjRDODNxMjlpWEY0?=
+ =?utf-8?B?bEdjNjBNRldEMjlXQWZqUG9DOVpCcHVkbkVzd3JrMTJUWGgzYkpRTjloNnhu?=
+ =?utf-8?B?NVZBdFJ1R1g1QnloT1AraTJQcytYc3JJQ1p6UFhCM0wrRXpCVCtXeVZEVndF?=
+ =?utf-8?B?eUJtQ3NNV3U2RkhFNWZBL085QzlVL1ZST2c0dUllRE5tSndERncvV3dxZXhl?=
+ =?utf-8?B?NFhVQ2M0Y3YzQlFVS3VnWW50U1NLS2l4T1hNRFNMZUY5SEtDTGNEVkwyTkZK?=
+ =?utf-8?B?djFFYWZ5ZzRLUUR4OGljaGJWUjEvVGdQcTNkZ1lKNXBQRlhhNW83THYreGpI?=
+ =?utf-8?B?aG45SVp2Qyt3M1ZyWVE9PQ==?=
+MIME-Version: 1.0
+
+--000000000000526767060a9862ca
+Content-Type: text/plain; charset="UTF-8"
+
+To get into the Lab's GPU you need to have a CSAIL account (
+https://inquir.csail.mit.edu/account_requests/new), and then you should be
+able to access the LAB's GPUS
+
+
+
+[image: Mailtrack]
+<https://mailtrack.io?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&>
+Sender
+notified by
+Mailtrack
+<https://mailtrack.io?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&>
+20/11/23,
+11:57:04 a. m.
+
+On Mon, 20 Nov 2023 at 11:33, Leshem Choshen <leshem.choshen@mail.huji.ac.il>
+wrote:
+
+> Reproduction, maybe can go to Pythia (but no need to get the legacy).
+>
+> https://github.com/EleutherAI/pythia#reproducing-training
+>
+>
+>
+>
+>
+> [image: Mailtrack]
+> <https://mailtrack.io?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&> Sender
+> notified by
+> Mailtrack
+> <https://mailtrack.io?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&> 20/11/23,
+> 11:33:19 a. m.
+>
+> On Mon, 20 Nov 2023 at 11:23, Leshem Choshen <
+> leshem.choshen@mail.huji.ac.il> wrote:
+>
+>> Code for Pretraining
+>> https://github.com/EleutherAI/gpt-neox#environment-and-dependencies
+>> Evaluation
+>> Perplexity loss
+>> Data
+>> https://github.com/EleutherAI/the-pile
+>>
+>> Have a hilarious day
+>> Leshem Choshen
+>> <http://ktilana.wixsite.com/leshem-choshen>
+>> <leshem.choshen@mail.huji.ac.il>
+>> <https://scholar.google.com/citations?hl=en&view_op=list_works&gmla=AJsN-F4PyOBRfjaJ400_0gVzZN0Dd4pk_vvPzj3pZe91jg_18lInMB3vknKdzGH4kTM3ADukdT3h3fjL5TASZ2Y5qwibLHycyATwwVjnveeXaWloc5kSuBM&user=8b8IhUYAAAAJ>
+>> <https://twitter.com/LChoshen>
+>>
+>>
+>>
+>> [image: Mailtrack]
+>> <https://mailtrack.io?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&> Sender
+>> notified by
+>> Mailtrack
+>> <https://mailtrack.io?utm_source=gmail&utm_medium=signature&utm_campaign=signaturevirality11&> 20/11/23,
+>> 11:22:56 a. m.
+>>
+>
+
+--000000000000526767060a9862ca
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div dir=3D"ltr">To get into the Lab's GPU you need to have =
+a CSAIL account (<a href=3D"https://inquir.csail.mit.edu/account_requests/n=
+ew" target=3D"_blank">https://inquir.csail.mit.edu/account_requests/new</a>=
+), and then you should be able to access the LAB's GPUS<br><br><br><br><div=
+ id=3D"gmail-mt-signature">
+        <table border=3D"0" cellpadding=3D"8" cellspacing=3D"0" style=3D"us=
+er-select: none;">
+            <tbody><tr>
+                <td>
+                    <a id=3D"gmail-signatureLink-logo" href=3D"https://mail=
+track.io?utm_source=3Dgmail&amp;utm_medium=3Dsignature&amp;utm_campaign=3Ds=
+ignaturevirality11&amp;" class=3D"gmail-mt-no-pointer-events" style=3D"text=
+-decoration:none">
+                        <img src=3D"https://s3.amazonaws.com/mailtrack-sign=
+ature/sender-notified-72.gif" alt=3D"Mailtrack" class=3D"gmail-mt-no-pointe=
+r-events" width=3D"32" height=3D"32">
+                    </a>
+                </td>
+                <td>
+                    <span style=3D"color:rgb(119,119,119)">Sender notified =
+by</span> <br>
+                    <a id=3D"gmail-signatureLink-text" href=3D"https://mail=
+track.io?utm_source=3Dgmail&amp;utm_medium=3Dsignature&amp;utm_campaign=3Ds=
+ignaturevirality11&amp;" class=3D"gmail-mt-install gmail-mt-no-pointer-even=
+ts" style=3D"color:rgb(67,116,247)">Mailtrack</a>
+                   =20
+    </td><td><span style=3D"color:transparent;font-size:0px">20/11/23, 11:5=
+7:04 a.&nbsp;m.</span></td>
+
+               =20
+                <td>
+                   =20
+
+                </td>
+            </tr>
+        </tbody></table>
+    </div></div><br><img width=3D"0" height=3D"0" class=3D"mailtrack-img" a=
+lt=3D"" style=3D"display:flex" src=3D"https://mailtrack.io/trace/mail/84539=
+31732783410865376a8f2655ff8ae1b23d6.png?u=3D2571037"><div class=3D"gmail_qu=
+ote"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, 20 Nov 2023 at 11:33, Le=
+shem Choshen &lt;<a href=3D"mailto:leshem.choshen@mail.huji.ac.il">leshem.c=
+hoshen@mail.huji.ac.il</a>&gt; wrote:<br></div><blockquote class=3D"gmail_q=
+uote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,2=
+04);padding-left:1ex"><div dir=3D"ltr"><div dir=3D"ltr">Reproduction, maybe=
+ can go to Pythia (but no need to get the legacy).<div><br></div><div><a hr=
+ef=3D"https://github.com/EleutherAI/pythia#reproducing-training" target=3D"=
+_blank">https://github.com/EleutherAI/pythia#reproducing-training</a></div>=
+<div><br><br><br><br></div><br><div id=3D"m_4465563384395347052gmail-mt-sig=
+nature">
+        <table border=3D"0" cellpadding=3D"8" cellspacing=3D"0">
+            <tbody><tr>
+                <td>
+                    <a id=3D"m_4465563384395347052gmail-signatureLink-logo"=
+ href=3D"https://mailtrack.io?utm_source=3Dgmail&amp;utm_medium=3Dsignature=
+&amp;utm_campaign=3Dsignaturevirality11&amp;" style=3D"text-decoration:none=
+" target=3D"_blank">
+                        <img src=3D"https://s3.amazonaws.com/mailtrack-sign=
+ature/sender-notified-72.gif" alt=3D"Mailtrack" width=3D"32" height=3D"32">
+                    </a>
+                </td>
+                <td>
+                    <span style=3D"color:rgb(119,119,119)">Sender notified =
+by</span> <br>
+                    <a id=3D"m_4465563384395347052gmail-signatureLink-text"=
+ href=3D"https://mailtrack.io?utm_source=3Dgmail&amp;utm_medium=3Dsignature=
+&amp;utm_campaign=3Dsignaturevirality11&amp;" style=3D"color:rgb(67,116,247=
+)" target=3D"_blank">Mailtrack</a>
+                   =20
+    </td><td><span style=3D"color:transparent;font-size:0px">20/11/23, 11:3=
+3:19 a.&nbsp;m.</span></td>
+
+               =20
+                <td>
+                   =20
+
+                </td>
+            </tr>
+        </tbody></table>
+    </div></div><br><img width=3D"0" height=3D"0" alt=3D"" style=3D"display=
+: flex;" src=3D"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAAL=
+AAAAAABAAEAAAIBRAA7"><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"g=
+mail_attr">On Mon, 20 Nov 2023 at 11:23, Leshem Choshen &lt;<a href=3D"mail=
+to:leshem.choshen@mail.huji.ac.il" target=3D"_blank">leshem.choshen@mail.hu=
+ji.ac.il</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D=
+"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-le=
+ft:1ex"><div dir=3D"ltr">Code for Pretraining<div><a href=3D"https://github=
+.com/EleutherAI/gpt-neox#environment-and-dependencies" target=3D"_blank">ht=
+tps://github.com/EleutherAI/gpt-neox#environment-and-dependencies</a></div>=
+<div>Evaluation&nbsp;</div><div>Perplexity loss</div><div>Data</div><div><a=
+ href=3D"https://github.com/EleutherAI/the-pile" target=3D"_blank">https://=
+github.com/EleutherAI/the-pile</a>&nbsp;<br></div><div><br clear=3D"all"><d=
+iv><div dir=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr">Have a&nbsp;=
+<span style=3D"color:rgb(34,34,34)">hilarious</span>&nbsp;day<div>Leshem Ch=
+oshen</div><div><span><a href=3D"http://ktilana.wixsite.com/leshem-choshen"=
+ target=3D"_blank"><span style=3D"font-size:12pt;font-family:&quot;Times Ne=
+w Roman&quot;;color:rgb(17,85,204);background-color:transparent;vertical-al=
+ign:baseline"><span style=3D"border:none;display:inline-block;overflow:hidd=
+en;width:23px;height:23px"><img src=3D"https://lh4.googleusercontent.com/mW=
+Ctfvt2evr0N7EZM8u6KpY2LHG7Swd6hXpl-mZ2wenXJUl1lwYxKgMVWqf39K5t1JBq8KmiDI6m8=
+TgoL3q-uZgo0YiunG3cNlqnS02bhll34HyyEc4rb9UnfZn2XwHwPcN8j16Tl6LSsTOQInSrhg" =
+width=3D"23" height=3D"23" style=3D"margin-left: 0px; margin-top: 0px;"></s=
+pan></span></a><a href=3D"mailto:leshem.choshen@mail.huji.ac.il" target=3D"=
+_blank"><span style=3D"font-size:10pt;font-family:&quot;Times New Roman&quo=
+t;;color:rgb(17,85,204);background-color:transparent;vertical-align:baselin=
+e"><span style=3D"border:none;display:inline-block;overflow:hidden;width:29=
+px;height:24px"><img src=3D"https://lh6.googleusercontent.com/C4emqAIHzNdEI=
+SK_wQqByYzR2XzCccPtWKG45ASm-24yH3409cczytfs8v3ub_lLvG4SqHVQNXJVZBl6estxn8O3=
+ACGeuKraMm2mpe1RVV1_Ncdi_FFDq0wn5HtEi942tci88EQYYmfvioWsqqyJfg" width=3D"29=
+" height=3D"24" style=3D"margin-left: 0px; margin-top: 0px;"></span></span>=
+</a><a href=3D"https://scholar.google.com/citations?hl=3Den&amp;view_op=3Dl=
+ist_works&amp;gmla=3DAJsN-F4PyOBRfjaJ400_0gVzZN0Dd4pk_vvPzj3pZe91jg_18lInMB=
+3vknKdzGH4kTM3ADukdT3h3fjL5TASZ2Y5qwibLHycyATwwVjnveeXaWloc5kSuBM&amp;user=
+=3D8b8IhUYAAAAJ" target=3D"_blank"><span style=3D"font-size:10pt;font-famil=
+y:&quot;Times New Roman&quot;;color:rgb(17,85,204);background-color:transpa=
+rent;vertical-align:baseline"><span style=3D"border:none;display:inline-blo=
+ck;overflow:hidden;width:20px;height:20px"><img src=3D"https://lh5.googleus=
+ercontent.com/AqNwa9W6dDZrmtrkDBms8jsVO58Ub6UOuA31Vv13yp2uF0Ff2uoAcVkpAS7iz=
+q6rZ4jRKBVaLA8JmUgNJyyHRdP7XFxVkkniDdZEMLnRCyFVruWOqLXNXHkPAgLlrx9bGMxpYWB0=
+j44TrwILahUgOw" width=3D"20" height=3D"20" style=3D"margin-left: 0px; margi=
+n-top: 0px;"></span></span></a><a href=3D"https://twitter.com/LChoshen" tar=
+get=3D"_blank"><span style=3D"font-size:10pt;font-family:&quot;Times New Ro=
+man&quot;;color:rgb(17,85,204);background-color:transparent;vertical-align:=
+baseline"><span style=3D"border:none;display:inline-block;overflow:hidden;w=
+idth:24px;height:20px"><img src=3D"https://lh5.googleusercontent.com/NGYa3z=
+QnqmkfX8ESo7uQY26Zc805uOrJUWgoVFjqf6vaZ_8ohcsCM7d5xCeJrG7yzIRHNGJwQeEV_ijJC=
+U924cWEAJqpSwOvHNPWoBL7V22TYmu35qMu9j1Vsvj2J2jII90vEM-mVHCznsFjSN6qzA" widt=
+h=3D"24" height=3D"20" style=3D"margin-left: 0px; margin-top: 0px;"></span>=
+</span></a></span><br></div><div><br></div></div></div></div><br></div><br>=
+<div id=3D"m_4465563384395347052m_5933618529885662038mt-signature">
+        <table border=3D"0" cellpadding=3D"8" cellspacing=3D"0">
+            <tbody><tr>
+                <td>
+                    <a id=3D"m_4465563384395347052m_5933618529885662038sign=
+atureLink-logo" href=3D"https://mailtrack.io?utm_source=3Dgmail&amp;utm_med=
+ium=3Dsignature&amp;utm_campaign=3Dsignaturevirality11&amp;" style=3D"text-=
+decoration:none" target=3D"_blank">
+                        <img src=3D"https://s3.amazonaws.com/mailtrack-sign=
+ature/sender-notified-72.gif" alt=3D"Mailtrack" width=3D"32" height=3D"32">
+                    </a>
+                </td>
+                <td>
+                    <span style=3D"color:rgb(119,119,119)">Sender notified =
+by</span> <br>
+                    <a id=3D"m_4465563384395347052m_5933618529885662038sign=
+atureLink-text" href=3D"https://mailtrack.io?utm_source=3Dgmail&amp;utm_med=
+ium=3Dsignature&amp;utm_campaign=3Dsignaturevirality11&amp;" style=3D"color=
+:rgb(67,116,247)" target=3D"_blank">Mailtrack</a>
+                   =20
+    </td><td><span style=3D"color:transparent;font-size:0px">20/11/23, 11:2=
+2:56 a.&nbsp;m.</span></td>
+
+               =20
+                <td>
+                   =20
+
+                </td>
+            </tr>
+        </tbody></table>
+    </div><img width=3D"0" height=3D"0" alt=3D"" style=3D"display: flex;" s=
+rc=3D"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAE=
+AAAIBRAA7"></div>
+</blockquote></div></div>
+</blockquote></div></div>
+
+--000000000000526767060a9862ca--

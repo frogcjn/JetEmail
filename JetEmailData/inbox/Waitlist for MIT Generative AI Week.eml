@@ -1,0 +1,510 @@
+Received: from SJ0PR01MB7479.prod.exchangelabs.com (2603:10b6:a03:3e1::21) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Thu, 30 Nov 2023 02:48:35
+ +0000
+Received: from MW4PR03CA0025.namprd03.prod.outlook.com (2603:10b6:303:8f::30)
+ by SJ0PR01MB7479.prod.exchangelabs.com (2603:10b6:a03:3e1::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.22; Thu, 30 Nov 2023 02:48:34 +0000
+Received: from CO1PEPF000044FC.namprd21.prod.outlook.com
+ (2603:10b6:303:8f:cafe::dc) by MW4PR03CA0025.outlook.office365.com
+ (2603:10b6:303:8f::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.23 via Frontend
+ Transport; Thu, 30 Nov 2023 02:48:34 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.112)
+ smtp.mailfrom=trix.bounces.google.com; dkim=pass (signature was verified)
+ header.d=google.com;dmarc=pass action=none header.from=google.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ trix.bounces.google.com discourages use of 18.9.1.112 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.112) by
+ CO1PEPF000044FC.mail.protection.outlook.com (10.167.241.202) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7068.1 via Frontend Transport; Thu, 30 Nov 2023 02:48:34 +0000
+Received: from w92extsm2.exchange.mit.edu (18.7.74.56) by
+ oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 29 Nov 2023 21:48:33 -0500
+Received: from oc11exhyb6.exchange.mit.edu (18.9.1.111) by
+ w92extsm2.exchange.mit.edu (18.7.74.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 29 Nov 2023 21:48:33 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.40) by
+ oc11exhyb6.exchange.mit.edu (18.9.1.111) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Wed, 29 Nov 2023 21:48:32 -0500
+Received: from DM6PR02CA0125.namprd02.prod.outlook.com (2603:10b6:5:1b4::27)
+ by DS7PR01MB7686.prod.exchangelabs.com (2603:10b6:8:79::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.22; Thu, 30 Nov 2023 02:48:29 +0000
+Received: from DS3PEPF000099E2.namprd04.prod.outlook.com
+ (2603:10b6:5:1b4:cafe::82) by DM6PR02CA0125.outlook.office365.com
+ (2603:10b6:5:1b4::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.24 via Frontend
+ Transport; Thu, 30 Nov 2023 02:48:29 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.128.197)
+ smtp.mailfrom=trix.bounces.google.com; dkim=pass (signature was verified)
+ header.d=google.com;dmarc=pass action=none
+ header.from=google.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of trix.bounces.google.com
+ designates 209.85.128.197 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.128.197;
+ helo=mail-yw1-f197.google.com; pr=C
+Received: from mail-yw1-f197.google.com (209.85.128.197) by
+ DS3PEPF000099E2.mail.protection.outlook.com (10.167.17.201) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Thu, 30 Nov 2023 02:48:29 +0000
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-5ccc8b7f578so8766277b3.2
+        for <jiannan@mit.edu>; Wed, 29 Nov 2023 18:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1701312509; x=1701917309; darn=mit.edu;
+        h=to:from:subject:date:message-id:feedback-id:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nyfR0cmgIlFRYVlVPrcBcut72CXr4+MmCU0C1sPUPqE=;
+        b=aKfgDBRVP+Ck3la1DN+W4+lQ4tedVTR0H10lLBHpdIM2Z8MvnhKz+Wec6dEOXOAjJ0
+         qNT8+TWIH9RfaJsFjfYmak5R1XPtyFaxfYwQbBHRyMi8DeQH5gm9CAEBDNzNE4QXVMQ5
+         QufpRn0JnJ5vnUYzwLo7UdPWXLxxoNOcHVxnUHOdcAw+99YbHjQjNtRbKCauoj++bokr
+         h1wNPUcB/1PSGgayIBdN0M9q0MgQmzkNLPYxyHdSROg7HyB3GZKnultFKaEtYnJ5VX9s
+         xCssyJOqDjTNd0jifNeCbLQWeGfzJMq+seNaXRHadDSuzBaWBnlGd37IXVIoYpqxwX6d
+         I9eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701312509; x=1701917309;
+        h=to:from:subject:date:message-id:feedback-id:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nyfR0cmgIlFRYVlVPrcBcut72CXr4+MmCU0C1sPUPqE=;
+        b=ZM+8lx2yhcWhKyYgMGglGvP5wBCS9M9jdA27NYIVfx6j+rpMSz70C+tiIrW5k2S1LB
+         A03ONJ5PSR4d8JQhPGdUQE2vwVnop+KZNI2+AFzQBeLxOAwL7rxhb9BYyHYkzItpsnV/
+         NY4xaX9WvGkgQVqV19SSVUjzsU1g0lSRp8+124bZ3SZX5hI74lsNKHT8nH/eXARKOXzG
+         ILQqK1R4z9MJUei9LQl5G7vOpHeWXBY+fSvg5UScswrYGqn1X2UozD5VSP0/w6mvzDPv
+         8JKV1Jn98eias/zCzHaUQAkHFF2W+TpTcVpnHq35A8RxblIQTZGOh/pZOQVMkM9MEbOT
+         4i3g==
+X-Gm-Message-State: AOJu0YzPNWO5wr0/B3Dbl1fozNuC+b8fX4Kj0TAgEPxJQgl9BQ5dF7N1
+	r4nmCzKf3IdEFITVGoDdX6qO2c5ksUFnAjezA/Cs3COj
+X-Google-Smtp-Source: AGHT+IEDoVaTas5ZidhtawuVLPXFndAYWB9RtORTARQyDdLqYrTYY0vKzW/YNJxWfy1/372gKlslCe/pOPdikqSKrdvvAA==
+X-Received: by 2002:a25:aab2:0:b0:d9b:3b3e:5a07 with SMTP id
+ t47-20020a25aab2000000b00d9b3b3e5a07mr17222748ybi.5.1701312509023; Wed, 29
+ Nov 2023 18:48:29 -0800 (PST)
+Feedback-ID: MailTypeResponseReceipt:GoogleForms
+X-GoogleForms-FormId: e/1FAIpQLSfur2H3GJj45bpU1Kq6Bz9P6e5q4pssOT4x820EIhrNdN2u0A
+X-GoogleForms-IsConsumerForm: true
+Message-ID: <autogen-java-e9c41e8d-1b99-4e73-9ec7-0cad8e0f2974@google.com>
+Date: Thu, 30 Nov 2023 02:48:29 +0000
+Subject: Waitlist for MIT Generative AI Week
+From: =?UTF-8?B?R29vZ2xlIOihqOWNlQ==?= <forms-receipts-noreply@google.com>
+To: jiannan@mit.edu
+Content-Type: multipart/alternative; boundary="000000000000c0a019060b55afb7"
+Return-Path:
+ 3_fdnZRYKB74jsvqw-vigimtxw-rsvitp2ksskpi.gsqnmerrerqmx.ihy@trix.bounces.google.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ DS3PEPF000099E2:EE_|DS7PR01MB7686:EE_|CO1PEPF000044FC:EE_|SJ0PR01MB7479:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41560c6d-3d26-4fc6-01a3-08dbf14ed897
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:3;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?bSUjUWyCkuSGEecYbkh2QnZyOA/epCOOXcS0M3QzddGPQTCt632QbsxoUiUa?=
+ =?us-ascii?Q?XNOkSCJToJXfboMPJcUcjKjxDoawDuUxYl9gDEkTGGQipm74zSRGxQoHoerM?=
+ =?us-ascii?Q?NcelumE/ZwkBbpLbsv7uOtbf9jocrUTzUf2wgrOjKuf6WP4YI7nP1QmBpSf3?=
+ =?us-ascii?Q?ULpZEc4YHeOpE9fAQ+tO+xadVAUs+We3F3boZHAIajFNXx8x7+FIXQk79sup?=
+ =?us-ascii?Q?Z78GGNHVZIcQ12AvO67B7u8nfiGPNgut//AJvazVwJKiQnKWUXIYCO3oBR60?=
+ =?us-ascii?Q?B96ptYr2MK1p6yQBOXdO0mIpD224M8PzWgQr8HDnPHYQfAU1IiLiNmIImJlu?=
+ =?us-ascii?Q?NPtCJ2vI1yFlNsc811MfSzKRumA5AZ0v56rsIroMKI0A1Frd0i9uRFJ4qaWT?=
+ =?us-ascii?Q?y1740VTbvgYRU3pJ4JYgTedbOKcbtXMrEh+f5RE1XH5NYsOoT3oNEJGLwFLn?=
+ =?us-ascii?Q?2zV5AjkSwFkXXAzhSMym52gJuu5NQ5JR8P+vIJn7IIsSPbXa6FXlaEiWfJwc?=
+ =?us-ascii?Q?Vd/QqM8hzsuBW7RRBsc1PtU0bXLvuaSGI5kvTuAlrg2VGPCv2EJuhpwAUvys?=
+ =?us-ascii?Q?CoyShBn7xs+LU5NsJMCLdjm88KQ2MSNeqGPPk3ABdycad+OFshLbjm5KmGc6?=
+ =?us-ascii?Q?QZNKbWuwZRZx7IGNiWe2rMCbNNFdP5BAzpmmru9By6DWi8HN+NMQCS5Fh7k1?=
+ =?us-ascii?Q?UyMFX3250AmZ85sNjdGTtlRNMWSGhiNj5GcMPq9G/AD588AKnNmkG8mjxdkG?=
+ =?us-ascii?Q?p3aCy4A2BZujM3fBAQKyPq7ASH3Q1dHhEM0wYT0gaooUEP7bRcDz5DCaG0z+?=
+ =?us-ascii?Q?Vr+EDvS7C8VHHcnekMRZPwMUvVmdQ+tSzUQphBofBRjUvGRr8zVwcPMzeYTR?=
+ =?us-ascii?Q?4c7Q8e8br6HllxzwVpGDSlEphrYT7Q2Ja4EBwf7CDbyLQYRrc5JKTZRuqLja?=
+ =?us-ascii?Q?S/6rqpD2gv0ABRKkkabJcr4bRzXCcKeWI03z8kWV5ClD0a1m4oLQGaQvG2o5?=
+ =?us-ascii?Q?7SRCFT74b/Tk4+mCBPk4+3kg8fZCI5oySaB5NoQXEbD/ojzbUs7ts9XIQXba?=
+ =?us-ascii?Q?CH8bMB3Htid1GvrgXqKMekyJ48tRBTJbvzwLfkzG8A3Y4jKoHx2qOg4VL/OJ?=
+ =?us-ascii?Q?7Fs8MwE5z5T6elRDsE+SlUlgG21+cab7FWWZHcHRMmxbQ0zqM1tDmH+x0Gez?=
+ =?us-ascii?Q?KKB2zsqfFKPlt+sx3N5TwFDFd1RIrVKV4w2Ja10vnhLSv27SebbQnot+f73o?=
+ =?us-ascii?Q?dLjfT3KNzNicBPJCULdnmXda0xl89DiAF3y8p6kyul0WXziO5RNcK8MJ0L6e?=
+ =?us-ascii?Q?b2shKfrP+27zNarH2U/PpsgXJsbm0OCQfYnpFKdR+6KudUBU/O2SmIl0xEjP?=
+ =?us-ascii?Q?7NusvH+IX3pjjscxAPSmz0GVctJYxJOPWRll5NFo70zXOkN7gzT96+65gjlB?=
+ =?us-ascii?Q?NvphmINKTB5sqBc8an6B4Q7I5tRcpbn+QnwGXhXrRvOPSFS5zs7nhLw3Vn/1?=
+ =?us-ascii?Q?iSJACzUWzYDmbrQoW48G+SU93DB6xOSRHIIYti9NhxHZoe8k71Ej5dwl0FXy?=
+ =?us-ascii?Q?VK04QSAmsjH0Bdfvn3sERbbs3+8XiWC546f3+4rpmq82hOlcdp8YXCrdyxTC?=
+ =?us-ascii?Q?8uiSfETygPgo4EnJ/22W868DfXVM4wXE4S0FDgf8AcU6TgXDXw39k7p9LEh/?=
+ =?us-ascii?Q?/+kZAKqpkFsJpQj0L9fUM7pIOkfX80S0YM/aC5sxxwsIAwuF2CY0430VsE7G?=
+ =?us-ascii?Q?Zi/X9J+Gxx30TEDuLnw50cBKB4dnzPE2pFg1A7+mNsFi1ZenAe8g/7lA4BOU?=
+ =?us-ascii?Q?FBagk/vtABfLXd+JU9GCeAHwFeAEZisQRHbpkBcb7zxgb7vMFKMiTmgQyeIL?=
+ =?us-ascii?Q?43bdJhIRWzjHmDE5uN5WaoTGDtmGPUy/OmHYuUy3IBog2yJpPZPj18dVS28T?=
+ =?us-ascii?Q?lLljcZmlpUSzcUEV4sNuDMX4FLZrK6QmR8FIDGSLiuby8SItfR/6aKNt0bS8?=
+ =?us-ascii?Q?srBj?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.128.197;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-yw1-f197.google.com;PTR:mail-yw1-f197.google.com;CAT:NONE;SFS:(13230031)(4636009)(286005)(84050400002)(1690799017)(451199024)(83170400001)(2616005)(58800400005)(336012)(426003)(26005)(33964004)(75640400001)(22186003)(83380400001)(6916009)(4006050)(76482006)(8676002)(1096003)(42186006)(356005)(7596003)(7636003)(166002)(36756003)(55446002)(85182001)(202311291699003)(5930299018)(15940465004);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR01MB7686
+X-OrganizationHeadersPreserved: DS7PR01MB7686.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb6.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb6.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92extsm2.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 30 Nov 2023 02:48:34.6575
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 41560c6d-3d26-4fc6-01a3-08dbf14ed897
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: CO1PEPF000044FC.namprd21.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CO1PEPF000044FC.namprd21.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1PEPF000044FC.namprd21.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DS3PEPF000099E2.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 72953ce6-6fca-4496-7126-08dbf14ed599
+X-Microsoft-Antispam: BCL:3;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.112;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2023 02:48:34.3137
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41560c6d-3d26-4fc6-01a3-08dbf14ed897
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ DS3PEPF000099E2.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB7479
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.5252850
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7046.004
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?anZkMEZ5cGUzQTNXa2pDNTJmNUVWTmYranVWb2liTFFqOGp2aUtGRUQvU0RP?=
+ =?utf-8?B?eUhhT3l2TU5RSjNpK0xKWXhmS1BWUU8rWFJ6RUlnK0xPMVNLR0QzN002UHlh?=
+ =?utf-8?B?WjJEWitIdU80aS80bndJLzFCNzloME5LdkRIT21CNFdWdm12RDhzT2JUZnpz?=
+ =?utf-8?B?SUQrY3loTERtSGJ5cFBIR04weVRxODUvK3pjdkV4UWF5RXdjd2ZJbm1zcEZ6?=
+ =?utf-8?B?WVFvRkMzQkNFWTNFdHIxV2t4bUF1ZHV5eUs2T2hzTHIzc0NPSGRTMkdUZEJn?=
+ =?utf-8?B?aVhONXFxSFB2bTlicEJ3d01YSXZsdWVsSnJaWW1lbWJzMXo0YzBZbStnbG1W?=
+ =?utf-8?B?dnFYeXk2STNRQ05odXhuTU1NSjNmNG5WNTZaWTAwS2N5RlJpMWFwT0RBRERZ?=
+ =?utf-8?B?b21telIvMkt3Q2NOVm9JYnFWMzlGcS80Q0dpVjB1akRzS2JkVXgzUHY2M0hr?=
+ =?utf-8?B?V0RXT1NVWndPNEh0Lzd0RC9xUzVPZERKZW0rS0tLQ2NaVkJKSmd2N00vc3o3?=
+ =?utf-8?B?eitPekR5N0pZTXg3QkZwRHhWbGlIVjFET244bmN4Y2ZQT0Y3ZHJ5bGgyQnVI?=
+ =?utf-8?B?Q2lMR1lVWEFEZTA3VXVteFYyNy9GRE1MbDdmVFNiYUdwWkdVVDZlVDBWajNp?=
+ =?utf-8?B?R21wTHdWZTZEazVNT3pjVHA3ZTMxdlZITUg1NnhkbndtQmZXbFhHcXNVdllQ?=
+ =?utf-8?B?Tk1xdTAzbmkxZTlFQVRMVC9WZWhaSjNyT0ZlUmVLc2ZIQnIrc2dLMHFxU3Rk?=
+ =?utf-8?B?OGJzSTBEYzNEOHVGUlltNkpuRzBndFVqalhlaGMxYSthMzFFSlFGNmJLTGtV?=
+ =?utf-8?B?dlFLWi9IZlVOTDBLdCswQmpjeThsU0RuYzNhalFVZjZXb3Z1TEdOM3RyOXdi?=
+ =?utf-8?B?Yy9oVCtzU2NPd1NWTVovQkJlaUdKVEU1QmlwQ0FQeW5OQmwvQVBOS2NmVFJt?=
+ =?utf-8?B?SU5FK2Nod2taVm8yWUwxK05ERjVOSUttdUZpWWh4YUJGcmhSc1dEVy8yWWRV?=
+ =?utf-8?B?K2pNa0hwcm8zRFVtdUpua1UrUGtIR2xSd1diWFdEY2daSTFvSEJFcTFtNW1Z?=
+ =?utf-8?B?c3dYaXo5QlNZdzVmS0xZK28yMHlxeGUyRWNmbXlQeHZaN3FWeG5UZHlRWkdU?=
+ =?utf-8?B?eEYxV2h4Z0RNOUN3TzZrRWtITWFadk9VK2g4bTlmQ0o2LzM5M2RvNjY5cjhR?=
+ =?utf-8?B?cm81OEFMT2pEUUhXbFZKSi9NN1p6ejRiT2FSRiszRU4veURMaGUzbkRXOWFU?=
+ =?utf-8?B?MWhKcTByTW5ObGtlTVc4RjFUM1ZqWXR0MHh2aXMzanRLWkFpN1c4WUw4anEy?=
+ =?utf-8?B?aU1adW84TEIxOUJmT1ZkYmtNZlNMQ3crYTUveW92SmlLcHZMamRTUCsvUlBE?=
+ =?utf-8?B?MVFjNE1JV1RkUGMvOEUxZkhwT3dlOVV5bkxIRyttUTlYWEVnK2pickpQdzFi?=
+ =?utf-8?B?aCs3Q1BFRXZYQVlWZVhOYlc2RndCSFhGbUVFWDRZYjZkdFhDMWV2cUdtN25y?=
+ =?utf-8?B?YnZkTEU2UUR3Y1o5YjZOWkQyVjRDVUNJbXFwNGNMcU1TcXg2ck8yQ1JLMkQw?=
+ =?utf-8?B?R3l3aHRxTXhxajVNS1pYNFZnZVpxQ2Y2dWhveGszNkh0M2NKTHdialVKcUh2?=
+ =?utf-8?B?L01WbThlZHpMWW1wd3UrYmdkWktFckRQcGdzTE5WQ0RycG5iYlpOdjhUdUp4?=
+ =?utf-8?B?NXJkZGpncGRTRmI3amZPTDZJOHU4WEwycGlBTnJEVllLQmlScVQyeFZMOVdR?=
+ =?utf-8?B?cGdTamJFeVF3blB2Vi9RMDUyWHpZdjZiOUpJRzN4eGdtWEI4L3dUZk1ML3F3?=
+ =?utf-8?B?KzVSb3NYUzB4SThBd0FpNTBCNno0b0d6aCtjUFFhcnJUbW85MkZxam1idFAw?=
+ =?utf-8?B?YWFIZjE2TWVwTUt0RlFqRWZnNm82Y2tFTGg0UEVodlBaMXpSenEyUG9DMkFZ?=
+ =?utf-8?B?NHVNZXNTVWExTHpQbDFydjF5aVVaZHhxWVB6ZDBNdERXSkpERUtuRXlCZDFy?=
+ =?utf-8?B?OEJXUE9zYnZTUkxUTFpNbllPaDAyZ2FTNmo3ckVJdlZjQzFZMDZjNEVQL1JV?=
+ =?utf-8?B?SXV5V2taSXdLeldvNEpaSDljUnQ0QWRaUG5nS0FCY1l0SkRwOE1rRXFKUDFM?=
+ =?utf-8?B?Qi93R2F4VGM0aGNGT2l6ZWxGSzU5U0hqVDFkYVM3OGhZY2FpbENxcHJSYnVl?=
+ =?utf-8?B?YzN6VjRieUFsR3lhZ2czSnZKSXZobmUxQm5rL1hRNXVLRHhPQ2UxOHlSQ0o5?=
+ =?utf-8?B?ckNaNGRvYy9kYVhwUkNsWEE2YzV5by95dVlsSUZLN1puTURDZUgzVDloWm5D?=
+ =?utf-8?B?QW5KeU5nUE5ZcmNtS2Q5cUgyd1p4OWhnQVRzSmJ3SW9zRlZWZHVtTmJiN1lR?=
+ =?utf-8?B?My9VbDNEbSt4ZHZVR1RxcEpKNEVPSFMrazRzdnE0KzlqY2VseW9kbEtRNDcz?=
+ =?utf-8?B?NmxrS3NVaGtlWVB1OTQ4YnF3UXk2b3l4RUZrQnhZcFFPRjBmWUQvc3AvRXAx?=
+ =?utf-8?B?dmdjd2IzaVR0bHlJNXRDS085SmdUUW13UzM4WGdWSHBRPT0=?=
+MIME-Version: 1.0
+
+--000000000000c0a019060b55afb7
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: base64
+
+R29vZ2xlIOihqOWNlQ0KDQoNCuaEn+iwouaCqOWhq+WGmeKAnFdhaXRsaXN0IGZvciBNSVQgR2Vu
+ZXJhdGl2ZSBBSSBXZWVr4oCdDQrku6XkuIvmmK/mlLbliLDnmoTlm57nrZTjgIINCg0KDQpXYWl0
+bGlzdCBmb3IgTUlUIEdlbmVyYXRpdmUgQUkgV2Vlaw0KDQpDb21wbGV0ZSB0aGlzIGZvcm0gdG8g
+am9pbiB0aGUgd2FpdGxpc3QgZm9yIE1JVCBHZW5lcmF0aXZlIEFJIFdlZWsuIFlvdSAgDQp3aWxs
+IGJlIGNvbnRhY3RlZCBpZiBhIHNlYXQgYmVjb21lcyBhdmFpbGFibGUuDQoNCg0K55S15a2Q6YKu
+5Lu25Zyw5Z2AICoNCg0KDQpqaWFubmFuQG1pdC5lZHUNCg0KDQpGaXJzdCBOYW1lDQoqDQoNCg0K
+Smlhbm5hbg0KDQoNCkxhc3QgTmFtZQ0KKg0KDQoNCkNhbw0KDQoNCk1JVCBBZmZpbGlhdGlvbg0K
+Kg0KDQoNCkZyaWVuZCBvZiBNSVQNCg0KDQpNSVQgRmFjdWx0eQ0KDQoNCk1JVCBTdGFmZg0KDQoN
+Ck1JVCBTdHVkZW50DQoNCg0KTUlUIEFsdW0NCg0KDQpNSVQgRGVwYXJ0bWVudCBvciBPcmdhbml6
+YXRpb24vQ29tcGFueQ0KKg0KDQoNClNETQ0KDQoNCkpvYiBUaXRsZQ0KKg0KDQoNClN0dWRlbnQN
+Cg0KDQpBcmUgeW91IGludGVyZXN0ZWQgaW4gYXR0ZW5kaW5nIHRoZSBmbGFnc2hpcCBzeW1wb3Np
+dW0sIE1JVCBHZW5lcmF0aXZlIEFJOiAgDQpTaGFwaW5nIHRoZSBGdXR1cmUsIG9uIE5vdmVtYmVy
+IDI4Pw0KKg0KDQoNClllcw0KDQoNCk5vDQoNCg0KQXJlIHlvdSBpbnRlcmVzdGVkIGluIGF0dGVu
+ZGluZyB0aGUgR2VuZXJhdGl2ZSBBSSArIEVkdWNhdGlvbiBTeW1wb3NpdW0gb24gIA0KTm92ZW1i
+ZXIgMjk/DQoqDQoNCg0KWWVzDQoNCg0KTm8NCg0KDQpBcmUgeW91IGludGVyZXN0ZWQgaW4gYXR0
+ZW5kaW5nIHRoZSBHZW5lcmF0aXZlIEFJICsgSGVhbHRoIFN5bXBvc2l1bSBvbiAgDQpOb3ZlbWJl
+ciAyOT8NCioNCg0KDQpZZXMNCg0KDQpObw0KDQoNCkFyZSB5b3UgaW50ZXJlc3RlZCBpbiBhdHRl
+bmRpbmcgdGhlIEdlbmVyYXRpdmUgQUkgKyBDcmVhdGl2aXR5IFN5bXBvc2l1bSBvbiAgDQpOb3Zl
+bWJlciAzMD8NCioNCg0KDQpZZXMNCg0KDQpObw0KDQoNCkFyZSB5b3UgaW50ZXJlc3RlZCBpbiBh
+dHRlbmRpbmcgdGhlIEdlbmVyYXRpdmUgQUkgKyBJbXBhY3Qgb24gQ29tbWVyY2UgIA0KU3ltcG9z
+aXVtIG9uIE5vdmVtYmVyIDMwPw0KKg0KDQoNClllcw0KDQoNCk5vDQoNCg0K5Yib5bu65oKo6Ieq
+5bex55qEIEdvb2dsZSDooajljZUNCg0K5Li+5oql5rul55So6KGM5Li6DQoNCg0K
+--000000000000c0a019060b55afb7
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><s=
+tyle nonce=3D"Ro9runq5jCMB1HraZDWlcg">@import url(https://fonts.googleapis.=
+com/css?family=3DGoogle+Sans:400,500|Roboto:300,400,400i,500,700&subset=3Dl=
+atin,vietnamese,latin-ext,cyrillic,greek,cyrillic-ext,greek-ext);</style><s=
+tyle nonce=3D"Ro9runq5jCMB1HraZDWlcg">[class=3D"x_body-content-wrapper"] * =
+{white-space: normal !important;}</style></head><body dir=3D"ltr" style=3D"=
+color: #202124;font-family: Roboto,Helvetica,Arial,sans-serif;font-size: 14=
+px; font-weight: 400; line-height: 20px;text-align: start; word-wrap: break=
+-word; margin: 0; padding: 0; height: 100%; width: 100%;"><table border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" style=3D"background-color:rgb(228,58=
+,53);" width=3D"100%" role=3D"presentation"><tbody><tr height=3D"64px"><td =
+style=3D"padding: 0 24px;"><img alt=3D"Google =E8=A1=A8=E5=8D=95" height=3D=
+"26px" style=3D"display: inline-block; margin: 0; vertical-align: middle;" =
+width=3D"143px" src=3D"https://www.gstatic.com/docs/forms/google_forms_logo=
+_lockup_white_2x.png"></td></tr></tbody></table><div class=3D"body-content-=
+wrapper" style=3D"padding: 12px; background-color: rgb(246,246,246);"><div =
+style=3D"margin: 0 auto; max-width: 640px; min-width: 154px;"><div style=3D=
+"border: 1px solid #dadce0; padding: 20px 12px;background-color: #fff; bord=
+er-radius: 8px; margin-bottom: 12px;padding: 20px;"><h1 style=3D"color: #20=
+2124;font-family: Roboto,Helvetica,Arial,sans-serif;font-size: 20px; font-w=
+eight: 400; line-height: 28px;margin: 0 0 12px;">=E6=84=9F=E8=B0=A2=E6=82=
+=A8=E5=A1=AB=E5=86=99=E2=80=9C<a href=3D"https://docs.google.com/forms/d/e/=
+1FAIpQLSfur2H3GJj45bpU1Kq6Bz9P6e5q4pssOT4x820EIhrNdN2u0A/viewform?usp=3Dmai=
+l_form_link" target=3D"_blank" style=3D"white-space: pre-wrap;">Waitlist fo=
+r MIT Generative AI Week<span></span></a>=E2=80=9D</h1>=E4=BB=A5=E4=B8=8B=
+=E6=98=AF=E6=94=B6=E5=88=B0=E7=9A=84=E5=9B=9E=E7=AD=94=E3=80=82</div><div s=
+tyle=3D"border-bottom: 1px solid #dadce0; border-left: 1px solid #dadce0; b=
+order-right: 1px solid #dadce0; border-top: 8px solid rgb(228,58,53); paddi=
+ng: 20px;background-color: #fff; border-radius: 8px; margin-bottom: 12px;">=
+<h1 dir=3D"ltr" style=3D"font-family: Roboto,Helvetica,Arial,sans-serif;fon=
+t-size: 32px; font-weight: 400; line-height: 42px;white-space: pre-wrap;mar=
+gin: 0 0 12px;">Waitlist for MIT Generative AI Week<span></span></h1><div s=
+tyle=3D"white-space: pre-wrap;margin-bottom: 12px;">Complete this form to j=
+oin the waitlist for MIT Generative AI Week. You will be contacted if a sea=
+t becomes available.<br></div></div><div style=3D"border: 1px solid #dadce0=
+; padding: 20px 12px;background-color: #fff; border-radius: 8px; margin-bot=
+tom: 12px;margin-bottom: 12px;"><div style=3D"padding: 0 12px;"><h2 dir=3D"=
+auto" style=3D"color: #202124;font-family: Roboto,Helvetica,Arial,sans-seri=
+f;font-size: 16px; font-weight: 400; line-height: 24px;white-space: pre-wra=
+p;margin: 0 0 16px;">=E7=94=B5=E5=AD=90=E9=82=AE=E4=BB=B6=E5=9C=B0=E5=9D=80=
+<span style=3D"color: #d93025;" aria-label=3D"=E6=AD=A4=E9=97=AE=E9=A2=98=
+=E4=B8=BA=E5=BF=85=E5=A1=AB"> *</span></h2></div><div style=3D"padding: 0 1=
+2px;"><div style=3D"width: 100%;"><div dir=3D"auto" style=3D"white-space: p=
+re-wrap;border-bottom: 1px dotted rgba(0,0,0,0.38);margin: 12px 0 8px; min-=
+height: 20px;display: inline-block; max-width: 100%; min-width: 50%;">jiann=
+an@mit.edu</div></div></div></div><div style=3D"border: 1px solid #dadce0; =
+padding: 20px 12px;background-color: #fff; border-radius: 8px; margin-botto=
+m: 12px;margin-bottom: 12px;"><div style=3D"padding: 0 12px;"><h2 dir=3D"au=
+to" style=3D"color: #202124;font-family: Roboto,Helvetica,Arial,sans-serif;=
+font-size: 16px; font-weight: 400; line-height: 24px;white-space: pre-wrap;=
+margin: 0 0 16px;">First Name<br><span style=3D"color: #d93025;" aria-label=
+=3D"=E6=AD=A4=E9=97=AE=E9=A2=98=E4=B8=BA=E5=BF=85=E5=A1=AB"> *</span></h2><=
+/div><div style=3D"padding: 0 12px;"><div style=3D"width: 100%;"><div dir=
+=3D"auto" style=3D"white-space: pre-wrap;border-bottom: 1px dotted rgba(0,0=
+,0,0.38);margin: 12px 0 8px; min-height: 20px;display: inline-block; max-wi=
+dth: 100%; min-width: 50%;">Jiannan</div></div></div></div><div style=3D"bo=
+rder: 1px solid #dadce0; padding: 20px 12px;background-color: #fff; border-=
+radius: 8px; margin-bottom: 12px;margin-bottom: 12px;"><div style=3D"paddin=
+g: 0 12px;"><h2 dir=3D"auto" style=3D"color: #202124;font-family: Roboto,He=
+lvetica,Arial,sans-serif;font-size: 16px; font-weight: 400; line-height: 24=
+px;white-space: pre-wrap;margin: 0 0 16px;">Last Name<br><span style=3D"col=
+or: #d93025;" aria-label=3D"=E6=AD=A4=E9=97=AE=E9=A2=98=E4=B8=BA=E5=BF=85=
+=E5=A1=AB"> *</span></h2></div><div style=3D"padding: 0 12px;"><div style=
+=3D"width: 100%;"><div dir=3D"auto" style=3D"white-space: pre-wrap;border-b=
+ottom: 1px dotted rgba(0,0,0,0.38);margin: 12px 0 8px; min-height: 20px;dis=
+play: inline-block; max-width: 100%; min-width: 50%;">Cao</div></div></div>=
+</div><div style=3D"border: 1px solid #dadce0; padding: 20px 12px;backgroun=
+d-color: #fff; border-radius: 8px; margin-bottom: 12px;margin-bottom: 12px;=
+"><div style=3D"padding: 0 12px;"><h2 dir=3D"auto" style=3D"color: #202124;=
+font-family: Roboto,Helvetica,Arial,sans-serif;font-size: 16px; font-weight=
+: 400; line-height: 24px;white-space: pre-wrap;margin: 0 0 16px;">MIT Affil=
+iation<br><span style=3D"color: #d93025;" aria-label=3D"=E6=AD=A4=E9=97=AE=
+=E9=A2=98=E4=B8=BA=E5=BF=85=E5=A1=AB"> *</span></h2></div><div style=3D"pad=
+ding: 0 12px;"><div style=3D"margin-top: 16px;"><table style=3D"color: #202=
+124;font-family: Roboto,Helvetica,Arial,sans-serif;font-size: 14px; font-we=
+ight: 400; line-height: 20px;color: #70757a;margin-top: 8px; table-layout: =
+fixed;"><tr><td><div role=3D"radio" aria-checked=3D"false" aria-label=3D"Fr=
+iend of MIT" style=3D"border: solid 2px #9aa0a6; height: 16px; width: 16px;=
+ border-radius: 50%;"></div></td><td style=3D"min-width: 8px;"></td><td sty=
+le=3D"word-break: break-word;">Friend of MIT</td></tr></table></div><div st=
+yle=3D"margin-top: 16px;"><table style=3D"color: #202124;font-family: Robot=
+o,Helvetica,Arial,sans-serif;font-size: 14px; font-weight: 400; line-height=
+: 20px;color: #70757a;margin-top: 8px; table-layout: fixed;"><tr><td><div r=
+ole=3D"radio" aria-checked=3D"false" aria-label=3D"MIT Faculty" style=3D"bo=
+rder: solid 2px #9aa0a6; height: 16px; width: 16px; border-radius: 50%;"></=
+div></td><td style=3D"min-width: 8px;"></td><td style=3D"word-break: break-=
+word;">MIT Faculty</td></tr></table></div><div style=3D"margin-top: 16px;">=
+<table style=3D"color: #202124;font-family: Roboto,Helvetica,Arial,sans-ser=
+if;font-size: 14px; font-weight: 400; line-height: 20px;color: #70757a;marg=
+in-top: 8px; table-layout: fixed;"><tr><td><div role=3D"radio" aria-checked=
+=3D"false" aria-label=3D"MIT Staff" style=3D"border: solid 2px #9aa0a6; hei=
+ght: 16px; width: 16px; border-radius: 50%;"></div></td><td style=3D"min-wi=
+dth: 8px;"></td><td style=3D"word-break: break-word;">MIT Staff</td></tr></=
+table></div><div style=3D"margin-top: 16px;"><table style=3D"color: #202124=
+;font-family: Roboto,Helvetica,Arial,sans-serif;font-size: 14px; font-weigh=
+t: 400; line-height: 20px;margin-top: 8px; table-layout: fixed;"><tr><td><d=
+iv role=3D"radio" aria-checked=3D"true" aria-label=3D"MIT Student" style=3D=
+"border: solid 2px #5f6368; height: 16px; width: 16px; border-radius: 50%;"=
+><div style=3D"background-color: #5f6368; border: solid 5px #5f6368; border=
+-radius: 50%; margin: 3px; height: 0; width: 0;"></div></div></td><td style=
+=3D"min-width: 8px;"></td><td style=3D"word-break: break-word;">MIT Student=
+</td></tr></table></div><div style=3D"margin-top: 16px;"><table style=3D"co=
+lor: #202124;font-family: Roboto,Helvetica,Arial,sans-serif;font-size: 14px=
+; font-weight: 400; line-height: 20px;color: #70757a;margin-top: 8px; table=
+-layout: fixed;"><tr><td><div role=3D"radio" aria-checked=3D"false" aria-la=
+bel=3D"MIT Alum" style=3D"border: solid 2px #9aa0a6; height: 16px; width: 1=
+6px; border-radius: 50%;"></div></td><td style=3D"min-width: 8px;"></td><td=
+ style=3D"word-break: break-word;">MIT Alum</td></tr></table></div></div></=
+div><div style=3D"border: 1px solid #dadce0; padding: 20px 12px;background-=
+color: #fff; border-radius: 8px; margin-bottom: 12px;margin-bottom: 12px;">=
+<div style=3D"padding: 0 12px;"><h2 dir=3D"auto" style=3D"color: #202124;fo=
+nt-family: Roboto,Helvetica,Arial,sans-serif;font-size: 16px; font-weight: =
+400; line-height: 24px;white-space: pre-wrap;margin: 0 0 16px;">MIT Departm=
+ent or Organization/Company<br><span style=3D"color: #d93025;" aria-label=
+=3D"=E6=AD=A4=E9=97=AE=E9=A2=98=E4=B8=BA=E5=BF=85=E5=A1=AB"> *</span></h2><=
+/div><div style=3D"padding: 0 12px;"><div style=3D"width: 100%;"><div dir=
+=3D"auto" style=3D"white-space: pre-wrap;border-bottom: 1px dotted rgba(0,0=
+,0,0.38);margin: 12px 0 8px; min-height: 20px;display: inline-block; max-wi=
+dth: 100%; min-width: 50%;">SDM</div></div></div></div><div style=3D"border=
+: 1px solid #dadce0; padding: 20px 12px;background-color: #fff; border-radi=
+us: 8px; margin-bottom: 12px;margin-bottom: 12px;"><div style=3D"padding: 0=
+ 12px;"><h2 dir=3D"auto" style=3D"color: #202124;font-family: Roboto,Helvet=
+ica,Arial,sans-serif;font-size: 16px; font-weight: 400; line-height: 24px;w=
+hite-space: pre-wrap;margin: 0 0 16px;">Job Title<br><span style=3D"color: =
+#d93025;" aria-label=3D"=E6=AD=A4=E9=97=AE=E9=A2=98=E4=B8=BA=E5=BF=85=E5=A1=
+=AB"> *</span></h2></div><div style=3D"padding: 0 12px;"><div style=3D"widt=
+h: 100%;"><div dir=3D"auto" style=3D"white-space: pre-wrap;border-bottom: 1=
+px dotted rgba(0,0,0,0.38);margin: 12px 0 8px; min-height: 20px;display: in=
+line-block; max-width: 100%; min-width: 50%;">Student</div></div></div></di=
+v><div style=3D"border: 1px solid #dadce0; padding: 20px 12px;background-co=
+lor: #fff; border-radius: 8px; margin-bottom: 12px;margin-bottom: 12px;"><d=
+iv style=3D"padding: 0 12px;"><h2 dir=3D"auto" style=3D"color: #202124;font=
+-family: Roboto,Helvetica,Arial,sans-serif;font-size: 16px; font-weight: 40=
+0; line-height: 24px;white-space: pre-wrap;margin: 0 0 16px;">Are you inter=
+ested in attending the flagship symposium, MIT Generative AI: Shaping the F=
+uture, on November 28?<br><span style=3D"color: #d93025;" aria-label=3D"=E6=
+=AD=A4=E9=97=AE=E9=A2=98=E4=B8=BA=E5=BF=85=E5=A1=AB"> *</span></h2></div><d=
+iv style=3D"padding: 0 12px;"><div style=3D"margin-top: 16px;"><table style=
+=3D"color: #202124;font-family: Roboto,Helvetica,Arial,sans-serif;font-size=
+: 14px; font-weight: 400; line-height: 20px;color: #70757a;margin-top: 8px;=
+ table-layout: fixed;"><tr><td><div role=3D"radio" aria-checked=3D"false" a=
+ria-label=3D"Yes" style=3D"border: solid 2px #9aa0a6; height: 16px; width: =
+16px; border-radius: 50%;"></div></td><td style=3D"min-width: 8px;"></td><t=
+d style=3D"word-break: break-word;">Yes</td></tr></table></div><div style=
+=3D"margin-top: 16px;"><table style=3D"color: #202124;font-family: Roboto,H=
+elvetica,Arial,sans-serif;font-size: 14px; font-weight: 400; line-height: 2=
+0px;margin-top: 8px; table-layout: fixed;"><tr><td><div role=3D"radio" aria=
+-checked=3D"true" aria-label=3D"No" style=3D"border: solid 2px #5f6368; hei=
+ght: 16px; width: 16px; border-radius: 50%;"><div style=3D"background-color=
+: #5f6368; border: solid 5px #5f6368; border-radius: 50%; margin: 3px; heig=
+ht: 0; width: 0;"></div></div></td><td style=3D"min-width: 8px;"></td><td s=
+tyle=3D"word-break: break-word;">No</td></tr></table></div></div></div><div=
+ style=3D"border: 1px solid #dadce0; padding: 20px 12px;background-color: #=
+fff; border-radius: 8px; margin-bottom: 12px;margin-bottom: 12px;"><div sty=
+le=3D"padding: 0 12px;"><h2 dir=3D"auto" style=3D"color: #202124;font-famil=
+y: Roboto,Helvetica,Arial,sans-serif;font-size: 16px; font-weight: 400; lin=
+e-height: 24px;white-space: pre-wrap;margin: 0 0 16px;">Are you interested =
+in attending the Generative AI + Education Symposium on November 29?<br><sp=
+an style=3D"color: #d93025;" aria-label=3D"=E6=AD=A4=E9=97=AE=E9=A2=98=E4=
+=B8=BA=E5=BF=85=E5=A1=AB"> *</span></h2></div><div style=3D"padding: 0 12px=
+;"><div style=3D"margin-top: 16px;"><table style=3D"color: #202124;font-fam=
+ily: Roboto,Helvetica,Arial,sans-serif;font-size: 14px; font-weight: 400; l=
+ine-height: 20px;color: #70757a;margin-top: 8px; table-layout: fixed;"><tr>=
+<td><div role=3D"radio" aria-checked=3D"false" aria-label=3D"Yes" style=3D"=
+border: solid 2px #9aa0a6; height: 16px; width: 16px; border-radius: 50%;">=
+</div></td><td style=3D"min-width: 8px;"></td><td style=3D"word-break: brea=
+k-word;">Yes</td></tr></table></div><div style=3D"margin-top: 16px;"><table=
+ style=3D"color: #202124;font-family: Roboto,Helvetica,Arial,sans-serif;fon=
+t-size: 14px; font-weight: 400; line-height: 20px;margin-top: 8px; table-la=
+yout: fixed;"><tr><td><div role=3D"radio" aria-checked=3D"true" aria-label=
+=3D"No" style=3D"border: solid 2px #5f6368; height: 16px; width: 16px; bord=
+er-radius: 50%;"><div style=3D"background-color: #5f6368; border: solid 5px=
+ #5f6368; border-radius: 50%; margin: 3px; height: 0; width: 0;"></div></di=
+v></td><td style=3D"min-width: 8px;"></td><td style=3D"word-break: break-wo=
+rd;">No</td></tr></table></div></div></div><div style=3D"border: 1px solid =
+#dadce0; padding: 20px 12px;background-color: #fff; border-radius: 8px; mar=
+gin-bottom: 12px;margin-bottom: 12px;"><div style=3D"padding: 0 12px;"><h2 =
+dir=3D"auto" style=3D"color: #202124;font-family: Roboto,Helvetica,Arial,sa=
+ns-serif;font-size: 16px; font-weight: 400; line-height: 24px;white-space: =
+pre-wrap;margin: 0 0 16px;">Are you interested in attending the Generative =
+AI + Health Symposium on November 29?<br><span style=3D"color: #d93025;" ar=
+ia-label=3D"=E6=AD=A4=E9=97=AE=E9=A2=98=E4=B8=BA=E5=BF=85=E5=A1=AB"> *</spa=
+n></h2></div><div style=3D"padding: 0 12px;"><div style=3D"margin-top: 16px=
+;"><table style=3D"color: #202124;font-family: Roboto,Helvetica,Arial,sans-=
+serif;font-size: 14px; font-weight: 400; line-height: 20px;color: #70757a;m=
+argin-top: 8px; table-layout: fixed;"><tr><td><div role=3D"radio" aria-chec=
+ked=3D"false" aria-label=3D"Yes" style=3D"border: solid 2px #9aa0a6; height=
+: 16px; width: 16px; border-radius: 50%;"></div></td><td style=3D"min-width=
+: 8px;"></td><td style=3D"word-break: break-word;">Yes</td></tr></table></d=
+iv><div style=3D"margin-top: 16px;"><table style=3D"color: #202124;font-fam=
+ily: Roboto,Helvetica,Arial,sans-serif;font-size: 14px; font-weight: 400; l=
+ine-height: 20px;margin-top: 8px; table-layout: fixed;"><tr><td><div role=
+=3D"radio" aria-checked=3D"true" aria-label=3D"No" style=3D"border: solid 2=
+px #5f6368; height: 16px; width: 16px; border-radius: 50%;"><div style=3D"b=
+ackground-color: #5f6368; border: solid 5px #5f6368; border-radius: 50%; ma=
+rgin: 3px; height: 0; width: 0;"></div></div></td><td style=3D"min-width: 8=
+px;"></td><td style=3D"word-break: break-word;">No</td></tr></table></div><=
+/div></div><div style=3D"border: 1px solid #dadce0; padding: 20px 12px;back=
+ground-color: #fff; border-radius: 8px; margin-bottom: 12px;margin-bottom: =
+12px;"><div style=3D"padding: 0 12px;"><h2 dir=3D"auto" style=3D"color: #20=
+2124;font-family: Roboto,Helvetica,Arial,sans-serif;font-size: 16px; font-w=
+eight: 400; line-height: 24px;white-space: pre-wrap;margin: 0 0 16px;">Are =
+you interested in attending the Generative AI + Creativity Symposium on Nov=
+ember 30?<br><span style=3D"color: #d93025;" aria-label=3D"=E6=AD=A4=E9=97=
+=AE=E9=A2=98=E4=B8=BA=E5=BF=85=E5=A1=AB"> *</span></h2></div><div style=3D"=
+padding: 0 12px;"><div style=3D"margin-top: 16px;"><table style=3D"color: #=
+202124;font-family: Roboto,Helvetica,Arial,sans-serif;font-size: 14px; font=
+-weight: 400; line-height: 20px;margin-top: 8px; table-layout: fixed;"><tr>=
+<td><div role=3D"radio" aria-checked=3D"true" aria-label=3D"Yes" style=3D"b=
+order: solid 2px #5f6368; height: 16px; width: 16px; border-radius: 50%;"><=
+div style=3D"background-color: #5f6368; border: solid 5px #5f6368; border-r=
+adius: 50%; margin: 3px; height: 0; width: 0;"></div></div></td><td style=
+=3D"min-width: 8px;"></td><td style=3D"word-break: break-word;">Yes</td></t=
+r></table></div><div style=3D"margin-top: 16px;"><table style=3D"color: #20=
+2124;font-family: Roboto,Helvetica,Arial,sans-serif;font-size: 14px; font-w=
+eight: 400; line-height: 20px;color: #70757a;margin-top: 8px; table-layout:=
+ fixed;"><tr><td><div role=3D"radio" aria-checked=3D"false" aria-label=3D"N=
+o" style=3D"border: solid 2px #9aa0a6; height: 16px; width: 16px; border-ra=
+dius: 50%;"></div></td><td style=3D"min-width: 8px;"></td><td style=3D"word=
+-break: break-word;">No</td></tr></table></div></div></div><div style=3D"bo=
+rder: 1px solid #dadce0; padding: 20px 12px;background-color: #fff; border-=
+radius: 8px; margin-bottom: 12px;margin-bottom: 12px;"><div style=3D"paddin=
+g: 0 12px;"><h2 dir=3D"auto" style=3D"color: #202124;font-family: Roboto,He=
+lvetica,Arial,sans-serif;font-size: 16px; font-weight: 400; line-height: 24=
+px;white-space: pre-wrap;margin: 0 0 16px;">Are you interested in attending=
+ the Generative AI + Impact on Commerce Symposium on November 30?<br><span =
+style=3D"color: #d93025;" aria-label=3D"=E6=AD=A4=E9=97=AE=E9=A2=98=E4=B8=
+=BA=E5=BF=85=E5=A1=AB"> *</span></h2></div><div style=3D"padding: 0 12px;">=
+<div style=3D"margin-top: 16px;"><table style=3D"color: #202124;font-family=
+: Roboto,Helvetica,Arial,sans-serif;font-size: 14px; font-weight: 400; line=
+-height: 20px;margin-top: 8px; table-layout: fixed;"><tr><td><div role=3D"r=
+adio" aria-checked=3D"true" aria-label=3D"Yes" style=3D"border: solid 2px #=
+5f6368; height: 16px; width: 16px; border-radius: 50%;"><div style=3D"backg=
+round-color: #5f6368; border: solid 5px #5f6368; border-radius: 50%; margin=
+: 3px; height: 0; width: 0;"></div></div></td><td style=3D"min-width: 8px;"=
+></td><td style=3D"word-break: break-word;">Yes</td></tr></table></div><div=
+ style=3D"margin-top: 16px;"><table style=3D"color: #202124;font-family: Ro=
+boto,Helvetica,Arial,sans-serif;font-size: 14px; font-weight: 400; line-hei=
+ght: 20px;color: #70757a;margin-top: 8px; table-layout: fixed;"><tr><td><di=
+v role=3D"radio" aria-checked=3D"false" aria-label=3D"No" style=3D"border: =
+solid 2px #9aa0a6; height: 16px; width: 16px; border-radius: 50%;"></div></=
+td><td style=3D"min-width: 8px;"></td><td style=3D"word-break: break-word;"=
+>No</td></tr></table></div></div></div></div><table align=3D"center" cellpa=
+dding=3D"0" cellspacing=3D"0" style=3D"max-width: 672px; min-width: 154px; =
+border-collapse: separate; border-spacing: 0 0.2em;" width=3D"100%" role=3D=
+"presentation"><tbody><tr height=3D"24px"><td></td></tr><tr><td><a href=3D"=
+https://docs.google.com/forms?usp=3Dmail_form_link" style=3D"color: #424242=
+; font-size: 13px;">=E5=88=9B=E5=BB=BA=E6=82=A8=E8=87=AA=E5=B7=B1=E7=9A=84 =
+Google =E8=A1=A8=E5=8D=95</a></td></tr><tr><td><a href=3D"https://docs.goog=
+le.com/forms/u/0/d/e/1FAIpQLSfur2H3GJj45bpU1Kq6Bz9P6e5q4pssOT4x820EIhrNdN2u=
+0A/reportabuse?source=3Dhttps://docs.google.com/forms/d/e/1FAIpQLSfur2H3GJj=
+45bpU1Kq6Bz9P6e5q4pssOT4x820EIhrNdN2u0A/viewform&amp;usp=3Dmail_receipt_abu=
+se" target=3D"_blank" style=3D"color: #424242; font-size: 13px;">=E4=B8=BE=
+=E6=8A=A5=E6=BB=A5=E7=94=A8=E8=A1=8C=E4=B8=BA</a></td></tr></tbody></table>=
+</div></body></html>=
+
+--000000000000c0a019060b55afb7--

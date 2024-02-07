@@ -1,0 +1,511 @@
+Received: from SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 25 Oct 2023 00:27:06
+ +0000
+Received: from CH2PR15CA0006.namprd15.prod.outlook.com (2603:10b6:610:51::16)
+ by SJ0PR01MB7282.prod.exchangelabs.com (2603:10b6:a03:3f2::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.33; Wed, 25 Oct 2023 00:27:05 +0000
+Received: from DS3PEPF000099DD.namprd04.prod.outlook.com
+ (2603:10b6:610:51:cafe::8c) by CH2PR15CA0006.outlook.office365.com
+ (2603:10b6:610:51::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33 via Frontend
+ Transport; Wed, 25 Oct 2023 00:27:04 +0000
+Authentication-Results: spf=pass (sender IP is 18.7.21.50)
+ smtp.mailfrom=mit.edu; dkim=fail (signature did not verify)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.7.21.50 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.7.21.50; helo=mailman.mit.edu; pr=C
+Received: from mailman.mit.edu (18.7.21.50) by
+ DS3PEPF000099DD.mail.protection.outlook.com (10.167.17.199) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Wed, 25 Oct 2023 00:27:04 +0000
+Received: from mailman.mit.edu (localhost [127.0.0.1])
+	by mailman.mit.edu (8.15.2/8.12.8) with ESMTP id 39P0R2qa921057;
+	Tue, 24 Oct 2023 20:27:03 -0400
+Received: from outgoing-exchange-3.mit.edu (OUTGOING-EXCHANGE-3.MIT.EDU
+ [18.9.28.13])
+ by mailman.mit.edu (8.15.2/8.12.8) with ESMTPS id 39P0R0Dk921053
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <sp-news@MAILMAN.MIT.EDU>; Tue, 24 Oct 2023 20:27:00 -0400
+Received: from w92exedge4.exchange.mit.edu (W92EXEDGE4.EXCHANGE.MIT.EDU
+ [18.7.73.16])
+ by outgoing-exchange-3.mit.edu (8.14.7/8.12.4) with ESMTP id 39P0QxEb021039
+ for <sp-news@PCH.MIT.EDU>; Tue, 24 Oct 2023 20:27:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+ t=1698193620; bh=e4R/1fttzRhpW5+8APZnXczho0/hnEYgv+tpqlbg31c=;
+ h=MIME-Version:From:Date:Message-ID:Subject:Content-Type;
+ b=UncKEj4jXGHwCp0a8XzKPhfRC447Ex7+Qzj5y3sZ/OatEUGt2kBNjfzeYt4jGuDCM
+ cuWxDxAQLQErGB47Mp/x2Mc+nLVD0BsYvUkNBGlHPgTBPuN3ISjM+Bder/IFOf5WX4
+ FhEzOOwGD4v4OXzFdr8/L91B3Nb4/I5FDxe4eOWHzxZd3qH2DXfAKBbq4k7txfNhnd
+ acqcu3VpdbbDABipj7wk4Ecz1YWDE4uJDlc5SOF80DzJlWH9Yfy1wkpknDmWtzLYiA
+ yLEGpQRpMouJzPC+tXQu9ZpBFrwZxvzqIuURttnjd0I2ZvNkHN2UQqapiGNI+VuwQq
+ nzKZgI9XbJu8g==
+Received: from w92expo28.exchange.mit.edu (18.7.74.34) by
+ w92exedge4.exchange.mit.edu (18.7.73.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 24 Oct 2023 20:26:40 -0400
+Received: from oc11exhyb8.exchange.mit.edu (18.9.1.113) by
+ w92expo28.exchange.mit.edu (18.7.74.34) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Tue, 24 Oct 2023 20:26:58 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
+ by oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Tue, 24 Oct 2023 20:26:58 -0400
+Received: from DS7PR03CA0306.namprd03.prod.outlook.com (2603:10b6:8:2b::14) by
+ LV3PR01MB8461.prod.exchangelabs.com (2603:10b6:408:195::9) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.26; Wed, 25 Oct 2023 00:26:56 +0000
+Received: from CY4PEPF0000EDD0.namprd03.prod.outlook.com
+ (2603:10b6:8:2b:cafe::b6) by DS7PR03CA0306.outlook.office365.com
+ (2603:10b6:8:2b::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.35 via Frontend
+ Transport; Wed, 25 Oct 2023 00:26:56 +0000
+Authentication-Results-Original: spf=pass (sender IP is 18.9.28.11)
+ smtp.mailfrom=mit.edu; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.9.28.11 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.9.28.11; helo=outgoing.mit.edu; pr=C
+Received: from outgoing.mit.edu (18.9.28.11) by
+ CY4PEPF0000EDD0.mail.protection.outlook.com (10.167.241.204) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Wed, 25 Oct 2023 00:26:56 +0000
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com
+ [209.85.208.175]) (authenticated bits=0)
+ (User authenticated as dwang97@ATHENA.MIT.EDU)
+ by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 39P0Qrdh004064
+ (version=TLSv1/SSLv3 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+ Tue, 24 Oct 2023 20:26:54 -0400
+Received: by mail-lj1-f175.google.com with SMTP id
+ 38308e7fff4ca-2c59a4dd14cso11191921fa.2; 
+ Tue, 24 Oct 2023 17:26:54 -0700 (PDT)
+X-Gm-Message-State: AOJu0Yxw+rW2Dzq0+8gEzjIINEQpGC7C7xKhxRfxWCm7vP/gWbodVwpt
+ BrPuFsRWiFwmUd+njPX+i5a+DI7AEFFrAWKEsQc=
+X-Google-Smtp-Source: AGHT+IHIDpgnpAAnBQfPdMkMKe/Xxl76XZqX1rANAgKO50LBb+rPwfB4xi7YkhIi0VtKi6d8a5tTm3s1nUkaXQ3kd10=
+X-Received: by 2002:a19:7015:0:b0:503:7be:c85d with SMTP id
+ h21-20020a197015000000b0050307bec85dmr9523973lfc.35.1698193612865; Tue, 24
+ Oct 2023 17:26:52 -0700 (PDT)
+From: "SP Publicity Chair" <sp-publicity-chair@mit.edu>
+Date: Tue, 24 Oct 2023 20:26:41 -0400
+X-Gmail-Original-Message-ID: <CAD5uLHdG4mSMzHWVCsgiNpWjmD_QNyrKf9t+Jo7+--A59qRLfg@mail.gmail.com>
+Message-ID: <CAD5uLHdG4mSMzHWVCsgiNpWjmD_QNyrKf9t+Jo7+--A59qRLfg@mail.gmail.com>
+To: <sp-news@mit.edu>
+CC: <sp-publicity-chair@mit.edu>
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CY4PEPF0000EDD0:EE_|LV3PR01MB8461:EE_|DS3PEPF000099DD:EE_|SJ0PR01MB7282:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: f34c9550-9049-4273-ef90-08dbd4f11d2d
+X-LD-Processed: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b,ExtAddr
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ QR5vtQjxDn5XRHHNwv5tY8+78W+Qy1LpSMO7VsDq2f1DID3J+jflWv6a3Cw8jhi7R++9Wbo3i6pNo6NA7FYoeyP49Lx9lS7BxgPowvMDNantIJ/7tZvNDjB1g1GxS105vd1xYt4UcuJSdHONVSiIEIZMwNEOu6XvIMQa/p2Co7Y1aZ/odWyxPukV9zLl8msiD+Ha6WaNpmWho9zBah/b1SpXupIO8juGsrQqYKIba53NatI4kivK8XNrzBVIyvMtFcKQShhNGKoExplDwFioC1HkMuOJTrFm7IP1gwu3fTXbDjc89ZgbtIZrvqhm1OBnv50ApJirFqk8/BwMF/1Oo+46P9K6y7DVchu63LPAkdH/cLVGP8/m0RZbjC64IoKEzuaDA+kDCClhvqA3dQfKcghkHNFVYx+/h1CX7USyj8mdkK8y70NRx+mh+m+B1hiuUU6EmgfNewWAUBxPze9GW9lqlKLYGpqBn/chCJVTIn5fXvg+Oy1UzqyBAAlgKWf6P3zKGyDZz2eyyL5z+E+6Le5LdVTPUY05DXI92icHQ34PxuWeQkFNfo9CaUQIqhneau6LRTmiGCd5D7D7MfFg782IuaqGFNpmWYc9KHu0Nf2FV5QagwA6irFiIE/z/zhMReVHiMVbNv2c9xH/18Ys9koThfLzFLqrwhbYoATsAjQBTlwUFxq33+C1KLwXY43NxaJHI/eoMvcGiblTtsRUXzpAlt6jDdpkS83SsPQS2igkXk5RlP+exkeYqXJuLZff
+X-Forefront-Antispam-Report-Untrusted: CIP:18.9.28.11; CTRY:US; LANG:en;
+ SCL:1; SRV:; IPV:CAL; SFV:NSPM; H:outgoing.mit.edu;
+ PTR:outgoing-auth-1.mit.edu; CAT:NONE;
+ SFS:(13230031)(4636009)(376002)(136003)(39860400002)(346002)(396003)(64100799003)(451199024)(1800799009)(966005)(6636002)(478600001)(75432002)(2906002)(9686003)(55446002)(70586007)(356005)(68406010)(786003)(3480700007)(26005)(316002)(336012)(83380400001)(166002)(33964004)(8676002)(66899024)(6666004)(4326008)(34206002)(16799955002)(5660300002)(86362001)(42186006);
+ DIR:OUT; SFP:1102; 
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR01MB8461
+Subject: [SP-News] SP-Anno for Tuesday, October 24th, 2023
+X-BeenThere: sp-news@mit.edu
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: MIT Sidney-Pacific Residents <sp-news.mit.edu>
+List-Unsubscribe: <https://mailman.mit.edu/mailman/options/sp-news>,
+ <mailto:sp-news-request@mit.edu?subject=unsubscribe>
+List-Archive: <https://mailman.mit.edu/mailman/private/sp-news/>
+List-Post: <mailto:sp-news@mit.edu>
+List-Help: <mailto:sp-news-request@mit.edu?subject=help>
+List-Subscribe: <https://mailman.mit.edu/mailman/listinfo/sp-news>,
+ <mailto:sp-news-request@mit.edu?subject=subscribe>
+Content-Type: multipart/mixed; boundary="===============4575588220075933852=="
+Errors-To: sp-news-bounces@mit.edu
+Sender: "SP-News" <sp-news-bounces@mit.edu>
+Return-Path: sp-news-bounces@mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 25 Oct 2023 00:27:04.4813
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ f34c9550-9049-4273-ef90-08dbd4f11d2d
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DS3PEPF000099DD.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DS3PEPF000099DD.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: mitprod.onmicrosoft.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 9bba108e-a2c7-4f8c-07c9-08dbd4f11846
+X-MS-Exchange-Organization-SCL: -1
+X-Microsoft-Antispam: BCL:4;
+X-Forefront-Antispam-Report:
+ CIP:18.7.21.50;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:mailman.mit.edu;PTR:mailman.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2023 00:27:04.0282
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f34c9550-9049-4273-ef90-08dbd4f11d2d
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.21.50];Helo=[mailman.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource: DS3PEPF000099DD.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB7282
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.6551838
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6933.019
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZjR2ZlVuZ25rQWI2MTNkNlc1WHovZzBUU0JJcGplTDhJQlgzQWpBcmtHUmJG?=
+ =?utf-8?B?bTNJNU0xU0pCeW1RRmlwZCtQSW1WVVNNQ3E2QWUvdEVsOWZVdzM4QVZ5Q1Q3?=
+ =?utf-8?B?MXgwcnJJcGVXSVlPZDRJaTVPa0lUVzI0dFlyanJtaVpIR1JwVlFEcHRpWm83?=
+ =?utf-8?B?OVVYUURldnhDcDFreDRnRTAvUy92UTNmSWgzYm81RGIyeHZGcDQ0SnV4c1Na?=
+ =?utf-8?B?V1ViQ3BxdXRacmliYkVxNitnb1RLUitndTdNVnduMHdtYmZ2WmtTWkh5YmZl?=
+ =?utf-8?B?TlpITjJHYkkwOUFFM05nYnpzZTBXMlJacVZxRlZhKy9tbkttaVdHYTVqOWF2?=
+ =?utf-8?B?VkQ1cmtGMmtNb2xScTFmekpRUUZqWU0xOG5pczJNdkNHWklrc0x4SUZpZFlR?=
+ =?utf-8?B?cjZoeENFdE5lTVVDdVRkZEU2SDc5R3NaYkJIY3Z1ZEpaSEo1S2Y2Wlhha3Nr?=
+ =?utf-8?B?ZTMyU3dwYmJpM0R5bjh6ell3U0dYR0E0U0xtYmJ6bmlNUUFIanM0V25haGxw?=
+ =?utf-8?B?bWk3SnRtWHJzTmtvSzgvMGZtVmdhenB0VnhJNnRjbGNGRmZmNUdsMFlVaHdu?=
+ =?utf-8?B?UEd3elVMOTQvK2xhMmZuMVpqVWdrQUkxeDd4ekQ5SUpPSWd3L3BDR21QQUZ2?=
+ =?utf-8?B?NXQ0S0d2dE5QLzRPS3dFQ0hpZzN1bE5nZ1NiSVlnZWR5cHRsay9OMFZWTC95?=
+ =?utf-8?B?Q2x0Z2I3TWpIY3pIa3B3ekZxQmZBVlZqMVhYS2UyeFYxOGxWZUtJVll1RXk3?=
+ =?utf-8?B?MkgzNGUyUUFlelBFS010MXZxK2s4UGdGMmNYb3kvRW9EWnpmOUNwQmtObmNv?=
+ =?utf-8?B?bWVWSmQ1ZVZJTDdXYWJjRXM2WEJWU0NhUGpsdm1qaUtaY0NFc0o3aW9yZ2RY?=
+ =?utf-8?B?eUdUNjlDT0lmbWoySXhkVEU0LzlnUnVQYTEyWGJnc054NTU0OVREVXgwL2Nz?=
+ =?utf-8?B?RGlIS25sSVdLcGszNXJzKzI2d0trSlRRdUFoNnNkcUFnRU5kVEM5WEg2a0xS?=
+ =?utf-8?B?MXIxa0dPTmg5ZHhjaGc0Z0Jzd2NkWlprM21ZQ2tadGJPM2FxVkUrMmNCZmFT?=
+ =?utf-8?B?eGYwaWN4VllSM2x3bll4OUVKdzRvczFJTHA0cUdpLzA5ZWtqWWpDRC9xQnBo?=
+ =?utf-8?B?bXdsZHBzWVBIMmtOMjlpTk94OFdURUdPR2xobWQ3STFKVDBwb0tvQXprZnla?=
+ =?utf-8?B?aTVKMHV6RDdPakQwaHZydGhqdkx1SytCMVd2OVZGR0U5eVJyc21TNkc3NVht?=
+ =?utf-8?B?TUpIUEZyUEhhb21OdGRzbmxOQldlblBkRDN4T21iZjlGQ1ljM2hFdWdtL1gz?=
+ =?utf-8?B?RXlIOEhaOGxiMS94Z1VyQzIxVTFBeE9uZk50bmNKVnh0SUJOSzBLVnZEcVFl?=
+ =?utf-8?B?cHRVYTFkYURPdmI0S3hKQVdnbjloRTVWQnRHcmR0dDh5SDd0amtTZ3ZHdHE4?=
+ =?utf-8?B?Y0RtY3AwL3NhMmo2V3M0M1psSmpOQmtSRnBiUW5zUzB0bEdZeFZQNTFXay9y?=
+ =?utf-8?B?LzVkTmtpeXpNcS9yQ1I2U0d3VTJQSWFBR0ZZN1ZTZCtpQXNkWSs3a09mRTl4?=
+ =?utf-8?B?dDZxNS94OEpMYlZzeFVEMDM1eERvNkh6RDNraWtFQmZSeHJodTRzK2NOTU42?=
+ =?utf-8?B?V0xXTkprN3ltbndacHRDU2JEWXlnb2c4cENJTjQ4U2NFU2Q0M1RmTTh4U1BU?=
+ =?utf-8?B?S2tvZHR1Y2sxZ2p0NXZZNEZlaC9UK2lEcnU2TWIxUnJpYjIzMy96TjBoYUdm?=
+ =?utf-8?B?cWpxbmlSamp3aCsvNmxSbG9xMmFudFBaQ3VuT2tyS0lpdlFPT1ZPNFExd09u?=
+ =?utf-8?B?aERrNUpWbHNWMkJzaUxNNkRoRm5DRW5MOW5ITXdZMXl2dXJHcjJEbXN4WmFr?=
+ =?utf-8?B?RkFHZURFMzVJM3NNYVhKQ2x1bVY5QnVpOVd2YUFRaEhSOEVpRDJleXhZMXcw?=
+ =?utf-8?B?cFdITUhuN3VJeTVxR2txQi82Y2NTbDhNVktKNi9EenYzcWtxWWdkZnhVZ0J4?=
+ =?utf-8?B?Vm5aRFM4SVJJdnU5L003M0VnQmEyQVB4N25tSVpPOXBzcHorSUVWUHRJOGlD?=
+ =?utf-8?B?SGhieSt2aWFCdXFTNUVpMXVhUTU5bHlpQXdqenRLT0xubDhzcVppVG0xVkJv?=
+ =?utf-8?B?dWVMNnJibGJyMjBITU5KYlV2aWdqUUZGOFpPUmRUSDgxaC8zOGJZczhCQUNm?=
+ =?utf-8?B?SlZIVC95MVhUakR0bVNSd3dUTWlUUk1odFMxTW9JMnRDSVJLL2hSeUVLSWl4?=
+ =?utf-8?B?RFduNzA4WVdOczJ0YVVpckRDTU14bUhHVGUyVklCM2tzL2dMN251Qm5xd29w?=
+ =?utf-8?B?bXlSbGpnd3RKN2JSZ083OTJ3TnpNeHpZOVViRm5wVWpiMWp0TEZJWVlMMjBL?=
+ =?utf-8?B?SXlQVW5QejViclBCWEZMS1dtVmZSWjBOd25QNzRpWHYwbVdKZHV0QTVmWHEy?=
+ =?utf-8?B?TEwrZjcvZkREaUJ0VTZhditxNlBDY3VtRnlnNUZFdG11VGdxOG9Nd1MxbWRV?=
+ =?utf-8?B?RkxSQUJIOGUzQWJ6MmNDeUxqYUJFT3UrdU80Y1ZtL1VvTDZwWTVpOFBNSGky?=
+ =?utf-8?B?aUZVK0pWUWJabWYwVkNRejE2ak9OekJpZHFhZXVJNHlrT0FGNmFXTW1ra2dQ?=
+ =?utf-8?B?VU9QZ0Z6YUZoL01wUDBaU0VJZHg2NXpRejNvOERhaW9rZlZuUWxvQy9MWHo1?=
+ =?utf-8?B?cmZ1Y1o2T2pFQ0ppajlTaldmdVl2bU1QMVE9PQ==?=
+MIME-Version: 1.0
+
+--===============4575588220075933852==
+Content-Type: multipart/alternative; boundary="0000000000000e09ce06087f83ce"
+
+--0000000000000e09ce06087f83ce
+Content-Type: text/plain; charset="UTF-8"
+
+SP-Anno for Tuesday, October 24th, 2023 Summary
+
+*SP events and notices:*
+
+Tuesday, Oct 24, 7-9pm:
+
+Painting event </publicity/anno_view.php#id3b1044e97c9d749f123d06ecece91913>
+
+Saturday, Oct 28, 12:30-2:30pm:
+
+SP Taiwanese Brunch
+</publicity/anno_view.php#idf2f3797842024ef85ae0f02b036f4cb9>
+
+Saturday, Oct 28, 5:30pm:
+
+S.A.W Halloween
+</publicity/anno_view.php#idf28cca51f95a81580aec840c8431e36c>
+
+
+SP Events
+
+*1.  Painting event*
+Tuesday, Oct 24, 7-9pm, Seminar Room.
+
+Recurring painting event
+
+
+E-mail: sp-arts-chair@mit.edu
+------------------------------
+
+*2.  SP Taiwanese Brunch*
+Saturday, Oct 28, 12:30-2:30pm, SP Multi-purpose Room.
+
+Welcome to SP Taiwanese Brunch! Enjoy an array of delicious Taiwanese
+dishes prepared by helpers from Sid-Pac and Taiwanese Students.  More...
+<anno_view.php?action=extended&Event_ID=f2f3797842024ef85ae0f02b036f4cb9>
+
+
+E-mail: sp-brunch-chair@mit.edu
+------------------------------
+
+*3.  S.A.W Halloween*
+Saturday, Oct 28, 5:30pm, NW Graduate Dorm.
+
+We, SidPac, Ashdown and Warehouse, aka S.A.W, are holding joint Halloween
+activities together.
+Come and join us to meet friends and celebrate Halloween!
+
+* Pumpkin carving: 5:30 pm to 7 pm on October 28th at Warehouse;
+* Movie night: 7 pm to 9 pm on October 28th at Ashdown, dinner will be
+provided;
+* Costume Crafting: 5 pm to 8 pm on October 31st at Sidney Pacific MP Room.
+
+
+E-mail: sp-social-chair@mit.edu
+------------------------------
+Recurring Events
+
+*1.  Board Game Night*
+Saturday, Oct 28, 7:30-11pm, Seminar room.
+
+Come play board games with fellow SP residents
+Happens every Saturday at 7:30 pm
+Dinner will be provided (please email sp-social-chair@mit.edu for dietary
+requests)
+
+
+E-mail: sp-social-chair@mit.edu
+
+SP-News is a low-volume e-mail list used by the house government to keep
+residents informed of important house activities. We usually send between
+one and two e-mails per week, including the SP-Anno. You can change your
+subscription settings at:
+https://sidpac.mit.edu/secure/user-info/edit_resident.php
+
+--0000000000000e09ce06087f83ce
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><h1>SP-Anno for
+Tuesday, October 24th, 2023<span></span></h1>
+
+<h2>Summary<span></span></h2>
+
+<p class=3D"MsoNormal" style=3D"margin-bottom:12pt"><b>SP events and notice=
+s:</b><span></span></p>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"4" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Tuesday,
+  Oct 24, 7-9pm:<span></span></p>
+  </td>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><a href=3D"/publicity/anno_view.php#id3b1044e97c9d=
+749f123d06ecece91913">Painting
+  event</a><span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Saturday,
+  Oct 28, 12:30-2:30pm:<span></span></p>
+  </td>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><a href=3D"/publicity/anno_view.php#idf2f379784202=
+4ef85ae0f02b036f4cb9">SP
+  Taiwanese Brunch</a><span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Saturday,
+  Oct 28, 5:30pm:<span></span></p>
+  </td>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><a href=3D"/publicity/anno_view.php#idf28cca51f95a=
+81580aec840c8431e36c">S.A.W
+  Halloween</a><span></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class=3D"MsoNormal"><span>&nbsp;</span></p>
+
+<h2>SP Events<span></span></h2>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"3" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><b>1.&nbsp;&nbsp;<a name=3D"id3b1044e97c9d749f123d=
+06ecece91913"></a>Painting event</b><br>
+  Tuesday, Oct 24, 7-9pm, Seminar Room.<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Recurring
+  painting event<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><br>
+  E-mail: <a href=3D"mailto:sp-arts-chair@mit.edu">sp-arts-chair@mit.edu</a=
+><span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt"></td>
+ </tr>
+</tbody></table>
+
+<div class=3D"MsoNormal" align=3D"center" style=3D"text-align:center">
+
+<hr size=3D"2" width=3D"100%" align=3D"center">
+
+</div>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"3" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><b>2.&nbsp;&nbsp;<a name=3D"idf2f3797842024ef85ae0=
+f02b036f4cb9"></a>SP Taiwanese Brunch</b><br>
+  Saturday, Oct 28, 12:30-2:30pm, SP Multi-purpose Room.<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Welcome
+  to SP Taiwanese Brunch! Enjoy an array of delicious Taiwanese dishes prep=
+ared
+  by helpers from Sid-Pac and Taiwanese Students.&nbsp;&nbsp;<a href=3D"ann=
+o_view.php?action=3Dextended&amp;Event_ID=3Df2f3797842024ef85ae0f02b036f4cb=
+9">More...</a><span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><br>
+  E-mail: <a href=3D"mailto:sp-brunch-chair@mit.edu">sp-brunch-chair@mit.ed=
+u</a><span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt"></td>
+ </tr>
+</tbody></table>
+
+<div class=3D"MsoNormal" align=3D"center" style=3D"text-align:center">
+
+<hr size=3D"2" width=3D"100%" align=3D"center">
+
+</div>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"3" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><b>3.&nbsp;&nbsp;<a name=3D"idf28cca51f95a81580aec=
+840c8431e36c"></a>S.A.W Halloween</b><br>
+  Saturday, Oct 28, 5:30pm, NW Graduate Dorm.<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">We,
+  SidPac, Ashdown and Warehouse, aka S.A.W, are holding joint Halloween
+  activities together. <br>
+  Come and join us to meet friends and celebrate Halloween!<br>
+  <br>
+  * Pumpkin carving: 5:30 pm to 7 pm on October 28th at Warehouse;<br>
+  * Movie night: 7 pm to 9 pm on October 28th at Ashdown, dinner will be
+  provided;<br>
+  * Costume Crafting: 5 pm to 8 pm on October 31st at Sidney Pacific MP Roo=
+m.<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><br>
+  E-mail: <a href=3D"mailto:sp-social-chair@mit.edu">sp-social-chair@mit.ed=
+u</a><span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt"></td>
+ </tr>
+</tbody></table>
+
+<div class=3D"MsoNormal" align=3D"center" style=3D"text-align:center">
+
+<hr size=3D"2" width=3D"100%" align=3D"center">
+
+</div>
+
+<h2>Recurring Events<span></span></h2>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"3" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><b>1.&nbsp;&nbsp;<a name=3D"id8dd8ff28be30425f8cf7=
+c75f17bf445f"></a>Board Game Night</b><br>
+  Saturday, Oct 28, 7:30-11pm, Seminar room.<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal">Come
+  play board games with fellow SP residents<br>
+  Happens every Saturday at 7:30 pm<br>
+  Dinner will be provided (please email <a href=3D"mailto:sp-social-chair@m=
+it.edu">sp-social-chair@mit.edu</a>
+  for dietary requests)<span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal"><br>
+  E-mail: <a href=3D"mailto:sp-social-chair@mit.edu">sp-social-chair@mit.ed=
+u</a><span></span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt"></td>
+ </tr>
+</tbody></table><div style=3D"text-align:center"><br></div><span style=3D"t=
+ext-align:center;font-size:13.3333px;font-family:sans-serif">SP-News&nbsp;i=
+s a&nbsp;low-volume&nbsp;e-mail list used by the house government to keep r=
+esidents informed of important house activities. We usually send between on=
+e and two e-mails per week, including the&nbsp;SP-Anno. You can change your=
+ subscription settings at:&nbsp;</span><a href=3D"https://sidpac.mit.edu/se=
+cure/user-info/edit_resident.php" target=3D"_blank" style=3D"text-align:cen=
+ter;font-size:13.3333px;font-family:sans-serif">https://sidpac.mit.edu/secu=
+re/user-info/edit_resident.php</a></div></div></div>
+
+--0000000000000e09ce06087f83ce--
+
+--===============4575588220075933852==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+SP-News is a low-volume e-mail list used by the house government to
+keep residents informed of important house activites. We usually send
+between one and two e-mails per week, including the SP-Anno.
+You can change your subscription settings at:
+https://s-p.mit.edu/myacct/resident_edit_entry.php
+
+--===============4575588220075933852==--

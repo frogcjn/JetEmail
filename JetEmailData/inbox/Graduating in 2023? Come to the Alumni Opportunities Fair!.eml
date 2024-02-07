@@ -1,0 +1,1269 @@
+Received: from DM6PR01MB3947.prod.exchangelabs.com (2603:10b6:5:91::28) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Mon, 17 Apr 2023 15:02:19
+ +0000
+Received: from MW2PR16CA0045.namprd16.prod.outlook.com (2603:10b6:907:1::22)
+ by DM6PR01MB3947.prod.exchangelabs.com (2603:10b6:5:91::28) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.30; Mon, 17 Apr 2023 15:02:17 +0000
+Received: from CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:907:1:cafe::7a) by MW2PR16CA0045.outlook.office365.com
+ (2603:10b6:907:1::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.46 via Frontend
+ Transport; Mon, 17 Apr 2023 15:02:17 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.110)
+ smtp.mailfrom=em2.imodules.com; dkim=pass (signature was verified)
+ header.d=imodules.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ em2.imodules.com discourages use of 18.9.1.110 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.110) by
+ CO1NAM11FT072.mail.protection.outlook.com (10.13.174.106) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6319.19 via Frontend Transport; Mon, 17 Apr 2023 15:02:17 +0000
+Received: from oc11exhyb4.exchange.mit.edu (18.9.1.100) by
+ oc11exhyb5.exchange.mit.edu (18.9.1.110) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Mon, 17 Apr 2023 11:02:03 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
+ by oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Mon, 17 Apr 2023 11:02:03 -0400
+Received: from BN8PR12CA0013.namprd12.prod.outlook.com (2603:10b6:408:60::26)
+ by CH3PR01MB8406.prod.exchangelabs.com (2603:10b6:610:172::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.19; Mon, 17 Apr 2023 15:02:02 +0000
+Received: from BL02EPF000145BB.namprd05.prod.outlook.com
+ (2603:10b6:408:60:cafe::e8) by BN8PR12CA0013.outlook.office365.com
+ (2603:10b6:408:60::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.46 via Frontend
+ Transport; Mon, 17 Apr 2023 15:02:02 +0000
+Authentication-Results-Original: spf=pass (sender IP is 167.89.106.17)
+ smtp.mailfrom=em2.imodules.com; dkim=pass (signature was verified)
+ header.d=imodules.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=105
+Received-SPF: Pass (protection.outlook.com: domain of em2.imodules.com
+ designates 167.89.106.17 as permitted sender)
+ receiver=protection.outlook.com; client-ip=167.89.106.17;
+ helo=o33.em.alum.mit.edu; pr=C
+Received: from o33.em.alum.mit.edu (167.89.106.17) by
+ BL02EPF000145BB.mail.protection.outlook.com (10.167.241.211) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.14 via Frontend Transport; Mon, 17 Apr 2023 15:02:01 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=imodules.com;
+	h=content-type:from:mime-version:subject:reply-to:to:cc:content-type:
+	from:subject:to;
+	s=s1; bh=ASPSaVNSzmqAQCP8GE9aa4Y26oJoM6NVUBh2CwObgcQ=;
+	b=Zf8eUgCh6T06kH/DrtcZJtdJDSwxNSJiMNUFpFW+o8QpU/eknGkp7CaJH/80ZEHte1b2
+	oDuyWqQ70hmCa/tlJEORm6HdkO8wZ0pdcy2kwh1/kiYW6AzMNXNwxwAvnfXfMGRJlgnamF
+	QieIiGqZtzNVmjGvkWkLfzCif/5cGFpYzR3SXCPX1Q4IOiHf2zWdmYLhjQFq3K+ODadVA7
+	G7ARnof314BO3oXzX5ZO5YuvUsarQy9VcycYcf5vcSlkfJbBPbWHwEFIFX9fVVaR7cOXHN
+	hiz+gClQtCq7HwhxwUd+6i+knaqyFhh+v3dfMnEswbGUlXyvalUV7rSu35+E383A==
+Received: by filterdrecv-9486d7cc7-mwdt9 with SMTP id filterdrecv-9486d7cc7-mwdt9-1-643D5F67-64
+        2023-04-17 15:01:59.269810213 +0000 UTC m=+4721249.139182711
+Received: from MTg5NzM2MA (unknown)
+	by geopod-ismtpd-13 (SG) with HTTP
+	id rcCW8eqySh2gnBEmFwEzHg
+	Mon, 17 Apr 2023 15:01:59.135 +0000 (UTC)
+Content-Type: multipart/alternative; boundary=5c23b44eb69e4b528b74f8d62d288656588646c318867b95a553a860921c
+Date: Mon, 17 Apr 2023 15:02:00 +0000
+From: MIT Sloan Alumni Relations <mitsloanalumnirelations@mit.edu>
+Message-ID: <rcCW8eqySh2gnBEmFwEzHg@geopod-ismtpd-13>
+Subject: Graduating in 2023? Come to the Alumni Opportunities Fair!
+Reply-To: mitsloanalumnirelations@mit.edu
+X-SG-EID: =?us-ascii?Q?AiyjW1QvieA5mEQTA59vvQGuKEkParKD88PR7pbk31VaEsM0x57ZPzefgTWZkX?=
+ =?us-ascii?Q?agC0lTnrggWoVHbDtjyDojDRAjTjuEE+H7hcNLy?=
+ =?us-ascii?Q?t7PnMR5PGxMPmoupCgj3IpmOCepPEpUE4jqRmDp?=
+ =?us-ascii?Q?NBRTpvEpeIfAaRoEFCY59XcE5VzpqQqbwJDbPw6?=
+ =?us-ascii?Q?Dx52Wr=2FAm4H1nrwrkrVR0bxaXns32N7vILtIkfp?=
+ =?us-ascii?Q?MTRvdLZo7shnTsq6piW3NfHUBap3qFWHcnEwJOT?=
+ =?us-ascii?Q?VsceElspympeO230oqdXw=3D=3D?=
+X-SG-ID: =?us-ascii?Q?N2C25iY2uzGMFz6rgvQsb8raWjw0ZPf1VmjsCkspi=2FKnPJPtKWIzzbu3+r3n1K?=
+ =?us-ascii?Q?cweylBpDmIQbs7HuYgsRzpF5ODngVfFR6QgFUmi?=
+ =?us-ascii?Q?90cZkJ4uyH70GVasgizOMDxuYklfsLch0WawyoA?=
+ =?us-ascii?Q?U8lvZQOrDGfzwe+j0BT8Q5Fd5oBG0ZqqCZRrp2P?=
+ =?us-ascii?Q?dOo9TGeUbfVbG=2F+0=2FPaCtAeSKqWxdULAiYJItpi?=
+ =?us-ascii?Q?aA8lDrtZrF5CjRAOK71xyyrvSxZFKGpZe9G1JUu?=
+ =?us-ascii?Q?60lHqSpf=2FMya72KZA0rrywG7Yt13rldfbf9zMwN?=
+ =?us-ascii?Q?vydwpzW+wF1dH8uHX1Mi3yCMYDTFqvQhCus1YnL?=
+ =?us-ascii?Q?j9WoKJMHm7vc32HNYRU6yIef0ywu4jnEnuq=2FC49?=
+ =?us-ascii?Q?wOEZ++tXfz?=
+To: jiannan@mit.edu
+X-Entity-ID: e7nNw3LFKpOiBeFW1AFfsg==
+Return-Path: bounces+1897360-f91c-jiannan=mit.edu@em2.imodules.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BL02EPF000145BB:EE_|CH3PR01MB8406:EE_|CO1NAM11FT072:EE_|DM6PR01MB3947:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9ff6bd49-d122-4f96-2447-08db3f54bc91
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?ogI7Obgj9DUhsH6xqPck0JsG3TCsm8qzRm8qzJ+/ROKVE3NtF1/IQrLmnoKn?=
+ =?us-ascii?Q?YQPrTNbvNMUs56yd09nrXJr/K7+XMe4fff0YSZygAwOF5zUdRrg7z5IGnuHP?=
+ =?us-ascii?Q?O5QLS+XjjFIpf1mOqY7bWiEtPhBOtnUL8MKH3W0YHLYfDwhVSTvwcFmyW5q8?=
+ =?us-ascii?Q?5/lBimrpTbqRiqx3IKZC20ZoXWVc2ueIGHTzoJDKMWAuWPUb6qwFHj6VAu0S?=
+ =?us-ascii?Q?h60rWQuF3EVZlFqU+SMbfQt1Gp4fOkbxwzNj/SKNNwpRg6EuR3fpCRa8hKwZ?=
+ =?us-ascii?Q?q+ZMiWTat7oakGf94hPqMe2/gganDjRCojxbai2NNWcYP427neckOFVQ89Uj?=
+ =?us-ascii?Q?piG33SPjTT0J2fFtRcHeu0gyZPzVAtFugjqHgRHmLGv3jxsqCW1ssRXXKl2d?=
+ =?us-ascii?Q?akUb0r5CifzB7GwvLc8iUE16Bjge/ebJY9dFEQSZAlL7MgvLd7d7ulC/657/?=
+ =?us-ascii?Q?s7jih2v2TXMzfF82o8IOsF3WI0GO6bSHNwSVBJPvJPaiPt9KWceJ0VJo8zxJ?=
+ =?us-ascii?Q?FahTnW4tUz5OHl6gSQYAdBAsqJpY7iguz78nBwhxLFuGeLjRw+vCFgE/3gO8?=
+ =?us-ascii?Q?rCBTo9Xxt8cSS2M8CVGbJh8yRcvyh4FnNZ6DRrPvr+7EqXP3cqHORf7dEeBg?=
+ =?us-ascii?Q?uPmxKo/XMvSaSuaq5XAGluPna9NU9y9t3E0bGLZN8TjSm9cRB/PzIwTBEssm?=
+ =?us-ascii?Q?xDZBnTl1nN1+myHBZNS9XcNqZ2NdkPN2JqMgmr7SBMPy8osggn/vIzX/+pYP?=
+ =?us-ascii?Q?gKLcEA2vgtPFSObWcreNu3iFfc85GHPo/uTcDWT+eZSwXeiH/BU3oUckSWjq?=
+ =?us-ascii?Q?vH54N2o4Zl2ZmwT1JjhrKYmNlWQPbb/bA31UzWRzXH9yAlASUFSkZaOu28w1?=
+ =?us-ascii?Q?PrEW+Le1XeZlMdCZhDnBYoxzIakpjHi1QTKpf2KUCkdbQrxZuMsdHGwv0rZn?=
+ =?us-ascii?Q?OtyFaqS6zxNu96U0VZg6px646QPQSBQBkbpfAzLmCVR22NhWeVkTjTul5eXE?=
+ =?us-ascii?Q?mnmQGzHCpzKO9QSfyK4bEui2jPXtYdPzsXhv36sIo0wYXc6feJn8ot+9EOiu?=
+ =?us-ascii?Q?p8ON0uET9aE1BI5GGArcY6nzDpQvPSRAY2dKGfm2ZGQ6ohkdvxJaEjG6DbAg?=
+ =?us-ascii?Q?bframpQKaq8DUct+N3Fow9XIn8QWutmgNO4+n0W50OYGxZwY9a6aV5VaNT5k?=
+ =?us-ascii?Q?FHWoaQZV7S04JDxXOsfeFLeY7EoneRaLEN73JoT3lV/SZ0y10HGYbI+awJCs?=
+ =?us-ascii?Q?S17fIoMcuQmp3/Zb8yWpCFblKsAalpHM3hq82AjzAf9IuSp39PRZOvv+mVsM?=
+ =?us-ascii?Q?y7whimVTmy4zkZMhYrtWfI1bdNteaNWgc/CaF29pWE0Me3eWfaVUH0kDQ7iD?=
+ =?us-ascii?Q?sNt0k8c=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:167.89.106.17;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:o33.em.alum.mit.edu;PTR:o33.em.alum.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR01MB8406
+X-OrganizationHeadersPreserved: CH3PR01MB8406.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb4.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb4.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb5.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 17 Apr 2023 15:02:17.6488
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 9ff6bd49-d122-4f96-2447-08db3f54bc91
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted:
+ CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1NAM11FT072.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL02EPF000145BB.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 812c1f92-ccb1-4a2d-d897-08db3f54b375
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.110;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb5.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2023 15:02:17.4301
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ff6bd49-d122-4f96-2447-08db3f54bc91
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.110];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL02EPF000145BB.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB3947
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.3184211
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6319.019
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?d2hubEprdnBZS0JpL3pZSVl0eXJydVkyNTF6N2U4UVNPTmY4L3htd04zWDhR?=
+ =?utf-8?B?cE0rTG4zS1VmU05VRGtqRkx5SGgyRmpXemdOR1lWTWpMVUZiRmkvbVM1eWd2?=
+ =?utf-8?B?ZGFlU01IMkY2cVRuSWNLNzloQ3lGejRQVzZNR0w4NmhmNjNNTUFuc1FoMGM3?=
+ =?utf-8?B?eGk3OTc5TmcyTVNHMTJ3K2dPRkJIRDZJUTNIdGJ5akJnZlZKNVFCOGx4djdp?=
+ =?utf-8?B?L25aQjhuOWx6THliYkhxS0lSY2ErU3YwMXBQSmlaZUpaOEQrc1BKZytxQ3Vj?=
+ =?utf-8?B?NVV3TllGS0cwY21ISzJtT1d4UTZSUzlHNkF1d1g5MjBWSDdrby9WTTQ5T2R2?=
+ =?utf-8?B?WmtqbS95L0NaY3diNCtsVURGTmlGaUdUQ1c1TUZmQ3c1VHg1TVZiK0lUVGgx?=
+ =?utf-8?B?d245UTFrVkpadDlaNVpKejlGbE55dWRlTVI3QUxlaVhpL0dwcFBrOE1RVXJP?=
+ =?utf-8?B?SGdIOW0yMWhzdDYraUFHMmtLS1U3aXNZMlBaZVpvMS91Ty84U3hDWkJaWWNO?=
+ =?utf-8?B?emFOeWhiVnhMZnY4SE1pR05vUDNNd3l0a1lyMVpQQ2N3aUtkbXB4MUhiM0Jj?=
+ =?utf-8?B?NERBVHFmU3pZQVdoSkdlczhQU2VyeThIeHRwOExTMVJwd2t6aElCOTRTVjNw?=
+ =?utf-8?B?RE12UmtHWHJQWGJscjY0WmxBUTVhcFcwUTBJVDRjcDVPbUlnZW5malVRdlJl?=
+ =?utf-8?B?d0YyVHNMMTBvM1hJdysxY2grMWdyaHM1Qjhnam95QnZsWjlLUDNQNUUyR3Vi?=
+ =?utf-8?B?L1ptUFhjMnJjY3pjQXZhRDI1RlNTRFRJNkdDU0RCR0tmZXd3YXRDbUxJRXZv?=
+ =?utf-8?B?ejU3dy9IN0NtT1BpSDlJNHZPV1F4UlR0cFdObThGZnE3UnFvUUhScEVnNkQv?=
+ =?utf-8?B?bFppQVVtL0g4VFRueDdWRElLbHlnNDJrK2ZYdkdiWEFhWFpWcmdrSzIvaTFa?=
+ =?utf-8?B?cTJRQW01OWxsMVlQYm92c0NDdlhCYW5LWmM2UndVODd5V01ZbGJDNTh6dDJp?=
+ =?utf-8?B?b1NRSzJROEF0QjVLZUN5UzA3dTdIb1hEeWtwK0M4OG1ucXRUWlJRSE9ML0Ir?=
+ =?utf-8?B?OFVGN0RrVkE1Z2x0dU9Eakd1NjZlTEFkZDJiakNNNjAwanM3UVBML2xqMk1V?=
+ =?utf-8?B?S01YMXJvVlJtVWM1UloveGQ4VnNXMVhWZU1XQXdPeVZEVWc3UllRdTgyWnJS?=
+ =?utf-8?B?TzNCRHpyVHdlR2xtd3NwMmRyK2RiTFBudHo1YVZsYUUxM25jY0RoanNXSy9S?=
+ =?utf-8?B?NCtka3hHYlNKanBuVzlUaTQrNFhuU1FRZDY1eDlZUld2Y0ZRSVRoZnVJVmZ0?=
+ =?utf-8?B?T2NFNFpBcGZzQW5pWlpSZks3TUFNSlZSa0lBTEtVYklGV3l3S0ZaOXZGWHF2?=
+ =?utf-8?B?d0V2WWh5Rmd3Yy9rOFhIZjhScWNVQTFFL0M2MVZ5dEdnSHhBczkrTGk1V25O?=
+ =?utf-8?B?anpXSWRoVjFnMlFGR2wxQzhGcExHZE1Db0Y4MmlXdTV6cGhoVHg5WGpjM3Mr?=
+ =?utf-8?B?UEJlLzVzTTZhMUFGQkFuMkVPRDExYzFtUDlpMHZ2Y2dlbEwveG5JTjI4REEz?=
+ =?utf-8?B?TWZmY01LQXVPc1NveXhKS2cwaEorZDVjaUJtUXBhTk9zaEVzNmNlK0ZrMXdk?=
+ =?utf-8?B?eW9DNXVaU2VqOGpldFR3WGNsbzIrNkpqWm5KUWJrWllycmtLMjFkS0lUTnhR?=
+ =?utf-8?B?NWpFTEI4KzNqdlVWdDZwd0pVRlpOYy9DMkZ6TEk4UGNMdmpCRVNmQVh0bGUz?=
+ =?utf-8?B?dWY2eTQ2eEp2V3dmNDdvN05TdmpTTzlRaitGYTVlSTNhc2Y5OGlOWFFSWGZ0?=
+ =?utf-8?B?b2VHaDdlczdRRG1rT3hGZjFLR1hEWGVIRER4MWUrYW5QM25YWW5NM082VXdL?=
+ =?utf-8?B?cExNOU1SV3BOWjNzWDB5OG4wcEd6U3JPZ1JCRzBJcXE1M0xXWWNuTlQ4am9T?=
+ =?utf-8?B?RU05RHFJdjFNUGh4ek1qdEd2MXlGMFJJZHRVMHNHdFNlTkZHTXVJb0g3cmll?=
+ =?utf-8?Q?FD4B0JKnXn2vwLt0NLx+yQwxyxwBGQ=3D?=
+MIME-Version: 1.0
+
+--5c23b44eb69e4b528b74f8d62d288656588646c318867b95a553a860921c
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+
+Graduating in 2023? Come to the Alumni Opportunities Fair! Come learn about=
+ the exciting resources available to you as you become alumni. ##SENDGRIDOP=
+ENTRACKING##=20
+<a clicktracking=3Doff href=3D"https://mit.imodules.com/controls/email_mark=
+eting/view_in_browser.aspx?sid=3D1314&gid=3D173&sendId=3D4336975&ecatid=3D1=
+141&puid=3Da1476710-60ab-4a41-b17e-51cdcd7cafe0">View in browser</a> https:=
+//mitsloan.mit.edu/=20
+Alumni Opportunities Fair=20
+Graduating in 2023? Come to learn about the exciting resources available to=
+ you as you become alumni: MIT and MIT Sloan Alumni clubs, Sloan 5, MIT Slo=
+an Alumni events and conferences, your first Reunion, life-long career coac=
+hing, and how to stay connected with Sloanies wherever you are. =C2=A0=20
+WHEN=20
+Wednesday, May 3, 2023=20
+11:00 a.m.=E2=80=932:00 p.m.=20
+WHERE=20
+Gruber Court=20
+100 Main Street=20
+Cambridge, MA https://sloangroups.mit.edu/OER/rsvp_boot?id=3D1926563 https:=
+//sloangroups.mit.edu/OER/rsvp_boot?id=3D1926563=20
+Sloan 5 and Class Council Information Sessions=20
+Are you ready to take the next step? We are looking for the next generation=
+ of Sloanies to join the alumni volunteer network as Sloan 5 leaders and Cl=
+ass Council members. Sloan 5 brings together recent graduates of the last f=
+ive classes from across MIT Sloan=E2=80=99s programs to foster sustained co=
+nnectivity amongst alumni and the school. Sloan 5 leaders organize and host=
+ events to provide opportunities to meet other recent MIT Sloan graduates i=
+n more than 20 cities worldwide. Class Council members work to organize the=
+ir classmates in preparation for their first Reunion in 2024. Lunch will be=
+ provided. =C2=A0=20
+=C2=A0=20
+Sloan 5 and Class Council Information Sessions (location for all sessions i=
+s E60-112) =E2=80=A2 https://sloangroups.mit.edu/OER/rsvp_boot?id=3D1926561=
+ =E2=80=A2 https://sloangroups.mit.edu/OER/rsvp_boot?id=3D1926562 =E2=80=A2=
+ https://sloangroups.mit.edu/OER/rsvp_boot?id=3D1926573=20
+=C2=A0=20
+If you have any questions,  mailto:mitsloanalumnirelations@mit.edu . =C2=A0
+ https://mitsloan.mit.edu/alumni#social-hub http://alum.mit.edu/myaccount h=
+ttps://giving.mit.edu/sloan/?utm_source=3Dimodules-footer&utm_medium=3Demai=
+l&utm_campaign=3DSloan23-general https://giving.mit.edu/sloan/?utm_source=
+=3Dimodules-footer&utm_medium=3Demail&utm_campaign=3DSloan23-general=20
+MIT Sloan School of Management=20
+Office of External Relations=20
+77 Massachusetts Avenue, E60-200=20
+Cambridge, MA 02139 https://mitsloan.mit.edu/alumni#tour-welcome=20
+https://mit.imodules.com?sid=3D1314&gid=3D173&pgid=3D37&cid=3D51&sendId=3D4=
+336975&ecatid=3D1141&puid=3Da1476710-60ab-4a41-b17e-51cdcd7cafe0=20=
+
+--5c23b44eb69e4b528b74f8d62d288656588646c318867b95a553a860921c
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=utf-8
+
+<!DOCTYPE html><html lang=3D"en" xmlns=3D"http://www.w3.org/1999/xhtml" xml=
+ns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com=
+:office:office"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+<meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1.=
+0">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+<meta name=3D"x-apple-disable-message-reformatting">
+<meta name=3D"format-detection" content=3D"telephone=3Dno">
+<title>Graduating in 2023? Come to the Alumni Opportunities Fair!</title>
+
+
+<style type=3D"text/css">@import url("https://imodglobal.blob.core.windows.=
+net/fonts/fonts.css");</style>
+<!--[if gte mso 16]>
+<xml>
+<o:OfficeDocumentSettings>
+<o:AllowPNG/>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+<style>
+html,body,table,tbody,tr,td,div,p,ul,ol,li,h1,h2,h3,h4,h5,h6 {
+margin: 0;
+padding: 0;
+}
+
+body {
+-ms-text-size-adjust: 100%;
+-webkit-text-size-adjust: 100%;
+}
+
+table {
+border-spacing: 0;
+mso-table-lspace: 0pt;
+mso-table-rspace: 0pt;
+}
+
+table td {
+border-collapse: collapse;
+}
+
+h1,h2,h3,h4,h5,h6 {
+font-family: Arial;
+}
+
+.ExternalClass {
+width: 100%;
+}
+
+.ExternalClass,
+.ExternalClass p,
+.ExternalClass span,
+.ExternalClass font,
+.ExternalClass td,
+.ExternalClass div {
+line-height: 100%;
+}
+
+/* Outermost container in Outlook.com */
+.ReadMsgBody {
+width: 100%;
+}
+
+img {
+-ms-interpolation-mode: bicubic;
+}
+
+</style>
+
+<style>
+a[x-apple-data-detectors=3Dtrue]{
+color: inherit !important;
+text-decoration: inherit !important;
+}
+
+u + #body a {
+color: inherit;
+text-decoration: inherit !important;
+font-size: inherit;
+font-family: inherit;
+font-weight: inherit;
+line-height: inherit;
+}
+
+a, a:link, .no-detect-local a, .appleLinks a {
+color: inherit !important;
+text-decoration: inherit;
+}
+
+</style>
+
+<style>
+
+.width600 {
+width: 600px;
+max-width: 100%;
+}
+
+@media all and (max-width: 599px) {
+.width600 {
+width: 100% !important;
+}
+}
+
+@media screen and (min-width: 600px) {
+.hide-on-desktop {
+display: none !important;
+}
+}
+
+@media all and (max-width: 599px),
+only screen and (max-device-width: 599px) {
+.main-container {
+width: 100% !important;
+}
+
+.col {
+width: 100%;
+}
+
+.fluid-on-mobile {
+width: 100% !important;
+height: auto !important;
+text-align:center;
+}
+
+.fluid-on-mobile img {
+width: 100% !important;
+}
+
+.hide-on-mobile {
+display:none !important;
+width:0px !important;
+height:0px !important;
+overflow:hidden;
+}
+}
+
+</style>
+
+
+<!--[if gte mso 9]>
+<style>
+
+.col {
+width: 100%;
+}
+
+.width600 {
+width: 600px;
+}
+
+.width600 {
+width: 600px;
+height: auto;
+}
+.width120 {
+width: 120px;
+height: auto;
+}
+
+.hide-on-desktop {
+display: none;
+}
+
+.hide-on-desktop table {
+mso-hide: all;
+}
+
+.hide-on-desktop div {
+mso-hide: all;
+}
+
+.nounderline {text-decoration: none; }
+
+.mso-font-fix-arial { font-family: Arial, sans-serif; }
+.mso-font-fix-comic_sans_ms { font-family: 'Comic Sans MS', sans-serif; }
+.mso-font-fix-courier { font-family: Courier, monospace; }
+.mso-font-fix-georgia { font-family: Georgia, serif; }
+.mso-font-fix-segoe_ui { font-family: 'Segoe UI', sans-serif; }
+.mso-font-fix-tahoma { font-family: Tahoma, sans-serif; }
+.mso-font-fix-times_new_roman { font-family: 'Times New Roman', serif; }
+.mso-font-fix-trebuchet_ms { font-family: 'Trebuchet MS', sans-serif; }
+.mso-font-fix-verdana { font-family: Verdana, sans-serif; }
+
+</style>
+<![endif]-->
+
+</head>
+<body id=3D"body" leftmargin=3D"0" marginwidth=3D"0" topmargin=3D"0" margin=
+height=3D"0" offset=3D"0" style=3D"font-family:Arial, sans-serif; font-size=
+:0px;margin:0;padding:0;background-color:#ffffff;"><div style=3D"display:no=
+ne !important;visibility:hidden;mso-hide:all;font-size:1px;color:#ffffff;li=
+ne-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">Come=
+ learn about the exciting resources available to you as you become alumni.<=
+/div><table style=3D"display:none;width:0px;max-height:0px;overflow:hidden;=
+mso-hide:all;height:0;font-size:0;max-height:0;line-height:0;margin:0 auto;=
+"><td style=3D"display:none;width:0px;max-height:0px;overflow:hidden;mso-hi=
+de:all;height:0;font-size:0;max-height:0;line-height:0;margin:0 auto;"><img=
+ src=3D"http://emclick.imodules.com/wf/open?upn=3Du-2FofFv1d43fok8UNQA60Nsw=
+P6H6Tox1-2BCn-2B2MVi25awtMSNRFSh9ELBMmJZJjQQOGJh8zBqkf-2BhHtl6rJB8ZMoDUeKm-=
+2BocNe5JbUA7RjAueW5QVGYztS0UaKz70j8i3W3Bo0mbLvZGrAaxBsve-2BONocm4An37G1GaO9=
+9kee1br-2Baf-2FKnkpbuE8DwJyyzNyrqfNiZzMOp-2BtToUlU9Mphpmtttv5zEU-2FYxVTswaF=
+-2BVUA3bo5phQ2q0f1rW8sF57STWJaGQvyyvbVGHcd42xQLG9bRy5gNf-2FpcoAx3-2BLLJEuYO=
+-2FrFKPNNlnd0xgZt689OyJHzBlUml3IHNhh3NnlPe6qV4Rgl43SInojtL9Xm9Twrh9ya9mk0Iy=
+4k9RnVsExk3z3xCiviDlwGCwFpeRUH4NGcAoY4QyeQVcKOC5C-2FTNT74m99q41MZe2CVc35awJ=
+uk-2BlQgl-2BTNRAkuRJxVJagjp5a9lZN15jU6Th63TFTh3rjPhyf-2B55oRZKHyBscx1axND1q=
+vf-2BhpdiOgg5lbXSUQ8phatVLNUBqq4U4mSNpTOyNo-3D" alt=3D"" width=3D"1" height=
+=3D"1" border=3D"0" style=3D"height:1px !important;width:1px !important;bor=
+der-width:0 !important;margin-top:0 !important;margin-bottom:0 !important;m=
+argin-right:0 !important;margin-left:0 !important;padding-top:0 !important;=
+padding-bottom:0 !important;padding-right:0 !important;padding-left:0 !impo=
+rtant;"></td></table>
+<style>
+@media screen and (min-width: 600px) {
+.hide-on-desktop {
+display: none;
+}
+}
+@media all and (max-width: 599px) {
+.hide-on-mobile {
+display:none !important;
+width:0px !important;
+height:0px !important;
+overflow:hidden;
+}
+.main-container {
+width: 100% !important;
+}
+.col {
+width: 100%;
+}
+.fluid-on-mobile {
+width: 100% !important;
+height: auto !important;
+text-align:center;
+}
+.fluid-on-mobile img {
+width: 100% !important;
+}
+}
+</style>
+<div style=3D"background-color:#ffffff;">
+<table height=3D"100%" width=3D"100%" cellpadding=3D"0" cellspacing=3D"0" b=
+order=3D"0">
+<tr>
+<td valign=3D"top" align=3D"left">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td width=3D"100%">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" styl=
+e=3D"background-color:#ffffff;">
+<tr>
+<td align=3D"center" width=3D"100%">
+<!--[if gte mso 9]><table width=3D"600" cellpadding=3D"0" cellspacing=3D"0"=
+><tr><td><![endif]-->
+<table class=3D"width600 main-container" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" style=3D"max-width:600px;">
+<tr>
+<td width=3D"100%">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" bgco=
+lor=3D"#ffffff" style=3D"background-color:#ffffff;">
+<tr>
+<td valign=3D"top" style=3D"padding-top:10px;padding-right:20px;padding-lef=
+t:20px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding-bottom:10px;"><div style=3D"font-family=
+:arial;font-size:12px;color:#000000;line-height:24px;text-align:left;"><p s=
+tyle=3D"padding: 0; margin: 0;text-align: center;"><u><span style=3D"color:=
+#a31f34;"><a clicktracking=3D"off" href=3D"https://sloan.alumgroup.mit.edu/=
+redirect.aspx?linkID=3D14388136&amp;sendId=3D4336975&amp;eid=3D1247989&amp;=
+gid=3D173&amp;tokenUrl=3Dhttps%3a%2f%2fmit.imodules.com%2fcontrols%2femail_=
+marketing%2fview_in_browser.aspx%3fsid%3d1314%26gid%3d173%26sendId%3d433697=
+5%26ecatid%3d1141%26puid%3da1476710-60ab-4a41-b17e-51cdcd7cafe0">View in br=
+owser</a></span></u></p></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" bgco=
+lor=3D"#ffffff" style=3D"background-color:#ffffff;">
+<tr>
+<td valign=3D"top">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" align=3D"center"><!--[if gte mso 9]><table width=3D"600"=
+ cellpadding=3D"0" cellspacing=3D"0"><tr><td><![endif]-->
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" style=3D"max-width:=
+100%;" class=3D"fluid-on-mobile img-wrap">
+<tr>
+<td valign=3D"top" align=3D"center"><a href=3D"http://emclick.imodules.com/=
+ls/click?upn=3DuV-2BQ-2BTHC4urxSn6c8AvixodWIzmMi-2Be5jrZuCt0UzAa1YOHtoXq3Nn=
+bkIqPGLHbI08WEsHRyGDLt-2FgdX4hPRjx-2BfWbi6-2FJRpMPp-2Fh56A3-2BushNP7vHb3xli=
+W3ZshFdE3VpAiqVrhC78oAESm3Dkl1g-3D-3DWJee_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2Fx=
+zNMbpA2uTIEp-2FujKJYLdaRnOvQB1YRJi2YlYyE9xCMY0yycpqhBJqds82xfPZXsmQZ9EkkSbj=
+QZf-2BVMdHSLV4WzppPHy5RiuJH-2Fff7U3fGnX4VMOLnk8RbJJWwc-2BfafM6bEQ0keAcTlCxL=
+h-2Fz1p4zLIufehdQwbVwzwfH9s8lLJ16HQJ4GPtKxjvf8yvQcn3xQ4SQ-2FlUnOO2xaWlwOxI9=
+MkoT8G7odOQdZNg-2F54MH6fdGaVFCShVe1-2BHbbRkNksD3GILjmc-2F6Ur1SYM98Vwq7oTCBW=
+DrDm1Itb2L1SftAluyUtq3t2lXzu2W22iImxPndNzMe-2BFe6KaQXtt2qm1stkBi43Ajv8znvaq=
+DBNdlrs3AT1RSixJsJw2Ixp2cqfHGc55WSkke-2BdL4jqnCblHvjs2sNX2K-2B-2B9dW1ddT1zi=
+rkUMHJW-2FkrlFsaOpCeZQs7m5mSWWTGvbZ0t8PNtyhGKEWC2reWz2jHJcZLJQzZLOc41luQZYr=
+Z0ACqaKUi53rRKvvr2T3GevpL4Y-3D" class=3D"imglink" target=3D"_blank">
+<img src=3D"https://mit.imodules.com/s/1314/images/gid173/editor/template_r=
+efresh_2022/revised_banners/118_mitsloan_600x125_b.png" width=3D"600" heigh=
+t=3D"125" alt=3D"MIT Sloan School of Management" border=3D"0" style=3D"disp=
+lay:block;font-size:14px;max-width:100%;height:auto;" class=3D"width600">
+</a>
+</td>
+</tr>
+</table>
+<!--[if gte mso 9]></td></tr></table><![endif]-->
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding-top:20px;padding-left:15px;"><div style=
+=3D"font-family:arial;font-size:24px;color:#444444;line-height:34px;text-al=
+ign:left;"><p style=3D"padding: 0; margin: 0;">Alumni Opportunities Fair<sp=
+an style=3D"color:#000000;"> </span></p></div>
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding:15px;"><div style=3D"font-family:arial;=
+font-size:14px;color:#000000;line-height:20px;text-align:left;"><p style=3D=
+"padding: 0; margin: 0;">Graduating in 2023? Come to learn about the exciti=
+ng resources available to you as you become alumni: MIT and MIT Sloan Alumn=
+i clubs, Sloan 5, MIT Sloan Alumni events and conferences, your first Reuni=
+on, life-long career coaching, and how to stay connected with Sloanies wher=
+ever you are. &nbsp;</p></div>
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" bgco=
+lor=3D"#ffffff" style=3D"background-color:#ffffff;">
+<tr>
+<td valign=3D"top" style=3D"padding-bottom:10px;"><table cellpadding=3D"0" =
+cellspacing=3D"0" border=3D"0" width=3D"100%" class=3D"mcol">
+<tr>
+<td valign=3D"top" style=3D"padding:0;mso-cellspacing:0in;">
+<!--[if gte mso 9]><table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" =
+width=3D"100%"><tr><![endif]-->
+<!--[if gte mso 9]><td valign=3D"top" style=3D"padding:0;width:270px;"><![e=
+ndif]-->
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"45%" class=
+=3D"col" style=3D"float:left;" align=3D"left">
+<tr>
+<td valign=3D"top" width=3D"100%" style=3D"padding:0;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding-right:10px;padding-left:10px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" bgco=
+lor=3D"#ffffff" style=3D"border-bottom:2px solid #a31f34;background-color:#=
+ffffff;">
+<tr>
+<td valign=3D"top" style=3D"padding:10px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top"><div style=3D"font-family:arial;font-size:15px;color:#00=
+0000;line-height:18px;text-align:left;"><p style=3D"padding: 0; margin: 0;t=
+ext-align: center;"><span style=3D"color:#a31f34;"><strong>WHEN</strong></s=
+pan></p></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding:10px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding:5px;"><div style=3D"font-family:arial;f=
+ont-size:14px;color:#000000;line-height:20px;text-align:left;"><p style=3D"=
+padding: 0; margin: 0;text-align: center;"><b>Wednesday, May 3, 2023</b></p=
+><p style=3D"padding: 0; margin: 0;text-align: center;">11:00 a.m.=E2=80=93=
+2:00 p.m.</p></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<!--[if gte mso 9]></td><![endif]--><!--[if gte mso 9]><td valign=3D"top" s=
+tyle=3D"padding:0;width:60px;"><![endif]-->
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"10%" class=
+=3D"col" style=3D"float:left;" align=3D"left">
+<tr>
+<td valign=3D"top" width=3D"100%" style=3D"padding:0;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding:2px;">
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<!--[if gte mso 9]></td><![endif]--><!--[if gte mso 9]><td valign=3D"top" s=
+tyle=3D"padding:0;width:270.00000000000006px;"><![endif]-->
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"45.0000000=
+0000001%" class=3D"col" style=3D"float:left;" align=3D"left">
+<tr>
+<td valign=3D"top" width=3D"100%" style=3D"padding:0;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding-right:10px;padding-left:10px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" bgco=
+lor=3D"#ffffff" style=3D"border-bottom:2px solid #a31f34;background-color:#=
+ffffff;">
+<tr>
+<td valign=3D"top" style=3D"padding:10px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top"><div style=3D"font-family:arial;font-size:15px;color:#00=
+0000;line-height:18px;text-align:left;"><p style=3D"padding: 0; margin: 0;t=
+ext-align: center;"><span style=3D"color:#a31f34;"><strong>WHERE</strong></=
+span></p></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding:10px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding:5px;"><div style=3D"font-family:arial;f=
+ont-size:14px;color:#000000;line-height:20px;text-align:left;"><p style=3D"=
+padding: 0; margin: 0;text-align: center;"><strong>Gruber Court</strong></p=
+><p style=3D"padding: 0; margin: 0;text-align: center;">100 Main Street</p>=
+<p style=3D"padding: 0; margin: 0;text-align: center;">Cambridge, MA</p></d=
+iv>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<!--[if gte mso 9]></td><![endif]-->
+<!--[if gte mso 9]></tr></table><![endif]-->
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" align=3D"center" style=3D"padding-right:10px;padding-bot=
+tom:10px;padding-left:10px;">
+<!--[if !mso]><!-- -->
+<a href=3D"http://emclick.imodules.com/ls/click?upn=3DuV-2BQ-2BTHC4urxSn6c8=
+AvixodWIzmMi-2Be5jrZuCt0UzAa1YOHtoXq3NnbkIqPGLHbI08WEsHRyGDLt-2FgdX4hPRjyjp=
+rkKmZoVYWkiv2U6CTyphJtOjOc9JdkdlhKAGzs9Cy68tMh03lHkpBm3V1Zsm0A-3D-3D1ePQ_GT=
+xtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbpA2uTIEp-2FujKJYLdaRnOvQB1YRJi2YlYyE9xCM=
+Y0yycpqhBJqds82xfPZXsmQZ9EkkSbjQZf-2BVMdHSLV4WzppPHy5RiuJH-2Fff7U3fGnX4VMOL=
+nk8RbJJWwc-2BfafM6bEQ0keAcTlCxLh-2Fz1p4zLIufehdQwbVwzwfH9s8lLJ16HQJ4GPtKxjv=
+f8yvQcn3xQ4SQ-2FlUnOO2xaWlwOxI9MkoT8G7odOQdZNg-2F54MH6fdGaVFCShVe1-2BHbbRkN=
+ksD3GILjmc-2F6Ur1SYM98Vwq7oTCBWDrDm1Itb2L1SftAluyUtq3t2lXzu2W22iImxPndNzMe-=
+2BFe6KaQXtt2qm1stkBi43Ajv8znvaqDBNdlrs3AT1RSixJsJwx1yqnM2XdpLg7ZLimJqrRWBI6=
+vMVa9olV2dtAabjhg-2Bzv1X9Sa7F2N0I-2B6l2sClsNvVLox-2ByDZzyx5MEB-2F4CNsjRryKS=
+V07zOQ-2BRwXDvlsTh2oblSBQKU47pZDehwAitYjLaJgE0F9AV2wigxCL3aw-3D" target=3D"=
+_blank" style=3D"display:inline-block; text-decoration:none;" class=3D"flui=
+d-on-mobile">
+<span>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" bgcolor=3D"#a31f34"=
+ style=3D"background-color:#a31f34;" class=3D"fluid-on-mobile">
+<tr>
+<td align=3D"center" style=3D"padding:10px;">
+<span style=3D"color:#ffffff !important;font-style:normal;font-family:arial=
+;font-size:14px;mso-line-height:exactly;font-weight:normal;line-height:16px=
+;mso-text-raise:1px;letter-spacing: normal;">
+<font style=3D"color:#ffffff;" class=3D"button">
+<strong>Register Today on SloanGroups</strong>
+</font>
+</span>
+</td>
+</tr>
+</table>
+</span>
+</a>
+<!--<![endif]-->
+<div style=3D"display:none; mso-hide: none;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" bgcolor=3D"#a31f34"=
+ style=3D"background-color:#a31f34;" class=3D"fluid-on-mobile">
+<tr>
+<td align=3D"center" style=3D"padding:10px;">
+<a href=3D"http://emclick.imodules.com/ls/click?upn=3DuV-2BQ-2BTHC4urxSn6c8=
+AvixodWIzmMi-2Be5jrZuCt0UzAa1YOHtoXq3NnbkIqPGLHbI08WEsHRyGDLt-2FgdX4hPRj2Xx=
+J7Rx-2B-2Ft3Ws8LK-2B5ereppXtnIE6QOrkw7Nr3igDSs5aIexQtheCqmeqZgzoqpKw-3D-3DE=
+bE0_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbpA2uTIEp-2FujKJYLdaRnOvQB1YRJi2YlY=
+yE9xCMY0yycpqhBJqds82xfPZXsmQZ9EkkSbjQZf-2BVMdHSLV4WzppPHy5RiuJH-2Fff7U3fGn=
+X4VMOLnk8RbJJWwc-2BfafM6bEQ0keAcTlCxLh-2Fz1p4zLIufehdQwbVwzwfH9s8lLJ16HQJ4G=
+PtKxjvf8yvQcn3xQ4SQ-2FlUnOO2xaWlwOxI9MkoT8G7odOQdZNg-2F54MH6fdGaVFCShVe1-2B=
+HbbRkNksD3GILjmc-2F6Ur1SYM98Vwq7oTCBWDrDm1Itb2L1SftAluyUtq3t2lXzu2W22iImxPn=
+dNzMe-2BFe6KaQXtt2qm1stkBi43Ajv8znvaqDBNdlrs3AT1RSixJsJw19E00WzwZ0ZxfZ7Jc1k=
+rHaKBuVromaKeHihnR0-2BENcZRX3WsFhfahXZReUBDZNT1cRvTGKqCF1cTxEOqF4CmelzZHMPA=
+ZyI5S4S-2BbxM99rSgRn9fwYwJVtQ6I-2BibI1Tt0FWIcklsp5C2k-2FtCGthIxY-3D" target=
+=3D"_blank" style=3D"color:#ffffff !important;font-style:normal;font-family=
+:arial;font-size:14px;mso-line-height:exactly;font-weight:normal;line-heigh=
+t:16px;mso-text-raise:1px;letter-spacing: normal;text-decoration:none;text-=
+align:center;">
+<span style=3D"color:#ffffff !important;font-style:normal;font-family:arial=
+;font-size:14px;mso-line-height:exactly;font-weight:normal;line-height:16px=
+;mso-text-raise:1px;letter-spacing: normal;">
+<font style=3D"color:#ffffff;" class=3D"button">
+<strong>Register Today on SloanGroups</strong>
+</font>
+</span>
+</a>
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding-top:20px;padding-left:15px;"><div style=
+=3D"font-family:arial;font-size:24px;color:#444444;line-height:34px;text-al=
+ign:left;"><p style=3D"padding: 0; margin: 0;">Sloan 5 and Class Council In=
+formation Sessions</p></div>
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding-top:10px;padding-right:15px;padding-bot=
+tom:10px;padding-left:15px;"><div style=3D"font-family:arial;font-size:14px=
+;color:#000000;line-height:20px;text-align:left;"><p style=3D"padding: 0; m=
+argin: 0;"><span style=3D"font-size:14px;">Are you ready to take the next s=
+tep? We are looking for the next generation of Sloanies to join the alumni =
+volunteer network as Sloan 5 leaders and Class Council members. Sloan 5 bri=
+ngs together recent graduates of the last five classes from across MIT Sloa=
+n=E2=80=99s programs to foster sustained connectivity amongst alumni and th=
+e school. Sloan 5 leaders organize and host events to provide opportunities=
+ to meet other recent MIT Sloan graduates in more than 20 cities worldwide.=
+ Class Council members work to organize their classmates in preparation for=
+ their first Reunion in 2024. Lunch will be provided. &nbsp;</span></p><p s=
+tyle=3D"padding: 0; margin: 0;">&nbsp;</p><p style=3D"padding: 0; margin: 0=
+;"><strong><span style=3D"font-size:14px;">Sloan 5 and Class Council Inform=
+ation Sessions (location for all sessions is E60-112)</span></strong></p><t=
+able cellpadding=3D"0" cellspacing=3D"0" border=3D"0"><tr><td style=3D"font=
+-family:arial; font-size: 14px; color: #000000; line-height: 20px; mso-line=
+-height: exactly;mso-text-raise: undefinedpx;margin: 0; padding-right:6px;"=
+ align=3D"right" width=3D"26.560835" valign=3D"top">=E2=80=A2</td><td style=
+=3D"font-family:arial; font-size: 14px; color: #000000; line-height: 20px; =
+mso-line-height: exactly;mso-text-raise: undefinedpx;padding: 0; margin: 0;=
+" align=3D"left"><a href=3D"http://emclick.imodules.com/ls/click?upn=3DuV-2=
+BQ-2BTHC4urxSn6c8AvixodWIzmMi-2Be5jrZuCt0UzAa1YOHtoXq3NnbkIqPGLHbI08WEsHRyG=
+DLt-2FgdX4hPRj8wq-2BFHV5PZBKKMRsxzrd-2FCwc0Y8R-2FSZ3vvB6pLnNiEIxSIkFlSbA-2F=
+1XHqZCdnJ-2BtA-3D-3D7_dV_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbpA2uTIEp-2Fuj=
+KJYLdaRnOvQB1YRJi2YlYyE9xCMY0yycpqhBJqds82xfPZXsmQZ9EkkSbjQZf-2BVMdHSLV4Wzp=
+pPHy5RiuJH-2Fff7U3fGnX4VMOLnk8RbJJWwc-2BfafM6bEQ0keAcTlCxLh-2Fz1p4zLIufehdQ=
+wbVwzwfH9s8lLJ16HQJ4GPtKxjvf8yvQcn3xQ4SQ-2FlUnOO2xaWlwOxI9MkoT8G7odOQdZNg-2=
+F54MH6fdGaVFCShVe1-2BHbbRkNksD3GILjmc-2F6Ur1SYM98Vwq7oTCBWDrDm1Itb2L1SftAlu=
+yUtq3t2lXzu2W22iImxPndNzMe-2BFe6KaQXtt2qm1stkBi43Ajv8znvaqDBNdlrs3AT1RSixJs=
+Jw8PQAMiVPTOZ5ceTl9R9rRJ9vcCwxuK33H4pgBkOSs-2BvSnaLjByYuV4xoGdSh8CVwK5OhQny=
+juFjvYeXzQri-2BWSBDogZfuChy4YwmSv1C5RrT4reLCLSvWgGYpZ-2BZugvBW0QOi3H9lg7z7I=
+-2FmVQv69k-3D" style=3D"color: #a31f34 !important;text-decoration: underlin=
+e !important;" target=3D"_blank"><font style=3D" color:#a31f34;">Tuesday, A=
+pril 18, 2023, 12:00=E2=80=931:00 p.m.</font></a></td></tr><tr><td style=3D=
+"font-family:arial; font-size: 14px; color: #000000; line-height: 20px; mso=
+-line-height: exactly;mso-text-raise: undefinedpx;margin: 0; padding-right:=
+6px;" align=3D"right" width=3D"26.560835" valign=3D"top">=E2=80=A2</td><td =
+style=3D"font-family:arial; font-size: 14px; color: #000000; line-height: 2=
+0px; mso-line-height: exactly;mso-text-raise: undefinedpx;padding: 0; margi=
+n: 0;" align=3D"left"><a href=3D"http://emclick.imodules.com/ls/click?upn=
+=3DuV-2BQ-2BTHC4urxSn6c8AvixodWIzmMi-2Be5jrZuCt0UzAa1YOHtoXq3NnbkIqPGLHbI08=
+WEsHRyGDLt-2FgdX4hPRj76jPS6hJ1mC5-2FZDu0ztNHnJVmVZJuGsWyDV-2FtWSeC2pZTCO05y=
+RMhXaBiYGCl9-2FxQ-3D-3D_NRU_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbpA2uTIEp-2=
+FujKJYLdaRnOvQB1YRJi2YlYyE9xCMY0yycpqhBJqds82xfPZXsmQZ9EkkSbjQZf-2BVMdHSLV4=
+WzppPHy5RiuJH-2Fff7U3fGnX4VMOLnk8RbJJWwc-2BfafM6bEQ0keAcTlCxLh-2Fz1p4zLIufe=
+hdQwbVwzwfH9s8lLJ16HQJ4GPtKxjvf8yvQcn3xQ4SQ-2FlUnOO2xaWlwOxI9MkoT8G7odOQdZN=
+g-2F54MH6fdGaVFCShVe1-2BHbbRkNksD3GILjmc-2F6Ur1SYM98Vwq7oTCBWDrDm1Itb2L1Sft=
+AluyUtq3t2lXzu2W22iImxPndNzMe-2BFe6KaQXtt2qm1stkBi43Ajv8znvaqDBNdlrs3AT1RSi=
+xJsJw61GUhTTvQaKFlteID6m-2FmzZ6L5ga4TbjvVyKdY6-2Bxavw8344LtxAyVdO66ar6bOSCv=
+5eIjexRL6vLDT-2BJSiL1UgRdsV-2BYnXbalDq9a6IGYmLHtuuGKTfaKQz0qephopKYFxAl-2Bb=
+A6riR51FACe4jMY-3D" style=3D"color: #a31f34 !important;text-decoration: und=
+erline !important;" target=3D"_blank"><font style=3D" color:#a31f34;">Thurs=
+day, May 4, 2023, 12:00=E2=80=931:00 p.m.</font></a></td></tr><tr><td style=
+=3D"font-family:arial; font-size: 14px; color: #000000; line-height: 20px; =
+mso-line-height: exactly;mso-text-raise: undefinedpx;margin: 0; padding-rig=
+ht:6px;" align=3D"right" width=3D"26.560835" valign=3D"top">=E2=80=A2</td><=
+td style=3D"font-family:arial; font-size: 14px; color: #000000; line-height=
+: 20px; mso-line-height: exactly;mso-text-raise: undefinedpx;padding: 0; ma=
+rgin: 0;" align=3D"left"><a href=3D"http://emclick.imodules.com/ls/click?up=
+n=3DuV-2BQ-2BTHC4urxSn6c8AvixodWIzmMi-2Be5jrZuCt0UzAa1YOHtoXq3NnbkIqPGLHbI0=
+8WEsHRyGDLt-2FgdX4hPRj3fKDy7ku-2FAuBR9p-2BfrrNd8zFniQqXB4FvmVtHSTASxCrMB2QG=
+qupdef0Bx-2FaAEkMQ-3D-3DaL48_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbpA2uTIEp-=
+2FujKJYLdaRnOvQB1YRJi2YlYyE9xCMY0yycpqhBJqds82xfPZXsmQZ9EkkSbjQZf-2BVMdHSLV=
+4WzppPHy5RiuJH-2Fff7U3fGnX4VMOLnk8RbJJWwc-2BfafM6bEQ0keAcTlCxLh-2Fz1p4zLIuf=
+ehdQwbVwzwfH9s8lLJ16HQJ4GPtKxjvf8yvQcn3xQ4SQ-2FlUnOO2xaWlwOxI9MkoT8G7odOQdZ=
+Ng-2F54MH6fdGaVFCShVe1-2BHbbRkNksD3GILjmc-2F6Ur1SYM98Vwq7oTCBWDrDm1Itb2L1Sf=
+tAluyUtq3t2lXzu2W22iImxPndNzMe-2BFe6KaQXtt2qm1stkBi43Ajv8znvaqDBNdlrs3AT1RS=
+ixJsJw36FA2Nr9SNGGv-2BvxhIJZmZALY8Ef-2BWui4Z4neOt9D6WKcc2ZFQdRVrJI-2Fu26Izv=
+RegrmM2BP1EOnKdBohhEHR1eYW8smSxMSPiukwRNs88FVedQHsQzAZ246tvmVtCNfvb8wrLlQad=
+PAuvoyfSlxrA-3D" style=3D"color: #a31f34 !important;text-decoration: underl=
+ine !important;" target=3D"_blank"><font style=3D" color:#a31f34;">Monday, =
+May 8, 2023, 12:00=E2=80=931:00 p.m.</font></a></td></tr></table><p style=
+=3D"padding: 0; margin: 0;">&nbsp;</p><p style=3D"padding: 0; margin: 0;">I=
+f you have any questions, <a href=3D"mailto:mitsloanalumnirelations@mit.edu=
+" style=3D"color: #a31f34 !important;text-decoration: underline !important;=
+"><font style=3D" color:#a31f34;">contact us at mitsloanalumnirelations@mit=
+.edu</font></a>.</p></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" bgco=
+lor=3D"#ffffff" style=3D"background-color:#ffffff;">
+<tr>
+<td valign=3D"top">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td style=3D"padding:10px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td style=3D"font-size:0px;line-height:0;mso-line-height-rule:exactly;">&nb=
+sp;
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding-top:1px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" bgco=
+lor=3D"#000000" style=3D"background-color:#000000;">
+<tr>
+<td valign=3D"top" style=3D"padding-top:20px;padding-right:5px;padding-bott=
+om:20px;padding-left:5px;"><table cellpadding=3D"0" cellspacing=3D"0" borde=
+r=3D"0" width=3D"100%" class=3D"mcol">
+<tr>
+<td valign=3D"top" style=3D"padding:0;mso-cellspacing:0in;">
+<!--[if gte mso 9]><table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" =
+width=3D"100%"><tr><![endif]-->
+<!--[if gte mso 9]><td valign=3D"top" style=3D"padding:0;width:412.99999999=
+99995px;"><![endif]-->
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"69.9999999=
+9999991%" class=3D"col" style=3D"float:left;" align=3D"left">
+<tr>
+<td valign=3D"top" width=3D"100%" style=3D"padding:0;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding-top:10px;padding-bottom:10px;padding-le=
+ft:20px;"><div style=3D"font-family:arial;font-size:16px;color:#000000;line=
+-height:16px;text-align:left;"><span style=3D"font-size: 12px;"><a href=3D"=
+http://emclick.imodules.com/ls/click?upn=3DuV-2BQ-2BTHC4urxSn6c8AvixodWIzmM=
+i-2Be5jrZuCt0UzAa1YOHtoXq3NnbkIqPGLHbI08WEsHRyGDLt-2FgdX4hPRjxWSzt0Hw3DjYTv=
+MkfEFsiMKTJmTIZrV2HMzG7xgUGuutopvC47oHOLWzu9hBN4C9Q-3D-3DPRxx_GTxtydiIV9NdZ=
+tG0G3uZKtoNSwJ7T-2FxzNMbpA2uTIEp-2FujKJYLdaRnOvQB1YRJi2YlYyE9xCMY0yycpqhBJq=
+ds82xfPZXsmQZ9EkkSbjQZf-2BVMdHSLV4WzppPHy5RiuJH-2Fff7U3fGnX4VMOLnk8RbJJWwc-=
+2BfafM6bEQ0keAcTlCxLh-2Fz1p4zLIufehdQwbVwzwfH9s8lLJ16HQJ4GPtKxjvf8yvQcn3xQ4=
+SQ-2FlUnOO2xaWlwOxI9MkoT8G7odOQdZNg-2F54MH6fdGaVFCShVe1-2BHbbRkNksD3GILjmc-=
+2F6Ur1SYM98Vwq7oTCBWDrDm1Itb2L1SftAluyUtq3t2lXzu2W22iImxPndNzMe-2BFe6KaQXtt=
+2qm1stkBi43Ajv8znvaqDBNdlrs3AT1RSixJsJw71GFeaHHnZ-2BdGzJVWBcPF42uKIpr-2FnD6=
+5hUpIgmMap5U4ylUXOIFZ8gsct4hg8-2FJSLBb4NDdyViKQ33-2FZr-2BMdwNug9nlLch7Lj1-2=
+BcidqmzUWeTEeNqDiQ-2BFzqxEpXhQQw7MW-2F5uzcraoVftToDlVZg-3D" style=3D"color:=
+ #ce1126 !important;text-decoration: underline !important;" target=3D"_blan=
+k"><font style=3D" color:#ce1126;"><span style=3D"color:#ffffff;"><u>Connec=
+t with us on Social Media</u></span></font></a></span><br><a href=3D"http:/=
+/emclick.imodules.com/ls/click?upn=3DuV-2BQ-2BTHC4urxSn6c8AvixodWIzmMi-2Be5=
+jrZuCt0UzAa1YOHtoXq3NnbkIqPGLHbI08WEsHRyGDLt-2FgdX4hPRjxTlMYWK6VErpDDxfZwOA=
+oqUus6rRtkfYm64VxiW3nsYlV7AljAoapklin-2By7wckjA-3D-3D_U5Z_GTxtydiIV9NdZtG0G=
+3uZKtoNSwJ7T-2FxzNMbpA2uTIEp-2FujKJYLdaRnOvQB1YRJi2YlYyE9xCMY0yycpqhBJqds82=
+xfPZXsmQZ9EkkSbjQZf-2BVMdHSLV4WzppPHy5RiuJH-2Fff7U3fGnX4VMOLnk8RbJJWwc-2Bfa=
+fM6bEQ0keAcTlCxLh-2Fz1p4zLIufehdQwbVwzwfH9s8lLJ16HQJ4GPtKxjvf8yvQcn3xQ4SQ-2=
+FlUnOO2xaWlwOxI9MkoT8G7odOQdZNg-2F54MH6fdGaVFCShVe1-2BHbbRkNksD3GILjmc-2F6U=
+r1SYM98Vwq7oTCBWDrDm1Itb2L1SftAluyUtq3t2lXzu2W22iImxPndNzMe-2BFe6KaQXtt2qm1=
+stkBi43Ajv8znvaqDBNdlrs3AT1RSixJsJw92-2FzrZOAtzO8LvWHa9wPK2x6gzcG9noJQfkxX-=
+2Bw3LOHmbTGgSNS7z-2FKlH-2FNqC4iX1RokVmrJGdB-2BpyKudNdmDhLX2Ju8RzCLuZm5DjN5a=
+nWT731uhdqnoxTjuOa0KRjdKD-2BJfGVqsRcJg90DaM0aEk-3D" style=3D"color: #ce1126=
+ !important;text-decoration: underline !important;" target=3D"_blank"><font=
+ style=3D" color:#ce1126;"><span style=3D"font-size: 12px; color: #ffffff;"=
+><u>Update your Contact Information</u></span></font></a></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<!--[if gte mso 9]></td><![endif]--><!--[if gte mso 9]><td valign=3D"top" s=
+tyle=3D"padding:0;width:177px;"><![endif]-->
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"30%" class=
+=3D"col" style=3D"float:left;" align=3D"left">
+<tr>
+<td valign=3D"top" width=3D"100%" style=3D"padding:0;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" align=3D"right" style=3D"padding-right:15px;padding-left=
+:15px;">
+<!--[if !mso]><!-- -->
+<a href=3D"http://emclick.imodules.com/ls/click?upn=3DuV-2BQ-2BTHC4urxSn6c8=
+AvixodWIzmMi-2Be5jrZuCt0UzAa1YOHtoXq3NnbkIqPGLHbI08WEsHRyGDLt-2FgdX4hPRj-2F=
+J3XhvVGGFsaT6HwJBdCIIW6RIwjDBFyi6MqwZq9GOxKDgnXC8nh5-2BOyApkaXuURg-3D-3Djsm=
+r_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbpA2uTIEp-2FujKJYLdaRnOvQB1YRJi2YlYyE=
+9xCMY0yycpqhBJqds82xfPZXsmQZ9EkkSbjQZf-2BVMdHSLV4WzppPHy5RiuJH-2Fff7U3fGnX4=
+VMOLnk8RbJJWwc-2BfafM6bEQ0keAcTlCxLh-2Fz1p4zLIufehdQwbVwzwfH9s8lLJ16HQJ4GPt=
+Kxjvf8yvQcn3xQ4SQ-2FlUnOO2xaWlwOxI9MkoT8G7odOQdZNg-2F54MH6fdGaVFCShVe1-2BHb=
+bRkNksD3GILjmc-2F6Ur1SYM98Vwq7oTCBWDrDm1Itb2L1SftAluyUtq3t2lXzu2W22iImxPndN=
+zMe-2BFe6KaQXtt2qm1stkBi43Ajv8znvaqDBNdlrs3AT1RSixJsJw-2B714c1W5qzD5L7AVwJk=
+3b3B55cl82BA-2BFbf-2BsjKJwko2q0nMMOPONmgpQo7OH1n3Lomuuz3aWGTBnwUg8QqwTvDsAk=
+m44rqcgOtSGs0B8wuu3G406z4ioM8lrtF3bGK1ucIsy-2ByiPOF-2B2-2FR4WVZo6o-3D" targ=
+et=3D"_blank" style=3D"display:inline-block; text-decoration:none;" class=
+=3D"fluid-on-mobile">
+<span>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" bgcolor=3D"#ffffff"=
+ style=3D"border:1px solid #58585a;background-color:#ffffff;" class=3D"flui=
+d-on-mobile">
+<tr>
+<td align=3D"center" style=3D"padding-top:12px;padding-right:10px;padding-b=
+ottom:12px;padding-left:10px;" width=3D"123">
+<span style=3D"color:#a31f34 !important;font-style:normal;font-family:arial=
+;font-size:14px;mso-line-height:exactly;font-weight:normal;line-height:14px=
+;letter-spacing: normal;">
+<font style=3D"color:#a31f34;" class=3D"button">
+<span style=3D"font-size:12px;"><strong>GIVE TO MIT SLOAN</strong></span>
+</font>
+</span>
+</td>
+</tr>
+</table>
+</span>
+</a>
+<!--<![endif]-->
+<div style=3D"display:none; mso-hide: none;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" bgcolor=3D"#ffffff"=
+ style=3D"border:1px solid #58585a;background-color:#ffffff;" class=3D"flui=
+d-on-mobile">
+<tr>
+<td align=3D"center" style=3D"padding-top:12px;padding-right:10px;padding-b=
+ottom:12px;padding-left:10px;" width=3D"123">
+<a href=3D"http://emclick.imodules.com/ls/click?upn=3DuV-2BQ-2BTHC4urxSn6c8=
+AvixodWIzmMi-2Be5jrZuCt0UzAa1YOHtoXq3NnbkIqPGLHbI08WEsHRyGDLt-2FgdX4hPRjxJQ=
+HRCQ6ZeM0TUJOhjjMeAfOW2Vx2cyihQvSuIXLW3CzM3WGDQ3oZGtczsc-2Ft2Niw-3D-3Dun3i_=
+GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbpA2uTIEp-2FujKJYLdaRnOvQB1YRJi2YlYyE9x=
+CMY0yycpqhBJqds82xfPZXsmQZ9EkkSbjQZf-2BVMdHSLV4WzppPHy5RiuJH-2Fff7U3fGnX4VM=
+OLnk8RbJJWwc-2BfafM6bEQ0keAcTlCxLh-2Fz1p4zLIufehdQwbVwzwfH9s8lLJ16HQJ4GPtKx=
+jvf8yvQcn3xQ4SQ-2FlUnOO2xaWlwOxI9MkoT8G7odOQdZNg-2F54MH6fdGaVFCShVe1-2BHbbR=
+kNksD3GILjmc-2F6Ur1SYM98Vwq7oTCBWDrDm1Itb2L1SftAluyUtq3t2lXzu2W22iImxPndNzM=
+e-2BFe6KaQXtt2qm1stkBi43Ajv8znvaqDBNdlrs3AT1RSixJsJwxYSgGCBVKpdVN8CVAP2ucs5=
+h1OofsxvHBhb6lV0dnF40TWKGSk8ON5baXvHW1L-2BoVYBK4Dwjlq0w89e9rjYltacEC9YLVpIE=
+TWh4RX8cJkHAwwl66QPJ21-2FAP8YPBr6K77-2FhYiacriINatrNRk0Xpc-3D" target=3D"_b=
+lank" style=3D"color:#a31f34 !important;font-style:normal;font-family:arial=
+;font-size:14px;mso-line-height:exactly;font-weight:normal;line-height:14px=
+;letter-spacing: normal;text-decoration:none;text-align:center;">
+<span style=3D"color:#a31f34 !important;font-style:normal;font-family:arial=
+;font-size:14px;mso-line-height:exactly;font-weight:normal;line-height:14px=
+;letter-spacing: normal;">
+<font style=3D"color:#a31f34;" class=3D"button">
+<span style=3D"font-size:12px;"><strong>GIVE TO MIT SLOAN</strong></span>
+</font>
+</span>
+</a>
+</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<!--[if gte mso 9]></td><![endif]-->
+<!--[if gte mso 9]></tr></table><![endif]-->
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" bgco=
+lor=3D"#545759" style=3D"background-color:#545759;">
+<tr>
+<td valign=3D"top" style=3D"padding-top:15px;padding-right:20px;padding-bot=
+tom:15px;padding-left:20px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" bgco=
+lor=3D"#545759" style=3D"background-color:#545759;">
+<tr>
+<td valign=3D"top" style=3D"padding-top:40px;padding-right:20px;padding-bot=
+tom:40px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top"><table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" =
+width=3D"100%">
+<tr>
+<td valign=3D"top" width=3D"58.03571428571429%">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding-bottom:2px;padding-left:5px;"><div styl=
+e=3D"font-family:arial;font-size:12px;color:#ffffff;line-height:18px;text-a=
+lign:left;"><p style=3D"padding: 0; margin: 0;"><strong>MIT Sloan School of=
+ Management</strong></p><p style=3D"padding: 0; margin: 0;">Office of Exter=
+nal Relations</p><p style=3D"padding: 0; margin: 0;">77 Massachusetts Avenu=
+e, E60-200</p><p style=3D"padding: 0; margin: 0;">Cambridge, MA 02139</p></=
+div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+<td valign=3D"top" width=3D"14.82142857142856%">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding-top:5px;padding-right:5px;padding-botto=
+m:5px;padding-left:18px;">
+</td>
+</tr>
+</table>
+</td>
+<td valign=3D"top" width=3D"27.142857142857142%">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" align=3D"right"><!--[if gte mso 9]><table width=3D"120" =
+cellpadding=3D"0" cellspacing=3D"0"><tr><td><![endif]-->
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" style=3D"max-width:=
+100%;" class=3D"img-wrap">
+<tr>
+<td valign=3D"top" align=3D"right"><a href=3D"http://emclick.imodules.com/l=
+s/click?upn=3DuV-2BQ-2BTHC4urxSn6c8AvixodWIzmMi-2Be5jrZuCt0UzAa1YOHtoXq3Nnb=
+kIqPGLHbI08WEsHRyGDLt-2FgdX4hPRj9i9xaTQOotOAFUOhO6a-2Bhjrp8jxYsp6gLqrheL1Qa=
+4BA8Tp3kcP8AEISPZ3Xu9LGg-3D-3DETKe_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbpA2=
+uTIEp-2FujKJYLdaRnOvQB1YRJi2YlYyE9xCMY0yycpqhBJqds82xfPZXsmQZ9EkkSbjQZf-2BV=
+MdHSLV4WzppPHy5RiuJH-2Fff7U3fGnX4VMOLnk8RbJJWwc-2BfafM6bEQ0keAcTlCxLh-2Fz1p=
+4zLIufehdQwbVwzwfH9s8lLJ16HQJ4GPtKxjvf8yvQcn3xQ4SQ-2FlUnOO2xaWlwOxI9MkoT8G7=
+odOQdZNg-2F54MH6fdGaVFCShVe1-2BHbbRkNksD3GILjmc-2F6Ur1SYM98Vwq7oTCBWDrDm1It=
+b2L1SftAluyUtq3t2lXzu2W22iImxPndNzMe-2BFe6KaQXtt2qm1stkBi43Ajv8znvaqDBNdlrs=
+3AT1RSixJsJwwsnwzl-2FcbOWsU3GJu-2BcWv9ubcf7DWEWXI7V4HQeZXcodi-2BWeO-2FK35pq=
+alF4fm0HcYvJnAezlDN5-2BnnQZzVE8-2BnLgOCrpC-2BFYovvZFbyyxeufbb14rmrAt1fe5xCq=
+dXjo9PeZW2E0y27e2yOcsez58w-3D" class=3D"imglink" target=3D"_blank">
+<img src=3D"https://mit.imodules.com/s/1314/images/gid173/editor/template_r=
+efresh_2022/logos/mitsloan_knockout_120x70.png" width=3D"120" height=3D"70"=
+ alt=3D"MIT Sloan School of Management" border=3D"0" style=3D"display:block=
+;font-size:14px;max-width:100%;height:auto;" class=3D"width120">
+</a>
+</td>
+</tr>
+</table>
+<!--[if gte mso 9]></td></tr></table><![endif]-->
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<!--[if gte mso 9]></td></tr></table><![endif]-->
+</td>
+</tr>
+</table>
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" styl=
+e=3D"background-color:#ffffff;">
+<tr>
+<td align=3D"center" width=3D"100%">
+<!--[if gte mso 9]><table width=3D"600" cellpadding=3D"0" cellspacing=3D"0"=
+><tr><td><![endif]-->
+<table class=3D"width600 main-container" cellpadding=3D"0" cellspacing=3D"0=
+" border=3D"0" width=3D"100%" style=3D"max-width:600px;">
+<tr>
+<td width=3D"100%">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding:5px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%" bgco=
+lor=3D"#ffffff" style=3D"background-color:#ffffff;">
+<tr>
+<td valign=3D"top" style=3D"padding:20px;">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top">
+<table cellpadding=3D"0" cellspacing=3D"0" border=3D"0" width=3D"100%">
+<tr>
+<td valign=3D"top" style=3D"padding:5px;"><div style=3D"font-family:arial;f=
+ont-size:12px;color:#000000;line-height:16px;text-align:left;"><p style=3D"=
+padding: 0; margin: 0;text-align: center;"><a href=3D"http://emclick.imodul=
+es.com/ls/click?upn=3DuV-2BQ-2BTHC4urxSn6c8AvixodWIzmMi-2Be5jrZuCt0UzAa1YOH=
+toXq3NnbkIqPGLHbI08WEsHRyGDLt-2FgdX4hPRj2vBm8LZjik1daiX9O9o9aEo3uTDwzord6dO=
+9FPbpWpknIqQ-2FTQ-2F1MH8SxGQVvUn-2BTSQsvft62h9KpDzava-2FnMlFcKASRZVUd3C5wdV=
+h-2Bi2vuggFOxOWc5AjtTQZUazYo2rQNZWjV0EmaRqv37XZTtd2-2Fc8ZiBYgkct-2BigUrsOFy=
+kEhJxOY1HQgdFRBwkuvyH68g7OR1z0Uy8WHewRQSP0QsjvB-2FBIjrlt2SCbwfB1FxJ1-2Fs31p=
+PBaMt9xTQSeJbU8wtLMkW2XedJiN78C5clTDOh8uJ2h9xzdFJUeBYiwmQmglB_GTxtydiIV9NdZ=
+tG0G3uZKtoNSwJ7T-2FxzNMbpA2uTIEp-2FujKJYLdaRnOvQB1YRJi2YlYyE9xCMY0yycpqhBJq=
+ds82xfPZXsmQZ9EkkSbjQZf-2BVMdHSLV4WzppPHy5RiuJH-2Fff7U3fGnX4VMOLnk8RbJJWwc-=
+2BfafM6bEQ0keAcTlCxLh-2Fz1p4zLIufehdQwbVwzwfH9s8lLJ16HQJ4GPtKxjvf8yvQcn3xQ4=
+SQ-2FlUnOO2xaWlwOxI9MkoT8G7odOQdZNg-2F54MH6fdGaVFCShVe1-2BHbbRkNksD3GILjmc-=
+2F6Ur1SYM98Vwq7oTCBWDrDm1Itb2L1SftAluyUtq3t2lXzu2W22iImxPndNzMe-2BFe6KaQXtt=
+2qm1stkBi43Ajv8znvaqDBNdlrs3AT1RSixJsJw9dXY0SAO5Yn8Uw-2B55YfLbQVk68KBaj7DAf=
+aaqJI2OE-2FuiBGncn17pIDf7VCDYHhkt3mx7koMa2Ofn-2F4uxh-2FGui3jEIx-2BiuEGLl-2F=
+EsutzFT7P8lZywdaLixn6-2FeSGMpiecWfAkNXWv1g1qDo2W5uC-2FQ-3D" style=3D"color:=
+ #a31f34 !important;text-decoration: underline !important;"><font style=3D"=
+ color:#a31f34;">To unsubscribe from this mailing list, click here.</font><=
+/a></p></div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<!--[if gte mso 9]></td></tr></table><![endif]-->
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</div>
+</body>
+</html>=
+
+--5c23b44eb69e4b528b74f8d62d288656588646c318867b95a553a860921c--

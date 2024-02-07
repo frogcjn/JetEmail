@@ -1,0 +1,401 @@
+Received: from CO1PR01MB6581.prod.exchangelabs.com (2603:10b6:303:f4::7) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Mon, 27 Nov 2023 07:08:34
+ +0000
+Received: from DM6PR11CA0014.namprd11.prod.outlook.com (2603:10b6:5:190::27)
+ by CO1PR01MB6581.prod.exchangelabs.com (2603:10b6:303:f4::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.29; Mon, 27 Nov 2023 07:08:33 +0000
+Received: from DS2PEPF0000343D.namprd02.prod.outlook.com
+ (2603:10b6:5:190:cafe::63) by DM6PR11CA0014.outlook.office365.com
+ (2603:10b6:5:190::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.25 via Frontend
+ Transport; Mon, 27 Nov 2023 07:08:33 +0000
+Authentication-Results: spf=softfail (sender IP is 18.7.71.111)
+ smtp.mailfrom=mandrillapp.com; dkim=pass (signature was verified)
+ header.d=parchment.com;dmarc=pass action=none header.from=parchment.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ mandrillapp.com discourages use of 18.7.71.111 as permitted sender)
+Received: from mail.exchange.mit.edu (18.7.71.111) by
+ DS2PEPF0000343D.mail.protection.outlook.com (10.167.18.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Mon, 27 Nov 2023 07:08:32 +0000
+Received: from w92extsm2.exchange.mit.edu (18.7.74.56) by
+ w92exhyb6.exchange.mit.edu (18.7.71.111) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Mon, 27 Nov 2023 02:08:31 -0500
+Received: from oc11exhyb7.exchange.mit.edu (18.9.1.112) by
+ w92extsm2.exchange.mit.edu (18.7.74.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Mon, 27 Nov 2023 02:08:31 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Mon, 27 Nov 2023 02:08:31 -0500
+Received: from CY5PR15CA0166.namprd15.prod.outlook.com (2603:10b6:930:81::14)
+ by BL3PR01MB7114.prod.exchangelabs.com (2603:10b6:208:339::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.27; Mon, 27 Nov 2023 07:08:28 +0000
+Received: from CY4PEPF0000EE3F.namprd03.prod.outlook.com
+ (2603:10b6:930:81:cafe::69) by CY5PR15CA0166.outlook.office365.com
+ (2603:10b6:930:81::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.27 via Frontend
+ Transport; Mon, 27 Nov 2023 07:08:27 +0000
+Authentication-Results-Original: spf=pass (sender IP is 198.2.136.122)
+ smtp.mailfrom=mandrillapp.com; dkim=pass (signature was verified)
+ header.d=parchment.com;dmarc=pass action=none
+ header.from=parchment.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mandrillapp.com
+ designates 198.2.136.122 as permitted sender)
+ receiver=protection.outlook.com; client-ip=198.2.136.122;
+ helo=mandrill.parchment.com; pr=C
+Received: from mandrill.parchment.com (198.2.136.122) by
+ CY4PEPF0000EE3F.mail.protection.outlook.com (10.167.242.19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Mon, 27 Nov 2023 07:08:27 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=parchment.com;
+	s=mandrill; t=1701068907; x=1701329407;
+	i=customerservice@parchment.com;
+	bh=2riqFvFnfZkD1uamxA19QHhq8NTpISAP6TVQz3htFuQ=;
+	h=From:Subject:To:Message-Id:Feedback-ID:Date:MIME-Version:
+	 Content-Type:CC:Date:Subject:From;
+	b=fAfgGvYsvBLCdYzxmUhAw1x0egh7Y4m32YwkQoJhSo7X/CS8u/qql5tUjjSyQ5qIf
+	 2gPf5vFMQNCEilaj9xJ+Sa1fKa8BtlUMgFQlV6bVVHH8U/eCBjdjbzLnk3AXTAUlTj
+	 7+zn0PiX858MffWmpu5/ZjrppTDNXgtPfpqo+seg=
+Received: from pmta11.mandrill.prod.atl01.rsglab.com (localhost [127.0.0.1])
+	by mandrill.parchment.com (Mailchimp) with ESMTP id 4SdxWb0lbtzJKF7GZ
+	for <jiannan@mit.edu>; Mon, 27 Nov 2023 07:08:27 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandrillapp.com;
+ i=@mandrillapp.com; q=dns/txt; s=mandrill; t=1701068907; h=from :
+ subject : to : message-id : date : mime-version : content-type : from
+ : x-mandrill-user : list-unsubscribe;
+ bh=2riqFvFnfZkD1uamxA19QHhq8NTpISAP6TVQz3htFuQ=;
+ b=jqk69rn5bAMemb4xoDljOgM0WS6mkF4+7oD6fMt/HzaOLxTzj31p3rckJS5X0dToqDJRa
+ APsFuoFuS8CNQJ0g1R/1uoMNdIY7f9VH/M1s2w6xB/NlzLMveuaDfucTR9/gdkTR4QmQ6oH
+ qw+zWsE4UkDEiEAjC0IUShY1xIs3AGs=
+From: Parchment <customerservice@parchment.com>
+Subject: =?utf-8?Q?Document=20has=20been=20received?=
+Received: from [34.209.190.195] by mandrillapp.com id 4cb0d853943243c78a04849b454780c7; Mon, 27 Nov 2023 07:08:27 +0000
+X-Mailer: com.docufide.st.tools.reportmaker.MailMessage
+To: jiannan@mit.edu
+Message-ID: <1643196144.22301701068906928.JavaMail.root@mailer-55dcbd578b-xdzx4>
+X-Native-Encoded: 1
+X-Report-Abuse: =?UTF-8?Q?Please=20forward=20a=20copy=20of=20this=20message,=20including=20all=20headers,=20to=20abuse@mandrill.com.=20You=20can=20also=20report=20abuse=20here:=20https://mandrillapp.com/contact/abuse=3Fid=3D30717337.4cb0d853943243c78a04849b454780c7?=
+X-Mandrill-User: md_30717337
+Feedback-ID: 30717337:30717337.20231127:md
+Date: Mon, 27 Nov 2023 07:08:27 +0000
+Content-Type: multipart/alternative; boundary="_av-t-8h6vbTlCQ6v24V35kAIA"
+Return-Path:
+ bounce-md_30717337.6564406b.v1-4cb0d853943243c78a04849b454780c7@mandrillapp.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CY4PEPF0000EE3F:EE_|BL3PR01MB7114:EE_|DS2PEPF0000343D:EE_|CO1PR01MB6581:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8dbd00c9-7dcd-4166-502f-08dbef17aaae
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:3;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?To8jdjBQn/Pfl1YtBgncDazVkB4WFPtfaO+DYpLPt++TbEZlqv/KM4UpLeqZ?=
+ =?us-ascii?Q?pnh65VM/hWFD+rpvQEchhdlN693Sn/AvFdHRmTujYaL9dVOaVYldU8jHr/7s?=
+ =?us-ascii?Q?vqoCUypeBP9dTVnb3B7i3QXaLS8JVF6EEgLtDcDmdwsXStXOOa8srmXcv3qQ?=
+ =?us-ascii?Q?gGBAhJtyWVUzDbpXB8LqpK0aZBiZOzn28ghCObLRQduBe9Wvd4Ye1qFn9BOq?=
+ =?us-ascii?Q?K4CeO2/Hh3MlCEi4oTHbK6DGM3ZCs5FRASBslW/+PmnagrVQ9xzNLeXsZVsq?=
+ =?us-ascii?Q?moapUna8Fg4aZyxxMICYBthm1giy/fKEKn9OsUlDWjl6niqRHjY7CcKfK++M?=
+ =?us-ascii?Q?v5t5LuegnuHHUlXbqdWxsKn6GSgyVp3Urr1EaJKIlItz6HNAN9kt9KE4EuUL?=
+ =?us-ascii?Q?hXeGBcZKg2HNg6trbKvWqMA1PPivItlGJs8j09JufV5nrskR1tOTgLewmGoU?=
+ =?us-ascii?Q?k3NKcqDuNjrTQdga23mqVCRcVf26awTWsuGQd2i9VxXNxHbU89tG1WEpGcgW?=
+ =?us-ascii?Q?seakf39WT4FvxZ7py+gF8weD04aN4WDW/D2f4dWkxxV1mIGi8Nibl2pGHrwS?=
+ =?us-ascii?Q?nIfEWHtJPSnyDcEeGIUxqfNxIZrnLplG6TpiTUZxFWufmHvroT7vmquyNZHW?=
+ =?us-ascii?Q?A05L9isWEOK9FjLfrFwdaton6LDZHzvoUqdVNBKSNK2k1T4xNjxTd4Yszc1p?=
+ =?us-ascii?Q?bQ9NUNJQy1YTG7idtm7/sUf/+LqZJ96FOFvpkGOs51iLeIYmmJOJKrN16GTZ?=
+ =?us-ascii?Q?arvbBAUbdC2S2LXRKt1hBhIvkK+iAjpyqe6oX1Yo6xTmV3xkuhUQ3WgFUKSG?=
+ =?us-ascii?Q?gm/J6qdYKxNAnc9DpvH7Ose13WVNb0MS89UX9V5hHPXzvCD9HZ4Ui/M0kzBr?=
+ =?us-ascii?Q?FW4n13dUWTyjaZ0H6KU7y+pLFLADbaIQBXKc1Ety4qxbvzNXTgS0MND1n5RT?=
+ =?us-ascii?Q?jJMq1vp/9vPPGz7G0ULYg+0J2O4x0ynFz0pbGNcFr6ZAh22n+49kgtn7YvCB?=
+ =?us-ascii?Q?q56UIvE9xzPBGYarxWxFHiQGK+gsH9sz3mWVg2U7FunhyVw/FgaeJOmz/oqx?=
+ =?us-ascii?Q?5UYKeKROSsYDsWJg2OB4yUZxPZDbPttrS01W+6E+D5kgYPYb6PWcihundF5L?=
+ =?us-ascii?Q?bx6zSq290UbGDrUm0jCrB5poQbTOzmXCJCoZwv9gRebMkwSSnf98Q9UoJZ19?=
+ =?us-ascii?Q?ZiIty7ci+T3ylLeQVOZK0WSdVtP7ZHJJwmUP3lNmxq0k5hY2dEl64C+B+Pm+?=
+ =?us-ascii?Q?pVbPmWJkG4wI/0yqHe8SzamDl8ZcGqgxbzW5UMX8CJ7WwuJ35qm0hMWVOxEG?=
+ =?us-ascii?Q?qpR6fG0g8r+b/gRvw1afJKxYEBOv0YotMhQUHJ9qKFY+hO3qH6w1HP8PGK7z?=
+ =?us-ascii?Q?CMbN3cbe82dNmx9ke4Je4VkQBmlAoEjByl13Ffa/r7NCZHWnEtCdfhZMIxZ1?=
+ =?us-ascii?Q?nnRgXnNKQPjwecZUIs/eEv7gHNxOkqFXLZ3QMzRtydltyJIBr1SKsoMo8uKq?=
+ =?us-ascii?Q?M4wazeTnaUWHlvduvoNcTgw3FOwKqeT5f/YDWaKhGhEoR+5JiKE0iN/AqRQ7?=
+ =?us-ascii?Q?QwzC8I5hgqixvnuUZDI2l2xlliYwvdfUMpuryvbDuVB7vvAgDHzgOXuNupr6?=
+ =?us-ascii?Q?ruRjbrSguuqHSgRlQKwtGAOs7Q3n8bQ5KeXBO8ku0WipWEQdYbQGcKZJza7T?=
+ =?us-ascii?Q?CFalztftdPl0tqehIUTgKM7zhNWWFJYM0ZLdw4v7Aj/iDrkJDh3KC7iGpZXw?=
+ =?us-ascii?Q?m693yHceBzB8llnf8xh2pp7TP4t4feonbeCK70uAVHJcwzzEZ5iR/dLNK9Ao?=
+ =?us-ascii?Q?h3iJZsbiNjSMg4aj10NXBVCFGIDqUfTCpL2b13MjwTIvo5p4tcpmSyEdrPr4?=
+ =?us-ascii?Q?vopN+CeU0f9urlcs40M+uMJWtPsn4pDML9QwyzNlgcYxOWd+UDkLy91EoinD?=
+ =?us-ascii?Q?pHFKEnNuVvbnGJ+jFHX2A6tp5u6Gd4GcvZcVCUEg/xHp3ybV/2y3d9SY08QC?=
+ =?us-ascii?Q?iaOh9x9SzrrBsGBstjTUJE8U5nMXkYX8fEvR6h1hornbQ9BvqqTHZf0mk3Ui?=
+ =?us-ascii?Q?mx4UN43sFl8uxVEq1JzqS5JrXXYvWl3DBbPIr3BUuw2Hn/hJc49OnkdSnd+u?=
+ =?us-ascii?Q?CTqksqCtmelP?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:198.2.136.122;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mandrill.parchment.com;PTR:mandrill.parchment.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR01MB7114
+X-OrganizationHeadersPreserved: BL3PR01MB7114.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb7.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb7.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92extsm2.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 27 Nov 2023 07:08:32.9893
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 8dbd00c9-7dcd-4166-502f-08dbef17aaae
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: DS2PEPF0000343D.namprd02.prod.outlook.com
+X-CrossPremisesHeadersFiltered: DS2PEPF0000343D.namprd02.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DS2PEPF0000343D.namprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CY4PEPF0000EE3F.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 0c378f7e-3507-402b-3484-08dbef17a77d
+X-Microsoft-Antispam: BCL:3;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.111;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:w92exhyb6.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 07:08:32.6612
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8dbd00c9-7dcd-4166-502f-08dbef17aaae
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.111];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CY4PEPF0000EE3F.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR01MB6581
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.2564207
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7025.020
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?U1VJNDRCa2V0ejRQSGJqUlZLZHE5eVhORGtkS1Q0bWxreEhobkZVOVlQM00z?=
+ =?utf-8?B?QzhUOXZIZUR5TVFoaEhYNW5JU0hqMnhmcWpzNE5RQ1ByYVg2SDZyeE5NZ2xE?=
+ =?utf-8?B?WFhmaEpqZ21GT0Y3V1llWndsbDNua0lrMnNmUVdUaEhxSlR0UVJ0T0IyRDA5?=
+ =?utf-8?B?TmFhVkhicmJISmZER2VST1lyY2t4UnBRQlZGNCtNMGsrcE1HU0hvUG1VK1Fo?=
+ =?utf-8?B?THA3V1RXYzRhTEFCUGJVVklIdTRaQ0VXZ2NBUXpGd0ZRaFZ5aTJBdlViMHln?=
+ =?utf-8?B?cVZaN1N3VkVncUMyUDArSC90VWtjdVRXcnp1ckczeE5vNTFzZnFMTEM0b1JH?=
+ =?utf-8?B?UHZXcEx6eW5jaEVxWHUyWlh0dHdDakE4V0gxa0NtY2ZMSmxlSHNtN2EvU2N0?=
+ =?utf-8?B?NzBqa1ZEUnU2SVF1SG8xc2RBdUh2T1ByMzk2NFpqRmxMYmVLZWYzVHhtZlYz?=
+ =?utf-8?B?d09QZGM0U1FHK1lEVzVOQ3dFL3pTSjYwWElZKzhIU0NDMVhhM1lUdWJrUUF1?=
+ =?utf-8?B?V2Z3ZnFVK3NhbDhHRVF1MU1VSFBVOS9hSmtlcnJUcFdYRVZiR0l3NHpRaDBS?=
+ =?utf-8?B?MDhJUWxpVlF2WDVGeWhGbEpuWWhWaktQc2dVck13QlgvQVl2dnMwYVlST0ty?=
+ =?utf-8?B?RzNXbC9vR1hBbGl3VWxXaVBSVmt5dnVpV3RObUYvQjhiUTBXWEJmWElSYzlM?=
+ =?utf-8?B?VlRmN3BHVHp0RnRPQjBmM0hSbGhWVXFNRktSZ1M2S0tNQTloR1h3cVJzVG8r?=
+ =?utf-8?B?QXFGKzQ4Z3k1bHphcHFQQ296Y3o2VjdJbXFTNEEyemxINjhvYUIvMWRQd0hi?=
+ =?utf-8?B?UVo0bWVVb2JNZkg4OStrUEJzdWNUUlZoUFRMZk5tTHhhRGhOVzlRV0ljb1lP?=
+ =?utf-8?B?K28vbElvL1AxOWZnYk1TTXIwcUFJam43S2FObHdCcCt0VmtmVktrb09yTTQ4?=
+ =?utf-8?B?ZGhZSGEvZE40VlZkbllHMG1qNllhMGJtckFRRUtrSDltemkyeE1DWmk2UnJY?=
+ =?utf-8?B?ZEpmV2hqNXFvaFBOdGRTcVFZNDFycHlsc0k1a3VXNTI5aHVmRU9ZRGlVcXRr?=
+ =?utf-8?B?YmJVUW81bmc0MDVLNjRzTk90SGphbmIrWW1OMUdCZTBLUWhLaDFhaTJaT3pj?=
+ =?utf-8?B?OVFBRTFFMXVsQ1E0UkQ4ajQ4T2lubi9ONG5CQ28rRUpxQXk0OHFWQVllVm5y?=
+ =?utf-8?B?TjRGcGFOTTYydUQ4V3V3RUhabFIzbHNJYjJwYWxHcHpidzZoNms1OW1VbVZE?=
+ =?utf-8?B?MHVJcXJ6dEhTR0NsTThkcURsbFlrOXZqQU1pSUh5RGF4QkhYU2JEU1JQT2Fp?=
+ =?utf-8?B?cWkyNlc5TzR3Y3pzVGFUK1BkMkxRaEdyNENwQnJub3hRVzU0RnpReE50ZGMy?=
+ =?utf-8?B?V2hwZE5LOVAzb2ErQW51S25LYXFSRFl2MElhMXppbjJwV25sZ1h0Q1RLS2JB?=
+ =?utf-8?B?L1I4VUtUd2lIRUkyY05ORWx5OGRVMlR2TXdJbVQ0b080Wk5ncnM1TkpIREtB?=
+ =?utf-8?B?KzZ6cWhacHBCUjhvWkx1VkRBanZ5Zm53WkdCT0dFNzJHWTZRdWtYdmsrbElJ?=
+ =?utf-8?B?MXV2dThvSEd3STNRMS9HNVk3dUlZVHhkSUJlQXBNZGhHaWZyaDNvZFVsbVI5?=
+ =?utf-8?B?L21TcUdMejNTTHhUL1JOQ2RDZ3llYUlXMVlLVzJuL0htUThYTmpFazBqSzN2?=
+ =?utf-8?B?MGRPVTV5WXRzdGsrRHVVWVdOY3BlT3hwQnNDRWdzK2ZSdDFRbktWSDZoNXIx?=
+ =?utf-8?B?UE9SWmRGN21qTWJRRXlEbGFYOVFsZTc0SmQ1bTlWZ0JJVnlGQ2djTUFQMGdw?=
+ =?utf-8?B?U085SklsbDRiaERqZzQ4RFp0UzFnVUhiK1NSTVdVTk5zMzMzRVZRbUJKTnlZ?=
+ =?utf-8?B?akVzOHY2V1VwSUd3WjFxeTRIbmJQdUZocUJ3bVlxcXdxOElHR09Cc25GaHpj?=
+ =?utf-8?B?Z2p5UStBVXlmM0dZWFBkODBvbUJUb1Y5U09YNXpJTDJlUHdTQ1lrbW1EeVox?=
+ =?utf-8?B?VXozU1pnTlFPN08zSXRucGRMem9lS3B4Ymx5ZFZmVDVRZFJhZ2NaQUNmTWx5?=
+ =?utf-8?B?MmhlQ1dZNTlIclNQUlo0V2VCUzF0QS9TQUE5Y1Nwd3RHOUVtU3diSk84bUhx?=
+ =?utf-8?B?M1hPSzFLY2czMW1ERTYwMlltN0x3SThSMHdjdDJXNlc5VENKWU94VndDMXl1?=
+ =?utf-8?B?eG02R2RERksxT2F6MTBtTlJsSXZ6WUZReHp3UE1EVFFWVjdWaDd0MmJ5VDlt?=
+ =?utf-8?B?ZENoYk5OT01idjBRaXA2bXpCeDdzcktEN1Z0cWp4eFZiQ0NrVldPOExvR0la?=
+ =?utf-8?B?eUZ3T0RwVlZGQWhpRkFNK3NIaVNvNXltVHNabjk4YlR0dXJZQWxIdkk5UXM0?=
+ =?utf-8?B?WmkxTGwyMzBNTzFtY2o2MklrUG53Y3BLUERUSDhWMXhURkJJYkFPRmltN212?=
+ =?utf-8?B?NTZDU3VpcGpuci9lK1hmNlBwQzJmVGluaWluaDJyQjFIUmZwSXRxdFdWOGlZ?=
+ =?utf-8?B?azNjSHJjYUUzZVROekZ0Rk9aekdtR0V0V2N3a2VyaHZMOTJuUU5GUTNRRzFJ?=
+ =?utf-8?B?NkV1K0Y0UnFQYzQrNFg0ckY0dEQxUXhwVXJ0bXVzd3ZsUDZUb0N3M0poSXpj?=
+ =?utf-8?B?RWtEYVNqZ0dpL3hURVBlcmxZWlZraE1TZXhVNHFMRVR4TmFEK0ViYjR6MU5J?=
+ =?utf-8?Q?8+Ds?=
+MIME-Version: 1.0
+
+--_av-t-8h6vbTlCQ6v24V35kAIA
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+ Dear Jiannan, The transcript you requested from Massachusetts Institute of=
+ Technology was successfully received by Jiannan Cao on 11/25/2023. If you =
+sent a document to a college or university, it can take up to six weeks for=
+ them to process the document after they receive it.TEESJFWMAll documents s=
+ent electronically have now been received. This completes your request.Than=
+k you, The Parchment TeamCopyright=C2=A0@2017=C2=A0Parchment=C2=A0=C2=A0=C2=
+=A0=C2=A0 Privacy=C2=A0Policy=C2=A0=C2=A0=C2=A0=C2=A0 Terms=C2=A0of=C2=A0Us=
+e
+
+
+--_av-t-8h6vbTlCQ6v24V35kAIA
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<?xml version=3D"1.0" encoding=3D"UTF-8"?><html xmlns=3D"http://www.w3.org/=
+1999/xhtml"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><m=
+eta name=3D"viewport" content=3D"width=3Ddevice-width"></head><body leftmar=
+gin=3D"0" marginwidth=3D"0" topmargin=3D"0" marginheight=3D"0" offset=3D"0"=
+ style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; heigh=
+t: 100% !important; width: 100% !important; background: #e3e3e3; margin: 0;=
+ padding: 0;" bgcolor=3D"#e3e3e3"><center><table align=3D"center" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" height=3D"100%" width=3D"100%" id=
+=3D"bodyTable" style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adjus=
+t: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: col=
+lapse !important; height: 100% !important; width: 100% !important; backgrou=
+nd: #e3e3e3; margin: 0; padding: 0;" bgcolor=3D"#e3e3e3"><tr><td align=3D"c=
+enter" valign=3D"top" id=3D"bodyCell" style=3D"-webkit-text-size-adjust: 10=
+0%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0p=
+t; height: 100% !important; width: 100% !important; border-top-width: 4px; =
+border-top-color: #acacac; border-top-style: solid; margin: 0; padding: 20p=
+x;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" id=3D"templateC=
+ontainer" style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 10=
+0%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse=
+ !important; width: 600px; border: 1px solid #acacac;"><tr><td align=3D"cen=
+ter" valign=3D"top" style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-=
+adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;"><table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" id=3D"preHeaderCo=
+lumns" style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;=
+ mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !i=
+mportant; border-bottom-color: #CCCCCC; border-bottom-width: 1px; border-bo=
+ttom-style: solid; background: #006090;" bgcolor=3D"#006090"><tr><td align=
+=3D"center" valign=3D"top" class=3D"templateColumnContainer" style=3D"-webk=
+it-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0p=
+t; mso-table-rspace: 0pt; padding-top: 20px; width: 260px;"><table border=
+=3D"0" cellpadding=3D"20" cellspacing=3D"0" width=3D"100%" style=3D"-webkit=
+-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt;=
+ mso-table-rspace: 0pt; border-collapse: collapse !important;"><tr><td vali=
+gn=3D"top" class=3D"leftColumnContent" style=3D"-webkit-text-size-adjust: 1=
+00%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0=
+pt; color: #505050; font-family: Helvetica; font-size: 14px; line-height: 1=
+50%; text-align: left; padding: 0 20px 20px;" align=3D"left"><h1 style=3D"c=
+olor: #fff; display: block; font-family: Helvetica; font-size: 16px; font-s=
+tyle: normal; font-weight: 300; line-height: 100%; letter-spacing: normal; =
+text-align: left; margin: 20px 0 5px;" align=3D"left"><h2 style=3D"color: #=
+fff; display: block; font-family: Helvetica; font-size: 18px; font-style: n=
+ormal; font-weight: 500; line-height: 100%; letter-spacing: normal; text-al=
+ign: left; margin: 0 0 20px;" align=3D"left"></td></tr></table></td><td ali=
+gn=3D"center" valign=3D"top" class=3D"templateColumnContainer" style=3D"-we=
+bkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: =
+0pt; mso-table-rspace: 0pt; padding-top: 20px; width: 260px;padding-bottom:=
+20px"><table border=3D"0" cellpadding=3D"20" cellspacing=3D"0" width=3D"100=
+%" style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso=
+-table-lspace: 0pt; mso-table-rspace: 0pt; border-collapse: collapse !impor=
+tant;"><tr><td valign=3D"top" class=3D"rightColumnContent" style=3D"-webkit=
+-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt;=
+ mso-table-rspace: 0pt; text-align: right; color: #505050; font-family: Hel=
+vetica; font-size: 14px; line-height: 150%; padding: 0 20px 20px;" align=3D=
+"right"><a href=3D"https://mandrillapp.com/track/click/30717337/www.parchme=
+nt.com?p=3DeyJzIjoibGN0TzFGdUVWZmRBdTVjbzNnWXJHZjNvbVM4IiwidiI6MSwicCI6Intc=
+InVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LnBhcmNobWV=
+udC5jb21cIixcImlkXCI6XCI0Y2IwZDg1Mzk0MzI0M2M3OGEwNDg0OWI0NTQ3ODBjN1wiLFwidX=
+JsX2lkc1wiOltcIjU4Njc2MjhmYzAyOTJlNTE5MDk3YjIzNTMwZGQxOGE3NzIxYTYzMDRcIl19I=
+n0" style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; co=
+lor: #45b3c4; font-weight: normal; text-decoration: none;"><img src=3D"http=
+://www.parchment.com/wp-content/themes/parchment/mail/images/p-logo.png" st=
+yle=3D"max-width: 160px; margin-top: 25px; -ms-interpolation-mode: bicubic;=
+ height: auto; line-height: 100%; outline: none; text-decoration: none; dis=
+play: inline; border: 0;" border=3D"0"></a></td></tr></table></td></tr></ta=
+ble></td></tr><tr><td align=3D"center" valign=3D"top" style=3D"-webkit-text=
+-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-=
+table-rspace: 0pt;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ width=3D"100%" id=3D"templateBody" style=3D"-webkit-text-size-adjust: 100%=
+; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;=
+ border-collapse: collapse !important;"><tr><td valign=3D"top" class=3D"bod=
+yContent" style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 10=
+0%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #505050; font-fami=
+ly: Helvetica; font-size: 14px; line-height: 150%; text-align: left; border=
+-bottom-width: 1px; border-bottom-color: #CCCCCC; border-bottom-style: soli=
+d; background: #fff; padding: 20px;" align=3D"left" bgcolor=3D"#fff"><br><p=
+><p>					Dear Jiannan,					</p><p>			The 					transcript			 you requested f=
+rom <strong>Massachusetts Institute of Technology</strong> was successfully=
+ received			by <strong>Jiannan Cao</strong> on			11/25/2023.			<p>If you se=
+nt a document to a college or university, it can take up to six weeks for t=
+hem to process the document after they receive it.</p>TEESJFWM</p><p>All do=
+cuments sent electronically have now been received. This completes your req=
+uest.</p><p>Thank you,<p>					The Parchment Team</p></p><br></td></tr></tab=
+le></td></tr><tr><td align=3D"center" valign=3D"top" style=3D"-webkit-text-=
+size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-t=
+able-rspace: 0pt;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+width=3D"100%" id=3D"footerColumns" style=3D"-webkit-text-size-adjust: 100%=
+; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt;=
+ border-collapse: collapse !important; background: #006098;" bgcolor=3D"#00=
+6098"><tr><td align=3D"center" valign=3D"top" class=3D"templateColumnContai=
+ner" style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; m=
+so-table-lspace: 0pt; mso-table-rspace: 0pt; width: 260px;"><table border=
+=3D"0" cellpadding=3D"20" cellspacing=3D"0" width=3D"100%" style=3D"-webkit=
+-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt;=
+ mso-table-rspace: 0pt; border-collapse: collapse !important;"><tr></table>=
+</td><td align=3D"center" valign=3D"top" class=3D"templateColumnContainer" =
+style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; mso-ta=
+ble-lspace: 0pt; mso-table-rspace: 0pt; width: 260px;"><table border=3D"0" =
+cellpadding=3D"20" cellspacing=3D"0" width=3D"100%" style=3D"-webkit-text-s=
+ize-adjust: 100%; -ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-ta=
+ble-rspace: 0pt; border-collapse: collapse !important;"><tr><td valign=3D"t=
+op" class=3D"rightColumnContent" style=3D"-webkit-text-size-adjust: 100%; -=
+ms-text-size-adjust: 100%; mso-table-lspace: 0pt; mso-table-rspace: 0pt; co=
+lor: #fff; font-family: Helvetica; font-size: 12px; line-height: 150%; text=
+-align: right; padding: 15px 20px;" align=3D"right"><table align=3D"right">=
+<tr><td><a href=3D"https://mandrillapp.com/track/click/30717337/www.faceboo=
+k.com?p=3DeyJzIjoiazBOS3ZoaFl0QUhJa21rckdyTzZSMlZXSXRJIiwidiI6MSwicCI6IntcI=
+nVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5mYWNlYm9v=
+ay5jb21cXFwvUGFyY2htZW50RmFuc1wiLFwiaWRcIjpcIjRjYjBkODUzOTQzMjQzYzc4YTA0ODQ=
+5YjQ1NDc4MGM3XCIsXCJ1cmxfaWRzXCI6W1wiMjM4NmZiZWUxZjBjZmY3ZTg2OTkwMTVlY2I1ZD=
+ZiYzU4NDkwN2Y2Y1wiXX0ifQ" style=3D"-webkit-text-size-adjust: 100%; -ms-text=
+-size-adjust: 100%; color: #fff; font-weight: normal; text-decoration: none=
+;"><img src=3D"http://www.parchment.com/wp-content/themes/parchment/mail/im=
+ages/social-facebook.png" width=3D"16" style=3D"-ms-interpolation-mode: bic=
+ubic; height: auto; line-height: 100%; outline: none; text-decoration: none=
+; display: inline; max-width: 260px; border: 0;"></a></td><td style=3D"padd=
+ing-left:15px"><a href=3D"https://mandrillapp.com/track/click/30717337/twit=
+ter.com?p=3DeyJzIjoiM0tpWjhpdG9tZG8zS09qVnZhMUZBbmNGSXdVIiwidiI6MSwicCI6Int=
+cInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3R3aXR0ZXIuY2=
+9tXFxcL3BhcmNobWVudFwiLFwiaWRcIjpcIjRjYjBkODUzOTQzMjQzYzc4YTA0ODQ5YjQ1NDc4M=
+GM3XCIsXCJ1cmxfaWRzXCI6W1wiM2Q5Mjk0MDdhNWIxMTg2ODgxMTAwODE5NmQ3NGZiNmU5Mjc0=
+ZjM3OFwiXX0ifQ" style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adju=
+st: 100%; color: #fff; font-weight: normal; text-decoration: none;"><img sr=
+c=3D"http://www.parchment.com/wp-content/themes/parchment/mail/images/socia=
+l-twitter.png" width=3D"16" style=3D"-ms-interpolation-mode: bicubic; heigh=
+t: auto; line-height: 100%; outline: none; text-decoration: none; display: =
+inline; max-width: 260px; border: 0;"></a></td><td style=3D"padding-left:15=
+px"><a href=3D"https://mandrillapp.com/track/click/30717337/www.linkedin.co=
+m?p=3DeyJzIjoiYnl4M213WHFocThzMnViSDMtOE56VHdQekE4IiwidiI6MSwicCI6IntcInVcI=
+jozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwczpcXFwvXFxcL3d3dy5saW5rZWRpbi5j=
+b21cXFwvY29tcGFueVxcXC8xMTQ5MjBcIixcImlkXCI6XCI0Y2IwZDg1Mzk0MzI0M2M3OGEwNDg=
+0OWI0NTQ3ODBjN1wiLFwidXJsX2lkc1wiOltcIjY1ZjdmNGM0YWYxZjQzMDQ5MWEwM2U3NDFiYz=
+ljZjAwMWJmNDM0ODRcIl19In0" style=3D"-webkit-text-size-adjust: 100%; -ms-tex=
+t-size-adjust: 100%; color: #fff; font-weight: normal; text-decoration: non=
+e;"><img src=3D"http://www.parchment.com/wp-content/themes/parchment/mail/i=
+mages/social-linkedin.png" width=3D"16" style=3D"-ms-interpolation-mode: bi=
+cubic; height: auto; line-height: 100%; outline: none; text-decoration: non=
+e; display: inline; max-width: 260px; border: 0;"></a></td></tr></table></t=
+d></tr></table></td></tr></table></td></tr></table><br><font class=3D"copyr=
+ight" style=3D"color: #777; font-family: Helvetica; font-size: 10px; line-h=
+eight: 100%; text-align: left; vertical-align: middle; padding: 0;"><br>Cop=
+yright&nbsp;@2017&nbsp;Parchment&nbsp;&nbsp;&nbsp;&nbsp; <a href=3D"https:/=
+/mandrillapp.com/track/click/30717337/www.parchment.com?p=3DeyJzIjoiNDNhUzM=
+xX1RfTC1jd25YR3dhSzJaeWZwaXNVIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIj=
+oxLFwidXJsXCI6XCJodHRwOlxcXC9cXFwvd3d3LnBhcmNobWVudC5jb21cXFwvcHJpdmFjeS1wb=
+2xpY3lcXFwvXCIsXCJpZFwiOlwiNGNiMGQ4NTM5NDMyNDNjNzhhMDQ4NDliNDU0NzgwYzdcIixc=
+InVybF9pZHNcIjpbXCI3ZDhiYTE5YWQ4OWRmNDMxN2NjZjk1ODEyYjc1YjEwYjA4ZTY5YjAzXCJ=
+dfSJ9" style=3D"-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;=
+ color: #999; font-weight: normal; text-decoration: none;">Privacy&nbsp;Pol=
+icy</a>&nbsp;&nbsp;&nbsp;&nbsp; <a href=3D"https://mandrillapp.com/track/cl=
+ick/30717337/www.parchment.com?p=3DeyJzIjoiUllDeHIwbkJsNzlNOVo5U05QSWlId0c1=
+YnhzIiwidiI6MSwicCI6IntcInVcIjozMDcxNzMzNyxcInZcIjoxLFwidXJsXCI6XCJodHRwOlx=
+cXC9cXFwvd3d3LnBhcmNobWVudC5jb21cXFwvdGVybXMtb2YtdXNlXFxcL1wiLFwiaWRcIjpcIj=
+RjYjBkODUzOTQzMjQzYzc4YTA0ODQ5YjQ1NDc4MGM3XCIsXCJ1cmxfaWRzXCI6W1wiYTNlY2JlN=
+zk1NDgxNmM0MzU4MjQ0ZjY1YTIxMDZjNmU0M2E1MTk1N1wiXX0ifQ" style=3D"-webkit-tex=
+t-size-adjust: 100%; -ms-text-size-adjust: 100%; color: #999; font-weight: =
+normal; text-decoration: none;">Terms&nbsp;of&nbsp;Use</a><br><br></font></=
+td></tr></table></center><img src=3D"https://mandrillapp.com/track/open.php=
+?u=3D30717337&amp;id=3D4cb0d853943243c78a04849b454780c7" height=3D"1" width=
+=3D"1" alt=3D""></body></html>
+
+
+--_av-t-8h6vbTlCQ6v24V35kAIA--

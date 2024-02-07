@@ -1,0 +1,474 @@
+Received: from IA0PR01MB8330.prod.exchangelabs.com (::1) by
+ BL3PR01MB7132.prod.exchangelabs.com with HTTPS; Wed, 31 May 2023 21:38:07
+ +0000
+Received: from MW4PR03CA0336.namprd03.prod.outlook.com (2603:10b6:303:dc::11)
+ by IA0PR01MB8330.prod.exchangelabs.com (2603:10b6:208:480::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6433.24; Wed, 31 May 2023 21:38:04 +0000
+Received: from CO1NAM11FT009.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:dc:cafe::d7) by MW4PR03CA0336.outlook.office365.com
+ (2603:10b6:303:dc::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.23 via Frontend
+ Transport; Wed, 31 May 2023 21:38:03 +0000
+Authentication-Results: spf=pass (sender IP is 18.7.21.50)
+ smtp.mailfrom=mit.edu; dkim=fail (signature did not verify)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.7.21.50 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.7.21.50; helo=mailman.mit.edu; pr=C
+Received: from mailman.mit.edu (18.7.21.50) by
+ CO1NAM11FT009.mail.protection.outlook.com (10.13.175.61) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.23 via Frontend Transport; Wed, 31 May 2023 21:38:03 +0000
+Received: from mailman.mit.edu (localhost [127.0.0.1])
+	by mailman.mit.edu (8.15.2/8.12.8) with ESMTP id 34VHxYQb2601157;
+	Wed, 31 May 2023 13:59:34 -0400
+Received: from outgoing-exchange-7.mit.edu (OUTGOING-EXCHANGE-7.MIT.EDU
+ [18.9.28.58])
+ by mailman.mit.edu (8.15.2/8.12.8) with ESMTPS id 34VHpqne2600310
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <soe_graduatestudents@MAILMAN.MIT.EDU>; Wed, 31 May 2023 13:51:52 -0400
+Received: from w92exedge3.exchange.mit.edu (W92EXEDGE3.EXCHANGE.MIT.EDU
+ [18.7.73.15])
+ by outgoing-exchange-7.mit.edu (8.14.7/8.12.4) with ESMTP id 34VHpqQX018761
+ for <soe_graduatestudents@PCH.MIT.EDU>; Wed, 31 May 2023 13:51:52 -0400
+Received: from oc11expo30.exchange.mit.edu (18.9.4.103) by
+ w92exedge3.exchange.mit.edu (18.7.73.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 31 May 2023 13:51:44 -0400
+Received: from oc11exhyb1.exchange.mit.edu (18.9.1.60) by
+ oc11expo30.exchange.mit.edu (18.9.4.103) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 31 May 2023 13:51:51 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
+ by oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Wed, 31 May 2023 13:51:51 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oHUrFD2Ag+S2QJvMwQrmnFHPO65ZH4Hl0m23mtJit983pR5sK1D5Tzw9MRORfNQHiwWdmhcYxUUwCgQGd7w1YbRv8wcivtTzyxGIC4aA+OWmD6VJYVczcsj/9n1JI/XCVnvzYTvkpk/pfDzoLz1z98M2rBVF2vSPDj7v0qdzEEzn8LEHqh6v66HqM2TPZ/oWf1aPxnE6vRx0D6Vx97uy5GdOCEimxPtOntGi6fMw/QK4bCovzKaSQEuUdFLufgyuo0NveSR/YUsnyiT8KVu0WC4onxcskwdewYzhglqfROX/kTuhx/q7ZIwK59UDWS9Yi1MUfvaZlCM+BVlwBLx7/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z2zODlTs2mC5GUImUKTmx4NUqaScVNTork7N1b87P04=;
+ b=fqfqiRgJPz9ripUzq6slwhpog1xdB437Y8Z2Dqvv841BC7wHYR+Tlr7S0IyW0BfGuCjgcm2WucXvgw1zhZeG0FiEHljK++daF4wHlnB5Igy2qJxtQUjNBL5PkhWp9wBNak15r4XejgPitBgOa2W6cLs9mHVKCE4txOeblbtGsHAc0OokBKYUp98UZqxGJ80NzG8BYnHqx+Izq+XrCfiM8NK1lQlPLLypoarWxAcoXJGfWP1pnHmFavbaUVKmkFTLlk0PSTdp+hCPNK96z3KyovyzMRkljobExWB597KV/cZnTLeC6kI+4zHk8cis3d0AjrTAT5YeFvH+3xO0/2IDHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 18.9.28.11) smtp.rcpttodomain=mit.edu smtp.mailfrom=mit.edu; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=mit.edu; dkim=pass
+ (signature was verified) header.d=mit.edu; arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=selector2; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z2zODlTs2mC5GUImUKTmx4NUqaScVNTork7N1b87P04=;
+ b=B8In/HLZEA6trviN4WnJtYyb0A/XBZ0T//EnG0U+J0x0v0uHzOixqQks1roSkdh9ua7DegwSnmN2nrspFCGLU+xZgi5E0xEEYBxbBR/oykKlXwqf2W0ttDRTAZtvZQDitiZs/8Bf7sl5A/KUiEkR381VyAU4Ah4lLAlUQkOs/XQ=
+Received: from DM6PR02CA0122.namprd02.prod.outlook.com (2603:10b6:5:1b4::24)
+ by SJ0PR01MB6350.prod.exchangelabs.com (2603:10b6:a03:291::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6433.24; Wed, 31 May 2023 17:51:50 +0000
+Received: from DM6NAM11FT053.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1b4:cafe::d8) by DM6PR02CA0122.outlook.office365.com
+ (2603:10b6:5:1b4::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22 via Frontend
+ Transport; Wed, 31 May 2023 17:51:50 +0000
+Authentication-Results-Original: spf=pass (sender IP is 18.9.28.11)
+ smtp.mailfrom=mit.edu; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.9.28.11 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.9.28.11; helo=outgoing.mit.edu; pr=C
+Received: from outgoing.mit.edu (18.9.28.11) by
+ DM6NAM11FT053.mail.protection.outlook.com (10.13.173.74) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.23 via Frontend Transport; Wed, 31 May 2023 17:51:49 +0000
+Received: from smtpclient.apple (dhcp-10-29-29-47.dyn.mit.edu [10.29.29.47])
+ (authenticated bits=0)
+ (User authenticated as tgiurleo@ATHENA.MIT.EDU)
+ by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 34VHpens026089
+ (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=NOT);
+ Wed, 31 May 2023 13:51:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+ t=1685555503; bh=z2zODlTs2mC5GUImUKTmx4NUqaScVNTork7N1b87P04=;
+ h=From:Date:Subject;
+ b=BOG3e9nGemyJE5K9CbusPsFXZ5ve1z9JGHmdknACDR9bM3KDgJDc9lnZjId0Y4/4O
+ 5+iumpSBAyqaHIVlA7XMMORRu+X9MlttljnL3trMEV5nTjc6GOGQpmZ+W2GT9SS4KB
+ 27zWwRnqXRNThWJL46SQGOu+n9yAjdEqEpqp5ysgL5Fn68JMqMHn732zCnwuRXr+VH
+ 7gxKPQJcRUU76KiJ+OwmC4dKD56zUpKvVf3T9SBVICHnHSv3fNAg4aShhy8vvT/SeN
+ ZxWczT9PQ7Mela4bfriieT+diu4kbret7suW6hRvoCoDEV1OTZcXF9VH+xC4sFmTkC
+ l96zsHzD6kFiQ==
+From: School of Engineering Events <soeevent@mit.edu>
+Date: Wed, 31 May 2023 13:51:40 -0400
+Subject: Watch Live: 2023 Advanced Degree Ceremony Webcast 
+Message-ID: <15200BD0-2A8A-4834-9FCC-C4E985CB3513@mit.edu>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+To: Undisclosed recipients:;
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ DM6NAM11FT053:EE_|SJ0PR01MB6350:EE_|CO1NAM11FT009:EE_|IA0PR01MB8330:EE_|BL3PR01MB7132:EE_
+X-MS-Office365-Filtering-Correlation-Id: 737ab1b5-b097-482c-5528-08db621f5078
+X-LD-Processed: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b,ExtAddr,ExtAddr
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ xQlE/Pl6uJMqnAW270os6RuDcMGtBHee/i8gj3nEcO9zUmo/X3vyKo0CPbxFdaArdvxm7W+KmFCjYtJLy9+QLL4ad7a/mXcIkeIlKZXjP9qdRo3Us/oTSffZCUEuruS1eOFnH42JFsjJqOLczI81wjnmX/PNP8ohraUKqlHS3l/7b+4MnAseQWUGHsIwwHYNOfCWfJFmj6bsIx2PRSET6unn2UD8kds9XSlVg30UDGfzG5WXkJ7bnauoaWOULtzo0GKBqtxN8eL0BqlkQZYqegfSVsx5W0a7iKe6llf2KShOjM1E4kZZWqk1kXol2ozqhgCVIH2rN8iaFDB9vSJ6ABy6G1CdwQ8z6J0GwrpEkq4TCuD/CbBsrhocDHEOShLVeNs5F0cIxSllvjqUqvnzxZkM+NP5Tax6xw1wkHXMdS98fdejAAUq7dcl7jAraBzjf4r7lj8blEus9hfongtOuusSJlItZ8uyT/L/tdtbsMtHYS7uQ6vUSA3tpz4yLlGZ/r1C47FR3I0Z2pwc+V/Lo64cPDG4jHG3lL/WDxfd/81m0yFYLH3t20lrRyxfRc9+GQX92ydSv5jA1nSSUSR9N7pF2L3sHPM+epd9w3lDBeT8qS7ECDPxZnk/1SchwueZ+uH/jWll17qaT+H7pb0Mds55BAUBU3Y8DkIb0Pascudk3jWs0JxqCAh5HzySNAdNuqpGBgVvBwG+O6pXTnN+HrAgYgCgyIewOoKw1aZHpoyRjo4erKF0+EJQdBKP6tWz
+X-Forefront-Antispam-Report-Untrusted: CIP:18.9.28.11; CTRY:US; LANG:en;
+ SCL:1; SRV:; IPV:CAL; SFV:NSPM; H:outgoing.mit.edu;
+ PTR:outgoing-auth-1.mit.edu; CAT:NONE;
+ SFS:(13230028)(4636009)(376002)(346002)(396003)(136003)(39860400002)(109986019)(1690799014)(451199021)(7696005)(33964004)(36756003)(336012)(426003)(166002)(2616005)(86362001)(356005)(33656002)(75432002)(26005)(4743002)(2906002)(70586007)(68406010)(8676002)(786003)(5660300002)(478600001)(316002);
+ DIR:OUT; SFP:1102; 
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB6350
+X-Mailman-Approved-At: Wed, 31 May 2023 13:59:33 -0400
+X-BeenThere: soe_graduatestudents@mit.edu
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: MIT Engineering graduate students list <soe_graduatestudents.mit.edu>
+List-Unsubscribe: <https://mailman.mit.edu/mailman/options/soe_graduatestudents>, 
+ <mailto:soe_graduatestudents-request@mit.edu?subject=unsubscribe>
+List-Archive: <https://mailman.mit.edu/mailman/private/soe_graduatestudents/>
+List-Post: <mailto:soe_graduatestudents@mit.edu>
+List-Help: <mailto:soe_graduatestudents-request@mit.edu?subject=help>
+List-Subscribe: <https://mailman.mit.edu/mailman/listinfo/soe_graduatestudents>, 
+ <mailto:soe_graduatestudents-request@mit.edu?subject=subscribe>
+Content-Type: multipart/mixed; boundary="===============2579347361975599225=="
+Errors-To: soe_graduatestudents-bounces@mit.edu
+Sender: "SoE_graduatestudents" <soe_graduatestudents-bounces@mit.edu>
+Return-Path: soe_graduatestudents-bounces@mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 31 May 2023 21:38:03.6628
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 737ab1b5-b097-482c-5528-08db621f5078
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CO1NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: mitprod.onmicrosoft.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ a4ca5822-e9aa-43c3-009e-08db61ffb5fe
+X-MS-Exchange-Organization-SCL: -1
+X-Microsoft-Antispam: BCL:6;
+X-Forefront-Antispam-Report:
+ CIP:18.7.21.50;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:mailman.mit.edu;PTR:mailman.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2023 21:38:03.2566
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 737ab1b5-b097-482c-5528-08db621f5078
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.21.50];Helo=[mailman.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR01MB8330
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:04.7392723
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6455.015
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RnBzTDE1emR3SkMrUHA3OGlxL3BreTdwTDQrMWU5MEJwS3VWV011dnVJTk1h?=
+ =?utf-8?B?c2puMEREODNhT0hRTTk3OE9Jb3hhZWI0cFhHNzNDc0ZBY2pxUnpXMnowcGtL?=
+ =?utf-8?B?OXAzUk10VWNLazVvQnpxR1J3dmg1WFpWZ2pZRHFKZE91Z2pkdTRrOWw5amQz?=
+ =?utf-8?B?UDIvcjgvTjlxcjlMak9LcmZHYXp1QmVDNm1QRDFCcjE2am9PSjdGaWs0SXhF?=
+ =?utf-8?B?dHFDaC9McldQazBFdzhCWGFrNnZYSnJDN05oSHBNMEpEcmxCckdVQlRXTEF6?=
+ =?utf-8?B?TXU2RGxISUNyVGM5NHlpenNrNm1tNE9sU09kdTBtWWVHOHdQKy9RZ2RMVWVH?=
+ =?utf-8?B?ajllTm9hOGF3WmRhUkxoRzQ2a0IyU2hGRVlTNEdyUmxIQnh4a1l1RnAyeW9Z?=
+ =?utf-8?B?OTdyTnJWdVJadUJ0SHJ5bld6cWh5dk9DU0ZKckJ6Q3YxOTFWdlBoV1pUNHZX?=
+ =?utf-8?B?Ny9URzQxdzllbU1xTFhhUFVYU3pEam8yZUN2cjlwMk0wandNM1YvYktnaGlp?=
+ =?utf-8?B?b3VEVUhDWWhmVFRpeklHWnpSR1hzUm9TQWdkaENiaS84NllGUmk4bmVxbU84?=
+ =?utf-8?B?YzlOSGkrRXlQZnBjdHl4S2pITXZQYXo0dldyWHJsQlgxRlVvOWZuVkl5OG5M?=
+ =?utf-8?B?N2ZYeW1hVGlTa0I1SjBjU0tRMndxSkNtNXcxdkVua0gyTGQvaC9HM0x4R08x?=
+ =?utf-8?B?M2cvcGZsSkRpejZIRDRiZ0RZK090ZDBUUmdHYjlseGdhaHlKWm51Z2FNcE91?=
+ =?utf-8?B?bUVMM09kWW1HKzlqcmEveGJCT0F0cUVjb01Ua1VaUnlIeHlDclhZQngrTERi?=
+ =?utf-8?B?RzNWN2Z1Zk9Zd0dRbFkrbkhFUnNEUjdWT1k1S1g5YTJsYVhEU1h1TEE0eVBH?=
+ =?utf-8?B?eTQxL0QrTHhxWGlaZHlMdTNtM0k4MTAxOXYxTGtBUXZYWEs4dXFPQjNqVW5H?=
+ =?utf-8?B?dGVac0pBSlVGcGRNanlBaUQwa1M1eUMxMGwrUzFwdnNOMk56aTFnWUdBRVU4?=
+ =?utf-8?B?NXNXaUxNMmoxb1oyRlZINi9EQWdCcmNJeGlIL1AxdFNRVjVFd2dFQmtYbUZT?=
+ =?utf-8?B?MzRwbFY5WERGb056aTlQZkwxMUcyUVJUSGVkSXFuNUhUdXRTQ2RwOXJjMFhz?=
+ =?utf-8?B?N0FoNzcyOFpKZUc0WGZidUx2ekVIMWpoMy9nakxYRGJzUzZjSVVQdGlKT0hV?=
+ =?utf-8?B?OTJaenMyL0dqeXFRZUoyMTZEVWVMZlJYK0Y2R3VYbzVKQnBEOE01U2J3R25l?=
+ =?utf-8?B?eVIwazR5eGNMZWJpOHlxb3NqZkVGeUVrU2JMSHZvWTVFQmpLU1FlSlBXWTB0?=
+ =?utf-8?B?NWFybCsxZ3E1YkFCSDREOUs3VmdickwwbERlakNJT2w2bGlnaW96dGgwSFFi?=
+ =?utf-8?B?ZWFKbFk2SDVuWmFraWpFREtFSXEyQjZZWmRFMkttcWdtWWFIakhCNXdTb3Q5?=
+ =?utf-8?B?SE5uSmJiTXZNWlIwamZ4RTA0RlpwajFxeHBkS2ttRlJVTmRUUFUvaG9nYmYx?=
+ =?utf-8?B?T290TE82d0lOOWlLcDRmaDlFQkdGOUhmSHJVcVJQTGI2T3lsaUE4RXVmWHRH?=
+ =?utf-8?B?MExHYUNMOGdwRUs0aGVudXROeHRRdkM0WGhWOGRkZ3hoSjhxb05xcEIrY1hF?=
+ =?utf-8?B?Yk1GUVpSZEUrd2FrSWYzT2dFM0ZkMnpHZnFMNlc5RHFTemsxQmFSdStXWTRj?=
+ =?utf-8?B?alRJT01OdVJGc1pJc0IwQkJDZG02RDZXMDJ1QlRoYmxoWnZSdnB2Q1ZqMDND?=
+ =?utf-8?B?NFF5bGprd3VGS25QTS85TDU3TXJiZ0RjZjRZWjE5YXRMMnBWUW9jbFk3eDJn?=
+ =?utf-8?B?dDlLNktKUFhtTGRWT3poVUM3c2lHVzNYUFZabGVlTnhyeTQyaWp6QVlBRkdB?=
+ =?utf-8?B?Q2V2dElUbTBYMkdVL04yOGx1TEJoSWZVZjRBSkFxZkdzK1QvQlV6K2I3T2Y5?=
+ =?utf-8?B?dFNqa3NNNW1WSXNUZ0RQL1NzWEdqOC9mTlRuaVUzUUtPN3V0M1U4ME9ERktz?=
+ =?utf-8?B?bnBUMUVQbXVuUTNTblBBSVBIM1ArRmdmWGVjOVFtZjVWZWdjWVAwUzJySFlu?=
+ =?utf-8?B?VDB0c3RhTVdwNmcyZXlLdnRLdU9pc0pwZEh0RFhJdjg3MHA1YTNUbnVyWEFW?=
+ =?utf-8?B?eUd4eXB5RCtuZUxKN2NwbmRjcExDWG5MUUtDSy93M0R5cmhvSW1oQmNDWWE0?=
+ =?utf-8?B?WTNGb1F1SHVtbVUwV09jQUtxdHpJZjNYOHd6ekIyUjVySGFpMUd5VndWUm8v?=
+ =?utf-8?B?UDVqVENLQTN4RnQ0VjUwVzdHOTBpRm9GZmNmM3VJWjIxRGt2SVlzSUxZc1NI?=
+ =?utf-8?B?bTJXSktibERsUkN4d0lsaHIweWRXL0ZwaTVGQ2NmT3hFV1FkNUduS0hXblNw?=
+ =?utf-8?B?b3pvM01uMzdqQzJsZ0Z1WEZJL2tZSll3WlhYeHNNdmE5YUI3amcvQ3FES0Ft?=
+ =?utf-8?B?UTBhbzM3Wk14NnpFbmc9PQ==?=
+MIME-Version: 1.0
+
+--===============2579347361975599225==
+Content-Type: multipart/alternative;
+	boundary="Apple-Mail=_7010163C-7524-4466-8DB8-0CDDF2564E45"
+
+--Apple-Mail=_7010163C-7524-4466-8DB8-0CDDF2564E45
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=utf-8
+
+=20
+
+ =
+<https://commencement.mit.edu/SOE-and-Schwarzman-College-of-Computing-ADC-=
+webcast>
+Advanced Degree Ceremony Webcast
+Celebrate the Class of 2023 at the School of Engineering & Schwarzman =
+College of Computing Advanced Degree Ceremony =E2=80=94  in person on =
+Killian Court or streaming.=20
+=20
+Date: Wednesday, May 31, 2023=20
+Time: 3:00pm EDT
+Location: Killian Court & Streaming
+ =
+<https://commencement.mit.edu/SOE-and-Schwarzman-College-of-Computing-ADC-=
+webcast>
+Ceremony Speaker:=20
+Lila Snyder SM '96, PhD '98, CEO of Bose=20
+ =
+<https://commencement.mit.edu/SOE-and-Schwarzman-College-of-Computing-ADC-=
+webcast>
+Lila Snyder is Bose Corporation=E2=80=99s chief executive officer, =
+overseeing all aspects of the company=E2=80=99s consumer electronics, =
+automotive, and related businesses. Lila is also a member of the Bose =
+Board of Directors. Prior to joining Bose in 2020, Lila was an executive =
+vice president at Pitney Bowes Inc., where she led the company=E2=80=99s =
+Commerce Services division. She also spent 15 years as a partner at =
+McKinsey & Company, consulting for clients in the technology, media, and =
+communications sectors. In addition, Lila is a member of the Board of =
+Directors for home builder PulteGroup Inc., and the Alumni Board of =
+Directors for the University of Miami. She also participates in the MIT =
+School of Engineering Dean=E2=80=99s Advisory Council and the MIT =
+Corporation Visiting Committee for the Department of Mechanical =
+Engineering.
+=20
+Lila earned a master=E2=80=99s degree and PhD in mechanical engineering =
+from the Massachusetts Institute of Technology, along with a =
+bachelor=E2=80=99s degree in mechanical engineering from the University =
+of Miami.
+=20
+=20
+
+
+--Apple-Mail=_7010163C-7524-4466-8DB8-0CDDF2564E45
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html;
+	charset=utf-8
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"></=
+head><body style=3D"word-wrap: break-word; -webkit-nbsp-mode: space; line-b=
+reak: after-white-space;" class=3D""><div class=3D""><div style=3D"margin: =
+0in; font-size: 11pt; font-family: Calibri, sans-serif;" class=3D""><o:p cl=
+ass=3D"">&nbsp;</o:p></div></div><div align=3D"center" class=3D""><table cl=
+ass=3D"MsoNormalTable" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wid=
+th=3D"100%" style=3D"width: 923px; background-color: rgb(244, 244, 244); bo=
+rder-collapse: collapse;"><tbody class=3D""><tr class=3D""><td width=3D"100=
+%" valign=3D"top" style=3D"width: 923px; padding: 0in;" class=3D""><div ali=
+gn=3D"center" class=3D""><table class=3D"MsoNormalTable" border=3D"0" cells=
+pacing=3D"0" cellpadding=3D"0" width=3D"100%" style=3D"width: 923px; border=
+-collapse: collapse;"><tbody class=3D""><tr class=3D""><td valign=3D"top" s=
+tyle=3D"padding: 0in;" class=3D""><div align=3D"center" class=3D""><table c=
+lass=3D"MsoNormalTable" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"660" style=3D"width: 495pt; border-collapse: collapse;"><tbody class=
+=3D""><tr class=3D""><td style=3D"padding: 0in;" class=3D""><table class=3D=
+"MsoNormalTable" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" style=3D"=
+max-width: 495pt; border-collapse: collapse;"><tbody class=3D""><tr class=
+=3D""><td valign=3D"top" style=3D"background-color: white; padding: 0in;" c=
+lass=3D""><div align=3D"center" class=3D""><table class=3D"MsoNormalTable" =
+border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" style=3D"wi=
+dth: 660px; border-collapse: collapse;"><tbody class=3D""><tr class=3D""><t=
+d valign=3D"top" style=3D"padding: 0in;" class=3D""><table class=3D"MsoNorm=
+alTable" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" st=
+yle=3D"width: 660px; border-collapse: collapse;"><tbody class=3D""><tr clas=
+s=3D""><td width=3D"100%" valign=3D"top" style=3D"width: 660px; padding: 0i=
+n;" class=3D""><table class=3D"MsoNormalTable" border=3D"0" cellspacing=3D"=
+0" cellpadding=3D"0" width=3D"100%" style=3D"width: 660px; border-collapse:=
+ collapse;"><tbody class=3D""><tr class=3D""><td valign=3D"top" style=3D"pa=
+dding: 3.75pt 0.25in;" class=3D""></td></tr><tr class=3D""><td valign=3D"to=
+p" style=3D"padding: 9pt 0.25in;" class=3D""><div style=3D"margin: 0in; fon=
+t-size: 11pt; font-family: Calibri, sans-serif; text-align: center;" class=
+=3D""><img width=3D"564" id=3D"_x0000_i1028" src=3D"https://dim.mcuserconte=
+nt.com/cs/b25894a30f7d87f4141d95b54/images/d3c2e9d5-b55b-8c96-b5f3-6e0a5a8e=
+83aa.jpg?w=3D564&amp;dpr=3D2" style=3D"width: 5.875in;" class=3D""><o:p cla=
+ss=3D""></o:p></div></td></tr><tr class=3D""><td valign=3D"top" style=3D"pa=
+dding: 6pt; background-size: cover; background-position: 50% 50%;" class=3D=
+""><div align=3D"center" class=3D""><table class=3D"MsoNormalTable" border=
+=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" id=3D"section_d28=
+981bb699447c7e8a4650c9895e6bb" style=3D"width: 644px; border-collapse: coll=
+apse;"><tbody class=3D""><tr class=3D""><td valign=3D"top" style=3D"padding=
+: 0in;" class=3D""><table class=3D"MsoNormalTable" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0" width=3D"100%" style=3D"width: 644px; border-colla=
+pse: collapse; background-size: cover; background-position: 50% 50%;"><tbod=
+y class=3D""><tr class=3D""><td width=3D"100%" valign=3D"top" style=3D"widt=
+h: 644px; padding: 0in;" class=3D""><table class=3D"MsoNormalTable" border=
+=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" style=3D"width: 6=
+44px; border-collapse: collapse; background-size: cover; background-positio=
+n: 50% 50%;"><tbody class=3D""><tr class=3D""><td valign=3D"top" style=3D"p=
+adding: 0in;" class=3D""><div align=3D"center" class=3D""><table class=3D"M=
+soNormalTable" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"10=
+0%" style=3D"width: 644px; border-collapse: collapse;"><tbody class=3D""><t=
+r class=3D""><td valign=3D"top" style=3D"padding: 0in;" class=3D""><table c=
+lass=3D"MsoNormalTable" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" wi=
+dth=3D"100%" style=3D"width: 644px; border-collapse: collapse;"><tbody clas=
+s=3D""><tr class=3D""><td width=3D"100%" valign=3D"top" style=3D"width: 644=
+px; padding: 0in;" class=3D""><table class=3D"MsoNormalTable" border=3D"0" =
+cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" style=3D"width: 644px; b=
+order-collapse: collapse;"><tbody class=3D""><tr class=3D""><td valign=3D"t=
+op" style=3D"background-color: rgb(161, 33, 55); padding: 9pt 12pt;" class=
+=3D""><div style=3D"margin: 0in; font-size: 11pt; font-family: Calibri, san=
+s-serif; text-align: center;" class=3D""><span style=3D"color: blue;" class=
+=3D""><a href=3D"https://commencement.mit.edu/SOE-and-Schwarzman-College-of=
+-Computing-ADC-webcast" target=3D"_blank" class=3D""><span style=3D"text-de=
+coration: none;" class=3D""><img border=3D"0" width=3D"564" id=3D"_x0000_i1=
+027" src=3D"https://dim.mcusercontent.com/cs/b25894a30f7d87f4141d95b54/imag=
+es/8b029e4c-a992-e790-0a90-c9290336c121.jpg?w=3D564&amp;dpr=3D2" style=3D"w=
+idth: 5.875in;" class=3D""></span></a></span><o:p class=3D""></o:p></div></=
+td></tr><tr class=3D""><td valign=3D"top" style=3D"padding: 9pt 12pt;" clas=
+s=3D""><div id=3D"dataBlockId-39" class=3D""><div style=3D"margin: 0in; fon=
+t-size: 11pt; font-family: Calibri, sans-serif; text-align: center;" class=
+=3D""><b class=3D""><span style=3D"font-size: 23.5pt; font-family: &quot;He=
+lvetica Neue&quot;;" class=3D"">Advanced Degree Ceremony Webcast<o:p class=
+=3D""></o:p></span></b></div></div></td></tr></tbody></table></td></tr></tb=
+ody></table></td></tr></tbody></table></div></td></tr></tbody></table></td>=
+</tr></tbody></table></td></tr></tbody></table></div></td></tr><tr class=3D=
+""><td valign=3D"top" style=3D"padding: 9pt 0.25in;" class=3D""><div id=3D"=
+dataBlockId-14" class=3D""><div style=3D"margin: 0in; font-size: 11pt; font=
+-family: Calibri, sans-serif;" class=3D""><span style=3D"font-size: 12pt; f=
+ont-family: &quot;Helvetica Neue&quot;;" class=3D"">Celebrate the Class of =
+2023 at the School of Engineering &amp;&nbsp;Schwarzman College of Computin=
+g Advanced Degree Ceremony =E2=80=94 &nbsp;in person on Killian Court or st=
+reaming.&nbsp;<o:p class=3D""></o:p></span></div><div style=3D"margin: 0in;=
+ font-size: 11pt; font-family: Calibri, sans-serif; text-align: center;" cl=
+ass=3D""><span style=3D"font-size: 12pt; font-family: &quot;Helvetica Neue&=
+quot;;" class=3D"">&nbsp;</span></div><div style=3D"margin: 0in; font-size:=
+ 11pt; font-family: Calibri, sans-serif;" class=3D""><strong class=3D""><sp=
+an style=3D"font-size: 15pt; font-family: &quot;Helvetica Neue&quot;;" clas=
+s=3D"">Date: Wednesday, May 31, 2023&nbsp;</span></strong><b class=3D""><sp=
+an style=3D"font-size: 15pt; font-family: &quot;Helvetica Neue&quot;;" clas=
+s=3D""><br class=3D""><strong class=3D"">Time: 3:00pm EDT</strong><br class=
+=3D""><strong class=3D"">Location: Killian Court &amp; Streaming</strong></=
+span></b><span style=3D"font-size: 15pt; font-family: &quot;Helvetica Neue&=
+quot;;" class=3D""></span><span style=3D"font-size: 12pt; font-family: &quo=
+t;Helvetica Neue&quot;;" class=3D""><o:p class=3D""></o:p></span></div></di=
+v></td></tr><tr class=3D""><td valign=3D"top" style=3D"padding: 9pt 0in;" c=
+lass=3D""><div style=3D"margin: 0in; font-size: 11pt; font-family: Calibri,=
+ sans-serif; text-align: center;" class=3D""><span style=3D"color: blue;" c=
+lass=3D""><a href=3D"https://commencement.mit.edu/SOE-and-Schwarzman-Colleg=
+e-of-Computing-ADC-webcast" target=3D"_blank" class=3D""><span style=3D"tex=
+t-decoration: none;" class=3D""><img border=3D"0" width=3D"169" id=3D"_x000=
+0_i1026" src=3D"https://dim.mcusercontent.com/cs/b25894a30f7d87f4141d95b54/=
+images/e9971f59-3c20-1470-9bf8-674d39f0559d.png?w=3D169&amp;dpr=3D2" style=
+=3D"width: 1.7604in;" class=3D""></span></a></span><o:p class=3D""></o:p></=
+div></td></tr><tr class=3D""><td valign=3D"top" style=3D"padding: 15pt 0.25=
+in; min-width: 100%;" class=3D""><table class=3D"MsoNormalTable" border=3D"=
+0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" style=3D"width: 612px=
+; border-collapse: collapse;"><tbody class=3D""><tr class=3D""><td valign=
+=3D"top" style=3D"border-style: solid none none; border-top-width: 1.5pt; b=
+order-top-color: black; padding: 0in;" class=3D""></td></tr></tbody></table=
+></td></tr><tr class=3D""><td valign=3D"top" style=3D"padding: 9pt 0.25in;"=
+ class=3D""><div id=3D"dataBlockId-47" class=3D""><div style=3D"margin: 0in=
+; font-size: 11pt; font-family: Calibri, sans-serif; text-align: center;" c=
+lass=3D""><b class=3D""><span style=3D"font-size: 21pt; font-family: &quot;=
+Helvetica Neue&quot;;" class=3D"">Ceremony Speaker:&nbsp;<br class=3D"">Lil=
+a Snyder SM '96, PhD '98, CEO of Bose&nbsp;</span></b><b class=3D""><span s=
+tyle=3D"font-size: 23.5pt; font-family: &quot;Helvetica Neue&quot;;" class=
+=3D""><o:p class=3D""></o:p></span></b></div></div></td></tr><tr class=3D""=
+><td valign=3D"top" style=3D"padding: 9pt 0in;" class=3D""><div style=3D"ma=
+rgin: 0in; font-size: 11pt; font-family: Calibri, sans-serif; text-align: c=
+enter;" class=3D""><span style=3D"color: blue;" class=3D""><a href=3D"https=
+://commencement.mit.edu/SOE-and-Schwarzman-College-of-Computing-ADC-webcast=
+" target=3D"_blank" class=3D""><span style=3D"text-decoration: none;" class=
+=3D""><img border=3D"0" width=3D"564" id=3D"_x0000_i1025" src=3D"https://di=
+m.mcusercontent.com/cs/b25894a30f7d87f4141d95b54/images/27906d4a-73fc-e92e-=
+02f9-4f26503f1829.jpg?w=3D564&amp;dpr=3D2" style=3D"width: 5.875in;" class=
+=3D""></span></a></span><o:p class=3D""></o:p></div></td></tr><tr class=3D"=
+"><td valign=3D"top" style=3D"padding: 9pt 0.25in;" class=3D""><div id=3D"d=
+ataBlockId-48" class=3D""><div style=3D"margin: 0in; font-size: 11pt; font-=
+family: Calibri, sans-serif;" class=3D""><span style=3D"font-size: 12pt; fo=
+nt-family: &quot;Helvetica Neue&quot;;" class=3D"">Lila Snyder is Bose Corp=
+oration=E2=80=99s chief executive officer, overseeing all aspects of the co=
+mpany=E2=80=99s consumer electronics, automotive, and related businesses. L=
+ila is also a member of the Bose Board of Directors.</span><span style=3D"f=
+ont-size: 12pt; font-family: &quot;Helvetica Neue&quot;;" class=3D"">&nbsp;=
+Prior to joining Bose in 2020, Lila was an executive vice president at Pitn=
+ey Bowes Inc., where she led the company=E2=80=99s Commerce Services divisi=
+on. She also spent 15 years as a partner at McKinsey &amp; Company, consult=
+ing for clients in the technology, media, and communications sectors.&nbsp;=
+In addition, Lila is a member of the Board of Directors for home builder Pu=
+lteGroup Inc.,&nbsp;and the Alumni Board of Directors for the University of=
+ Miami. She also&nbsp;participates in the MIT School of Engineering Dean=E2=
+=80=99s Advisory Council and the MIT Corporation Visiting Committee for the=
+ Department of Mechanical Engineering.<o:p class=3D""></o:p></span></div><d=
+iv style=3D"margin: 0in; font-size: 11pt; font-family: Calibri, sans-serif;=
+" class=3D""><span style=3D"font-size: 12pt; font-family: &quot;Helvetica N=
+eue&quot;;" class=3D"">&nbsp;</span></div><div style=3D"margin: 0in; font-s=
+ize: 11pt; font-family: Calibri, sans-serif;" class=3D""><span style=3D"fon=
+t-size: 12pt; font-family: &quot;Helvetica Neue&quot;;" class=3D"">Lila ear=
+ned a master=E2=80=99s degree and PhD in mechanical engineering from the Ma=
+ssachusetts Institute of Technology, along with a bachelor=E2=80=99s degree=
+ in mechanical engineering from the University of Miami.<o:p class=3D""></o=
+:p></span></div></div></td></tr><tr class=3D""><td valign=3D"top" style=3D"=
+padding: 5.25pt 0.25in; min-width: 100%;" class=3D""><table class=3D"MsoNor=
+malTable" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" s=
+tyle=3D"width: 612px; border-collapse: collapse;"><tbody class=3D""><tr cla=
+ss=3D""><td valign=3D"top" style=3D"border-style: solid none none; border-t=
+op-width: 1pt; border-top-color: black; padding: 0in;" class=3D""></td></tr=
+></tbody></table></td></tr><tr class=3D""><td valign=3D"top" style=3D"paddi=
+ng: 6pt; background-size: cover; background-position: 50% 50%;" class=3D"">=
+<div align=3D"center" class=3D""><table class=3D"MsoNormalTable" border=3D"=
+0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" id=3D"section_96aff8a=
+24c2f6733e7bcac02d3ed20c5" style=3D"width: 644px; border-collapse: collapse=
+;"><tbody class=3D""><tr class=3D""><td valign=3D"top" style=3D"padding: 0i=
+n;" class=3D""><table class=3D"MsoNormalTable" border=3D"0" cellspacing=3D"=
+0" cellpadding=3D"0" width=3D"100%" style=3D"width: 644px; border-collapse:=
+ collapse; background-size: cover; background-position: 50% 50%;"><tbody cl=
+ass=3D""><tr class=3D""><td width=3D"100%" valign=3D"top" style=3D"width: 6=
+44px; padding: 0in;" class=3D""><table class=3D"MsoNormalTable" border=3D"0=
+" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" style=3D"width: 644px;=
+ border-collapse: collapse;"><tbody class=3D""><tr class=3D""><td valign=3D=
+"top" style=3D"padding: 9pt 0in;" class=3D""><div style=3D"margin: 0in; fon=
+t-size: 11pt; font-family: Calibri, sans-serif; text-align: center;" class=
+=3D""><o:p class=3D"">&nbsp;</o:p></div></td></tr><tr class=3D""><td valign=
+=3D"top" style=3D"padding: 9pt 12pt;" class=3D""><div id=3D"dataBlockId-9" =
+class=3D""><div style=3D"margin: 0in; text-align: center; font-size: 12pt; =
+font-family: &quot;Helvetica Neue&quot;;" class=3D""><o:p class=3D"">&nbsp;=
+</o:p></div></div></td></tr><tr class=3D""><td valign=3D"top" style=3D"padd=
+ing: 0in; background-size: cover; background-position: 50% 50%;" class=3D""=
+><div align=3D"center" class=3D""><table class=3D"MsoNormalTable" border=3D=
+"0" cellspacing=3D"0" cellpadding=3D"0" width=3D"100%" style=3D"width: 644p=
+x; border-collapse: collapse; background-size: cover; background-position: =
+50% 50%;"><tbody class=3D""><tr class=3D""><td valign=3D"top" style=3D"padd=
+ing: 0in; background-size: cover; background-position: 50% 50%;" class=3D""=
+><table class=3D"MsoNormalTable" border=3D"0" cellspacing=3D"0" cellpadding=
+=3D"0" width=3D"100%" style=3D"width: 644px; border-collapse: collapse;"><t=
+body class=3D""><tr class=3D""></tr></tbody></table></td></tr></tbody></tab=
+le></div></td></tr></tbody></table></td></tr></tbody></table></td></tr></tb=
+ody></table></div></td></tr></tbody></table></td></tr></tbody></table></td>=
+</tr></tbody></table></div></td></tr></tbody></table></td></tr></tbody></ta=
+ble></div></td></tr></tbody></table></div></td></tr></tbody></table></div><=
+div class=3D""><br class=3D""></div></body></html>=
+
+--Apple-Mail=_7010163C-7524-4466-8DB8-0CDDF2564E45--
+
+--===============2579347361975599225==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+SoE_graduatestudents mailing list
+SoE_graduatestudents@mit.edu
+https://mailman.mit.edu/mailman/listinfo/soe_graduatestudents
+
+--===============2579347361975599225==--

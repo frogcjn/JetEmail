@@ -1,0 +1,725 @@
+Received: from SA1PR01MB8396.prod.exchangelabs.com (2603:10b6:806:389::7) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Fri, 13 Oct 2023 00:01:10
+ +0000
+Received: from SN7PR04CA0175.namprd04.prod.outlook.com (2603:10b6:806:125::30)
+ by SA1PR01MB8396.prod.exchangelabs.com (2603:10b6:806:389::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6863.44; Fri, 13 Oct 2023 00:01:09 +0000
+Received: from SA2PEPF00001508.namprd04.prod.outlook.com
+ (2603:10b6:806:125:cafe::52) by SN7PR04CA0175.outlook.office365.com
+ (2603:10b6:806:125::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.30 via Frontend
+ Transport; Fri, 13 Oct 2023 00:01:09 +0000
+Authentication-Results: spf=fail (sender IP is 18.7.71.110)
+ smtp.mailfrom=a561359.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of a561359.bnc3.mailjet.com
+ does not designate 18.7.71.110 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.7.71.110;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.7.71.110) by
+ SA2PEPF00001508.mail.protection.outlook.com (10.167.242.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6838.22 via Frontend Transport; Fri, 13 Oct 2023 00:01:08 +0000
+Received: from oc11exhyb2.exchange.mit.edu (18.9.1.98) by
+ w92exhyb5.exchange.mit.edu (18.7.71.110) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Thu, 12 Oct 2023 20:00:55 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
+ by oc11exhyb2.exchange.mit.edu (18.9.1.98) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Thu, 12 Oct 2023 20:00:54 -0400
+Received: from MN2PR01CA0023.prod.exchangelabs.com (2603:10b6:208:10c::36) by
+ DM4PR01MB7764.prod.exchangelabs.com (2603:10b6:8:6b::8) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6863.46; Fri, 13 Oct 2023 00:00:52 +0000
+Received: from MN1PEPF0000ECDB.namprd02.prod.outlook.com
+ (2603:10b6:208:10c:cafe::76) by MN2PR01CA0023.outlook.office365.com
+ (2603:10b6:208:10c::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.41 via Frontend
+ Transport; Fri, 13 Oct 2023 00:00:52 +0000
+Authentication-Results-Original: spf=pass (sender IP is 87.253.236.214)
+ smtp.mailfrom=a561359.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=704
+Received-SPF: Pass (protection.outlook.com: domain of a561359.bnc3.mailjet.com
+ designates 87.253.236.214 as permitted sender)
+ receiver=protection.outlook.com; client-ip=87.253.236.214;
+ helo=o214.p11.mailjet.com; pr=C
+Received: from o214.p11.mailjet.com (87.253.236.214) by
+ MN1PEPF0000ECDB.mail.protection.outlook.com (10.167.242.139) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.22 via Frontend Transport; Fri, 13 Oct 2023 00:00:52 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; q=dns/txt;
+  d=bnc3.mailjet.com; i=dsl-reply=3Dmit.edu@a561359.bnc3.mailjet.com; s=mailjet1; x=1697162450;
+  h=message-id:mime-version:from:from:reply-to:to:to:subject:subject:date:date:list-id:list-unsubscribe-post:
+  list-unsubscribe:feedback-id:precedence:x-campaignid:x-csa-complaints:
+  x-mj-mid:x-mj-smtpguid:x-report-abuse-to:content-type;
+  bh=6vEsqIo5N4ifLIo6H70wGR15Uvkn/RwzRptvpDOFo2M=;
+  b=XtGN8Iw1Et4cE3tW924ohOU3qoR0Wz/3pSDrlQJ/xVnnMZ1om7kuBS97K
+ LOyVODJeO8bUcl8KaWfOkUeKkiuS4iDuClbuR9cA1CouUXj+IR8c3kqE0/ur
+ VQOGLkBH8n5PogL4RRP0TClkA6hnCHwH5Atiar7QjdV3fCjmJBcT8g=
+Return-Path:
+ 230e6529.AVwAACgyxpEAAcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiy@a561359.bnc3.mailjet.com
+Message-ID: <230e6529.AVwAACgyxpEAAcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiy@mailjet.com>
+From: Suzy Nelson <dsl-reply@mit.edu>
+Reply-To: dsl-replies@mit.edu
+To: jiannan@mit.edu
+Subject: Timely reminders about safety and community
+Date: Fri, 13 Oct 2023 00:00:50 +0000 (UTC)
+List-Id: <dsl-reply.mit.edu.inj9-sxn34.mj>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+List-Unsubscribe: <mailto:unsub-230e6529.inj9.lt7vpvzmq65x@bnc3.mailjet.com>,
+	<https://inj9.mjt.lu/unsub2?m=AVwAACgyxpEAAcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc&b=230e6529&e=35a582db&x=a7iET_5Bkh8rOy7esnA68A>
+Feedback-Id: 42.561359.532839:MJ
+Precedence: bulk
+X-CampaignID: 7699500752
+X-CSA-Complaints: csa-complaints@eco.de
+X-MJ-Mid: AVwAACgyxpEAAcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc
+X-MJ-SMTPGUID: 0fd79d7d-c3a3-4c6a-b67d-524abe6c4525
+X-REPORT-ABUSE-TO: Message sent by Mailjet please report to
+	abuse@mailjet.com with a copy of the message
+Content-Type: multipart/alternative; boundary="=-S92mgEhseLIBceG53h69"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ MN1PEPF0000ECDB:EE_|DM4PR01MB7764:EE_|SA2PEPF00001508:EE_|SA1PR01MB8396:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 012b79ec-ac9c-48b0-4da2-08dbcb7f811a
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?SwFQk5RJSVacWajCKuupS+Qj5rPpgc/6q1kPsRDOGragxT2XOYG/JrpZS0QS?=
+ =?us-ascii?Q?W15xrX76j8sakejzmhhUYsBpn329/OsjLtgNB3XP4aN6f1Fxo2FQ20WnNeC7?=
+ =?us-ascii?Q?AEpQ0wLtwGOuT+qzHf8EdAthdPZN9AtVyoxzOFjXfywuKScnuMfTgh00/ADs?=
+ =?us-ascii?Q?HFkzU+2nfGyuZwNY4JRVPj5ZA0qDVUAkOOWH65G8BXbKvesG3NGijfel+cEW?=
+ =?us-ascii?Q?8uEzUiyS3uNpkxjIyC8k4dYslZzvVG5ZYzF+yr+uVpi2d1TJvNe91Zw755t7?=
+ =?us-ascii?Q?vnQHNe/lkaAXMAlxulRHRlGEa07i0/tezHhxb8NJTMRQJU3k8PcDpENGeMBJ?=
+ =?us-ascii?Q?Zt4sG10c85bfADtgbfoBLNP8mt//KpxRtwwM/FM1YZnXveXuOSmXFgdwDrZ3?=
+ =?us-ascii?Q?GtqRQu+Wnb1WwELFCRrZayWjmNlWXSasqW4SI8gkNsTPevnZGim/7Qcojgmw?=
+ =?us-ascii?Q?9Z0oK1ybPmuBJCRFNnst8wQGxKdv+rzcfC+L9rA846oHKXrt5gWT6dTr2B/+?=
+ =?us-ascii?Q?UIp+MFwz8+zny4HVIDOqrtZ30F1GVS0R2bHjxwDCCvPQPFKDcjFg7cXr08PV?=
+ =?us-ascii?Q?/f9J7RTJ+0m9UOQY8mQ4CdMcLiaYcx/mrNMm4lE80AOX6ufHtTfJOIj2nBVW?=
+ =?us-ascii?Q?hA34kSgOF3BPWms7YNSyA5gOE/+x4V7eTkvIiYCpxOEzgrVwDzLIMW9SjZoT?=
+ =?us-ascii?Q?AlSPzYbCfIs6RE/xGz0qSAZ9aFVPNNCBg3eng37MjxMJOHNbi2keosY4rzRj?=
+ =?us-ascii?Q?lsIK7H/BBuQ4FXBTBuvmisiUox7IsidZpIGlaQNdpBhj89IqpI0ThVtcoKNy?=
+ =?us-ascii?Q?8CabfbSajIc/tZssmK5xIQt7ABuuokCnBJTBEjPdTg4fW+4YITrSbd9oNxpP?=
+ =?us-ascii?Q?uj8ir8EXAVU9wFl6B2hDmZ2+AH8XLTvpEo42dKkBz6ERg9XGD95efGshBSe+?=
+ =?us-ascii?Q?M1mlvVhWv6NRKlgE2cM4PrzQ2naSTGlEWDR6AD3xTasmPbXksx9I5TKxVGgW?=
+ =?us-ascii?Q?vUAwKfePuVDhUUTja/3ajm7c/8xadOCcpovk8EaLeFywG/zm1oIyx5o48RN7?=
+ =?us-ascii?Q?TF1nZL3CQWysIIveIRXfW3gs93Hfd0n6IBZcQt+B59EWDutMBtVO7z81SoGt?=
+ =?us-ascii?Q?bspNHL/VgkRgoEkdQfhAn5NO0oI1WJGsumsj2Skfi0M9MTMSZvYSDw5iX47v?=
+ =?us-ascii?Q?TTo+za6ASoahjP0DOsBawlcx2qsU8s/S8NnonYxv40HB7Tuq5bvxbWGESi/9?=
+ =?us-ascii?Q?NMYTu2YuBobczCpgC7Stw5mvAsO2bNvI77mPDROvRVbsPftTgP9naVxLbiMB?=
+ =?us-ascii?Q?yhD31xhlcwmAnUNzWQjtFS8dD7Ed620aCbU/ErwTZButIYsP3X+h+wYw7j+a?=
+ =?us-ascii?Q?JJFbaek=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:87.253.236.214;CTRY:FR;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:o214.p11.mailjet.com;PTR:o214.p11.mailjet.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR01MB7764
+X-OrganizationHeadersPreserved: DM4PR01MB7764.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb2.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb2.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92exhyb5.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 13 Oct 2023 00:01:09.0326
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 012b79ec-ac9c-48b0-4da2-08dbcb7f811a
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: SA2PEPF00001508.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: SA2PEPF00001508.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ SA2PEPF00001508.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ MN1PEPF0000ECDB.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 5a9c3292-e43d-4b41-4bbd-08dbcb7f7746
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.110;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:w92exhyb5.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2023 00:01:08.8295
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 012b79ec-ac9c-48b0-4da2-08dbcb7f811a
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.110];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ MN1PEPF0000ECDB.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB8396
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.4258274
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6863.043
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Y0taRllVTXRqSzlzcW56R1IzVm5UeE5DUFRQMmNJVWxIT3QvY0FvekZwekR6?=
+ =?utf-8?B?WGdYR1AzUG1MNXNua05LUWJWRmNYTE9RNEl3dFZuRGlGdnNCdWFEdVZuODEx?=
+ =?utf-8?B?enFQQTN2SE85eUVQWmx4dytpU2JYQzFKbmVGMGxzVXIzSzdXRnh0R3dFTlhK?=
+ =?utf-8?B?NURabEdDMHJBSURBQ05HYWRWYjRRU2VVOTQxRUUyU3JhbjJQbll1MUdnK01S?=
+ =?utf-8?B?bElKeXBMK0x2STArSXYyRzhlWEVLaGNPM2NHQUV6cktjOWl0MTEwb09KazZs?=
+ =?utf-8?B?cGsyOFdpMENWcTBtOXRMUlZkaE1TZUlqZnhyUW9lVGJGVkF3Sk96eTh5d2da?=
+ =?utf-8?B?Sk5OSGJHYW5mZkhJdUgrYkhmeXRRUElCbmo4cGszMnIyVkkvZFlPNHRudFNK?=
+ =?utf-8?B?d1lmRnVScVN1SU1Lai9UR3FKTzM5ZTVXVFJMdjUvQ0FjcUlOdW9YaWNiNVF0?=
+ =?utf-8?B?R0xRVlNRVVdYQzNGdnJ0c1VTbFdFODM5UVJpM28zUGV5RlZCYU5CVVBlbEY4?=
+ =?utf-8?B?UHl3OTY0aC9qQWFLVElPVEI0eUlhOE5IaXh0RE1QN0l3VmVIYllvb3o5NTF5?=
+ =?utf-8?B?NFNZZFYvYkhPWW5aQlVSOXBSdFlSQk4wSEhkWnRrK3U0anEwZ1FaWi9tejBt?=
+ =?utf-8?B?aCtNQnNsMGpPc25YamlLQnVmVUFFUjBSMVRydjk1LzZCK0VrV21ZVlhnVjZt?=
+ =?utf-8?B?VDJVenFuN1NQVWdpT3hWcUZRWFphWmJaY2hNZEh4NVZtSUNvMmpnOGtZOEFv?=
+ =?utf-8?B?TDVWOTFJcm5mLzBXUjR0dkpaRUM0RkJtN252REp2Uk1PclVLZTg2L2M4OHZX?=
+ =?utf-8?B?R1hGb004YkM5UzRSdWFOb29xcnkxeUZNVWVRS0ZMSDFOWFFIOTZhRzdGMTFP?=
+ =?utf-8?B?MkNZbC9ZcW9xYjhTWm1FaWJHRWVidGl0N1I4SS9mdjhIYjhEYVpjUWludlZ0?=
+ =?utf-8?B?ZnZmVkJsSk1aUk41ZEM4VmFRSjUxZHZ1alcwN096TC8zLzBsay80SkpPUmtW?=
+ =?utf-8?B?ZnVIK0JoYWFxSTZyU3preUV3YytVRThla2t2V3BqZEdIVHlweFdrOEFBTzZG?=
+ =?utf-8?B?VnNNNlNrTy82NDhvMkZ3SFN5cXhSMEREYzdENStBd2R5bW8vRlh4QzdQdXJl?=
+ =?utf-8?B?OHFGbTZqYmYxUVdFK2FmQlRKOWlQMjRjdTVvRnptNW1IN0gxM1FJKzllbEFp?=
+ =?utf-8?B?UHhiSnZyOE1ZV3BCaW4xeXdGSzFKSjBEK1dtQ0hmWTViZzZzdnJ5UWlrL01U?=
+ =?utf-8?B?Ujd1b1hBMWl2ODRMajVqNStjazlnd1Mvcjk2RVJpV05jdDRSclJiS1J5MC9H?=
+ =?utf-8?B?c2RVMGpYd2xXaDRTbmdXOUxuL0tvQ3FXbG9aQmVGK1NGcHZtVUZEcU1KVThU?=
+ =?utf-8?B?Z1B3L2pEZDU1R093ZHFJUUg4VmtHVTR3WXREM2t4Q0x4SDdHT0lFMGc4ZDFw?=
+ =?utf-8?B?UzFabzZSQSs1UnpBb3FOd3RJM3daZEMyRTBxNm0rbEFrUCtlcmlZeGh6cHJq?=
+ =?utf-8?B?ZmRZR0lSbFFDbEtVVW9QSmNKdk43eDZoWW5ReXZuRUlpNU1WaVJZK0Z0Um84?=
+ =?utf-8?B?TlJvZmdGY2txNWdzaTE4cS9PV2UrdFpwN01tRWt3UTJqbG1LOXNlV2FTallz?=
+ =?utf-8?B?SXA4VFlzenhTSHNTRFZMaWZCR3dMcTcrYkdjbHRNei9rZHU2MlB0WjFPcmlu?=
+ =?utf-8?B?WFJ1Ri8wZUV0cnlLcEtzQUxvb0xSbzE0b3l6eFgvMDF1S0JocVoxL3phbVhX?=
+ =?utf-8?B?NjFTQ1k4V3FqeUJ6L1B1aEdKSWkwdCtTeHhVRTJScFFDNUJkcWo5UHM5UzFW?=
+ =?utf-8?B?NE1rdGpjTGdVbUlUSERsdHpuZDhrNjB4Zk9OMXl0OFZWQkoyTmVoWVlhWVFI?=
+ =?utf-8?B?amRNVHNjL08xR2NRS1hqbXVka1hLVXVXc1RiUWlPWFpVV0ZENlg5UFJ0S0Vj?=
+ =?utf-8?B?citKTWlFOGRkemxEM0pLQTdpU2o4TjdIQ2RlUFZHZE5MYmtPYWV4eUYyYmFU?=
+ =?utf-8?B?N3p3Tmo1QngwY0ZIdVNqQjc5TC9EQk95RXMyZXNvWXZqSlFpbHpTQ1dSL0Nk?=
+ =?utf-8?B?Ull5b3dkQk1JbnBxa0U2NURaWi82TnBtNWR1ZHBPZEh6Vy91aVpiUndyNnBl?=
+ =?utf-8?B?Qi9nZm85OTJwbVkwL3pybmMvc3ZXZkg4M21oNjJuU3NLdXdra2VnRTFIUUZD?=
+ =?utf-8?B?Mi9RM0hrcDY0Ukluazd3c0ZqV28ydmFqUXZZQmtKU2c3S3NQRjJzQkp0R0ty?=
+ =?utf-8?B?cGxiYzZIdzJpNWZZRDRUamYwVkpsUEN5N09IdXB2TTd4Q1haR296NXFoZGZh?=
+ =?utf-8?B?UnpZRDJlUkN2ekc5U2luVmR6VXlBaEd5c3VvNnJac2NMZDJWVVJLRjE5aWlU?=
+ =?utf-8?Q?pkHYCKmEJUH/QZ46huANXBw4MKIB7+V0bY5lG?=
+MIME-Version: 1.0
+
+--=-S92mgEhseLIBceG53h69
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+View online version http://inj9.mjt.lu/nl3/cA-JKwqkf9-ZMbXoGCMSgA?m=3DAVwAA=
+CgyxpEAAcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc&=
+b=3D230e6529&e=3D35a582db&x=3Da7iET_5Bkh8rOy7esnA68A
+
+
+
+<<MIT letterhead for Vice Chancellor and Dean for Student Life Suzy M. Nels=
+on>> [https://inj9.mjt.lu/img/inj9/b/mksgs/gmjkh.png]
+
+
+
+TL;DR: Leaning into MIT values and being there for each other; Reporting po=
+sters and other media that may violate MIT policies; Personal attacks targe=
+ting individuals or groups will be taken seriously; Reach out to support re=
+sources and follow safety tips.
+Dear students,
+
+I have been impressed by the peaceful gatherings on campus that have alread=
+y occurred, and I hope and expect future gatherings will be held in this sa=
+me spirit. As the conflict in Israel and Gaza has deepened, however, I feel=
+ it=E2=80=99s important to share some reminders about guidelines and polici=
+es that enable us to live together in community.=C2=A0
+
+As President Kornbluth emphasized [https://president.mit.edu/writing-speech=
+es/video-transcript-our-community-and-violence-israel-and-gaza], we must su=
+stain the strength of our community even in such a painful time by holding =
+fast to our values [https://www.mit.edu/values/] and respecting each other.=
+ I=E2=80=99m grateful that, on the whole, the members of our community are =
+more than living up to this expectation.=C2=A0
+
+
+Controversial messages
+
+At the same time, we have seen a rise in divisive social media posts, flyer=
+s, chalking, and other incidents that increase tensions in our community. U=
+nfortunately, you may be exposed to posters and other media =E2=80=93 at MI=
+T and elsewhere =E2=80=93 containing misleading, unsettling, and even hurtf=
+ul statements.
+
+In keeping with MIT=E2=80=99s commitment to free expression, we can all sha=
+re opinions and emotions about recent events. However, if you believe the c=
+ontent of a poster, chalking, or similar display violates Institute policy,=
+ leave it alone, take a photo, and report your concerns to the Institute Di=
+scrimination & Harassment Response Office (IDHR) [https://idhr.mit.edu/] or=
+ the MIT Hotline [https://hotline.mit.edu/]. The decision to take down a po=
+ster, chalking, or similar display based on content or viewpoint will be ma=
+de in the sole discretion of a rapid response team appointed jointly by the=
+ Provost, Chancellor, Vice President for Human Resources, and the Chair of =
+the Faculty.
+
+And, of course, we have a role in how we respond to hateful messages. As Pr=
+esident Kornbluth said, =E2=80=9CSimple gestures of compassion and kindness=
+ can be incredibly important for people in the midst of such overwhelming s=
+uffering and uncertainty.=E2=80=9D
+
+
+Targeting, harassment, and threats of violence
+
+Speech or behavior that amounts to harassment [https://policies.mit.edu/pol=
+icies-procedures/90-relations-and-responsibilities-within-mit-community/95-=
+harassment] and acts (or threats of) violence [https://policies.mit.edu/pol=
+icies-procedures/90-relations-and-responsibilities-within-mit-community/96-=
+violence-against], against individuals or groups, are against MIT policy. R=
+eports of such behavior will be taken seriously.=C2=A0
+
+
+Your well-being and your sense of safety
+
+We=E2=80=99re reaching out to students who have been directly impacted and =
+are offering them individualized supports. If you or someone you know would=
+ benefit from support or a listening ear, I encourage you to contact MIT=E2=
+=80=99s support resources [https://doingwell.mit.edu/support-3/]. Below my =
+signature, you=E2=80=99ll also find some helpful personal safety tips from =
+MIT Police and DSL.
+
+MIT is a strong community, and it=E2=80=99s even stronger when we are there=
+ for each other. I=E2=80=99m confident we have the wisdom to promote empath=
+y, respect, and dignity for everyone in our MIT home.=C2=A0
+
+Best,
+
+Suzy Nelson
+Vice Chancellor and Dean for Student Life
+---------------------------------------------------------------------------=
+-----
+For your personal safety
+
+MIT Police shared the following best practices:
+
+ * Be aware of your surroundings. If your physical safety is threatened at =
+any time, or if you see a crime occurring or about to occur, contact MIT Po=
+lice immediately at (617) 253-1212, or dial 100 from any MIT phone.
+ * If you receive a threatening email that targets your life, safety, or pr=
+operty, refer to this information on MIT Stopit [http://kb.mit.edu/confluen=
+ce/display/istcontrib/MIT+Stopit+and+Harassment+on+Campus;jsessionid=3D3905=
+872A63EE2B7FCDD3A5FC7E8756E4] and contact MIT Police.
+ * Report harassment or discrimination incidents at https://idhr.mit.edu [h=
+ttps://idhr.mit.edu].
+ * Do not allow tailgaters, and contact MIT Police if anyone follows you in=
+to a restricted area (e.g., your residence hall, lab, or other locked area)=
+ without swiping their MIT ID.
+ * Always lock your residence=E2=80=99s or room=E2=80=99s door and windows,=
+ even if you leave for a minute or two.
+ * When entering or exiting a residence or other secure space, make sure th=
+e door closes tightly behind you.
+ * If you intend on having guests in your residence hall, make sure you fol=
+low your house=E2=80=99s guest policy.
+ * Learn the locations of the Blue Light emergency phones [https://police.m=
+it.edu/report-crime-accident-or-incident] on campus and utilize SafeRide [h=
+ttps://web.mit.edu/facilities/transportation/shuttles/safe_ride.html] or pu=
+blic transportation.
+ * Let your friends know when you are leaving and arriving at your destinat=
+ion at the end of the night.
+
+
+
+---------------------------------------------------------------------------=
+-----
+Massachusetts Institute of Technology
+77 Massachusetts Ave | Cambridge, MA 02139
+
+This email has been sent to jiannan@mit.edu.=C2=A0
+You received this email because you are an MIT student.
+Click here to unsubscribe http://inj9.mjt.lu/unsub2?hl=3Den&m=3DAVwAACgyxpE=
+AAcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc&b=3D23=
+0e6529&e=3D35a582db&x=3Da7iET_5Bkh8rOy7esnA68A. Report an issue with this e=
+mail [report-announcement-issue@mit.edu].
+
+
+
+[https://www.mailjet.com/?utm_source=3Dfooter&utm_medium=3Demail&utm_campai=
+gn=3Dlogo1]=
+
+--=-S92mgEhseLIBceG53h69
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>Timely reminders about safety and community</title><!--[if !mso]><!-->=
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><!--<![endif]-->=
+<meta name=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=3D1">=
+<style type=3D"text/css">#outlook a { padding:0; }
+      body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size=
+-adjust:100%; }
+      table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-table-r=
+space:0pt; }
+      img { border:0;height:auto;line-height:100%; outline:none;text-decora=
+tion:none;-ms-interpolation-mode:bicubic; }
+      p { display:block;margin:13px 0; }</style><!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]--><!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]--><!--[if !mso]><!--><link href=3D"https://fonts.googleapis.c=
+om/css?family=3DUbuntu:300,400,500,700" rel=3D"stylesheet" type=3D"text/css=
+"><style type=3D"text/css">@import url(https://fonts.googleapis.com/css?fam=
+ily=3DUbuntu:300,400,500,700);</style><!--<![endif]--><style type=3D"text/c=
+ss">@media only screen and (min-width:480px) {
+        .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.mj-column-per-33 { width:33% !important; max-width: 33%; }
+.mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.moz-text-html .mj-column-per-33 { width:33% !important; max-width: 33%; }
+.moz-text-html .mj-column-per-100 { width:100% !important; max-width: 100%;=
+ }</style><style type=3D"text/css">[owa] .mj-column-per-67 { width:67% !imp=
+ortant; max-width: 67%; }
+[owa] .mj-column-per-33 { width:33% !important; max-width: 33%; }
+[owa] .mj-column-per-100 { width:100% !important; max-width: 100%; }</style=
+><style type=3D"text/css">@media only screen and (max-width:479px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style><style type=3D"text/css"></style></head><body style=3D"word-sp=
+acing:normal;background-color:#ffffff;"><div style=3D"background-color:#fff=
+fff;"><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px=
+;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-h=
+eight-rule:exactly;"><![endif]--><div style=3D"margin:0px auto;max-width:60=
+0px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr><td style=3D"dir=
+ection:ltr;font-size:0px;padding:20px 0px 20px 0px;padding-left:0px;padding=
+-right:0px;text-align:center;"><!--[if mso | IE]><table role=3D"presentatio=
+n" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" styl=
+e=3D"vertical-align:middle;width:402px;" ><![endif]--><div class=3D"mj-colu=
+mn-per-67 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;dire=
+ction:ltr;display:inline-block;vertical-align:middle;width:100%;"><table bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"vertical-align:middle;" width=3D"100%"><tbody><tr><td align=3D"left" st=
+yle=3D"font-size:0px;padding:0px 0px 0px 25px;padding-top:0px;padding-right=
+:0px;padding-bottom:0px;word-break:break-word;"><div style=3D"font-family:A=
+rial, sans-serif;font-size:12px;letter-spacing:normal;line-height:1;text-al=
+ign:left;color:#000000;"></div></td></tr></tbody></table></div><!--[if mso =
+| IE]></td><td class=3D"" style=3D"vertical-align:middle;width:198px;" ><![=
+endif]--><div class=3D"mj-column-per-33 mj-outlook-group-fix" style=3D"font=
+-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align=
+:middle;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" role=3D"presentation" style=3D"vertical-align:middle;" width=3D"100%"><tb=
+ody><tr><td align=3D"left" style=3D"font-size:0px;padding:0px 25px 0px 0px;=
+padding-top:0px;padding-right:25px;padding-bottom:0px;word-break:break-word=
+;"><div style=3D"font-family:Arial, sans-serif;font-size:13px;letter-spacin=
+g:normal;line-height:1;text-align:left;color:#000000;"><p style=3D"text-ali=
+gn: right; margin: 10px 0; margin-top: 10px; margin-bottom: 10px;"><a href=
+=3D"http://inj9.mjt.lu/nl3/cA-JKwqkf9-ZMbXoGCMSgA?m=3DAVwAACgyxpEAAcrtDtAAA=
+MlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc&amp;b=3D230e6529=
+&amp;e=3D35a582db&amp;x=3Da7iET_5Bkh8rOy7esnA68A" target=3D"_blank" style=
+=3D"; text-decoration: none;"><span><u><span style=3D"line-height:22px;text=
+-align:right;font-size:12px;letter-spacing:normal;text-align:left;color:#00=
+56ee;font-family:Arial;"><u>View online version</u></span></u></span></a></=
+p></div></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table=
+><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></=
+table><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" class=3D"" role=3D"presentation" style=3D"width:600px;" width=3D"600" >=
+<tr><td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly=
+;"><![endif]--><div style=3D"margin:0px auto;max-width:600px;"><table align=
+=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presen=
+tation" style=3D"width:100%;"><tbody><tr><td style=3D"direction:ltr;font-si=
+ze:0px;padding:20px 0;padding-bottom:0px;padding-top:0px;text-align:center;=
+"><!--[if mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;wid=
+th:600px;" ><![endif]--><div class=3D"mj-column-per-100 mj-outlook-group-fi=
+x" style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-bloc=
+k;vertical-align:top;width:100%;"><table border=3D"0" cellpadding=3D"0" cel=
+lspacing=3D"0" role=3D"presentation" style=3D"vertical-align:top;" width=3D=
+"100%"><tbody><tr><td align=3D"center" style=3D"font-size:0px;padding:0px 4=
+px 0px 4px;padding-top:0px;padding-right:4px;padding-bottom:0px;padding-lef=
+t:4px;word-break:break-word;"><table border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" role=3D"presentation" style=3D"border-collapse:collapse;border-s=
+pacing:0px;"><tbody><tr><td style=3D"width:592px;"><img alt=3D"MIT letterhe=
+ad for Vice Chancellor and Dean for Student Life Suzy M. Nelson" src=3D"htt=
+ps://inj9.mjt.lu/img/inj9/b/mksgs/gmjkh.png" style=3D"border:none;border-ra=
+dius:px;display:block;outline:none;text-decoration:none;height:auto;width:1=
+00%;font-size:13px;" width=3D"592" height=3D"auto"></td></tr></tbody></tabl=
+e></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![en=
+dif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table>=
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" cl=
+ass=3D"" role=3D"presentation" style=3D"width:600px;" width=3D"600" bgcolor=
+=3D"#ffffff" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-heigh=
+t-rule:exactly;"><![endif]--><div style=3D"background:#ffffff;background-co=
+lor:#ffffff;margin:0px auto;max-width:600px;"><table align=3D"center" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"=
+background:#ffffff;background-color:#ffffff;width:100%;"><tbody><tr><td sty=
+le=3D"direction:ltr;font-size:0px;padding:0px 0px 20px 0px;padding-left:0px=
+;padding-right:0px;padding-top:0px;text-align:center;"><!--[if mso | IE]><t=
+able role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+><tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><![endif]-->=
+<div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-size:0p=
+x;text-align:left;direction:ltr;display:inline-block;vertical-align:top;wid=
+th:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td al=
+ign=3D"left" style=3D"font-size:0px;padding:10px 25px;padding-top:0px;paddi=
+ng-bottom:0px;word-break:break-word;"><div style=3D"font-family:Ubuntu, Hel=
+vetica, Arial, sans-serif;font-size:13px;letter-spacing:normal;line-height:=
+1;text-align:left;color:#000000;"><p class=3D"text-build-content" style=3D"=
+line-height: 22px; margin: 10px 0; margin-top: 10px; margin-bottom: 10px;" =
+data-testid=3D"CbzcIpX4zWAw9V4zQBiHZ"><span style=3D"color:#333333;font-fam=
+ily:Arial;font-size:14px;"><i><b>TL;DR:</b> Leaning into MIT values and bei=
+ng there for each other; Reporting posters and other media that may violate=
+ MIT policies; Personal attacks targeting individuals or groups will be tak=
+en seriously; Reach out to support resources and follow safety tips.</i></s=
+pan></p></div></td></tr><tr><td align=3D"left" style=3D"font-size:0px;paddi=
+ng:0px 25px 0px 25px;padding-top:0px;padding-right:25px;padding-bottom:0px;=
+padding-left:25px;word-break:break-word;"><div style=3D"font-family:Ubuntu,=
+ Helvetica, Arial, sans-serif;font-size:13px;letter-spacing:normal;line-hei=
+ght:1;text-align:left;color:#000000;"><p class=3D"text-build-content" style=
+=3D"line-height: 22px; margin: 10px 0; margin-top: 10px;" data-testid=3D"yk=
+wUBMl-WY"><span style=3D"color:#333333;font-family:Arial;font-size:14px;">D=
+ear students,</span></p><p class=3D"text-build-content" style=3D"line-heigh=
+t: 22px; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#=
+333333;font-family:Arial;font-size:14px;">I have been impressed by the peac=
+eful gatherings on campus that have already occurred, and I hope and expect=
+ future gatherings will be held in this same spirit. As the conflict in Isr=
+ael and Gaza has deepened, however, I feel it=E2=80=99s important to share =
+some reminders about guidelines and policies that enable us to live togethe=
+r in community.&nbsp;</span></p><p class=3D"text-build-content" style=3D"li=
+ne-height: 22px; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D=
+"color:#333333;font-family:Arial;font-size:14px;">As </span><a class=3D"lin=
+k-build-content" style=3D"color:inherit;text-decoration:none;; text-decorat=
+ion: none;" target=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVwAACgyxpEAAc=
+rtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc/1/-O1IIOY=
+B1REL_KnyCydciQ/aHR0cHM6Ly9wcmVzaWRlbnQubWl0LmVkdS93cml0aW5nLXNwZWVjaGVzL3Z=
+pZGVvLXRyYW5zY3JpcHQtb3VyLWNvbW11bml0eS1hbmQtdmlvbGVuY2UtaXNyYWVsLWFuZC1nYX=
+ph"><span style=3D"color:#0056ee;font-family:Arial;font-size:14px;"><u>Pres=
+ident Kornbluth emphasized</u></span></a><span style=3D"color:#333333;font-=
+family:Arial;font-size:14px;">, we must sustain the strength of our communi=
+ty even in such a painful time by holding fast to </span><a class=3D"link-b=
+uild-content" style=3D"color:inherit;text-decoration:none;; text-decoration=
+: none;" target=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVwAACgyxpEAAcrtD=
+tAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc/2/tJrHckMC-b=
+G1YaNA38mbFg/aHR0cHM6Ly93d3cubWl0LmVkdS92YWx1ZXMv"><span style=3D"color:#00=
+56ee;font-family:Arial;font-size:14px;"><u>our values</u></span></a><span s=
+tyle=3D"color:#333333;font-family:Arial;font-size:14px;"> and respecting ea=
+ch other. I=E2=80=99m grateful that, on the whole, the members of our commu=
+nity are more than living up to this expectation.&nbsp;</span></p><h2 class=
+=3D"text-build-content" data-testid=3D"ykwUBMl-WY" style=3D"; font-weight: =
+normal;"><span style=3D"color:#333333;font-family:Arial;font-size:15px;"><b=
+>Controversial messages</b></span></h2><p class=3D"text-build-content" styl=
+e=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span s=
+tyle=3D"color:#333333;font-family:Arial;font-size:14px;">At the same time, =
+we have seen a rise in divisive social media posts, flyers, chalking, and o=
+ther incidents that increase tensions in our community. Unfortunately, you =
+may be exposed to posters and other media =E2=80=93 at MIT and elsewhere =
+=E2=80=93 containing misleading, unsettling, and even hurtful statements.</=
+span></p><p class=3D"text-build-content" style=3D"line-height: 22px; margin=
+: 10px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-fam=
+ily:Arial;font-size:14px;">In keeping with MIT=E2=80=99s commitment to free=
+ expression, we can all share opinions and emotions about recent events. Ho=
+wever, if you believe the content of a poster, chalking, or similar display=
+ violates Institute policy, leave it alone, take a photo, and report your c=
+oncerns to the </span><a class=3D"link-build-content" style=3D"color:inheri=
+t;text-decoration:none;; text-decoration: none;" target=3D"_blank" href=3D"=
+http://inj9.mjt.lu/lnk/AVwAACgyxpEAAcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiy=
+D9edfcOjTGq2fVJKvmxFJQAIIWc/3/twcExN3SHIuc-8raHo2gxQ/aHR0cHM6Ly9pZGhyLm1pdC=
+5lZHUv"><span style=3D"color:#0056ee;font-family:Arial;font-size:14px;"><u>=
+Institute Discrimination &amp; Harassment Response Office (IDHR)</u></span>=
+</a><span style=3D"color:#333333;font-family:Arial;font-size:14px;"> or the=
+ </span><a class=3D"link-build-content" style=3D"color:inherit;text-decorat=
+ion:none;; text-decoration: none;" target=3D"_blank" href=3D"http://inj9.mj=
+t.lu/lnk/AVwAACgyxpEAAcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fV=
+JKvmxFJQAIIWc/4/-ZFYXcKu2AoHAbL9k_FZJw/aHR0cHM6Ly9ob3RsaW5lLm1pdC5lZHUv"><s=
+pan style=3D"color:#0056ee;font-family:Arial;font-size:14px;"><u>MIT Hotlin=
+e</u></span></a><span style=3D"color:#333333;font-family:Arial;font-size:14=
+px;">. The decision to take down a poster, chalking, or similar display bas=
+ed on content or viewpoint will be made in the sole discretion of a rapid r=
+esponse team appointed jointly by the Provost, Chancellor, Vice President f=
+or Human Resources, and the Chair of the Faculty.</span></p><p class=3D"tex=
+t-build-content" style=3D"line-height: 22px; margin: 10px 0;" data-testid=
+=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-family:Arial;font-size:14=
+px;">And, of course, we have a role in how we respond to hateful messages. =
+As President Kornbluth said, =E2=80=9CSimple gestures of compassion and kin=
+dness can be incredibly important for people in the midst of such overwhelm=
+ing suffering and uncertainty.=E2=80=9D</span></p><h2 class=3D"text-build-c=
+ontent" data-testid=3D"ykwUBMl-WY" style=3D"; font-weight: normal;"><span s=
+tyle=3D"color:#333333;font-family:Arial;font-size:15px;"><b>Targeting, hara=
+ssment, and threats of violence</b></span></h2><p class=3D"text-build-conte=
+nt" style=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"=
+><span style=3D"color:#333333;font-family:Arial;font-size:14px;">Speech or =
+behavior that amounts to </span><a class=3D"link-build-content" style=3D"co=
+lor:inherit;text-decoration:none;; text-decoration: none;" target=3D"_blank=
+" href=3D"http://inj9.mjt.lu/lnk/AVwAACgyxpEAAcrtDtAAAMlryacAAYCrBTgAJc-cAA=
+iQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc/5/mIxdYiGJKOUdY0CCrOE4ZQ/aHR0cHM6Ly9w=
+b2xpY2llcy5taXQuZWR1L3BvbGljaWVzLXByb2NlZHVyZXMvOTAtcmVsYXRpb25zLWFuZC1yZXN=
+wb25zaWJpbGl0aWVzLXdpdGhpbi1taXQtY29tbXVuaXR5Lzk1LWhhcmFzc21lbnQ"><span sty=
+le=3D"color:#0056ee;font-family:Arial;font-size:14px;"><u>harassment</u></s=
+pan></a><span style=3D"color:#333333;font-family:Arial;font-size:14px;"> an=
+d </span><a class=3D"link-build-content" style=3D"color:inherit;text-decora=
+tion:none;; text-decoration: none;" target=3D"_blank" href=3D"http://inj9.m=
+jt.lu/lnk/AVwAACgyxpEAAcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2f=
+VJKvmxFJQAIIWc/6/Yq_Cf2Z5G1Pue4edOoRyFA/aHR0cHM6Ly9wb2xpY2llcy5taXQuZWR1L3B=
+vbGljaWVzLXByb2NlZHVyZXMvOTAtcmVsYXRpb25zLWFuZC1yZXNwb25zaWJpbGl0aWVzLXdpdG=
+hpbi1taXQtY29tbXVuaXR5Lzk2LXZpb2xlbmNlLWFnYWluc3Q"><span style=3D"color:#00=
+56ee;font-family:Arial;font-size:14px;"><u>acts (or threats of) violence</u=
+></span></a><span style=3D"color:#333333;font-family:Arial;font-size:14px;"=
+>, against individuals or groups, are against MIT policy. Reports of such b=
+ehavior will be taken seriously.&nbsp;</span></p><h2 class=3D"text-build-co=
+ntent" data-testid=3D"ykwUBMl-WY" style=3D"; font-weight: normal;"><span st=
+yle=3D"color:#333333;font-family:Arial;font-size:15px;"><b>Your well-being =
+and your sense of safety</b></span></h2><p class=3D"text-build-content" sty=
+le=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span =
+style=3D"color:#333333;font-family:Arial;font-size:14px;">We=E2=80=99re rea=
+ching out to students who have been directly impacted and are offering them=
+ individualized supports. If you or someone you know would benefit from sup=
+port or a listening ear, I encourage you to </span><a class=3D"link-build-c=
+ontent" style=3D"color:inherit;text-decoration:none;; text-decoration: none=
+;" target=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVwAACgyxpEAAcrtDtAAAMl=
+ryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc/7/a59Ok4XkzGuxCLZ3=
+5u7Y7w/aHR0cHM6Ly9kb2luZ3dlbGwubWl0LmVkdS9zdXBwb3J0LTMv"><span style=3D"col=
+or:#0056ee;font-family:Arial;font-size:14px;"><u>contact MIT=E2=80=99s supp=
+ort resources</u></span></a><span style=3D"color:#333333;font-family:Arial;=
+font-size:14px;">. Below my signature, you=E2=80=99ll also find some helpfu=
+l personal safety tips from MIT Police and DSL.</span></p><p class=3D"text-=
+build-content" style=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"=
+ykwUBMl-WY"><span style=3D"color:#333333;font-family:Arial;font-size:14px;"=
+>MIT is a strong community, and it=E2=80=99s even stronger when we are ther=
+e for each other. I=E2=80=99m confident we have the wisdom to promote empat=
+hy, respect, and dignity for everyone in our MIT home.&nbsp;</span></p><p c=
+lass=3D"text-build-content" style=3D"line-height: 22px; margin: 10px 0;" da=
+ta-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-family:Arial;fon=
+t-size:14px;">Best,</span></p><p class=3D"text-build-content" style=3D"line=
+-height: 22px; margin: 10px 0; margin-bottom: 10px;" data-testid=3D"ykwUBMl=
+-WY"><span style=3D"color:#333333;font-family:Arial;font-size:14px;">Suzy N=
+elson</span><br><span style=3D"color:#333333;font-family:Arial;font-size:14=
+px;">Vice Chancellor and Dean for Student Life</span></p></div></td></tr><t=
+r><td align=3D"center" style=3D"font-size:0px;padding:10px 25px;word-break:=
+break-word;"><p style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:=
+0px auto;width:100%;"></p><!--[if mso | IE]><table align=3D"center" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" style=3D"border-top:solid 2px #E=
+6E6E6;font-size:1px;margin:0px auto;width:550px;" role=3D"presentation" wid=
+th=3D"550px" ><tr><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"left" style=3D"fon=
+t-size:0px;padding:10px 25px;padding-top:0px;padding-bottom:0px;word-break:=
+break-word;"><div style=3D"font-family:Ubuntu, Helvetica, Arial, sans-serif=
+;font-size:13px;letter-spacing:normal;line-height:1;text-align:left;color:#=
+000000;"><h2 class=3D"text-build-content" data-testid=3D"aftrHLD0QKn4BZRV1g=
+Okx" style=3D"margin-top: 10px; font-weight: normal;"><span style=3D"color:=
+#333333;font-family:Arial;font-size:15px;"><b>For your personal safety</b><=
+/span></h2><p class=3D"text-build-content" data-testid=3D"aftrHLD0QKn4BZRV1=
+gOkx" style=3D"margin: 10px 0; margin-bottom: 10px;"><span style=3D"color:#=
+333333;font-family:Arial;font-size:14px;line-height:22px;">MIT Police share=
+d the following best practices:</span></p><ul><li style=3D"line-height:22px=
+;"><span style=3D"color:#333333;font-family:Arial;font-size:14px;"><b>Be aw=
+are of your surroundings. If your physical safety is threatened at any time=
+, or if you see a crime occurring or about to occur, contact MIT Police imm=
+ediately at (617) 253-1212, or dial 100 from any MIT phone.</b></span></li>=
+<li style=3D"line-height:22px;"><span style=3D"color:#333333;font-family:Ar=
+ial;font-size:14px;">If you receive a threatening email that targets your l=
+ife, safety, or property, refer to this information on </span><a class=3D"l=
+ink-build-content" style=3D"color:inherit;text-decoration:none;; text-decor=
+ation: none;" target=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVwAACgyxpEA=
+AcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc/8/XsGJa=
+vDd7jvjzHrKU570HA/aHR0cDovL2tiLm1pdC5lZHUvY29uZmx1ZW5jZS9kaXNwbGF5L2lzdGNvb=
+nRyaWIvTUlUK1N0b3BpdCthbmQrSGFyYXNzbWVudCtvbitDYW1wdXM7anNlc3Npb25pZD0zOTA1=
+ODcyQTYzRUUyQjdGQ0REM0E1RkM3RTg3NTZFNA"><span style=3D"color:#0056ee;font-f=
+amily:Arial;font-size:14px;"><u>MIT Stopit</u></span></a><span style=3D"col=
+or:#333333;font-family:Arial;font-size:14px;"> and contact MIT Police.</spa=
+n></li><li style=3D"line-height:22px;"><span style=3D"color:#333333;font-fa=
+mily:Arial;font-size:14px;">Report harassment or discrimination incidents a=
+t </span><a class=3D"link-build-content" style=3D"color:inherit;text-decora=
+tion:none;; text-decoration: none;" target=3D"_blank" href=3D"http://inj9.m=
+jt.lu/lnk/AVwAACgyxpEAAcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2f=
+VJKvmxFJQAIIWc/9/trb70SxA97RH-zjFQg7p9g/aHR0cHM6Ly9pZGhyLm1pdC5lZHU"><span =
+style=3D"color:#0056ee;font-family:Arial;font-size:14px;"><u>https://idhr.m=
+it.edu</u></span></a><span style=3D"color:#333333;font-family:Arial;font-si=
+ze:14px;">.</span></li><li style=3D"line-height:22px;"><span style=3D"color=
+:#333333;font-family:Arial;font-size:14px;">Do not allow tailgaters, and co=
+ntact MIT Police if anyone follows you into a restricted area (e.g., your r=
+esidence hall, lab, or other locked area) without swiping their MIT ID.</sp=
+an></li><li style=3D"line-height:22px;"><span style=3D"color:#333333;font-f=
+amily:Arial;font-size:14px;">Always lock your residence=E2=80=99s or room=
+=E2=80=99s door and windows, even if you leave for a minute or two.</span><=
+/li><li style=3D"line-height:22px;"><span style=3D"color:#333333;font-famil=
+y:Arial;font-size:14px;">When entering or exiting a residence or other secu=
+re space, make sure the door closes tightly behind you.</span></li><li styl=
+e=3D"line-height:22px;"><span style=3D"color:#333333;font-family:Arial;font=
+-size:14px;">If you intend on having guests in your residence hall, make su=
+re you follow your house=E2=80=99s guest policy.</span></li><li style=3D"li=
+ne-height:22px;"><span style=3D"color:#333333;font-family:Arial;font-size:1=
+4px;">Learn the locations of the </span><a class=3D"link-build-content" sty=
+le=3D"color:inherit;text-decoration:none;; text-decoration: none;" target=
+=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVwAACgyxpEAAcrtDtAAAMlryacAAYCr=
+BTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc/10/j8203Dyc3o5PzNWOdm2AoA/a=
+HR0cHM6Ly9wb2xpY2UubWl0LmVkdS9yZXBvcnQtY3JpbWUtYWNjaWRlbnQtb3ItaW5jaWRlbnQ"=
+><span style=3D"color:#0056ee;font-family:Arial;font-size:14px;"><u>Blue Li=
+ght emergency phones</u></span></a><span style=3D"color:#333333;font-family=
+:Arial;font-size:14px;"> on campus and utilize </span><a class=3D"link-buil=
+d-content" style=3D"color:inherit;text-decoration:none;; text-decoration: n=
+one;" target=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVwAACgyxpEAAcrtDtAA=
+AMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc/11/OJ6RetH8v2DK=
+5hF142WtyA/aHR0cHM6Ly93ZWIubWl0LmVkdS9mYWNpbGl0aWVzL3RyYW5zcG9ydGF0aW9uL3No=
+dXR0bGVzL3NhZmVfcmlkZS5odG1s"><span style=3D"color:#0056ee;font-family:Aria=
+l;font-size:14px;"><u>SafeRide</u></span></a><span style=3D"color:#333333;f=
+ont-family:Arial;font-size:14px;"> or public transportation.</span></li><li=
+ style=3D"line-height:22px;"><span style=3D"color:#333333;font-family:Arial=
+;font-size:14px;">Let your friends know when you are leaving and arriving a=
+t your destination at the end of the night.</span></li></ul></div></td></tr=
+></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td=
+></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><table alig=
+n=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" ro=
+le=3D"presentation" style=3D"width:600px;" width=3D"600" ><tr><td style=3D"=
+line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><d=
+iv style=3D"margin:0px auto;max-width:600px;"><table align=3D"center" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"=
+width:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px 20px 0px;padding-left:0px;padding-right:0px;text-align:center;"><!--=
+[if mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:600px=
+;" ><![endif]--><div class=3D"mj-column-per-100 mj-outlook-group-fix" style=
+=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertic=
+al-align:top;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><=
+tbody><tr><td align=3D"center" style=3D"font-size:0px;padding:0px 25px 10px=
+ 25px;padding-top:0px;padding-right:25px;padding-left:25px;word-break:break=
+-word;"><p style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:0px a=
+uto;width:100%;"></p><!--[if mso | IE]><table align=3D"center" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" style=3D"border-top:solid 2px #E6E6E6;=
+font-size:1px;margin:0px auto;width:550px;" role=3D"presentation" width=3D"=
+550px" ><tr><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"left" style=3D"fon=
+t-size:0px;padding:0px 20px 0px 20px;padding-top:0px;padding-bottom:0px;wor=
+d-break:break-word;"><div style=3D"font-family:Arial, sans-serif;font-size:=
+11px;letter-spacing:normal;line-height:1;text-align:left;color:#000000;"><p=
+ class=3D"text-build-content" style=3D"text-align: center; margin: 10px 0; =
+margin-top: 10px;" data-testid=3D"A5rER0v1Z-"><span style=3D"color:#333333;=
+font-family:Arial;font-size:11px;line-height:14px;">Massachusetts Institute=
+ of Technology</span><br><span style=3D"color:#333333;font-family:Arial;fon=
+t-size:11px;line-height:14px;">77 Massachusetts Ave | Cambridge, MA 02139</=
+span></p><p class=3D"text-build-content" style=3D"text-align: center; margi=
+n: 10px 0; margin-bottom: 10px;" data-testid=3D"A5rER0v1Z-"><span style=3D"=
+color:#333333;font-family:Arial;font-size:11px;line-height:14px;">This emai=
+l has been sent to jiannan@mit.edu.&nbsp;</span><br><span style=3D"color:#3=
+33333;font-family:Arial;font-size:11px;line-height:14px;">You received this=
+ email because you are an MIT student.</span><br><a class=3D"link-build-con=
+tent" style=3D"color:inherit;text-decoration:none;; text-decoration: none;"=
+ target=3D"_blank" href=3D"http://inj9.mjt.lu/unsub2?hl=3Den&amp;m=3DAVwAAC=
+gyxpEAAcrtDtAAAMlryacAAYCrBTgAJc-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc&a=
+mp;b=3D230e6529&amp;e=3D35a582db&amp;x=3Da7iET_5Bkh8rOy7esnA68A"><span styl=
+e=3D"color:#0056ee;font-family:Arial;font-size:11px;line-height:14px;"><u>C=
+lick here to unsubscribe</u></span></a><span style=3D"color:#333333;font-fa=
+mily:Arial;font-size:11px;line-height:14px;">. </span><a class=3D"link-buil=
+d-content" style=3D"color:inherit;text-decoration:none;; text-decoration: n=
+one;" href=3D"mailto:report-announcement-issue@mit.edu"><span style=3D"colo=
+r:#0056ee;font-family:Arial;font-size:11px;line-height:14px;"><u>Report an =
+issue with this email</u></span></a><span style=3D"color:#333333;font-famil=
+y:Arial;font-size:11px;line-height:14px;">.</span></p></div></td></tr></tbo=
+dy></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr>=
+</tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div=
+>
+<br><img src=3D"http://inj9.mjt.lu/oo/AVwAACgyxpEAAcrtDtAAAMlryacAAYCrBTgAJ=
+c-cAAiQzwBlKIiyD9edfcOjTGq2fVJKvmxFJQAIIWc/91d48478/e.gif" height=3D"1" wid=
+th=3D"1" alt=3D"" border=3D"0" style=3D"height:1px;width:1px;border:0;">
+</body></html>=
+
+--=-S92mgEhseLIBceG53h69--

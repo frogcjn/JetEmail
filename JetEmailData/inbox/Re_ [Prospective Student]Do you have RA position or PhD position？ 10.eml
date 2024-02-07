@@ -1,0 +1,465 @@
+Received: from MWHPR0101MB3088.prod.exchangelabs.com (2603:10b6:301:36::25) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 1 Feb 2023 17:39:22
+ +0000
+Received: from DM6PR21CA0025.namprd21.prod.outlook.com (2603:10b6:5:174::35)
+ by MWHPR0101MB3088.prod.exchangelabs.com (2603:10b6:301:36::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.38; Wed, 1 Feb
+ 2023 17:39:21 +0000
+Received: from DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:174:cafe::57) by DM6PR21CA0025.outlook.office365.com
+ (2603:10b6:5:174::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.5 via Frontend
+ Transport; Wed, 1 Feb 2023 17:39:21 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.99)
+ smtp.mailfrom=cs.hku.hk; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cs.hku.hk;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ cs.hku.hk discourages use of 18.9.1.99 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.99) by
+ DM6NAM11FT103.mail.protection.outlook.com (10.13.172.75) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6043.36 via Frontend Transport; Wed, 1 Feb 2023 17:39:18 +0000
+Received: from w92expo13.exchange.mit.edu (18.7.74.67) by
+ oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 1 Feb 2023 12:36:35 -0500
+Received: from oc11exhyb6.exchange.mit.edu (18.9.1.111) by
+ w92expo13.exchange.mit.edu (18.7.74.67) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 1 Feb 2023 12:36:01 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.172)
+ by oc11exhyb6.exchange.mit.edu (18.9.1.111) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42 via Frontend Transport; Wed, 1 Feb 2023 12:36:01 -0500
+Received: from MN2PR22CA0030.namprd22.prod.outlook.com (2603:10b6:208:238::35)
+ by BN6PR01MB2369.prod.exchangelabs.com (2603:10b6:404:53::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6043.38; Wed, 1 Feb 2023 17:36:00 +0000
+Received: from BL02EPF0000EE3C.namprd05.prod.outlook.com
+ (2603:10b6:208:238:cafe::eb) by MN2PR22CA0030.outlook.office365.com
+ (2603:10b6:208:238::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6064.25 via Frontend
+ Transport; Wed, 1 Feb 2023 17:36:00 +0000
+Authentication-Results-Original: spf=pass (sender IP is 147.8.176.10)
+ smtp.mailfrom=cs.hku.hk; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none
+ header.from=cs.hku.hk;compauth=pass reason=109
+Received-SPF: Pass (protection.outlook.com: domain of cs.hku.hk designates
+ 147.8.176.10 as permitted sender) receiver=protection.outlook.com;
+ client-ip=147.8.176.10; helo=mail.cs.hku.hk; pr=C
+Received: from mail.cs.hku.hk (147.8.176.10) by
+ BL02EPF0000EE3C.mail.protection.outlook.com (10.167.241.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6064.17 via Frontend Transport; Wed, 1 Feb 2023 17:35:57 +0000
+X-Spam-Status: No
+X-cs-MailScanner-Watermark: 1675877750.41497@w08Op1kxFYK5Mr8S/Ny+RA
+X-cs-MailScanner-From: tyu@cs.hku.hk
+X-cs-MailScanner-SpamScore: s
+X-cs-MailScanner-SpamCheck: not spam, SpamAssassin (not cached, score=1.275,
+	required 9, autolearn=disabled, HTML_MESSAGE 0.00,
+	RCVD_IN_DNSWL_NONE -0.00, RCVD_IN_MSPIKE_H2 -0.00, RDNS_NONE 1.27,
+	SPF_HELO_NONE 0.00)
+X-cs-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+X-cs-MailScanner-ID: 311HZmpf016543
+X-cs-MailScanner-Information: Please contact the ISP for more information
+Received: from intraguard.cs.hku.hk (intraguard.cs.hku.hk [147.8.176.32])
+	by mail.cs.hku.hk (8.15.2/8.15.2/Debian-10) with ESMTP id 311HZmpf016543
+	for <jiannan@mit.edu>; Thu, 2 Feb 2023 01:35:48 +0800
+X-IronPort-AV: E=Sophos;i="5.97,263,1669046400"; 
+   d="scan'208,217";a="2745886"
+Received: from mail-lj1-f170.google.com ([209.85.208.170])
+  by intraguard.cs.hku.hk with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2023 01:35:48 +0800
+Received: by mail-lj1-f170.google.com with SMTP id u27so13587627ljo.12
+        for <jiannan@mit.edu>; Wed, 01 Feb 2023 09:35:47 -0800 (PST)
+X-Gm-Message-State: AO0yUKWLQmatpMqol74cqXIO6cHPEJIeMRlAjMNHuVjlnQIQDlBRtyn+
+	DJsplz2CJmAVsiPffFWHxmvt3He5riErYFUcZ2M=
+X-Google-Smtp-Source: AK7set90DO9pa9Juh/BXKhRSA3L5rf46Ll7Rm2vG3oi6h/lLM/Hm7Bb12NwHYAkkMEzInhmdlPxaJ2My7dhFujP23hc=
+X-Received: by 2002:a2e:a452:0:b0:290:563d:fb86 with SMTP id
+ v18-20020a2ea452000000b00290563dfb86mr456109ljn.196.1675272944978; Wed, 01
+ Feb 2023 09:35:44 -0800 (PST)
+References: <BN0PR01MB713483FCC8C9C8F54823FD61BDD09@BN0PR01MB7134.prod.exchangelabs.com>
+ <CABtXVYtH+zzDhVQgM2C1U1QCO_hAhE-gp50URzMoi63XQLXL1Q@mail.gmail.com>
+ <2C152615-47B3-426E-8BDD-B517F785DA29@mit.edu>
+ <CABtXVYsqpqSXeOrnyNpN-dYZ5ec2mR_TLfX0ip7=c_0oKGp0dw@mail.gmail.com>
+ <E5645840-56D3-4B45-90CC-87F53C3C842E@mit.edu>
+ <CABtXVYsxR+hchopCLsVp3S7R-j91Vj=a-jHeP32oj3E1zkX6+Q@mail.gmail.com>
+ <62324B14-F280-465B-A8A9-7ED3BF2D8251@mit.edu>
+In-Reply-To: <62324B14-F280-465B-A8A9-7ED3BF2D8251@mit.edu>
+From: Tao Yu <tyu@cs.hku.hk>
+Date: Thu, 2 Feb 2023 01:35:33 +0800
+X-Gmail-Original-Message-ID: <CABtXVYtxwcM2Mxvo5jp-g_xuKDH93j8G0ftFYb3qZyqZquCv3w@mail.gmail.com>
+Message-ID: <CABtXVYtxwcM2Mxvo5jp-g_xuKDH93j8G0ftFYb3qZyqZquCv3w@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_=5BProspective_Student=5DDo_you_have_RA_position_or_?=
+	=?UTF-8?Q?PhD_position=EF=BC=9F?=
+To: Jiannan Cao <jiannan@mit.edu>
+Content-Type: multipart/alternative; boundary="000000000000c98f7b05f3a6e02c"
+Return-Path: tyu@cs.hku.hk
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BL02EPF0000EE3C:EE_|BN6PR01MB2369:EE_|DM6NAM11FT103:EE_|MWHPR0101MB3088:EE_
+X-MS-Office365-Filtering-Correlation-Id: e8bb4dfd-0439-4289-7639-08db047b3f13
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?HAtQYq8E85dckUByOoO52/YZXWstBENGCg8PTdJ1vjswmQBIRw5BPUiSHwav?=
+ =?us-ascii?Q?nsI0KLgBy71BWBhg7CnmEx/HE81z+Fq20Bgk7JTGNrpbRctz38y5F0cKmJX2?=
+ =?us-ascii?Q?y0coZRdhDf3qupddzUQi8qv4FehhlqPw9e7uJ16IYOe2EcHDLFzL42V0TkHi?=
+ =?us-ascii?Q?WvBXETD1T02jFDJS8O6d3foyop1WhwxOGeXC3PRnXXPkOK2er7wkU1TH1X7i?=
+ =?us-ascii?Q?tIyQwTRK4gg5vXSfh0RxQ1Zep+vzlOUYeDEyXI5OTnGbs4/V9zXooF3zWo+7?=
+ =?us-ascii?Q?/A+rUXjIN7SPfL3EtzTG0JDoNZWoSHIpVkuL5YmkY0HyXFyQQfB5RzyxrJxA?=
+ =?us-ascii?Q?OH0fxtwnMA4mPBnECi6nIdLjOVqmWcwTmeTgdRIW8DxoEVN1L767Drykn6ja?=
+ =?us-ascii?Q?LMWLSJ31oAB/RvzVcQzWpZ0u2D34s+6IJ8ztfZ1ANm5NNgUfwWSv+kPTjprG?=
+ =?us-ascii?Q?2gPmZUJtkPPqyYLWs6UiIzwdmCjBcqdbpGIZsBlw3Rf0KN2cyaZ1h5WtoYRa?=
+ =?us-ascii?Q?bhw03+QEZD982YT65BriLJcyL+NfnfF735RDJRLk0heqe3HHzPXbdwm4MyxJ?=
+ =?us-ascii?Q?3DypAXBVC1Xp0n/81WjiGYp5as1ignGZEguuOmk3dCMJFluj31xBSLQjwN5m?=
+ =?us-ascii?Q?FTX5pUO0pEACGVLOE9fXgHIqDsEjQBQCYj6TwMhWOwqlxPGSMH4w9bHKgm/F?=
+ =?us-ascii?Q?PvTnbjmXSxFhOax8S4frdqyq4h/VTK4bpbPEuEQ6O49ggOZZnaph5VKznc3y?=
+ =?us-ascii?Q?RQz7MwW/+dwmcVRxhIgI9r83lYgrDEA6uPtCCnGtQKkGCu5jlmEehZXso37S?=
+ =?us-ascii?Q?FOk78EbgsuJx7n+fFCreqg+780nvWQvV9BHANFxm8HYh4DgGXwjg9PS9ahkY?=
+ =?us-ascii?Q?atEkcmowCNHr8b0iwB5diENyyLM/6GmbmUdzxQNvuOymh0cFItt0nNUyTlnX?=
+ =?us-ascii?Q?meq3fOw1G/sTwGD/WOViF1PaPg05zjU3zXV7ZnXe1MMDTMAdEd06JOcEIK4l?=
+ =?us-ascii?Q?So8oaxwYnnFVCn/Ty9zFWkgQ46PKqp+imaDDNyXpnPrY1szWG9c8flMxqqKF?=
+ =?us-ascii?Q?9IxWZW2Qyl1fKxfkqrUabqdJ5yHyKoYZ1fBf+GKVeyzEOrseGBUCULQ0Gq7Y?=
+ =?us-ascii?Q?KzDO8W9sILwWHuo5i60Rly6n0WMO9CO/ipprCMT4Ba3ozkaOZK7/ZwyLy8X5?=
+ =?us-ascii?Q?Ued/yg8Cs48+ZXR15c1brk1k/udZHJsEcQuR8hvSEUuR82JGy3+6MN9rXyPy?=
+ =?us-ascii?Q?8q0iDHJCPOQVFOzTZf56Y4FqulSmnyKNZNxV798ZZFF1hFlr2zh/82/d6g9z?=
+ =?us-ascii?Q?8pCGiHaX+WML0CQW67ZtPcZAvAFNnNijvudwBLc6UnD7wHyYlKEClurCbz/p?=
+ =?us-ascii?Q?bhGDL4RCSD3JmyGI3fsuG/BBQfgOmCqERagA72XWH0yb0XU+c0NSr4DL3po/?=
+ =?us-ascii?Q?PyKpPrttPdgD1frRqkyEKYS/K2DVeXl/3F4XYHCsAR16K9UkdPeK5tkOP4Fx?=
+ =?us-ascii?Q?kEdj0o9INKAv+mD5bGWP8I+U4fvYwIvYhsJd04OWcXRF2vP4b8IZlbJKrLU+?=
+ =?us-ascii?Q?HgNIVzg/hzrzA+5SDDUgmo87X2KzNxC6shQOAuGeLZjm+4afRJqMrq1Egz6o?=
+ =?us-ascii?Q?LcqvrQIkv+yF7S035Vu7OFVoNJ80dJLYFuOrtnblehmcuOcWLKtmeCc4SIx/?=
+ =?us-ascii?Q?Je8rlkqHvM5IUu6cR+dJbEPr0lI=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:147.8.176.10;CTRY:HK;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.cs.hku.hk;PTR:ErrorRetry;CAT:NONE;SFS:(13230025)(4636009)(451199018)(336012)(83380400001)(966005)(33964004)(6666004)(9686003)(26005)(53546011)(55446002)(86362001)(40140700001)(166002)(356005)(81166007)(42186006)(6916009)(75640400001)(5660300002)(1096003)(4006050);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR01MB2369
+X-OrganizationHeadersPreserved: BN6PR01MB2369.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb6.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb6.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo13.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 01 Feb 2023 17:39:18.8785
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ e8bb4dfd-0439-4289-7639-08db047b3f13
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted:
+ DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL02EPF0000EE3C.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 4fa04928-bfe7-4f44-5794-08db047ac7bf
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.99;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb3.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Feb 2023 17:39:18.2692
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e8bb4dfd-0439-4289-7639-08db047b3f13
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.99];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL02EPF0000EE3C.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR0101MB3088
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:04.4350158
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6064.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cVlQMFkzandNa2ZjOGszTFk1NitFUklpaW1jM1lDZGJaNVN0UXhWZUFCaEFy?=
+ =?utf-8?B?VUl0Zm9aaFpXakxKeXQ1N0FHSFlMczBrMGFNcDFCWXVwNC9TLzBKblFnZmQv?=
+ =?utf-8?B?VzNoV0RLdTlUbE9NZW5majk5d0VuS0xHZ1o1TUJ1d1NRaEJYVTA0QU53R0Jn?=
+ =?utf-8?B?Ykp4TzRMby96RC9RZWlzZ3F3N2Q1OWdpNFNLM3A5cTFGTHYzbGpWblM4OGZF?=
+ =?utf-8?B?UGMvSUk2d0d1ZWhMVUdDNjVQUDRtdGk0RXBPeHJSZTUwcHRBR2paZnZnM0ln?=
+ =?utf-8?B?amg2dklhN2FHTjdmQ3d2M2ZENTE0SGxhQ0o2bHZsT0xHenZRZ0x5Q3poZVlD?=
+ =?utf-8?B?eGQxeHZGbG04NmhlditpdTRIemdIZVVqbGpFcW1oZXRpWHdIMWFvUlFHRmZ3?=
+ =?utf-8?B?ZW0wOU5oaGtTVVhxT3FuWFZhT29QaFhUR3c3ZTQydHI0NFBLTVhQdnNjUm0z?=
+ =?utf-8?B?UmVac0ZBbHJ2SktHdC9CbWZNUmxKQm9reE5uMUxxbzZwczNFaTg3MWwyVUp0?=
+ =?utf-8?B?Q2pRL3d2ZjRyblduV2JBWWd3Y0RhV1NhdVlHVWEreHdOOW96RzhNODdvUFMw?=
+ =?utf-8?B?bk8yQ0JoN3hOY1ZtUFc1SzF5VnkrZXp2d1djQmRKUFZQeGRJaE9mUGNIM0ZE?=
+ =?utf-8?B?aXRFczNFY2ZOV1FkSzJlcjBJLzBQSWtYanN0NHd2bUJVSjFLUHZOelBySGNI?=
+ =?utf-8?B?OWdEU09xWmN6cG90VERFcEF3bWI0MVhzZUY3bDFHbU82QlUyUXl2VTN5RDhz?=
+ =?utf-8?B?S21WUWpteDIzQVA2Y09xOFhJcmx1LzFaTlpHRmxBYjRLeXlKUCtUcUNZN3hE?=
+ =?utf-8?B?RHpXRUVEUW1FcUdJQWsvQlJnMUZUd1dLNHl6Z3drSmQvQjVzSG16ZURKSmdz?=
+ =?utf-8?B?S0xvVmJ3d0dEeVRmeFh3Z2s4N2VxQklsWk5MNm5KbFIzcERoWm5FM20wS3E3?=
+ =?utf-8?B?a0xRbXUybFlGQjM1dU9HWkxHV1crMFlMVXlUZ1BEbGsvZzFmVncyYWdtSkp2?=
+ =?utf-8?B?Y0wrSk8xWjhrOElidXNwdDExOTNPMVVIZXBqRm9BVnp2Vjdza3ZUOVJLVnRB?=
+ =?utf-8?B?WnB5ZzNreFJlWUlZL1dWRGFtMkg5K1V1bTB4d0tKVHp3QTJpNGxEM2tSSFlL?=
+ =?utf-8?B?UStoS1VIcFhtQS8wc0lDS0xoZWI0aUJEdGhoZFREV3lDam1RYlM2eGZUcUxt?=
+ =?utf-8?B?NGZFL3VFQWY2ZHRwWkRvTU0rM3RJcmtjN2RmNllTcDBxVHBMUWNCVE9LcWJo?=
+ =?utf-8?B?TmZRK1ZZUW9BZTJ3bVBwaXlMYnhmWnQvTEYvVzVuRDVqM1pEVnkzcjM0RFV5?=
+ =?utf-8?B?V0g1NTdNT2RzL2ZEbndkZ3hKZmtUbHZmMDlwbmgyWFloam80ekJEcnNMNkNZ?=
+ =?utf-8?B?NERFQnBjdithZjZUeERDWTZIZ2VTcVk1MEx1TE5BSElIODFUT2VjTGhBOWV2?=
+ =?utf-8?B?dXVHM3Boc3k3RlFxQks4YnhmODNDSm5lVUY0VzdKcGxWZ0h5NzYwekQwREVr?=
+ =?utf-8?B?eFhGN2VFTWcvTFN2WjhhZmwya3dQZGFpUVlrYTk4R3JtNzV3MkFOSVBUb1VL?=
+ =?utf-8?B?dzcyK1B1OHNzMWFMTlNoZTlRNldNR3lpY0g4Zy8yaDloaWFzWmgybzA4NlM4?=
+ =?utf-8?B?bzlFcVNweDJzRUFhTVR0NDJ5ckpraHZ4QXNiU1lTbzBoYlhOWmxZQUhtQXFh?=
+ =?utf-8?B?cU5JUWgxQUxRZ283MmkrNTRWZEJvaWlZQ04rQ0JXZDg1K28zZHNqckpZQUwr?=
+ =?utf-8?B?Y1BTQ1puUWp1MFhZOVFubkl2NXA3alhNWlYvYmdTZWFJRTFqRGdtcUUzbVVo?=
+ =?utf-8?B?dCt0KzhNUmtNcDQzVXM4RHNQSDlhT0dRZ3kzRU1vbjB3azBVbGJpcEdaMXky?=
+ =?utf-8?B?QXlMcTIxK25kTGxZUEpaWkp0UDlRaTFQZDdRZi85eHRxYi9MaHkvdVk2c3pF?=
+ =?utf-8?B?WnhJM05jSWNzRUdwQ3JRYUtFYm02OG1hMnhJbitnVzhtOGtZdjJGRzNJVTlN?=
+ =?utf-8?B?YUNMY010aFNDRVNGOUxlUTlwSnJRRWhEeTNoTHZyek5ISVp3QTN3NUJITlJT?=
+ =?utf-8?B?ZGQxVWdudDBmTjhTYUVFckNMQ0ZnVlVBWGxjdzk2TDJyMUFCL0xYb0pNOHV6?=
+ =?utf-8?B?SXFodlJEb21HSXdtRmtSM1N1V1RoUmgvcUNtdHJHVXpCWUtTYm5MTHlSSHVM?=
+ =?utf-8?B?UTdidU1ZODNJYi95Mm5IOUdHa1JLSnordGJjL3ZYdEFGZGsrMEJZU3gwTDNj?=
+ =?utf-8?B?OXJOSWoxQnRVanhUelNGOGRvNElPSEtUendaNjBzVUJZeGNLYm9yc2VQRXhk?=
+ =?utf-8?Q?iIPGaoX/J3sR/Xk8Eh?=
+MIME-Version: 1.0
+
+--000000000000c98f7b05f3a6e02c
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hmm, sorry, I messed up with the clock change. How about 1:45 am Hong Kong
+time?
+
+On Thu, Feb 2, 2023 at 1:29 AM Jiannan Cao <jiannan@mit.edu> wrote:
+
+>
+> It works for me. I=E2=80=99ll join the zoom meeting link. 1:30 pm eastern=
+ time,
+> which is 2:30 am in Hong Kong.
+>
+>
+> On Feb 1, 2023, at 12:24, Tao Yu <tyu@cs.hku.hk> wrote:
+>
+> =EF=BB=BF
+> Got it. How about 1:30 pm or 2 pm your time? Just a very short chat on
+> zoom? If it works for you, then join https://hku.zoom.us/j/8966055422. If
+> not, we can find another time tomorrow. Thanks.
+>
+> Best,
+> Tao
+>
+> On Thu, Feb 2, 2023 at 1:05 AM Jiannan Cao <jiannan@mit.edu> wrote:
+>
+>>
+>>
+>> l=E2=80=98m in Boston Area. You can just use GMT+8 time, for your conven=
+ience. I
+>> could have a talk at any time.
+>>
+>> Best,
+>> Jiannan
+>>
+>> On Feb 1, 2023, at 12:00, Tao Yu <tyu@cs.hku.hk> wrote:
+>>
+>> =EF=BB=BF
+>> Great! Are you in Boston or China?
+>>
+>> Best,
+>> Tao
+>>
+>> On Wed, Feb 1, 2023 at 10:20 PM Jiannan Cao <jiannan@mit.edu> wrote:
+>>
+>>> Hi Prof. Yu,
+>>>
+>>> You could reach me with WeChat: yueran_cn
+>>> phone number: +86-18519880029 or +1 650 300-9068, and my resume is
+>>> attached.
+>>>
+>>> I have time to chat at anytime in this week.
+>>>
+>>> Best,
+>>> Jiannan
+>>>
+>>>
+>>>
+>>> On Feb 1, 2023, at 08:50, Tao Yu <tyu@cs.hku.hk> wrote:
+>>>
+>>> =EF=BB=BF
+>>> Hi Jiannan,
+>>>
+>>> Thanks for your email. Yes, I do have multiple RA and PhD openings. I'm
+>>> happy to chat if you'd like to hear more!
+>>>
+>>> Best,
+>>> Tao
+>>>
+>>> On Tue, Jan 31, 2023 at 11:50 AM Jiannan Cao <jiannan@mit.edu> wrote:
+>>>
+>>>> Hi Prof. Yu,
+>>>>
+>>>> I'm currently a master student at MIT. I'm very interested in your
+>>>> research and lab.
+>>>> Do you have a research assistant position?
+>>>> Or PhD position in Fall 2023 or Fall 2024?
+>>>>
+>>>> Thanks!
+>>>> Jiannan
+>>>>
+>>>
+
+--000000000000c98f7b05f3a6e02c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr">Hmm, sorry, I messed up with the clock change. How about 1:4=
+5 am Hong Kong time?</div><br><div class=3D"gmail_quote"><div dir=3D"ltr" c=
+lass=3D"gmail_attr">On Thu, Feb 2, 2023 at 1:29 AM Jiannan Cao &lt;<a href=
+=3D"mailto:jiannan@mit.edu">jiannan@mit.edu</a>&gt; wrote:<br></div><blockq=
+uote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1p=
+x solid rgb(204,204,204);padding-left:1ex">
+
+
+
+<div dir=3D"auto">
+<br>
+It works for me. I=E2=80=99ll join the zoom meeting link. 1:30 pm eastern t=
+ime, which is 2:30 am in Hong Kong.
+<div><br>
+<div dir=3D"ltr">
+<blockquote type=3D"cite"><br>
+On Feb 1, 2023, at 12:24, Tao Yu &lt;<a href=3D"mailto:tyu@cs.hku.hk" targe=
+t=3D"_blank">tyu@cs.hku.hk</a>&gt; wrote:<br>
+<br>
+</blockquote>
+</div>
+<blockquote type=3D"cite">
+<div dir=3D"ltr">=EF=BB=BF
+<div dir=3D"ltr">Got it. How about 1:30 pm or 2 pm your&nbsp;time? Just a v=
+ery short chat on zoom? If it works for you, then join&nbsp;<a href=3D"http=
+s://hku.zoom.us/j/8966055422" target=3D"_blank">https://hku.zoom.us/j/89660=
+55422</a>. If not, we can find another time tomorrow. Thanks.
+<div><br>
+</div>
+<div>Best,</div>
+<div>Tao</div>
+</div>
+<br>
+<div class=3D"gmail_quote">
+<div dir=3D"ltr" class=3D"gmail_attr">On Thu, Feb 2, 2023 at 1:05 AM Jianna=
+n Cao &lt;<a href=3D"mailto:jiannan@mit.edu" target=3D"_blank">jiannan@mit.=
+edu</a>&gt; wrote:<br>
+</div>
+<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
+left:1px solid rgb(204,204,204);padding-left:1ex">
+<div dir=3D"auto"><br>
+<br>
+<div dir=3D"ltr">l=E2=80=98m in Boston Area. You can just use GMT+8 time, f=
+or your convenience. I could have a talk at any time.</div>
+<div dir=3D"ltr"><br>
+</div>
+<div dir=3D"ltr">Best,</div>
+<div dir=3D"ltr">Jiannan</div>
+<div dir=3D"ltr"><br>
+<blockquote type=3D"cite">On Feb 1, 2023, at 12:00, Tao Yu &lt;<a href=3D"m=
+ailto:tyu@cs.hku.hk" target=3D"_blank">tyu@cs.hku.hk</a>&gt; wrote:<br>
+<br>
+</blockquote>
+</div>
+<blockquote type=3D"cite">
+<div dir=3D"ltr">=EF=BB=BF
+<div dir=3D"ltr">Great! Are you in Boston or China?
+<div><br>
+</div>
+<div>Best,</div>
+<div>Tao</div>
+</div>
+<br>
+<div class=3D"gmail_quote">
+<div dir=3D"ltr" class=3D"gmail_attr">On Wed, Feb 1, 2023 at 10:20 PM Jiann=
+an Cao &lt;<a href=3D"mailto:jiannan@mit.edu" target=3D"_blank">jiannan@mit=
+.edu</a>&gt; wrote:<br>
+</div>
+<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
+left:1px solid rgb(204,204,204);padding-left:1ex">
+<div dir=3D"auto">Hi Prof. Yu,
+<div><br>
+</div>
+<div>You could reach me with WeChat: yueran_cn</div>
+<div>phone number: +86-18519880029 or +1 650 300-9068, and my resume is att=
+ached.</div>
+<div><br>
+</div>
+<div>I have time to chat at anytime in this week.</div>
+<div><br>
+</div>
+<div>Best,</div>
+<div>Jiannan</div>
+<div></div>
+<div><br>
+</div>
+<div><br>
+<div dir=3D"ltr">
+<blockquote type=3D"cite"><br>
+On Feb 1, 2023, at 08:50, Tao Yu &lt;<a href=3D"mailto:tyu@cs.hku.hk" targe=
+t=3D"_blank">tyu@cs.hku.hk</a>&gt; wrote:<br>
+<br>
+</blockquote>
+</div>
+<blockquote type=3D"cite">
+<div dir=3D"ltr">=EF=BB=BF
+<div dir=3D"ltr">Hi Jiannan,
+<div><br>
+</div>
+<div>Thanks for your email. Yes, I do have multiple RA and PhD openings. I'=
+m happy to chat if you'd like to hear&nbsp;more!</div>
+<div><br>
+</div>
+<div>Best,</div>
+<div>Tao</div>
+</div>
+<br>
+<div class=3D"gmail_quote">
+<div dir=3D"ltr" class=3D"gmail_attr">On Tue, Jan 31, 2023 at 11:50 AM Jian=
+nan Cao &lt;<a href=3D"mailto:jiannan@mit.edu" target=3D"_blank">jiannan@mi=
+t.edu</a>&gt; wrote:<br>
+</div>
+<blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-=
+left:1px solid rgb(204,204,204);padding-left:1ex">
+<div>
+<div dir=3D"ltr">
+<div></div>
+<div>
+<div dir=3D"ltr">Hi Prof. Yu,</div>
+<div dir=3D"ltr"><br>
+</div>
+<div dir=3D"ltr">I'm currently a master student at MIT.&nbsp;<span style=3D=
+"font-size:inherit">I'm very interested in your research and lab.</span></d=
+iv>
+<div dir=3D"ltr">Do you have a research assistant position?</div>
+<div dir=3D"ltr">Or PhD position in Fall 2023 or Fall 2024?</div>
+<div dir=3D"ltr"><br>
+</div>
+<div dir=3D"ltr">Thanks!</div>
+<div dir=3D"ltr">Jiannan&nbsp;</div>
+<div id=3D"m_3387983900765581462m_-2937048653811853193m_7417827936726975926=
+m_-5577955615945980165ms-outlook-mobile-signature" dir=3D"ltr">
+<div></div>
+</div>
+</div>
+</div>
+</div>
+</blockquote>
+</div>
+</div>
+</blockquote>
+</div>
+</div>
+</blockquote>
+</div>
+</div>
+</blockquote>
+</div>
+</blockquote>
+</div>
+</div>
+</blockquote>
+</div>
+</div>
+
+</blockquote></div>
+
+--000000000000c98f7b05f3a6e02c--

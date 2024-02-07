@@ -1,0 +1,391 @@
+Received: from SA3PR01MB8474.prod.exchangelabs.com (2603:10b6:806:395::8) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 21 Nov 2023 20:23:21
+ +0000
+Received: from MN2PR16CA0020.namprd16.prod.outlook.com (2603:10b6:208:134::33)
+ by SA3PR01MB8474.prod.exchangelabs.com (2603:10b6:806:395::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.18; Tue, 21 Nov 2023 20:23:20 +0000
+Received: from BL6PEPF0001AB4E.namprd04.prod.outlook.com
+ (2603:10b6:208:134:cafe::b7) by MN2PR16CA0020.outlook.office365.com
+ (2603:10b6:208:134::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.36 via Frontend
+ Transport; Tue, 21 Nov 2023 20:23:20 +0000
+Authentication-Results: spf=softfail (sender IP is 18.7.71.110)
+ smtp.mailfrom=apac.ai; dkim=fail (body hash did not verify)
+ header.d=apac.ai;dmarc=fail action=none header.from=apac.ai;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ apac.ai discourages use of 18.7.71.110 as permitted sender)
+Received: from mail.exchange.mit.edu (18.7.71.110) by
+ BL6PEPF0001AB4E.mail.protection.outlook.com (10.167.242.72) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7025.12 via Frontend Transport; Tue, 21 Nov 2023 20:23:20 +0000
+Received: from oc11exhyb1.exchange.mit.edu (18.9.1.60) by
+ w92exhyb5.exchange.mit.edu (18.7.71.110) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 21 Nov 2023 15:23:16 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
+ oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Tue, 21 Nov 2023 15:23:16 -0500
+Received: from CH2PR11CA0021.namprd11.prod.outlook.com (2603:10b6:610:54::31)
+ by SJ0PR01MB6190.prod.exchangelabs.com (2603:10b6:a03:29e::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7002.27; Tue, 21 Nov 2023 20:23:10 +0000
+Received: from SN1PEPF0002636B.namprd02.prod.outlook.com
+ (2603:10b6:610:54:cafe::45) by CH2PR11CA0021.outlook.office365.com
+ (2603:10b6:610:54::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.27 via Frontend
+ Transport; Tue, 21 Nov 2023 20:23:10 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.221.182)
+ smtp.mailfrom=apac.ai; dkim=pass (signature was verified)
+ header.d=apac.ai;dmarc=pass action=none header.from=apac.ai;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of apac.ai designates
+ 209.85.221.182 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.221.182; helo=mail-vk1-f182.google.com; pr=C
+Received: from mail-vk1-f182.google.com (209.85.221.182) by
+ SN1PEPF0002636B.mail.protection.outlook.com (10.167.241.136) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.12 via Frontend Transport; Tue, 21 Nov 2023 20:23:09 +0000
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-49618e09f16so1815342e0c.2
+        for <jiannan@mit.edu>; Tue, 21 Nov 2023 12:23:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=apac.ai; s=google; t=1700598189; x=1701202989; darn=mit.edu;
+        h=to:subject:date:from:message-id:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=kSlzzZdSLElcBXgTZ4Bot+fI+QHKwMPHCCZOJFXx+U4=;
+        b=tX1ix34iX+W8PfM/aPEFdG+1ApIVR/LsqDIJnqqTP0P9esIJp6DjsPvQ4WKAaRQWoJ
+         dTQYwFtA1Kz4iVA+xPvvaXg0Y6C3J+xeeTU2lfbhlxeA/n3NG0JjNFYC/J59WBtK0/88
+         eU4IO2FMncKCvMb0jk77An7ru6C8CU5wINvTsSKCEaH6C1gAuGONzt6DuX3UDQ5dGGak
+         984bmCTytqP3TS05PrO67ZRBosKBEpSIXKRZiZDUngwdHXq4hEch31Tl6/VGG16lulHf
+         HaqrR17bByO09/deu/Hl1RuEdY3epfwGIvrL5YtwYSE9urTr/0KMyrWFJJO05wJwg+h8
+         XsOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700598189; x=1701202989;
+        h=to:subject:date:from:message-id:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kSlzzZdSLElcBXgTZ4Bot+fI+QHKwMPHCCZOJFXx+U4=;
+        b=cmWdxlGFIC+e5rQFTAGnd5D/CeHHENBno0rjQSX2aV9zvz0mYoH/F/DC/fT7h441qr
+         p49EL7XBxaU2ykYIr4iKHcq+R7mgwG4YtrNXvwNujaRgKjBUCdm4lfK5IeKChMGm6RKc
+         VvR/DZyNnG/wvfKGaaPEfsYFOYg18AjqLbY79rYReryrDHx48aUjWEwsq14fTl9zzgNw
+         GXeTjBNdnmskB/yOCjoShEsEaw9UP/hJh6kmQPCCqm7yNBnciIZ0SDLPQllY2lRR4qUh
+         XiTQcggSkZ39P6mva4UaI/Jy2FbJnfbcRX1ARYI3rcLfjB3h/3kYoJl+9h2ef2dS7UGW
+         J8FQ==
+X-Gm-Message-State: AOJu0YwixJk8LkWpZasWbz50CGXKyfAAVAllg65Zvh0fNTOlkjl2KWXN
+	zSJS6JRck/2JDR+Rf84fRanyTdWyKPxSAtuF5et/yz1Ts436AHAhlsjf23iNs5khMfm0usbSA1i
+	DXCboWIFQO8VVzlA=
+X-Google-Smtp-Source: AGHT+IGyVt8js08CuSLaiSu92QYm18rjiV7G55sZATbbf4Xi2wdMjMDa5DfXxx1b+3wp/L2uh56flg==
+X-Received: by 2002:a1f:6283:0:b0:49e:2145:1651 with SMTP id w125-20020a1f6283000000b0049e21451651mr497730vkb.6.1700598188802;
+        Tue, 21 Nov 2023 12:23:08 -0800 (PST)
+Return-Path: kye@apac.ai
+Received: from localhost (0.92.231.35.bc.googleusercontent.com. [35.231.92.0])
+        by smtp.gmail.com with UTF8SMTPSA id y28-20020a1f641c000000b0049a5af84851sm1649458vkb.48.2023.11.21.12.23.08
+        for <jiannan@mit.edu>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Nov 2023 12:23:08 -0800 (PST)
+X-Mailer: Superhuman Web (2023-11-20T20:46:28Z)
+X-Superhuman-ID: lp8s8mpt.43846dd6-0ce7-4059-a864-eb38bb825e51
+X-Superhuman-Draft-ID: draft00d91c9b964220e6
+X-Superhuman-Thread-ID: draft00d08952ce04c4e4
+Message-ID: <lp8s1itc.74092168-9645-4a6b-a409-3575a053afe1@we.are.superhuman.com>
+From: "Kye Gomez" <kye@apac.ai>
+Date: Tue, 21 Nov 2023 20:23:06 +0000
+Subject: [Agent Design Team at Swarms] [Read Time: 50s]
+To: yeyn2001@gmail.com, xin.cong@outlook.com, jiannan@mit.edu, hwang4@alumni.cmu.edu
+Content-Type: multipart/alternative;
+	boundary="7a6a5d1fbab912a5e61f293a0f0b6a6b2d11ae4cc92ae635daab3ee9fd47"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ SN1PEPF0002636B:EE_|SJ0PR01MB6190:EE_|BL6PEPF0001AB4E:EE_|SA3PR01MB8474:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7f10c7b2-97a4-4fb2-425e-08dbeacfb440
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?UTozMD/VGIjzuJnkeCbW3dJFF0RSgOEO1OAmgosdgai8h5lrO59/gDK1nvcI?=
+ =?us-ascii?Q?GLGe4iRSPNwajkZc3Tp9rhxRsmcIjuuNL5olLfR1JnrBZ+hT5bm7n22YYCJz?=
+ =?us-ascii?Q?yAKHY+Y2MGR5lO1jTDZts4TL782SCOaioFCFNGCypTUaR5ZIWyxDgqegP8TJ?=
+ =?us-ascii?Q?eZNRsFN6IAwEYj6fUZM0oR8tjmWMoqS4qERUaCw64pZXsUzBrYfI4hXPJqOG?=
+ =?us-ascii?Q?dSTi1s3lYfgtZR3S5SamI7/yT+S5EfD/S/6act7HfOn8+mfO2kp0mJfqseB0?=
+ =?us-ascii?Q?iVy1+duGpDFWlwMwSpDPCk00NIBXDs+DLHJ18bgtqWnBBSxi/pCUxkjXNGZH?=
+ =?us-ascii?Q?839VLPKXcZzmWFoKdnEuNKpDFqGSbLhIlBQuvYgmeYeUQLZH52i7UKsaNTeE?=
+ =?us-ascii?Q?WmN1c0qJ3eiBCYVS6NiEQwwo/nte5R4yZQ94ivyeepo9ETRn1aiq+1kY1L0n?=
+ =?us-ascii?Q?fa2lG3pXuoE8Pa1dqyGYMSqmPg5/k8h78ZXIIVEuA5mbVgJtS3OsO6GckCIt?=
+ =?us-ascii?Q?xshPxCKXSkCFqOlMINNg3ImEwm6SM+of5kwXLEyvg2dAHaeutQHKLP/kt8nl?=
+ =?us-ascii?Q?XXDSzKpdihDv8BaBrHHiZACjxOwnb8vI2r8WfPgE3y+wm2y+ibPqaY/L8w1b?=
+ =?us-ascii?Q?/xu/8Z5k3x0iAIWiBcUJR6UsFeUlvPEl3ADImBVpHtSvd0r8uXx4xEvonpF9?=
+ =?us-ascii?Q?CWNLtzOqRoQqhYoBzQ+5aj1oZkKoYWGXV9EaETW0S58vluMtlw4+gJqGXGpM?=
+ =?us-ascii?Q?ZR3WWNYJBC4oTh0vL2J1Vrv+TEMuuHPLNu1MVtjg3XeOAxOSUJWS1W5e73s9?=
+ =?us-ascii?Q?J2psvZ/VHS+Cd81qV/B5g/K7XMKT/J1Twf8ZMXSD8ShnpEOWgytTexDdrYN+?=
+ =?us-ascii?Q?TWhkwEwkW9OwK/veBez5/NRMjRd+X/D8NZGqDjWB/0+dwzO5juiMA2WOGUs0?=
+ =?us-ascii?Q?MuwyP63Ui5IX5gm5dX8vYdmbFtVO3VBgPIEpM0xZ79RzaMRODjPRmZ6RSDMP?=
+ =?us-ascii?Q?y6xo4H/5KLWIkji1Vw3kwYx8NVUgk6wcpv+E1uFE3Q3aWi5mmnaUpiQ5UgYV?=
+ =?us-ascii?Q?EJHSAHZDBYhueWWGDlVfNgM9oSKnBw8Xa0VbO0sWr7qXwyTIIo2TZpYUpd/1?=
+ =?us-ascii?Q?0a94Waz3k6wq3FFJGATlwhkQq7eJODgqE8tCIMA6/3xHPpbi/oBx8oW8giuc?=
+ =?us-ascii?Q?cmszzKos80rmQawnDmaEdGyUPLwQRn91Vvm+AWHlS6KBMf6u4NRCXxdlShTd?=
+ =?us-ascii?Q?GbihYMGdsc3WOzo6/4XLCSMl06zTTatncZXpfMLU447/wJSPaPTXxMnEDGVI?=
+ =?us-ascii?Q?lbmafuOgTLInq2jpeDcik4QTr4hoL9CgZrG+WD270tkCFJOnHmdg1BTKoJvi?=
+ =?us-ascii?Q?YDKELMvcmgJqm+dtaVyaBdk/p477pknE48S0g9sXJUeeTry0dWyilI1ToerU?=
+ =?us-ascii?Q?y5UtW54zZbnDsoH9OwTXpMfp+ZRU3R+PpIByIYWVQuGcJWTadToM1HTWgAOt?=
+ =?us-ascii?Q?yrHNJUbAh4Fd9CD4zOhORJvaUWYULvIVYCo4OZYMEhRSryTDuztmQ3V0nkRI?=
+ =?us-ascii?Q?GG1TRuGS540GWCyqiTSLzaayDAirHUw2gPUsr5B96E3WYqIxHPB9AIKzo9Pl?=
+ =?us-ascii?Q?UHLjopSi9Sg3Cnen6hvt7Z6eGucpMbxGvtSMFKhBoxM9rhys1H0PQtDh+Ob3?=
+ =?us-ascii?Q?AJYvmW2G7fsx0FoiCDA0IKpcXSdez3rQng7nBkAdbaQequYe/i2VeqVo5vPN?=
+ =?us-ascii?Q?a7/YMjBr/9Yd965DI1WTPFiB13OSzReYNCAIfBzWUr9frvdnkmv3to0b7lIJ?=
+ =?us-ascii?Q?GBfUZqI8d0dqfw=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.221.182;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-vk1-f182.google.com;PTR:mail-vk1-f182.google.com;CAT:NONE;SFS:(13230031)(4636009)(451199024)(15402899012)(75640400001)(9686003)(58800400005)(336012)(956004)(33964004)(26005)(966005)(7596003)(83380400001)(166002)(7636003)(76236004)(356005)(86362001)(4006050)(5660300002)(22186003)(19627405001)(5930299018)(1096003)(8676002)(76899018)(43450500001)(43540500003);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB6190
+X-OrganizationHeadersPreserved: SJ0PR01MB6190.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb1.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb1.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92exhyb5.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 21 Nov 2023 20:23:20.6297
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 7f10c7b2-97a4-4fb2-425e-08dbeacfb440
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: BL6PEPF0001AB4E.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: BL6PEPF0001AB4E.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ BL6PEPF0001AB4E.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ SN1PEPF0002636B.namprd02.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ a8110167-9f05-442e-4dde-08dbeacfade1
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.110;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:w92exhyb5.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2023 20:23:20.5515
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f10c7b2-97a4-4fb2-425e-08dbeacfb440
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.110];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ SN1PEPF0002636B.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR01MB8474
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.3236128
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7002.027
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZGpXWm1PYTR0V2ZBZHpVZ0hXRnBHMU1JQXh3dSsyaGlManlKekljU0E0Vnk0?=
+ =?utf-8?B?T3A5a1FoclpDQ0dSQjFLVDU1Q1hlWmlNbDEwSUF4TUFLaXZVcXd1QmhlRmth?=
+ =?utf-8?B?Q1Z2NU81WjJqcW9ranZzMHJyS3M5V1VPYUt4M2h5YVR5ZmhVQmVrNEEwZ0RY?=
+ =?utf-8?B?eWlEVFdRUFhHUWRGb1BPYzRTUDArR056WTV5K01YSzU1TklQVWhySVBoYXdT?=
+ =?utf-8?B?TnpRWitxT0NjU3FtQVNHNVRyZnY3V0tlS3hVZGNQdjBlQ3VPNW5MV0lwQ0k1?=
+ =?utf-8?B?cGxSOFNiM21OcnloMEdYZnBwZUtWN1Z3bWVzM2piRUgxSzRaTXc4aUhUaW5l?=
+ =?utf-8?B?bVZ2UzRKT0tSSEdNa3R4MW53Sy9FQ3hLREN4dWJLeTU0K01uTGNGMXExOEFj?=
+ =?utf-8?B?K01KZStRbVJGQk9NQ0lLLytlWU5kQVUrQ2RDeUhVV0xWVEdNRWRjNmptK0ZZ?=
+ =?utf-8?B?L0RPZUdjR3I0V1h0MW9ra3k0ZnZLcXlVbGNKamhXZm9DUXBQUFBETjQxYXBw?=
+ =?utf-8?B?emFBOExhTm5CZDhjVTNIZHJJSHNsMGtDYStUWDc3dkoreFhrTWR1YXd0WGF4?=
+ =?utf-8?B?eHZTc3ZubWtUWGF2bG1zUHhXNjZSMk42YVVMcVVJY0t4NXRDR3NyVEkzUmZT?=
+ =?utf-8?B?UVREbzNldk0zNWpsVEozalY5QlFDeVpMbnorcUdaaW1xWkdaMG5KRUxFR0Rw?=
+ =?utf-8?B?TldVL0RiNTB1ZjZDWUQ2NGljaFNuTWNienExdmhiR3ljQXA2U1pWOXYyWXJ4?=
+ =?utf-8?B?SGxnODltbHZDeFlwNVQ2MEtVVG0vYmRxTjI3NzZpSnM0czdmRDJHY0JBcXdK?=
+ =?utf-8?B?YjFVV3pxNWt0YnFyTHBReFJRVGR2L2p6NmE1dTF5TFR4dGNLOFlrUTJyeExm?=
+ =?utf-8?B?L2ROdXdwUS9NbGszdGUwRzZhWjh2N1d5Z2w4QWEvWGVtWXNNK0Rjb1UrS2Nm?=
+ =?utf-8?B?TXorM0d6dkg4WHhLQWZSL2VPRFk5TGwvdHNLd1NKL0wrS3huMkZtSlU1eG9K?=
+ =?utf-8?B?SXFDcXhuV3FvVm1sVHozSVhXOWhsaDdmczFhS3hLdldRWWQxbDllSk9aYnBV?=
+ =?utf-8?B?WTViS2MxT1hwMk0reTc3TzZYaEROd1JOOGxNUHNxQ0FTbzlxM1NicUdRaXg0?=
+ =?utf-8?B?bmN6WlhDa1k0bEswUEhyU0ZzMmdpYmpnTkg2Y3JrNURkU3pPcFBJVFhVTStR?=
+ =?utf-8?B?MmJBVFJFNlZmWHQzMXovQmpPd1ordmtMNEoxc0poa1lBQWZ4c3VkUEUwclQw?=
+ =?utf-8?B?cStJbllQaGl3NFZlcVBsV0EyZnhDL0JCUDcxMU95UStQUXB6YlZDSU5naE95?=
+ =?utf-8?B?eUFBUUJjQUNWT096K1QzanUvWEsxYVRHYjZVWll0dHc2ZFlaTkZ5Tzhnd2h4?=
+ =?utf-8?B?a21qaVQxMTVlbE1pTWVBclVuVDZHL2dtUG5naW1xNHFZOXBPZ2N6aDl5RVo4?=
+ =?utf-8?B?TFYxVDFUT0dkOFQyamhKbmJPTEM2eFlGQlpMSmNlTmd4ZXhoUnNqazdINVkv?=
+ =?utf-8?B?c0dCcmFBSy9QY0dkMnRXWkJCSGI0ZG0xTDFmaHVqQzJ4TEtSQnlDak1hQkpT?=
+ =?utf-8?B?RHJ3RSs1a0tTUitPanNZLzd1eC9DYXpHR1FiZUdjVkhpSDhML0kyYUJPNmtu?=
+ =?utf-8?B?aHUxR2ZFK25ZcXlOM1huRW96TEh4Y0Y0c0tkSm5IdlBQMDRpTDdCbm15dy9j?=
+ =?utf-8?B?R1FjY01zUkxpZy9DU2ExY2JuNGoxbXRrUHRJNm4wR1FHZTNPTldUbzJqbTVm?=
+ =?utf-8?B?eU42cGF1a3phVHRTeUY1V1ZER3hncVRRWDJheU1oUVE0Tk5zT1UwamlRUnZl?=
+ =?utf-8?B?QlBST040VmxneFhYVDZJa09zNzZvL2NlQUFqaXBqRVdZNFpHb3NjTWppSGVj?=
+ =?utf-8?B?cGg3MkFmVGdiUTBzem1hSVIxK3krOEpmd1RQZGxmeUd3T2JxcUVOMGk0dU9s?=
+ =?utf-8?B?azM5WDVka2Rpc3BJbytQNFo4ZVA0dmVZUlB6UlpyMHhiVkhLVkV5TFZVQkdm?=
+ =?utf-8?B?QWxuNnB1L2U4cGk3bGx1U2U4eDNHWld0V0lJVFpYVHRwZjdLMWVLME1uK213?=
+ =?utf-8?B?c01jREo1eHRkZmxFRkV3SlZBcTN2SDJjOFltYU9DTE9VNlN4M0RVUlROcmVY?=
+ =?utf-8?B?RG1BYzRJUDBkek50akxCd0lxaGdsd0o2S3h2ZjlJeC9YZHVVbTg1SjNZaG4w?=
+ =?utf-8?B?andjeHZpd1NtVjd5OFdrQzJQSXZtNTJoRVcybTlhd05mSnhlZ0YzTHlJTkly?=
+ =?utf-8?Q?nQPcmBTFXkKv4HfTpvEx5Nbj84S6HSjbILW+EkOQWU=3D?=
+MIME-Version: 1.0
+
+--7a6a5d1fbab912a5e61f293a0f0b6a6b2d11ae4cc92ae635daab3ee9fd47
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+
+Yining, Xin, Jiannan, Hao, I'm=C2=A0looking for world-class Agent engineers=
+ like yourself to join the Swarms ( https://www.swarms.world/ ) founding te=
+am, your paper: "PROAGENT: FROM ROBOTIC PROCESS AUTOMATION TO AGENTIC PROCE=
+SS AUTOMATION" has caught my eye.
+
+* Our mission: Provide AI engineers a reliable and production grade framewo=
+rk to orchestrate swarms of autonomous agents for real-world production gra=
+de use.
+
+* Why: Individual Agents suffer from many limits like single threading task=
+ completion, faulty reasoning, and many other issues, swarms of autonomous =
+agents overcome these issues
+
+* Partners: AWS, Nvidia
+
+* Team: 100,000+ Collective hours building and shipping autonomous agents t=
+o SMBs=C2=A0and Enterprises
+
+* Role: Agent Design Team
+
+Would love to chat this week, if you're open minded schedule a time with me=
+ here ( https://www.swarms.world/ )
+
+*Resources*
+
+Swarms Repo ( https://github.com/kyegomez/swarms )
+
+Swarms Deck ( https://drive.google.com/file/d/1z8CTxAJHNGVffiJ6rM-SywDhte_C=
+RGG6/view?usp=3Dsharing )
+
+Kye ( https://github.com/kyegomez/swarms ) Gomez ( https://github.com/kyego=
+mez/swarms ) 's Github 300+ models ( https://github.com/kyegomez/swarms )
+
+And, Join the Agora, the open source AI research lab!
+Agora Github ( https://github.com/Agora-X )
+
+Agora Discord community ( https://discord.gg/xup9DmQPwU )
+
+Agora Community Codex ( https://codex.apac.ai/ )
+--7a6a5d1fbab912a5e61f293a0f0b6a6b2d11ae4cc92ae635daab3ee9fd47
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="UTF-8"
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"></=
+head><body><div><div><div class=3D"">Yining, Xin, Jiannan, Hao, I'm&nbsp;lo=
+oking for world-class Agent engineers like yourself to join the <a href=3D"=
+https://www.swarms.world/" target=3D"_blank" class=3D"">Swarms</a> founding=
+ team, your paper: &quot;PROAGENT: FROM ROBOTIC PROCESS AUTOMATION
+TO AGENTIC PROCESS AUTOMATION&quot; has caught my eye.</div><div style=3D"t=
+ext-decoration-color:initial;text-decoration-style:initial;text-decoration-=
+thickness:initial;font-weight:400;" class=3D""><div class=3D""><ul class=3D=
+""><li class=3D"" aria-level=3D"1" style=3D"list-style-type:disc">Our missi=
+on: Provide AI engineers a reliable and production grade framework to orche=
+strate swarms of autonomous agents for real-world production grade use.<br>=
+</li><li class=3D"" aria-level=3D"1" style=3D"list-style-type:disc">Why: In=
+dividual Agents suffer from many limits like single threading task completi=
+on, faulty reasoning, and many other issues, swarms of autonomous agents ov=
+ercome these issues<br></li><li class=3D"" aria-level=3D"1" style=3D"list-s=
+tyle-type:disc">Partners: AWS, Nvidia<br></li><li class=3D"" aria-level=3D"=
+1" style=3D"list-style-type:disc">Team: 100,000+ Collective hours building =
+and shipping autonomous agents to SMBs&nbsp;and Enterprises<br></li><li cla=
+ss=3D"" aria-level=3D"1" style=3D"list-style-type:disc">Role: Agent Design =
+Team<br></li></ul><div class=3D"">Would love to chat this week,<span class=
+=3D"">&nbsp;</span><a style=3D"text-decoration-color:initial;text-decoratio=
+n-style:initial;text-decoration-thickness:initial;text-decoration-line:none=
+;color:rgb(84, 172, 220);" rel=3D"noopener noreferrer" href=3D"https://www.=
+swarms.world/" class=3D"" target=3D"_blank">if you're open minded schedule =
+a time with me here</a><br></div><div class=3D""><br></div><div class=3D"">=
+&nbsp;<b class=3D"">Resources</b><br></div></div></div><div style=3D"text-d=
+ecoration-color:initial;text-decoration-style:initial;text-decoration-thick=
+ness:initial;font-weight:400;" class=3D""><a style=3D"text-decoration-color=
+:initial;text-decoration-style:initial;text-decoration-thickness:initial;te=
+xt-decoration-line:none;color:rgb(84, 172, 220);" rel=3D"noopener noreferre=
+r" href=3D"https://github.com/kyegomez/swarms" class=3D"" target=3D"_blank"=
+>Swarms Repo</a><br></div><div style=3D"text-decoration-color:initial;text-=
+decoration-style:initial;text-decoration-thickness:initial;font-weight:400;=
+" class=3D""><a style=3D"text-decoration-color:initial;text-decoration-styl=
+e:initial;text-decoration-thickness:initial;text-decoration-line:none;color=
+:rgb(84, 172, 220);" class=3D"" rel=3D"noopener noreferrer" href=3D"https:/=
+/drive.google.com/file/d/1z8CTxAJHNGVffiJ6rM-SywDhte_CRGG6/view?usp=3Dshari=
+ng" target=3D"_blank">Swarms Deck</a><br></div><div style=3D"text-decoratio=
+n-color:initial;text-decoration-style:initial;text-decoration-thickness:ini=
+tial;font-weight:400;" class=3D""><a style=3D"text-decoration-color:initial=
+;text-decoration-style:initial;text-decoration-thickness:initial;text-decor=
+ation-line:none;color:rgb(84, 172, 220);" rel=3D"noopener noreferrer" href=
+=3D"https://github.com/kyegomez/swarms" class=3D"" target=3D"_blank">Kye<sp=
+an style=3D"text-decoration-color:initial;text-decoration-style:initial;tex=
+t-decoration-thickness:initial;text-decoration-line:none;" class=3D"">&nbsp=
+;</span></a><a style=3D"text-decoration-color:initial;text-decoration-style=
+:initial;text-decoration-thickness:initial;text-decoration-line:none;color:=
+rgb(84, 172, 220);" rel=3D"noopener noreferrer" href=3D"https://github.com/=
+kyegomez/swarms" class=3D"" target=3D"_blank">Gomez</a><a style=3D"text-dec=
+oration-color:initial;text-decoration-style:initial;text-decoration-thickne=
+ss:initial;text-decoration-line:none;color:rgb(84, 172, 220);" rel=3D"noope=
+ner noreferrer" href=3D"https://github.com/kyegomez/swarms" class=3D"" targ=
+et=3D"_blank">'s Github 300+ models</a><br></div><div style=3D"text-decorat=
+ion-color:initial;text-decoration-style:initial;text-decoration-thickness:i=
+nitial;font-weight:400;" class=3D""><br></div><div style=3D"text-decoration=
+-color:initial;text-decoration-style:initial;text-decoration-thickness:init=
+ial;font-weight:400;" class=3D"">And, Join the Agora, the open source AI re=
+search lab!</div><div style=3D"text-decoration-color:initial;text-decoratio=
+n-style:initial;text-decoration-thickness:initial;font-weight:400;" class=
+=3D""><a style=3D"text-decoration-color:initial;text-decoration-style:initi=
+al;text-decoration-thickness:initial;text-decoration-line:none;color:rgb(84=
+, 172, 220);" rel=3D"noopener noreferrer" href=3D"https://github.com/Agora-=
+X" class=3D"" target=3D"_blank">Agora Github</a><br></div><div style=3D"tex=
+t-decoration-color:initial;text-decoration-style:initial;text-decoration-th=
+ickness:initial;font-weight:400;" class=3D""><a style=3D"text-decoration-co=
+lor:initial;text-decoration-style:initial;text-decoration-thickness:initial=
+;text-decoration-line:none;color:rgb(84, 172, 220);" class=3D"" rel=3D"noop=
+ener noreferrer" href=3D"https://discord.gg/xup9DmQPwU" target=3D"_blank">A=
+gora Discord community</a><br></div><div style=3D"text-decoration-color:ini=
+tial;text-decoration-style:initial;text-decoration-thickness:initial;font-w=
+eight:400;" class=3D""><a style=3D"text-decoration-color:initial;text-decor=
+ation-style:initial;text-decoration-thickness:initial;text-decoration-line:=
+none;color:rgb(84, 172, 220);" rel=3D"noopener noreferrer" href=3D"https://=
+codex.apac.ai/" class=3D"" target=3D"_blank">Agora Community Codex</a><br><=
+/div></div><div><div style=3D"display: none; border: 0px; width: 0px; heigh=
+t: 0px; overflow: hidden; visibility: hidden;"><img src=3D"https://r.superh=
+uman.com/cxhWi85QTk2AHsAezNwKW5VbHE-t_5QxZbhuoy-sg6rSfKEjNnQiKtdm5qwllyphZf=
+7w-OHufh2OyNrnK7tJvkr8vFq5ryySv7Oi1_qFWGRViQw7qe_93605YqMHq-1Lo7d2bPl8gzTSQ=
+JOHOkNce2mfJAN5_Gyvmc-FkvyoDp7G61Y.gif" alt=3D" " width=3D"1" height=3D"0" =
+style=3D"display: none; border: 0px; width: 0px; height: 0px; overflow: hid=
+den; visibility: hidden;"><!--                                             =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+                                                                           =
+     --></div></div></div></body></html>=
+
+--7a6a5d1fbab912a5e61f293a0f0b6a6b2d11ae4cc92ae635daab3ee9fd47--

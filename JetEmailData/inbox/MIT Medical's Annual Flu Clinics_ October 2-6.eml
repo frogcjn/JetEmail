@@ -1,0 +1,698 @@
+Received: from SJ2PR01MB8258.prod.exchangelabs.com (2603:10b6:a03:540::9) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 27 Sep 2023 14:20:50
+ +0000
+Received: from CH0PR03CA0023.namprd03.prod.outlook.com (2603:10b6:610:b0::28)
+ by SJ2PR01MB8258.prod.exchangelabs.com (2603:10b6:a03:540::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6813.28; Wed, 27 Sep 2023 14:20:47 +0000
+Received: from DS2PEPF00003442.namprd04.prod.outlook.com
+ (2603:10b6:610:b0:cafe::f) by CH0PR03CA0023.outlook.office365.com
+ (2603:10b6:610:b0::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.22 via Frontend
+ Transport; Wed, 27 Sep 2023 14:20:46 +0000
+Authentication-Results: spf=fail (sender IP is 18.7.71.74)
+ smtp.mailfrom=a561359.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of a561359.bnc3.mailjet.com
+ does not designate 18.7.71.74 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.7.71.74;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.7.71.74) by
+ DS2PEPF00003442.mail.protection.outlook.com (10.167.17.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6838.14 via Frontend Transport; Wed, 27 Sep 2023 14:20:46 +0000
+Received: from w92expo19.exchange.mit.edu (18.7.74.73) by
+ w92exhyb4.exchange.mit.edu (18.7.71.74) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 27 Sep 2023 10:20:30 -0400
+Received: from oc11exhyb8.exchange.mit.edu (18.9.1.113) by
+ w92expo19.exchange.mit.edu (18.7.74.73) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 27 Sep 2023 10:20:30 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.103)
+ by oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Wed, 27 Sep 2023 10:20:30 -0400
+Received: from BYAPR05CA0060.namprd05.prod.outlook.com (2603:10b6:a03:74::37)
+ by BL3PR01MB6834.prod.exchangelabs.com (2603:10b6:208:33f::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6813.28; Wed, 27 Sep 2023 14:20:27 +0000
+Received: from SA2PEPF000015C9.namprd03.prod.outlook.com
+ (2603:10b6:a03:74:cafe::3b) by BYAPR05CA0060.outlook.office365.com
+ (2603:10b6:a03:74::37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.12 via Frontend
+ Transport; Wed, 27 Sep 2023 14:20:27 +0000
+Authentication-Results-Original: spf=pass (sender IP is 87.253.236.214)
+ smtp.mailfrom=a561359.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=704
+Received-SPF: Pass (protection.outlook.com: domain of a561359.bnc3.mailjet.com
+ designates 87.253.236.214 as permitted sender)
+ receiver=protection.outlook.com; client-ip=87.253.236.214;
+ helo=o214.p11.mailjet.com; pr=C
+Received: from o214.p11.mailjet.com (87.253.236.214) by
+ SA2PEPF000015C9.mail.protection.outlook.com (10.167.241.199) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.14 via Frontend Transport; Wed, 27 Sep 2023 14:20:26 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; q=dns/txt;
+  d=bnc3.mailjet.com; i=medical=3Dmit.edu@a561359.bnc3.mailjet.com; s=mailjet1; x=1695831625;
+  h=message-id:mime-version:from:from:reply-to:to:to:subject:subject:date:date:list-id:list-unsubscribe-post:
+  list-unsubscribe:feedback-id:precedence:x-campaignid:x-csa-complaints:
+  x-mj-mid:x-mj-smtpguid:x-report-abuse-to:content-type;
+  bh=HieM6lO4Bsg0Ajy4wzjOoMj5Oo3BZjcyjAiA6+oXKxE=;
+  b=Ze1Z9IL9gMhddgWjKrsM6PofmyFyvNxSTH7MtXxaSkYesqVljeYCWv9uk
+ Vd9Y7+J5/P26SNnGYJCaWqcwYsIl1eUvAJ/n1BAiV2Dmu6TjrmEoAdJvfPfN
+ I3swJn7wac8Gi6OdbYt7Y3JhGm+gSeai5HAKI6eUSJG2y1bGj6vFb0=
+Return-Path:
+ b8f648a7.AVoAACXMtcUAAcrtDK4AAMlryacAAYCq_8sAJc6qAAiQzwBlFDoo@a561359.bnc3.mailjet.com
+Message-ID: <b8f648a7.AVoAACXMtcUAAcrtDK4AAMlryacAAYCq_8sAJc6qAAiQzwBlFDoo@mailjet.com>
+From: "Cecilia Stuopis, MD" <medical@mit.edu>
+Reply-To: comments-fluinfo@mit.edu
+To: jiannan@mit.edu
+Subject: MIT Medical's Annual Flu Clinics: October 2-6
+Date: Wed, 27 Sep 2023 14:20:24 +0000 (UTC)
+List-Id: <medical.mit.edu.inj9-sxnxp.mj>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+List-Unsubscribe: <mailto:unsub-b8f648a7.inj9.lz8y2q2qh26l@bnc3.mailjet.com>,
+	<https://inj9.mjt.lu/unsub2?m=AVoAACXMtcUAAcrtDK4AAMlryacAAYCq_8sAJc6qAAiQzwBlFDoowUqN6ZieSquiBDULJQ-JdQAIIWc&b=b8f648a7&e=d46a0e01&x=a7iET_5Bkh8rOy7esnA68A>
+Feedback-Id: 42.561359.532839:MJ
+Precedence: bulk
+X-CampaignID: 7699500206
+X-CSA-Complaints: csa-complaints@eco.de
+X-MJ-Mid: AVoAACXMtcUAAcrtDK4AAMlryacAAYCq_8sAJc6qAAiQzwBlFDoowUqN6ZieSquiBDULJQ-JdQAIIWc
+X-MJ-SMTPGUID: c14a8de9-989e-4aab-a204-350b250f8975
+X-REPORT-ABUSE-TO: Message sent by Mailjet please report to
+	abuse@mailjet.com with a copy of the message
+Content-Type: multipart/alternative; boundary="=-6df3qju6tZKKVZbfvCrA"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ SA2PEPF000015C9:EE_|BL3PR01MB6834:EE_|DS2PEPF00003442:EE_|SJ2PR01MB8258:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: a8b01c98-3002-488c-2078-08dbbf64f153
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?hFpDQCdX6rz1iB0jQj8WS+SeU+dxOKuN1iYcSQrul7CmTBsZxeQ6wkrW2mIp?=
+ =?us-ascii?Q?zShiyoh6WI1FQ7B0YelWqYe5Q6BJQPL2xtH5/JCldNMsYWB08wTbOuivaxqF?=
+ =?us-ascii?Q?rmw0SrkScY0xU4pUGcMAyWEjgfS5eEAZGBbLeDYy14tc++JQL3HyC6i7mkUH?=
+ =?us-ascii?Q?0sR3MZaUUGQ3gBcGIWvZ7zwt2MOIGy6IwjtrEOPuC1NOot7RjNMUIOkvy224?=
+ =?us-ascii?Q?74DvB58pOiPYYYlKkhOcgolnA3ThHgbvqooTHCUpaQMGINT4kXoYkwpIDvbK?=
+ =?us-ascii?Q?fDYYcucT5Z/VECdgVshUKOu8r2rGqJjLE+iMYO5FqtRDBfQs4unKckREoSs4?=
+ =?us-ascii?Q?2PPxVmR9tRNj9aWCf3OXOBk2clr9LweEMIfnr8RbISzXycckO1PSZR7URRxx?=
+ =?us-ascii?Q?Q3cVsJIwQ9v0gtf7ocMPMPTHM85u/Nn2PzHRYlhG/j16ravFYzvDrQJ8rUlo?=
+ =?us-ascii?Q?B/l8lpn6GFJ03L0/1WruQxYWk/RjuxO0guTOLe00rxtM+LA7/Ob4LKxnCIyE?=
+ =?us-ascii?Q?wk+aUTg0Ow5oHAowAZd4A4rkuFk7lldOvVHtBg3m05Ln3AXAvzLrkUOsmfKL?=
+ =?us-ascii?Q?iA+s/2bZf9KMweoDnSlIZm+YjIBwNvsMZq0goFe4DTUWg7Atv3OL4R13G+9r?=
+ =?us-ascii?Q?xopxYfhk86Jj3fizqrnaJSNPWOPNANsMCRGbbRMQKsXSVuVmuvTlFo+mnu+n?=
+ =?us-ascii?Q?AqXH783NH/idzITMlH+x9q9gDHKlpovK6baVxwcydKSux4bWWza1eMOG/Zwd?=
+ =?us-ascii?Q?4gWBOhb6i213IUoTpLMpxD4YfXv7KIlPrWHAdPx2wEK+6n/cPvfai0n1HQDp?=
+ =?us-ascii?Q?AlMoS/FTtvmAO6t/eu6B5fUC8FFNH3FLaRPKerLN7YbPHsay1XHWtditFWDG?=
+ =?us-ascii?Q?/K3KswdscY8Rmj9a6nhIMKNYKNXcQgOnvfD4Xs/zvrPt5gNE0uXTQqJGpbAz?=
+ =?us-ascii?Q?Nz1RGE7FtM/LPPjj4toezld/YeJQcCh8nXbCketpvozhw+/ew3p6Jc5cd3xR?=
+ =?us-ascii?Q?yq+H3yA+JXDV1omHkTpphZde+B1f6w6VTct4nN1sPvdpSbQpwU1anPrSOhLu?=
+ =?us-ascii?Q?+WfKuQhKY90zlnSuv9LBl7zETaUw3zRKNFkzD7/BFI7RrnuzwzSLNxZdXXY+?=
+ =?us-ascii?Q?Ypz30E4ufsOhBh4W8+L7b7jX/UBizPwKf26dALtawcTZW2MrYARGYIzK94nM?=
+ =?us-ascii?Q?UaQkPfDyoiX3mU6aWCsD+mr1W2zjJ5J5kCuBFLDRgvKa5zoKAZzYOv8Q3WaT?=
+ =?us-ascii?Q?035bx2q2RQcDVSSerYD3tFKUfDHQthOdMA3gk0k+M3+ZWuiukNxzBvWrDSAh?=
+ =?us-ascii?Q?Ix92lmsRoACGVi7Aaq0yk0h3Ffv58GI5TVbHlf1sy58m2J7TmV/uz3/uComW?=
+ =?us-ascii?Q?eP/faf9eXzpDzbb9oq79K784fwcjLhdPK9OxgT77Nz5oFQBa7ih7SWBXxtft?=
+ =?us-ascii?Q?lxq3vYEReNje0NGmuFWogEk7Vzk/whrmikD7vyw+aVdomoZK1rgCVyBp6U++?=
+ =?us-ascii?Q?KWVWFB8STSDOPIU=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:87.253.236.214;CTRY:FR;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:o214.p11.mailjet.com;PTR:o214.p11.mailjet.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR01MB6834
+X-OrganizationHeadersPreserved: BL3PR01MB6834.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb8.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb8.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo19.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 27 Sep 2023 14:20:46.9448
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ a8b01c98-3002-488c-2078-08dbbf64f153
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: DS2PEPF00003442.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: DS2PEPF00003442.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DS2PEPF00003442.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ SA2PEPF000015C9.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 6a09871d-47da-4e9d-1436-08dbbf64e54e
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.74;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:w92exhyb4.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2023 14:20:46.7417
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a8b01c98-3002-488c-2078-08dbbf64f153
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.74];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ SA2PEPF000015C9.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR01MB8258
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:04.0269353
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6813.027
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Y0llMDdPTjljQ3Y5aDNYRkNpRXZJZmF2Y0MzOTFFeGg1WUk5L2pEVDB0Z2dp?=
+ =?utf-8?B?MW83cXE1dG9XL0pJdGdMYkRaQUp3cHZzTGhXcEdDYUdaL2JHd29mZ1U5a2FL?=
+ =?utf-8?B?MkpzdXlxTTRHb2ZSUFpDenNYRGFuUWNjL2JaK3Y5V3haWDI1czBMQnkyYUxt?=
+ =?utf-8?B?dVVvRk1tekg1QXNYWDdaVkxvWVYwL1Q3N0pZY3dkakg5Uk9aUmJIaHBFTmNE?=
+ =?utf-8?B?N1ZyM3FOcHVXeUNoSEdtUHlGRXBib3hXeVp5cVN5RVJiRmJpWTZmTjdGN3VM?=
+ =?utf-8?B?MWlGbTljL2JYVmRoazN3UjVUT2Q0cUY4Zm1HMS9tN3EwZmdWR2VIUXhFVjVy?=
+ =?utf-8?B?d2dTUGtDbkYyWnptSGRvMm1CSFQvYmxiTW5uaEtkQlNtUks1VjZleGpHTDFv?=
+ =?utf-8?B?NmVnc3VDcGd4MmNIc3BadGlJSTk4cDFVckwzZzI5aUcrMTdWSEw2WWljWUhP?=
+ =?utf-8?B?bEVXdWxOeW9HODd0Z1JZSW9zeElIUXVPbmhLc0pFaEpncXRmQnZ4T2RwVG5G?=
+ =?utf-8?B?VkpaV1kzMFVYL0phQzIrN0t1MjY3NXpCaUx2Y2dwa3hZUzVjT0xHMEpQcysv?=
+ =?utf-8?B?WUVINGFiWjAwQWN1QXFUVFZZMEZ1VXRDVmZhaGVvdUQxUDZVVXJTdVc0cHVQ?=
+ =?utf-8?B?d1NybE1oWW5FNEFiRVFtMlBCczF3L3BYbmhhMk1KejV3VFcxNncxNzBFb2po?=
+ =?utf-8?B?KzVXU0swL3VzVzRmUXJtOW1jbEY0SjJnR01YaG5ublpwOEFDVGlNUWRaQ2dK?=
+ =?utf-8?B?TU12V0NCM1NLdm96MjVQTjhIcFZJeWNMN0lQZlFHSStaaDZ5MmpKQ3gvSmZP?=
+ =?utf-8?B?TmtOTldZWjZVRFhEbkFwYks4cXRkQmZzZ3RHRnd5eEhQQ1NjWUx6ME05RG5q?=
+ =?utf-8?B?UC9hbWdCZ28wQ3ZMdm1Bckc2RWFjaTZmZWxLL25GazhrbjJSWS9jNUdyUnZz?=
+ =?utf-8?B?Y2tkTlNWaktWdlREQnh1U0tBeCtxQXRJTE9FcHJMSjk0Q1lUMU1YaDNIODJR?=
+ =?utf-8?B?eEt0UGQzVnYyeWFSTUVYNWw1Y2dBTDlXSk1mMUxmRmRzVXJrUVcwQ1ZjRzdW?=
+ =?utf-8?B?SGFpZlRMM2xYQnhXbTZ1Y0dWeVpzT1BhcU01M2RBaU5VYTdnREtvM0VrMUI3?=
+ =?utf-8?B?RDloT01mY1NVeG9ucTUzajRMQzJCdlc2a3Y3YVczUmsxTWZqS2k4TzV4c2tD?=
+ =?utf-8?B?MmpGQ1BROU84cG1ON0wwYm9UZ0hjdG9SV3lmSWVpdDgwZFJaanlydmhsaFEx?=
+ =?utf-8?B?bCtQSmw3VEgxSjV4Vk9nbk54N3RYQVZCR1I2RENJUWRXQmlVZkVwVmVBdUcr?=
+ =?utf-8?B?Q0ZUc0E5V0x3RkI1a0czQ1h2a2NaT1dEOW5YdVBkMnFYNmN4V3BHOEErdHJl?=
+ =?utf-8?B?d3A2VUFSTTgwNXB3QkdEMVZvY0pKNVpKekh0cHhPZkc3dFJQclpzZEJvSW1Y?=
+ =?utf-8?B?UHhoSHJXSVVOb2FwUzZlWTUwZXdkeURaUG5xUTQ4MGIrTFZ1OThZMjhBQWlD?=
+ =?utf-8?B?eXFydTBhMEpnc0I1RFgrblQ5RmU1NFRDVk45cUU0dC9IekU3dzBkc2ZuVCs5?=
+ =?utf-8?B?N0RXa1M5MnNabEtFWWFsZlBKZy8ySUFSTlV5UFZ2VGNnUCtvZFNTclY2L2w4?=
+ =?utf-8?B?ME0yZVF0cEdkODZGcnJWSHExN3U0ZEdMS2ZmTmpNb0ZoUWxDZHRFZDd5THlI?=
+ =?utf-8?B?WDdtanFPVzN5K0x0YlhYc1ArTlNLNTRCcTErUG5yMThSTmV6enBTQXJxaUhR?=
+ =?utf-8?B?eHVPWkJNcHJaTmtSZVZ4cXg0dmc1SjVtUmlacjJBZjJhQ051cVdCeFZ1Z2t3?=
+ =?utf-8?B?MERpc0VnSmRlSG9PTHM1eUZNanRqWWIramlYNC9CeWFsb3pnckF4WjVxVzhm?=
+ =?utf-8?B?U1hKRFFiYzhQdVhSZlFURWUzeHdYeFVmdDV5R1I2eVJnUTZSVHVGMzF3TWNQ?=
+ =?utf-8?B?VWV6TzdCVk5xMU5SU0x0ckRVZzdiOFlienhZRVlKNFpuNFY3bUtEU3ZpaW1n?=
+ =?utf-8?B?T21IYWJWSkZWRHJ0eHE0WnpjV2FXYjh4Z1QxSUtDVklMQzhQdVZmYlExT0Uv?=
+ =?utf-8?B?R1NQaWhKMnoyQ1NzQUlFR05DVE5xUHFuajhtMjNkTVJLM24vQ0lQQkhEYTBt?=
+ =?utf-8?B?VmhSeVVpczVIZndGMmhlRGdSM20rS2l6anhYYXRZWGFzOWovczVSWkRkU1Mr?=
+ =?utf-8?B?TG5IZ05IQ3phcDFNVjRNaWFJZjhlR3J0M0hseU5OU0txM1loMzVCWGdVMFJU?=
+ =?utf-8?B?OEVmbndGa3pRZU5PN2JzZmdWdHE3SFczMU5hZnNvOU1PZlpOWmlaTnN2TUM0?=
+ =?utf-8?B?UURBdTFyaVBrVnNaUWV4SGNjQndpMG15R0NHWXUyRFNvUmFKN3QwMldWSnBo?=
+ =?utf-8?Q?Mjaz7Q255Zbckw12E+3qh5uhlu4atRnqShqce?=
+MIME-Version: 1.0
+
+--=-6df3qju6tZKKVZbfvCrA
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Flu vaccine clinics Oct. 2=E2=80=936
+
+View online version http://inj9.mjt.lu/nl3/dg3KX5EtijKSEucNYajQRg?m=3DAVoAA=
+CXMtcUAAcrtDK4AAMlryacAAYCq_8sAJc6qAAiQzwBlFDoowUqN6ZieSquiBDULJQ-JdQAIIWc&=
+b=3Db8f648a7&e=3Dd46a0e01&x=3Da7iET_5Bkh8rOy7esnA68A
+
+
+
+<<Massachusetts Institute of Technology letterhead>> [https://inj9.mjt.lu/t=
+plimg/inj9/b/x95tz/gm5yt.png]
+
+
+
+To the MIT community,
+
+Flu season is upon us, and we strongly recommend a flu vaccine to help prot=
+ect you from influenza this year. This email contains important information=
+ about when you can get your immunization:
+
+This year, MIT Medical will hold flu clinics Monday=E2=80=93Friday, October=
+ 2=E2=80=936, 8 a.m.=E2=80=934 p.m. in Morss Hall in Walker Memorial (Build=
+ing 50) [https://whereis.mit.edu/?go=3D50]. These clinics are free to every=
+one who is eligible to get a vaccine on campus.
+
+
+Who is eligible for the 2023 flu clinic?
+
+ * All enrolled students living on or off campus
+ * All non-students who live on campus, including family members and childr=
+en aged six months and older
+ * All employees and contractors with an MIT ID
+ * All patients with a primary care provider at MIT Medical, including chil=
+dren older than six months
+
+If you are a student
+
+To minimize crowding, please try to get your vaccine according to the follo=
+wing schedule, based on last name:
+
+ * A=E2=80=93G: Monday, October 2
+ * H=E2=80=93M: Tuesday, October 3
+ * N=E2=80=93S: Wednesday, October 4
+ * T=E2=80=93Z: Thursday, October 5
+
+If you can=E2=80=99t make it on the date corresponding to your last name, y=
+ou can come to the clinic any day from October 2=E2=80=936.
+
+
+If you are an employee
+
+Come to the clinic on a day of the week that you normally work. There=E2=80=
+=99s no need to make a special trip to campus.
+
+
+If you are an MIT Medical patient
+
+Come to the clinic any day from October 2=E2=80=936.
+
+
+If you are over age 65
+
+High-dose vaccines will be available at all times.
+
+
+If you are bringing children
+
+Clinicians who can give vaccines to pediatric patients will be available at=
+ all times. However, if your baby has an upcoming six-month well-child visi=
+t at MIT Medical, they will receive their flu vaccine at that scheduled app=
+ointment.
+
+
+Other things you need to know
+
+ * Bring your MIT ID or your MIT Atlas app. We can scan the barcode in the =
+app if you don=E2=80=99t have your MIT ID.
+ * Wear flu-vaccine-friendly clothing with short sleeves. If it is cold, we=
+ar a single, easy-to-remove outer layer, like a jacket.
+
+
+If you need documentation
+
+ * Paper receipts are available upon request; ask a staff member at the cli=
+nic.
+ * If you=E2=80=99re an MIT Medical patient, you can get documentation of y=
+our vaccination through our patient portal, HealthELife.
+
+
+Can=E2=80=99t come to the flu clinic? Other options are available.
+
+ * All MIT-sponsored insurance plans will allow you to get your flu vaccine=
+ anywhere Blue Cross Blue Shield of Massachusetts is accepted.
+ * Get your flu vaccine at a retail pharmacy, like CVS or Walgreens.
+ * Attend a flu clinic in your community.
+ * Get the flu vaccine from your primary care provider.
+ * If you=E2=80=99re an MIT Medical patient, get the flu vaccine at your ne=
+xt primary care visit.
+
+
+About this year=E2=80=99s vaccine
+
+The 2023=E2=80=9324 flu vaccine offered at MIT is quadrivalent, protecting =
+against two strains of influenza A (H1N1 and H3N2) and two strains of influ=
+enza B. The vaccine does not provide protection for COVID-19. To get a COVI=
+D-19 vaccine, you should visit a local pharmacy or your primary care provid=
+er.
+
+COVID-19 vaccines will not be available at these flu clinics.
+
+Active flu strains are different each year, so even if you got a flu vaccin=
+e last year, you still need to get this year=E2=80=99s vaccine. More inform=
+ation about this year=E2=80=99s vaccine is available from the CDC (CDC Vacc=
+ine Information Statement [https://www.cdc.gov/vaccines/hcp/vis/vis-stateme=
+nts/flu.html]) and the Commonwealth of Massachusetts (Massachusetts Immuniz=
+ation Information System [https://www.mass.gov/massachusetts-immunization-i=
+nformation-system-miis]).
+
+Questions? Send an email to comments-fluinfo@mit.edu [comments-fluinfo@mit.=
+edu].
+
+Wishing you a safe and healthy flu season,
+
+Cecilia Stuopis, M.D.
+Medical Director, MIT Medical
+
+
+
+---------------------------------------------------------------------------=
+-----
+Massachusetts Institute of Technology
+77 Massachusetts Ave | Cambridge, MA 02139
+
+This email has been sent to jiannan@mit.edu.=C2=A0
+You received this email because you are a member of MIT's faculty or staff,=
+ or an MIT student.
+Click here to unsubscribe http://inj9.mjt.lu/unsub2?hl=3Den&m=3DAVoAACXMtcU=
+AAcrtDK4AAMlryacAAYCq_8sAJc6qAAiQzwBlFDoowUqN6ZieSquiBDULJQ-JdQAIIWc&b=3Db8=
+f648a7&e=3Dd46a0e01&x=3Da7iET_5Bkh8rOy7esnA68A. Report an issue with this e=
+mail [report-announcement-issue@mit.edu].
+
+
+
+[https://www.mailjet.com/?utm_source=3Dfooter&utm_medium=3Demail&utm_campai=
+gn=3Dlogo1]=
+
+--=-6df3qju6tZKKVZbfvCrA
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>MIT Medical's Annual Flu Clinics: October 2-6</title><!--[if !mso]><!-=
+-><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><!--<![endif]-=
+-><meta name=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=3D1=
+"><style type=3D"text/css">#outlook a { padding:0; }
+      body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size=
+-adjust:100%; }
+      table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-table-r=
+space:0pt; }
+      img { border:0;height:auto;line-height:100%; outline:none;text-decora=
+tion:none;-ms-interpolation-mode:bicubic; }
+      p { display:block;margin:13px 0; }</style><!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]--><!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]--><!--[if !mso]><!--><link href=3D"https://fonts.googleapis.c=
+om/css?family=3DUbuntu:300,400,500,700" rel=3D"stylesheet" type=3D"text/css=
+"><style type=3D"text/css">@import url(https://fonts.googleapis.com/css?fam=
+ily=3DUbuntu:300,400,500,700);</style><!--<![endif]--><style type=3D"text/c=
+ss">@media only screen and (min-width:480px) {
+        .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.mj-column-per-33 { width:33% !important; max-width: 33%; }
+.mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.moz-text-html .mj-column-per-33 { width:33% !important; max-width: 33%; }
+.moz-text-html .mj-column-per-100 { width:100% !important; max-width: 100%;=
+ }</style><style type=3D"text/css">[owa] .mj-column-per-67 { width:67% !imp=
+ortant; max-width: 67%; }
+[owa] .mj-column-per-33 { width:33% !important; max-width: 33%; }
+[owa] .mj-column-per-100 { width:100% !important; max-width: 100%; }</style=
+><style type=3D"text/css">@media only screen and (max-width:479px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style><style type=3D"text/css"></style></head><body style=3D"word-sp=
+acing:normal;background-color:#ffffff;"><div style=3D"background-color:#fff=
+fff;"><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px=
+;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-h=
+eight-rule:exactly;"><![endif]--><div style=3D"margin:0px auto;max-width:60=
+0px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr><td style=3D"dir=
+ection:ltr;font-size:0px;padding:20px 0px 20px 0px;padding-left:0px;padding=
+-right:0px;text-align:center;"><!--[if mso | IE]><table role=3D"presentatio=
+n" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" styl=
+e=3D"vertical-align:middle;width:402px;" ><![endif]--><div class=3D"mj-colu=
+mn-per-67 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;dire=
+ction:ltr;display:inline-block;vertical-align:middle;width:100%;"><table bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"vertical-align:middle;" width=3D"100%"><tbody><tr><td align=3D"left" st=
+yle=3D"font-size:0px;padding:0px 0px 0px 25px;padding-top:0px;padding-right=
+:0px;padding-bottom:0px;word-break:break-word;"><div style=3D"font-family:A=
+rial, sans-serif;font-size:12px;letter-spacing:normal;line-height:1;text-al=
+ign:left;color:#000000;"><p class=3D"text-build-content" style=3D"line-heig=
+ht: 22px; margin: 10px 0; margin-top: 10px; margin-bottom: 10px;" data-test=
+id=3D"uvnhl3IGEWt"><span style=3D"color:#333333;font-family:Arial;font-size=
+:12px;">Flu vaccine clinics Oct. 2=E2=80=936</span></p></div></td></tr></tb=
+ody></table></div><!--[if mso | IE]></td><td class=3D"" style=3D"vertical-a=
+lign:middle;width:198px;" ><![endif]--><div class=3D"mj-column-per-33 mj-ou=
+tlook-group-fix" style=3D"font-size:0px;text-align:left;direction:ltr;displ=
+ay:inline-block;vertical-align:middle;width:100%;"><table border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"vertical-ali=
+gn:middle;" width=3D"100%"><tbody><tr><td align=3D"left" style=3D"font-size=
+:0px;padding:0px 25px 0px 0px;padding-top:0px;padding-right:25px;padding-bo=
+ttom:0px;word-break:break-word;"><div style=3D"font-family:Arial, sans-seri=
+f;font-size:13px;letter-spacing:normal;line-height:1;text-align:left;color:=
+#000000;"><p style=3D"text-align: right; margin: 10px 0; margin-top: 10px; =
+margin-bottom: 10px;"><a href=3D"http://inj9.mjt.lu/nl3/dg3KX5EtijKSEucNYaj=
+QRg?m=3DAVoAACXMtcUAAcrtDK4AAMlryacAAYCq_8sAJc6qAAiQzwBlFDoowUqN6ZieSquiBDU=
+LJQ-JdQAIIWc&amp;b=3Db8f648a7&amp;e=3Dd46a0e01&amp;x=3Da7iET_5Bkh8rOy7esnA6=
+8A" target=3D"_blank" style=3D"; text-decoration: none;"><span><u><span sty=
+le=3D"line-height:22px;text-align:right;font-size:12px;letter-spacing:norma=
+l;text-align:left;color:#0056ee;font-family:Arial;"><u>View online version<=
+/u></span></u></span></a></p></div></td></tr></tbody></table></div><!--[if =
+mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!-=
+-[if mso | IE]></td></tr></table><table align=3D"center" border=3D"0" cellp=
+adding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"wi=
+dth:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;m=
+so-line-height-rule:exactly;"><![endif]--><div style=3D"margin:0px auto;max=
+-width:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr><td sty=
+le=3D"direction:ltr;font-size:0px;padding:20px 0;padding-bottom:0px;padding=
+-top:0px;text-align:center;"><!--[if mso | IE]><table role=3D"presentation"=
+ border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=
+=3D"vertical-align:top;width:600px;" ><![endif]--><div class=3D"mj-column-p=
+er-100 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;directi=
+on:ltr;display:inline-block;vertical-align:top;width:100%;"><table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"v=
+ertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"center" style=3D=
+"font-size:0px;padding:0px 4px 0px 4px;padding-top:0px;padding-right:4px;pa=
+dding-bottom:0px;padding-left:4px;word-break:break-word;"><table border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"borde=
+r-collapse:collapse;border-spacing:0px;"><tbody><tr><td style=3D"width:592p=
+x;"><img alt=3D"Massachusetts Institute of Technology letterhead" src=3D"ht=
+tps://inj9.mjt.lu/tplimg/inj9/b/x95tz/gm5yt.png" style=3D"border:none;borde=
+r-radius:px;display:block;outline:none;text-decoration:none;height:auto;wid=
+th:100%;font-size:13px;" width=3D"592" height=3D"auto"></td></tr></tbody></=
+table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><=
+![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></ta=
+ble><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" class=3D"" role=3D"presentation" style=3D"width:600px;" width=3D"600" bgc=
+olor=3D"#ffffff" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-h=
+eight-rule:exactly;"><![endif]--><div style=3D"background:#ffffff;backgroun=
+d-color:#ffffff;margin:0px auto;max-width:600px;"><table align=3D"center" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"background:#ffffff;background-color:#ffffff;width:100%;"><tbody><tr><td=
+ style=3D"direction:ltr;font-size:0px;padding:0px 0px 20px 0px;padding-left=
+:0px;padding-right:0px;padding-top:0px;text-align:center;"><!--[if mso | IE=
+]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><![end=
+if]--><div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-s=
+ize:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:t=
+op;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr>=
+<td align=3D"left" style=3D"font-size:0px;padding:0px 25px 0px 25px;padding=
+-top:0px;padding-right:25px;padding-bottom:0px;padding-left:25px;word-break=
+:break-word;"><div style=3D"font-family:Ubuntu, Helvetica, Arial, sans-seri=
+f;font-size:13px;letter-spacing:normal;line-height:1;text-align:left;color:=
+#000000;"><p class=3D"text-build-content" style=3D"line-height: 22px; margi=
+n: 10px 0; margin-top: 10px;" data-testid=3D"ykwUBMl-WY"><span style=3D"col=
+or:#333333;font-family:Arial;font-size:14px;">To the MIT community,</span><=
+/p><p class=3D"text-build-content" style=3D"line-height: 22px; margin: 10px=
+ 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-family:Ar=
+ial;font-size:14px;">Flu season is upon us, and we strongly recommend a flu=
+ vaccine to help protect you from influenza this year. This email contains =
+important information about when you can get your immunization:</span></p><=
+p class=3D"text-build-content" style=3D"line-height: 22px; margin: 10px 0;"=
+ data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-family:Arial;=
+font-size:14px;">This year, MIT Medical will hold flu clinics Monday=E2=80=
+=93Friday, October 2=E2=80=936, 8 a.m.=E2=80=934 p.m. in Morss Hall in </sp=
+an><a class=3D"link-build-content" style=3D"color:inherit;text-decoration:n=
+one;; text-decoration: none;" target=3D"_blank" href=3D"http://inj9.mjt.lu/=
+lnk/AVoAACXMtcUAAcrtDK4AAMlryacAAYCq_8sAJc6qAAiQzwBlFDoowUqN6ZieSquiBDULJQ-=
+JdQAIIWc/1/RwBB6Fyokg12-CXTResVNw/aHR0cHM6Ly93aGVyZWlzLm1pdC5lZHUvP2dvPTUw"=
+><span style=3D"color:#0056ee;font-family:Arial;font-size:14px;"><u>Walker =
+Memorial (Building 50)</u></span></a><span style=3D"color:#333333;font-fami=
+ly:Arial;font-size:14px;">. These clinics are free to everyone who is eligi=
+ble to get a vaccine on campus.</span></p><h2 class=3D"text-build-content" =
+data-testid=3D"ykwUBMl-WY" style=3D"; font-weight: normal;"><span style=3D"=
+color:#333333;font-family:Arial;font-size:15px;"><b>Who is eligible for the=
+ 2023 flu clinic?</b></span></h2><ul><li><span style=3D"color:#333333;font-=
+family:Arial;font-size:14px;line-height:22px;">All enrolled students living=
+ on or off campus</span></li><li><span style=3D"color:#333333;font-family:A=
+rial;font-size:14px;line-height:22px;">All non-students who live on campus,=
+ including family members and children aged six months and older</span></li=
+><li><span style=3D"color:#333333;font-family:Arial;font-size:14px;line-hei=
+ght:22px;">All employees and contractors with an MIT ID</span></li><li><spa=
+n style=3D"color:#333333;font-family:Arial;font-size:14px;line-height:22px;=
+">All patients with a primary care provider at MIT Medical, including child=
+ren older than six months</span></li></ul><p class=3D"text-build-content" d=
+ata-testid=3D"ykwUBMl-WY" style=3D"margin: 10px 0;"><span style=3D"color:#3=
+33333;font-family:Arial;font-size:14px;line-height:22px;"><b>If you are a s=
+tudent</b></span></p><p class=3D"text-build-content" style=3D"line-height: =
+22px; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333=
+333;font-family:Arial;font-size:14px;">To minimize crowding, please try to =
+get your vaccine according to the following schedule, based on last name:</=
+span></p><ul><li><span style=3D"color:#333333;font-family:Arial;font-size:1=
+4px;line-height:22px;">A=E2=80=93G: Monday, October 2</span></li><li><span =
+style=3D"color:#333333;font-family:Arial;font-size:14px;line-height:22px;">=
+H=E2=80=93M: Tuesday, October 3</span></li><li><span style=3D"color:#333333=
+;font-family:Arial;font-size:14px;line-height:22px;">N=E2=80=93S: Wednesday=
+, October 4</span></li><li><span style=3D"color:#333333;font-family:Arial;f=
+ont-size:14px;line-height:22px;">T=E2=80=93Z: Thursday, October 5</span></l=
+i></ul><p class=3D"text-build-content" style=3D"line-height: 22px; margin: =
+10px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-famil=
+y:Arial;font-size:14px;">If you can=E2=80=99t make it on the date correspon=
+ding to your last name, you can come to the clinic any day from October 2=
+=E2=80=936.</span></p><h2 class=3D"text-build-content" data-testid=3D"ykwUB=
+Ml-WY" style=3D"; font-weight: normal;"><span style=3D"color:#333333;font-f=
+amily:Arial;font-size:15px;"><b>If you are an employee</b></span></h2><p cl=
+ass=3D"text-build-content" style=3D"line-height: 22px; margin: 10px 0;" dat=
+a-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-family:Arial;font=
+-size:14px;">Come to the clinic on a day of the week that you normally work=
+. There=E2=80=99s no need to make a special trip to campus.</span></p><h2 c=
+lass=3D"text-build-content" data-testid=3D"ykwUBMl-WY" style=3D"; font-weig=
+ht: normal;"><span style=3D"color:#333333;font-family:Arial;font-size:15px;=
+"><b>If you are an MIT Medical patient</b></span></h2><p class=3D"text-buil=
+d-content" style=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"ykwU=
+BMl-WY"><span style=3D"color:#333333;font-family:Arial;font-size:14px;">Com=
+e to the clinic any day from October 2=E2=80=936.</span></p><h2 class=3D"te=
+xt-build-content" data-testid=3D"ykwUBMl-WY" style=3D"; font-weight: normal=
+;"><span style=3D"color:#333333;font-family:Arial;font-size:15px;"><b>If yo=
+u are over age 65</b></span></h2><p class=3D"text-build-content" style=3D"l=
+ine-height: 22px; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span style=
+=3D"color:#333333;font-family:Arial;font-size:14px;">High-dose vaccines wil=
+l be available at all times.</span></p><h2 class=3D"text-build-content" dat=
+a-testid=3D"ykwUBMl-WY" style=3D"; font-weight: normal;"><span style=3D"col=
+or:#333333;font-family:Arial;font-size:15px;"><b>If you are bringing childr=
+en</b></span></h2><p class=3D"text-build-content" style=3D"line-height: 22p=
+x; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333=
+;font-family:Arial;font-size:14px;">Clinicians who can give vaccines to ped=
+iatric patients will be available at all times. However, if your baby has a=
+n upcoming six-month well-child visit at MIT Medical, they will receive the=
+ir flu vaccine at that scheduled appointment.</span></p><h2 class=3D"text-b=
+uild-content" data-testid=3D"ykwUBMl-WY" style=3D"; font-weight: normal;"><=
+span style=3D"color:#333333;font-family:Arial;font-size:15px;"><b>Other thi=
+ngs you need to know</b></span></h2><ul><li><span style=3D"color:#333333;fo=
+nt-family:Arial;font-size:14px;line-height:22px;">Bring your MIT ID or your=
+ MIT Atlas app. We can scan the barcode in the app if you don=E2=80=99t hav=
+e your MIT ID.</span></li><li><span style=3D"color:#333333;font-family:Aria=
+l;font-size:14px;line-height:22px;">Wear flu-vaccine-friendly clothing with=
+ short sleeves. If it is cold, wear a single, easy-to-remove outer layer, l=
+ike a jacket.</span></li></ul><h2 class=3D"text-build-content" data-testid=
+=3D"ykwUBMl-WY" style=3D"; font-weight: normal;"><span style=3D"color:#3333=
+33;font-family:Arial;font-size:15px;"><b>If you need documentation</b></spa=
+n></h2><ul><li><span style=3D"color:#333333;font-family:Arial;font-size:14p=
+x;line-height:22px;">Paper receipts are available upon request; ask a staff=
+ member at the clinic.</span></li><li><span style=3D"color:#333333;font-fam=
+ily:Arial;font-size:14px;line-height:22px;">If you=E2=80=99re an MIT Medica=
+l patient, you can get documentation of your vaccination through our patien=
+t portal, HealthELife.</span></li></ul><h2 class=3D"text-build-content" dat=
+a-testid=3D"ykwUBMl-WY" style=3D"; font-weight: normal;"><span style=3D"col=
+or:#333333;font-family:Arial;font-size:15px;"><b>Can=E2=80=99t come to the =
+flu clinic? Other options are available.</b></span></h2><ul><li><span style=
+=3D"color:#333333;font-family:Arial;font-size:14px;line-height:22px;">All M=
+IT-sponsored insurance plans will allow you to get your flu vaccine anywher=
+e Blue Cross Blue Shield of Massachusetts is accepted.</span></li><li><span=
+ style=3D"color:#333333;font-family:Arial;font-size:14px;line-height:22px;"=
+>Get your flu vaccine at a retail pharmacy, like CVS or Walgreens.</span></=
+li><li><span style=3D"color:#333333;font-family:Arial;font-size:14px;line-h=
+eight:22px;">Attend a flu clinic in your community.</span></li><li><span st=
+yle=3D"color:#333333;font-family:Arial;font-size:14px;line-height:22px;">Ge=
+t the flu vaccine from your primary care provider.</span></li><li><span sty=
+le=3D"color:#333333;font-family:Arial;font-size:14px;line-height:22px;">If =
+you=E2=80=99re an MIT Medical patient, get the flu vaccine at your next pri=
+mary care visit.</span></li></ul><h2 class=3D"text-build-content" data-test=
+id=3D"ykwUBMl-WY" style=3D"; font-weight: normal;"><span style=3D"color:#33=
+3333;font-family:Arial;font-size:15px;"><b>About this year=E2=80=99s vaccin=
+e</b></span></h2><p class=3D"text-build-content" style=3D"line-height: 22px=
+; margin: 10px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333;=
+font-family:Arial;font-size:14px;">The 2023=E2=80=9324 flu vaccine offered =
+at MIT is quadrivalent, protecting against two strains of influenza A (H1N1=
+ and H3N2) and two strains of influenza B. The vaccine does not provide pro=
+tection for COVID-19. To get a COVID-19 vaccine, you should visit a local p=
+harmacy or your primary care provider.</span></p><p class=3D"text-build-con=
+tent" style=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"ykwUBMl-W=
+Y"><span style=3D"color:#333333;font-family:Arial;font-size:14px;">COVID-19=
+ vaccines will not be available at these flu clinics.</span></p><p class=3D=
+"text-build-content" style=3D"line-height: 22px; margin: 10px 0;" data-test=
+id=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-family:Arial;font-size:=
+14px;">Active flu strains are different each year, so even if you got a flu=
+ vaccine last year, you still need to get this year=E2=80=99s vaccine. More=
+ information about this year=E2=80=99s vaccine is available from the CDC (<=
+/span><a class=3D"link-build-content" style=3D"color:inherit;text-decoratio=
+n:none;; text-decoration: none;" target=3D"_blank" href=3D"http://inj9.mjt.=
+lu/lnk/AVoAACXMtcUAAcrtDK4AAMlryacAAYCq_8sAJc6qAAiQzwBlFDoowUqN6ZieSquiBDUL=
+JQ-JdQAIIWc/2/yhoUWAW3BgKLV30xmR5JCg/aHR0cHM6Ly93d3cuY2RjLmdvdi92YWNjaW5lcy=
+9oY3AvdmlzL3Zpcy1zdGF0ZW1lbnRzL2ZsdS5odG1s"><span style=3D"color:#0056ee;fo=
+nt-family:Arial;font-size:14px;"><u>CDC Vaccine Information Statement</u></=
+span></a><span style=3D"color:#333333;font-family:Arial;font-size:14px;">) =
+and the Commonwealth of Massachusetts (</span><a class=3D"link-build-conten=
+t" style=3D"color:inherit;text-decoration:none;; text-decoration: none;" ta=
+rget=3D"_blank" href=3D"http://inj9.mjt.lu/lnk/AVoAACXMtcUAAcrtDK4AAMlryacA=
+AYCq_8sAJc6qAAiQzwBlFDoowUqN6ZieSquiBDULJQ-JdQAIIWc/3/eXE4I6ZAFhEeUDQaWAgrh=
+w/aHR0cHM6Ly93d3cubWFzcy5nb3YvbWFzc2FjaHVzZXR0cy1pbW11bml6YXRpb24taW5mb3JtY=
+XRpb24tc3lzdGVtLW1paXM"><span style=3D"color:#0056ee;font-family:Arial;font=
+-size:14px;"><u>Massachusetts Immunization Information System</u></span></a=
+><span style=3D"color:#333333;font-family:Arial;font-size:14px;">).</span><=
+/p><p class=3D"text-build-content" style=3D"line-height: 22px; margin: 10px=
+ 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-family:Ar=
+ial;font-size:14px;">Questions? Send an email to </span><a class=3D"link-bu=
+ild-content" style=3D"color:inherit;text-decoration:none;; text-decoration:=
+ none;" href=3D"mailto:comments-fluinfo@mit.edu"><span style=3D"color:#0056=
+ee;font-family:Arial;font-size:14px;"><u>comments-fluinfo@mit.edu</u></span=
+></a><span style=3D"color:#333333;font-family:Arial;font-size:14px;">.</spa=
+n></p><p class=3D"text-build-content" style=3D"line-height: 22px; margin: 1=
+0px 0;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#333333;font-family=
+:Arial;font-size:14px;">Wishing you a safe and healthy flu season,</span></=
+p><p class=3D"text-build-content" style=3D"line-height: 22px; margin: 10px =
+0; margin-bottom: 10px;" data-testid=3D"ykwUBMl-WY"><span style=3D"color:#3=
+33333;font-family:Arial;font-size:14px;">Cecilia Stuopis, M.D.</span><br><s=
+pan style=3D"color:#333333;font-family:Arial;font-size:14px;">Medical Direc=
+tor, MIT Medical</span></p></div></td></tr></tbody></table></div><!--[if ms=
+o | IE]></td></tr></table><![endif]--></td></tr></tbody></table></div><!--[=
+if mso | IE]></td></tr></table><table align=3D"center" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"widt=
+h:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso=
+-line-height-rule:exactly;"><![endif]--><div style=3D"margin:0px auto;max-w=
+idth:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr><td style=
+=3D"direction:ltr;font-size:0px;padding:20px 0px 20px 0px;padding-left:0px;=
+padding-right:0px;text-align:center;"><!--[if mso | IE]><table role=3D"pres=
+entation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D=
+"" style=3D"vertical-align:top;width:600px;" ><![endif]--><div class=3D"mj-=
+column-per-100 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left=
+;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><table =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" styl=
+e=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"center" st=
+yle=3D"font-size:0px;padding:0px 25px 10px 25px;padding-top:0px;padding-rig=
+ht:25px;padding-left:25px;word-break:break-word;"><p style=3D"border-top:so=
+lid 2px #E6E6E6;font-size:1px;margin:0px auto;width:100%;"></p><!--[if mso =
+| IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:0px auto;wid=
+th:550px;" role=3D"presentation" width=3D"550px" ><tr><td style=3D"height:0=
+;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"left" style=3D"fon=
+t-size:0px;padding:0px 20px 0px 20px;padding-top:0px;padding-bottom:0px;wor=
+d-break:break-word;"><div style=3D"font-family:Arial, sans-serif;font-size:=
+11px;letter-spacing:normal;line-height:1;text-align:left;color:#000000;"><p=
+ class=3D"text-build-content" style=3D"text-align: center; margin: 10px 0; =
+margin-top: 10px;" data-testid=3D"A5rER0v1Z-"><span style=3D"color:#333333;=
+font-family:Arial;font-size:11px;line-height:14px;">Massachusetts Institute=
+ of Technology</span><br><span style=3D"color:#333333;font-family:Arial;fon=
+t-size:11px;line-height:14px;">77 Massachusetts Ave | Cambridge, MA 02139</=
+span></p><p class=3D"text-build-content" style=3D"text-align: center; margi=
+n: 10px 0; margin-bottom: 10px;" data-testid=3D"A5rER0v1Z-"><span style=3D"=
+color:#333333;font-family:Arial;font-size:11px;line-height:14px;">This emai=
+l has been sent to jiannan@mit.edu.&nbsp;</span><br><span style=3D"color:#3=
+33333;font-family:Arial;font-size:11px;line-height:14px;">You received this=
+ email because you are a member of MIT's faculty or staff, or an MIT studen=
+t.</span><br><a class=3D"link-build-content" style=3D"color:inherit;; text-=
+decoration: none;" target=3D"_blank" href=3D"http://inj9.mjt.lu/unsub2?hl=
+=3Den&amp;m=3DAVoAACXMtcUAAcrtDK4AAMlryacAAYCq_8sAJc6qAAiQzwBlFDoowUqN6ZieS=
+quiBDULJQ-JdQAIIWc&amp;b=3Db8f648a7&amp;e=3Dd46a0e01&amp;x=3Da7iET_5Bkh8rOy=
+7esnA68A"><span style=3D"color:#0056ee;font-family:Arial;font-size:11px;lin=
+e-height:14px;"><u>Click here to unsubscribe</u></span></a><span style=3D"c=
+olor:#333333;font-family:Arial;font-size:11px;line-height:14px;">. </span><=
+a class=3D"link-build-content" style=3D"color:inherit;; text-decoration: no=
+ne;" href=3D"mailto:report-announcement-issue@mit.edu"><span style=3D"color=
+:#0056ee;font-family:Arial;font-size:11px;line-height:14px;"><u>Report an i=
+ssue with this email</u></span></a><span style=3D"color:#333333;font-family=
+:Arial;font-size:11px;line-height:14px;">.</span></p></div></td></tr></tbod=
+y></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr><=
+/tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></div>
+<br><img src=3D"http://inj9.mjt.lu/oo/AVoAACXMtcUAAcrtDK4AAMlryacAAYCq_8sAJ=
+c6qAAiQzwBlFDoowUqN6ZieSquiBDULJQ-JdQAIIWc/c48aa4b1/e.gif" height=3D"1" wid=
+th=3D"1" alt=3D"" border=3D"0" style=3D"height:1px;width:1px;border:0;">
+</body></html>=
+
+--=-6df3qju6tZKKVZbfvCrA--

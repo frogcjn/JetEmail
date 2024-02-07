@@ -1,0 +1,562 @@
+Received: from CO1PR01MB7258.prod.exchangelabs.com (2603:10b6:303:151::22) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Mon, 11 Sep 2023 15:38:32
+ +0000
+Received: from DS0PR17CA0011.namprd17.prod.outlook.com (2603:10b6:8:191::13)
+ by CO1PR01MB7258.prod.exchangelabs.com (2603:10b6:303:151::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6768.34; Mon, 11 Sep 2023 15:38:31 +0000
+Received: from CY4PEPF0000EDD6.namprd03.prod.outlook.com
+ (2603:10b6:8:191:cafe::c3) by DS0PR17CA0011.outlook.office365.com
+ (2603:10b6:8:191::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.35 via Frontend
+ Transport; Mon, 11 Sep 2023 15:38:31 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.98)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ gmail.com discourages use of 18.9.1.98 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.98) by
+ CY4PEPF0000EDD6.mail.protection.outlook.com (10.167.241.210) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6792.17 via Frontend Transport; Mon, 11 Sep 2023 15:38:31 +0000
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ oc11exhyb2.exchange.mit.edu (18.9.1.98) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Mon, 11 Sep 2023 11:38:28 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.40) by
+ oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Mon, 11 Sep 2023 11:38:28 -0400
+Received: from CY5P221CA0109.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:1f::21)
+ by DM4PR01MB7811.prod.exchangelabs.com (2603:10b6:8:6a::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6768.30; Mon, 11 Sep 2023 15:38:26 +0000
+Received: from CY4PEPF0000EDD4.namprd03.prod.outlook.com
+ (2603:10b6:930:1f:cafe::b0) by CY5P221CA0109.outlook.office365.com
+ (2603:10b6:930:1f::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.35 via Frontend
+ Transport; Mon, 11 Sep 2023 15:38:26 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.221.44)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of gmail.com designates
+ 209.85.221.44 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.221.44; helo=mail-wr1-f44.google.com; pr=C
+Received: from mail-wr1-f44.google.com (209.85.221.44) by
+ CY4PEPF0000EDD4.mail.protection.outlook.com (10.167.241.208) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.17 via Frontend Transport; Mon, 11 Sep 2023 15:38:25 +0000
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-31f737b8b69so4102755f8f.3
+        for <jiannan@mit.edu>; Mon, 11 Sep 2023 08:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694446704; x=1695051504; darn=mit.edu;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pq25cUh5Pr3rq3QqykGl8jKRRBeSaBs11KOggGy2cdg=;
+        b=bjke80XgknteqqHiuwSchUeDyUsWd1NB9gDNJ1Ji04kAfpQ2jm++68pqhELrtKLBFK
+         iLm3SfL8vnSejFhd7IGUKsakAYVEEjHeSSMK/HTP0BkQbO+kp+krSka4HMPWSwfzackd
+         RxaRLvyt5XDwcUU6H07q52UgVjcdLRmRu+55+JmVAyilI9pxnHZ8X8l6DsCrPc6Fdg97
+         CmaFQpRTH5QL1+LStRy1oyFAIyn7FOTDRu9CGoJJHIkJWwkljeuLW+eEmhRbm5lRzAiz
+         EPsm3pl0ygeLkF2CK9pp/sFMD4YlfRVtjnTFITakAhNwTvCM3JsQwOc8lUUoIC/kjeYM
+         Q7vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694446704; x=1695051504;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pq25cUh5Pr3rq3QqykGl8jKRRBeSaBs11KOggGy2cdg=;
+        b=Mo3bfnlexwvTQYQT6N5YbrxCYVPEBug9M79RhaYR8/nwZtxPHwVvjtbO3Wac8bbQwD
+         Af6g0SZWGLk/e/pFmrem+WBmsvbLaOpw+x6APKXtVNyZciLxZNrh/LRv0DLPUOJBPbVU
+         xWcadzBfJhQsSfN4N9Y9g+cfMqDxLRd654xy9O0Q44sxVz+abo3uAOQ0Xjad4qAmKAnB
+         Rnz7LPHRd/Exi78gMkWxHOj+I5cJc4xgUyJKqR0TBnvTY1x7ZuL0qVnXrHr7hyKdApap
+         h92y58fe82bnjKaJVBcokFzR6xxpGvJiMAJbZXA5632RnwdYGekKsFXIQ3oHYpwoFPVV
+         Mftg==
+X-Gm-Message-State: AOJu0YyA2cM2XGFVOwYAkeaSlGGdp0ybnUprsZTfR0kvNPXpBZWrH75/
+	7Vx4AhnWt2CsiXeTjA+IONFgTFSUIRw2AHEvJV6nMzye6Z0=
+X-Google-Smtp-Source: AGHT+IFQxPK7+byCu0WigSbQbUQ8K/DC+Q/Pa/R0jGOFgvaIlIUM8ntR5DRgI8c4awtMzkSHWNSjA0IJE8Z14xQMymo=
+X-Received: by 2002:a05:6512:2394:b0:500:c2d8:a2a2 with SMTP id
+ c20-20020a056512239400b00500c2d8a2a2mr10604980lfv.46.1694446683621; Mon, 11
+ Sep 2023 08:38:03 -0700 (PDT)
+References: <1.8a755846fe840ce8d420@live-mail-2>
+In-Reply-To: <1.8a755846fe840ce8d420@live-mail-2>
+From: Nancy Leveson <leveson.nancy8@gmail.com>
+Date: Mon, 11 Sep 2023 11:37:51 -0400
+Message-ID: <CABMQRd7h4jJ9ZDmavDqcRzNqQpLOxHWV51_2Qvvs996fCqa=uA@mail.gmail.com>
+Subject: Fwd: Reminder and updated Agenda - IAASS Launch and Reentry Safety
+ Technical Committee VC meeting
+To: Nancy Leveson <leveson@mit.edu>
+Content-Type: multipart/alternative; boundary="000000000000ab0eaa0605171c6d"
+BCC: <jiannan@mit.edu>
+Return-Path: leveson.nancy8@gmail.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CY4PEPF0000EDD4:EE_|DM4PR01MB7811:EE_|CY4PEPF0000EDD6:EE_|CO1PR01MB7258:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 79edfdf0-b33c-4cd9-6ea9-08dbb2dd26e0
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?dH8xfJS9twKqvI0sc3OrxbnwOH1zs3syggF1zQFMBoCG83bfh8piPoIvyimU?=
+ =?us-ascii?Q?MR6wYiMeYu+qa3mWrsi/8ho9EPEjYj7MMte/X0PdX1huEVXFSdJFN/C510n1?=
+ =?us-ascii?Q?ZdW1JTySZOvZoTFyPDVm88hywD9WV0RIRl0Jc1pxx+OZnhPe0raphusCcdNa?=
+ =?us-ascii?Q?LwAL/JpNcK1mzhhDPgCNXsrZX2eos55GbOTH0qfwjAJ5bCeimWYei0pl9qwE?=
+ =?us-ascii?Q?Teim9XW/k1PlJEL6eWWtYCs6BEbne45MG28JI+q2rdjO+LGQVrcVUBssPkVt?=
+ =?us-ascii?Q?XCq9hIaWOpP92DeVcIKGWw/Bp39GdPgK1Wohzh5kGlSTHtYospEIpvDR4HQ3?=
+ =?us-ascii?Q?Z3lD9eps1CG4QImJifsF19GelPvbt7kJ59J5MGAv4a0F5piryirV3s413+Tw?=
+ =?us-ascii?Q?UsJWxnPISuqvTnwf41svSg/zGhwcxWAuqF0ZXVjyNL8LW7PjnE2uFtQ/941b?=
+ =?us-ascii?Q?8sIsF5gHJk3EdxNdZrQOmleCgw5v4/cz+2meiCt6n8kSnoYhg1Lwi3ixELZm?=
+ =?us-ascii?Q?P5l1hgNbean6/qbgrhq3Uu5GVUnAh50gNy6YB7qC4aiBQ6br4G74gBNaixCp?=
+ =?us-ascii?Q?BYDI9kCiYA68gjP+igYRkhBrBQpSEzpXrZhfpDBleC0sH4U4Yb1wTck8vp8O?=
+ =?us-ascii?Q?B7eKgIs4/vl/U9e9syXkcpBA2tvbud0/hknoIcCA4yrKH2HCtFTKimKEyEd9?=
+ =?us-ascii?Q?IOmEr4VxA87vJcZ9Y3p+4saQEOc+hX/2qFgEBFi0lWb2+EeuqaAxSjZj1hhG?=
+ =?us-ascii?Q?ut4q9MnoxPufDt+tdRJZEDv7kF7qxKg2hiu8DuXO1hTAwj+3gG6vgVIcKlIx?=
+ =?us-ascii?Q?RTPSx2pPmuFZJ9WvSqnoB6SrgTnCDkHFj7jRFwYMCnenq8PuU3kpjIjQ909I?=
+ =?us-ascii?Q?TQ31Pa6XhoWpmyNzOPpSWs7Lcst5YZ4B7Lqb6NFM/6wi3bboMZw8t3PxtaON?=
+ =?us-ascii?Q?Zwbin74ay5hMUrlpnwXFDJV3a80lWcuY6O7boAbehx3TSaH1fIIUZ8oVcPjf?=
+ =?us-ascii?Q?xLvMOwhWiaZysoAUq10FK3eOhaNdfz6tn3VTa3gJRjGwb3vVd2EqIvPNaui5?=
+ =?us-ascii?Q?289ioV6H35c2zJvLZKdqEQTengWndRjHowHF8Pp/rBLUS2Iri+/ci39c7WPW?=
+ =?us-ascii?Q?wdXL3fycYbRnLmQxHJWaj+NAijJd1/nKUHfoEMSC/icdEDeg4Z4YB+d2Fxzo?=
+ =?us-ascii?Q?vEHcAglXfvG2ipSGMeTvhdUL/sCjhW8SbPGvHVH/yeDcZ6i+Y4rRIy4HKBn2?=
+ =?us-ascii?Q?JDcnrU+TxV3+ji2aHippuKjkR9qcNGIpfqulMtf9Uxu8biTSUnteY8a/W1Ic?=
+ =?us-ascii?Q?GZM/ofkOvEPRdJRbNZA7Oujel6Tzdx/fQvLPixkuz7RB/7U9nzTZmCYX+7DR?=
+ =?us-ascii?Q?7MB5buNPqqRtbN1ApGQPPSGlBAwkvxqdv1TWkvUhOwBPSCu/+knXdynl3X8n?=
+ =?us-ascii?Q?CxxJp7NLLBxO4pVgMv9jSgd/iQRlg5N0BaI6wyNUL2oqnwgEFc+LCzgpb8pg?=
+ =?us-ascii?Q?Ag+JzrJnabMkNQp7sZkW+ruJkJjV+pWP0+R4tjFWuwDwrTw2Ccobbb09MY0i?=
+ =?us-ascii?Q?D0XacQS2yWNCJM9orD2sSJMcOg+E14egoaS3UJcYDE8aY7JcWnX0WJa3uRIE?=
+ =?us-ascii?Q?dfV9RPw03eU/P8Ij74rJbzOi9uwuWKhQqsLQSgUMfGo3ZizGeqxeLVr99Aql?=
+ =?us-ascii?Q?b8bVag=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.221.44;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-wr1-f44.google.com;PTR:mail-wr1-f44.google.com;CAT:NONE;SFS:(13230031)(4636009)(1690799017)(451199024)(7596003)(82202003)(33964004)(6666004)(53546011)(58800400005)(83380400001)(336012)(66574015)(966005)(26005)(73392003)(6862004)(42186006)(76482006)(1096003)(8676002)(15650500001)(40140700001)(86362001)(4006050)(55446002)(166002)(84300400001)(75640400001)(5660300002)(7636003)(66899024)(356005);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR01MB7811
+X-OrganizationHeadersPreserved: DM4PR01MB7811.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb3.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb3.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb2.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 11 Sep 2023 15:38:31.2816
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 79edfdf0-b33c-4cd9-6ea9-08dbb2dd26e0
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: CY4PEPF0000EDD6.namprd03.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CY4PEPF0000EDD6.namprd03.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CY4PEPF0000EDD6.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CY4PEPF0000EDD4.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 7dfa6d0f-f7b0-44e9-e5c6-08dbb2dd23c0
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.98;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb2.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2023 15:38:31.0316
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 79edfdf0-b33c-4cd9-6ea9-08dbb2dd26e0
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.98];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CY4PEPF0000EDD4.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR01MB7258
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.7960620
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6768.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?K0JEU3VWYWdXVzVvRTAzOGE3TlQ4bVM1M0N3ZW9xVEtWS0dDRUpGWkpJWG9r?=
+ =?utf-8?B?d0k4MzFuQnBIT3hVTmthejE4MndvM1k5NG1NVGdnOUFpdHBwNjFPcHVuTGti?=
+ =?utf-8?B?b0FQL3VyQUwvUG56TURsb2NDU2NKZ2NNYVNENVBGazRCTUNLYW5JNjQxYUxZ?=
+ =?utf-8?B?M3Yya0RGQ3ZRdk5CNGVzMTJCd09KSXlzeHVrZGd2YVFNY2k4WU92TFc2S0c0?=
+ =?utf-8?B?N2tGRHUwQnhOYktwYWJFL01YaE01UE5kOUwwUTRuKzVtRU5OMFpvMitMRlpl?=
+ =?utf-8?B?Z2JyblY2aFRvOG04UXhDK3M0U1hCSlJEdkt5ekVUQjFibDd5aWVJUmpTdlFH?=
+ =?utf-8?B?d1kreWtIb1JMV3k3aEZ2all4Zitxc1crV0FCZTVMUlpOM2tTWlRmLzJoLy9k?=
+ =?utf-8?B?OElkR1dhWkxxYmM3b1dzN0xSZVpmaTR6bTZTYzl0UGpGRGNQSEZWZGVUWU1o?=
+ =?utf-8?B?RVAyQUt2OU9QU3p0cnRQamM3V0NyOU5ZNGtoRFFaL2xjcnhmNkxYaTR0aUFw?=
+ =?utf-8?B?NDRVK3JrcW5md0R5VHI2a2psSG1aeW1HbzIzV1dLN2Y1ZEt1TkFVbTlyQ1lQ?=
+ =?utf-8?B?M3RZTElIazRUeUZ2c3pVaGlza3FWWFNBUEVqQkliZ2h3OExoWmxDaDI5WGNt?=
+ =?utf-8?B?V2tUN0czNW82NDlKT1BrUy9nQXNjeit6SE1kRit4SGFSdllZUEsvMTZqMXlp?=
+ =?utf-8?B?WGh5eE5IelZqU0drQ0hXVURtYkhUbS94dXBQcGNTVkxGZ3Rnc2FQN09TUEdE?=
+ =?utf-8?B?REg2ZHN6ajlZQkdwVG5vYXJpZ3VEeWN2TStqQk5qalI1d1dWUkpKZktwSElm?=
+ =?utf-8?B?WHpXTWIvRCsyM1NYNXR0RXRoYTNyV3JvTzlmRnRENEhIUHVjdm5qNDl3VmM2?=
+ =?utf-8?B?aTAvU0ZYYm1hbDdsaGJ5YVRONmhCRFNKRnpjYzQ3azdPM29ZUkRseXEyNGQx?=
+ =?utf-8?B?dWJRWmlQNVNYRUIxOXp2OWtzV2FvcWpDMERFb1JzR3VrcEJFSUtYdlZHQlln?=
+ =?utf-8?B?akdYWE9FVW8yc0ZKMzMyU2hTdmJVSDMwdkp3VFB1bWhQVkFPUnEwb2lkREk3?=
+ =?utf-8?B?SjFNODdrbDRNcWdEYjBUeGw0all5VE5FeittN0xLTnpkU0JOaG4rZUJDU1Ry?=
+ =?utf-8?B?TGQzWWxxMFhDVG42N2pPOURjV2xhdVdGSVFGbythOEh5cloraUxnL2FPU2lX?=
+ =?utf-8?B?UUJzSS9veEt0ZWNTWWs4RVJqd21zdlBrR0d4cTJKamxLQkM4bjMycUw1YjY5?=
+ =?utf-8?B?YlowZm1LMEErYUI5aHB1N1p3eTRGMnhKTkJGUGR1L3VPUC9oR2JpbGxoVHJy?=
+ =?utf-8?B?d3VzS1d4UTJha1d5cldqUzQ0eTFSRkR4RU5NSEthNUVlR2lTcE9KdjJwbGw4?=
+ =?utf-8?B?bUFrUkpnWVJaWThCMys0SXB4QzJKYnhuQUN4ZTZNQVRvK2lmQkE5RGlXMWZ4?=
+ =?utf-8?B?ekJiTllROENhdVZ0cUp0Yys1dlpCOVl2bVhkd3Z1TlpxbEdQbnJ0UmFhYmFt?=
+ =?utf-8?B?c0xmaHd4QUY3UmVSNWZqaThhNVZXYUdNeUx5V0JHeUNkeHdmRkJJTUFCWC9m?=
+ =?utf-8?B?eWJzWFBZS2RuSU9CV2cwdmNNMWZwS0pmWERia0JuQWNId29jU1huZEVBVDNo?=
+ =?utf-8?B?UHFnSmVOKzE2NmRIZVJKaWJ5NzVubHJ4SkdXcUpCQ1IrL1ppeFRKVnU0YXJ6?=
+ =?utf-8?B?M09DUzJzbjMxZnRYdHViYW1ZRGlWbUVFbllxMWUrTWhmZGJhUTVrT2hQMU5R?=
+ =?utf-8?B?a3lBaW5mVjdyS1ZTKzRMSzV3UFgzL2oyWEtlMm9oWnQyUUg3c2hhSEswMk80?=
+ =?utf-8?B?Nk1GZFdwbTFLNTBQQVdRMVUvVUMvVWFQMmJ1c3VJdTgrYWJZTWpudmRrWGxQ?=
+ =?utf-8?B?Slh2UXd4aXpMUVVLM2t1UDlBWXJkVGpCSTVyWVpMalpyRUhKTUU0TlZuWkc2?=
+ =?utf-8?B?TkpXRWNiTkFiYithZTg3dlBtWFV0ZXlGT29Md1VjVGVucVByMnJCb0RFcVlK?=
+ =?utf-8?B?MmZDaU5sMzVsaUZDQzczaWlBM3VQbEZPZUJ1cU43WjFFR2NrbHZhNGptN3Y1?=
+ =?utf-8?B?b3Z1SjcvWmhkWURGcmJnb004bjVoWFo1QThoUmtyeTc5MzBsOXJ0REg0Z2Mw?=
+ =?utf-8?B?N2QvVVd5TFErL2dOMm5vTytBQzBQWGEvcGtOZklMK242RmVLZWxyUER6Rzdi?=
+ =?utf-8?B?R29YZnFPNHBEVXZ4UHNyNDdKcktpM01mMVVkYUpQUFhQQk1xeDZDVERabG1I?=
+ =?utf-8?Q?ju4h3ZstCI+7e7sXuXN03HQixf8Yv/Vs4dnLX4Cwhg=3D?=
+MIME-Version: 1.0
+
+--000000000000ab0eaa0605171c6d
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+In case anyone is interested.
+
+---------- Forwarded message ---------
+From: IAASS <Iaass@wildapricot.org>
+Date: Mon, Sep 11, 2023 at 11:34=E2=80=AFAM
+Subject: Reminder and updated Agenda - IAASS Launch and Reentry Safety
+Technical Committee VC meeting
+To: Nancy Leveson <leveson@mit.edu>
+
+
+
+
+Dear Nancy Leveson,
+
+On September 14 between 1800-2000 CET we will have a *Launch and Reentry
+Safety Technical Committee* VC meeting. We invite you to join us as members
+to our committee.
+
+Following is the updated agenda:
+
+18:00-18:20 - *General organization and welcome to new members* =E2=80=93 D=
+r. Ronen
+Ingbir & Dr. Cristina De Persis
+
+18:20-18:40  - *AFTS mission validation* =E2=80=93 Presentation  -  Ltc. As=
+af
+Schuldenfrei, IAF, Israel
+
+18:40-18:50 =E2=80=93 AFTS mission validation - Open discussion
+
+18:50-19:10 - *Proposal for an international technical specification
+baseline for a generic AFTS* =E2=80=93 Presentation =E2=80=93 Mr Giuliano A=
+campa, AVIO,
+Italy
+
+19:10-19:20 =E2=80=93 International technical baseline for a generic AFTS =
+=E2=80=93 Open
+discussion
+
+19:20-19:40 - *Aviation Safety and Uncontrolled Space Object
+Re-entries* =E2=80=93 *OSAKA
+Workshop summary* =E2=80=93 Presentation =E2=80=93 Dr. Cristina De Persis, =
+ESA, The
+Netherlands
+
+19:40-19:50 - Aviation Safety and Uncontrolled Space Object Re-entries =E2=
+=80=93
+Open discussion
+
+19:50-20:00 =E2=80=93 *Meeting summary and future plans* =E2=80=93 Dr. Rone=
+n Ingbir & Dr.
+Cristina De Persis
+
+We apologize for the time (next meeting will be more suitable to JAPAN /
+AUSTRALIA time zone). *The meeting will be recorded and shared with the
+IAASS members.*
+
+Please see following Zoom connection details
+
+
+*Topic: Launch and Reentry  Committee meeting*
+*Time: Sep 14, 2023 06:00 PM Amsterdam, Berlin, Rome, Stockholm, Vienna**Jo=
+in
+Zoom Meeting*
+
+*https://us02web.zoom.us/j/89066314993?pwd=3DL3NQVnBvMkQwZkZJTUwrbklVb1l4dz=
+09
+<https://iaass.wildapricot.org/EmailTracker/LinkTracker.ashx?linkAndRecipie=
+ntCode=3DE7DnPnVxMG7Asn%2fedclolI%2bURHImaPEdcH92U1Vei55f55qTLBMRJv8ZI63mGr=
+ZeJvwNZkzQrdUC9H%2bPsQmesnzFazObBI3MdB5d5T%2fn594%3d>*
+
+Meeting ID: 890 6631 4993
+Passcode: 207935
+
+ ---
+
+ One tap mobile
+
++13602095623,,89066314993#,,,,*207935# US
+
++13863475053,,89066314993#,,,,*207935# US
+
+ ---
+
+ Dial by your location
+
+=E2=80=A2 +1 360 209 5623 US
+
+=E2=80=A2 +1 386 347 5053 US
+
+=E2=80=A2 +1 507 473 4847 US
+
+=E2=80=A2 +1 564 217 2000 US
+
+=E2=80=A2 +1 646 931 3860 US
+
+=E2=80=A2 +1 669 444 9171 US
+
+=E2=80=A2 +1 669 900 6833 US (San Jose)
+
+=E2=80=A2 +1 689 278 1000 US
+
+=E2=80=A2 +1 719 359 4580 US
+
+=E2=80=A2 +1 929 205 6099 US (New York)
+
+=E2=80=A2 +1 253 205 0468 US
+
+=E2=80=A2 +1 253 215 8782 US (Tacoma)
+
+=E2=80=A2 +1 301 715 8592 US (Washington DC)
+
+=E2=80=A2 +1 305 224 1968 US
+
+=E2=80=A2 +1 309 205 3325 US
+
+=E2=80=A2 +1 312 626 6799 US (Chicago)
+
+=E2=80=A2 +1 346 248 7799 US (Houston)
+
+Meeting ID: 890 6631 4993
+
+Passcode: 207935
+
+Find your local number: https://us02web.zoom.us/u/keqyOKjjo5
+<https://iaass.wildapricot.org/EmailTracker/LinkTracker.ashx?linkAndRecipie=
+ntCode=3D3l7MGzDVYHSmxTNdT2MMrF1pkNcbpPtBSsRM9rfRDZ4oLmvFv6az1WSyvM9WtlONbr=
+pU3wF3DniUZK%2fWqUKaypK%2bXRSGtJYmz2IjUuIGpx4%3d>
+
+
+Hope to see you all,
+
+Dr. Ronen Ingbir
+
+Chair, IAASS L&RSTC
+
+
+
+
+This message was sent to you by IAASS
+If you no longer wish to receive these emails, you can unsubscribe
+<https://iaass.wildapricot.org/EmailTracker/LinkTracker.ashx?linkAndRecipie=
+ntCode=3D%2f95R53B8VoCJug1oQwGCFa%2fbQx7%2bjmSRb8TY9gfPHefGkv3KdUEXosicS6hh=
+SVwEBEtwd5rrOqTdC2Z3stdEohJIxEhGntO9VuVzdbFzwDI%3d&up=3D%3fet%3dbkmusIS1z0A=
+EYshms08PWrT4n0QLBh8qegRZxTF%252flpbQpCo75K3kziaVTNKSeEGnp2Vekwi72PxcoFbiy3=
+4JJlnalrtrkruvsGJ%252bklCQQ23Ls1TOoIZspkGEglwh6ERsJUgZUBPL3SYPDagyUzYNC8vx3=
+BQ%253d>
+at any time
+http://iaass.space-safety.org/
+<https://iaass.wildapricot.org/EmailTracker/LinkTracker.ashx?linkAndRecipie=
+ntCode=3DU4bJTMZY%2bs01K8f%2brKCGxr1DqjhXWAu%2b%2f2jbV1pLxT%2b1z1Q1Yaa3T3KU=
+XA37MJCLdeWOAOVbgX%2fPw%2fXtxuwt1j5CDsGNiKdvIiJPY0cZjtE%3d>
+
+--000000000000ab0eaa0605171c6d
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-size:small">In ca=
+se anyone is interested.</div><div class=3D"gmail_default" style=3D"font-si=
+ze:small"><br></div><div><div dir=3D"ltr" class=3D"gmail_signature" data-sm=
+artmail=3D"gmail_signature"><div dir=3D"ltr"><div><div dir=3D"ltr"><div><di=
+v dir=3D"ltr"><div><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div =
+dir=3D"ltr"><div dir=3D"ltr"><div>---------- Forwarded message ---------<br=
+></div></div></div></div></div></div></div></div></div></div></div></div></=
+div></div><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">=
+From: <strong class=3D"gmail_sendername" dir=3D"auto">IAASS</strong> <span =
+dir=3D"auto">&lt;<a href=3D"mailto:Iaass@wildapricot.org">Iaass@wildapricot=
+.org</a>&gt;</span><br>Date: Mon, Sep 11, 2023 at 11:34=E2=80=AFAM<br>Subje=
+ct: Reminder and updated Agenda - IAASS Launch and Reentry Safety Technical=
+ Committee VC meeting<br>To: Nancy Leveson &lt;<a href=3D"mailto:leveson@mi=
+t.edu">leveson@mit.edu</a>&gt;<br></div><div class=3D"msg-91523939513880447=
+39"><br><div>       <div>     <table background=3D"https://Iaass.wildaprico=
+t.orgnone" bgcolor=3D"transparent" align=3D"center" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" height=3D"100%" width=3D"100%" style=3D"backgroun=
+d-image:none;background-color:transparent;background-position:50% 0%;backgr=
+ound-repeat:repeat">   <tbody>    <tr>    <td align=3D"center" valign=3D"to=
+p">             <div style=3D"margin:0px auto;max-width:600px">     <table =
+align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" style=3D"width:100%">   <tbody>    <tr>    <td style=3D"direct=
+ion:ltr;font-size:0px;padding:0px;text-align:center">          <div class=
+=3D"m_-9152393951388044739mj-column-px-600" style=3D"font-size:0px;text-ali=
+gn:left;direction:ltr;display:inline-block;vertical-align:top;width:100%"> =
+   <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presenta=
+tion" width=3D"100%">   <tbody>   <tr>    <td style=3D"background-color:#ff=
+ffff;border-bottom:0px none #000000;border-left:0px none #000000;border-rig=
+ht:0px none #000000;border-top:0px none #000000;vertical-align:top;padding:=
+0px;padding-right:10px;padding-left:10px">      <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%">      <tb=
+ody><tr>    <td style=3D"font-size:0px;padding:0px;word-break:break-word"> =
+          <div style=3D"height:50px">   &nbsp;  </div>         </td>    </t=
+r>      <tr>    <td align=3D"center" style=3D"font-size:0px;padding:0px;wor=
+d-break:break-word">      <table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"border-collapse:collapse;border-spaci=
+ng:0px">   <tbody>   <tr>    <td style=3D"width:580px">      <img height=3D=
+"auto" src=3D"https://Iaass.wildapricot.org/resources/Pictures/IAASS%20head=
+er.jpg" style=3D"border:0;display:block;outline:none;text-decoration:none;h=
+eight:auto;width:100%;font-size:16px" width=3D"580">     </td>   </tr>   </=
+tbody>  </table>     </td>    </tr>      <tr>    <td style=3D"font-size:0px=
+;padding:0px;word-break:break-word">           <div style=3D"height:30px"> =
+  &nbsp;  </div>         </td>    </tr>      <tr>    <td align=3D"left" sty=
+le=3D"font-size:0px;padding:0px;word-break:break-word">      <div style=3D"=
+font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1;text-al=
+ign:left;color:#000000"><p style=3D"line-height:24px" align=3D"justify"><fo=
+nt color=3D"#000000" style=3D"font-size:16px">Dear Nancy Leveson,</font></p=
+> <p style=3D"line-height:24px" align=3D"justify"><font color=3D"#222222" s=
+tyle=3D"font-size:16px">On September 14 between 1800-2000 CET we will have =
+a&nbsp;<strong>Launch and Reentry Safety Technical Committee</strong>&nbsp;=
+VC meeting.&nbsp;</font>We invite you to join us as members to our committe=
+e.&nbsp;</p> <p style=3D"line-height:24px" align=3D"justify"><font color=3D=
+"#222222" style=3D"font-size:16px">Following is the updated agenda:</font><=
+/p> <p style=3D"line-height:24px" align=3D"justify"><font color=3D"#222222"=
+ style=3D"font-size:16px">18:00-18:20 -&nbsp;<strong>General organization a=
+nd welcome to new members</strong>&nbsp;=E2=80=93 Dr. Ronen Ingbir &amp;&nb=
+sp;Dr. Cristina De Persis</font></p> <p style=3D"line-height:24px" align=3D=
+"justify"><font color=3D"#222222" style=3D"font-size:16px">18:20-18:40 &nbs=
+p;-&nbsp;<strong>AFTS mission validation</strong>&nbsp;=E2=80=93 Presentati=
+on &nbsp;- &nbsp;Ltc. Asaf Schuldenfrei, IAF, Israel</font></p> <p style=3D=
+"line-height:24px" align=3D"justify"><font color=3D"#222222" style=3D"font-=
+size:16px">18:40-18:50 =E2=80=93 AFTS mission validation - Open discussion<=
+/font></p> <p style=3D"line-height:24px" align=3D"justify"><font color=3D"#=
+222222" style=3D"font-size:16px">18:50-19:10 -&nbsp;<strong>Proposal for an=
+ international technical specification baseline for a generic AFTS</strong>=
+&nbsp;=E2=80=93 Presentation =E2=80=93 Mr Giuliano Acampa, AVIO, Italy</fon=
+t></p> <p style=3D"line-height:24px" align=3D"justify"><font color=3D"#2222=
+22" style=3D"font-size:16px">19:10-19:20 =E2=80=93 International technical =
+baseline for a generic AFTS =E2=80=93 Open discussion</font></p> <p style=
+=3D"line-height:24px" align=3D"justify"><font color=3D"#222222" style=3D"fo=
+nt-size:16px">19:20-19:40 -&nbsp;<strong>Aviation Safety and Uncontrolled S=
+pace Object Re-entries</strong>&nbsp;=E2=80=93&nbsp;<strong>OSAKA Workshop =
+summary</strong>&nbsp;=E2=80=93 Presentation =E2=80=93 Dr. Cristina De Pers=
+is, ESA, The Netherlands</font></p> <p style=3D"line-height:24px" align=3D"=
+justify"><font color=3D"#222222" style=3D"font-size:16px">19:40-19:50 - Avi=
+ation Safety and Uncontrolled Space Object Re-entries =E2=80=93 Open discus=
+sion</font></p> <p style=3D"line-height:24px" align=3D"justify"><font color=
+=3D"#222222" style=3D"font-size:16px">19:50-20:00 =E2=80=93&nbsp;<strong>Me=
+eting summary and future plans</strong>&nbsp;=E2=80=93 Dr. Ronen Ingbir&nbs=
+p;&amp;&nbsp;Dr. Cristina De Persis</font></p> <p style=3D"line-height:24px=
+" align=3D"justify"><font color=3D"#222222" style=3D"font-size:16px">We apo=
+logize for the time (next meeting will be more suitable to JAPAN / AUSTRALI=
+A time zone).&nbsp;</font><strong style=3D"color:rgb(34,34,34);text-align:l=
+eft"><em><font>The meeting will be recorded and shared with the IAASS membe=
+rs.</font></em></strong></p> <p style=3D"line-height:24px" align=3D"justify=
+"><font color=3D"#222222" style=3D"font-size:16px">Please see following Zoo=
+m connection details</font></p> <p style=3D"line-height:24px" align=3D"just=
+ify"><font color=3D"#222222" style=3D"font-size:16px"><strong>Topic: Launch=
+ and Reentry&nbsp; Committee meeting<br></strong></font><strong style=3D"co=
+lor:rgb(34,34,34);text-align:left">Time: Sep 14, 2023 06:00 PM Amsterdam, B=
+erlin, Rome, Stockholm, Vienna<br></strong><strong style=3D"color:rgb(34,34=
+,34);text-align:left">Join Zoom Meeting</strong></p> <p style=3D"line-heigh=
+t:24px" align=3D"justify"><font color=3D"#222222" style=3D"font-size:16px">=
+<strong><a href=3D"https://iaass.wildapricot.org/EmailTracker/LinkTracker.a=
+shx?linkAndRecipientCode=3DE7DnPnVxMG7Asn%2fedclolI%2bURHImaPEdcH92U1Vei55f=
+55qTLBMRJv8ZI63mGrZeJvwNZkzQrdUC9H%2bPsQmesnzFazObBI3MdB5d5T%2fn594%3d" tar=
+get=3D"_blank"><font color=3D"#1155CC">https://us02web.zoom.us/j/8906631499=
+3?pwd=3DL3NQVnBvMkQwZkZJTUwrbklVb1l4dz09</font></a></strong></font></p> <p =
+style=3D"line-height:24px" align=3D"justify"><font color=3D"#222222" style=
+=3D"font-size:16px">Meeting ID: 890 6631 4993<br></font>Passcode: 207935</p=
+> <p style=3D"line-height:24px" align=3D"justify"><font color=3D"#222222" s=
+tyle=3D"font-size:16px">&nbsp;---</font></p> <p style=3D"line-height:24px" =
+align=3D"justify"><font color=3D"#222222" style=3D"font-size:16px">&nbsp;On=
+e tap mobile</font></p> <p style=3D"line-height:24px" align=3D"justify"><fo=
+nt color=3D"#222222" style=3D"font-size:16px">+13602095623,,89066314993#,,,=
+,*207935# US</font></p> <p style=3D"line-height:24px" align=3D"justify"><fo=
+nt color=3D"#222222" style=3D"font-size:16px">+13863475053,,89066314993#,,,=
+,*207935# US</font></p> <p style=3D"line-height:24px" align=3D"justify"><fo=
+nt color=3D"#222222" style=3D"font-size:16px">&nbsp;---</font></p> <p style=
+=3D"line-height:24px" align=3D"justify"><font color=3D"#222222" style=3D"fo=
+nt-size:16px">&nbsp;Dial by your location</font></p> <p style=3D"line-heigh=
+t:24px" align=3D"justify"><font color=3D"#222222" style=3D"font-size:16px">=
+=E2=80=A2 +1 360 209 5623 US</font></p> <p style=3D"line-height:24px" align=
+=3D"justify"><font color=3D"#222222" style=3D"font-size:16px">=E2=80=A2 +1 =
+386 347 5053 US</font></p> <p style=3D"line-height:24px" align=3D"justify">=
+<font color=3D"#222222" style=3D"font-size:16px">=E2=80=A2 +1 507 473 4847 =
+US</font></p> <p style=3D"line-height:24px" align=3D"justify"><font color=
+=3D"#222222" style=3D"font-size:16px">=E2=80=A2 +1 564 217 2000 US</font></=
+p> <p style=3D"line-height:24px" align=3D"justify"><font color=3D"#222222" =
+style=3D"font-size:16px">=E2=80=A2 +1 646 931 3860 US</font></p> <p style=
+=3D"line-height:24px" align=3D"justify"><font color=3D"#222222" style=3D"fo=
+nt-size:16px">=E2=80=A2 +1 669 444 9171 US</font></p> <p style=3D"line-heig=
+ht:24px" align=3D"justify"><font color=3D"#222222" style=3D"font-size:16px"=
+>=E2=80=A2 +1 669 900 6833 US (San Jose)</font></p> <p style=3D"line-height=
+:24px" align=3D"justify"><font color=3D"#222222" style=3D"font-size:16px">=
+=E2=80=A2 +1 689 278 1000 US</font></p> <p style=3D"line-height:24px" align=
+=3D"justify"><font color=3D"#222222" style=3D"font-size:16px">=E2=80=A2 +1 =
+719 359 4580 US</font></p> <p style=3D"line-height:24px" align=3D"justify">=
+<font color=3D"#222222" style=3D"font-size:16px">=E2=80=A2 +1 929 205 6099 =
+US (New York)</font></p> <p style=3D"line-height:24px" align=3D"justify"><f=
+ont color=3D"#222222" style=3D"font-size:16px">=E2=80=A2 +1 253 205 0468 US=
+</font></p> <p style=3D"line-height:24px" align=3D"justify"><font color=3D"=
+#222222" style=3D"font-size:16px">=E2=80=A2 +1 253 215 8782 US (Tacoma)</fo=
+nt></p> <p style=3D"line-height:24px" align=3D"justify"><font color=3D"#222=
+222" style=3D"font-size:16px">=E2=80=A2 +1 301 715 8592 US (Washington DC)<=
+/font></p> <p style=3D"line-height:24px" align=3D"justify"><font color=3D"#=
+222222" style=3D"font-size:16px">=E2=80=A2 +1 305 224 1968 US</font></p> <p=
+ style=3D"line-height:24px" align=3D"justify"><font color=3D"#222222" style=
+=3D"font-size:16px">=E2=80=A2 +1 309 205 3325 US</font></p> <p style=3D"lin=
+e-height:24px" align=3D"justify"><font color=3D"#222222" style=3D"font-size=
+:16px">=E2=80=A2 +1 312 626 6799 US (Chicago)</font></p> <p style=3D"line-h=
+eight:24px" align=3D"justify"><font color=3D"#222222" style=3D"font-size:16=
+px">=E2=80=A2 +1 346 248 7799 US (Houston)</font></p> <p style=3D"line-heig=
+ht:24px" align=3D"justify"><font color=3D"#222222" style=3D"font-size:16px"=
+>Meeting ID: 890 6631 4993</font></p> <p style=3D"line-height:24px" align=
+=3D"justify"><font color=3D"#222222" style=3D"font-size:16px">Passcode: 207=
+935</font></p> <p style=3D"line-height:24px" align=3D"justify"><font color=
+=3D"#222222" style=3D"font-size:16px">Find your local number:&nbsp;<a href=
+=3D"https://iaass.wildapricot.org/EmailTracker/LinkTracker.ashx?linkAndReci=
+pientCode=3D3l7MGzDVYHSmxTNdT2MMrF1pkNcbpPtBSsRM9rfRDZ4oLmvFv6az1WSyvM9WtlO=
+NbrpU3wF3DniUZK%2fWqUKaypK%2bXRSGtJYmz2IjUuIGpx4%3d" target=3D"_blank"><fon=
+t color=3D"#1155CC">https://us02web.zoom.us/u/keqyOKjjo5</font></a></font><=
+/p> <p style=3D"line-height:24px" align=3D"justify"><font color=3D"#222222"=
+ style=3D"font-size:16px"><br></font></p><p style=3D"line-height:24px" alig=
+n=3D"justify"><font color=3D"#222222" style=3D"font-size:16px">Hope to see =
+you all,</font></p> <p style=3D"line-height:24px" align=3D"justify"><font c=
+olor=3D"#222222" style=3D"font-size:16px">Dr. Ronen Ingbir</font></p> <p st=
+yle=3D"line-height:24px" align=3D"justify"><font color=3D"#222222" style=3D=
+"font-size:16px">Chair, IAASS L&amp;RSTC</font></p></div>     </td>    </tr=
+>      <tr>    <td style=3D"font-size:0px;padding:0px;word-break:break-word=
+">           <div style=3D"height:20px">   &nbsp;  </div>         </td>    =
+</tr>      <tr>    <td style=3D"font-size:0px;padding:0px;word-break:break-=
+word">      <p style=3D"border-top:solid 4px #eeeeee;font-size:1;margin:0px=
+ auto;width:100%">  </p>           </td>    </tr>      <tr>    <td style=3D=
+"font-size:0px;padding:0px;word-break:break-word">           <div style=3D"=
+height:30px">   &nbsp;  </div>         </td>    </tr>      <tr>    <td alig=
+n=3D"left" style=3D"font-size:0px;padding:0px;word-break:break-word">      =
+<div style=3D"font-family:Arial,Helvetica,sans-serif;font-size:16px;line-he=
+ight:1;text-align:left;color:#000000"><p style=3D"line-height:20px" align=
+=3D"center"><font style=3D"font-size:12px" color=3D"#999999">This message w=
+as sent to you by IAASS</font><font style=3D"font-size:12px"><br><font colo=
+r=3D"#999999">If you no longer wish to receive these emails, you can </font=
+><a href=3D"https://iaass.wildapricot.org/EmailTracker/LinkTracker.ashx?lin=
+kAndRecipientCode=3D%2f95R53B8VoCJug1oQwGCFa%2fbQx7%2bjmSRb8TY9gfPHefGkv3Kd=
+UEXosicS6hhSVwEBEtwd5rrOqTdC2Z3stdEohJIxEhGntO9VuVzdbFzwDI%3d&amp;up=3D%3fe=
+t%3dbkmusIS1z0AEYshms08PWrT4n0QLBh8qegRZxTF%252flpbQpCo75K3kziaVTNKSeEGnp2V=
+ekwi72PxcoFbiy34JJlnalrtrkruvsGJ%252bklCQQ23Ls1TOoIZspkGEglwh6ERsJUgZUBPL3S=
+YPDagyUzYNC8vx3BQ%253d" target=3D"_blank"><font color=3D"#2979ff">unsubscri=
+be</font></a><font color=3D"#999999"> at any time </font><br><font color=3D=
+"#2979ff"><a href=3D"https://iaass.wildapricot.org/EmailTracker/LinkTracker=
+.ashx?linkAndRecipientCode=3DU4bJTMZY%2bs01K8f%2brKCGxr1DqjhXWAu%2b%2f2jbV1=
+pLxT%2b1z1Q1Yaa3T3KUXA37MJCLdeWOAOVbgX%2fPw%2fXtxuwt1j5CDsGNiKdvIiJPY0cZjtE=
+%3d" target=3D"_blank">http://iaass.space-safety.org/</a></font></font><br>=
+</p></div>     </td>    </tr>      <tr>    <td style=3D"font-size:0px;paddi=
+ng:0px;word-break:break-word">           <div style=3D"height:60px">   &nbs=
+p;  </div>         </td>    </tr>     </tbody></table>     </td>   </tr>   =
+</tbody>  </table>   </div>        </td>    </tr>   </tbody>   </table>    =
+</div>            </td>    </tr>   </tbody>   </table>   </div>   </div>   =
+</div></div></div>
+
+--000000000000ab0eaa0605171c6d--

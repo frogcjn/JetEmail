@@ -1,0 +1,371 @@
+Received: from CH0PR01MB6956.prod.exchangelabs.com (2603:10b6:610:109::17) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Sat, 16 Dec 2023 16:38:30
+ +0000
+Received: from DS7PR03CA0048.namprd03.prod.outlook.com (2603:10b6:5:3b5::23)
+ by CH0PR01MB6956.prod.exchangelabs.com (2603:10b6:610:109::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.36; Sat, 16 Dec 2023 16:38:29 +0000
+Received: from CY4PEPF0000E9D6.namprd05.prod.outlook.com
+ (2603:10b6:5:3b5:cafe::cf) by DS7PR03CA0048.outlook.office365.com
+ (2603:10b6:5:3b5::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.36 via Frontend
+ Transport; Sat, 16 Dec 2023 16:38:29 +0000
+Authentication-Results: spf=softfail (sender IP is 18.7.71.112)
+ smtp.mailfrom=cs.washington.edu; dkim=test (signature was verified)
+ header.d=cs.washington.edu;dmarc=pass action=none
+ header.from=cs.washington.edu;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ cs.washington.edu discourages use of 18.7.71.112 as permitted sender)
+Received: from mail.exchange.mit.edu (18.7.71.112) by
+ CY4PEPF0000E9D6.mail.protection.outlook.com (10.167.241.80) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7113.14 via Frontend Transport; Sat, 16 Dec 2023 16:38:28 +0000
+Received: from oc11exhyb2.exchange.mit.edu (18.9.1.98) by
+ w92exhyb7.exchange.mit.edu (18.7.71.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Sat, 16 Dec 2023 11:38:27 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by oc11exhyb2.exchange.mit.edu (18.9.1.98) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Sat, 16 Dec 2023 11:38:27 -0500
+Received: from SJ0PR13CA0183.namprd13.prod.outlook.com (2603:10b6:a03:2c3::8)
+ by SA1PR01MB8251.prod.exchangelabs.com (2603:10b6:806:389::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.33; Sat, 16 Dec 2023 16:38:25 +0000
+Received: from CO1PEPF000044F2.namprd05.prod.outlook.com
+ (2603:10b6:a03:2c3:cafe::40) by SJ0PR13CA0183.outlook.office365.com
+ (2603:10b6:a03:2c3::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.15 via Frontend
+ Transport; Sat, 16 Dec 2023 16:38:24 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.166.178)
+ smtp.mailfrom=cs.washington.edu; dkim=test (signature was verified)
+ header.d=cs.washington.edu;dmarc=pass action=none
+ header.from=cs.washington.edu;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of cs.washington.edu
+ designates 209.85.166.178 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.166.178;
+ helo=mail-il1-f178.google.com; pr=C
+Received: from mail-il1-f178.google.com (209.85.166.178) by
+ CO1PEPF000044F2.mail.protection.outlook.com (10.167.241.72) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7113.14 via Frontend Transport; Sat, 16 Dec 2023 16:38:24 +0000
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-35da160de2bso8441025ab.1
+        for <jiannan@mit.edu>; Sat, 16 Dec 2023 08:38:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs.washington.edu; s=goo201206; t=1702744703; x=1703349503; darn=mit.edu;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A5n7kVyf76hSiFOyLYx3pN2RiKDulL+rdIgRKLLIYKc=;
+        b=ce5k4y7eUDmPbu6VTvLci8bhWtSQ3Hg9g615RRIiLuzEpysuhNuztWpPt8mckILJDt
+         DTV9BNLSlHLHgz1bRrRfXfD0teYahws6vEHc2UnTH83IqdE0TTdI+rQ4arIHYUdG4zli
+         tb54JIeJKf0WkZh1butiSDr9qLGbBlwTqc7iY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702744703; x=1703349503;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A5n7kVyf76hSiFOyLYx3pN2RiKDulL+rdIgRKLLIYKc=;
+        b=SC6qKjWkb3CMoSSqXxIgajksp83CPy1pe3a4a/DdjCZqa5GYrXYXK+R8RWllARAiPJ
+         wKhs4AsAB4M3M4ziJ00UQ9HloKtUa8h9vWJdPu+PJyEfRNxiE3KWkFLNmYn24vLiSZXN
+         IDDZX8ccQmAQmm11GWZ9yIwaSGeFxnceP7suqiZxKfeL4d0x6VuG8bgqucIAeUZXIe7+
+         n18PdB+CF11a2dFjeIXeJ4EEdtt5NZB6eiKP78gZR+Bjr86DQPUv5mv82yn8h32MUH5s
+         YpwJmyYEqncoSUom1kGmrrgl3zeGu+WJD7dbUKYyWfeXf7UTJa8yWSacb9QuCBO4rj8Y
+         YleQ==
+X-Gm-Message-State: AOJu0Yy7TUJEb/E08cAoMFYwiBs29939AlkN2LuOr2cJYdR4LY/64tCA
+	1Wv2u9ASkZnK7jx0VrNqvtcOlaizbfrnBkeWuIQQuapl3vRM30YBYT0=
+X-Google-Smtp-Source: AGHT+IEjXyCqmEoZ/3Wq7FXUS92cVTx6gu/jK0M6mba+RUq4IpgkAz5MA2LISS4bRNAhfBoFFsblqpOT+YTM5ngWo2M=
+X-Received: by 2002:a05:6e02:216b:b0:35f:75df:5310 with SMTP id
+ s11-20020a056e02216b00b0035f75df5310mr8977788ilv.21.1702744703105; Sat, 16
+ Dec 2023 08:38:23 -0800 (PST)
+References: <BN0PR01MB713475C4835B76437FDA86FBBD92A@BN0PR01MB7134.prod.exchangelabs.com>
+In-Reply-To: <BN0PR01MB713475C4835B76437FDA86FBBD92A@BN0PR01MB7134.prod.exchangelabs.com>
+From: Mitchell Louis Gordon <mgord@cs.washington.edu>
+Date: Sat, 16 Dec 2023 08:38:20 -0800
+Message-ID: <CADX41cT6_19cQwLrhU5rLoEy-h2XFokW2H+=gNnV4CTn_Lfhaw@mail.gmail.com>
+Subject: Re: apply to your Ph.D. Position
+To: Jiannan Cao <jiannan@mit.edu>
+Content-Type: multipart/alternative; boundary="0000000000002c10c1060ca325c6"
+Return-Path: mgord@cs.washington.edu
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CO1PEPF000044F2:EE_|SA1PR01MB8251:EE_|CY4PEPF0000E9D6:EE_|CH0PR01MB6956:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: ee77fd8b-34d0-46d1-c9c1-08dbfe556ea7
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?NSyNLhf6ZuPdFJUHGGUzhIt2FnIY883NNRkTVtHpnmF/sVs3YFMNOMS3EzJ3?=
+ =?us-ascii?Q?zPkwcPfDEChf7HyYLVmeOXGOi4R8NjndwQU5auM9cjfjXqpks6YE7MvxTVzW?=
+ =?us-ascii?Q?OuxrDvPwT5KmqgLTbZ0u1i2qus/Bo/2LdYThLjHJQuPyOxNYMEQo+RZbLUKQ?=
+ =?us-ascii?Q?1iFpr14fiICz4gXIiKWwv0k12lTNEPKSXVzFblxzGkTbBMgq1PqDxCiSuehG?=
+ =?us-ascii?Q?LJIdSs6+PhP8ld7Fhc/iXhpIGDPXxocJsAXfAsM+rqVtNh4wGM4Fjq0XtAkW?=
+ =?us-ascii?Q?wZn8c/Rhi11UYOhU46TTSxFqGOjoOR2yCPB5+RNQK2fyQZ0xIpaT8U9bni86?=
+ =?us-ascii?Q?r441YgrWwC6uckKpLtDHQHDKLEjmwzcc1O0xvFZqTEyZpaEKjyprB5gwRzx8?=
+ =?us-ascii?Q?COUx/k2bbMTwmjV0IVawXIzPa0R7DdL47LbFU7T4NiHIXutggBr/8S4X25be?=
+ =?us-ascii?Q?TBqvWoRMbpG/dpUKilHyRDYciz1rMusbVxdMOGUzODMDwe6ukb8VWwoXwNfX?=
+ =?us-ascii?Q?ih98usYCkhcQYyPNVZ2bry1Y1gdA6HYZ3mn0rUFQJcvrk+c83/Hz9WrT+GnG?=
+ =?us-ascii?Q?qZWcm/CiMhiMK9lL7VnzjwdkoJX9lZ68j4o06DRBRq2rdckivItIhmWAeAOY?=
+ =?us-ascii?Q?Oeh/iyyCekAC9jh3gKNxiUNKxPVlvc7XRL4s77v9mjC1Zs/7BBJs2Zr8YUfM?=
+ =?us-ascii?Q?v8+MorMwWbsGCcreWRd6uGi+Rm90OcpfS0LHycftzaXVxTbdwChqdJ+9le+m?=
+ =?us-ascii?Q?zp03nWe6dzLT1+GQIxaxwF8VVGUJ6XsSwPQdddRyecsUN+ABRcWXijXZfV6e?=
+ =?us-ascii?Q?OLqJ4MQB0oIQbU+22QdB4cny8v6zjynpVAOyzwMW2fdEYBzSdzkBkdh5wzot?=
+ =?us-ascii?Q?m0BxMOhetgEl47Zc3+rZxiiT61xbyZoprY3Eav6ro9QzsGPCH5rvYNol/I9w?=
+ =?us-ascii?Q?DzrU7IWQZz1WpY/oHUHJmMDoQlXU1Gs3D44gOAwGAnXSDAiKBFXspvZza+PI?=
+ =?us-ascii?Q?SK3V3WneoFaHuSOPTQHlHsLidgrH08Bp1acsb5svLUn7obfidlKVSVaDQ3j1?=
+ =?us-ascii?Q?jLJtIg4RQ1Eb7IroIDgS+R6iGO6tA299R1QTvwDY2Q2yEPy+31Stj75+9wb9?=
+ =?us-ascii?Q?QGV5cnCohE1uIILJJX5quWLqSOTLQQWy0pFkD5vIz+qdXbNj0pTnnzUR1Sl6?=
+ =?us-ascii?Q?3bpay8HQTq2WwAul7JvYxen7JEku+JLitDINUm11T4KXntb4TuPS3fEJLhvx?=
+ =?us-ascii?Q?aEAi9NVe5q3Wzf6aDmSZa3GJFZb4OR4naqCQ0SfnZWZ9QbghkQ7bgiGKVGb2?=
+ =?us-ascii?Q?Pi8+N7c22nImk+WmZZK2qvTlshD6oqOz5OQijyudD1DUrIIxYeLyvtYMrpkM?=
+ =?us-ascii?Q?ZRgIX9rzBTES4OkW54nW57GIAurO+gJJEsyF5yTnnjouYp5jrgf10TFrIKd+?=
+ =?us-ascii?Q?IoLRHdcJ4rPjRyPi3q0YlJqLdQTXdhTXivkykVXoFOsqbkqd464FBHScUCbE?=
+ =?us-ascii?Q?hIwSpfSwVdTjBS7174QUf6AC3upvXlLU392MmU4SMAIETOYQcxGjaySL4vWv?=
+ =?us-ascii?Q?W7W4Jx20qg/9cdpv4l0Lb6jHTULlTTHSWF1cCd8gcIxPrjbwX2bC3bP7156P?=
+ =?us-ascii?Q?5w=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.166.178;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-il1-f178.google.com;PTR:mail-il1-f178.google.com;CAT:NONE;SFS:(13230031)(4636009)(451199024)(7636003)(75432002)(356005)(7596003)(55446002)(86362001)(58800400005)(6916009)(42186006)(83380400001)(336012)(6666004)(9686003)(26005)(4006050)(22186003)(33964004)(5660300002)(53546011)(1096003)(8676002)(75640400001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB8251
+X-OrganizationHeadersPreserved: SA1PR01MB8251.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb2.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb2.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92exhyb7.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 16 Dec 2023 16:38:28.5222
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ ee77fd8b-34d0-46d1-c9c1-08dbfe556ea7
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: CY4PEPF0000E9D6.namprd05.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CY4PEPF0000E9D6.namprd05.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CY4PEPF0000E9D6.namprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1PEPF000044F2.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 340cf53f-c2b2-45cd-688a-08dbfe556c24
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.112;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:w92exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2023 16:38:28.1941
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee77fd8b-34d0-46d1-c9c1-08dbfe556ea7
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1PEPF000044F2.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB6956
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.4502386
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7091.030
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UzBHODJzamdPTExuMjl1WDNyTEZsZlZyYkZhRWFSWkw0ZVBQR3BkajQ2Z2xz?=
+ =?utf-8?B?OVZKaXAxMDZ4b1Z3a1RERHZsVjFKeFhvc0k5UjZiQ0pzTXdRSHFaZ0phMGF5?=
+ =?utf-8?B?bXpRcWZtNUxCejBKVENvNTNVRlB4Z2tSTXZpSlI2RVZBeTdqRnpSWXkvU2la?=
+ =?utf-8?B?MG9DVmhrUlB6bWZMMzhqN004UlRNb0NIaTU0YXlDWm5wZnNrclhCWHpFTUUw?=
+ =?utf-8?B?ZFZzMFJQT2NDZHJBNjhZcEVMWUoyUERxdWtjb2RBL1JBYjVhQW5tQ0xoZDI5?=
+ =?utf-8?B?TTFyd3dXem9CbEpyOEUyK0NxYURvVHpCS1VFVGNJemNHZVQ0emxkNGRnaVF0?=
+ =?utf-8?B?N1EwVXg5UVZFb0ttNXd2R0lSZzhWTVRjd2RDc0sxTzYwdFhFemtRWkNBV1VG?=
+ =?utf-8?B?M3pieGJhREp2Vm10SWNzYzhtZTVMNVF4eVQ5NDB0RFAxdVZiaHlRNlNNOE1S?=
+ =?utf-8?B?dEFXTHk5YnB5Z0Y5MzJSYlBoM0NiNCs0WUFLdnpIRXBNWjRwelRHWEMxRGgy?=
+ =?utf-8?B?ZzVIU2RmbUxYOEJzeldQTWZzeHVsQkZSanRsNVFxaytIM0ZLZ2J3ckFJMFZ4?=
+ =?utf-8?B?cDhKbnI5RndwV3RVZ1NwclpONWV1cnhSSFBlVnBKeU95NW1WTzBUajlhSHYz?=
+ =?utf-8?B?WUNJb2VnMlE2T3lWd1M2TkVkSUdZd1VJT2RwQ2NHa1FuNFZMVE5RUytQUlY0?=
+ =?utf-8?B?R09CRG1TcituL2pzRFF1dER3ODZuQkxsR3hEL3VBWlQ1cHFXTkVMdEtuQVdr?=
+ =?utf-8?B?QlM5aE9BQzBTWnc0NnQwWDhIU1hpQzQ0dmgyczRkSHVnbHFkMERWK3BYVHNV?=
+ =?utf-8?B?YUV0S0F1b0FEdE9uQVB2T2R5K0owcDZPbDV6QWJCU3ZNQSsrV1A3dHVPNmxi?=
+ =?utf-8?B?VmN0N2dYeXIyckhDTHFHTkluRnlGZFF5N1hWVjY1SmpBZnVIWXhjQ0JIcGx0?=
+ =?utf-8?B?UEJ1TzZXeXBYQ0N4V241cDN4N2JKVEZsOVNQUUc5RmJRZE9RZlZaOTNvUW40?=
+ =?utf-8?B?d3ZqMThqY2p5aU00TG1pTTZpeEY5L0RMMUxvMExGbVVLMzlQRWc0S1lUS1lY?=
+ =?utf-8?B?TTdoSlVuVzcwR1dpS0pQaXYzalZtMXNMVU1vanJZN1BuY0t4Tlkrb1VVSWh0?=
+ =?utf-8?B?TXNtUm5yM1o1cDh0UGtocEhJVXdadkFoMkRBR2x4cHVmdTUvWWlHeVFBK3gx?=
+ =?utf-8?B?L1Z4K08yRjF6TjlUS3p4SnBoOGNsbG90cEVqZ2xXK2VxY3IvcnFSVm8rOC9S?=
+ =?utf-8?B?UnNSeitTY2FRdEJVUGpsZXhaaGM5YzJ6Rm52Rk93ZCt6d0hSeW0ra3F2WmJD?=
+ =?utf-8?B?TmVjVEV5SXVFaU5zTzlCZlp3VHdDVW91ekZhbjdOWnV6L2lzME55MXB5NVNT?=
+ =?utf-8?B?UHFjTURMUmpUM3lhVmFWTDZJTFk4cUIyWEtpSXk1VVJVdGRPNWg3b1FraU0x?=
+ =?utf-8?B?S1oxU0tlMVNVS3VjMm11dnlKWEtidFJXNDlQL09McEtqZWpIaktjbUlaUXhp?=
+ =?utf-8?B?WE1QeG9BWisyb1lPWEw4bVZvNWZIYXFqQ3pNd0dYYjl5eHJhb0dUWU92NnFy?=
+ =?utf-8?B?ckZSRUdWdmVBc3JlWFRpSndsYVU3c29Tazhld3lDMWNKN3VLcnMvbWN6T2p4?=
+ =?utf-8?B?bU4yMy9Jd09wRXJRSHZQcG1OZTJ2Y1daWVZ5TFFuYXI4aEpNSzZWWmlHaUVz?=
+ =?utf-8?B?UEd0b2xHUU5Sd3lhd2ZLb3Z5dHBhMDVoSnNRaFlXR0I1bFAvSTdJZk9vNXRV?=
+ =?utf-8?B?MjY5RVZzWnhWWmhTd1dyMEhwNnczVmFwcFNKckZmeFEvWktJZDZLUzJJcW9F?=
+ =?utf-8?B?cFY3S2RGNTgzd3ZmVWJDUUd2R1U2NDFaNHc4NjNVK3NxdklrdDAzN1RwMEYy?=
+ =?utf-8?B?MnovMVNVUGdaNUxYZHZzMW9iOHRueFJrZnh1K2ZlemdWV0VPYmx0VzIyeVFV?=
+ =?utf-8?B?VzdLTzVVallJS3NZSFd3bkhEZ09ObUVINUpuSVQ1WlVrM1p6eE1WcHB0eit6?=
+ =?utf-8?B?QlozdFEreVZMS3NWVXA0R2V6MmdiQzczWmR2UE9OZG5VZEE2Nkd4U1NBZC8r?=
+ =?utf-8?B?YS83VlpoNHI5NUJDWEV0dUVObjFDVzR3andBdWE2SUFTSEtPQVgyMEFNUmxp?=
+ =?utf-8?B?c1lKY25ocDkyRUlWc0JDcXBXYlFIdEpGTFB5STdhVFpnV0luWS9MY3lZbUJ4?=
+ =?utf-8?Q?DbzJmlyMyFJOAqtDdowtarh6cxQ/LMV8MevlEIGGjtW3?=
+MIME-Version: 1.0
+
+--0000000000002c10c1060ca325c6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Jiannan,
+
+Thanks very much for your interest in joining my group, looking forward to
+reading your application!
+
+- Mitchell
+
+On Sat, Dec 16, 2023 at 6:37=E2=80=AFAM Jiannan Cao <jiannan@mit.edu> wrote=
+:
+
+>
+> Hi Prof. Gordon,
+>
+>
+>
+> My name is Jiannan Cao. I am currently a third-year master's student at
+> MIT.
+>
+>
+>
+> I am very interested in your lab. I'll focus on the intersection of LLM
+> Agent and HCI and how to build AI agents with GUI to help people complete
+> tasks better, faster, and smarter or to learn things well. Recently, it h=
+as
+> been one of the greatest moments in computer history since the GUI was
+> invented. There is a lot of meaningful academic and engineering work, lik=
+e
+> how to build an AI agent chatbot to control API or GUI to complete a
+> complex task, e.g., booking hotel and flight tickets for a journey.
+>
+>
+> My background is a little different from general applicant. Previously, I
+> had AI product management full time work experience in Kuangshi and Baidu
+> (My resume is also attached). I also have a long-experienced programming
+> skill for small or large projects, might better than other applicants. I
+> also have deep and broad UI programming at Apple Platform.
+>
+> In the summer of 2023, I did an LLM internship at Apple in China, mainly
+> focusing on LLM distillation and LLM Tool Learning. I also did some
+> projects with the THUNLP lab led by Prof. Zhiyuan Liu, including the agen=
+t
+> application of large language models (The paper is attached). I also
+> participated in the earliest Chinese large language model CPM-1 6B projec=
+t
+> in late 2020. Previously, I also had product management experience and
+> Apple platform development experience (My resume is also attached).
+>
+>
+> I have applied MIT Ph.D. Program and mentioned you as a potential faculty=
+.
+> I would be very willing to be your Ph.D. student. If you have any questio=
+ns
+> on my previous experience and want to discuss research direction, please
+> feel free to contact me!
+>
+>
+>
+> Best,
+>
+> Jiannan
+>
+>
+>
+
+--0000000000002c10c1060ca325c6
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr">Hi&nbsp;Jiannan,<div><br></div><div>Thanks very much for you=
+r interest in joining my group, looking forward to reading your application=
+!</div><div><br></div><div>- Mitchell</div></div><br><div class=3D"gmail_qu=
+ote"><div dir=3D"ltr" class=3D"gmail_attr">On Sat, Dec 16, 2023 at 6:37=E2=
+=80=AFAM Jiannan Cao &lt;<a href=3D"mailto:jiannan@mit.edu">jiannan@mit.edu=
+</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:=
+0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+
+
+
+<div>
+<div dir=3D"ltr">
+<div dir=3D"ltr"><br>
+</div>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+Hi Prof. Gordon,</p>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+&nbsp;</p>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+My name is Jiannan Cao. I am currently a third-year master's student at MIT=
+.<span>&nbsp;</span></p>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+&nbsp;</p>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+I am very interested in your lab. I'll focus on the intersection of LLM Age=
+nt and HCI and how to build AI agents with GUI to help people complete task=
+s better, faster, and smarter or to learn things well. Recently, it has bee=
+n one of the greatest moments in
+ computer history since the GUI was invented. There is a lot of meaningful =
+academic and engineering work, like how to build an AI agent chatbot to con=
+trol API or GUI to complete a complex task, e.g., booking hotel and flight =
+tickets for a journey.<span>&nbsp;</span></p>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+&nbsp;</p>
+<div class=3D"MsoNormal" style=3D"text-decoration:none;margin:0px 0cm;font-=
+size:11pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+<span style=3D"text-decoration:none;display:inline">My background is a litt=
+le different from general applicant. Previously, I had AI product managemen=
+t full time work experience in Kuangshi and Baidu (My resume is also attach=
+ed). I also have a long-experienced
+ programming skill for small or large projects, might better than other app=
+licants. I also have deep and broad UI programming at Apple Platform.</span=
+></div>
+<div class=3D"MsoNormal" style=3D"text-decoration:none;margin:0px 0cm;font-=
+size:11pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)" dir=3D"ltr">
+<span style=3D"text-decoration:none;display:inline"><br>
+</span></div>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+In the summer of 2023, I did an LLM internship at Apple in China, mainly fo=
+cusing on LLM distillation and LLM Tool Learning. I also did some projects =
+with the THUNLP lab led by Prof. Zhiyuan Liu, including the agent applicati=
+on of large language models (The
+ paper is attached). I also participated in the earliest Chinese large lang=
+uage model CPM-1 6B project in late 2020. Previously, I also had product ma=
+nagement experience and Apple platform development experience (My resume is=
+ also attached).</p>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+<span style=3D"font-size:11pt"><br>
+</span></p>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+<span style=3D"font-size:11pt">I have applied MIT Ph.D. Program and mention=
+ed you as a potential faculty. I would be very willing to be your Ph.D. stu=
+dent. If you have any questions on my previous experience and want to discu=
+ss research direction, please feel
+ free to contact me!</span></p>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+&nbsp;</p>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+Best,</p>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+Jiannan</p>
+<p class=3D"MsoNormal" style=3D"text-decoration:none;margin:0cm;font-size:1=
+1pt;font-family:Calibri,sans-serif;color:rgb(33,33,33)">
+&nbsp;</p>
+<div dir=3D"ltr" id=3D"m_8398201016178120948ms-outlook-mobile-signature"></=
+div>
+</div>
+</div>
+
+</blockquote></div>
+
+--0000000000002c10c1060ca325c6--

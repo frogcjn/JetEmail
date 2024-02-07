@@ -1,0 +1,3222 @@
+Received: from CH0PR01MB7107.prod.exchangelabs.com (2603:10b6:610:f1::20) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Thu, 4 May 2023 21:16:06
+ +0000
+Received: from DS7PR03CA0255.namprd03.prod.outlook.com (2603:10b6:5:3b3::20)
+ by CH0PR01MB7107.prod.exchangelabs.com (2603:10b6:610:f1::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.26; Thu, 4 May 2023 21:16:02 +0000
+Received: from DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b3:cafe::28) by DS7PR03CA0255.outlook.office365.com
+ (2603:10b6:5:3b3::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26 via Frontend
+ Transport; Thu, 4 May 2023 21:16:02 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.113)
+ smtp.mailfrom=bf04x.hubspotemail.net; dkim=fail (body hash did not verify)
+ header.d=bf04x.hubspotemail.net;dmarc=fail action=quarantine
+ header.from=cohere.com;
+Received-SPF: Fail (protection.outlook.com: domain of bf04x.hubspotemail.net
+ does not designate 18.9.1.113 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.113;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.113) by
+ DM6NAM11FT101.mail.protection.outlook.com (10.13.172.208) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6363.27 via Frontend Transport; Thu, 4 May 2023 21:16:02 +0000
+Received: from oc11expo13.exchange.mit.edu (18.9.4.18) by
+ oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Thu, 4 May 2023 17:15:52 -0400
+Received: from oc11exhyb7.exchange.mit.edu (18.9.1.112) by
+ oc11expo13.exchange.mit.edu (18.9.4.18) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Thu, 4 May 2023 17:15:51 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Thu, 4 May 2023 17:15:51 -0400
+Received: from BN8PR04CA0046.namprd04.prod.outlook.com (2603:10b6:408:d4::20)
+ by SJ2PR01MB8050.prod.exchangelabs.com (2603:10b6:a03:4d3::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.31; Thu, 4 May 2023 21:13:56 +0000
+Received: from BN8NAM11FT106.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:d4:cafe::7c) by BN8PR04CA0046.outlook.office365.com
+ (2603:10b6:408:d4::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26 via Frontend
+ Transport; Thu, 4 May 2023 21:13:56 +0000
+Authentication-Results-Original: spf=pass (sender IP is 54.174.52.182)
+ smtp.mailfrom=bf04x.hubspotemail.net; dkim=pass (signature was verified)
+ header.d=bf04x.hubspotemail.net;dmarc=pass action=none
+ header.from=cohere.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of bf04x.hubspotemail.net
+ designates 54.174.52.182 as permitted sender)
+ receiver=protection.outlook.com; client-ip=54.174.52.182;
+ helo=pgg16g.bf04x.hubspotemail.net; pr=C
+Received: from pgg16g.bf04x.hubspotemail.net (54.174.52.182) by
+ BN8NAM11FT106.mail.protection.outlook.com (10.13.177.7) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.26 via Frontend Transport; Thu, 4 May 2023 21:13:56 +0000
+Received: by 172.16.84.104 with SMTP id awd9wj8vrpxffpqdlow6g10kspvyppj401on;
+        Thu, 4 May 2023 21:13:55 GMT
+DKIM-Signature: v=1; s=hs2; d=bf04x.hubspotemail.net; 
+        i=@bf04x.hubspotemail.net; 
+        h=sender:from:from:reply-to:to:to:cc:cc:subject:subject:list-unsubscribe:form-sub:feedback-id; 
+        a=rsa-sha256; c=relaxed/relaxed; 
+        bh=H4KlbjMoT9SSYGNleULYpW6y9zKHmknl8GRo/wBgOJs=; 
+        b=mHeg1wmtTAsl/b/lD0ADKWKi5mv/dENSACqqlv6w1HPflcuzIUb2cN5mV2fagB
+         NNVUXuuK638ZxrYt1rvv7H3FrVOQj5yBRNFS+mI11B7IbKbWpsiSgaWygH15093
+         k9MYX624Z9gVojf9HYMF+FTioGKSjfv4DUZHZhsEpqNYpLc3mBnOMdEbIkeIwcz
+         8bIL/FM6EuGw5HiLNz8w0TIHZ7gVp25K1N6AWg5rbknR9Q5CCNKh2xRaK3vVd8r
+         a50eHXKe1nIJzLbKeHC1yUYUUZoK7U3uhqsmqAjiBDw8+iYl9xS8ylLVJuURvrb
+         Ga3FHpQWnBRMXgjr70S7z95FnqKw==; q=dns/txt; t=1683234835; 
+        x=1683407635;
+DKIM-Signature: v=1; s=hs1-20956172; d=cohere.com; i=@cohere.com; 
+        h=sender:from:from:reply-to:to:to:cc:cc:subject:subject:list-unsubscribe:form-sub:feedback-id; 
+        a=rsa-sha256; c=relaxed/relaxed; 
+        bh=H4KlbjMoT9SSYGNleULYpW6y9zKHmknl8GRo/wBgOJs=; 
+        b=uoul2gmZEBOyvuBU4S4iaqvsnHZvRZCRQanMwfoMd0bZD0i6C8SHjH4+YxGGSf
+         uspZkT16ZCMBPDxavoByzvVFO5l0ZlYercCn8sXv4cFOQAEUZH0FcjYgTXTTNe8
+         XWqN8+uLm0mn2jwUikEC671bZw3laogGSMdtva8+vF9NmztGG640xXiXNzaiQTr
+         PFmyGlfdmSbDG7gZRwrIKE2NtD6USD+U7PjRpwdC9NsAnfzZrNN3PbpU69MrmX9
+         MI1hQVdWXB5+WTvWUXGmupvVrI4HULq6vByo+j3BRrLyGgY1bd6X2s+aFGv4uTE
+         TUvis7byAouaTdhR8tQkafvB5NYQ==; q=dns/txt; t=1683234835; 
+        x=1683407635;
+Return-Path:
+ 1axb9zha4mimvmg31wz7w46v5kibex0vvr8oad-jiannan=mit.edu@bf04x.hubspotemail.net
+X-HS-Cid: 1axf1ypc61nlhkvs017etzetwawsn8hl23bf1h
+List-Unsubscribe: <mailto:1axc8nfece5t4aknz3z8xfei2rc8ibijg29zv5-jiannan=mit.edu@bf04x.hubspotemail.net?subject=unsubscribe>
+Date: Thu, 4 May 2023 17:13:55 -0400
+From: Cohere Team <hello@cohere.com>
+Reply-To: hello@cohere.com
+To: jiannan@mit.edu
+Message-ID: <1683234711622.8738e9de-626b-4911-8549-59197d664631@bf04x.hubspotemail.net>
+Subject: Introducing Rerank - The Way to Modernize Enterprise Search; New
+ Liveperson Partnership
+Content-Type: multipart/alternative;
+	boundary="----=_Part_85326_720714525.1683234835189"
+X-Report-Abuse-To: abuse@hubspot.com (see
+ https://policy.hubspot.com/abuse-complaints)
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BN8NAM11FT106:EE_|SJ2PR01MB8050:EE_|DM6NAM11FT101:EE_|CH0PR01MB7107:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 73edbdf4-4fc3-4fef-f2e8-08db4ce4c3fb
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:5;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?NwpH74Fyh+a9WPb0u6SZbs2zYHAiiRqy8kZFeBatvQ0cileu9f1OmJu+3tsh?=
+ =?us-ascii?Q?vU997vBDfvpKRaXD6Cpa3NWpe0Y1lUGlVr1d/jkfg7wLWykjkSrWjHhH9Mrm?=
+ =?us-ascii?Q?L6PLVOpJFJf7cXLRNVVkBZAjt1RuUS4k10mHNJn3Vjpf7SWObDUzbL8PLhZ7?=
+ =?us-ascii?Q?HuCCZU2m3PCgzCZxWxXCrZJUNSvvu31Ccamw1mrUYNHpD+v7fd6w1SUJxr7t?=
+ =?us-ascii?Q?l0U/Vqygxv34jqII+yLjJa9Oh6GXtKol8aZLO6HJM+LDMRsanyd3ByBmaL88?=
+ =?us-ascii?Q?65HmhelE52VX7OzpFqtJBhVB6EQGCw6yBv40rn7V/bKbKf39GEGb7yFRQR86?=
+ =?us-ascii?Q?ugjF8hFTuC/bg1tNmK4qsvEqKjedNf93lBf3nJOiv4RGNQm2eJnWlQ7GoB7K?=
+ =?us-ascii?Q?0IWUc0877VUJuucbUKQbuglRp1DabQMIp7678EpmDTn+LAbEy5DsjC0xNq8E?=
+ =?us-ascii?Q?weNdFcTFThPd0KHowt6l0927ORY/Kw2cp8SOeIj2HM6Qum1hhiKckg5rjOaX?=
+ =?us-ascii?Q?Y8Ig/v570uJQuLLIr9SAQTKlOs2DDmyVK4sGMXK3DdXwBuaGsn4OSpPUeRSa?=
+ =?us-ascii?Q?U7cZmkYJU59JYIo0inFj9cJ5pBeEQcITBO/irXO/jbD9/xOuzjqUJGusBkhW?=
+ =?us-ascii?Q?iP/BMjp+O/YBcy4pYIKFjZ8ZMIT4/YVxGyCFZllj+AmWlk6+w/ibicgidHlz?=
+ =?us-ascii?Q?gsUA08KhpqC8JRk9kzb8ULqjCo+Mw1zWte6M6ila0pNVFcfNGldPQEyEoiZ2?=
+ =?us-ascii?Q?b2ASJ1d4+vy1toE+Z0lXY5OiEzM4ph2t/An1T7Vz3W5LGJSqe671v5btthIz?=
+ =?us-ascii?Q?KcI8UXT+u2mw1OjqQKyBBTpe325xAu5/jnCsq1OARWbBBj0oeQg0CS3rJgjU?=
+ =?us-ascii?Q?nC5C8DiDUezLHcnn5YASTUIc0MnRf1BPPGpIgi5jv6Pg+nR7tH60EFPc14S4?=
+ =?us-ascii?Q?3txGgZopZ1fqBR9gSiwnfo+PhWqXGexZG5xQYdTT6n9yUWmYcfNRxL/K4qNh?=
+ =?us-ascii?Q?kO8Xf6baT+8GwH4SoVqcgFPSNxMMQflyICL25qff84N4NVSOFEy7xty5gO+s?=
+ =?us-ascii?Q?wGEcyP92zLEh+zd/DbFo4pcT57OpQ65ruu6lPKhxjATWUKM6R5b+5suQSQzm?=
+ =?us-ascii?Q?biIpVrRQTpOilEhiZXwpD7efszGqaaWmucX3jZ8lxvY+dNrzAjJ7cEl5R5ZR?=
+ =?us-ascii?Q?J1SdQvomMmnzLx30Lq+G1PhgpXjE5fp8dLX2iVTazjzLABwUKzIFJBoti3tF?=
+ =?us-ascii?Q?OVrl2T2CeWX+i/D5fRataBup9tLBgRAZ/rhRYjVbgOM3vouQvr+132pi73aI?=
+ =?us-ascii?Q?5CkJelIb3VZir6ISyA5YcwSe0vlNSep2gppwlXe5Ovu/mizzscp/crTMN02f?=
+ =?us-ascii?Q?eXH9gHKijclmkqBKLaOPOSgZnji9BohBqG0wFun2v6ePT8m31Xu+4Hck5fOS?=
+ =?us-ascii?Q?KMTwupGuQq92LP91R57EyWK0xgv6/1rXh4wNejCEHlEGdOqWHqWyGvSfprha?=
+ =?us-ascii?Q?44OuXcc1g+txHxjuawqo6esEh4cne+MWMLzHiyqKSl1n6I5OOhT9kxhpGGTP?=
+ =?us-ascii?Q?rIoZW5XZv45lbYkceRBuPk5KlLWLtMdD7RP+DoaXTDkqmu1dM0jHMmalS3ZC?=
+ =?us-ascii?Q?XTXHepN/jcec5xetvUulYjebnSokAhiyEhwGWbcI+dGwJkUbOaWk5F3U3Ukn?=
+ =?us-ascii?Q?PQVzAtjqmzlLz09YbRN7Gdn2z4XWsW5rRPzqnk5J/cJgMQ+dWTOIWnZs4i+v?=
+ =?us-ascii?Q?e1oVbi/hQIkRoFuWC0CchA2EtyuGOB7fjCbJC7GNZ63/+nCAO3NxqC4ynKwp?=
+ =?us-ascii?Q?afRYeIo29iRGwMbrP6Ue3v/qHzha16jMeiY=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:54.174.52.182;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:pgg16g.bf04x.hubspotemail.net;PTR:pgg16g.bf04x.hubspotemail.net;CAT:NONE;SFS:(13230028)(4636009)(286005)(1690799014)(451199021)(19627405001)(66899021)(42186006)(6916009)(33964004)(42882007)(83380400001)(336012)(26005)(9686003)(75640400001)(4006050)(22186003)(83170400001)(1096003)(30864003)(58800400005)(3450700001)(76236004)(356005)(8676002)(7596003)(7636003)(166002)(1406899024)(76899015)(43043002)(579004)(559001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR01MB8050
+X-OrganizationHeadersPreserved: SJ2PR01MB8050.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb7.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb7.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo13.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 04 May 2023 21:16:02.7380
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 73edbdf4-4fc3-4fef-f2e8-08db4ce4c3fb
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted:
+ DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BN8NAM11FT106.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 7f2c9a51-da08-41c0-74f7-08db4ce4787e
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.113;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb8.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2023 21:16:02.6130
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73edbdf4-4fc3-4fef-f2e8-08db4ce4c3fb
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.113];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BN8NAM11FT106.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB7107
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.5529775
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6363.026
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?WHJHb1Y5eUFSbzl0dktyaEprbFdROG5CNnVBa0ZkejB1cG94SHNWKzRldU1x?=
+ =?utf-8?B?MWVnV2MxQ2tsR2RIRFBQN1c0V2swZDVpWmhwTVBsOHB6eTZNK0c2bS9XRUtZ?=
+ =?utf-8?B?bXpHclNtalUyQm1DMmdIemNrQXhrOEw0US9uOTlwUjI1ZGduWW5kV0JJOG9z?=
+ =?utf-8?B?aEN1c3F6NEZYN2dINE5lRWNrd0NMeDViL1ovUkl1U0tPZlh3WUw4eUE5aFJq?=
+ =?utf-8?B?SFg3ejVVNExTd2kwWHVnYUVVQURxZjZHYU53TVlueUF4dWRnWTJhY2N5bERV?=
+ =?utf-8?B?cTNva2FBTkU0MHpZZDV0VkdzOUc5Tm9TZ3NCV3VhY2dpUWxWYW1jRkxqaVBS?=
+ =?utf-8?B?TDA3c2YxYndQZTlZcUx6WEhTakNuUVZrOUswMG5BNU1CeFFHaUJFMVBnS0tT?=
+ =?utf-8?B?WTFHOU1CdkdvUGMySkFQc0lpYVVKUEE2VUo0Q2Vvc1czL3RhSGFrSTdmUjJE?=
+ =?utf-8?B?MjNUbzV3MmhYY3pUYmpZK2RqR3c2bUFFUlJZQUgvM0g2em9MdVF5QzBzc1Ft?=
+ =?utf-8?B?YnprNVo0UVFJQ003clUxZTFWWFl0d1VRc24yQzNyNVl1MG5wOFgzK05sTUQ0?=
+ =?utf-8?B?VDBWZnBDWmlocjZKdTQ4OXMyQ1pPVlJtTUFYdTJVWXlZQjRrUENDY0JzR05o?=
+ =?utf-8?B?VExzUDQ3K1lEUjB0OTdaeEpjcEo4b1luOWR4cmFLYmdRRlZwZmQ0eXdFUFpZ?=
+ =?utf-8?B?SnJHdUg3THBTdE5Gc2NGRmpCNDFHcFZIOGRxRFc4a04xcC9hVDhjSmZyNE5y?=
+ =?utf-8?B?Um54QTE0R2loOVZQM0Y1TFgzcmZ1T1VqQ0w4dTY2cHBCbUNUcE1tRkxLVTdu?=
+ =?utf-8?B?d3RTa1JCdUExNEFleVNaVEcyMG44QXowQlIrKzlpMHU2L1ZjNFF2TUYzQ24v?=
+ =?utf-8?B?Zk0vN05WZkRPT28zM29FZmJtaGVvQmRlY1VZc0hlR3UydE9DZUdjd1NqTCtt?=
+ =?utf-8?B?Y3RDV3dHZWxySTRCbXQrSW95bStRNTNHb3MzbWlIZzA5YmRncy93UDhpWXo0?=
+ =?utf-8?B?Z0JaN0hIMDRvM3I0YldRVFFsNU84MmFEeDZuMVhUMmJEWUZtazU5R054bXN6?=
+ =?utf-8?B?a3EwV1hlbnhaYWF2WUdyMmtRQkF1MDFxWE54L3FKNWY4b20wRWU1NXFCZk00?=
+ =?utf-8?B?UUx3aHRlNkFCdzJHUjl2LzVCMUNaZWNMbWh6R21wYmlBNnBUVjQ1OTBLdVZy?=
+ =?utf-8?B?RVJNMVpRSkluemxGdi9wZ29aYXUvR0VuOEJKNlpxeUJHQnJrYUF1TXZzd3lM?=
+ =?utf-8?B?b2pZekEzUUFaZVBSbENIL2tkeXFqd0pFeDV5S3Q1aEovSCt1QytSTTV4M29m?=
+ =?utf-8?B?WjdYVmM5czV3dWVJdEdmS0dtd2VpdHVHMGhFK3d3QlJqclN4a1g0VCtnM1dJ?=
+ =?utf-8?B?azA0KzI2Z3hxaXNwQnQzUnkvcS9UclpkNE5GZEZhTjg5K1ZhSU9yOW9LVmlU?=
+ =?utf-8?B?NFJEeE9zUTc0R00xWVl5ZW9xWjlSalVIZGVBTmJUMGl6S3dlbW1Vd2oyWmxI?=
+ =?utf-8?B?aEhqOUNzMXVXQ3dzSUhCY2hIRlFpRktzcmdCb0t4SzVZY1g5azFzTWVUN2kw?=
+ =?utf-8?B?a2hEMjhWS0ZUT2pqTWVhUFdLcisxOEZ3NDEzNnpGZ252RTBoU2xXV09PVVFa?=
+ =?utf-8?B?aXJoSWM3aFdzcGk5QnFhNG0zWDR0M05wUGpKSnBRay80elExWFN6RVhqcXgz?=
+ =?utf-8?B?YWhtclZObVZhUWs3MjdSYzNQRWkxU1c2TDNQYytEQ3lQcSsvUEFlN2l1VDlO?=
+ =?utf-8?B?MGI5aGZqdFg0Y1dkSVFqQnZ0Yk5MdFhPbmlEangrTEh1ZTJodVo3SC9Vdklt?=
+ =?utf-8?B?VmJ6WWRyWktlNHliOXpHK1QyMU5NckF6TXp0L2tTcFhJTkhaK0huWXp0elZT?=
+ =?utf-8?B?NnFpNHFrbW5BZ0R6Q1BvLyt6QlNRM0dhZXZ1QW0yYWR1N3dmVVdYVEJScWUv?=
+ =?utf-8?B?ejRQL09QSlBDM1Y1S2RPVnNXZE5zRnRubnhTeERLcmZzQ1cvQW8wNXNGVnNM?=
+ =?utf-8?B?VFZsTmNBUnRHWXhCUUFWS1RWdE91NGhDL3ZFVzVEWENXOUdDa2UvUHlaNzBv?=
+ =?utf-8?B?QU84Tmk1Yml4UWlhemxyWHlWS0JoRm5WcWduenhXL3dkaG5VRzJxYVhsaWhw?=
+ =?utf-8?B?ZUNqZEpPazNCQTVkLy9mM0dtR3YwMjJuZ1g2ZTBZWFFQam1XOHJESHhEQUNV?=
+ =?utf-8?B?Y0x0YThwaEJtTTUzbFR0YlFCZk9TRWNET3MyQ29nWkZKQllFVW9UTVNlTThv?=
+ =?utf-8?Q?s3t+Q6eGhJYLionKjpZvn799PXQONrlmd977o8Zp70=3D?=
+MIME-Version: 1.0
+
+------=_Part_85326_720714525.1683234835189
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Cohere Rerank improves search results with easy integration. We are partner=
+ing with LivePerson to revolutionize the way enterprises deploy LLMs...
+
+Welcome to Cohere=E2=80=99s monthly newsletter, where we share the latest u=
+pdates in the world of language AI.
+
+Greetings, Language AI Leaders,
+
+Are you tired of irrelevant search results in your organization's keyword-b=
+ased systems? Introducing Cohere Rerank (https://email.cohere.ai/e3t/Ctc/2N=
++113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213pdqSV1-WJV7CgSL3W=
+1f5Pjh20wTcCW2dx76X2QYbHnW8LqFyZ36RySZN8y-zxV2DxFPW4tS0rT1P74v2W7F8SD31MM81=
+wVFH5zt3JM8gkW4Nh69Z5Wt3fSW8wcfxT4yJpSJN7BMr15F0SWmW88sYld8dJ7znVxwsY48cnDk=
+rW7g3J7j7wYbGDW5NG5VG9c7PLVW95GmHb5GNFbJN5gLhtCxNsNZW50h-qZ4fhwf5W6mMCTW5-6=
+9prW5mJKD011gyXfW6wCsTx7QXP5R3n171 ) , an innovative solution providing acc=
+urate, relevant results. Integrate semantic search technology into your exi=
+sting system with one line of code, improving search quality in 100+ langua=
+ges without altering the infrastructure. Experience Rerank's high-performan=
+ce solution today (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86=
+PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213pdqSV1-WJV7CgJxhW2gl6L57C3H61W2lYlcK33N=
+3F-W220m_F3mGtLxW6mqBbZ9bbR_KW2_Yghp8Jc5HJW5SwJxb2Jl80kVmz5zx2C83y3W1DC_HH5=
+C0cwVW7B6YFW9hCZZ9W3dYPwj3KqqlgW2KFwGP2sVwh2W5SfTWR8RF9sHW4gsNQ657R6y3N7MSc=
+-lrKNhTW6jYZxc6rXybTW1ZJvzP8F_hK8VSgpF13PHSWrW1w_NX35NvySyW8mSM-d2CcCcyW3CW=
+lxs3vggKw315-1 ) !
+
+In other news, we're thrilled to share that for the second year in a row, w=
+e've made it to Forbes AI 50 (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg=
+04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2k3pdr7V1-WJV7CgCjHW1yJfLW5FjBM=
+8Vgcwx45hx_PRW73Qltw3DxLFkN2MnLTP41f1yV570KX8wkf0KVVmrzv4DZ-2TN1c4mgGtvgwbW=
+5BPm8d7mBdhGW7ggbBj4THFJcW44k__K8C8_-GW4_Mt7Z1V5K1gW4mfQc72ZgvTNW2hXR5k3PRh=
+vkW6H5JQ05R5kMjV-LgwK6dpRMcW68xyjB3-1D2yW2mz86c1pl90tW1JVYk84W2KpFW1t44GN3T=
+3k3qW1nmfHP5lJBQ4W6DZFck89RY4tW1j1FQC1x5CQN3fKt1 ) ! Cohere is working hard=
+ to make language AI accessible to businesses and developers alike.
+
+Next, we are collaborating with conversational AI company LivePerson (https=
+://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-=
+8zKRN2z6H3c3pds1V1-WJV7CgPWPW3W0mwK97hVvWW8qYCMh51g1VTW5Qbcwv66n8z6W2mh8Pp6=
+Vxh0xW3bFSNl2y8XSVW6GmDRT2H_xQKW544BhY2SZTsFW95cCkg9gx8VyW2VXLN22bwM2ZW1RSF=
+Z564ml7FW45DHvF6pg_qBW4CpKJC2wvQhDW8n4l6V3d98_nW3S9TgH30g969N29B1W24JVDyW39=
+8dBF7Pk2qsW5sSwV12GLgt3N8_T58bG_BJ_W27s2Nj3807Y-W69D83H8W_qsWF8RTnn1qN7bW3v=
+Y-gx79HxqPW1mNTw71TK_ryW4mbfht55Xsm2W7RWRQj49SPjHW7YdQhW3ys41zW32NXVf8hrCgM=
+W1_M1zg7J1fDv31xr1 ) to enhance Cohere's LLM technology. This partnership f=
+ocuses on addressing bias, increasing explainability, and minimizing AI hal=
+lucinations, aiming to improve how enterprises implement LLMs.
+
+- The advantages of Language AI for businesses are becoming increasingly ap=
+parent. A research report by the NBER (https://email.cohere.ai/e3t/Ctc/2N+1=
+13/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2D3pdrrV1-WJV7CgJR4W6Z=
+HJPP4zq9Z2W97lttz8QjY-vW5PTXDs177kpPVh7bNy5GrnjLW3q0m7_1s652DW27n_5_3Ty9ZQW=
+1X8gJt8_b3FtW6b8jV62NxgLZW2pTf4p85p40KW2tkzkf8FYkSGW7vXRyf3qBsYXW4YzglB7Y6f=
+2dW88kvdp8GlCYqW5Pggym835GCMW8fqPQV6C1Sj1W1k8gl25qsVH4W4Lfv1M6GR_dvW7459-P1=
+WVM_9W7B0R3H2ZGrRlW8qXDv37gML2SW5Bp2YS3cWZ_KW65qMW53Z0q69W5k-g-18SqnW4W8BqG=
+Kp5czvz639C61 ) demonstrates that a contact center experienced a 14% produc=
+tivity increase by employing a language AI model. Interestingly, lower-skil=
+led workers benefited more than their high-skilled counterparts. We anticip=
+ate many more examples of successful LLM implementations in the near future=
+, and we=E2=80=99ll share the highlights with you in this newsletter.
+- A key challenge to improving the performance and visibility of LLMs is th=
+e use of current, factual data from external sources (the term is retrieval=
+ augmented language models). In the paper, Shall We Pretrain Autoregressive=
+ Language Models with Retrieval? A Comprehensive Study (https://email.coher=
+e.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213pd=
+qSV1-WJV7CgXZbW90GBr97fW9-PN8JRSx_YSFFLW5nkhRy51HGJDW7972Kk7f1CvTW5F0pCz7G9=
+DxnW11rWdw4Kf0mQW4Ppz0B3PbQ8KW30ncLf87XRkbW1vFl537DD-C5W7dhvfK3ty-MsW8hq8Q-=
+51mfRRVVRqQ32y5QHSW561SgF7K8QwsVNlNnZ7YBf32V9ZzNL7pJ086W19Btry7W3ZRfW5TBHK2=
+2gYPqMW3jj3D03hrB17W3dhfND3CN4ZZW4-KYnx2PpF9v3dGM1 ) , the retrieval-augmen=
+ted models significantly outperformed GPT models on knowledge-intensive tas=
+ks, as well as other metrics. We expect substantial technological progress =
+in the coming months.
+- Another adjacent area in retrieval-augmented generation is generative sea=
+rch, which uses generative AI to create fluent and contextual responses bas=
+ed on user queries. Technology media expects this to be a threat to traditi=
+onal search engines. This paper Evaluating Verifiability in Generative Sear=
+ch Engines (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFz=
+N6DYhSWbW1PHNH54-8zKRN2z6H213pdqSV1-WJV7CgSFXW67DJzK6BP5HRW63KwTL16wKTYW3z1=
+Bb-62RSFrVb1TFV16KS0sW3PrWM_3jKbz0W5DNWJY89mZ11W4h-C973TN80cW5Cx9hR5qxD7xW6=
+39gXl1RQT36N4MgV3hgFsd-N1TXMvLGnRKmW28XQXs5BgDw5W7_hF605VFGGfW8B0HRk5DqSFpW=
+6GC2Rt3NJKb0W3PMXJ018GqXMW2yXBTl1LJzFVN59gjQTdrjxsW13NmbR2q03gyN2Y_ytJCz6wq=
+3qnZ1 ) examines and finds these young products to generate fluent text, bu=
+t they often contain unsupported statements and inaccurate citations, which=
+ outlines clear areas for future improvements of these systems.
+- In More Design Patterns For Machine Learning Systems (https://email.coher=
+e.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2k3pd=
+r7V1-WJV7CgJ7SW3rWmSK671LyNW4jXjqb9431cXW6Sqrxt7RSw-gV5QsGf23YJqPN3qMN678bQ=
+L6W4Bf2ZM25mwh5W4wd5cc1nqPvmW3QLBfC80W6wsW12MgCT3_969hW5y5-Qy7vsL2FW71PhwB6=
+LxfwHW4rXj_c8XkTB-W44WGk54fmLJXW5922HS2JSYNjW469WC-8BXCjXW82wHMN5gWxQyW1VTC=
+cN3mLTD0W8mGJCQ7-PkVVW2Zb1CB3fyXTSW507mbQ2xBbvBW4tcmh13LFjgrW8h5cDL4VmRvz32=
+_01 ) , Eugene Yan (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f8=
+6PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213pdqSV1-WJV7CgG9zVrblNX6v94CbW8WJZwf3Mn=
+m8lW1TdgFb8lLqFPW9ksjNM9ktqJ2W4gk8b57cx5c9N5H588_KdSDyW4DWR1C1S9lXJW60-FJC7=
+wdXYVW4rs-5s66pvgkW32MWmC2t0p0jW1LJ6Cr6PF1BWW38QxPn3WYrbxMnM2Rbc0KQpW37ygK2=
+7WY5cJW1YQLdX6S3Fs5N2xCpFCZD-p6W8ZZtF_1Z9RmSVGL2lC2FrHkKW6z0ChW6S3wshW53vPl=
+T131-ZP31z31 ) shares a number of design patterns for machine learning syst=
+ems, which are reusable, time-tested solutions to common problems in softwa=
+re engineering, including Process Raw Data Only Once, Human-In-The-Loop, Da=
+ta Augmentation, Hard Negative Mining, amongst others.
+- Also, don't miss out on Cohere For AI community's top NLP research picks =
+for March (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN=
+6DYhSWbW1PHNH54-8zKRN2z6H2X3pdrLV1-WJV7CgR07W6S72hv1sNjZ1W5xpHKr11lkwLVnrsh=
+p9gGsJ6W6rzv8Y5qGrn_W1hl_jK3NQPktW8gPhf-6M2GBSW9fq-2L4hfZP6W11m5CK4wTZStW7M=
+J_Fq8GNQGjW2T-ggT71KlnRW1bP_XG5GSVjRW4F6CfS4mZNFcW5GBjFW9hMZ38W6VMyvW4CkXcw=
+W7fTLbD5TGfBKN91gbSRSZB7_W2rQVNY2lyqVVW1kMgPk8cQJWmW5pHNmd35bJvlN2Kb5NSXGd9=
+8VgTJ6F8B5Gf6W2LQ_5435mJsZMRZsWMwSM5dW1y0XGq33L3rJW21-xh78tb4bdW8_sdjW2V5CF=
+d36YZ1 ) . From embodied multimodal language models like PaLM-E that tackle=
+ the challenge of grounding language models in real-world robotic applicati=
+ons to the impressive Vid2Seq architecture that leverages narrated videos f=
+or dense video captioning, researchers are working to continuously expand t=
+he horizons of NLP.
+
+Dive into the latest demos created by the Cohere community:
+
+- JeremyKirshbaum#6893 launched Library of Babel (https://email.cohere.ai/e=
+3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213pdqSV1-W=
+JV7CgV1vW4sT9CH6K00mzW1sFwP269qRVjW5TpLVc16pJbMW1KvblJ25XyTBW6W9RVq80Md1CW1=
+rhzbS3QkZpxW6x27bF2ptB6HW3btfQG8bBJ9gW5xTxm95Tck7RW2C0Y5Y5wYK0cN6t_XFFvp8Fd=
+W6gXSFZ5WdJ2FN8_22wkWTvyTW1Dlg1v76K553W91RvXZ7s4xrNW3ZVRrs3wlkH3W5Jq5GC9c4Q=
+5GW1qC19S2R7BcsW8KRY166Z7dV1W6B-pkp6S9Pjz32rj1 ) , which =E2=80=9Cis somewh=
+ere between a prompt Wikipedia and an AI Reddit=E2=80=9D for collective pro=
+mpt exploration. Just drop your Cohere API key in the playground and go cre=
+ate some prompts (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86P=
+fJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2D3pdrrV1-WJV7CgX2gW48ZWMc95tf1CN5ZbM60GJ7m=
+mW4TD87F2zrqyPW7w_Mm27fDS5WW1RxcvW6mj8DGW6ffPlZ1x-2VyW39x1642w378TVcq46J1kc=
+NvXW4lkBFf5rF_SfW3X_SPS57F8FdN1QKsCHfPRrcN4MBCtJDqwXRVK-DRj8QG8pjW1slXQ56P3=
+HR6W6QKy8p1VzJHVW7s-gLW6c84PLW43ZhP91vcQm_Vgh2KQ3H7w6JVWCy6c7G_zmMW3Jb46x1H=
+kh3RW5RVd7m53P3lbVkXvRZ2ty8F9VhRHj533Yy_lW30GBz35zlx4C38k11 ) !
+- michaelwechner#6901 built of off Cohere Wikipedia Embeddings Archives (ht=
+tps://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH=
+54-8zKRN2z6H2k3pdr7V1-WJV7CgY0fW10g1NF2TY-n-W7hslPp8y9mC0W19nQ2T21hfVbW2gst=
+Hk6q-nhGW6GvXlk6V2P3VW2XCfwy5kR6CnN2n82K5CtvxzW2c_-zF1fN331W325zJP5y3Bs9Vbh=
+6Mf8nsYfkW91JPgW9cY5NWW3nNnBM9fj1N1N2yNbHRtxq5lW7c4fTP6DptbXW2W8Rn33yRWQwW5=
+Fqdvg1YmVMLW5TNbW93NRGf6W47LXvZ94FLbfN90t7KsMxtRbW70_RVr3r0cd0W3BJHvt7qywWz=
+W6z3YzC6NVS4M3mmg1 ) and launched Katie Bot (https://email.cohere.ai/e3t/Ct=
+c/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H1L3pdqyV1-WJV7Cg=
+-hRW2kMzK82XH398W995qz61bKv0qW37LXll7jCVswW5mr4774KtBDDW7QsyJQ4b6BbhW1d3ZmF=
+5vxxnYW3P6n8v3r7cQNW6HSsJN3dYhhfW14mftV71KRhkW6rwdS49jgTtDW6Lymmb24F92cW3Gb=
+Tw26pGTfPW5zwkXC5lhhC2W5gnHRg4HJnmvN36WVcYzL6w9W1yrz663lVGSrW31lLFx7h4MtyVZ=
+bBns94wh-F2Gm1 ) , a Wikipedia-Weaviate-Cohere hybrid that you can now test=
+ via Discord (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrM=
+FzN6DYhSWbW1PHNH54-8zKRN2z6H3c3pds1V1-WJV7CgY7DW6rtQVr6DBwVXW1dnwtf2W095bW8=
+VnWxk641ky7W2xzMCQ7CtzYzW19PK827ZltJ-VpcrNK8rjrsBVxfBxp4KmR09W1N55XB8KWLM8W=
+2fvRQF882jkQW1CRZSC4H0g-GW83YTKk3yX4vbW6kf69f4x41pWW2P8P9c2YyrsQVq4gZt6dnRg=
+zW1K1sn8706TY2W3RG0821kw7-NW1gW_bR75p-RmW5M-CcF6W4VklW2RXXlL6RfCtnW5_vpfh6m=
+qK4MVZhcP2919-MjN4XWFrBxFhl8W8pRLYs1mTsGdN2qxC8WF4lp_W5-LDWR6ZBhDhW7TwLpZ4h=
+WbyXW4TQh9N30FsMcW5dmDlm3HtMrM3bM51 ) and Slack.
+- On a similar note, Kwadwo#8015 took inspiration from our Champion=E2=80=
+=99s Elle Neal's work on Cofinder (https://email.cohere.ai/e3t/Ctc/2N+113/d=
+2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2D3pdrrV1-WJV7CgX0LW20fZdJ=
+7PHrxCW5SRB3D8_fZ91Vlt6NB5YthDqW8QYtHd420j-2W2Q__Hh7gMj10W8XP2RH4S2_5ZW37yz=
+gJ5t5ZgZW12vv407R1BZ7T4RWk80Fsv7W92B8fF8pmjMrW2f-0RR25R-7hW5VmbRL8vzQlhW37K=
+G2G8NjvLQW3Pwq6S6ZsXlCW1KylRb2x87DVW71QWQG7jfLy6W2flK6v7x7sj7W3PNhkg1T62TSW=
+25tBCh7lJMWFW2yP29G6fQ5DQW732kZz21jYGtVdBN0X3R_z1VV5pYdh6XwNtbW7jjZ3-3JG4xQ=
+3nVf1 ) , and expanded it to create Document Cofinder (https://email.cohere=
+.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2D3pdr=
+rV1-WJV7CgZqZVDzdrR4NJHKDW2QJ6q76F-t8RW8mY3kY3pP6YYW3WH-mp7LW7_DW42skLV5zxH=
+HKW2VzNtN2YcClPW5md3w152lgmpW6jm_zc44n6qwW8-K2Vx3Tz_bJN4yC2mfNm5s4W7PWHPz4C=
+1nZVW3jrgW68QB6x1W1z7CZf7-ck1pW2LT1fv2z21FcW33Y6nC46F0tDW6CYqS64yYSPdVjYQYj=
+6tTgr7W2W2QxJ69tJMMW7N35Fr5LRL2cW6v0W-S7S2jCQW64Gmss4DbTz-W8vPjPL8g3jzFW5NZ=
+Z9c133Mw8W5x6hlF1B6GJX34JM1 ) , a demo that let=E2=80=99s you apply semanti=
+c search to your own PDF documents. Try it out (https://email.cohere.ai/e3t=
+/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H3c3pds1V1-WJV=
+7CgFXzW11G9qq96ZtRqW7BXMW-4KTNq1VYM0HR8YQ7rWW7FM_W68FNFlDW59drtf2p9XCcW54-D=
+BG7_XFK4W1jglZB79T49lW7hj6ZS3cQXydW30kTr81y1zsmW4wCqqY3tfZH6W7Q1YCC3XMtzqV5=
+TRcR47ZhskW8bDjkN7h9Sn-W6Ps0c74KGLMTVlq_hn4gVLxLLqNgKnDkhYW6MXSjf1tQlRxW892=
+dKr1Ydx84W21dFQ-8rNQgLW6FZYn74R4yZtW6hkqrC2h-pdfW5zZnHx7dJSZwW80Q_dJ8TxBv2N=
+4ndZKYCbYHxW22NBNw45hK4dW8bwPm679hq46W2mRg8y6V7z3tW4x8kXt6DfWm33d-r1 ) and =
+share your feedback!
+- Our Champion Sonam Gupta wrote an article Cohere Embeddings with Weaviate=
+ Vector Database (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86P=
+fJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H3c3pds1V1-WJV7CgNBZW2KlXR74MYMCkW4sXkkt6Nv9=
+WtW98cCK06mBCwfW7-0GXk2GkG4xW6gTsGr6GghpQW7Q-R64677_ZlV4nlTN4Xy_RMW8zz8XT5r=
+SnzJW7JGKQh8RQhb7W9kP5K46yV3mGW5Rrdh39fl757N6mSKn3dNgFtW6TTSwf6w3yYvVfk_-c3=
+8RhGpN1T23KXYX8pNVG6dZw53gq1RN8VJVWCsdHBYVrzRN-5X6R1yW2k79BF6_wXjWW24nnDM8-=
+7SvgN1gjScW8PsWpN3MV3M0QtXdGN3Ndg0C9cS_TN687Y8ltKZZfW7g3m-L6Kgt-KW7F87bG263=
+-_QN6GtHM764tvvN1TP23Lbg2D73czX1 ) summarizing what she learned from our re=
+cent webinar hosted by Cohere and Weaviate with Nils Reimers and Etienne Di=
+locker.
+- Our Champion Elle Neal worked on Databutton templates for her AI apps tha=
+t use Cohere API  (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86=
+PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H3w3cf3cV1-WJV7CgXqkW21YlsH6MWTKWW7H0fMP1hB=
+74FW2SH9bZ9lXmXRW7SV-YW7B-K0qW43p1Px1Q0QKHW8WSVBT28dJN3Vj7ByL99KkLbW7CG1Z-9=
+3tv4qW5JMpdn1v3SCXVfq5cX1pL273W2VBgg33t6VF4W2gCNVk4Zm0qhVDwCh43l2tW_W978yKr=
+11HMmbW4QZdTf91WGlgMXb7xb45kZkW5qQHVn5HZjhhW1N-Psb2Krrq6VJ77075RTpVgW3Yh8RB=
+3bDgFZN7RH2WtkdgqsV9WQwn1KjCXFW2FM9fy1Fv57YN2b4rNRNvJsRV9r_rP1V2HbgW2j_MZk3=
+5qQcdW6gLw_D2nPPpNW8vtxg86slmlnW4NYrL25hSNdMW7HK89m5SR6s43gvT1 ) (like her =
+Cofinder semantic search app), so you can now use them to get started with =
+your own AI projects with ease!
+
+Join the Cohere community on Discord!
+
+Want to explore more demos and collaborate with other NLP practitioners? Jo=
+in in on the conversation on our Discord (https://email.cohere.ai/e3t/Ctc/2=
+N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213pdqSV1-WJV7CgWpb=
+W6YtSvv13jrxGW1wj4VC1JNDkLW7-dd3v5RVLTHW5Xs66R79rj2BW2l1DtM3cw1bZV7RP1D4Pq5=
+yxW6_FJ0Y4z7Q6fN17NxG0sTkBCN3h87q7m9WrRW6nfkSj6DC6s7W1TTLD61kKvqMW3qm8MC6fj=
+y0GW2ZrgNH5qjS_yW146VSC288YT1W11_NK08BzjRMW5YWVJs58-nkMW83cWtB3T88z0W5yY0Fr=
+8t5V9NN3YDmfSdf5wYN8N9zHWB9yPv3qqm1 )
+
+The Embedding Archives: Millions of Wikipedia Article Embeddings in Many La=
+nguages (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6D=
+YhSWbW1PHNH54-8zKRN2z6H2k3pdr7V1-WJV7CgFXfW6mfZsM8wrcVFW2hPyF-2-MHmDW5LpFw1=
+9jsWT4N10CjgzbrSJ5W1BpPft2-n9mWW7KMYNr7hZl91W4b-vDW41pprvN4t3K_1T5NZyVy59vM=
+7-dvrJW2_vs9c3N3-W8W2Fc5qc6RxPq4N3Hwr3SQhwyrW8zGgYG1rKdn1W5PGx5-74qR2kN6JVG=
+7cVJYjvW3rTztv2ftG1gVxS86q8lddPNVCf48G19mK7sW68j75P9hhMPDVvP0f33TYs86W30GSS=
+d1tLDN7W7wzzpB80DL-p3mrs1 )
+
+Gain access to nearly 100 million embeddings for Wikipedia articles, coveri=
+ng not only Wikipedia in English but also various other languages.
+
+Unlocking the Power of Cross-Lingual Classification in NLP (https://email.c=
+ohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2=
+k3pdr7V1-WJV7CgBT5N8FwCypmjSNYVcptw58t_31pW5HphfR15R836W2shD3R8D1wQ0V8_1Xv5=
+mGBvpW50j-yr1RYK1PW6MVqYf5prRWnW5cLbzy1q1-1TN3ZR2ljHcRcgW8RBBFT54nrJXW4jQDd=
+93G4nGsVP_wBr5tCB8nW2zp_Nh7tS9b3V9RdBB3mtJ1gW7Dd2bv3vD26zW1M2GhS6FWD9PVfdsx=
+H6-LGpcW3QpS714h27_zW2QyH9j8yZWPTW6Wc_wR2sBJ3QW4kCx0b35WG8NW36bfDm6P-RJQ22P=
+1 )
+
+Learn how to use Cohere's multilingual embedding model that enables cross-l=
+ingual text classification for various applications like sentiment analysis=
+, content moderation, and intent recognition across 100+ languages using a =
+single language's training data.
+
+What Are Transformer Models and How Do They Work? (https://email.cohere.ai/=
+e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2k3pdr7V1-=
+WJV7CgNwrW7R3NLh5JzzW5W5-btpf6R_6gZW4ckQwM5WzXQ2W89L0Pm7lPr76W4k0P3V3LGXlMW=
+1xbsYf36rcKMW9ccYBZ932kBCW59bvg55jvBWlW4bYb0D5kDd-tW51Gc4s83-l7nW3FfY-p3nGF=
+W9W1Y7KqC4HRxSJMSZlYxbCM4XVt9Q2f7kLCfCW3C__1p3dBFqMW7vrx016Zl7rrN5nvW-Fv0GG=
+sW1zPD6H7wM9_cW5h5Bkp4zbXYzVrXVhf4Cn04YN8kCKQDv6fW-W5zSSMF3y665x3hlx1 )
+
+Learn about the architecture and functioning of Transformer models. This ar=
+ticle, with multiple diagrams, explains the fundamentals of transformers in=
+ an easily readable way.
+
+READ MORE
+(https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1P=
+HNH54-8zKRN2z6H213pdqSV1-WJV7CgCHLW11yt7D8vvB-rW7YKPVY2-wVkVW1_Cldj93NszfW2=
+1DKZk1gg89YW7mZYwX2dxjtkW6V5lV3473qXBW6_kdcL27yScQN16wrBtcc3jJN9jsK0ZxT6x5W=
+7JhJ8r1rnhD7W7yCzjv65-Q3jVH2wsd366mwQW8HH1DJ59L2G_W8ln5796p0FLpW760TCB2z8z4=
+pW5ybmpc6n7lt9W8McmQS4ywn0bW3LCpGN2WTg1hW3BqMwd8czDqzN37xYYqjyLR03kP91 )
+
+Updates From Cohere For AI
+
+- ICLR 2023: We=E2=80=99re excited to showcase our latest research in our m=
+ain track and workshop papers and looking forward to connecting with our co=
+mmunity! Attending in person? Stop by the Cohere booth to say hello and pic=
+k up limited-edition swag!
+- New Research: On the Challenges of Using Black-Box APIs for Toxicity Eval=
+uation in Research was published this week. Learn more about the work here.=
+ (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1=
+PHNH54-8zKRN2z6H213pdqSV1-WJV7CgHSlW3yZ0DM26SBvvW5cHqFx20XS8-W7bwsFY1YzhyvW=
+7Fg8j115flnBW1kfbCh2S63zmW394SjB72LCyPW3mZD-b8PWsW4W2Y_5vK2280g5W93PS8c54G4=
+bMW47xLPK7FlH7xW1K5cdp8VD3l0W21J8r25pQbl4W9bLGW98gv995MkTzChDZFNcW2BDr7y4tq=
+Z3SW93LY5z8bBFpHW6VkNq34kWHjzW10bNTv3xMlljVGc5_b3jjjy9W4Tnzyd2xbqyY3p7p1 )
+
+Join our community! We want to keep growing our fantastic events and progra=
+ms (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWb=
+W1PHNH54-8zKRN2z6H2X3pdrLV1-WJV7CgMRkW7rdhjN8m-fDbW2CRCZt5NPTLnW1W_Hrj1SkPj=
+1W33GYkb6hWqsBW8wNMzc40DcJmW2Gp88y6PsFVQW5dPGJ07zZXZmW36dbjd1W8bd8T-Ytk2qGn=
+p-W6tgKWJ82xNtCN8QkG_GxcYKFW1hKHD68cTs00W4mQyY331tCG3W6HbTvh7p_tDhW4Dpwvq7R=
+54V6W2Qp5h-1tyvVhN97LyQhQFB-tW6-R5GP4Tc-r0W1NrTC59lr95gW6kF84-1d0lj3W8Yg7T_=
+9jH5y-W2ynQGH36hjF7W6WR42j57bHlTW1ncp1Q1k7ZdxMPqwY2rgPqPN98GB_LFknwx3dXH1 )=
+ and provide new opportunities for aspiring researchers to get involved wit=
+h our Open Science research project. Complete the community application for=
+m (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW=
+1PHNH54-8zKRN2z6H3w7lksJV5X_Kf7CgTN6W6g8VpF4zxmSMVNwlqV1jmGNYW4J4Wvq37PmZpW=
+1ZwmXX6p34_jW6V32Xx8n9KwjW8c6Ztf8X4K2fW78RwWz6kdzFQW7MyBym76cy16W176Vpq2Lym=
+bYN6-Ktc91NQFGW8vYrCw1jrMjnN4_wHC1KmLxRW5Rt8766y90w6VV6h-C4zg4pgW1xGj_B2Tgs=
+vHW3HCzcY7LdCJ3W1fW9SD2GSd-rW1BG6Y212sNtGW76NPRJ492K_bW5LgXRB6lL6DbW8Xc6Vz8=
+dx5sJW2-NZxl4QF8cfW7Y4CkS5ZG8WWW7pBK7K2VFzylW6LNt_23T2TNQW4J7f8q7cQTZpW3_H6=
+CV5jz5Y2W5STS2x8vH76kW4n4J8m7-dVNKVhz91-7QBl6TW1XV47r4xF26ZVXpv806X_HLnW1wx=
+kDR89FfwJW6cJf0P4wvQKHW3Z7N041m-BScW7hpQ3q5CghgTW3Mvh8v5LSg37W4sSvzX8jGHyyW=
+3hJBrL6Nb4C5W734nMD40VQmxW1Pp2jB5FFd3DW5c1MPm1YKDL9N4vMWlQFcVqWW8j-s7810HzS=
+kW78jHnk1xPH07W68Qz1X7X64MRV8dwx_8KmDNqW98K6T86fllS6W8qh2gC6vGRZKW5wsXXY4kc=
+6mpW28z4Fm3xfY36W5pHT7V6_m8JDW8GtQtY5nJPkhW4W1Bxk1xdNqyW3jBzp046qyZQW24Tly9=
+1fSMj2W6b6ZS98DQ4zPW3M5RmK6RYXNkW5lvByr78SCGrW1fD0Jm1Q-qypW1Wl9DM1GZrccW6gQ=
+m_f24x5Vw3mY61 ) to join in.
+
+JOIN COHERE FOR AI
+(https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1P=
+HNH54-8zKRN2z6H2D3pdrrV1-WJV7CgLfKW4bc0Tf64ZqBYW43fsJp5KK4-hW1PGQ_w364dz2Vz=
+36nM7z4LqFW2lvqhl3mDBVSVjdY9S6W36bVW7dY7-f3RdRkVW5jgzkm69TQ0DW5lkdMn1X13W5W=
+1W100r6pqy-1W25n6jz5dmzGvN93vfFMmwld_W8f040H4kQ9_DN8XDXs4sj6ljW5BTrRH2HbphH=
+W9jjZS72j6bCpW5z07Ck3f9NZLW19hYLD4Tj3vXW2Yncv61WLSHLW3LFpv-13YR1LW4VC6F36Yk=
+VYyW74nP5b5Y_GfpW4vbXf55XqfpBW7RmTNb47c8Jy3n-Y1 )
+
+=F0=9F=97=93=EF=B8=8F May 11, 1:00 pm - 2:00 pm EDT
+
+The 2023 Zeitgeist Report - Generative AI and Best Practices for Enterprise=
+ Adoption
+
+Explore the Scale Zeitgeist AI Readiness Report, surveying 1.6k+ execs & ML=
+ pros on challenges, LLMs' impact & real business applications.
+
+SIGN UP
+(https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1P=
+HNH54-8zKRN2z6H1r5mNXrV3Zsc37CgWnQW73tZ_R1JMJzGW7yL9sf1tFTlwW8NXmfY68j-v7W1=
+yYFfs4Jf62cW1Y62P61rmMfFVymP9y2-XjfcVtz7VW8Wy3hPN46kD8k6XdM7W8hrcZ-28Q1Y8W5=
+-_mgk3_Xgy2Vf7LrT4NzKXzW7tf68T3hrZwvW19RWJk1Dv6PZW41_KGx1QZ-cPW5H6VQT99ZCtS=
+W52Px3_85Y2h7VSZVHC4Cf_mVW1_yCfn4CpT4BW6VK-HY6tky3nW4YPzc42_XtVCW53q65h1BXp=
+qpW78Mj2j5tDBgdVfGQ245WnfWwW7L0yNm1HJr7NW5xJgL52tffhsW87j2wV40rzC8W34mWnf50=
+p0-YW4wX3ww5vJpkKVcmjRG3MTG8qN87Gv0_CBzhZW6Qv8V432vJr7W8X4gMm99727y22S1 )
+
+=F0=9F=97=93=EF=B8=8F May 26, Friday - 12 pm ET
+
+co:lab friday 4.0 =E2=80=93 Community x Cohere
+
+This colab friday demo showcase features outstanding Language AI demos.
+
+SIGN UP
+(https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1P=
+HNH54-8zKRN2z6H3w3pdskV1-WJV7CgRmYW5dpLWM6b_nprW8MmH_v4C36T_W3VTZgr5lM80YW6=
+DhHCl1_twytN2BjzD6yhNtzN6JWBN75HJRmW3B2JcV8NwTPhW2Lvg396CJgCbW6PMCJS4Yf-LpV=
+QlwC21Z_gfbN5LtDT3C21_hW30krg15zPZm_N7C-yMn4NzXKVRtd332Qt3h8W2h4m_c97VPWPW2=
+vMhVx8ld-fsW49S25n7XmRcFW79y5g-26GHMPN3RQ_QXy19bYVFVpXG8z6-SgV8fmfP7YMWJmW1=
+767q_8k9ZWTW99mnRf7VGmnHW3kJ_TR1l18thW2qh_Zc44xSdzW1BwRlh8SyntJW6fqKsR9kgGf=
+PVFTfx53QK4YzW2T9D5l35Vx94W6xvmBj4rzDH23gg_1 )
+
+We want to make NLP useful and accessible to anyone who needs it.
+
+Whether you're a beginner or an expert, we're here to help.
+
+REGISTER NOW
+(https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1P=
+HNH54-8zKRN2z6H1L3pdqyV1-WJV7CgTLLW2VDxLw1gkGFWW3sXqrM1SFTHsW1-2YLK5jzfGtW8=
+7-fQn58xYmTW5C3V3N8MBbntW5pkZfN8NzLj8W91Y3-51zyyPCW7jt9L39fcCZrW1bG3rM4MLqS=
+XW3mfNNw26zSfCW3YSfz74ZwwjcW8BTRNS7tL45YW1YSCYZ23kskkW2w9DPQ3X62jgW90C05Y2h=
+NqW6W2xfRQj1Tzlb9N27D-t3CGrgjW6twDGn28CRYP3dPM1 )
+
+Linkedin Outline (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86P=
+fJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2k3pdr7V1-WJV7CgV7xW1F4hNf2zRb_9W5nxyPx7xYF=
+VXN8CGLRFNP0J2W4srSXT1bzcZmVhv7Gp5xQgtdW4G6Tf_2mcpH-W50jy1l7p5b_VW6878Dr2dh=
+0GjW2cdFbV3mZ3D3W90WTVj6J8zzGW5TJ81f6xKNRCVJv7Qk6pZq2gW2KQ3w24VzBlnVZZd3Q5p=
+x8crW4mZc2M6R0Gs_W6TWDvL8cDp3vW5cdgm62X9CmkW1PhZm18XXDP6W17My5Q5gk4gLW8ZrTL=
+j6F2pxvN6w2qMCdxhDJW7Lph801pGtXv3pQ51 )
+
+Discord Outline (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86Pf=
+JrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213pdqSV1-WJV7CgWpbW6YtSvv13jrxGW1wj4VC1JNDk=
+LW7-dd3v5RVLTHW5Xs66R79rj2BW2l1DtM3cw1bZV7RP1D4Pq5yxW6_FJ0Y4z7Q6fN17NxG0sTk=
+BCN3h87q7m9WrRW6nfkSj6DC6s7W1TTLD61kKvqMW3qm8MC6fjy0GW2ZrgNH5qjS_yW146VSC28=
+8YT1W11_NK08BzjRMW5YWVJs58-nkMW83cWtB3T88z0W5yY0Fr8t5V9NN3YDmfSdf5wYN8N9zHW=
+B9yPv3qqm1 )
+
+Twitter Outline (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86Pf=
+JrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2X3pdrLV1-WJV7CgXPVW7n2G2G6kZYZ1W4nnCtT213Wb=
+NW5t5HpS1zsp-rW35xrfG3hj8QRW64Qb6T6QTc9FVwF98B2HFTzHW4rNMtj63x15VW4_yMqD230=
+PdRW7_wkrK4JpCzzW54_V3z5p0XQBW6_tHXj7RvS4SW4MfKRY1rKKBmW8kWJZQ8Xjn42W4V7rV7=
+992bS2W455LLk5HTPw7W6BwCbS8jQjtJW1PVh2Z392JqNW3LhWdX34d0lTW6kllGr3LMR5JW1Qn=
+0SK8zDbxTW25XFlg6DJKq6W1dqMCl99p9jMW3lgFgz3X2Sz3VDf-w88FrkcMW697p5h5WVyqMW1=
+Lcwwd72Sc143mfn1 )
+
+Cohere (https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DY=
+hSWbW1PHNH54-8zKRN2z6H1L3pdqyV1-WJV7Cg_2BW5JDNJ47qZQQcW7Tm2p-3YYnq5W4B-D-q4=
+flPD-W5Y0Pjf76CFxGW7BpYyQ40p6vMW7PRG335DP4JzVFhCZ99fqXZ0VK0B5y66SWD_W3TZTsM=
+873t0SVCt_Pm5pGCQkW2JV-qW6WyCRLN49wlvb61FmMW1JD8z84_8v4WW3J5DB876dzslW4tx1v=
+13szwy4W6Y4nX03Hfz_YW2s7jwN4f46qnW820SLS4F1Vsh36QK1 )
+
+Cohere Inc., 171 John Street, Suite 200, Toronto, ON M5T 1X3, Canada
+
+Unsubscribe (https://email.cohere.ai/hs/manage-preferences/unsubscribe-all?=
+languagePreference=3Den&d=3DVnbsg850jshMVzqv6541W27xW2m6wcq1JykXmMWSJJfrYMW=
+PVQtFsR5DJFV9N7SwpfrCJkMDW5pRlG05KSqK4W7gh7gR9hxPf3V1yf0N31N4tTW1Lvz-Z3N2Fs=
+LW2lx8d67Y7VmL23x3&v=3D3&_hsenc=3Dp2ANqtz--wc8dKeO0RkAX1Mq6xWVI9f6H4ns9rZrc=
+YvGgjy6T_2nZX_HfgTPT4BhJC-FiwVoMmxSaCD2YDwrQo6Uv177KguQiKgQ&_hsmi=3D2570524=
+46 )
+
+Manage preferences (https://email.cohere.ai/hs/manage-preferences/unsubscri=
+be?languagePreference=3Den&d=3DVnbsg850jshMVzqv6541W27xW2m6wcq1JykXmMWSJJfr=
+YMWPVQtFsR5DJFV9N7SwpfrCJkMDW5pRlG05KSqK4W7gh7gR9hxPf3V1yf0N31N4tTW1Lvz-Z3N=
+2FsLW2lx8d67Y7VmL23x3&v=3D3&_hsenc=3Dp2ANqtz--wc8dKeO0RkAX1Mq6xWVI9f6H4ns9r=
+ZrcYvGgjy6T_2nZX_HfgTPT4BhJC-FiwVoMmxSaCD2YDwrQo6Uv177KguQiKgQ&_hsmi=3D2570=
+52446 )
+------=_Part_85326_720714525.1683234835189
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www=
+.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns=3D"http://www.w3=
+.org/1999/xhtml" xmlns:o=3D"urn:schemas-microsoft-com:office:office" xmlns:=
+v=3D"urn:schemas-microsoft-com:vml" lang=3D"en"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>Introducing Rerank - The Way to Modernize Enterprise Search; New Livep=
+erson Partnership</title>
+    <meta property=3D"og:title" content=3D"Introducing Rerank - The Way to =
+Modernize Enterprise Search; New Liveperson Partnership">
+    <meta name=3D"twitter:title" content=3D"Introducing Rerank - The Way to=
+ Modernize Enterprise Search; New Liveperson Partnership">
+   =20
+   =20
+   =20
+<meta name=3D"x-apple-disable-message-reformatting">
+
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+<meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1.=
+0">
+    <!--[if gte mso 9]>
+  <xml>
+      <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+  </xml>
+ =20
+  <style>
+    ul > li {
+      text-indent: -1em;
+    }
+  </style>
+<![endif]-->
+<!--[if mso]>
+<style type=3D"text/css">
+ body, td {font-family: Arial, Helvetica, sans-serif;}=20
+ .hse-body-wrapper-table {background-color: #FFFFFF}
+</style>
+<![endif]-->
+   =20
+     =20
+   =20
+  <meta name=3D"generator" content=3D"HubSpot"><meta property=3D"og:url" co=
+ntent=3D"https://email.cohere.ai/-temporary-slug-82af4b26-8b6c-4f3e-931c-e7=
+380f00cba9"><meta name=3D"robots" content=3D"noindex,follow"><!--[if !((mso=
+)|(IE))]><!-- --><style type=3D"text/css">.moz-text-html .hse-column-contai=
+ner{max-width:600px !important;width:600px !important}
+.moz-text-html .hse-column{display:table-cell;vertical-align:top}.moz-text-=
+html .hse-section .hse-size-3{max-width:150px !important;width:150px !impor=
+tant}
+.moz-text-html .hse-section .hse-size-4{max-width:200px !important;width:20=
+0px !important}
+.moz-text-html .hse-section .hse-size-8{max-width:400px !important;width:40=
+0px !important}
+.moz-text-html .hse-section .hse-size-9{max-width:450px !important;width:45=
+0px !important}
+.moz-text-html .hse-section .hse-size-12{max-width:600px !important;width:6=
+00px !important}
+[owa] .hse-column-container{max-width:600px !important;width:600px !importa=
+nt}[owa] .hse-column{display:table-cell;vertical-align:top}
+[owa] .hse-section .hse-size-3{max-width:150px !important;width:150px !impo=
+rtant}
+[owa] .hse-section .hse-size-4{max-width:200px !important;width:200px !impo=
+rtant}
+[owa] .hse-section .hse-size-8{max-width:400px !important;width:400px !impo=
+rtant}
+[owa] .hse-section .hse-size-9{max-width:450px !important;width:450px !impo=
+rtant}
+[owa] .hse-section .hse-size-12{max-width:600px !important;width:600px !imp=
+ortant}
+@media only screen and (min-width:640px){.hse-column-container{max-width:60=
+0px !important;width:600px !important}
+.hse-column{display:table-cell;vertical-align:top}.hse-section .hse-size-3{=
+max-width:150px !important;width:150px !important}
+.hse-section .hse-size-4{max-width:200px !important;width:200px !important}=
+.hse-section .hse-size-8{max-width:400px !important;width:400px !important}
+.hse-section .hse-size-9{max-width:450px !important;width:450px !important}=
+.hse-section .hse-size-12{max-width:600px !important;width:600px !important=
+}
+}@media only screen and (max-width:639px){img.stretch-on-mobile,.hs_rss_ema=
+il_entries_table img,.hs-stretch-cta .hs-cta-img{height:auto !important;wid=
+th:100% !important}
+.display_block_on_small_screens{display:block}.hs_padded{padding-left:20px =
+!important;padding-right:20px !important}
+ul,blockquote{margin:0;padding:1em 40px}}@media screen and (max-width:639px=
+){.social-network-cell{display:inline-block}
+}</style><!--<![endif]--><style type=3D"text/css">body[data-outlook-cycle] =
+img.stretch-on-mobile,body[data-outlook-cycle] .hs_rss_email_entries_table =
+img{height:auto !important;width:100% !important}
+body[data-outlook-cycle] .hs_padded{padding-left:20px !important;padding-ri=
+ght:20px !important}
+a[x-apple-data-detectors]{color:inherit !important;text-decoration:none !im=
+portant;font-size:inherit !important;font-family:inherit !important;font-we=
+ight:inherit !important;line-height:inherit !important}
+#outlook a{padding:0}.yshortcuts a{border-bottom:none !important}a{text-dec=
+oration:underline}
+.ExternalClass{width:100%}.ExternalClass,.ExternalClass p,.ExternalClass td=
+,.ExternalClass div,.ExternalClass span,.ExternalClass font{line-height:100=
+%}
+p{margin:0}body{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-we=
+bkit-font-smoothing:antialiased;moz-osx-font-smoothing:grayscale}</style></=
+head>
+  <body bgcolor=3D"#FFFFFF" style=3D"margin:0 !important; padding:0 !import=
+ant; font-family:Arial, sans-serif; font-size:15px; color:#23496d; word-bre=
+ak:break-word">
+   =20
+<div id=3D"preview_text" style=3D"display:none;font-size:1px;color:#FFFFFF;=
+line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">Co=
+here Rerank improves search results with easy integration. We are partnerin=
+g with LivePerson to revolutionize the way enterprises deploy LLMs...</div>
+   =20
+<!--[if gte mso 9]>
+<v:background xmlns:v=3D"urn:schemas-microsoft-com:vml" fill=3D"t">
+ =20
+    <v:fill type=3D"tile" size=3D"100%,100%"  color=3D"#ffffff"/>
+ =20
+</v:background>
+<![endif]-->
+    <div class=3D"hse-body-background" style=3D"background-color:#ffffff" b=
+gcolor=3D"#ffffff">
+      <table role=3D"presentation" class=3D"hse-body-wrapper-table" cellpad=
+ding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; border-c=
+ollapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; margin:0; pad=
+ding:0; width:100% !important; min-width:320px !important; height:100% !imp=
+ortant" width=3D"100%" height=3D"100%">
+        <tbody><tr>
+          <td class=3D"hse-body-wrapper-td" valign=3D"top" style=3D"border-=
+collapse:collapse; mso-line-height-rule:exactly; font-family:Arial, sans-se=
+rif; font-size:15px; color:#23496d; word-break:break-word">
+            <div id=3D"hs_cos_wrapper_main" class=3D"hs_cos_wrapper hs_cos_=
+wrapper_widget hs_cos_wrapper_type_dnd_area" style=3D"color: inherit; font-=
+size: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widget" d=
+ata-hs-cos-type=3D"dnd_area">  <div id=3D"section-0" class=3D"hse-section h=
+se-section-first" style=3D"padding-left:10px; padding-right:10px; padding-t=
+op:20px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-0-0" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:20px 20px 0px"><div id=3D"hs_cos_wrapper_module-0-0-0" class=3D"hs_=
+cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"colo=
+r: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-general-=
+type=3D"widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wrapper_modul=
+e-0-0-0_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type=
+_rich_text" style=3D"color: inherit; font-size: inherit; line-height: inher=
+it;" data-hs-cos-general-type=3D"widget" data-hs-cos-type=3D"rich_text"><p =
+style=3D"mso-line-height-rule:exactly; font-size:15px; line-height:150%"><s=
+pan style=3D"font-family: Helvetica, Arial, sans-serif; color: #000000;">We=
+lcome to Cohere=E2=80=99s monthly newsletter, where we share the latest upd=
+ates in the world of language AI.</span></p></div></div></td></tr></tbody><=
+/table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-1" class=3D"hse-section" style=3D"padding-left:10px; p=
+adding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff; padding-bottom:10px; =
+padding-top:10px" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;padding-bottom:10px; padding-top:=
+10px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-1-0" class=3D"hse-column hse-size-12">
+  <div id=3D"hs_cos_wrapper_module-1-0-0" class=3D"hs_cos_wrapper hs_cos_wr=
+apper_widget hs_cos_wrapper_type_module" style=3D"color: inherit; font-size=
+: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widget" data-=
+hs-cos-type=3D"module">
+=09
+<table class=3D"hse-image-wrapper" role=3D"presentation" width=3D"100%" cel=
+lpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; bord=
+er-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt">
+    <tbody>
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"border-collapse:co=
+llapse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; color:=
+#23496d; word-break:break-word; text-align:center; padding:0px 0px 10px; fo=
+nt-size:0px">
+               =20
+                <img alt=3D"Hubspot Email Header-Mar-09-2023-02-44-46-8477-=
+AM" src=3D"https://email.cohere.ai/hs-fs/hubfs/Hubspot%20Email%20Header-Mar=
+-09-2023-02-44-46-8477-AM.jpg?width=3D1200&amp;upscale=3Dtrue&amp;name=3DHu=
+bspot%20Email%20Header-Mar-09-2023-02-44-46-8477-AM.jpg" style=3D"outline:n=
+one; text-decoration:none; -ms-interpolation-mode:bicubic; max-width:100%; =
+font-size:16px" width=3D"600" align=3D"middle" class=3D"stretch-on-mobile" =
+srcset=3D"https://email.cohere.ai/hs-fs/hubfs/Hubspot%20Email%20Header-Mar-=
+09-2023-02-44-46-8477-AM.jpg?upscale=3Dtrue&amp;width=3D1200&amp;upscale=3D=
+true&amp;name=3DHubspot%20Email%20Header-Mar-09-2023-02-44-46-8477-AM.jpg 6=
+00w, https://email.cohere.ai/hs-fs/hubfs/Hubspot%20Email%20Header-Mar-09-20=
+23-02-44-46-8477-AM.jpg?upscale=3Dtrue&amp;width=3D2400&amp;upscale=3Dtrue&=
+amp;name=3DHubspot%20Email%20Header-Mar-09-2023-02-44-46-8477-AM.jpg 1200w"=
+ sizes=3D"(max-width: 600px) 100vw, 600px">
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-2" class=3D"hse-section" style=3D"padding-left:10px; p=
+adding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff; padding-bottom:40px; =
+padding-top:20px" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;padding-bottom:40px; padding-top:=
+20px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-2-0" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:10px 20px"><div id=3D"hs_cos_wrapper_module-2-0-0" class=3D"hs_cos_=
+wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"color: i=
+nherit; font-size: inherit; line-height: inherit;" data-hs-cos-general-type=
+=3D"widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wrapper_module-2-=
+0-0_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_ric=
+h_text" style=3D"color: inherit; font-size: inherit; line-height: inherit;"=
+ data-hs-cos-general-type=3D"widget" data-hs-cos-type=3D"rich_text"><p styl=
+e=3D"mso-line-height-rule:exactly; line-height:175%"><span style=3D"color: =
+#000000;">Greetings, Language AI Leaders,</span></p>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%">&nbsp;</p>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=3D"=
+color: #000000;">Are you tired of irrelevant search results in your organiz=
+ation's keyword-based systems? <a href=3D"https://email.cohere.ai/e3t/Ctc/2=
+N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213q3n5V1-WJV7CgRXn=
+W4BS6l11Gk0W9W12B8VQ1gg4SRN1KM53zLq_PXW8GFZGS4Qp4c5W5F0fqG69p4F4W847f4p8KYd=
+b0VGzfBZ7jZls_N3gBg_SXr_G3N88MmWFc_vTkM5CGH-Xfv8WW1lfs4-7KQ3_GW2F0ZBP9cLnr4=
+W12W4cm4kdM3FW88TJ784ZPthMW81bbZ146mwPKW6vwF9N8Mr70vVhWC5V2BvwtKW3J6PLw4YKD=
+DtW2cZN1L2KDClMW7TYl5D63cykb3cFy1" style=3D"mso-line-height-rule:exactly; c=
+olor:#00a4bd" data-hs-link-id=3D"0" target=3D"_blank">Introducing Cohere Re=
+rank</a>, an innovative solution providing accurate, relevant results. Inte=
+grate semantic search technology into your existing system with one line of=
+ code, improving search quality in 100+ languages without altering the infr=
+astructure. Experience <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2=
+t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213q3n5V1-WJV7CgR1mW3-S-Tl6=
+k-zXfW4rf3zx3qqBv4W570cvk8-gyjhW3JdJYj8zmZG4W4F9dgw58YrL7W98rZ6340YgL-W6B3g=
+Fz526RlYW4-DS1w7XpfyLN3RnyFDH1_WZW7jVjdN3rswcBW4FZNfB2SjcgYW1kvfp-2QZKqKW3g=
+bYMW8JVh7GVwxrp186Gn5KW7LMtJZ5sXGFrW6sN1Sf7MXk3CW584pKQ6xpSkwW4Pbkfq1DkM-FN=
+2V65nGb38cFW2gGMHf7FHl0_35411" style=3D"mso-line-height-rule:exactly; color=
+:#00a4bd" data-hs-link-id=3D"0" target=3D"_blank">Rerank's high-performance=
+ solution today</a>!</span></p>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%">&nbsp;</p>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=3D"=
+color: #000000;">In other news, we're thrilled to share that for the second=
+ year in a row, we've made it to <a href=3D"https://email.cohere.ai/e3t/Ctc=
+/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2k3q3npV1-WJV7CgX=
+vMN1Y1K6bWBctnN5KR5KSppNV4W5Y_ZH26nfqfwW7KrhjZ8dVTYZW2MhFcC1hyQxLW5Scz3F7NF=
+NxdMsLtpslRnPfW8tbbKY7rxv64VvF3Bc3NFwl0W4N1fCH1bZ5WyW4XVlFz2dpPqKW8jxxv21V-=
+JXyW2GGjrD1B9lcpW1nzkSB36jbf-Vl6PHR3pZZ3JW8NmtD94LKWLbW2Gf-lf6WRJY1W14-nnb5=
+8y_PHW8F5kYT87j6pGW6RCKjB7QtbHFW7nYDPC7zGp7bW7ZPfvz65z_-T3pm71" style=3D"ms=
+o-line-height-rule:exactly; color:#00a4bd" data-hs-link-id=3D"0" target=3D"=
+_blank">Forbes AI 50</a>! Cohere is working hard to make language AI access=
+ible to businesses and developers alike.&nbsp;&nbsp;</span><br><br></p>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=3D"=
+font-size: 15px;"><span style=3D"color: #000000;">Next, we are </span><a hr=
+ef=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhS=
+WbW1PHNH54-8zKRN2z6H3c3q3phV1-WJV7CgHy0N7HlGS_K84_NVG8Z_P1z_53KW4XngDX4WS1w=
+hW8gzdB35D2HYcW5tmfgg5msNp1W3fjHSq6jyC3mW585hkB8wN78-W7bHRMF6H7yMTW5b9pPV6z=
+dmCPW7lLlnz5yXYdkVJk1m868pyRGW58HBBr5PCyLRW6l9tbr938XLWW4FW2Pv4C8jRQW6-r4Gt=
+7z9_DRM_LnKcd9sxhVzpHHd44kX1-W7zL7426-Rpp_W2JN9rH2s2JSyW2Z4hdM2CRpbLVjG_D_3=
+Zhd6VW4CpgDq2fs2pwV7zrXz5Fg_1RW81hW_T6TJwd9W7ZSB902ssbbxW7CvRqk1vXcv2M4Zf0C=
+tl_84W5BYdZ32XDRsq32py1" style=3D"mso-line-height-rule:exactly; color:#00a4=
+bd" data-hs-link-id=3D"0" target=3D"_blank">collaborating with conversation=
+al AI company LivePerson</a><span style=3D"color: #000000;"> to enhance Coh=
+ere's LLM technology. This partnership focuses on addressing bias, increasi=
+ng explainability, and minimizing AI hallucinations, aiming to improve how =
+enterprises implement LLMs.</span></span></p></div></div></td></tr></tbody>=
+</table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section_1683128292583" class=3D"hse-section" style=3D"padding-=
+left:10px; padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column_1683128292583_0" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:10px 20px"><div id=3D"hs_cos_wrapper_module_16831282925036" class=
+=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=
+=3D"color: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-=
+general-type=3D"widget" data-hs-cos-type=3D"module">
+<!--[if gte mso 9]>
+<div style=3D"line-height: 0; font-size: 0px">
+  <v:rect xmlns:v=3D"urn:schemas-microsoft-com:vml" fill=3D"true" stroke=3D=
+"false" style=3D"width:560px; height:2pt;" fillcolor=3D"none">
+    <v:fill type=3D"tile"/>
+    <v:textbox inset=3D"0,0,0,0">
+      <div>
+<![endif]-->
+<table role=3D"presentation" width=3D"100%" align=3D"center" border=3D"0" s=
+tyle=3D"position:relative; top:-1px; min-width:20px; width:100%; max-width:=
+100%; border-spacing:0; mso-table-lspace:0pt; mso-table-rspace:0pt; border-=
+collapse:collapse; font-size:1px">
+  <tbody><tr>
+   =20
+   =20
+   =20
+    <td width=3D"100%" valign=3D"middle" style=3D"border-collapse:collapse;=
+ mso-line-height-rule:exactly; font-family:Arial, sans-serif; font-size:15p=
+x; color:#23496d; word-break:break-word; line-height:0; border:transparent;=
+ border-bottom:2px solid #ccc; mso-border-bottom-alt:2pt solid #ccc; border=
+-bottom-width:2px"><!--[if mso 16]>&nbsp;<![endif]--></td>
+   =20
+   =20
+  </tr>
+</tbody></table>
+<!--[if gte mso 9]></div></v:textbox></v:rect></div><![endif]--></div></td>=
+</tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-3" class=3D"hse-section" style=3D"padding-left:10px; p=
+adding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff; padding-bottom:10px" =
+bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;padding-bottom:10px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-3-0" class=3D"hse-column hse-size-12">
+  <div id=3D"hs_cos_wrapper_module-3-0-0" class=3D"hs_cos_wrapper hs_cos_wr=
+apper_widget hs_cos_wrapper_type_module" style=3D"color: inherit; font-size=
+: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widget" data-=
+hs-cos-type=3D"module">
+=09
+<table class=3D"hse-image-wrapper" role=3D"presentation" width=3D"100%" cel=
+lpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; bord=
+er-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt">
+    <tbody>
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"border-collapse:co=
+llapse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; color:=
+#23496d; word-break:break-word; text-align:center; padding:20px 0px 10px; f=
+ont-size:0px">
+               =20
+                <img alt=3D"Whats New in NLP" src=3D"https://email.cohere.a=
+i/hs-fs/hubfs/Whats%20New%20in%20NLP.png?width=3D1200&amp;upscale=3Dtrue&am=
+p;name=3DWhats%20New%20in%20NLP.png" style=3D"outline:none; text-decoration=
+:none; -ms-interpolation-mode:bicubic; max-width:100%; font-size:16px" widt=
+h=3D"600" align=3D"middle" srcset=3D"https://email.cohere.ai/hs-fs/hubfs/Wh=
+ats%20New%20in%20NLP.png?upscale=3Dtrue&amp;width=3D1200&amp;upscale=3Dtrue=
+&amp;name=3DWhats%20New%20in%20NLP.png 600w, https://email.cohere.ai/hs-fs/=
+hubfs/Whats%20New%20in%20NLP.png?upscale=3Dtrue&amp;width=3D2400&amp;upscal=
+e=3Dtrue&amp;name=3DWhats%20New%20in%20NLP.png 1200w" sizes=3D"(max-width: =
+600px) 100vw, 600px">
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-4" class=3D"hse-section" style=3D"padding-left:10px; p=
+adding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff; padding-bottom:20px; =
+padding-top:20px" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;padding-bottom:20px; padding-top:=
+20px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-4-0" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:20px 20px 40px"><div id=3D"hs_cos_wrapper_module-4-0-0" class=3D"hs=
+_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"col=
+or: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-general=
+-type=3D"widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wrapper_modu=
+le-4-0-0_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_typ=
+e_rich_text" style=3D"color: inherit; font-size: inherit; line-height: inhe=
+rit;" data-hs-cos-general-type=3D"widget" data-hs-cos-type=3D"rich_text"><u=
+l style=3D"mso-line-height-rule:exactly; line-height:175%">
+<li style=3D"mso-line-height-rule:exactly"><span style=3D"color: #000000;">=
+The advantages of Language AI for businesses are becoming increasingly appa=
+rent. <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86Pf=
+JrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2D3q3nJV1-WJV7CgCqBW1-_6xb1v_ZLwW7fBQWf76lGp=
+VVv6zGn393SfnN1wVG3q_qh64W3jNLhX2sJpd_W46cqkm83f7DcW15lRKQ9bbrrMN7ZljydwdRX=
+dW36J-pF8GCVGFN1Dzh9SVq7b_N8_Nh5zPJ-HtW8Fd9sq61ccPcW45bJr92F4XLNW3vbXwD4n9_=
+gWVSCrvp8DlHxwW3ML-g22_f1GqW8-NRFd4YYNyGVtYt-z4kjg-pW7G3Sqr54N4DSW4Q44pw8G-=
+64TW4RHBY41MwMdrW1p8gPT4hzWGbW3Hc-v-7QrdWWVwrj3K3RLDwB368h1" style=3D"mso-l=
+ine-height-rule:exactly; color:#00a4bd" data-hs-link-id=3D"0" target=3D"_bl=
+ank">A research report by the NBER</a> demonstrates that a contact center e=
+xperienced a 14% productivity increase by employing a language AI model. In=
+terestingly, lower-skilled workers benefited more than their high-skilled c=
+ounterparts. We anticipate many more examples of successful LLM implementat=
+ions in the near future, and we=E2=80=99ll share the highlights with you in=
+ this newsletter.&nbsp;</span></li>
+<li style=3D"mso-line-height-rule:exactly"><span style=3D"color: #000000;">=
+A key challenge to improving the performance and visibility of LLMs is the =
+use of current, factual data from external sources (the term is retrieval a=
+ugmented language models). In the paper, <a href=3D"https://email.cohere.ai=
+/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213q3n5V1=
+-WJV7CgNRtW7fkLgp1gzhHJW5DXxzL2WL0T9W5wv6lz89z-MHW2dMSzK1b0pp7N2vsMHkYn9WnW=
+4jTx7s5TFK-qW1vMzkG4B9L-HVRWPSb2MY42SW4Nfl8C5jm6RmW42t__G8P6kRJW7d4shv3PpHD=
+2W9dwLHt8pH1WZV4Bcbl2Z3k9HN6jZKTgfkB-lW3XlqPP7378mMN8f7NFV7gvy1W7mFQzx2Jg5h=
+VW6LpwwG3wqz-yW6NGlT-38qwrvW3wzBd53dHf8t3l_S1" style=3D"mso-line-height-rul=
+e:exactly; color:#00a4bd" data-hs-link-id=3D"0" target=3D"_blank">Shall We =
+Pretrain Autoregressive Language Models with Retrieval? A Comprehensive Stu=
+dy</a>, the retrieval-augmented models significantly outperformed GPT model=
+s on knowledge-intensive tasks, as well as other metrics. We expect substan=
+tial technological progress in the coming months.</span></li>
+<li style=3D"mso-line-height-rule:exactly"><span style=3D"color: #000000;">=
+Another adjacent area in retrieval-augmented generation is generative searc=
+h, which uses generative AI to create fluent and contextual responses based=
+ on user queries. Technology media expects this to be a threat to tradition=
+al search engines. This paper <a href=3D"https://email.cohere.ai/e3t/Ctc/2N=
++113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213q3n5V1-WJV7CgCDbW=
+84dpqt3Zs7F_Vb6JB92GdQ9-W3Gd1qw5v536TW39m-hv8Cz1BfW55snrK83ZBhmW5rBs4B2jPD0=
+MW1ZzMvb6Qv6QYVCfDHL9k-K_KW5jxrds55w_sgW6HW2j27nY6JyW4jdhS84gckbXW3TfKCB4V5=
+vT4W8Yygyf6nSYYBV5QbD36dBcQgVppnfN82sJQ1W1DqrGt3DdnN1W3GKhKk1nhmbRW72RZDx5K=
+jGrDW8VYpGQ8gL1TVW4GjNw56wjblR3pTJ1" style=3D"mso-line-height-rule:exactly;=
+ color:#00a4bd" data-hs-link-id=3D"0" target=3D"_blank">Evaluating Verifiab=
+ility in Generative Search Engines</a> examines and finds these young produ=
+cts to generate fluent text, but they often contain unsupported statements =
+and inaccurate citations, which outlines clear areas for future improvement=
+s of these systems.</span></li>
+<li style=3D"mso-line-height-rule:exactly"><span style=3D"color: #000000;">=
+In <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrM=
+FzN6DYhSWbW1PHNH54-8zKRN2z6H2k3q3npV1-WJV7CgZ5kN7Tfqh2WJgFHN6xM4mZNSt38W7QT=
+JNk2dyn7JW4w-rG14dK-01W8QW1Zw38PRxJW4-B_2V1vB6ymW7054Ht2dMvCmW2gxpdG7wTPRCW=
+2Zn7dZ8js1BWW7_j2-d7Z-xb9W18Tgkx66wjv1W6Z0cHp2CcqR-Vq0sZg4LFL9dW6DDGS_7mQT8=
+BW93TP_T125J7_W73mncw8KbdgPVGjxw37BTnzCW82vmfh1ZT_7TVfjmWl3rjlvHW2FDw5C62FT=
+rtW7rHdGz8HMBqnW8zKPX59hWH8H3j181" style=3D"mso-line-height-rule:exactly; c=
+olor:#00a4bd" data-hs-link-id=3D"0" target=3D"_blank">More Design Patterns =
+For Machine Learning Systems</a>, <a href=3D"https://email.cohere.ai/e3t/Ct=
+c/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213q3n5V1-WJV7Cg=
+Kp0N60Q9NrqKMdwW3bZG5W3q4cv7W7K3lRl7z5NPWW8nmwhL4yhCXlW5gmxJG6zz75VW3p10R44=
+CFLjmW1TrwGp3myZVWW4N3S-h7fzBvZVr6bdw8_DTK8W7tfMYw1Q1kPgW1DfqZF2zSdphVVrC9r=
+2fDHdBW7SMfxT1Pbqs9W6YtvTY17ZZz4N5fmHGx8kJQWN6yld9_GYvhyW2k7F3q5rxYWvW94xLg=
+V4QZ2RgW3ZSLwr6HH9SvN8yz_fXgvD0n31tD1" style=3D"mso-line-height-rule:exactl=
+y; color:#000000" data-hs-link-id=3D"0" target=3D"_blank">Eugene Yan</a> sh=
+ares a number of design patterns for machine learning systems, which are re=
+usable, time-tested solutions to common problems in software engineering, i=
+ncluding Process Raw Data Only Once, Human-In-The-Loop, Data Augmentation, =
+Hard Negative Mining, amongst others.</span></li>
+<li style=3D"mso-line-height-rule:exactly"><span style=3D"font-size: 15px; =
+color: #000000;">Also, don't miss out on Cohere For AI <a href=3D"https://e=
+mail.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKR=
+N2z6H2X3q3n_V1-WJV7CgL07W76dvBY739zd_W3tKHg14v424QW8-7sNN4cpHvKW3QW_sM92XSQ=
+jW6Rrqyq7VWhtjW5DZD158-ClVjW13BT2143k4N9W928n_G8MsjWfW3gMQvg1y9FTWW1yN55j53=
+2KQ7W8tMNCk4scPxFN7CP6hj5-WWfW7XJD8j3s1llKW15Xw2Q8jsSRxW54J0C-4LYh3wW3_rYcQ=
+8wckR1W8_FB032k0F2lV-bC2j7hlQwpW8S4rmM16tRpdW6qKKRc3kRzVLW6qCpTN84gQ5wW7csl=
+m36WKCV_W7zTkSb5jRP2fW9kDrdQ88hKVTW7zZ47-12VPMYN5xDvtyJltB73h7y1" style=3D"=
+mso-line-height-rule:exactly; color:#00a4bd" data-hs-link-id=3D"0" target=
+=3D"_blank">community's top NLP research picks for March</a>. From embodied=
+ multimodal language models like PaLM-E that tackle the challenge of ground=
+ing language models in real-world robotic applications to the impressive Vi=
+d2Seq architecture that leverages narrated videos for dense video captionin=
+g, researchers are working to continuously expand the horizons of NLP.</spa=
+n></li>
+</ul></div></div></td></tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-8" class=3D"hse-section" style=3D"padding-left:10px; p=
+adding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#FFFFFF" bgcolor=3D"#FFFFFF">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#FFFFFF">
+      <tr style=3D"background-color:#FFFFFF;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-8-0" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:10px 20px"><div id=3D"hs_cos_wrapper_module_16799457100142" class=
+=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=
+=3D"color: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-=
+general-type=3D"widget" data-hs-cos-type=3D"module">
+<!--[if gte mso 9]>
+<div style=3D"line-height: 0; font-size: 0px">
+  <v:rect xmlns:v=3D"urn:schemas-microsoft-com:vml" fill=3D"true" stroke=3D=
+"false" style=3D"width:560px; height:2pt;" fillcolor=3D"none">
+    <v:fill type=3D"tile"/>
+    <v:textbox inset=3D"0,0,0,0">
+      <div>
+<![endif]-->
+<table role=3D"presentation" width=3D"100%" align=3D"center" border=3D"0" s=
+tyle=3D"position:relative; top:-1px; min-width:20px; width:100%; max-width:=
+100%; border-spacing:0; mso-table-lspace:0pt; mso-table-rspace:0pt; border-=
+collapse:collapse; font-size:1px">
+  <tbody><tr>
+   =20
+   =20
+   =20
+    <td width=3D"100%" valign=3D"middle" style=3D"border-collapse:collapse;=
+ mso-line-height-rule:exactly; font-family:Arial, sans-serif; font-size:15p=
+x; color:#23496d; word-break:break-word; line-height:0; border:transparent;=
+ border-bottom:2px solid #CCCCCC; mso-border-bottom-alt:2pt solid #CCCCCC; =
+border-bottom-width:2px"><!--[if mso 16]>&nbsp;<![endif]--></td>
+   =20
+   =20
+  </tr>
+</tbody></table>
+<!--[if gte mso 9]></div></v:textbox></v:rect></div><![endif]--></div></td>=
+</tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"module_1683123424687" class=3D"hse-section" style=3D"padding-l=
+eft:10px; padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"module_1683123424687_0" class=3D"hse-column hse-size-12">
+  <div id=3D"hs_cos_wrapper_module_16831234246274" class=3D"hs_cos_wrapper =
+hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"color: inherit; =
+font-size: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widg=
+et" data-hs-cos-type=3D"module">
+=09
+<table class=3D"hse-image-wrapper" role=3D"presentation" width=3D"100%" cel=
+lpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; bord=
+er-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt">
+    <tbody>
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"border-collapse:co=
+llapse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; color:=
+#23496d; word-break:break-word; text-align:center; padding:0px; font-size:0=
+px">
+               =20
+                <img alt=3D"Community Section" src=3D"https://email.cohere.=
+ai/hs-fs/hubfs/General%20Use%20Graphics/Newsletter/Community%20Section.jpg?=
+width=3D1200&amp;upscale=3Dtrue&amp;name=3DCommunity%20Section.jpg" style=
+=3D"outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; max=
+-width:100%; font-size:16px" width=3D"600" align=3D"middle" srcset=3D"https=
+://email.cohere.ai/hs-fs/hubfs/General%20Use%20Graphics/Newsletter/Communit=
+y%20Section.jpg?upscale=3Dtrue&amp;width=3D1200&amp;upscale=3Dtrue&amp;name=
+=3DCommunity%20Section.jpg 600w, https://email.cohere.ai/hs-fs/hubfs/Genera=
+l%20Use%20Graphics/Newsletter/Community%20Section.jpg?upscale=3Dtrue&amp;wi=
+dth=3D2400&amp;upscale=3Dtrue&amp;name=3DCommunity%20Section.jpg 1200w" siz=
+es=3D"(max-width: 600px) 100vw, 600px">
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"module_1683123459190" class=3D"hse-section" style=3D"padding-l=
+eft:10px; padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff; padding-bottom:10px; =
+padding-top:20px" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;padding-bottom:10px; padding-top:=
+20px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"module_1683123459190_0" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:20px 20px 40px"><div id=3D"hs_cos_wrapper_module_16831234591445" cl=
+ass=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" sty=
+le=3D"color: inherit; font-size: inherit; line-height: inherit;" data-hs-co=
+s-general-type=3D"widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wra=
+pper_module_16831234591445_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget =
+hs_cos_wrapper_type_rich_text" style=3D"color: inherit; font-size: inherit;=
+ line-height: inherit;" data-hs-cos-general-type=3D"widget" data-hs-cos-typ=
+e=3D"rich_text"><p style=3D"mso-line-height-rule:exactly; line-height:175%"=
+><span style=3D"color: #000000;">Dive into the latest demos created by the =
+Cohere community:&nbsp;</span></p>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%">&nbsp;</p>
+<ol style=3D"mso-line-height-rule:exactly; line-height:175%">
+<li aria-level=3D"1" style=3D"mso-line-height-rule:exactly"><span style=3D"=
+color: #000000;">JeremyKirshbaum#6893 launched <a href=3D"https://email.coh=
+ere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213=
+q3n5V1-WJV7CgzTtN6_sPVC-cRhzW1PxJTx5PbLPbW2SdBlh15tyd_W80c0rr1vl3gjW3SGzVS3=
+W2K6YW3nRvnN36NkV6VXbwpv79VpLYW1bsnrQ4phc6YW74gT1b8mXd2RW7pJ6RB5CWrgzW5dhT7=
+c1VMVLkW6jj2Py7q4wvYW2Q11p07hRM2MW24VVgT4v3GdYN3KMXKkd1kx2TP9sm6642n_W3f478=
+G2zMYNqW2WR3Bh9dcYvFW5rMLQH69JtD3W8Z28gQ2CX1Y638jY1" style=3D"mso-line-heig=
+ht-rule:exactly; color:#00a4bd" data-hs-link-id=3D"0" target=3D"_blank">Lib=
+rary of Babel</a>, which =E2=80=9Cis somewhere between a prompt Wikipedia a=
+nd an AI Reddit=E2=80=9D for collective prompt exploration. Just drop your =
+Cohere API key in the playground and go <a href=3D"https://email.cohere.ai/=
+e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2D3q3nJV1-=
+WJV7CgGlpW7_TQKq1w6YvkW6TD9Wk1zN-vlVhYDFW2FGS9xW8vpMFn5Rn4jRW5YcQDz55s8s8W3=
+J-Ppp1K3fkZW194P6D4HwyBJW1FJt0y6t5mZPVVmh2t2thwL6N2bWV0Sl-KcnW8C9V9n2X1gGyW=
+95B5Rl5QCvGtW2_S94h95jY00W8WZRhg7xQ25lW78W6w96LhWcNW8k0rhT18ZdY2W8S70jP5430=
+ZsW4zdMM76ySD5JW91D-pZ1zjDS-W6ZvQf662kDpdW8L9BBp3mDq0KW8klkTZ2zb1ynW4WyNzS3=
+XGzthW2DbJ471bwHzv2Yc1" style=3D"mso-line-height-rule:exactly; color:#00a4b=
+d" data-hs-link-id=3D"0" target=3D"_blank">create some prompts</a>!&nbsp;</=
+span></li>
+<li aria-level=3D"1" style=3D"mso-line-height-rule:exactly"><span style=3D"=
+color: #000000;">michaelwechner#6901 built of off <a href=3D"https://email.=
+cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H=
+2k3q3npV1-WJV7CgTYxW2wM_552fnTFwW3_XMFX3jJkFkV_ngyX8Z7vdBN8xrQgLQ5qjQMw4TZl=
+mBk3XN8J6PcflWVDbW2bH9716fCvW5N6dRzVms6hsSW6v0MF44mcPdMW5JPS-S73cYl8W7vymR9=
+2brnK0N7sjq5xS4vNTW3D6V0V22HPvQN2L_20K7Gz0dW2_1Lbs3sQ076W62QNSv4cgCtnW9dr3g=
+118TpSWW2Pt_8K7wvdr8W1RWkwY5dLtblW7PhTN31blRHyW7YFW1B6lXrL2N66tNrCNmZFZ3csp=
+1" style=3D"mso-line-height-rule:exactly; color:#00a4bd" data-hs-link-id=3D=
+"0" target=3D"_blank">Cohere Wikipedia Embeddings Archives</a> and launched=
+ <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFz=
+N6DYhSWbW1PHNH54-8zKRN2z6H1L3q3mQV1-WJV7CgN2lW1VsnfX3wz7WHW37dBLC7tq-5WW4VV=
+-BQ2lKcGGM9XZvzBDdVyVK5Vmm68nGjCW5N8KQ-5tDVScV81drL95b86xW1dMf4y4m3WqbV7d60=
+Y7hFKMVW7fpHj65Kmlw4W8Gw63H1g2bZxW1rwgtv4R48mBW6_HsBc2VLZXNW94YLpR4Vfs3zW77=
+67Gq1Jcv9sW9kKRhg1QqZsbW83cMN57byxNFW7wRbkw6Q6TDN34Zt1" rel=3D"noopener" st=
+yle=3D"mso-line-height-rule:exactly; color:#00a4bd" data-hs-link-id=3D"0" t=
+arget=3D"_blank">Katie Bot</a>, a Wikipedia-Weaviate-Cohere hybrid that you=
+ can now test via <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg0=
+4/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H3c3q3phV1-WJV7CgL5RW5YQwFK3-gQk1=
+W1JF41v6Mj8c4W9k1rGz41bpzSW3hLWNM58dHtSW1hkwzJ5Gb9YlW7C86Br67gRxQW6Sqpst62F=
+GBVW29-WqR3bGQGdVdk6Hw5t8b56W5z7P0Y8Rz_LzW2Df4WN8bqyChW8mHJp78mG3TdW7mqMMG4=
+6PtwBW4PfzyT6H8DHYW6wXXkv7Cv1PtW6dWGH84gzRYyW6Ct4tf72q4yjW2dxn_67szl7SN87Rp=
+FW7KBDtW8W-xNv66HcM2V5Z6PZ17TX30W7mWPsD4wKB_1W5QXWh31HqdNXW5gblD-8Zb8TjW358=
+sTL7VwL0MW4Hzx6C7vVZQQW80RDcF59zgmhN4382WYvX5tc3nCz1" style=3D"mso-line-hei=
+ght-rule:exactly; color:#00a4bd" data-hs-link-id=3D"0" target=3D"_blank">Di=
+scord</a> and Slack.&nbsp;</span></li>
+<li aria-level=3D"1" style=3D"mso-line-height-rule:exactly"><span style=3D"=
+color: #000000;">On a similar note, Kwadwo#8015 took inspiration from our C=
+hampion=E2=80=99s <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg0=
+4/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2D3q3nJV1-WJV7CgzFSW2FR4_C2T7g8r=
+W70ZrMC24tSpSVTzF0s6M56kbW1vbCWy6V4PCzW1J2m392_gSK5W91-4QS6wnnW1W4knGsG2D93=
+qwW5Kdlvj6Vtvs7W6sS-yD95Zj9HW8tqPcW2tP0HHW2rSBz96SZHWmW8NSstk1-KkSJW3rXddf4=
+6FLWbW7Zd6TG8x7sTLW8MKRBk1wDN60W2lSMNn5JryHrW26tn_Z4TqtrnW25Sp1q63RRGTVc9RM=
+R6XMdzLW62x_QL3smb3JVJz21m2mWSD-W4XPC9H801XByN2j-15JfHk39N7fK6GbVd16h34r31"=
+ style=3D"mso-line-height-rule:exactly; color:#00a4bd" data-hs-link-id=3D"0=
+" target=3D"_blank">Elle Neal's work on Cofinder</a>, and expanded it to cr=
+eate <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJ=
+rMFzN6DYhSWbW1PHNH54-8zKRN2z6H2D3q3nJV1-WJV7CgB6dW1hPyZ31Z-YsYVJGYYF5ptdTdN=
+81DG_tLmgM7W1TzD663ZVHf7V2Yzsn5GtTrSVySb0k6TPJbjW6zK39l7N9YYGN4j09YyJR-J0W8=
+R0Ggw3rSG-zN3SGLmx3-Yg7W7PyFwk8q-43hW63c_0c2Y_DfmW5rhBBF5Ld8R-W2H1lk73nFh8B=
+W8Ss3PJ3HltjMW26wJ125bNf8HW7N-BKX1Kn2TKW4Rg7BK6bm2vXN60GCkkjPN0_W7cZbYC2zRW=
+c7W4j46FX5M7GrrW1nj4xj5kYBz_N5fBCbwQ4jZjVhwdJ728nkHM3fy51" style=3D"mso-lin=
+e-height-rule:exactly; color:#00a4bd" data-hs-link-id=3D"0" target=3D"_blan=
+k">Document Cofinder</a>, a demo that let=E2=80=99s you apply semantic sear=
+ch to your own PDF documents. <a href=3D"https://email.cohere.ai/e3t/Ctc/2N=
++113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H3c3q3phV1-WJV7CgZMZN=
+8qgJWVdq71DVh_31C1htj3TW9j2Y-t40HTj4N14CVhJkJH3gW6F3jGx2h4nFGV6m_G-7vQKVlW5=
+mdPRZ7K8vsYMT1-7qQZJyKVC16KW5_y3BBN9ksqgj1d1QyW2NJS6c42cr3GW7H6dB213j6ZmW1j=
+d2hw2NFq7FW75Wnw38kmhc4W8Bqqrs4vkhgkW6j91Bv3jDg2kW8qxg8t5D1gf9W7hLvs910pnMC=
+W6J5-Pr3cthYQW8Qh9hP3mgHVVN3q-ZDKSqqZzW1hK0Pc4F7lrFN5CJnr1z0l52W63BDbm8dHS0=
+fW5X_4cy115Qf8W3Hkldl7VJ61JVL4cf085Q9YgN5wTH3-zWGl52L91" style=3D"mso-line-=
+height-rule:exactly; color:#00a4bd" data-hs-link-id=3D"0" target=3D"_blank"=
+>Try it out</a> and share your feedback!&nbsp;&nbsp;</span></li>
+<li aria-level=3D"1" style=3D"mso-line-height-rule:exactly"><span style=3D"=
+color: #000000;">Our Champion Sonam Gupta wrote an article <a href=3D"https=
+://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-=
+8zKRN2z6H3c3q3phV1-WJV7CgNnRW5HWs2H3nYSZYW3-ZLvs5MtlK4W2sbg7Q47mXq-W9fH9tG5=
+MD9hjW4tdcJf80CZwZVGXHLr32Y5cQW4kyzn74ycpxpW4c-J3K52P1dYW8p8HT88YV-2_W6mVGR=
+b62vp75V-HZY55PL2CYW6qQCM33z2YFjW1q7wk94zXJ_LW8rQx7w1QQZCxW59f72C5cqQ3JVzBD=
+cf65x3B4W3fjkVV7g3sTMVP_9sV2QPfGrW69sPCK4rhg49W6nTHWc44tXnrW8nTpF56mTqVPV7J=
+Dhr8yg495W8bSslF7Cbdl5V_jG-l1hLxJ3VxWvJx1bNkPDN2hmqyP9pk6hW8D4byw3V6CxQW3My=
+kwl2Pj1q33kHK1" style=3D"mso-line-height-rule:exactly; color:#00a4bd" data-=
+hs-link-id=3D"0" target=3D"_blank">Cohere Embeddings with Weaviate Vector D=
+atabase</a> summarizing what she learned from our recent webinar hosted by =
+Cohere and Weaviate with Nils Reimers and Etienne Dilocker.</span></li>
+<li aria-level=3D"1" style=3D"mso-line-height-rule:exactly"><span style=3D"=
+color: #000000;">Our Champion Elle Neal <a href=3D"https://email.cohere.ai/=
+e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H3w3d40tV1-=
+WJV7CgX52W1Wfm8v5qfwd0W4KRGsY1Z7mtrW4z6Rbv3g3BpvW3jvWJ_7N-21hW7qth1h4v_HcKW=
+8xgt_V45yrv9W1GJj5Y8Vcq6KN5Pw1D0HDmfjMyBlKj2DskLW6hmv7b8lrn-dW1xNVMX97Hx1FW=
+7VTX3F7h1NTwW8xfCmh6QB4TGW3QQFXc8jQYWCW2PvKjS3bGhK6W3zFNHW8sY1-JW2_Wfs78CZp=
+zqW2pPbJC6QM4Q2W9fCwCz26kXjVW5Nhp9v5L0C7yW6YbBV25xXGDBVx9RsX8cTZl8VYpBf56pd=
+Qs9W81Dfgf5KKMKTW57FQ6N2R__mLN8kHD-RgQ9BpW37z7v-8sjWQpW8BQXQt3HGXJXW1jZsQP4=
+sBYhhW68fL3h8Fdy5N3m9Z1" style=3D"mso-line-height-rule:exactly; color:#00a4=
+bd" data-hs-link-id=3D"0" target=3D"_blank">worked on Databutton templates =
+for her AI apps that use Cohere API </a>(like her Cofinder semantic search =
+app), so you can now use them to get started with your own AI projects with=
+ ease!</span></li>
+</ol></div></div></td></tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section_16783369658944" class=3D"hse-section" style=3D"padding=
+-left:10px; padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#FFFFFF; padding-bottom:4px; p=
+adding-top:20px" bgcolor=3D"#FFFFFF">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#FFFFFF">
+      <tr style=3D"background-color:#FFFFFF;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:150px;padding-bottom:4px; padding-top:2=
+0px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"150" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:150px">
+<![endif]-->
+<div id=3D"column-0-0" class=3D"hse-column hse-size-3">
+  <div id=3D"hs_cos_wrapper_module_16783369658942" class=3D"hs_cos_wrapper =
+hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"color: inherit; =
+font-size: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widg=
+et" data-hs-cos-type=3D"module">
+=09
+<table class=3D"hse-image-wrapper" role=3D"presentation" width=3D"100%" cel=
+lpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; bord=
+er-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt">
+    <tbody>
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"border-collapse:co=
+llapse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; color:=
+#23496d; word-break:break-word; text-align:center; padding:24px 0px 10px; f=
+ont-size:0px">
+               =20
+                <img alt=3D"Discord_Symbol_#212121@2x" src=3D"https://email=
+.cohere.ai/hs-fs/hubfs/Discord_Symbol_%23212121@2x.png?width=3D160&amp;upsc=
+ale=3Dtrue&amp;name=3DDiscord_Symbol_%23212121@2x.png" style=3D"outline:non=
+e; text-decoration:none; -ms-interpolation-mode:bicubic; max-width:100%; fo=
+nt-size:16px" width=3D"80" align=3D"middle" srcset=3D"https://email.cohere.=
+ai/hs-fs/hubfs/Discord_Symbol_%23212121@2x.png?upscale=3Dtrue&amp;width=3D1=
+60&amp;upscale=3Dtrue&amp;name=3DDiscord_Symbol_%23212121@2x.png 80w, https=
+://email.cohere.ai/hs-fs/hubfs/Discord_Symbol_%23212121@2x.png?upscale=3Dtr=
+ue&amp;width=3D320&amp;upscale=3Dtrue&amp;name=3DDiscord_Symbol_%23212121@2=
+x.png 160w" sizes=3D"(max-width: 80px) 100vw, 80px">
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+<!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:450px;padding-bottom:4px; padding-top:2=
+0px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"450" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:450px">
+<![endif]-->
+<div id=3D"column-0-1" class=3D"hse-column hse-size-9">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:10px 20px"><div id=3D"hs_cos_wrapper_module_16783369658943" class=
+=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=
+=3D"color: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-=
+general-type=3D"widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wrapp=
+er_module_16783369658943_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget hs=
+_cos_wrapper_type_rich_text" style=3D"color: inherit; font-size: inherit; l=
+ine-height: inherit;" data-hs-cos-general-type=3D"widget" data-hs-cos-type=
+=3D"rich_text"><h2 style=3D"margin:0; mso-line-height-rule:exactly; font-si=
+ze:20px; line-height:175%"><span style=3D"font-family: Helvetica, Arial, sa=
+ns-serif; color: #212121;">Join the Cohere community on Discord!</span></h2=
+>
+<span style=3D"color: #212121;"> </span>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=3D"=
+font-family: Helvetica, Arial, sans-serif; color: #212121;">Want to explore=
+ more demos and collaborate with other NLP practitioners? <a href=3D"https:=
+//email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8=
+zKRN2z6H213q3n5V1-WJV7Cg-5LV52s_L2mZTL0V-Fp0G3tVMW3N7N1qzCrWYGrW5x2V4x1J8Tr=
+_W2_ZPmD85CCSxW8qM_dh1FJ1cvW4VmpRK4fKtb3W4lJFq83JpnH3N4CJD4M114bZW36Hpj083B=
+FbVV8BJDN7dRj_4W7jkwBW7rtwsRW8GnQGq6YKTlGVv8yMJ78cZkCW2K0VVB7YKF6GW1C1FtX5L=
+Sf9fW3J6x108jHZhmW5xVtXh22qv46W47q1qM8jdVG3W4qDxmL5pdPRf3qhz1" style=3D"mso=
+-line-height-rule:exactly; color:#212121" rel=3D"noopener" data-hs-link-id=
+=3D"0" target=3D"_blank">Join in on the conversation on our Discord</a></sp=
+an></p>
+<ul style=3D"mso-line-height-rule:exactly; line-height:175%"></ul></div></d=
+iv></td></tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section_1683128329163" class=3D"hse-section" style=3D"padding-=
+left:10px; padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column_1683128329163_0" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:10px 20px"><div id=3D"hs_cos_wrapper_module_16831283290827" class=
+=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=
+=3D"color: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-=
+general-type=3D"widget" data-hs-cos-type=3D"module">
+<!--[if gte mso 9]>
+<div style=3D"line-height: 0; font-size: 0px">
+  <v:rect xmlns:v=3D"urn:schemas-microsoft-com:vml" fill=3D"true" stroke=3D=
+"false" style=3D"width:560px; height:2pt;" fillcolor=3D"none">
+    <v:fill type=3D"tile"/>
+    <v:textbox inset=3D"0,0,0,0">
+      <div>
+<![endif]-->
+<table role=3D"presentation" width=3D"100%" align=3D"center" border=3D"0" s=
+tyle=3D"position:relative; top:-1px; min-width:20px; width:100%; max-width:=
+100%; border-spacing:0; mso-table-lspace:0pt; mso-table-rspace:0pt; border-=
+collapse:collapse; font-size:1px">
+  <tbody><tr>
+   =20
+   =20
+   =20
+    <td width=3D"100%" valign=3D"middle" style=3D"border-collapse:collapse;=
+ mso-line-height-rule:exactly; font-family:Arial, sans-serif; font-size:15p=
+x; color:#23496d; word-break:break-word; line-height:0; border:transparent;=
+ border-bottom:2px solid #ccc; mso-border-bottom-alt:2pt solid #ccc; border=
+-bottom-width:2px"><!--[if mso 16]>&nbsp;<![endif]--></td>
+   =20
+   =20
+  </tr>
+</tbody></table>
+<!--[if gte mso 9]></div></v:textbox></v:rect></div><![endif]--></div></td>=
+</tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-10" class=3D"hse-section" style=3D"padding-left:10px; =
+padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-10-0" class=3D"hse-column hse-size-12">
+  <div id=3D"hs_cos_wrapper_module-10-0-0" class=3D"hs_cos_wrapper hs_cos_w=
+rapper_widget hs_cos_wrapper_type_module" style=3D"color: inherit; font-siz=
+e: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widget" data=
+-hs-cos-type=3D"module">
+=09
+<table class=3D"hse-image-wrapper" role=3D"presentation" width=3D"100%" cel=
+lpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; bord=
+er-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt">
+    <tbody>
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"border-collapse:co=
+llapse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; color:=
+#23496d; word-break:break-word; text-align:center; padding:20px 0px 0px; fo=
+nt-size:0px">
+               =20
+                <img alt=3D"Whats new on the blog Top Cap" src=3D"https://e=
+mail.cohere.ai/hs-fs/hubfs/General%20Use%20Graphics/Newsletter/Whats%20new%=
+20on%20the%20blog%20Top%20Cap.jpg?width=3D1200&amp;upscale=3Dtrue&amp;name=
+=3DWhats%20new%20on%20the%20blog%20Top%20Cap.jpg" style=3D"outline:none; te=
+xt-decoration:none; -ms-interpolation-mode:bicubic; max-width:100%; font-si=
+ze:16px" width=3D"600" align=3D"middle" srcset=3D"https://email.cohere.ai/h=
+s-fs/hubfs/General%20Use%20Graphics/Newsletter/Whats%20new%20on%20the%20blo=
+g%20Top%20Cap.jpg?upscale=3Dtrue&amp;width=3D1200&amp;upscale=3Dtrue&amp;na=
+me=3DWhats%20new%20on%20the%20blog%20Top%20Cap.jpg 600w, https://email.cohe=
+re.ai/hs-fs/hubfs/General%20Use%20Graphics/Newsletter/Whats%20new%20on%20th=
+e%20blog%20Top%20Cap.jpg?upscale=3Dtrue&amp;width=3D2400&amp;upscale=3Dtrue=
+&amp;name=3DWhats%20new%20on%20the%20blog%20Top%20Cap.jpg 1200w" sizes=3D"(=
+max-width: 600px) 100vw, 600px">
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-11" class=3D"hse-section" style=3D"padding-left:10px; =
+padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#FFFFFF; padding-top:20px" bgc=
+olor=3D"#FFFFFF">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#FFFFFF">
+      <tr style=3D"background-color:#FFFFFF;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:200px;padding-top:20px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"200" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:200px">
+<![endif]-->
+<div id=3D"column-11-0" class=3D"hse-column hse-size-4">
+  <div id=3D"hs_cos_wrapper_module-11-0-0" class=3D"hs_cos_wrapper hs_cos_w=
+rapper_widget hs_cos_wrapper_type_module" style=3D"color: inherit; font-siz=
+e: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widget" data=
+-hs-cos-type=3D"module">
+=09
+<table class=3D"hse-image-wrapper" role=3D"presentation" width=3D"100%" cel=
+lpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; bord=
+er-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt">
+    <tbody>
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"border-collapse:co=
+llapse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; color:=
+#23496d; word-break:break-word; text-align:center; padding:20px 20px 10px; =
+font-size:0px">
+               =20
+                <img alt=3D"embeddings-archive" src=3D"https://email.cohere=
+.ai/hs-fs/hubfs/embeddings-archive.jpg?width=3D320&amp;upscale=3Dtrue&amp;n=
+ame=3Dembeddings-archive.jpg" style=3D"outline:none; text-decoration:none; =
+-ms-interpolation-mode:bicubic; max-width:100%; font-size:16px" width=3D"16=
+0" align=3D"middle" class=3D"stretch-on-mobile" srcset=3D"https://email.coh=
+ere.ai/hs-fs/hubfs/embeddings-archive.jpg?upscale=3Dtrue&amp;width=3D320&am=
+p;upscale=3Dtrue&amp;name=3Dembeddings-archive.jpg 160w, https://email.cohe=
+re.ai/hs-fs/hubfs/embeddings-archive.jpg?upscale=3Dtrue&amp;width=3D640&amp=
+;upscale=3Dtrue&amp;name=3Dembeddings-archive.jpg 320w" sizes=3D"(max-width=
+: 160px) 100vw, 160px">
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+<!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:400px;padding-top:20px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"400" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:400px">
+<![endif]-->
+<div id=3D"column-11-1" class=3D"hse-column hse-size-8">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:10px"><div id=3D"hs_cos_wrapper_module-11-1-0" class=3D"hs_cos_wrap=
+per hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"color: inher=
+it; font-size: inherit; line-height: inherit;" data-hs-cos-general-type=3D"=
+widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wrapper_module-11-1-0=
+_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_rich_t=
+ext" style=3D"color: inherit; font-size: inherit; line-height: inherit;" da=
+ta-hs-cos-general-type=3D"widget" data-hs-cos-type=3D"rich_text"><h2 style=
+=3D"margin:0; mso-line-height-rule:exactly; font-size:22px; line-height:125=
+%"><a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrM=
+FzN6DYhSWbW1PHNH54-8zKRN2z6H2k3q3npV1-WJV7CgW96N5SfrNZsS40yW2Z-fhl3K-FdMN3j=
+qq_pH-V3HW8NC-LC40_DHLW7-kBkL17ntYJW6S9JqH40Hk0wW2wWntx1ch-y6W8GJ_ZB22r7RkW=
+8WLDXX8ftPJ-VGMhKC9hf1DYW46-lCr1MdJ8FM7bpsdV7WFWW3sQXbs5LjG0yN4HHmSRTxd18W7=
+DHdXN7Np0F5W4_T8pH7Zlp2QW1tLMRM75SnF1W1TrFtb3JRbBrVY0D4f5Z7K9fVbXBF26M28s5W=
+3_Q1b_6pJFl7W77qpCJ2jN3_X39Wz1" style=3D"mso-line-height-rule:exactly; colo=
+r:#00a4bd; font-size:18px; font-weight:bold" rel=3D"noopener" data-hs-link-=
+id=3D"0" target=3D"_blank">The Embedding Archives: Millions of Wikipedia Ar=
+ticle Embeddings in Many Languages</a></h2>
+<div style=3D"mso-line-height-rule:exactly; line-height:175%">
+<p style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=3D"=
+color: #000000;">Gain access to nearly 100 million embeddings for Wikipedia=
+ articles, covering not only Wikipedia in English but also various other la=
+nguages.</span></p>
+</div></div></div></td></tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-12" class=3D"hse-section" style=3D"padding-left:10px; =
+padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#FFFFFF" bgcolor=3D"#FFFFFF">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#FFFFFF">
+      <tr style=3D"background-color:#FFFFFF;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-12-1" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:20px 20px 10px"><div id=3D"hs_cos_wrapper_module-12-1-0" class=3D"h=
+s_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"co=
+lor: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-genera=
+l-type=3D"widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wrapper_mod=
+ule-12-1-0_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_t=
+ype_rich_text" style=3D"color: inherit; font-size: inherit; line-height: in=
+herit;" data-hs-cos-general-type=3D"widget" data-hs-cos-type=3D"rich_text">=
+<h2 style=3D"margin:0; mso-line-height-rule:exactly; font-size:22px; line-h=
+eight:125%"><a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp=
+8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2k3q3npV1-WJV7CgXKLW8GPjJ91NXJtTW8YSwd=
+m445Zv4MChFVBQ6S1TVgq6JL2WJ1w-W3jl7pC4-XfC1W1gCmBf1gLKJjW2yB7bV2qhV6mW2kJ3s=
+w7JZ55VN2FBdZqBl79xW85fTXl4xYZg_W8-1zvf5kkG4_W1CDBLL3tVQJgW5T761F57HxFKW6Cs=
+r7B2_STrDW4rYkMS3_3TJYN3NXtSYXzXX_W8Pc34m7h6qG1V7bcLz2M_nrcW4sYDBQ2kZnrcW5s=
+vNDz7GpHhbW4dqqpD2yngTxW2Y7T3K72cB7733_m1" style=3D"mso-line-height-rule:ex=
+actly; color:#00a4bd; font-size:18px; font-weight:bold" rel=3D"noopener" da=
+ta-hs-link-id=3D"0" target=3D"_blank">Unlocking the Power of Cross-Lingual =
+Classification in NLP</a></h2>
+<div style=3D"mso-line-height-rule:exactly; line-height:175%">
+<p style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=3D"=
+color: #000000;">Learn how to use Cohere's multilingual embedding model tha=
+t enables cross-lingual text classification for various applications like s=
+entiment analysis, content moderation, and intent recognition across 100+ l=
+anguages using a single language's training data.</span></p>
+</div></div></div></td></tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-13" class=3D"hse-section" style=3D"padding-left:10px; =
+padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#FFFFFF" bgcolor=3D"#FFFFFF">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#FFFFFF">
+      <tr style=3D"background-color:#FFFFFF;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-13-1" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:20px 20px 10px"><div id=3D"hs_cos_wrapper_module-13-1-0" class=3D"h=
+s_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"co=
+lor: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-genera=
+l-type=3D"widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wrapper_mod=
+ule-13-1-0_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_t=
+ype_rich_text" style=3D"color: inherit; font-size: inherit; line-height: in=
+herit;" data-hs-cos-general-type=3D"widget" data-hs-cos-type=3D"rich_text">=
+<h2 style=3D"margin:0; mso-line-height-rule:exactly; line-height:125%; font=
+-size:20px"><a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp=
+8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2k3q3npV1-WJV7CgSFrV4FfzH25bwgkN78mMBs=
+RQFM5W6CsX4N8WLcgpW2tSQbg9drFqwW4tB0Wf1vBfD1W98G6D18DkG6pW1QMDHv4QK1SVW6_c6=
+mS6RCHwwW1Yt0NM67RC-fW19DzBD1y0MWWW6Qrh_T80vr-RW8YCqFH6kjBW_N1XYzNws8mWMW2B=
+LbWM2V6XnMW90xDDC5WWwjmN2bq710GvS_zVSZzJR6ZVqRhV-6qwk7nSdzDVxQW_15gNppJW2Mp=
+2W35WWQsnW6Zg_0n95Xnz0W5Zkj0w2pJq5832m11" style=3D"mso-line-height-rule:exa=
+ctly; color:#00a4bd; font-size:18px; font-weight:bold" rel=3D"noopener" dat=
+a-hs-link-id=3D"0" target=3D"_blank">What Are Transformer Models and How Do=
+ They Work?</a></h2>
+<div style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=
+=3D"color: #212121; font-weight: bold;"> </span>
+<div style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=
+=3D"color: #212121; font-weight: bold;"> </span>
+<div style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=
+=3D"color: #212121; font-weight: bold;"> </span>
+<div style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=
+=3D"color: #212121; font-weight: bold;"> </span>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=3D"=
+color: #000000;">Learn about the architecture and functioning of Transforme=
+r models. This article, with multiple diagrams, explains the fundamentals o=
+f transformers in an easily readable way.&nbsp;&nbsp;&nbsp;</span></p>
+</div>
+</div>
+</div>
+</div></div></div></td></tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-14" class=3D"hse-section" style=3D"padding-left:10px; =
+padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#FFFFFF" bgcolor=3D"#FFFFFF">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#FFFFFF">
+      <tr style=3D"background-color:#FFFFFF;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-14-0" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:40px 20px 30px"><div id=3D"hs_cos_wrapper_module-14-0-0" class=3D"h=
+s_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"co=
+lor: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-genera=
+l-type=3D"widget" data-hs-cos-type=3D"module">
+ =20
+  <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"border-spacing:0 !important; mso-table-lspac=
+e:0pt; mso-table-rspace:0pt; border-collapse:separate!important">
+    <tbody><tr>
+        <!--[if mso]>
+      <td align=3D"center" valign=3D"middle" bgcolor=3D"#212121" role=3D"pr=
+esentation"  valign=3D"middle" style=3D"border-radius:8px;cursor:auto;backg=
+round-color:#212121;padding:12px 18px;">
+    <![endif]-->
+    <!--[if !mso]><!-- -->
+      <td align=3D"center" valign=3D"middle" bgcolor=3D"#212121" role=3D"pr=
+esentation" style=3D"border-collapse:collapse; mso-line-height-rule:exactly=
+; font-family:Arial, sans-serif; font-size:15px; color:#23496d; word-break:=
+break-word; border-radius:8px; cursor:auto; background-color:#212121">
+   <!--<![endif]-->
+        <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86=
+PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213q3n5V1-WJV7CgNJ8W2PsBz73P4VlLW34PJ465MT=
+lrTW7D2scQ6K3WPmW80Vcr742cnl-W1Vv4rb6-NRtLN227qynP4978W75xtMf2qhwMCW570bz84=
+stdjWDwXKQs69YpW36T-BZ8SvW9-W74pC131pRf78ML_sc9vfl4yW6PW2qw76Dy_4W6dtmmv8JH=
+BxbVwPrCC5pg9cXVMg8942FxFQ8W68kVzW2x70yNW3dyfG83vmZ9zW7s1xLq9bP0TmW2yThT38W=
+VKWR3hW81" target=3D"_blank" style=3D"color:#00a4bd; mso-line-height-rule:e=
+xactly; font-size:14px; font-family:Helvetica,Arial,sans-serif; Margin:0; t=
+ext-transform:none; text-decoration:none; padding:12px 18px; display:block"=
+ data-hs-link-id=3D"0">
+          <strong style=3D"color:#ffffff;font-weight:normal;text-decoration=
+:none;font-style:normal;">READ MORE</strong>
+        </a>
+      </td>
+    </tr>
+  </tbody></table>
+</div></td></tr></tbody></table>
+<table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-ta=
+ble-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" st=
+yle=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-family:=
+Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; pa=
+dding:10px 20px"><div id=3D"hs_cos_wrapper_module_16799457602774" class=3D"=
+hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"c=
+olor: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-gener=
+al-type=3D"widget" data-hs-cos-type=3D"module">
+<!--[if gte mso 9]>
+<div style=3D"line-height: 0; font-size: 0px">
+  <v:rect xmlns:v=3D"urn:schemas-microsoft-com:vml" fill=3D"true" stroke=3D=
+"false" style=3D"width:560px; height:2pt;" fillcolor=3D"none">
+    <v:fill type=3D"tile"/>
+    <v:textbox inset=3D"0,0,0,0">
+      <div>
+<![endif]-->
+<table role=3D"presentation" width=3D"100%" align=3D"center" border=3D"0" s=
+tyle=3D"position:relative; top:-1px; min-width:20px; width:100%; max-width:=
+100%; border-spacing:0; mso-table-lspace:0pt; mso-table-rspace:0pt; border-=
+collapse:collapse; font-size:1px">
+  <tbody><tr>
+   =20
+   =20
+   =20
+    <td width=3D"100%" valign=3D"middle" style=3D"border-collapse:collapse;=
+ mso-line-height-rule:exactly; font-family:Arial, sans-serif; font-size:15p=
+x; color:#23496d; word-break:break-word; line-height:0; border:transparent;=
+ border-bottom:2px solid #CCCCCC; mso-border-bottom-alt:2pt solid #CCCCCC; =
+border-bottom-width:2px"><!--[if mso 16]>&nbsp;<![endif]--></td>
+   =20
+   =20
+  </tr>
+</tbody></table>
+<!--[if gte mso 9]></div></v:textbox></v:rect></div><![endif]--></div></td>=
+</tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-19" class=3D"hse-section" style=3D"padding-left:10px; =
+padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-19-0" class=3D"hse-column hse-size-12">
+  <div id=3D"hs_cos_wrapper_module-19-0-0" class=3D"hs_cos_wrapper hs_cos_w=
+rapper_widget hs_cos_wrapper_type_module" style=3D"color: inherit; font-siz=
+e: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widget" data=
+-hs-cos-type=3D"module">
+=09
+<table class=3D"hse-image-wrapper" role=3D"presentation" width=3D"100%" cel=
+lpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; bord=
+er-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt">
+    <tbody>
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"border-collapse:co=
+llapse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; color:=
+#23496d; word-break:break-word; text-align:center; padding:10px 0px; font-s=
+ize:0px">
+               =20
+                <img alt=3D"CohereForAI_Banner" src=3D"https://email.cohere=
+.ai/hs-fs/hubfs/CohereForAI_Banner.png?width=3D1200&amp;upscale=3Dtrue&amp;=
+name=3DCohereForAI_Banner.png" style=3D"outline:none; text-decoration:none;=
+ -ms-interpolation-mode:bicubic; max-width:100%; font-size:16px" width=3D"6=
+00" align=3D"middle" srcset=3D"https://email.cohere.ai/hs-fs/hubfs/CohereFo=
+rAI_Banner.png?upscale=3Dtrue&amp;width=3D1200&amp;upscale=3Dtrue&amp;name=
+=3DCohereForAI_Banner.png 600w, https://email.cohere.ai/hs-fs/hubfs/CohereF=
+orAI_Banner.png?upscale=3Dtrue&amp;width=3D2400&amp;upscale=3Dtrue&amp;name=
+=3DCohereForAI_Banner.png 1200w" sizes=3D"(max-width: 600px) 100vw, 600px">
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+<table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-ta=
+ble-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" st=
+yle=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-family:=
+Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; pa=
+dding:20px 20px 40px"><div id=3D"hs_cos_wrapper_module-19-0-1" class=3D"hs_=
+cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"colo=
+r: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-general-=
+type=3D"widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wrapper_modul=
+e-19-0-1_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_typ=
+e_rich_text" style=3D"color: inherit; font-size: inherit; line-height: inhe=
+rit;" data-hs-cos-general-type=3D"widget" data-hs-cos-type=3D"rich_text"><p=
+ style=3D"mso-line-height-rule:exactly; font-size:15px; line-height:296%"><=
+strong><span style=3D"color: #000000;">Updates From Cohere For AI&nbsp;</sp=
+an></strong></p>
+<ul style=3D"mso-line-height-rule:exactly; line-height:175%">
+<li aria-level=3D"1" style=3D"mso-line-height-rule:exactly"><span style=3D"=
+color: #000000;"><strong>ICLR 2023</strong>: We=E2=80=99re excited to showc=
+ase our latest research in our main track and workshop papers and looking f=
+orward to connecting with our community! Attending in person? Stop by the C=
+ohere booth to say hello and pick up limited-edition swag!</span></li>
+<li aria-level=3D"1" style=3D"mso-line-height-rule:exactly"><span style=3D"=
+color: #000000;"><strong>New Research</strong>: <span style=3D"font-size: 1=
+5px;"><em>On the Challenges of Using Black-Box APIs for Toxicity Evaluation=
+ in Research</em> was published this week. Learn more about the work <a hre=
+f=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6DYhSW=
+bW1PHNH54-8zKRN2z6H213q3n5V1-WJV7CgR1RW5NXwDB1DD3ggVByGxh6Gf6VxW135SsN1zTr5=
+1W1Zzn483dNFvpW4TnQjF7VZWkXW69rJlY6QNd0SW3H7QYY2Q_Kh4MhvKf92VpTWW8wPNqy94wB=
+jyW6Yvsjj7Y7cwLW2WqFzF6ysz69W30D-X83_8bKCV8J5lQ3FtncCN8hJyvNYX1mWW3ldZYG1sd=
+rqVN8xYfCh2nd9HW6V6GD86021SJW8VN3qr2rvTdbVXhh9y4scQY9W6ndHW47Qx_3J3lbX1" st=
+yle=3D"mso-line-height-rule:exactly; color:#00a4bd" data-hs-link-id=3D"0" t=
+arget=3D"_blank">here.</a>&nbsp;</span></span></li>
+</ul>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=3D"=
+font-size: 15px;"><strong><span style=3D"color: #232333;">Join our communit=
+y</span></strong><span style=3D"color: #000000;">! We want to keep growing =
+our </span><a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8=
+f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2X3q3n_V1-WJV7CgL80W1TNYSk6F20DVW3_jbYf=
+7zyvC5N4817K3c_LZ0W99MYpw5vswH5W8D9Ksp4twj9QW6Hd0zV1clCpXW7g0_TH5Y0RwdV8j-y=
+G8TnV7zN7wTn-_T_dXqW1YQMS110-f21W2vgGB53CF79NW4FBYXt7nLw_0W2jDBdJ5f4L0-W6-M=
+vw8170WFxW3xs6Fl3Zh88PW122xzv4n1q4dW48TpZs5ZBfKVW3bJtF3786sX_W2FWhrT9fGbVnW=
+3GC7Vw14zq1pN1l1_V9cCRC6W6RDvg_2PV_jrW93lpMf7GVS0bW6lJV_d3ZkVNvW69C4N03WKdC=
+JW5n_yDs176tH334Q61" style=3D"mso-line-height-rule:exactly; color:#00a4bd" =
+data-hs-link-id=3D"0" target=3D"_blank">fantastic events and programs</a><s=
+pan style=3D"color: #000000;"> and provide new opportunities for aspiring r=
+esearchers to get involved with our Open Science research project. </span><=
+a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86PfJrMFzN6=
+DYhSWbW1PHNH54-8zKRN2z6H3w7m8pZV5X_Kf7CgY8MW2q0fYR59N3r0N5tKs-w1CPXMW4Cl2NW=
+1tG2NhW4lmGwc5yqRrtW1jstY92pj99gW3ky8hv6K6VLhW7Jg6335fFX8cW5V7Zk62rs-zNW9hx=
+JDX94z6jTW9lDsQK5pNtPlW1TfqR93hFHMmW4qFSLs90FrzBW8g75XH59K92WW4n77Zj7x2Ll_W=
+93DHYH5Vkt88W6lWjHD84Sd9ZN3ZbgVCG98zsW8NhDpj3bV8nBW6y7FtD38DPS4W5GNd6J2ZRkP=
+bW5Tt_9F5BDGwFN3_FVkVf_17fW5DFPx41pG03bW2hsMBR4FPR5WW2V29484yMBB-W8yM8gk4v_=
+WkYW2PzlqL70CwSdW13GgMT4SXdSXW3BBGrL1tRDBKW5wynqB8-jgcNN14K5Nr1kHVcW4S39R13=
+gdsdrVxdzx13rQdcmW4XZTML3HY69zW5G63N55ztT7lW4254cK6Xv2YxN52-sX4PbxqyN8F5xy-=
+cTy7MW49qKmH4Bjq9hW3Hw2r031pJKgW3bgQZN176PfxN4H039x2Nsj7W8fGZ9P93l01LW3xNK3=
+B2PfGFdW1vNygg5s2JqXW3bVH2x8XXpf8W1RQ6y76WgkH_W2VmWYR4SsldWVcM7Tm4Wmb2BVWT-=
+vs8rxYwbW7qBc9D3_mzYVW4CfvR_6YH6y2N8x2qs-MHT1RW7pdV1C50fmQtW905Fyl1nCMw-W3H=
+w3W32VrjbzN7qmPYHM7RNPW6ly5PZ5bQMGHW27NjX-1LwYk0Mw4N7gqNpdmW94F0wg80DNb5W2J=
+30xP5cCPXv3l-91" style=3D"mso-line-height-rule:exactly; color:#00a4bd" data=
+-hs-link-id=3D"0" target=3D"_blank">Complete the community application form=
+</a><span style=3D"color: #000000;"> to join in. </span></span></p></div></=
+div></td></tr></tbody></table>
+<table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-ta=
+ble-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" st=
+yle=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-family:=
+Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; pa=
+dding:10px 20px 20px"><div id=3D"hs_cos_wrapper_module-19-0-2" class=3D"hs_=
+cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"colo=
+r: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-general-=
+type=3D"widget" data-hs-cos-type=3D"module">
+ =20
+  <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"border-spacing:0 !important; mso-table-lspac=
+e:0pt; mso-table-rspace:0pt; border-collapse:separate!important">
+    <tbody><tr>
+        <!--[if mso]>
+      <td align=3D"center" valign=3D"middle" bgcolor=3D"#212121" role=3D"pr=
+esentation"  valign=3D"middle" style=3D"border-radius:8px;cursor:auto;backg=
+round-color:#212121;padding:12px 18px;">
+    <![endif]-->
+    <!--[if !mso]><!-- -->
+      <td align=3D"center" valign=3D"middle" bgcolor=3D"#212121" role=3D"pr=
+esentation" style=3D"border-collapse:collapse; mso-line-height-rule:exactly=
+; font-family:Arial, sans-serif; font-size:15px; color:#23496d; word-break:=
+break-word; border-radius:8px; cursor:auto; background-color:#212121">
+   <!--<![endif]-->
+        <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86=
+PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2D3q3nJV1-WJV7CgX01W5g_ckM8_yPTqW37YvVc8WG=
+dRMW3Hh1Cy1S5pxqW6frmLs4vVvQwW51DZsQ8gcs1jW2_Tstk77CGcnW7H6Zbh1c4hpWW4m6R7d=
+6Gy0zNW6Yq0p_2F9T3zW5pMWMs4gjg_LW7ySWCl4w2zscN1pKzjXXxtrwW86jd4K69Cn5_W99Ff=
+5z6PX5w2N3tbM2Gsw4jvW71FVBh4Z8G6pW58mJ5H3W76TTW50zp_Z2gBlYyW8tFk0T4yMxqVW8K=
+4XDb41mbTTW5Rlh5s5csLWtW3s2RGV7j1BWpW648GK0680gzBW4hz6kk6m4pHC35rX1" target=
+=3D"_blank" style=3D"color:#00a4bd; mso-line-height-rule:exactly; font-size=
+:14px; font-family:Helvetica,Arial,sans-serif; Margin:0; text-transform:non=
+e; text-decoration:none; padding:12px 18px; display:block" data-hs-link-id=
+=3D"0">
+          <strong style=3D"color:#ffffff;font-weight:normal;text-decoration=
+:none;font-style:normal;">JOIN COHERE FOR AI</strong>
+        </a>
+      </td>
+    </tr>
+  </tbody></table>
+</div></td></tr></tbody></table>
+<table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-ta=
+ble-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" st=
+yle=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-family:=
+Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; pa=
+dding:10px 20px"><div id=3D"hs_cos_wrapper_module_16799457206413" class=3D"=
+hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"c=
+olor: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-gener=
+al-type=3D"widget" data-hs-cos-type=3D"module">
+<!--[if gte mso 9]>
+<div style=3D"line-height: 0; font-size: 0px">
+  <v:rect xmlns:v=3D"urn:schemas-microsoft-com:vml" fill=3D"true" stroke=3D=
+"false" style=3D"width:560px; height:2pt;" fillcolor=3D"none">
+    <v:fill type=3D"tile"/>
+    <v:textbox inset=3D"0,0,0,0">
+      <div>
+<![endif]-->
+<table role=3D"presentation" width=3D"100%" align=3D"center" border=3D"0" s=
+tyle=3D"position:relative; top:-1px; min-width:20px; width:100%; max-width:=
+100%; border-spacing:0; mso-table-lspace:0pt; mso-table-rspace:0pt; border-=
+collapse:collapse; font-size:1px">
+  <tbody><tr>
+   =20
+   =20
+   =20
+    <td width=3D"100%" valign=3D"middle" style=3D"border-collapse:collapse;=
+ mso-line-height-rule:exactly; font-family:Arial, sans-serif; font-size:15p=
+x; color:#23496d; word-break:break-word; line-height:0; border:transparent;=
+ border-bottom:2px solid #CCCCCC; mso-border-bottom-alt:2pt solid #CCCCCC; =
+border-bottom-width:2px"><!--[if mso 16]>&nbsp;<![endif]--></td>
+   =20
+   =20
+  </tr>
+</tbody></table>
+<!--[if gte mso 9]></div></v:textbox></v:rect></div><![endif]--></div></td>=
+</tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-20" class=3D"hse-section" style=3D"padding-left:10px; =
+padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-20-0" class=3D"hse-column hse-size-12">
+  <div id=3D"hs_cos_wrapper_module-20-0-0" class=3D"hs_cos_wrapper hs_cos_w=
+rapper_widget hs_cos_wrapper_type_module" style=3D"color: inherit; font-siz=
+e: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widget" data=
+-hs-cos-type=3D"module">
+=09
+<table class=3D"hse-image-wrapper" role=3D"presentation" width=3D"100%" cel=
+lpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; bord=
+er-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt">
+    <tbody>
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"border-collapse:co=
+llapse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; color:=
+#23496d; word-break:break-word; text-align:center; padding:20px 0px 0px; fo=
+nt-size:0px">
+               =20
+                <img alt=3D"Events" src=3D"https://email.cohere.ai/hs-fs/hu=
+bfs/General%20Use%20Graphics/Newsletter/Events.jpg?width=3D1200&amp;upscale=
+=3Dtrue&amp;name=3DEvents.jpg" style=3D"outline:none; text-decoration:none;=
+ -ms-interpolation-mode:bicubic; max-width:100%; font-size:16px" width=3D"6=
+00" align=3D"middle" srcset=3D"https://email.cohere.ai/hs-fs/hubfs/General%=
+20Use%20Graphics/Newsletter/Events.jpg?upscale=3Dtrue&amp;width=3D1200&amp;=
+upscale=3Dtrue&amp;name=3DEvents.jpg 600w, https://email.cohere.ai/hs-fs/hu=
+bfs/General%20Use%20Graphics/Newsletter/Events.jpg?upscale=3Dtrue&amp;width=
+=3D2400&amp;upscale=3Dtrue&amp;name=3DEvents.jpg 1200w" sizes=3D"(max-width=
+: 600px) 100vw, 600px">
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-25" class=3D"hse-section" style=3D"padding-left:10px; =
+padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#FFFFFF; padding-bottom:20px; =
+padding-top:20px" bgcolor=3D"#FFFFFF">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#FFFFFF">
+      <tr style=3D"background-color:#FFFFFF;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:200px;padding-bottom:20px; padding-top:=
+20px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"200" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:200px">
+<![endif]-->
+<div id=3D"column-25-0" class=3D"hse-column hse-size-4">
+  <div id=3D"hs_cos_wrapper_module-25-0-0" class=3D"hs_cos_wrapper hs_cos_w=
+rapper_widget hs_cos_wrapper_type_module" style=3D"color: inherit; font-siz=
+e: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widget" data=
+-hs-cos-type=3D"module">
+=09
+<table class=3D"hse-image-wrapper" role=3D"presentation" width=3D"100%" cel=
+lpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; bord=
+er-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt">
+    <tbody>
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"border-collapse:co=
+llapse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; color:=
+#23496d; word-break:break-word; text-align:center; padding:16px 20px 10px; =
+font-size:0px">
+               =20
+                <img alt=3D"scale-cohere" src=3D"https://email.cohere.ai/hs=
+-fs/hubfs/scale-cohere.jpg?width=3D320&amp;upscale=3Dtrue&amp;name=3Dscale-=
+cohere.jpg" style=3D"outline:none; text-decoration:none; -ms-interpolation-=
+mode:bicubic; max-width:100%; font-size:16px" width=3D"160" align=3D"middle=
+" class=3D"stretch-on-mobile" srcset=3D"https://email.cohere.ai/hs-fs/hubfs=
+/scale-cohere.jpg?upscale=3Dtrue&amp;width=3D320&amp;upscale=3Dtrue&amp;nam=
+e=3Dscale-cohere.jpg 160w, https://email.cohere.ai/hs-fs/hubfs/scale-cohere=
+.jpg?upscale=3Dtrue&amp;width=3D640&amp;upscale=3Dtrue&amp;name=3Dscale-coh=
+ere.jpg 320w" sizes=3D"(max-width: 160px) 100vw, 160px">
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+<!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:400px;padding-bottom:20px; padding-top:=
+20px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"400" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:400px">
+<![endif]-->
+<div id=3D"column-25-1" class=3D"hse-column hse-size-8">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:10px 20px"><div id=3D"hs_cos_wrapper_module-25-1-0" class=3D"hs_cos=
+_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"color: =
+inherit; font-size: inherit; line-height: inherit;" data-hs-cos-general-typ=
+e=3D"widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wrapper_module-2=
+5-1-0_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_r=
+ich_text" style=3D"color: inherit; font-size: inherit; line-height: inherit=
+;" data-hs-cos-general-type=3D"widget" data-hs-cos-type=3D"rich_text"><h2 s=
+tyle=3D"margin:0; mso-line-height-rule:exactly; line-height:150%; font-size=
+:18px"><span style=3D"font-family: Helvetica, Arial, sans-serif; color: #23=
+496d;"><span style=3D"font-size: 14px;">=F0=9F=97=93=EF=B8=8F May 11, 1:00 =
+pm - 2:00 pm EDT</span><br>The 2023 Zeitgeist Report - Generative AI and Be=
+st Practices for Enterprise Adoption&nbsp;<br></span></h2>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%">&nbsp;</p>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=3D"=
+font-family: Helvetica, Arial, sans-serif; color: #23496d;">Explore the Sca=
+le Zeitgeist AI Readiness Report, surveying 1.6k+ execs &amp; ML pros on ch=
+allenges, LLMs' impact &amp; real business applications.</span></p></div></=
+div></td></tr></tbody></table>
+<table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-ta=
+ble-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" st=
+yle=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-family:=
+Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; pa=
+dding:0px 20px"><div id=3D"hs_cos_wrapper_module-25-1-1" class=3D"hs_cos_wr=
+apper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"color: inh=
+erit; font-size: inherit; line-height: inherit;" data-hs-cos-general-type=
+=3D"widget" data-hs-cos-type=3D"module">
+ =20
+  <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" ro=
+le=3D"presentation" style=3D"border-spacing:0 !important; mso-table-lspace:=
+0pt; mso-table-rspace:0pt; border-collapse:separate!important">
+    <tbody><tr>
+        <!--[if mso]>
+      <td align=3D"center" valign=3D"middle" bgcolor=3D"#212121" role=3D"pr=
+esentation"  valign=3D"middle" style=3D"border-radius:8px;cursor:auto;backg=
+round-color:#212121;padding:12px 18px;">
+    <![endif]-->
+    <!--[if !mso]><!-- -->
+      <td align=3D"center" valign=3D"middle" bgcolor=3D"#212121" role=3D"pr=
+esentation" style=3D"border-collapse:collapse; mso-line-height-rule:exactly=
+; font-family:Arial, sans-serif; font-size:15px; color:#23496d; word-break:=
+break-word; border-radius:8px; cursor:auto; background-color:#212121">
+   <!--<![endif]-->
+        <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86=
+PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H1r5nCTJV3Zsc37CgWsTW3tCc-Q4zyh7KW46rpTf3g1=
+rXrW2wnvQQ7ZgrN-N62cKbJlsVfHW4hS3j18cpXdCW2y5k9G6zkZhdW8fN_qP87KD26W8GY9wL1=
+DtKFXW3vlPGd7WklTcN8NJmT9WWH3LW5jVvdg3rHzP8N822BdV4pnCFW8f0qxs6Bh0bmW5029zC=
+7pj1JRW4b0hQc7VzjfyW2zHJnk50hQT1N3tCFXfGS7VsW1vZ0Xy1LMJKlW53M8TF4JcyRDW7-_R=
+j24wMM2LW62m2Wc8c4FLnW2NMRD21FPxmDW5K_66s3t6h6sW35TTrK3SrN1NW4sMHlf86VWckW2=
+6QfK59fcDj1W2QSpXn1GX8GWM57kH8w5bmpVk8Qqs94xF-hW3-tJDt80wp_ZW8k6Fg56jHdC_W8=
+TBZpn5-NSKy3nL_1" target=3D"_blank" style=3D"color:#00a4bd; mso-line-height=
+-rule:exactly; font-size:12px; font-family:Helvetica,Arial,sans-serif; Marg=
+in:0; text-transform:none; text-decoration:none; padding:12px 18px; display=
+:block" data-hs-link-id=3D"0">
+          <strong style=3D"color:#ffffff;font-weight:normal;text-decoration=
+:none;font-style:normal;">SIGN UP</strong>
+        </a>
+      </td>
+    </tr>
+  </tbody></table>
+</div></td></tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"module_1683086016730" class=3D"hse-section" style=3D"padding-l=
+eft:10px; padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#FFFFFF; padding-bottom:20px; =
+padding-top:20px" bgcolor=3D"#FFFFFF">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#FFFFFF">
+      <tr style=3D"background-color:#FFFFFF;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:200px;padding-bottom:20px; padding-top:=
+20px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"200" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:200px">
+<![endif]-->
+<div id=3D"module_1683086016730_0" class=3D"hse-column hse-size-4">
+  <div id=3D"hs_cos_wrapper_module_16830860166701" class=3D"hs_cos_wrapper =
+hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"color: inherit; =
+font-size: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widg=
+et" data-hs-cos-type=3D"module">
+=09
+<table class=3D"hse-image-wrapper" role=3D"presentation" width=3D"100%" cel=
+lpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; bord=
+er-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt">
+    <tbody>
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"border-collapse:co=
+llapse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; color:=
+#23496d; word-break:break-word; text-align:center; padding:16px 20px 10px; =
+font-size:0px">
+               =20
+                <img alt=3D"co_lab friday" src=3D"https://email.cohere.ai/h=
+s-fs/hubfs/General%20Use%20Graphics/Newsletter/co_lab%20friday.png?width=3D=
+320&amp;upscale=3Dtrue&amp;name=3Dco_lab%20friday.png" style=3D"outline:non=
+e; text-decoration:none; -ms-interpolation-mode:bicubic; max-width:100%; fo=
+nt-size:16px" width=3D"160" align=3D"middle" class=3D"stretch-on-mobile" sr=
+cset=3D"https://email.cohere.ai/hs-fs/hubfs/General%20Use%20Graphics/Newsle=
+tter/co_lab%20friday.png?upscale=3Dtrue&amp;width=3D320&amp;upscale=3Dtrue&=
+amp;name=3Dco_lab%20friday.png 160w, https://email.cohere.ai/hs-fs/hubfs/Ge=
+neral%20Use%20Graphics/Newsletter/co_lab%20friday.png?upscale=3Dtrue&amp;wi=
+dth=3D640&amp;upscale=3Dtrue&amp;name=3Dco_lab%20friday.png 320w" sizes=3D"=
+(max-width: 160px) 100vw, 160px">
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+<!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:400px;padding-bottom:20px; padding-top:=
+20px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"400" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:400px">
+<![endif]-->
+<div id=3D"module_1683086016730_1" class=3D"hse-column hse-size-8">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:10px 20px"><div id=3D"hs_cos_wrapper_module_16830860166712" class=
+=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=
+=3D"color: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-=
+general-type=3D"widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wrapp=
+er_module_16830860166712_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget hs=
+_cos_wrapper_type_rich_text" style=3D"color: inherit; font-size: inherit; l=
+ine-height: inherit;" data-hs-cos-general-type=3D"widget" data-hs-cos-type=
+=3D"rich_text"><h2 style=3D"margin:0; mso-line-height-rule:exactly; line-he=
+ight:150%; font-size:18px"><span style=3D"font-family: Helvetica, Arial, sa=
+ns-serif; color: #23496d;"><span style=3D"font-size: 14px;">=F0=9F=97=93=EF=
+=B8=8F May 26, Friday - 12 pm ET</span><br>co:lab friday 4.0 =E2=80=93 Comm=
+unity x Cohere</span></h2>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%">&nbsp;</p>
+<p style=3D"mso-line-height-rule:exactly; line-height:175%"><span style=3D"=
+color: #23496d;"><span style=3D"font-size: 15px;">This colab friday demo sh=
+owcase features outstanding Language AI demos.</span></span></p></div></div=
+></td></tr></tbody></table>
+<table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-ta=
+ble-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" st=
+yle=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-family:=
+Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; pa=
+dding:0px 20px"><div id=3D"hs_cos_wrapper_module_16830860166713" class=3D"h=
+s_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"co=
+lor: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-genera=
+l-type=3D"widget" data-hs-cos-type=3D"module">
+ =20
+  <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" ro=
+le=3D"presentation" style=3D"border-spacing:0 !important; mso-table-lspace:=
+0pt; mso-table-rspace:0pt; border-collapse:separate!important">
+    <tbody><tr>
+        <!--[if mso]>
+      <td align=3D"center" valign=3D"middle" bgcolor=3D"#212121" role=3D"pr=
+esentation"  valign=3D"middle" style=3D"border-radius:8px;cursor:auto;backg=
+round-color:#212121;padding:12px 18px;">
+    <![endif]-->
+    <!--[if !mso]><!-- -->
+      <td align=3D"center" valign=3D"middle" bgcolor=3D"#212121" role=3D"pr=
+esentation" style=3D"border-collapse:collapse; mso-line-height-rule:exactly=
+; font-family:Arial, sans-serif; font-size:15px; color:#23496d; word-break:=
+break-word; border-radius:8px; cursor:auto; background-color:#212121">
+   <!--<![endif]-->
+        <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86=
+PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H3w3q3pBV1-WJV7CgJ7ZVBdz2K3q8cLPW38KrmW6DqL=
+FSW93N9W_2sqcNyVsTz595fMCTtW9l9cT78538kpVqC8Nj3GdpS1W2bMrXY3rL6CjW7vS62c64d=
+T7FW4TQYjx2mtszzVdSffy3KcXYkW4hFm6C8pYG6CW8hn-LB5ymbjjW1Qlw5t8jxTt4W4WMLjR5=
+vwTT5W64rfg27hd2CrW22clQ23lxHwxW3CZTy74m52Z_W6qC4Qc5cww_7V-p85f7jTjZnW25y1Y=
+F6wN_S2W4s7pvR974sp2W3Q5wSf85DRdzW6HLgG04FhcWpW9gZLfx9hs22rW3ksJRh36dZm-W4N=
+Pphm66RTj2VqQldv1kkBvKW1pJ_dd2BNl8zW3nRHMr4mCltZW2gl8Zz3GH9BX3j6Z1" target=
+=3D"_blank" style=3D"color:#00a4bd; mso-line-height-rule:exactly; font-size=
+:12px; font-family:Helvetica,Arial,sans-serif; Margin:0; text-transform:non=
+e; text-decoration:none; padding:12px 18px; display:block" data-hs-link-id=
+=3D"0">
+          <strong style=3D"color:#ffffff;font-weight:normal;text-decoration=
+:none;font-style:normal;">SIGN UP</strong>
+        </a>
+      </td>
+    </tr>
+  </tbody></table>
+</div></td></tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section_1680120619684" class=3D"hse-section" style=3D"padding-=
+left:10px; padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column_1680120619684_0" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:10px 20px"><div id=3D"hs_cos_wrapper_module_16799459422059" class=
+=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=
+=3D"color: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-=
+general-type=3D"widget" data-hs-cos-type=3D"module">
+<!--[if gte mso 9]>
+<div style=3D"line-height: 0; font-size: 0px">
+  <v:rect xmlns:v=3D"urn:schemas-microsoft-com:vml" fill=3D"true" stroke=3D=
+"false" style=3D"width:560px; height:2pt;" fillcolor=3D"none">
+    <v:fill type=3D"tile"/>
+    <v:textbox inset=3D"0,0,0,0">
+      <div>
+<![endif]-->
+<table role=3D"presentation" width=3D"100%" align=3D"center" border=3D"0" s=
+tyle=3D"position:relative; top:-1px; min-width:20px; width:100%; max-width:=
+100%; border-spacing:0; mso-table-lspace:0pt; mso-table-rspace:0pt; border-=
+collapse:collapse; font-size:1px">
+  <tbody><tr>
+   =20
+   =20
+   =20
+    <td width=3D"100%" valign=3D"middle" style=3D"border-collapse:collapse;=
+ mso-line-height-rule:exactly; font-family:Arial, sans-serif; font-size:15p=
+x; color:#23496d; word-break:break-word; line-height:0; border:transparent;=
+ border-bottom:2px solid #CCCCCC; mso-border-bottom-alt:2pt solid #CCCCCC; =
+border-bottom-width:2px"><!--[if mso 16]>&nbsp;<![endif]--></td>
+   =20
+   =20
+  </tr>
+</tbody></table>
+<!--[if gte mso 9]></div></v:textbox></v:rect></div><![endif]--></div></td>=
+</tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"module_1680115492207" class=3D"hse-section" style=3D"padding-l=
+eft:10px; padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#ffffff" bgcolor=3D"#ffffff">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#ffffff">
+      <tr style=3D"background-color:#ffffff;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"module_1680115492207_0" class=3D"hse-column hse-size-12">
+  <div id=3D"hs_cos_wrapper_module_16801154921551" class=3D"hs_cos_wrapper =
+hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"color: inherit; =
+font-size: inherit; line-height: inherit;" data-hs-cos-general-type=3D"widg=
+et" data-hs-cos-type=3D"module">
+=09
+<table class=3D"hse-image-wrapper" role=3D"presentation" width=3D"100%" cel=
+lpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !important; bord=
+er-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt">
+    <tbody>
+        <tr>
+            <td align=3D"center" valign=3D"top" style=3D"border-collapse:co=
+llapse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; color:=
+#23496d; word-break:break-word; text-align:center; padding:20px 0px 0px; fo=
+nt-size:0px">
+               =20
+                <img alt=3D"Get started Top Cap" src=3D"https://email.coher=
+e.ai/hs-fs/hubfs/General%20Use%20Graphics/Newsletter/Get%20started%20Top%20=
+Cap.jpg?width=3D1200&amp;upscale=3Dtrue&amp;name=3DGet%20started%20Top%20Ca=
+p.jpg" style=3D"outline:none; text-decoration:none; -ms-interpolation-mode:=
+bicubic; max-width:100%; font-size:16px" width=3D"600" align=3D"middle" src=
+set=3D"https://email.cohere.ai/hs-fs/hubfs/General%20Use%20Graphics/Newslet=
+ter/Get%20started%20Top%20Cap.jpg?upscale=3Dtrue&amp;width=3D1200&amp;upsca=
+le=3Dtrue&amp;name=3DGet%20started%20Top%20Cap.jpg 600w, https://email.cohe=
+re.ai/hs-fs/hubfs/General%20Use%20Graphics/Newsletter/Get%20started%20Top%2=
+0Cap.jpg?upscale=3Dtrue&amp;width=3D2400&amp;upscale=3Dtrue&amp;name=3DGet%=
+20started%20Top%20Cap.jpg 1200w" sizes=3D"(max-width: 600px) 100vw, 600px">
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"module_1679945899230" class=3D"hse-section" style=3D"padding-l=
+eft:10px; padding-right:10px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#FFFFFF" bgcolor=3D"#FFFFFF">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#FFFFFF">
+      <tr style=3D"background-color:#FFFFFF;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"module_1679945899230_0" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:10px 40px 0px"><div id=3D"hs_cos_wrapper_module_16799458991857" cla=
+ss=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" styl=
+e=3D"color: inherit; font-size: inherit; line-height: inherit;" data-hs-cos=
+-general-type=3D"widget" data-hs-cos-type=3D"module"><div id=3D"hs_cos_wrap=
+per_module_16799458991857_" class=3D"hs_cos_wrapper hs_cos_wrapper_widget h=
+s_cos_wrapper_type_rich_text" style=3D"color: inherit; font-size: inherit; =
+line-height: inherit;" data-hs-cos-general-type=3D"widget" data-hs-cos-type=
+=3D"rich_text"><p style=3D"mso-line-height-rule:exactly; font-size:16px; li=
+ne-height:150%; font-weight:normal"><span style=3D"color: #000000;"><span s=
+tyle=3D"font-family: Helvetica, Arial, sans-serif;">We want to make NLP use=
+ful and accessible to anyone who needs it. <br>Whether you're a beginner or=
+ an expert, we're here to help.&nbsp;</span></span></p>
+<ul style=3D"mso-line-height-rule:exactly; line-height:175%"></ul></div></d=
+iv></td></tr></tbody></table>
+<table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-ta=
+ble-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" st=
+yle=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-family:=
+Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; pa=
+dding:10px 20px 40px"><div id=3D"hs_cos_wrapper_module_16799458991858" clas=
+s=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=
+=3D"color: inherit; font-size: inherit; line-height: inherit;" data-hs-cos-=
+general-type=3D"widget" data-hs-cos-type=3D"module">
+ =20
+  <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" style=3D"border-spacing:0 !important; mso-table-lspac=
+e:0pt; mso-table-rspace:0pt; border-collapse:separate!important">
+    <tbody><tr>
+        <!--[if mso]>
+      <td align=3D"center" valign=3D"middle" bgcolor=3D"#212121" role=3D"pr=
+esentation"  valign=3D"middle" style=3D"border-radius:8px;cursor:auto;backg=
+round-color:#212121;padding:12px 18px;">
+    <![endif]-->
+    <!--[if !mso]><!-- -->
+      <td align=3D"center" valign=3D"middle" bgcolor=3D"#212121" role=3D"pr=
+esentation" style=3D"border-collapse:collapse; mso-line-height-rule:exactly=
+; font-family:Arial, sans-serif; font-size:15px; color:#23496d; word-break:=
+break-word; border-radius:8px; cursor:auto; background-color:#212121">
+   <!--<![endif]-->
+        <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/VWpp8f86=
+PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213q3n5V1-WJV7CgP5vN7qBcPdf3ymvW5BMGF52RJ9=
+XBW2W_T-C1XF9xwW55d06f3-bhRyW67MtS4796T4KW6TV8gr625f0HW16sGKb8TQ40YW76bwpG6=
+N2WfzW7mkW6y1dvqwmW8qD-m85b7WJYMjTdZMMy5kqW4tLT5-8qXxpRVQL-hc3z_Fr3W685bqH7=
+LLl-NMN0pBKglyMYW6Pm53P3f67yBW4kRPSz5MzhQWW7L6JF34dytvYW5-3zDl6gjDNkW7JJgg0=
+8C8_K932w71" target=3D"_blank" style=3D"color:#00a4bd; mso-line-height-rule=
+:exactly; font-size:14px; font-family:Helvetica,Arial,sans-serif; Margin:0;=
+ text-transform:none; text-decoration:none; padding:12px 18px; display:bloc=
+k" data-hs-link-id=3D"0">
+          <strong style=3D"color:#ffffff;font-weight:normal;text-decoration=
+:none;font-style:normal;">REGISTER NOW</strong>
+        </a>
+      </td>
+    </tr>
+  </tbody></table>
+</div></td></tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+  <div id=3D"section-27" class=3D"hse-section hse-section-last" style=3D"pa=
+dding-left:10px; padding-right:10px; padding-bottom:20px">
+   =20
+   =20
+    <!--[if !((mso)|(IE))]><!-- -->
+      <div class=3D"hse-column-container" style=3D"min-width:280px; max-wid=
+th:600px; width:100%; Margin-left:auto; Margin-right:auto; border-collapse:=
+collapse; border-spacing:0; background-color:#E0E0E0; padding-bottom:20px; =
+padding-top:20px" bgcolor=3D"#E0E0E0">
+    <!--<![endif]-->
+   =20
+    <!--[if (mso)|(IE)]>
+      <div class=3D"hse-column-container" style=3D"min-width:280px;max-widt=
+h:600px;width:100%;Margin-left:auto;Margin-right:auto;border-collapse:colla=
+pse;border-spacing:0;">
+      <table align=3D"center" style=3D"border-collapse:collapse;mso-table-l=
+space:0pt;mso-table-rspace:0pt;width:600px;" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" width=3D"600" bgcolor=3D"#E0E0E0">
+      <tr style=3D"background-color:#E0E0E0;">
+    <![endif]-->
+    <!--[if (mso)|(IE)]>
+  <td valign=3D"top" style=3D"width:600px;padding-bottom:20px; padding-top:=
+20px;">
+<![endif]-->
+<!--[if gte mso 9]>
+  <table role=3D"presentation" width=3D"600" cellpadding=3D"0" cellspacing=
+=3D"0" style=3D"border-collapse:collapse;mso-table-lspace:0pt;mso-table-rsp=
+ace:0pt;width:600px">
+<![endif]-->
+<div id=3D"column-27-0" class=3D"hse-column hse-size-12">
+  <table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D=
+"100%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-=
+table-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" =
+style=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-famil=
+y:Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; =
+padding:10px 20px 10px 30px"><div id=3D"hs_cos_wrapper_module_1679927363024=
+1" class=3D"hs_cos_wrapper hs_cos_wrapper_widget hs_cos_wrapper_type_module=
+" style=3D"color: inherit; font-size: inherit; line-height: inherit;" data-=
+hs-cos-general-type=3D"widget" data-hs-cos-type=3D"module">
+<table role=3D"presentation" align=3D"left" style=3D"border-spacing:0 !impo=
+rtant; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt=
+; width:auto; text-align:left" class=3D"hs_cos_wrapper_type_social_module" =
+width=3D"auto">
+  <tbody>
+    <tr align=3D"left">
+     =20
+     =20
+       =20
+     =20
+      <td class=3D"social-network-cell" style=3D"border-collapse:collapse; =
+mso-line-height-rule:exactly; font-family:Arial, sans-serif; font-size:15px=
+; color:#23496d; word-break:break-word">
+        <table role=3D"presentation" align=3D"left" style=3D"border-spacing=
+:0 !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rs=
+pace:0pt; width:auto; text-align:left" class=3D"hs_cos_wrapper_type_social_=
+module_single" width=3D"auto">
+          <tbody>
+            <tr align=3D"left">
+             =20
+              <td class=3D"display_block_on_small_screens" style=3D"border-=
+collapse:collapse; mso-line-height-rule:exactly; font-family:Arial, sans-se=
+rif; font-size:15px; color:#23496d; word-break:break-word; padding:8px 8px;=
+ line-height:1; vertical-align:middle" valign=3D"middle">
+                <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/=
+VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2k3q3npV1-WJV7CgQ46W815r082GXrGtW5=
+DcSy73rwhWpW2XM7LN1j9XkfW9l10p23YCgyfMbbWT-yNwHkW1GtpCR4TvQBHW8fP8pJ77Sfm0W=
+3NQ5SY8bzSw0N5R03ZD2D_lyW234LhL6pn-6rW36hF4653nTSNW1rm0tj91QlbdW5rZLBJ6r1WR=
+zW5xcj0z1GB7FbW4f5DZC5Mk-kCW3yFycP1NrVkTW6vpNbZ43RwVfW6yMtv362y4CGW43W66V5p=
+QKfzW2qmQmw7NcMgJW6szlSt3L1DQ_W6-FVKz3pSd7G3kfx1" style=3D"color:#00a4bd; m=
+so-line-height-rule:exactly; text-decoration:none !important" data-hs-link-=
+id=3D"0" target=3D"_blank">
+                 =20
+                 =20
+                   =20
+                   =20
+                 =20
+                  <img src=3D"https://email.cohere.ai/hs-fs/hubfs/Linkedin%=
+20Outline.png?height=3D44&amp;upscale=3Dtrue&amp;name=3DLinkedin%20Outline.=
+png" alt=3D"Linkedin Outline" height=3D"22" style=3D"outline:none; text-dec=
+oration:none; -ms-interpolation-mode:bicubic; border:none; width:auto!impor=
+tant; height:22px!important; vertical-align:middle" valign=3D"middle" width=
+=3D"auto">
+                 =20
+                </a>
+              </td>
+             =20
+             =20
+            </tr>
+          </tbody>
+        </table>
+      </td>
+     =20
+     =20
+       =20
+     =20
+      <td class=3D"social-network-cell" style=3D"border-collapse:collapse; =
+mso-line-height-rule:exactly; font-family:Arial, sans-serif; font-size:15px=
+; color:#23496d; word-break:break-word">
+        <table role=3D"presentation" align=3D"left" style=3D"border-spacing=
+:0 !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rs=
+pace:0pt; width:auto; text-align:left" class=3D"hs_cos_wrapper_type_social_=
+module_single" width=3D"auto">
+          <tbody>
+            <tr align=3D"left">
+             =20
+              <td class=3D"display_block_on_small_screens" style=3D"border-=
+collapse:collapse; mso-line-height-rule:exactly; font-family:Arial, sans-se=
+rif; font-size:15px; color:#23496d; word-break:break-word; padding:8px 8px;=
+ line-height:1; vertical-align:middle" valign=3D"middle">
+                <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/=
+VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H213q3n5V1-WJV7CgHg6W4sNhv78HNTffW5=
+8SbrL18PVQ7VzwJTQ59f8vZW3j4p6t40xqrNN853vyg9RcXHW1WPzDx28NG5-W37GzRC10vd6GW=
+7Fqm7C1kBPsnW3gFgRx8vHkcMW6VwjpQ3l2NQGW7jKKQ48nbBrQW808d5K4NcYMKW9gLdw81ZTP=
+WhW3kvk7K2kGNDYW7Hbsbh5wFr_JW7TH9Fc2_XSFKW6028NJ1V3XC8W1PPRn56CCWcDW57vJST3=
+N2hZSW7Qypq53DqMKQ2SG1" style=3D"color:#00a4bd; mso-line-height-rule:exactl=
+y; text-decoration:none !important" data-hs-link-id=3D"1" target=3D"_blank"=
+>
+                 =20
+                 =20
+                   =20
+                   =20
+                 =20
+                  <img src=3D"https://email.cohere.ai/hs-fs/hubfs/Discord%2=
+0Outline.png?height=3D44&amp;upscale=3Dtrue&amp;name=3DDiscord%20Outline.pn=
+g" alt=3D"Discord Outline" height=3D"22" style=3D"outline:none; text-decora=
+tion:none; -ms-interpolation-mode:bicubic; border:none; width:auto!importan=
+t; height:22px!important; vertical-align:middle" valign=3D"middle" width=3D=
+"auto">
+                 =20
+                </a>
+              </td>
+             =20
+             =20
+            </tr>
+          </tbody>
+        </table>
+      </td>
+     =20
+     =20
+       =20
+     =20
+      <td class=3D"social-network-cell" style=3D"border-collapse:collapse; =
+mso-line-height-rule:exactly; font-family:Arial, sans-serif; font-size:15px=
+; color:#23496d; word-break:break-word">
+        <table role=3D"presentation" align=3D"left" style=3D"border-spacing=
+:0 !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rs=
+pace:0pt; width:auto; text-align:left" class=3D"hs_cos_wrapper_type_social_=
+module_single" width=3D"auto">
+          <tbody>
+            <tr align=3D"left">
+             =20
+              <td class=3D"display_block_on_small_screens" style=3D"border-=
+collapse:collapse; mso-line-height-rule:exactly; font-family:Arial, sans-se=
+rif; font-size:15px; color:#23496d; word-break:break-word; padding:8px 8px;=
+ line-height:1; vertical-align:middle" valign=3D"middle">
+                <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/=
+VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H2X3q3n_V1-WJV7CgS-5W8Yx7kt5YlD3mW5=
+WB2HN61RD1DN9fBJSB6nly_W50zD9C2-DhzvW5g4mL06qm8t1W4D0t9w5wgvdDW71j6nG2GjVnc=
+W4PPyX98Smq2tW6TKLCV3Zz-b-W68KrsQ1yr75FVwZ89B7lXDWkV233BN776D5DW1l5jjd7cX_f=
+LW7-pbMK6QTbRTW5VkKYr4-pKm_W63Y6P56DnCcdW8Y3l1T2MXy3KW40k3p19bFb4YW3dvCl66D=
+KdNvW2TMTJ-6GfmzzW3StqmB1xMvftW3MBYZy35SkMwW2JD76Y5q9gZjW2yfWYL8d-0V3W1NNJm=
+Y7_7PggN4DLtG4Hdr9_36tL1" style=3D"color:#00a4bd; mso-line-height-rule:exac=
+tly; text-decoration:none !important" data-hs-link-id=3D"0" target=3D"_blan=
+k">
+                 =20
+                 =20
+                   =20
+                   =20
+                 =20
+                  <img src=3D"https://email.cohere.ai/hs-fs/hubfs/Twitter%2=
+0Outline.png?height=3D44&amp;upscale=3Dtrue&amp;name=3DTwitter%20Outline.pn=
+g" alt=3D"Twitter Outline" height=3D"22" style=3D"outline:none; text-decora=
+tion:none; -ms-interpolation-mode:bicubic; border:none; width:auto!importan=
+t; height:22px!important; vertical-align:middle" valign=3D"middle" width=3D=
+"auto">
+                 =20
+                </a>
+              </td>
+             =20
+             =20
+            </tr>
+          </tbody>
+        </table>
+      </td>
+     =20
+     =20
+       =20
+     =20
+      <td class=3D"social-network-cell" style=3D"border-collapse:collapse; =
+mso-line-height-rule:exactly; font-family:Arial, sans-serif; font-size:15px=
+; color:#23496d; word-break:break-word">
+        <table role=3D"presentation" align=3D"left" style=3D"border-spacing=
+:0 !important; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rs=
+pace:0pt; width:auto; text-align:left" class=3D"hs_cos_wrapper_type_social_=
+module_single" width=3D"auto">
+          <tbody>
+            <tr align=3D"left">
+             =20
+              <td class=3D"display_block_on_small_screens" style=3D"border-=
+collapse:collapse; mso-line-height-rule:exactly; font-family:Arial, sans-se=
+rif; font-size:15px; color:#23496d; word-break:break-word; padding:8px 8px;=
+ line-height:1; vertical-align:middle" valign=3D"middle">
+                <a href=3D"https://email.cohere.ai/e3t/Ctc/2N+113/d2t4Dg04/=
+VWpp8f86PfJrMFzN6DYhSWbW1PHNH54-8zKRN2z6H1L3q3mQV1-WJV7CgPnwW59VgVg5DQ79FW2=
+pg4RS7wMl1ZW8lHPSR6W9LMmW89f4vM7N9JFlW6wzw2Q3JV_VfW5ptY6V6GWlX-VGckv478VvkN=
+W6JhQjG8yf5rmW614H6w7r9l0TN1pKg6sQtnyyW74StMt5MW055W5JNdSd2pJDp-W3SF9Ry1mvW=
+4fW2P_pmZ3Zc2vXW4fQqNc136YBgW7-GCxn6V-x0-VyHH693JZzJMW2CGYwr5rxRKJ3q721" st=
+yle=3D"color:#00a4bd; mso-line-height-rule:exactly; text-decoration:none !i=
+mportant" data-hs-link-id=3D"0" target=3D"_blank">
+                 =20
+                 =20
+                   =20
+                   =20
+                 =20
+                  <img src=3D"https://email.cohere.ai/hs-fs/hubfs/Symbol-2.=
+png?height=3D44&amp;upscale=3Dtrue&amp;name=3DSymbol-2.png" alt=3D"Cohere" =
+height=3D"22" style=3D"outline:none; text-decoration:none; -ms-interpolatio=
+n-mode:bicubic; border:none; width:auto!important; height:22px!important; v=
+ertical-align:middle" valign=3D"middle" width=3D"auto">
+                 =20
+                </a>
+              </td>
+             =20
+             =20
+            </tr>
+          </tbody>
+        </table>
+      </td>
+     =20
+    </tr>
+  </tbody>
+</table>
+</div></td></tr></tbody></table>
+<table role=3D"presentation" cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" style=3D"border-spacing:0 !important; border-collapse:collapse; mso-ta=
+ble-lspace:0pt; mso-table-rspace:0pt"><tbody><tr><td class=3D"hs_padded" st=
+yle=3D"border-collapse:collapse; mso-line-height-rule:exactly; font-family:=
+Arial, sans-serif; font-size:15px; color:#23496d; word-break:break-word; pa=
+dding:10px 20px"><div id=3D"hs_cos_wrapper_module-27-0-1" class=3D"hs_cos_w=
+rapper hs_cos_wrapper_widget hs_cos_wrapper_type_module" style=3D"color: in=
+herit; font-size: inherit; line-height: inherit;" data-hs-cos-general-type=
+=3D"widget" data-hs-cos-type=3D"module">
+ =20
+ =20
+ =20
+ =20
+ =20
+ =20
+ =20
+<table role=3D"presentation" class=3D"hse-footer hse-secondary" width=3D"10=
+0%" cellpadding=3D"0" cellspacing=3D"0" style=3D"border-spacing:0 !importan=
+t; border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; fo=
+nt-family:Arial, sans-serif; font-size:12px; line-height:135%; color:#23496=
+d; margin-bottom:0; padding:0">
+    <tbody>
+        <tr>
+            <td align=3D"left" valign=3D"top" style=3D"border-collapse:coll=
+apse; mso-line-height-rule:exactly; font-family:Arial, sans-serif; font-siz=
+e:15px; color:#23496d; word-break:break-word; text-align:left; margin-botto=
+m:0; line-height:135%; padding:10px 20px">
+               =20
+                <p style=3D"mso-line-height-rule:exactly; font-family:Helve=
+tica,Arial,sans-serif; font-size:12px; font-weight:normal; text-decoration:=
+none; font-style:normal; color:#666666; direction:lrt" dir=3D"lrt">
+                  Cohere Inc., 171 John Street, Suite 200, Toronto, ON M5T =
+1X3, Canada
+                </p>
+                <p style=3D"mso-line-height-rule:exactly">
+                 =20
+                  <a data-unsubscribe=3D"true" href=3D"https://email.cohere=
+.ai/hs/manage-preferences/unsubscribe-all?languagePreference=3Den&amp;d=3DV=
+nbsg850jshMVzqv6541W27xW2m6wcq1JykXmMWSJJfrYMWPVQtFsR5DJFV9N7SwpfrCJkMDW5pR=
+lG05KSqK4W7gh7gR9hxPf3V1yf0N31N4tTW1Lvz-Z3N2FsLW2lx8d67Y7VmL23x3&amp;v=3D3&=
+amp;utm_campaign=3DCohere%20Newsletter&amp;utm_source=3Dhs_email&amp;utm_me=
+dium=3Demail&amp;utm_content=3D257052446&amp;_hsenc=3Dp2ANqtz-8e9g6PhWTIDMT=
+W6jUTo9101Af8G1SUeRKVAHxhzNLEBkJIbSHU-hYhxxCYyhYrlzsKuZpGn_xDLpAbS3RpAY3yR6=
+KmsQ&amp;_hsmi=3D257052446" style=3D"mso-line-height-rule:exactly; font-fam=
+ily:Helvetica,Arial,sans-serif; font-size:12px; color:#666666; font-weight:=
+normal; text-decoration:underline; font-style:normal" data-hs-link-id=3D"0"=
+ target=3D"_blank">Unsubscribe</a>
+                 =20
+                  <a data-unsubscribe=3D"true" href=3D"https://email.cohere=
+.ai/hs/manage-preferences/unsubscribe?languagePreference=3Den&amp;d=3DVnbsg=
+850jshMVzqv6541W27xW2m6wcq1JykXmMWSJJfrYMWPVQtFsR5DJFV9N7SwpfrCJkMDW5pRlG05=
+KSqK4W7gh7gR9hxPf3V1yf0N31N4tTW1Lvz-Z3N2FsLW2lx8d67Y7VmL23x3&amp;v=3D3&amp;=
+utm_campaign=3DCohere%20Newsletter&amp;utm_source=3Dhs_email&amp;utm_medium=
+=3Demail&amp;utm_content=3D257052446&amp;_hsenc=3Dp2ANqtz-8e9g6PhWTIDMTW6jU=
+To9101Af8G1SUeRKVAHxhzNLEBkJIbSHU-hYhxxCYyhYrlzsKuZpGn_xDLpAbS3RpAY3yR6KmsQ=
+&amp;_hsmi=3D257052446" style=3D"mso-line-height-rule:exactly; font-family:=
+Helvetica,Arial,sans-serif; font-size:12px; color:#666666; font-weight:norm=
+al; text-decoration:underline; font-style:normal" data-hs-link-id=3D"0" tar=
+get=3D"_blank">Manage preferences</a>
+                 =20
+                </p>
+               =20
+            </td>
+        </tr>
+    </tbody>
+</table></div></td></tr></tbody></table>
+</div>
+<!--[if gte mso 9]></table><![endif]-->
+<!--[if (mso)|(IE)]></td><![endif]-->
+    <!--[if (mso)|(IE)]></tr></table><![endif]-->
+    </div>
+  =20
+  </div>
+</div>
+          </td>
+        </tr>
+      </tbody></table>
+    </div>
+ =20
+<img src=3D"https://email.cohere.ai/e3t/Cto/2N+113/d2t4Dg04/VWpp8f86PfJrMFz=
+N6DYhSWbW1PHNH54-8zKRW2z6GQr3Cs1QN192" alt=3D"" width=3D"1" height=3D"1" bo=
+rder=3D"0" style=3D"display:none!important;min-height:1px!important;width:1=
+px!important;border-width:0!important;margin-top:0!important;margin-bottom:=
+0!important;margin-right:0!important;margin-left:0!important;padding-top:0!=
+important;padding-bottom:0!important;padding-right:0!important;padding-left=
+:0!important"></body></html>=
+
+------=_Part_85326_720714525.1683234835189--

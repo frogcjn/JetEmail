@@ -1,0 +1,882 @@
+Received: from MN2PR01MB5613.prod.exchangelabs.com (2603:10b6:208:10f::14) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Fri, 14 Apr 2023 17:20:00
+ +0000
+Received: from DS7PR06CA0039.namprd06.prod.outlook.com (2603:10b6:8:54::7) by
+ MN2PR01MB5613.prod.exchangelabs.com (2603:10b6:208:10f::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6319.4; Fri, 14 Apr 2023 17:19:59 +0000
+Received: from DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:54:cafe::3c) by DS7PR06CA0039.outlook.office365.com
+ (2603:10b6:8:54::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.36 via Frontend
+ Transport; Fri, 14 Apr 2023 17:19:59 +0000
+Authentication-Results: spf=fail (sender IP is 18.7.71.112)
+ smtp.mailfrom=a552720.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of a552720.bnc3.mailjet.com
+ does not designate 18.7.71.112 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.7.71.112;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.7.71.112) by
+ DM6NAM11FT019.mail.protection.outlook.com (10.13.172.172) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6298.36 via Frontend Transport; Fri, 14 Apr 2023 17:19:59 +0000
+Received: from oc11exhyb7.exchange.mit.edu (18.9.1.112) by
+ w92exhyb7.exchange.mit.edu (18.7.71.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Fri, 14 Apr 2023 13:19:41 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
+ by oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Fri, 14 Apr 2023 13:19:41 -0400
+Received: from BN1PR12CA0016.namprd12.prod.outlook.com (2603:10b6:408:e1::21)
+ by MN2PR01MB5343.prod.exchangelabs.com (2603:10b6:208:119::33) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.30; Fri, 14 Apr 2023 17:18:27 +0000
+Received: from BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e1:cafe::34) by BN1PR12CA0016.outlook.office365.com
+ (2603:10b6:408:e1::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.36 via Frontend
+ Transport; Fri, 14 Apr 2023 17:18:27 +0000
+Authentication-Results-Original: spf=pass (sender IP is 87.253.233.201)
+ smtp.mailfrom=a552720.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=704
+Received-SPF: Pass (protection.outlook.com: domain of a552720.bnc3.mailjet.com
+ designates 87.253.233.201 as permitted sender)
+ receiver=protection.outlook.com; client-ip=87.253.233.201;
+ helo=o201.p8.mailjet.com; pr=C
+Received: from o201.p8.mailjet.com (87.253.233.201) by
+ BN8NAM11FT054.mail.protection.outlook.com (10.13.177.102) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6298.37 via Frontend Transport; Fri, 14 Apr 2023 17:18:27 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; q=dns/txt;
+  d=bnc3.mailjet.com; i=suzynelson=3Dmit.edu@a552720.bnc3.mailjet.com; s=mailjet1; x=1681579106;
+  h=message-id:mime-version:from:from:to:to:subject:subject:date:date:list-id:list-unsubscribe:
+  list-unsubscribe-post:feedback-id:precedence:x-campaignid:x-csa-complaints:
+  x-mj-mid:x-mj-smtpguid:x-report-abuse-to:content-type;
+  bh=/Gj6j50m5ks5oumyEotBIRXrGIwDSga3qzYqBNpoSGU=;
+  b=JMXA8528c5JOGBRHTAqQmVDVx7dytpSwN0S2mERXw3TpItjz6DRNYaQ1R
+ F7KFDtKpglqUOMfNUiljlGvoDAvHORJ1V3nFgS+5Y+LMqiDWYe/6gO7CtRMM
+ HOofPCLf9cXj2O+gst11Mq6D6DlfJz6MirWYvZQrS+GtW9va7c8BO0=
+Return-Path:
+ 8e7a82cd.AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYri@a552720.bnc3.mailjet.com
+Message-ID: <8e7a82cd.AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYri@mailjet.com>
+From: Suzy Nelson <suzynelson@mit.edu>
+To: jiannan@mit.edu
+Subject: Sharing some springtime thoughts and W20 updates
+Date: Fri, 14 Apr 2023 17:18:26 +0000 (UTC)
+List-Id: <suzynelson.mit.edu.iz1w-swzju.mj>
+List-Unsubscribe: <mailto:unsub-8e7a82cd.iz1w.lutxmig68h64@bnc3.mailjet.com>,
+	<https://iz1w.mjt.lu/unsub2?m=AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM&b=8e7a82cd&e=d9d201a0&x=a7iET_5Bkh8rOy7esnA68A>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Feedback-Id: 42.552720.525363:MJ
+Precedence: bulk
+X-CampaignID: 7672615354
+X-CSA-Complaints: csa-complaints@eco.de
+X-MJ-Mid: AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM
+X-MJ-SMTPGUID: 1f1646f6-3f19-45d6-bb5c-b12729a0dd36
+X-REPORT-ABUSE-TO: Message sent by Mailjet please report to
+	abuse@mailjet.com with a copy of the message
+Content-Type: multipart/alternative; boundary="=-wU7BOIbJoU18xmjcuKpm"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BN8NAM11FT054:EE_|MN2PR01MB5343:EE_|DM6NAM11FT019:EE_|MN2PR01MB5613:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 77662c1e-9e9d-4fc9-a4a5-08db3d0c79d9
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?Hj6HkQZglSC30+HzynLWTYq64G/kEYdCJh3Xtjow5iIcfQMW1gz/NKB+/F7h?=
+ =?us-ascii?Q?sdSHZ+owT1mtYRHVVnxwJIUnwPmM6y8VD1A/WMbX/iQ0VB3LdItbl5GI2zPt?=
+ =?us-ascii?Q?yHN2239VgFNpx2jgGXxdy623CDPGojy9ZzlbKhae1N5mlfhjHTiJ8LdEYgKP?=
+ =?us-ascii?Q?C/AzuoJLj9WgK+0IsMzCLUf+3k6WXFy1PtJTvTYUVm7nVtKuLHMmAxPSr2Hi?=
+ =?us-ascii?Q?B1RoEE3+jKXthrI1dib12F9QFONNAy1IoRN6GZYeCvK/Axdx61yHKJM5XoUi?=
+ =?us-ascii?Q?rd8bIZU0qov9pPsl3K/pY3UGepHtsZYAlxvgmXi0jobUAZKd3YQ/64BiflKe?=
+ =?us-ascii?Q?f/GXKsE8WoBqrcN4n6v5ydQ7SoBWpMwhUTU0JyNvd0WtiWpdq530PktxRLKk?=
+ =?us-ascii?Q?vDL646ljELkY2ZqiDtZ1ENLRhxyYY5lSeaoD116+PrvDFobar3pL8polNrvV?=
+ =?us-ascii?Q?JPG9X+VK+LN7TYh8OcFBLKBQ8htfi6zRxBar5GKDMhXX1X4FrrSAfs6K+b9V?=
+ =?us-ascii?Q?2q803d9bWCfPwP1t2s7fQK04RBBNL3PTw0VMDvpJckEJ30Zpw36PZiCpQVL+?=
+ =?us-ascii?Q?Z3PxKfw3qH7saGQpSpzVbtPWAOCxuDfLz9JD2OeNLSDw5rSBeIz46hAtndr+?=
+ =?us-ascii?Q?PJdQZjfS+XXZ0FkBev6xWCDQQlwPBwHwXtG05hiMmHdClX9/ejXYswvXGUia?=
+ =?us-ascii?Q?Q2puC54gyCKucXZvjN7PW71dcZmJ3y/1oCkN07KfUPYNxQvzPNpgDPT3jP4L?=
+ =?us-ascii?Q?JAQ54haTR31JmI8nc4XHOQlUijcSqiApx/NvZK7dPXFCRJ0Dx+caQZroFitN?=
+ =?us-ascii?Q?gOLwK4T0wAGF5ATsINzCGxckS+P56bRcPwU7QNekUqmDTdtRHtF1ZH+YE0kI?=
+ =?us-ascii?Q?Vq7Iff54i0LMiphFFGIEVxWdkViQwX1/GyLi1p2ySGHVCai9ATOw8MU6zidn?=
+ =?us-ascii?Q?a5bews+j2oJSzBfKVy9RLlpCzVTMCSs+0gx5uFr8DAd05FMNrn/5KI+Bkf4m?=
+ =?us-ascii?Q?EWmjMUANZPxTR6++wwoYg0wHiiusPGmjWng+iqfFULfw+l4H5QRqhH/FpTlB?=
+ =?us-ascii?Q?09HK/OLgpx+snrm1YRXpEUXyHA87Kf03ycCg2/SnlI2I20w6eDfw7z4QoSb4?=
+ =?us-ascii?Q?k6MrYTWgxhDtGrZK+FErF7oJavIxRu1gHhc8FJBu1/o+sgLUZW2jxCwmCif0?=
+ =?us-ascii?Q?reOWOsSDQ8DyERHtk4NGsFdcamSP/IaNlDqhGP1/QGmnwT5OBUCdBs8LPZbl?=
+ =?us-ascii?Q?omRO1WcONUfr99F8lT0L?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:87.253.233.201;CTRY:FR;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:o201.p8.mailjet.com;PTR:o201.p8.mailjet.com;CAT:NONE;SFS:(13230028)(4636009)(1690799014)(451199021)(66899021)(6486002)(8676002)(966005)(6916009)(58800400005)(6636002)(7066003)(7696005)(36736006)(19810500001)(83380400001)(16799955002)(36756003)(7636003)(42882007)(336012)(33964004)(9686003)(956004)(6506007)(26005)(30864003)(1096003)(76236004)(9316004)(5660300002)(7596003)(83170400001)(166002)(356005)(15650500001)(76899015)(1406899024)(44200200035)(579004);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR01MB5343
+X-OrganizationHeadersPreserved: MN2PR01MB5343.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb7.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb7.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92exhyb7.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 14 Apr 2023 17:19:59.6265
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 77662c1e-9e9d-4fc9-a4a5-08db3d0c79d9
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted:
+ DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 3f6ef3c4-de28-4055-f9e4-08db3d0c4314
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.112;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:w92exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2023 17:19:59.4078
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77662c1e-9e9d-4fc9-a4a5-08db3d0c79d9
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR01MB5613
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.5797107
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6319.010
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?S0ZQRGhzaVpVUzdCK3o2eVRvSHRsMHEvUW1yOE90VzJKZnZpcUtuK0hMZ2s1?=
+ =?utf-8?B?VDdLcXRKL3dXbjZBbGJoN3IyL1pXdkNqZ2NtMjFETDZsUG5pcW0xaFNkR0ps?=
+ =?utf-8?B?eEtrMmszVkhvVlYvMGowbW5vL1ExaitkSklBTHNIU3lINGx3YzhnekZaVkFo?=
+ =?utf-8?B?MTkxK2xKUmFkTkorZWdrbk5IcU5oQjUydjVCZGJKVlU5OUswbHlMUmxhdm5D?=
+ =?utf-8?B?VkhyZ05DS3ZFdEpOVDFwK0k2SVBWaDY1OHRqREVzNEp2QitoZzk3NFBCMEdu?=
+ =?utf-8?B?TStWK3J2TSt1WGNOcURJakFXanJhb2lrMTRwNTdJVzZ1NUI2dVFteG4vQ01I?=
+ =?utf-8?B?dGk3NktYV0hHMFZJSURZeGM3bE5pT1BNVFVmdXRxY1kzdUs4UUZON2NZQmFZ?=
+ =?utf-8?B?cGZkRWNXMjUrTUtzTlFvY3BwWHBqT09jdUxYSkVqTTU5MXp4MGxsaFMxd29N?=
+ =?utf-8?B?d2ZBc3FHb0JjcmZOTzFEQlFVbVRONEZlS0NLSzJRZlZPZkFTZUFSNmRPM2J1?=
+ =?utf-8?B?b29JS2dTT1RyVmE4TGtjTEcvSEthZDI5dS9xak9FY3lFZ0VnSUxIaTR5QXVx?=
+ =?utf-8?B?Uy9DUzJhYnRoa3lWd24vMHBzYXVSaEhib3BNN3RlSlJkU3hHN2tVcm1QbzFV?=
+ =?utf-8?B?WmlsWkx5Z1B0QjZuWjNXWURVSjR4S0FGc2VjRW4rSkxZRDEvZFloOWxYQTFl?=
+ =?utf-8?B?bmlyNW1odTgvMlJiNFQzNUF1QmFsVDdIQlZKRlNnbm9wYmRwVWZ5eUdtSXFT?=
+ =?utf-8?B?dmRuS1gzUXdHc2xPSS81Q0J1dUErd1JxR25EQmFlZXlSN2RsWDdlUk9RY1VU?=
+ =?utf-8?B?MVJ5ajN2ZE00S3U5NlhXK09rSlNCSzQrNVozL1FpRnZZTlpHTzBZdElVc0lU?=
+ =?utf-8?B?Qnd4V1d6WjNqc1drZ05xaDAycnNPNXRVUEZRL0NnMXhXL3FvclMwRGFwTysz?=
+ =?utf-8?B?eTJ6RFcrai9vcUFmN1VrMHQ3Y0FWVnlHM3F6NStBMEJhT2JDS2IzM1kzRzY2?=
+ =?utf-8?B?R3dGb3dNQVRCcDRHVkpJaU1zclljNGN0US9EK3E0VjVIT1NKL0NSYUJPdWhk?=
+ =?utf-8?B?WXhZUTlCQjF6c3hTRTVxZG1ZQjc5d0wva1dxb1hnMkFTYnBSbkQwbGI5WjRh?=
+ =?utf-8?B?Z2tZUU8wSlhuMXkzRG1zUFhNd0lvTjE0K0ZadjR6Mnd5SmlhaFVrd2tUUDhW?=
+ =?utf-8?B?SStRdFdOdDlMNUIxdmJYTWRhU2lWWmV4UWVRSW9Wb3VQejJHSWNHejNMM0FH?=
+ =?utf-8?B?VUw5aFJhSlpDVWd5eWpNMW41M21MMzI1UmFVaWVDNzVNZXdGLzBVek1XcUhi?=
+ =?utf-8?B?eEk1MHlXclZpU3plR0ZlMGVKbWVra1NXSEJrdXZaSmVYL21qNEVITkphVkgy?=
+ =?utf-8?B?RGVINE1DeE1KRVQwN25XSmpVTWM4VU80T1B0T3JCczluV2laUWc5NmNudFNw?=
+ =?utf-8?B?dVI5dmcyQlB4ay8rZ1hvYTVIUS9mU3QybTNTVCtOYjcxZUZEUHprUjcrYmY1?=
+ =?utf-8?B?dDY5NFBIdzFjTitGa0lzaWloL2d2R1JHd3NJT1pLZFU1cmoxcE9VeHpXdnlt?=
+ =?utf-8?B?aHFCNWpqWDZBbGJ6ZFIrVy9nOWxUUUZSSXBiWnU5UTlHSUdmbFVxUDdRdU4x?=
+ =?utf-8?B?WU5UTnc1cUdlYk0zbXJKZWlLdUgva216bzF1N1FneTB1L3lzYWxDbW9MbzRY?=
+ =?utf-8?B?aUptV01YWTkyQVRYZFMwMFpid3V3Q2pIVTBQeTFDdU9PeG5PUHN3NVE0c0hK?=
+ =?utf-8?B?d1VYZ0R2amNwdVhlU3pzZytxYW42UVJlMkZmVFloUlFBakVBMDVSZlNlZmFt?=
+ =?utf-8?B?Tml0V2ZNRWltZkk1dmw5THByWnBGZDZQeTJaOTdvcXUrNTVxOFY5bklObjcr?=
+ =?utf-8?B?ZTRXbDR2SkEyYjF1ZlBRQ3NtNVZLbW5Qck5TU2I5M0xuZUxqOHBSeEtIY1po?=
+ =?utf-8?B?ZGlxSWtoMjMySGhrK1lWQmt1SDZRZFNMQkx2bVJNeGlqRjVLQms5NDBvM3NN?=
+ =?utf-8?Q?Nnz3u64RFPP+JQPIIIiopsXAcABLX8=3D?=
+MIME-Version: 1.0
+
+--=-wU7BOIbJoU18xmjcuKpm
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<<Suzy Nelson>> [https://iz1w.mjt.lu/img/iz1w/b/mjunt/gm4zk.png]
+TL;DR: W20 closes this weekend for renovations; resources for food and groc=
+eries, space, and services are below; the renewed building will reopen for =
+the 2023 fall term; students and DSL collaborate on key priorities includin=
+g W20, housing renewal, student orgs, food security, and event security.
+
+Dear students,
+
+MIT is a special place. I was reminded of this when I watched Professor Ane=
+tte =E2=80=9CPeko=E2=80=9D Hosoi [https://idss.mit.edu/staff/anette-peko-ho=
+soi/]=E2=80=99s appearance on CBS News [https://idss.mit.edu/news/kindness-=
+goes-viral/] over the winter. Professor Hosoi developed a mathematical form=
+ula demonstrating that kindness could go viral =E2=80=9Cif every time someo=
+ne performs an act of kindness for us, we do more than one nice thing for s=
+omeone else.=E2=80=9D This is good advice anytime, but especially as we hea=
+d into the home stretch of another rigorous academic year.
+
+Below I highlight some important initiatives that students are working on w=
+ith the Division of Student Life (DSL), part of the Chancellor=E2=80=99s Of=
+fice network that=E2=80=99s dedicated to helping students be happier, healt=
+hier, and more successful at MIT. I also have some updates on the Stratton =
+Student Center (W20), which will close this Sunday, April 16, for renovatio=
+ns. You can also find details on food, gathering spaces, and more resources=
+ available while the building is closed, so please read this message closel=
+y.
+
+And in case you aren't aware, the DSL deans and I host office hours every F=
+riday in 4-110 [http://whereis.mit.edu/?go=3D4] from 11 am to noon for the =
+remainder of the semester. Please come by for a chat, a snack, and meet our=
+ furry four-legged dean, Addie [https://studentlife.mit.edu/deans-open-offi=
+ce-hours-addie]!
+
+I wish you all the best for the remainder of this term.
+
+Best,
+Suzy
+
+***
+
+Student Center Renovation
+
+After Sunday night, the Student Center, including all of the eateries and s=
+paces in it, will be closed for renovations until the start of the fall ter=
+m. This is the culmination of more than five years of planning in which stu=
+dents played a key role (see below for more details). The result will be re=
+freshed and expanded student spaces, a fantastic Wellbeing Lab, and a found=
+ation for continued enhancements.
+
+With a few weeks left in the semester, we have developed plans to replace (=
+as best we can) W20=E2=80=99s food and space resources temporarily.
+
+ * Food. A rotating roster of food trucks [https://studentlife.mit.edu/food=
+-trucks] will be parked outside W20 each day, from 11 am to 4:30 pm (you ca=
+n check out their menus online [https://studentlife.mit.edu/food-trucks]). =
+Additionally, three more restaurants around campus=E2=80=93Dumpling Daughte=
+r, Tasty Burger, and Vitality Bowls=E2=80=93have been added to the roster o=
+f businesses that accept TechCASH, totaling 14 eateries and grocery stores =
+on or near campus [https://get.cbord.com/mit/full/merchants.php].
+ * Groceries. The grocery shuttle schedule has been extended to Wednesday, =
+Friday, and Sunday, from 11:30 am to 4:30 pm. The shuttle runs in a loop en=
+compassing Trader Joe=E2=80=99s on Memorial Drive, Whole Foods on River Str=
+eet, and the Daily Table in Central Square. Bookmark the shuttles page on t=
+he Facilities website for maps and live schedule updates [https://web.mit.e=
+du/facilities/transportation/shuttles/grocery.html].
+ * Spaces. Although we will not be able to replace all of the space that W2=
+0 offers, there are several resources you can use to find space now, includ=
+ing touchdown space in classrooms reserved by DSL, space from Libraries, In=
+stitute Events, and more. Visit the W20 project updates and FAQ page for de=
+tails on space resources [https://studentlife.mit.edu/about/new-vision-stud=
+ent-center/project-updates-and-faq].
+ * Services. US Mail continues to be redirected to the USPS location at 770=
+ Massachusetts Avenue [https://goo.gl/maps/8UqERiNqcEV7whzv7]. The MIT Cred=
+it Union has several ATMs across campus [https://www.mitfcu.org/branches-an=
+d-atms], and the main branch is located in Building NE48 [http://whereis.mi=
+t.edu/?go=3DNE48].
+
+Long-term improvements. Our vision is for the Student Center to be a destin=
+ation for wellbeing [https://studentlife.mit.edu/about/new-vision-student-c=
+enter/destination-wellbeing], performing arts and dance [https://studentlif=
+e.mit.edu/about/new-vision-student-center/student-community], healthy eatin=
+g [https://studentlife.mit.edu/about/new-vision-student-center/food-culture=
+], and community building [https://studentlife.mit.edu/about/new-vision-stu=
+dent-center/lounge-network]. For more than four years, we have gathered inp=
+ut from students and the community on what W20 can become. When it reopens =
+in the fall, W20=E2=80=99s interior will be fresh and new, and we=E2=80=99l=
+l have a solid foundation for more improvements.
+
+The renovated Student Center will be more welcoming, more open, and more fo=
+cused on students. There will be some changes, of course. As we announced i=
+n January, LaVerde=E2=80=99s Market has chosen not to reopen [https://stude=
+ntlife.mit.edu/news/campus-grocer-laverde%E2%80%99s-announces-closure-april=
+] after the renovation. We are working with a retail consulting firm to ide=
+ntify a new grocery tenant for that space, and I am encouraged by ongoing d=
+evelopments.
+
+We will also keep improving our food and dining offerings. New to the Commo=
+nWealth Kitchen Launchpad [https://studentlife.mit.edu/news/commonwealth-ki=
+tchen-launchpad-prepares-takeoff-student-center] in the Lobdell Food Court =
+will be Tawakal Halal Cafe [https://studentlife.mit.edu/news/students-selec=
+t-somali-restaurant-join-launchpad-fall], which replaces Las Palmas Dominic=
+an Kitchen. Tawakal=E2=80=99s chef Yahya Noor was a James Beard Award nomin=
+ee this year, and we thank the more than 660 students who helped select his=
+ eatery to be added to the Launchpad. We will also welcome back favorites i=
+ncluding Dunkin=E2=80=99, Tea-Do (serving an expanded menu), Bib Bim Box, a=
+nd Carolicious.
+
+There=E2=80=99s a lot to be excited about. The temporary inconvenience over=
+ the coming weeks will be worth it when the Student Center reopens in a few=
+ short months. Follow our progress on the DSL website [https://studentlife.=
+mit.edu/about/new-vision-student-center/project-updates-and-faq].
+
+Student Involvement
+
+At MIT, students help shape decisions that affect their experience. Since I=
+ came to MIT in 2016, I have worked with hundreds of students on dozens of =
+impactful committees, from developing architectural principles for future r=
+esidence halls [https://studentlife.mit.edu/news/architectural-principles-c=
+ommittee-completes-work-guidance-future-dorms] to making the student-manage=
+d room assignment process more equitable and less stressful [https://studen=
+tlife.mit.edu/about/goals-mission-and-organization/meet-suzy-nelson/key-mat=
+ters/room-assignment-and-move-design-exercise] for incoming students. More =
+recently, we worked with students from Burton-Conner [https://studentlife.m=
+it.edu/housing/undergraduate-housing/renovation-renewal-new-construction-pr=
+ojects/burton-conner-renewal-project] on their renovation and are now engag=
+ed with East Campus residents [https://studentlife.mit.edu/housing/undergra=
+duate-housing/renovation-renewal-new-construction-projects/east-campus-reno=
+vation] to prepare for the start of EC=E2=80=99s renewal. Student leaders a=
+lso meet with Chancellor Melissa Nobles, Vice Chancellor Ian Waitz, me, DSL=
+=E2=80=99s senior leadership team, and other MIT leaders regularly. Here ar=
+e a few of the important issues we=E2=80=99re working on with students:
+
+ * Student Center Renovations. We worked closely with students to develop t=
+he plans described above, beginning with focus groups in November 2018. Sin=
+ce then, we hosted many events to gather student feedback [https://studentl=
+ife.mit.edu/sites/default/files/Documents/20230201-W20-Timeline-Final.pdf] =
+which, combined with other analyses, resulted in the new vision of W20 [htt=
+ps://studentlife.mit.edu/about/new-vision-student-center] as a hub for stud=
+ent wellbeing.
+ * Event Security. Encouraged by the Black Students Union (BSU), DSL has un=
+dertaken a review of security protocols for on-campus events with students =
+from the BSU, the Association of Student Activities, and other stakeholders=
+. This builds on the Working Group on Reimagining Public Safety at MIT [htt=
+p://inj9.mjt.lu/nl3/h3P5SC4HQ0q3Uv9Bp76XYA?m=3DAVoAAAUPL-YAAcrs8oAAAAA81V8A=
+AAAAGqoAJb6rAAiQzwBjmM5E1YC4PZ3JTzG5u9fc346PfwAIIWc&b=3D08d90b6d&e=3D946280=
+ce&x=3D40nyjL_lSKXB76ujW1DR7A], which also included students and delivered =
+their report [https://reif.mit.edu/sites/default/files/Safety_1.pdf] in Dec=
+ember 2022.
+ * Student Organizations. MIT boasts a constellation of groups, teams, and =
+clubs engaged in just about any activity or sport that you can imagine. Sta=
+rting last month, a working group including students started examining memb=
+ership, recognition, and funding processes and in the fall will make recomm=
+endations to strengthen this vital aspect of campus life.
+
+Food and Dining
+
+MIT recently commissioned a report on evolving food and dining trends [http=
+s://studentlife.mit.edu/news/mit-releases-campus-retail-dining-study] that =
+will help to inform the future of food on campus. But, changes to the food =
+and dining landscape that started during the pandemic continue. We reaffirm=
+ our commitment to student food security, which is the focus of the faculty=
+, staff, and students serving on the Food Security Action Team [https://stu=
+dentlife.mit.edu/fsat]. If you find that you aren=E2=80=99t getting suffici=
+ent nutrition=E2=80=93or you are struggling with finances=E2=80=93know that=
+ help is available. As I=E2=80=99ve said before, no student at MIT should g=
+o hungry because they don=E2=80=99t have enough money to buy food. Check ou=
+t these resources available through DSL and MIT [https://doingwell.mit.edu/=
+foodandfinancial/].
+
+
+
+This e-mail has been sent to jiannan@mit.edu, click here to unsubscribe htt=
+p://iz1w.mjt.lu/unsub2?hl=3Den&m=3DAVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfr=
+AAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM&b=3D8e7a82cd&e=3Dd9d201a0&x=3Da7iET=
+_5Bkh8rOy7esnA68A.
+
+
+
+[https://www.mailjet.com/?utm_source=3Dfooter&utm_medium=3Demail&utm_campai=
+gn=3Dlogo1]=
+
+--=-wU7BOIbJoU18xmjcuKpm
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>Sharing some springtime thoughts and W20 updates</title><!--[if !mso]>=
+<!--><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><!--<![endi=
+f]--><meta name=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=
+=3D1"><style type=3D"text/css">#outlook a { padding:0; }
+          body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-=
+size-adjust:100%; }
+          table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-tab=
+le-rspace:0pt; }
+          img { border:0;height:auto;line-height:100%; outline:none;text-de=
+coration:none;-ms-interpolation-mode:bicubic; }
+          p { display:block;margin:13px 0; }</style><!--[if mso]>
+        <noscript>
+        <xml>
+        <o:OfficeDocumentSettings>
+          <o:AllowPNG/>
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+        </xml>
+        </noscript>
+        <![endif]--><!--[if lte mso 11]>
+        <style type=3D"text/css">
+          .mj-outlook-group-fix { width:100% !important; }
+        </style>
+        <![endif]--><style type=3D"text/css">@media only screen and (min-wi=
+dth:480px) {
+        .mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-100 { width:100% !important; max-width: 100%; }</style><sty=
+le type=3D"text/css">[owa] .mj-column-per-100 { width:100% !important; max-=
+width: 100%; }</style><style type=3D"text/css">@media only screen and (max-=
+width:480px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style></head><body style=3D"word-spacing:normal;background-color:#ff=
+ffff;"><div style=3D"background-color:#ffffff;"><!--[if mso | IE]><table al=
+ign=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" =
+role=3D"presentation" style=3D"width:600px;" width=3D"600" bgcolor=3D"#ffff=
+ff" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:ex=
+actly;"><![endif]--><div style=3D"background:#ffffff;background-color:#ffff=
+ff;margin:0px auto;max-width:600px;"><table align=3D"center" border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"backgroun=
+d:#ffffff;background-color:#ffffff;width:100%;"><tbody><tr><td style=3D"dir=
+ection:ltr;font-size:0px;padding:20px 0;text-align:center;"><!--[if mso | I=
+E]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><![end=
+if]--><div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-s=
+ize:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:t=
+op;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr>=
+<td align=3D"left" style=3D"font-size:0px;padding:10px 25px 10px 25px;paddi=
+ng-right:25px;padding-left:25px;word-break:break-word;"><table border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"border-=
+collapse:collapse;border-spacing:0px;"><tbody><tr><td style=3D"width:550px;=
+"><img alt=3D"Suzy Nelson" height=3D"auto" src=3D"https://iz1w.mjt.lu/img/i=
+z1w/b/mjunt/gm4zk.png" style=3D"border:none;display:block;outline:none;text=
+-decoration:none;height:auto;width:100%;font-size:13px;" width=3D"550"></td=
+></tr></tbody></table></td></tr><tr><td align=3D"left" style=3D"font-size:0=
+px;padding:0px 25px 0px 25px;padding-top:0px;padding-right:25px;padding-bot=
+tom:0px;padding-left:25px;word-break:break-word;"><div style=3D"font-family=
+:Arial, sans-serif;font-size:14px;letter-spacing:normal;line-height:1;text-=
+align:left;color:#000000;"><p class=3D"text-build-content" style=3D"line-he=
+ight: 24px; margin: 10px 0; margin-top: 10px;" data-testid=3D"PKVvbOW58H"><=
+span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif=
+;font-size:14px;line-height:24px;"><i><b>TL;DR: </b>W20 closes this weekend=
+ for renovations; resources for food and groceries, space, and services are=
+ below; the renewed building will reopen for the 2023 fall term; students a=
+nd DSL collaborate on key priorities including W20, housing renewal, studen=
+t orgs, food security, and event security.</i></span></p><p class=3D"text-b=
+uild-content" style=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"P=
+KVvbOW58H"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial=
+, sans-serif;font-size:14px;line-height:24px;">Dear students,</span></p><p =
+class=3D"text-build-content" style=3D"line-height: 24px; margin: 10px 0;" d=
+ata-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial, H=
+elvetica, Arial, sans-serif;font-size:14px;line-height:24px;">MIT is a spec=
+ial place. I was reminded of this when I watched </span><a class=3D"link-bu=
+ild-content" style=3D"color:inherit;; text-decoration: none;" target=3D"_bl=
+ank" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUf=
+rAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/1/wfNh2wOkxLza_prraYTaZw/aHR0cHM6L=
+y9pZHNzLm1pdC5lZHUvc3RhZmYvYW5ldHRlLXBla28taG9zb2kv"><span style=3D"color:#=
+1c80ff;font-family:Arial;font-size:14px;line-height:24px;"><u>Professor Ane=
+tte =E2=80=9CPeko=E2=80=9D Hosoi</u></span></a><span style=3D"color:#000000=
+;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height=
+:24px;">=E2=80=99s appearance on </span><a class=3D"link-build-content" sty=
+le=3D"color:inherit;; text-decoration: none;" target=3D"_blank" href=3D"htt=
+p://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZ=
+G9j8ZRda7XLEnKaDdNgAIBDM/2/miVCyq3C8u0EALeKXw5aCQ/aHR0cHM6Ly9pZHNzLm1pdC5lZ=
+HUvbmV3cy9raW5kbmVzcy1nb2VzLXZpcmFsLw"><span style=3D"color:#1c80ff;font-fa=
+mily:Arial;font-size:14px;line-height:24px;"><u>CBS News</u></span></a><spa=
+n style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;fo=
+nt-size:14px;line-height:24px;"> over the winter. Professor Hosoi developed=
+ a mathematical formula demonstrating that kindness could go viral =E2=80=
+=9Cif every time someone performs an act of kindness for us, we do more tha=
+n one nice thing for someone else.=E2=80=9D This is good advice anytime, bu=
+t especially as we head into the home stretch of another rigorous academic =
+year.</span></p><p class=3D"text-build-content" style=3D"line-height: 24px;=
+ margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;f=
+ont-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:2=
+4px;">Below I highlight some important initiatives that students are workin=
+g on with the Division of Student Life (DSL), part of the Chancellor=E2=80=
+=99s Office network that=E2=80=99s dedicated to helping students be happier=
+, healthier, and more successful at MIT. I also have some updates on the St=
+ratton Student Center (W20), which will close this Sunday, April 16, for re=
+novations. You can also find details on food, gathering spaces, and more re=
+sources available while the building is closed, so please read this message=
+ closely.</span></p><p class=3D"text-build-content" style=3D"line-height: 2=
+4px; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#0000=
+00;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-heig=
+ht:24px;">And in case you aren't aware, the DSL deans and I host office hou=
+rs every Friday in </span><a class=3D"link-build-content" style=3D"color:in=
+herit;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.l=
+u/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnK=
+aDdNgAIBDM/3/PckcuiCPuTYuld60VTBa3g/aHR0cDovL3doZXJlaXMubWl0LmVkdS8_Z289NA"=
+><span style=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:=
+24px;"><u>4-110</u></span></a><span style=3D"color:#000000;font-family:Aria=
+l, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;"> from 11 =
+am to noon for the remainder of the semester. Please come by for a chat, a =
+snack, and meet our </span><a class=3D"link-build-content" style=3D"color:i=
+nherit;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.=
+lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEn=
+KaDdNgAIBDM/4/_hyJUa9WXYYf3PlNxgnjiQ/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L2=
+RlYW5zLW9wZW4tb2ZmaWNlLWhvdXJzLWFkZGll"><span style=3D"color:#1c80ff;font-f=
+amily:Arial;font-size:14px;line-height:24px;"><u>furry four-legged dean, Ad=
+die</u></span></a><span style=3D"color:#000000;font-family:Arial, Helvetica=
+, Arial, sans-serif;font-size:14px;line-height:24px;">!</span></p><p class=
+=3D"text-build-content" style=3D"line-height: 24px; margin: 10px 0;" data-t=
+estid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial, Helvet=
+ica, Arial, sans-serif;font-size:14px;line-height:24px;">I wish you all the=
+ best for the remainder of this term.</span></p><p class=3D"text-build-cont=
+ent" style=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H=
+"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-se=
+rif;font-size:14px;line-height:24px;">Best,</span><br><span style=3D"color:=
+#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line=
+-height:24px;">Suzy</span></p><p class=3D"text-build-content" style=3D"line=
+-height: 24px; text-align: center; margin: 10px 0;" data-testid=3D"PKVvbOW5=
+8H"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-=
+serif;font-size:14px;line-height:24px;">***</span></p><p class=3D"text-buil=
+d-content" style=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVv=
+bOW58H"><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, s=
+ans-serif;font-size:14px;line-height:24px;"><b>Student Center Renovation</b=
+></span></p><p class=3D"text-build-content" style=3D"line-height: 24px; mar=
+gin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-=
+family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;=
+">After Sunday night, the Student Center, including all of the eateries and=
+ spaces in it, will be closed for renovations until the start of the fall t=
+erm. This is the culmination of more than five years of planning in which s=
+tudents played a key role (see below for more details). The result will be =
+refreshed and expanded student spaces, a fantastic Wellbeing Lab, and a fou=
+ndation for continued enhancements.</span></p><p class=3D"text-build-conten=
+t" style=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H">=
+<span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-seri=
+f;font-size:14px;line-height:24px;">With a few weeks left in the semester, =
+we have developed plans to replace (as best we can) W20=E2=80=99s food and =
+space resources temporarily.</span></p><ul><li style=3D"line-height:24px;">=
+<span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-seri=
+f;font-size:14px;line-height:24px;"><b>Food. </b>A </span><a class=3D"link-=
+build-content" style=3D"color:inherit;; text-decoration: none;" target=3D"_=
+blank" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJ=
+UfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/5/UF28CZa9c9zIymCh4jmNiA/aHR0cHM=
+6Ly9zdHVkZW50bGlmZS5taXQuZWR1L2Zvb2QtdHJ1Y2tz"><span style=3D"color:#1c80ff=
+;font-family:Arial;font-size:14px;line-height:24px;"><u>rotating roster of =
+food trucks</u></span></a><span style=3D"color:#000000;font-family:Arial, H=
+elvetica, Arial, sans-serif;font-size:14px;line-height:24px;"> will be park=
+ed outside W20 each day, from 11 am to 4:30 pm (</span><a class=3D"link-bui=
+ld-content" style=3D"color:inherit;; text-decoration: none;" target=3D"_bla=
+nk" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfr=
+AAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/6/l8-hPxY94hKyqndww9FMyw/aHR0cHM6Ly=
+9zdHVkZW50bGlmZS5taXQuZWR1L2Zvb2QtdHJ1Y2tz"><span style=3D"color:#1c80ff;fo=
+nt-family:Arial;font-size:14px;line-height:24px;"><u>you can check out thei=
+r menus online</u></span></a><span style=3D"color:#000000;font-family:Arial=
+, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">). Additio=
+nally, three more restaurants around campus=E2=80=93Dumpling Daughter, Tast=
+y Burger, and Vitality Bowls=E2=80=93have been added to the roster of busin=
+esses that accept TechCASH, totaling </span><a class=3D"link-build-content"=
+ style=3D"color:inherit;; text-decoration: none;" target=3D"_blank" href=3D=
+"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYr=
+iHxZG9j8ZRda7XLEnKaDdNgAIBDM/7/jitDDMCgH2GkM4pVIlaz1w/aHR0cHM6Ly9nZXQuY2Jvc=
+mQuY29tL21pdC9mdWxsL21lcmNoYW50cy5waHA"><span style=3D"color:#1c80ff;font-f=
+amily:Arial;font-size:14px;line-height:24px;"><u>14 eateries and grocery st=
+ores on or near campus</u></span></a><span style=3D"color:#000000;font-fami=
+ly:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">.<=
+/span></li><li style=3D"line-height:24px;"><span style=3D"color:#000000;fon=
+t-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24p=
+x;"><b>Groceries. </b>The grocery shuttle schedule has been extended to Wed=
+nesday, Friday, and Sunday, from 11:30 am to 4:30 pm. The shuttle runs in a=
+ loop encompassing Trader Joe=E2=80=99s on Memorial Drive, Whole Foods on R=
+iver Street, and the Daily Table in Central Square. Bookmark the </span><a =
+class=3D"link-build-content" style=3D"color:inherit;; text-decoration: none=
+;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM1=
+05GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/8/6rS2kOtiNHVSzBts=
+QSJsNw/aHR0cHM6Ly93ZWIubWl0LmVkdS9mYWNpbGl0aWVzL3RyYW5zcG9ydGF0aW9uL3NodXR0=
+bGVzL2dyb2NlcnkuaHRtbA"><span style=3D"color:#1c80ff;font-family:Arial;font=
+-size:14px;line-height:24px;"><u>shuttles page on the Facilities website fo=
+r maps and live schedule updates</u></span></a><span style=3D"color:#000000=
+;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height=
+:24px;">.</span></li><li style=3D"line-height:24px;"><span style=3D"color:#=
+000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-=
+height:24px;"><b>Spaces. </b>Although we will not be able to replace all of=
+ the space that W20 offers, there are several resources you can use to find=
+ space now, including touchdown space in classrooms reserved by DSL, space =
+from Libraries, Institute Events, and more. </span><a class=3D"link-build-c=
+ontent" style=3D"color:inherit;; text-decoration: none;" target=3D"_blank" =
+href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhv=
+EABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/9/pqEi7Cf6BtkVQ3CfIX7YWw/aHR0cHM6Ly9zdH=
+VkZW50bGlmZS5taXQuZWR1L2Fib3V0L25ldy12aXNpb24tc3R1ZGVudC1jZW50ZXIvcHJvamVjd=
+C11cGRhdGVzLWFuZC1mYXE"><span style=3D"color:#1c80ff;font-family:Arial;font=
+-size:14px;line-height:24px;"><u>Visit the W20 project updates and FAQ page=
+ for details on space resources</u></span></a><span style=3D"color:#000000;=
+font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:=
+24px;">.</span></li><li style=3D"line-height:24px;"><span style=3D"color:#0=
+00000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-h=
+eight:24px;"><b>Services. </b>US Mail continues to be redirected to the </s=
+pan><a class=3D"link-build-content" style=3D"color:inherit;; text-decoratio=
+n: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS=
+0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/10/0mEcCN3O=
+Do8bp0Ug9iz-Yg/aHR0cHM6Ly9nb28uZ2wvbWFwcy84VXFFUmlOcWNFVjd3aHp2Nw"><span st=
+yle=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:24px;"><u=
+>USPS location at 770 Massachusetts Avenue</u></span></a><span style=3D"col=
+or:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;l=
+ine-height:24px;">. The </span><a class=3D"link-build-content" style=3D"col=
+or:inherit;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1w.=
+mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7=
+XLEnKaDdNgAIBDM/11/Mci6WdIg8FrDRnjJi74t_A/aHR0cHM6Ly93d3cubWl0ZmN1Lm9yZy9ic=
+mFuY2hlcy1hbmQtYXRtcw"><span style=3D"color:#1c80ff;font-family:Arial;font-=
+size:14px;line-height:24px;"><u>MIT Credit Union has several ATMs across ca=
+mpus</u></span></a><span style=3D"color:#000000;font-family:Arial, Helvetic=
+a, Arial, sans-serif;font-size:14px;line-height:24px;">, and the main branc=
+h is located in </span><a class=3D"link-build-content" style=3D"color:inher=
+it;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/l=
+nk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDd=
+NgAIBDM/12/31hlyhABeOw1nmJk42l6lQ/aHR0cDovL3doZXJlaXMubWl0LmVkdS8_Z289TkU0O=
+A"><span style=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-heigh=
+t:24px;"><u>Building NE48</u></span></a><span style=3D"color:#000000;font-f=
+amily:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;"=
+>.</span></li></ul><p class=3D"text-build-content" style=3D"line-height: 24=
+px; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#00000=
+0;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-heigh=
+t:24px;"><b>Long-term improvements. </b>Our vision is for the Student Cente=
+r to be a destination for </span><a class=3D"link-build-content" style=3D"c=
+olor:inherit;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1=
+w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRd=
+a7XLEnKaDdNgAIBDM/13/3afUGjSbwrrZZwmFq5CwbA/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQ=
+uZWR1L2Fib3V0L25ldy12aXNpb24tc3R1ZGVudC1jZW50ZXIvZGVzdGluYXRpb24td2VsbGJlaW=
+5n"><span style=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-heig=
+ht:24px;"><u>wellbeing</u></span></a><span style=3D"color:#000000;font-fami=
+ly:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">, =
+</span><a class=3D"link-build-content" style=3D"color:inherit;; text-decora=
+tion: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAA=
+clS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/14/Av4iz=
+HOhTZOpwDG356SgqQ/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L2Fib3V0L25ldy12aXNpb=
+24tc3R1ZGVudC1jZW50ZXIvc3R1ZGVudC1jb21tdW5pdHk"><span style=3D"color:#1c80f=
+f;font-family:Arial;font-size:14px;line-height:24px;"><u>performing arts an=
+d dance</u></span></a><span style=3D"color:#000000;font-family:Arial, Helve=
+tica, Arial, sans-serif;font-size:14px;line-height:24px;">, </span><a class=
+=3D"link-build-content" style=3D"color:inherit;; text-decoration: none;" ta=
+rget=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoA=
+AVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/15/5FAQbdK3ad7YARDxUhr7=
+4Q/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L2Fib3V0L25ldy12aXNpb24tc3R1ZGVudC1j=
+ZW50ZXIvZm9vZC1jdWx0dXJl"><span style=3D"color:#1c80ff;font-family:Arial;fo=
+nt-size:14px;line-height:24px;"><u>healthy eating</u></span></a><span style=
+=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size=
+:14px;line-height:24px;">, and </span><a class=3D"link-build-content" style=
+=3D"color:inherit;; text-decoration: none;" target=3D"_blank" href=3D"http:=
+//iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9=
+j8ZRda7XLEnKaDdNgAIBDM/16/YeCxxnm4OPQxhV1luN5cJg/aHR0cHM6Ly9zdHVkZW50bGlmZS=
+5taXQuZWR1L2Fib3V0L25ldy12aXNpb24tc3R1ZGVudC1jZW50ZXIvbG91bmdlLW5ldHdvcms">=
+<span style=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:2=
+4px;"><u>community building</u></span></a><span style=3D"color:#000000;font=
+-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px=
+;">. For more than four years, we have gathered input from students and the=
+ community on what W20 can become. When it reopens in the fall, W20=E2=80=
+=99s interior will be fresh and new, and we=E2=80=99ll have a solid foundat=
+ion for more improvements.</span></p><p class=3D"text-build-content" style=
+=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span st=
+yle=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-s=
+ize:14px;line-height:24px;">The renovated Student Center will be more welco=
+ming, more open, and more focused on students. There will be some changes, =
+of course. As we announced in January, </span><a class=3D"link-build-conten=
+t" style=3D"color:inherit;; text-decoration: none;" target=3D"_blank" href=
+=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABk=
+OYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/17/kKsITr6NiKXsXV382MGbww/aHR0cHM6Ly9zdHVkZ=
+W50bGlmZS5taXQuZWR1L25ld3MvY2FtcHVzLWdyb2Nlci1sYXZlcmRlJUUyJTgwJTk5cy1hbm5v=
+dW5jZXMtY2xvc3VyZS1hcHJpbA"><span style=3D"color:#1c80ff;font-family:Arial;=
+font-size:14px;line-height:24px;"><u>LaVerde=E2=80=99s Market has chosen no=
+t to reopen</u></span></a><span style=3D"color:#000000;font-family:Arial, H=
+elvetica, Arial, sans-serif;font-size:14px;line-height:24px;"> after the re=
+novation. We are working with a retail consulting firm to identify a new gr=
+ocery tenant for that space, and I am encouraged by ongoing developments.</=
+span></p><p class=3D"text-build-content" style=3D"line-height: 24px; margin=
+: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-fam=
+ily:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;">W=
+e will also keep improving our food and dining offerings. New to the </span=
+><a class=3D"link-build-content" style=3D"color:inherit;; text-decoration: =
+none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0bo=
+AAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/18/EyNL66QfxQe=
+jnl2t-kF1tw/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L25ld3MvY29tbW9ud2VhbHRoLWt=
+pdGNoZW4tbGF1bmNocGFkLXByZXBhcmVzLXRha2VvZmYtc3R1ZGVudC1jZW50ZXI"><span sty=
+le=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:24px;"><u>=
+CommonWealth Kitchen Launchpad</u></span></a><span style=3D"color:#000000;f=
+ont-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:2=
+4px;"> in the Lobdell Food Court will be </span><a class=3D"link-build-cont=
+ent" style=3D"color:inherit;; text-decoration: none;" target=3D"_blank" hre=
+f=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEAB=
+kOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/19/I7b1K3nuvgYbPf1ewb8OlQ/aHR0cHM6Ly9zdHVk=
+ZW50bGlmZS5taXQuZWR1L25ld3Mvc3R1ZGVudHMtc2VsZWN0LXNvbWFsaS1yZXN0YXVyYW50LWp=
+vaW4tbGF1bmNocGFkLWZhbGw"><span style=3D"color:#1c80ff;font-family:Arial;fo=
+nt-size:14px;line-height:24px;"><u>Tawakal Halal Cafe</u></span></a><span s=
+tyle=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-=
+size:14px;line-height:24px;">, which replaces Las Palmas Dominican Kitchen.=
+ Tawakal=E2=80=99s chef Yahya Noor was a James Beard Award nominee this yea=
+r, and we thank the more than 660 students who helped select his eatery to =
+be added to the Launchpad. We will also welcome back favorites including Du=
+nkin=E2=80=99, Tea-Do (serving an expanded menu), Bib Bim Box, and Carolici=
+ous.</span></p><p class=3D"text-build-content" style=3D"line-height: 24px; =
+margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=3D"color:#000000;fo=
+nt-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24=
+px;">There=E2=80=99s a lot to be excited about. The temporary inconvenience=
+ over the coming weeks will be worth it when the Student Center reopens in =
+a few short months. </span><a class=3D"link-build-content" style=3D"color:i=
+nherit;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.=
+lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEn=
+KaDdNgAIBDM/20/ELa_DY2zWx8v6V_5MwKlNA/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L=
+2Fib3V0L25ldy12aXNpb24tc3R1ZGVudC1jZW50ZXIvcHJvamVjdC11cGRhdGVzLWFuZC1mYXE"=
+><span style=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:=
+24px;"><u>Follow our progress on the DSL website</u></span></a><span style=
+=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size=
+:14px;line-height:24px;">.</span></p><p class=3D"text-build-content" style=
+=3D"line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span st=
+yle=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-s=
+ize:14px;line-height:24px;"><b>Student Involvement</b></span></p><p class=
+=3D"text-build-content" style=3D"line-height: 24px; margin: 10px 0;" data-t=
+estid=3D"PKVvbOW58H"><span style=3D"color:#000000;font-family:Arial, Helvet=
+ica, Arial, sans-serif;font-size:14px;line-height:24px;">At MIT, students h=
+elp shape decisions that affect their experience. Since I came to MIT in 20=
+16, I have worked with hundreds of students on dozens of impactful committe=
+es, from developing </span><a class=3D"link-build-content" style=3D"color:i=
+nherit;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.=
+lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEn=
+KaDdNgAIBDM/21/iDmBfXfvJKM1j8avQ9wGDg/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L=
+25ld3MvYXJjaGl0ZWN0dXJhbC1wcmluY2lwbGVzLWNvbW1pdHRlZS1jb21wbGV0ZXMtd29yay1n=
+dWlkYW5jZS1mdXR1cmUtZG9ybXM"><span style=3D"color:#1c80ff;font-family:Arial=
+;font-size:14px;line-height:24px;"><u>architectural principles for future r=
+esidence halls</u></span></a><span style=3D"color:#000000;font-family:Arial=
+, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;"> to making=
+ the </span><a class=3D"link-build-content" style=3D"color:inherit;; text-d=
+ecoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLg=
+BpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/22/=
+FhpZqmiI-VJRBw7QrNMgxQ/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L2Fib3V0L2dvYWxz=
+LW1pc3Npb24tYW5kLW9yZ2FuaXphdGlvbi9tZWV0LXN1enktbmVsc29uL2tleS1tYXR0ZXJzL3J=
+vb20tYXNzaWdubWVudC1hbmQtbW92ZS1kZXNpZ24tZXhlcmNpc2U"><span style=3D"color:=
+#1c80ff;font-family:Arial;font-size:14px;line-height:24px;"><u>student-mana=
+ged room assignment process more equitable and less stressful</u></span></a=
+><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-ser=
+if;font-size:14px;line-height:24px;"> for incoming students. More recently,=
+ </span><a class=3D"link-build-content" style=3D"color:inherit;; text-decor=
+ation: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoA=
+AclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/23/8Xuw=
+5jS5qgnej7eDuBWJfw/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L2hvdXNpbmcvdW5kZXJn=
+cmFkdWF0ZS1ob3VzaW5nL3Jlbm92YXRpb24tcmVuZXdhbC1uZXctY29uc3RydWN0aW9uLXByb2p=
+lY3RzL2J1cnRvbi1jb25uZXItcmVuZXdhbC1wcm9qZWN0"><span style=3D"color:#1c80ff=
+;font-family:Arial;font-size:14px;line-height:24px;"><u>we worked with stud=
+ents from Burton-Conner</u></span></a><span style=3D"color:#000000;font-fam=
+ily:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height:24px;"> =
+on their renovation and are </span><a class=3D"link-build-content" style=3D=
+"color:inherit;; text-decoration: none;" target=3D"_blank" href=3D"http://i=
+z1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8Z=
+Rda7XLEnKaDdNgAIBDM/24/tpuUlO5r5F3cgqAyUK7KAw/aHR0cHM6Ly9zdHVkZW50bGlmZS5ta=
+XQuZWR1L2hvdXNpbmcvdW5kZXJncmFkdWF0ZS1ob3VzaW5nL3Jlbm92YXRpb24tcmVuZXdhbC1u=
+ZXctY29uc3RydWN0aW9uLXByb2plY3RzL2Vhc3QtY2FtcHVzLXJlbm92YXRpb24"><span styl=
+e=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:24px;"><u>n=
+ow engaged with East Campus residents</u></span></a><span style=3D"color:#0=
+00000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-h=
+eight:24px;"> to prepare for the start of EC=E2=80=99s renewal. Student lea=
+ders also meet with Chancellor Melissa Nobles, Vice Chancellor Ian Waitz, m=
+e, DSL=E2=80=99s senior leadership team, and other MIT leaders regularly. H=
+ere are a few of the important issues we=E2=80=99re working on with student=
+s:</span></p><ul><li style=3D"line-height:24px;"><span style=3D"color:#0000=
+00;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-heig=
+ht:24px;"><b>Student Center Renovations. </b>We worked closely with student=
+s to develop the plans described above, beginning with focus groups in Nove=
+mber 2018. Since then, </span><a class=3D"link-build-content" style=3D"colo=
+r:inherit;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1w.m=
+jt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7X=
+LEnKaDdNgAIBDM/25/VvHrtqpxXOEeZao5lhsOpw/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZW=
+R1L3NpdGVzL2RlZmF1bHQvZmlsZXMvRG9jdW1lbnRzLzIwMjMwMjAxLVcyMC1UaW1lbGluZS1Ga=
+W5hbC5wZGY"><span style=3D"color:#1c80ff;font-family:Arial;font-size:14px;l=
+ine-height:24px;"><u>we hosted many events to gather student feedback</u></=
+span></a><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial, =
+sans-serif;font-size:14px;line-height:24px;"> which, combined with other an=
+alyses, </span><a class=3D"link-build-content" style=3D"color:inherit;; tex=
+t-decoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AVcAA=
+BLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/=
+26/xV1R4_BNpC0HH5onwLDIYg/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L2Fib3V0L25ld=
+y12aXNpb24tc3R1ZGVudC1jZW50ZXI"><span style=3D"color:#1c80ff;font-family:Ar=
+ial;font-size:14px;line-height:24px;"><u>resulted in the new vision of W20<=
+/u></span></a><span style=3D"color:#000000;font-family:Arial, Helvetica, Ar=
+ial, sans-serif;font-size:14px;line-height:24px;"> as a hub for student wel=
+lbeing.</span></li><li style=3D"line-height:24px;"><span style=3D"color:#00=
+0000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-he=
+ight:24px;"><b>Event Security. </b>Encouraged by the Black Students Union (=
+BSU), DSL has undertaken a review of security protocols for on-campus event=
+s with students from the BSU, the Association of Student Activities, and ot=
+her stakeholders. This builds on the </span><a class=3D"link-build-content"=
+ style=3D"color:inherit;; text-decoration: none;" target=3D"_blank" href=3D=
+"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYr=
+iHxZG9j8ZRda7XLEnKaDdNgAIBDM/27/rHbKFcpnFfBp9Dd2NYnQkg/aHR0cDovL2luajkubWp0=
+Lmx1L25sMy9oM1A1U0M0SFEwcTNVdjlCcDc2WFlBP209QVZvQUFBVVBMLVlBQWNyczhvQUFBQUE=
+4MVY4QUFBQUFHcW9BSmI2ckFBaVF6d0JqbU01RTFZQzRQWjNKVHpHNXU5ZmMzNDZQZndBSUlXYy=
+ZiPTA4ZDkwYjZkJmU9OTQ2MjgwY2UmeD00MG55akxfbFNLWEI3NnVqVzFEUjdB"><span style=
+=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:24px;"><u>Wo=
+rking Group on Reimagining Public Safety at MIT</u></span></a><span style=
+=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size=
+:14px;line-height:24px;">, which also included students and </span><a class=
+=3D"link-build-content" style=3D"color:inherit;; text-decoration: none;" ta=
+rget=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoA=
+AVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/28/r3P4YNPvCuSfTH83yiAu=
+Ew/aHR0cHM6Ly9yZWlmLm1pdC5lZHUvc2l0ZXMvZGVmYXVsdC9maWxlcy9TYWZldHlfMS5wZGY"=
+><span style=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:=
+24px;"><u>delivered their report</u></span></a><span style=3D"color:#000000=
+;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-height=
+:24px;"> in December 2022.</span></li><li style=3D"line-height:24px;"><span=
+ style=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;fon=
+t-size:14px;line-height:24px;"><b>Student Organizations. </b>MIT boasts a c=
+onstellation of groups, teams, and clubs engaged in just about any activity=
+ or sport that you can imagine. Starting last month, a working group includ=
+ing students started examining membership, recognition, and funding process=
+es and in the fall will make recommendations to strengthen this vital aspec=
+t of campus life.</span></li></ul><p class=3D"text-build-content" style=3D"=
+line-height: 24px; margin: 10px 0;" data-testid=3D"PKVvbOW58H"><span style=
+=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size=
+:14px;line-height:24px;"><b>Food and Dining</b></span></p><p class=3D"text-=
+build-content" style=3D"line-height: 24px; margin: 10px 0; margin-bottom: 1=
+0px;" data-testid=3D"PKVvbOW58H"><a class=3D"link-build-content" style=3D"c=
+olor:inherit;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1=
+w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRd=
+a7XLEnKaDdNgAIBDM/29/wxHMQrs8V6QBKqAPGtINtA/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQ=
+uZWR1L25ld3MvbWl0LXJlbGVhc2VzLWNhbXB1cy1yZXRhaWwtZGluaW5nLXN0dWR5"><span st=
+yle=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height:24px;"><u=
+>MIT recently commissioned a report on evolving food and dining trends</u><=
+/span></a><span style=3D"color:#000000;font-family:Arial, Helvetica, Arial,=
+ sans-serif;font-size:14px;line-height:24px;"> that will help to inform the=
+ future of food on campus. But, changes to the food and dining landscape th=
+at started during the pandemic continue. We reaffirm our commitment to stud=
+ent food security, which is the focus of the faculty, staff, and students s=
+erving on the </span><a class=3D"link-build-content" style=3D"color:inherit=
+;; text-decoration: none;" target=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk=
+/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNg=
+AIBDM/30/kyTEaLIpvyOMD8IlV25FNw/aHR0cHM6Ly9zdHVkZW50bGlmZS5taXQuZWR1L2ZzYXQ=
+"><span style=3D"color:#1c80ff;font-family:Arial;font-size:14px;line-height=
+:24px;"><u>Food Security Action Team</u></span></a><span style=3D"color:#00=
+0000;font-family:Arial, Helvetica, Arial, sans-serif;font-size:14px;line-he=
+ight:24px;">. If you find that you aren=E2=80=99t getting sufficient nutrit=
+ion=E2=80=93or you are struggling with finances=E2=80=93know that help is a=
+vailable. As I=E2=80=99ve said before, no student at MIT should go hungry b=
+ecause they don=E2=80=99t have enough money to buy food. </span><a class=3D=
+"link-build-content" style=3D"color:inherit;; text-decoration: none;" targe=
+t=3D"_blank" href=3D"http://iz1w.mjt.lu/lnk/AVcAABLgBpoAAclS0boAAM105GoAAVW=
+symMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/31/3Qim82-8CNQa_0BaL2h2HQ/=
+aHR0cHM6Ly9kb2luZ3dlbGwubWl0LmVkdS9mb29kYW5kZmluYW5jaWFsLw"><span style=3D"=
+color:#1c80ff;font-family:Arial;font-size:14px;line-height:24px;"><u>Check =
+out these resources available through DSL and MIT</u></span></a><span style=
+=3D"color:#000000;font-family:Arial, Helvetica, Arial, sans-serif;font-size=
+:14px;line-height:24px;">.</span></p></div></td></tr></tbody></table></div>=
+<!--[if mso | IE]></td></tr></table><![endif]--></td></tr></tbody></table><=
+/div><!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" sty=
+le=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-si=
+ze:0px;mso-line-height-rule:exactly;"><![endif]--><div style=3D"margin:0px =
+auto;max-width:600px;"><table align=3D"center" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr=
+><td style=3D"direction:ltr;font-size:0px;padding:20px 0px 20px 0px;text-al=
+ign:center;"><!--[if mso | IE]><table role=3D"presentation" border=3D"0" ce=
+llpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-alig=
+n:top;width:600px;" ><![endif]--><div class=3D"mj-column-per-100 mj-outlook=
+-group-fix" style=3D"font-size:0px;text-align:left;direction:ltr;display:in=
+line-block;vertical-align:top;width:100%;"><table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"vertical-align:top;=
+" width=3D"100%"><tbody><tr><td align=3D"left" style=3D"font-size:0px;paddi=
+ng:0px 20px 0px 20px;padding-top:0px;padding-bottom:0px;word-break:break-wo=
+rd;"><div style=3D"font-family:Arial, sans-serif;font-size:13px;letter-spac=
+ing:normal;line-height:1;text-align:left;color:#000000;"><p style=3D"text-a=
+lign: center; margin: 10px 0; margin-top: 10px; margin-bottom: 10px;"><span=
+ style=3D"font-size:10px;text-align:center;color:#5e6977;font-family:Arial;=
+line-height:22px;">This e-mail has been sent to jiannan@mit.edu, </span><a =
+href=3D"http://iz1w.mjt.lu/unsub2?hl=3Den&amp;m=3DAVcAABLgBpoAAclS0boAAM105=
+GoAAVWsymMAJUfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM&amp;b=3D8e7a82cd&amp=
+;e=3Dd9d201a0&amp;x=3Da7iET_5Bkh8rOy7esnA68A" target=3D"_blank" style=3D"; =
+text-decoration: none;"><span><span style=3D"font-size:10px;text-align:cent=
+er;color:#0000EE;font-family:Arial;line-height:22px;"><u>click here to unsu=
+bscribe</u></span></span></a><span style=3D"font-size:10px;text-align:cente=
+r;color:#5e6977;font-family:Arial;line-height:22px;">.</span></p></div></td=
+></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--=
+></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![end=
+if]--></div>
+<br><img src=3D"http://iz1w.mjt.lu/oo/AVcAABLgBpoAAclS0boAAM105GoAAVWsymMAJ=
+UfrAAhvEABkOYriHxZG9j8ZRda7XLEnKaDdNgAIBDM/14b34f42/e.gif" height=3D"1" wid=
+th=3D"1" alt=3D"" border=3D"0" style=3D"height:1px;width:1px;border:0;">
+</body></html>=
+
+--=-wU7BOIbJoU18xmjcuKpm--

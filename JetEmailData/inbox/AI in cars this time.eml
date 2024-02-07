@@ -1,0 +1,1007 @@
+Received: from MW4PR01MB6323.prod.exchangelabs.com (2603:10b6:303:78::23) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 11 Oct 2023 13:50:34
+ +0000
+Received: from CH5PR04CA0018.namprd04.prod.outlook.com (2603:10b6:610:1f4::29)
+ by MW4PR01MB6323.prod.exchangelabs.com (2603:10b6:303:78::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6863.44; Wed, 11 Oct 2023 13:50:32 +0000
+Received: from SA2PEPF00001505.namprd04.prod.outlook.com
+ (2603:10b6:610:1f4:cafe::ca) by CH5PR04CA0018.outlook.office365.com
+ (2603:10b6:610:1f4::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38 via Frontend
+ Transport; Wed, 11 Oct 2023 13:50:31 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.98)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ gmail.com discourages use of 18.9.1.98 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.98) by
+ SA2PEPF00001505.mail.protection.outlook.com (10.167.242.37) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6838.22 via Frontend Transport; Wed, 11 Oct 2023 13:50:30 +0000
+Received: from oc11expo11.exchange.mit.edu (18.9.4.16) by
+ oc11exhyb2.exchange.mit.edu (18.9.1.98) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 11 Oct 2023 09:50:15 -0400
+Received: from oc11exhyb4.exchange.mit.edu (18.9.1.100) by
+ oc11expo11.exchange.mit.edu (18.9.4.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 11 Oct 2023 09:50:15 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.40) by
+ oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Wed, 11 Oct 2023 09:50:15 -0400
+Received: from MW4PR03CA0012.namprd03.prod.outlook.com (2603:10b6:303:8f::17)
+ by CH3PR01MB8422.prod.exchangelabs.com (2603:10b6:610:1a5::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6863.36; Wed, 11 Oct 2023 13:48:05 +0000
+Received: from CO1PEPF000044F9.namprd21.prod.outlook.com
+ (2603:10b6:303:8f:cafe::4c) by MW4PR03CA0012.outlook.office365.com
+ (2603:10b6:303:8f::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38 via Frontend
+ Transport; Wed, 11 Oct 2023 13:48:04 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.208.45)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of gmail.com designates
+ 209.85.208.45 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.208.45; helo=mail-ed1-f45.google.com; pr=C
+Received: from mail-ed1-f45.google.com (209.85.208.45) by
+ CO1PEPF000044F9.mail.protection.outlook.com (10.167.241.199) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.6 via Frontend Transport; Wed, 11 Oct 2023 13:48:04 +0000
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-53627feca49so11341326a12.1;
+        Wed, 11 Oct 2023 06:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697032083; x=1697636883; darn=mit.edu;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hsFf3zh4wlR6DOFA4myEm+fzkDiIXKw4KqoWZ88Ur1I=;
+        b=g8IX47jD6uBk9aceLcsx7frsaPAQF3SpmaloS83yU0mJJMVwUi0pH2KPzzTw3OfmNf
+         GkDBmRoOe34Qb9Ef7qCdJzw+L1Wx82tIODY2mwXQTwiW+HdOK3Z6xylo76COEJg1xORq
+         O5IJq6thGhkG/OKYVC09N2Q88ka2vIS92r/OKI+OnOiZEIDxvi6mjOusKb5BNMHPHwob
+         wu+CEKs8sfQ4szQRhWwv2L/drG/cIv4tAGFoVceNa2eY3CKZ+xidgU78JzV5sGaciQVo
+         ou95ybpWfzSYSdCMJjhCcIxSOTVV/yFJnCBnxcJ50zB3LfoEY89nJr9VXP3x3CH71UST
+         CmnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697032083; x=1697636883;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hsFf3zh4wlR6DOFA4myEm+fzkDiIXKw4KqoWZ88Ur1I=;
+        b=FJpJrUZp56hmSk3lCOZ2f33C4wggorLglfh9U70WR5I4I+D6IIdR+iJGExQ9Jg1lyZ
+         GiuKaj2d9Ydc7gxp+QQ00tGlCvjlpDAUnemssaBFK6TfP4ZnIVoY5rqB8d3cTB7ghBoa
+         6GbH2ye6+CXXA05Ezv1ORgfQstPBkOsraKylcli1ynxfqoxshvDgBEYy/XZjzGIGWWL8
+         /ePUGKPt4WpE99rDkbl1O4+meFNZiJUVHf4AQ6l0zOv+QXn4plC/3FuXsg93qGillwy8
+         6qIk0FPGY6Pg0ly1CamXWSrIeE3ywWapbf5rKQ/eGbN+0o3dX1LIMNbzxFE+i1nXxk0x
+         3/DQ==
+X-Gm-Message-State: AOJu0YzPbqsErK3z442zcNrL4aeUUtgf9RLI3uorFBLl/eOMct/j64Tg
+	mBWXn+a2Q1NXk44si/I9/dZs+mU7XG5miQuYh0U=
+X-Google-Smtp-Source: AGHT+IHY3i4V1TAteD3/q+tQC+io8JA8sPoUfkEHAJxpy4SQGWb0gBkE3S2vYvvEDCKckMVUX5R97U0c0B5OaKvx8Eo=
+X-Received: by 2002:aa7:d7d8:0:b0:533:193d:da60 with SMTP id
+ e24-20020aa7d7d8000000b00533193dda60mr18003736eds.19.1697032082740; Wed, 11
+ Oct 2023 06:48:02 -0700 (PDT)
+References: <80f62adc67c5889c8cf03eb72.66bea72eda.20231011095943.03ae182187.df093a84@mail230.atl271.mcdlv.net>
+ <CABMQRd6SU5gWSME7zLFBN0pJ2XgW3QZTigp2-+AyFv2t8JOaog@mail.gmail.com>
+In-Reply-To: <CABMQRd6SU5gWSME7zLFBN0pJ2XgW3QZTigp2-+AyFv2t8JOaog@mail.gmail.com>
+From: Nancy Leveson <leveson.nancy8@gmail.com>
+Date: Wed, 11 Oct 2023 09:47:49 -0400
+Message-ID: <CABMQRd6+47s3GLfWPG5WKd_k5PsUmuPePSuVYUVxmPd2fPJf_w@mail.gmail.com>
+Subject: AI in cars this time
+To: Isabel de Luis <ideluis@olin.edu>, Andrew Kopeikin <kopeikin@mit.edu>, Pauline Harrington <ph1@mit.edu>, 
+	Noam David Eisen <eisenn@mit.edu>, Adam Munekata <AMunekata@outlook.com>, 
+	Cecilia Perez Gago <cecipg@mit.edu>, Lawrence Wong <l_wong@mit.edu>, Elizabeth White Baker <bakerew@vcu.edu>, 
+	Andy Canady <canadyam@mit.edu>, Natalie Basnight <nbasnight75@gmail.com>, John Thomas <jthomas4@mit.edu>, 
+	Rodrigo Lopes Rose <rlrose@mit.edu>, 
+	"WILLIAM E JR Col USAF AETC AWC/DEW YOUNG (william.young.3@us.af.mil)" <wyoung@mit.edu>, Michael Sebasti Schmid <schmidm@mit.edu>, Sarah Summers <sesumme@gmail.com>, 
+	John Thomas Clarke Barstow <jbarstow@mit.edu>, Alexander Hillman <ahillman@mit.edu>, Brittany Bishop <brit901@mit.edu>, 
+	Justin Wei Siang Poh <jpoh@mit.edu>, Kristen Joyce Ammons <kjammons@mit.edu>, naoshima@mit.edu, 
+	Natalie Ann Basnight <natbas35@mit.edu>, Tim Blackford <tblackfd@mit.edu>, 
+	Madison M Bronnimann <bronnima@mit.edu>, Braden Corrigan Brower <bcbrower@mit.edu>, jiannan@mit.edu, 
+	Don Duval <donduval@mit.edu>, Joseph Estep <joeestep@mit.edu>, Leonardo Gallo <leogallo@mit.edu>, 
+	Lauren E Gutierrez <laureng2@mit.edu>, Jack Martin Hamel <jmhamel@mit.edu>, 
+	Francisco Javier Jeldres <fjeldres@mit.edu>, Billy Kline <wkline@mit.edu>, amagzoub@mit.edu, 
+	Ayaka Miyamoto <ayakam@mit.edu>, Connor Daniel Rude <rudc6118@mit.edu>, Ahaana Sarup <asarup@mit.edu>, 
+	Maryam Shamsie <mas097@mit.edu>, Anup Sreekumar <anupsk@mit.edu>, Kensuke Suzuki <ksuzuki1@mit.edu>, zukio@mit.edu, 
+	Christopher Douglas Tommila <ctommila@mit.edu>, vaccaro@mit.edu, Stephanie Walker <steph151@mit.edu>, yutaro22@mit.edu, 
+	bnzhou@mit.edu
+Content-Type: multipart/alternative; boundary="00000000000076dfa20607711240"
+Return-Path: leveson.nancy8@gmail.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CO1PEPF000044F9:EE_|CH3PR01MB8422:EE_|SA2PEPF00001505:EE_|MW4PR01MB6323:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: cf71a3ef-b5be-48bf-1670-08dbca6108ff
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?rRLBK75kFGdBr0HQN0xet1rn7CYOZCUfxskG4MWg/8YO8T6cXu52VKaXJvqh?=
+ =?us-ascii?Q?t4ep13NyDqdzi8fR9ZVDd/zW/jqWpaUxYUvbGzSKWR22aoM9ZXvUa4Lphho7?=
+ =?us-ascii?Q?9IG2I1whjGVi9P/vQnkwlk1PWOtUtVehgTgFgmGWsZBwmegIDfLPPFrB7tCD?=
+ =?us-ascii?Q?pcco2Z2nqRPt4NA/X7xbesRrt4HCCl3vdpeM7bNU+1fe/DfOxuE+hBViWVvE?=
+ =?us-ascii?Q?rQo5ufALxiDpokUbjST65jQeZkINbgmDuQjz4xtPd0tn7qbE6XD6W48WgRIn?=
+ =?us-ascii?Q?Kfj0ytvGnuDTHIw+udfhx6i3IGGMLDQWe4N7/Hi1v8BqktDxZURtmlQhekFX?=
+ =?us-ascii?Q?hRI4vnx0fmVY3IYMhGaVLPUkkGxAF9Ej4Eq4iY68UsoNTQSA+Q2BexcbwgGN?=
+ =?us-ascii?Q?EJBLPWabDuGd8ELM7oNF2Uu91iusRL0dS4NWaWeyYW0TQK6U1C4MYulWoUlN?=
+ =?us-ascii?Q?mcPo1auCQY702r8gxSHhKO/ZBbuMta5kIp3NIf/KN+cTLjdbVb9Q6sXHSQQS?=
+ =?us-ascii?Q?cmtCjf+GHgkRT5EOu9XD9h1lqhWU4YvLgMrDEV5GiUWZjSU1wC8cqXtX659u?=
+ =?us-ascii?Q?6Me+UOMUkYDut8sfl6V6cEOrvCPhBjZcGYKlfN3R7K0LYbHzhJ3Ya7SYpFSH?=
+ =?us-ascii?Q?WuSYP6a5PV7GWa3cR5V0jQLn+uBZN7EbURFkTxCY2fsmVyWu1OaWub7ODFN5?=
+ =?us-ascii?Q?pnIPJHcRBinjZHlZ7PI8KlxHB40ZEWiG5vVTB8+25cj6EDLvtnUaQUiT65Hm?=
+ =?us-ascii?Q?ZiJlwXe9XJ87b42VD2fQZIDwE2baX5OR4/OO5hGn01gvzEQJEMMUDQjStBKr?=
+ =?us-ascii?Q?MS1GurR+Cfgfl1X3FT8HY+hBnJJ+mL7mJ1OFVrK9j7gL6ATafZF/aFaxOEqi?=
+ =?us-ascii?Q?HGuWrMKobQk4b++v4Z6pU1yNPdIHWvWJwx5YT2/99AHNofXdWx1fr0dQJ1TQ?=
+ =?us-ascii?Q?GKfgxMl8c3pEwIGlJWWcz/tj2aIuAE2rxENZlST6d+SbkPP+7gv2vTxwsLjF?=
+ =?us-ascii?Q?ySP+rr0JVOUSO6FjkngJyDmbQ6wm9n+62k4bs5f7GCOq+KqskthSuybRETR5?=
+ =?us-ascii?Q?b+3ZXGU5pkFylibzTO6MHmUI6N6UqdcBHmZ0092sQ9AOCp9IiI8cySMVf/5w?=
+ =?us-ascii?Q?U8EypcjuquHithnCK4hnLc6enA39l4nndG4+i0RThMMRNY6ZRoZYTrcXODt+?=
+ =?us-ascii?Q?KcPJjzzx7mBFueT5aFFEp8F2F01ta3O0v2+K8Q3iMLRRJ6AzYNsoXAtiut5r?=
+ =?us-ascii?Q?7ORAGM9Lb/shouRT8GibLrq1p74VDeLrhwja5rLTEcVLfHfdb/nlIqFiPskB?=
+ =?us-ascii?Q?pPrQO1oMDI3bCzMfQNz+XYBZQBmo+QCOz3/61L5cXLoQyqFTAbscWv2VgYn+?=
+ =?us-ascii?Q?bl6GOF/Fl7X6Ottw11n+S7pEpMxwJvYwWq+t7Wvw+T6bbhI5dp8VkHuEhmFu?=
+ =?us-ascii?Q?RnSFGn3USTwnN4CHcyzjgbXGM14ZGpDwxIP8QNcsilbl8EJWGDtmTqYx+uK3?=
+ =?us-ascii?Q?nHojbTfVpF5PY5vn2GiVs8XRHutlHeEI7xxN/VDEbvKC7E6axcwIefmTFWLd?=
+ =?us-ascii?Q?1C0CFRV9MpmJB3Nsy7RQvPeEpjlSobxmrDejKk4gyXJMb4KNtuNiccqGKBHM?=
+ =?us-ascii?Q?yAvcbLEE4n6/A0cpEQNl0NxB6PKE5VYTTtWaNmxhEwXS?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.208.45;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-ed1-f45.google.com;PTR:mail-ed1-f45.google.com;CAT:NONE;SFS:(13230031)(4636009)(451199024)(82202003)(336012)(4006050)(73392003)(83380400001)(166002)(26005)(110136005)(7416002)(42186006)(8676002)(6666004)(21615005)(450100002)(5660300002)(76482006)(30864003)(1096003)(75640400001)(33964004)(16799955002)(7636003)(921005)(76236004)(7596003)(55446002)(86362001)(356005)(19627405001)(217914005);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR01MB8422
+X-OrganizationHeadersPreserved: CH3PR01MB8422.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb4.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb4.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo11.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 11 Oct 2023 13:50:31.4630
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ cf71a3ef-b5be-48bf-1670-08dbca6108ff
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: SA2PEPF00001505.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: SA2PEPF00001505.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ SA2PEPF00001505.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1PEPF000044F9.namprd21.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 66bb9e63-dcb7-4f6f-bbf4-08dbca60b19a
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.98;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb2.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2023 13:50:30.3849
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cf71a3ef-b5be-48bf-1670-08dbca6108ff
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.98];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1PEPF000044F9.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR01MB6323
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:04.0372901
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6863.027
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Yy9NWVBKS3g0NjlsV0JJWmlMUGhrTWhHR2NQaXVmUHlkajhwVG9DS3N2WG55?=
+ =?utf-8?B?c1V3aWVNakFMRjYySHZTKzJZMmhDOFNRS0F0bTlGR2VXY1ZTU2R1aFJrSjFn?=
+ =?utf-8?B?U3dSbDJ1ekJndDczdjBEYkRTaHY2NndhOXBKUzlOTVNxV3c0Zm9JVzBrdmxv?=
+ =?utf-8?B?VWtFcXIwVkIvVzh1N080NkFmNUsyNHptZGdiOGVDckdPRkxZOEtBckhWNVpF?=
+ =?utf-8?B?VTM2NFFobHlPeTd5dWxGY2svM2NYRm1PRkYxWlJSZWlpNGRTeDVUbTFkZ05U?=
+ =?utf-8?B?Y2Joc1AxUnhHQlArdFVVRzBialBTd0pwQ1Z4Q2lTZHVsaW1Qam1jcUl0cVY5?=
+ =?utf-8?B?RjM3dkY4SVpEeFpLdzRqYjJZb0xVY2JYaHU2TFQzeDErK2xET1FpRnZuWTd1?=
+ =?utf-8?B?azZuWUttZFc3UmIrVmJYTnNjWDFjdXVCaDZpc1oxUTN4b25UcjlEaTZWQlgv?=
+ =?utf-8?B?eFczQitEakZtbVlPS0l2R0hidit6MnJTSmtzSUVZUkxwaEF1dU1NdmZWK0Zk?=
+ =?utf-8?B?c0FPRGZxUSs2anVTVkVHQk1rL2FoRFJyc0ExcEpFalk2cmRUMHBnU1NZUDBw?=
+ =?utf-8?B?ck84SFlDUFVTckNxZWNEcC9XU29RTUNXK05wZTFIakFUbXpDZ3dXeWgxYU1D?=
+ =?utf-8?B?bDRFK2VPbzY0RmNQTGxyNmVkR09xNXhTVS9Yakh1U2E1WGpSckdPamYwcDdm?=
+ =?utf-8?B?U0dLbWY0dzlXSnRmQmdQeFg0MVF1OWh6Zzhwdzg4UUxLR3M2WkVzWlVKVUti?=
+ =?utf-8?B?eUdwaTE2WDhwTDd1aVl0VnRDUjBUT2N6MUtFUkZhWVBkeHRVbHhQSEp5RHl1?=
+ =?utf-8?B?ejJKWTU1a2t3RThJZlkrWStrRFJyOUU4L3F0anhnVkNUOVYrc2sxelgvWTNu?=
+ =?utf-8?B?bTNubm9vNUU4OHUzZ3FFQjhuNnFYQVJPbk9JK3A1YjJJSHN6bWFVejdSbHE2?=
+ =?utf-8?B?Nlg0ZUdhcnZXKzhEdUVzSFpKc29jbVVndUcrL2FPaFNuYXVhdnhoTm1mUGF2?=
+ =?utf-8?B?bzZxalJIZGw5ZktKY0l6RmQ1VlEwUHp2MldjN1VzUWlKMTdGZDJEdWEvR1NX?=
+ =?utf-8?B?OXFRS1FBcElkRmlhSHhPWk15TmhGdE0zb2FxbDI5VnFLekJoUVB5cXczR2k5?=
+ =?utf-8?B?N2Nsc005MVZ3RHBuNlNrTzB2N2FyaXFUUEJ1Q295eUtxOWo4ZXFMd3FFSEJj?=
+ =?utf-8?B?SjM4RjYvd24wRzU1VFdFdUc2TVl5aTk5Y0FySm5KVU1pR1k1M2VuN2ZteFB2?=
+ =?utf-8?B?ZWh2S1ZhQkQ4alR6aW9LVW8valMyQ2NibTRPV3EybElyY0JpZVFzS0FwUVF4?=
+ =?utf-8?B?eVJmSTl0S0xVSmc1RE9uU0R2aXA3U0hsV3RudCt3Mi93aFpTUGVYN09teTFS?=
+ =?utf-8?B?bmhvWEVwdWMzQ1FYWTdIaWxFaDhwMmhxZm5QeFhrVVFzRmZnNi9Ja3V0KzFm?=
+ =?utf-8?B?UStna0ViZ0dEcVZPMzhxVXZsSXA4K0V5TkV5NjhkVzVPTFhnL0I3N3NkTkor?=
+ =?utf-8?B?VlZyTzJBYmYvNkUzNzI0cVI5WkI0SnBSWDdZcWlIOW1aUFhXMkloOWNNOGpz?=
+ =?utf-8?B?ZjNlOVJRWHV1SUhISVVTV1pkVkVXTkpwV1BnS1Z5dkhHQkZKVkZoSHBQc01n?=
+ =?utf-8?B?azlGRDdDSStFWmFXc1FFM0ZUbTU3VUNMNHUySXVLNjlLQkpFV2NvRHE1akg3?=
+ =?utf-8?B?a1BVLzJZOGYyUWtVYjVaRW5xUFExWkVsd0tHa002bDVyL0ZuME81QXp5eUtx?=
+ =?utf-8?B?THVHRWVqRFpscnRMZWFFSUl4UUNwOFNaOUk1dXJMWWE0NFh5dUQ1dWtqNU5j?=
+ =?utf-8?B?c1gzQ3RLL21kSUR3T25QNjd5SGhnd0kxR3B0MXNSbVNOZmZHKzRUUzVJWTJB?=
+ =?utf-8?B?RjZVaVVGVjFxNUZzNVhyMGpLT2lvZTM5V3RrWmlndXNBNVZ6eHN1V2ZEbTdP?=
+ =?utf-8?B?S3J0MXI3eTl0MHl6VnV1RTdOL1F0RTlWRkpXL1B3Q1dMdW9FUTdGWXZpcm1q?=
+ =?utf-8?B?ZUlYVmtRQWtHb0krbkgxRnMxaVBPQmVvb1hDMmc0aXgyVHl3c1RiZ3ZBMkpr?=
+ =?utf-8?Q?zlvBx2?=
+MIME-Version: 1.0
+
+--00000000000076dfa20607711240
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+> <https://www.nytimes.com/section/opinion>
+>
+> *OPINION; New york times <https://www.nytimes.com/section/opinion>*
+>
+>
+>
+> *GUEST ESSAY*
+>
+> *Autonomous Vehicles Are Driving Blind*
+>
+> Oct. 11, 2023, 5:02 a.m. ET
+>
+>
+>
+>    -
+>
+> Top of Form
+>
+> Bottom of Form
+>
+> [image: Julia Angwin] <https://www.nytimes.com/by/julia-angwin>
+>
+> *By Julia Angwin <https://www.nytimes.com/by/julia-angwin>*
+>
+> Ms. Angwin is a contributing Opinion writer and an investigative
+> journalist.
+>
+> In San Francisco this month, a woman suffered traumatic injuries
+> <https://sfstandard.com/2023/10/02/cruise-robotaxi-crash-woman-injured-sa=
+n-francisco/> from
+> being struck by a driver and thrown into the path of one of hundreds of
+> self-driving cars roaming the city=E2=80=99s streets. San Francisco=E2=80=
+=99s fire chief,
+> Jeanine Nicholson, recently testified that as of August, autonomous
+> vehicles interfered with firefighting duties 55 times
+> <https://sfist.com/2023/08/08/cops-firefighters-and-of-course-tax-drivers=
+-tee-off-on-self-driving-robotaxis-before-key-regulatory-vote/> this
+> year. Tesla=E2=80=99s autopilot software, a driver-assistance system, has=
+ been
+> involved in 736 crashes and 17 fatalities
+> <https://www.washingtonpost.com/technology/2023/06/10/tesla-autopilot-cra=
+shes-elon-musk/> nationwide
+> since 2019.
+>
+> For all the ballyhoo over the possibility of artificial intelligence
+> threatening humanity someday, there=E2=80=99s remarkably little discussio=
+n of the
+> ways it is threatening humanity right now. When it comes to self-driving
+> cars, we are driving blind.
+>
+> The reason is simple: There are no federal software safety testing
+> standards for autonomous vehicles =E2=80=94 a loophole large enough for E=
+lon Musk,
+> General Motors and Waymo to drive thousands of cars through. The National
+> Highway Traffic Safety Administration regulates the hardware (such as
+> windshield wipers, airbags and mirrors) of cars sold in the United States=
+.
+> And the states are in charge of licensing human drivers. To earn the righ=
+t
+> to drive a car, most of us at some point have to pass a vision test, a
+> written test and a driving test.
+>
+> The A.I. undergoes no such government scrutiny before commanding the
+> wheel. In California, companies can get a permit to operate driverless ca=
+rs by
+> declaring that their vehicles have been tested
+> <https://www.dmv.ca.gov/portal/vehicle-industry-services/autonomous-vehic=
+les/testing-autonomous-vehicles-without-a-driver/> and
+> the =E2=80=9Cmanufacturer has reasonably determined that is safe to opera=
+te the
+> vehicle
+> <https://www.dmv.ca.gov/portal/file/autonomous-vehicle-tester-atv-program=
+-application-for-manufacturers-testing-permit-driverless-vehicles-ol-318-pd=
+f/>
+> .=E2=80=9D
+>
+> =E2=80=9CThere=E2=80=99s this weird gap between who is in charge of licen=
+sing a computer
+> driver =E2=80=94 is it N.H.T.S.A. or the state?=E2=80=9D asks Missy Cummi=
+ngs, a professor
+> and the director of the Mason Autonomy and Robotics Center at George Maso=
+n
+> University.
+>
+> There=E2=80=99s an irony here: So many headlines have focused on fears th=
+at
+> computers will get too smart and take control of the world from humans, b=
+ut
+> in our reality, computers are often too dumb to avoid hurting us.
+>
+> The autonomous vehicle companies argue
+> <https://getcruise.com/news/blog/2023/human-ridehail-crash-rate-benchmark=
+/> that
+> despite their publicized malfunctions, their software is still better
+> than human drivers.
+> <https://waymo.com/blog/2023/09/waymos-autonomous-vehicles-are.html> That
+> could be true =E2=80=94 after all, autonomous vehicles don=E2=80=99t get =
+tired, drive drunk
+> or text and drive =E2=80=94 but we don=E2=80=99t have the data to make th=
+at determination
+> yet. Autonomous cars make other kinds of mistakes =E2=80=94 such as stopp=
+ing in
+> ways that block ambulances and pinning a crash victim.
+>
+> Last month Representatives Nancy Pelosi and Kevin Mullin wrote a letter
+> <https://kevinmullin.house.gov/sites/evo-subsites/kevinmullin.house.gov/f=
+iles/evo-media-document/3b080d17-b33e-4de0-a762-e1dd005633ee.pdf> to
+> the N.H.T.S.A. asking for it to demand more data about autonomous vehicle
+> incidents, particularly those involving stopped vehicles that impede
+> emergency workers. More comparison data about human-driven car crashes
+> would also be helpful; the N.H.T.S.A. provides only crash estimates based
+> on sampling
+> <https://www.nhtsa.gov/crash-data-systems/crash-investigation-sampling-sy=
+stem>
+> .
+>
+> But why can=E2=80=99t we go further than collecting data?
+>
+> After all, A.I. often makes surprising mistakes. This year, one of GM=E2=
+=80=99s
+> Cruise cars slammed into an articulated bus
+> <https://www.carscoops.com/2023/04/gms-cruise-recalls-autonomous-vehicles=
+-following-crash-into-articulated-bus/> after
+> incorrectly predicting its movement. GM updated the software after the
+> incident. Last year, an autonomous car slammed on its brakes while making
+> a left turn <https://spectrum.ieee.org/self-driving-cars-2662494269> beca=
+use
+> it seemed to have thought that an oncoming car was going to make a right
+> turn into its path. Instead, the oncoming vehicle slammed into the stoppe=
+d
+> driverless vehicle. Passengers in both cars were injured
+> <https://incidentdatabase.ai/cite/293/>.
+>
+>
+> <https://www.nytimes.com/2023/10/10/dining/sandra-gutierrez-latinisimo.ht=
+ml?action=3Dclick&module=3DeditorContent&pgtype=3DArticle&region=3DCompanio=
+nColumn&contentCollection=3DTrending>
+>
+> =E2=80=9CThe computer vision systems in these cars are extremely brittle.=
+ They
+> will fail in ways that we simply don=E2=80=99t understand,=E2=80=9D says =
+Dr. Cummings, who
+> has written that A.I. should be subject to licensing requirements
+> <http://hal.pratt.duke.edu/sites/hal.pratt.duke.edu/files/u30/Certificati=
+on%20of%20Autonomous%20Systems%20MAR18.compressed.pdf> equivalent
+> to the vision and performance tests that pilots and drivers undergo.
+>
+> Of course, the problem isn=E2=80=99t limited to cars. Every day we learn =
+a
+> different way that the A.I. chatbots are failing =E2=80=94 whether by inv=
+enting
+> case law
+> <https://www.nytimes.com/2023/06/08/nyregion/lawyer-chatgpt-sanctions.htm=
+l> or
+> by sexually harassing their users
+> <https://www.vice.com/en/article/z34d43/my-ai-is-sexually-harassing-me-re=
+plika-chatbot-nudes>.
+> And we have long been grappling with the failures of A.I. recommendation
+> systems, which at times have recommended gun parts and drug paraphernalia
+> <https://themarkup.org/banned-bounty/2020/06/18/amazons-enforcement-failu=
+res-leave-open-a-back-door> on
+> Amazon, which restricts such items, or pushed ideologically biased conten=
+t
+> <https://arxiv.org/pdf/2203.10666.pdf> on YouTube.
+>
+> Despite all these real-world examples of harm, many regulators remain
+> distracted by the distant and, to some, far-fetched disaster scenarios sp=
+un
+> by the A.I. doomers =E2=80=94 high-powered tech researchers and execs who=
+ argue
+> that the big worry is the risk someday of human extinction
+> <https://www.safe.ai/statement-on-ai-risk>. The British government is
+> holding an A.I. Safety Summit
+> <https://www.gov.uk/government/news/iconic-bletchley-park-to-host-uk-ai-s=
+afety-summit-in-early-november> in
+> November, and Politico reports that the A.I. task force is being led by
+> such doomers
+> <https://www.politico.eu/article/rishi-sunak-artificial-intelligence-pivo=
+t-safety-summit-united-kingdom-silicon-valley-effective-altruism/>
+> .
+>
+> In the United States, a wide array of A.I. legislation
+> <https://www.vox.com/future-perfect/23775650/ai-regulation-openai-gpt-ant=
+hropic-midjourney-stable> has
+> been proposed in Congress, largely focused on doomer concerns, such as ba=
+rring
+> A.I. from making nuclear launch decisions
+> <https://www.markey.senate.gov/news/press-releases/markey-lieu-beyer-and-=
+buck-introduce-bipartisan-legislation-to-prevent-ai-from-launching-a-nuclea=
+r-weapon>
+>  and requiring some high-risk A.I. models to be licensed and registered
+> <https://www.blumenthal.senate.gov/newsroom/press/release/blumenthal-and-=
+hawley-announce-bipartisan-framework-on-artificial-intelligence-legislation=
+>
+> .
+>
+> The doomer theories are =E2=80=9Ca distraction tactic to make people chas=
+e an
+> infinite amount of risks,=E2=80=9D says Heidy Khlaaf, a software safety e=
+ngineer
+> who is an engineering director at Trail of Bits, a technical security fir=
+m.
+> In a recent paper,
+> <https://blog.trailofbits.com/2023/03/14/ai-security-safety-audit-assuran=
+ce-heidy-khlaaf-odd/> Dr.
+> Khlaaf argued for a focus on A.I. safety testing that is specific to each
+> domain in which it operates =E2=80=94 for instance, ChatGPT for lawyers=
+=E2=80=99 use.
+>
+> In other words, we need to start acknowledging that A.I. safety is a
+> solvable problem =E2=80=94 and that we can, and should, solve it now with=
+ the tools
+> we have.
+>
+> Experts in different domains need to evaluate the A.I. used in their
+> fields to determine whether it is too risky =E2=80=94 starting with makin=
+g a bunch
+> of autonomous cars take vision and driving tests.
+>
+> It sounds boring, but that=E2=80=99s exactly what safety is. It is a bunc=
+h of
+> experts running tests and making checklists. And we need to start doing i=
+t
+> now.
+>
+> *More on driverless cars*
+>
+>
+> <https://www.nytimes.com/2023/08/09/technology/san-francisco-driverless-c=
+ars.html?action=3Dclick&module=3DRelatedLinks&pgtype=3DArticle>
+>
+> San Francisco Balks at Expanding Driverless Car Services on City=E2=80=99=
+s Roads
+> <https://www.nytimes.com/2023/08/09/technology/san-francisco-driverless-c=
+ars.html?action=3Dclick&module=3DRelatedLinks&pgtype=3DArticle>
+>
+> Aug. 9, 2023
+> <https://www.nytimes.com/2023/08/09/technology/san-francisco-driverless-c=
+ars.html?action=3Dclick&module=3DRelatedLinks&pgtype=3DArticle>
+>
+>
+>
+> =E2=80=98This Experience May Feel Futuristic=E2=80=99: Three Rides in Way=
+mo Robot Taxis
+> <https://www.nytimes.com/2023/08/21/technology/waymo-driverless-cars-san-=
+francisco.html?action=3Dclick&module=3DRelatedLinks&pgtype=3DArticle>
+>
+> Aug. 21, 2023
+> <https://www.nytimes.com/2023/08/21/technology/waymo-driverless-cars-san-=
+francisco.html?action=3Dclick&module=3DRelatedLinks&pgtype=3DArticle>
+>
+>
+> <https://www.nytimes.com/2023/08/23/podcasts/the-daily/driverless-cars-sa=
+n-francisco.html?action=3Dclick&module=3DRelatedLinks&pgtype=3DArticle>
+>
+> Ready or Not, Driverless Cars Are Here
+> <https://www.nytimes.com/2023/08/23/podcasts/the-daily/driverless-cars-sa=
+n-francisco.html?action=3Dclick&module=3DRelatedLinks&pgtype=3DArticle>
+>
+> Aug. 23, 2023
+> <https://www.nytimes.com/2023/08/23/podcasts/the-daily/driverless-cars-sa=
+n-francisco.html?action=3Dclick&module=3DRelatedLinks&pgtype=3DArticle>
+>
+>
+>
+> *The Times is committed to publishing **a diversity of letters*
+> <https://www.nytimes.com/2019/01/31/opinion/letters/letters-to-editor-new=
+-york-times-women.html>* to
+> the editor. We=E2=80=99d like to hear what you think about this or any of=
+ our
+> articles. Here are some **tips*
+> <https://help.nytimes.com/hc/en-us/articles/115014925288-How-to-submit-a-=
+letter-to-the-editor>*.
+> And here=E2=80=99s our email: **letters@nytimes.com* <letters@nytimes.com=
+>*.*
+>
+> *Follow The New York Times Opinion section on **Facebook*
+> <https://www.facebook.com/nytopinion>*, **Twitter (@NYTopinion)*
+> <http://twitter.com/NYTOpinion>* and **Instagram*
+> <https://www.instagram.com/nytopinion/>*.*
+>
+
+--00000000000076dfa20607711240
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-=
+size:small"><br clear=3D"all"></div></div><div class=3D"gmail_quote"><block=
+quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
+px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr"><div class=3D"=
+gmail_quote"><p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin=
+:0in;font-size:11pt;font-family:Calibri,sans-serif"><span style=3D"font-siz=
+e:12pt;font-family:&quot;Times New Roman&quot;,serif"><a href=3D"https://ww=
+w.nytimes.com/section/opinion"><span style=3D"color:black;border:1pt none w=
+indowtext;padding:0in;text-decoration-line:none"></span></a></span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:middle;margin:0in;font-size:=
+11pt;font-family:Calibri,sans-serif"><b><span style=3D"font-size:12pt;font-=
+family:Georgia,serif;color:black;text-transform:uppercase;letter-spacing:0.=
+85pt;border:1pt none windowtext;padding:0in"><a href=3D"https://www.nytimes=
+.com/section/opinion"><span style=3D"color:black;text-decoration-line:none"=
+>OPINION; New york times</span><span style=3D"color:windowtext;border:none;=
+text-decoration-line:none"></span></a></span></b></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:&quot;Times New Roman&quot;,serif">&nbsp;</span></p>
+
+<p class=3D"MsoNormal" align=3D"center" style=3D"text-align:center;vertical=
+-align:baseline;margin:0in;font-size:11pt;font-family:Calibri,sans-serif"><=
+b><span style=3D"font-size:12pt;font-family:Georgia,serif;text-transform:up=
+percase;letter-spacing:0.85pt">GUEST ESSAY</span></b></p>
+
+<p class=3D"MsoNormal" align=3D"center" style=3D"text-align:center;vertical=
+-align:baseline;margin:0in;font-size:11pt;font-family:Calibri,sans-serif"><=
+b><span style=3D"font-size:24pt;font-family:Georgia,serif">Autonomous Vehic=
+les Are Driving Blind</span></b></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:&quot;Times New Roman&quot;,serif">Oct. 11, 2023,&nbsp;<span style=3D=
+"border:1pt none windowtext;padding:0in">5:02 a.m. ET</span></span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:&quot;Times New Roman&quot;,serif">&nbsp;</span></p>
+
+<ul style=3D"margin-top:0in;margin-bottom:0in" type=3D"disc">
+ <li class=3D"MsoNormal" style=3D"color:rgb(153,153,153);vertical-align:bas=
+eline;margin:0in;font-size:11pt;font-family:Calibri,sans-serif"><span style=
+=3D"font-size:13pt;font-family:Helvetica,sans-serif">&nbsp;</span></li>
+</ul>
+
+<div style=3D"border-top:none;border-right:none;border-left:none;border-bot=
+tom:1pt solid windowtext;padding:0in 0in 1pt">
+
+<p class=3D"MsoNormal" align=3D"center" style=3D"text-align:center;border:n=
+one;padding:0in;margin:0in;font-size:11pt;font-family:Calibri,sans-serif"><=
+span style=3D"font-size:8pt;font-family:Arial,sans-serif;display:none">Top =
+of Form</span></p>
+
+</div>
+
+<div style=3D"border-right:none;border-bottom:none;border-left:none;border-=
+top:1pt solid windowtext;padding:1pt 0in 0in">
+
+<p class=3D"MsoNormal" align=3D"center" style=3D"text-align:center;border:n=
+one;padding:0in;margin:0in;font-size:11pt;font-family:Calibri,sans-serif"><=
+span style=3D"font-size:8pt;font-family:Arial,sans-serif;display:none">Bott=
+om of Form</span></p>
+
+</div>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><a href=3D"https://www.nytimes.com/b=
+y/julia-angwin"><span style=3D"font-size:12pt;font-family:&quot;Times New R=
+oman&quot;,serif;color:black;border:1pt none windowtext;padding:0in;text-de=
+coration-line:none"><img border=3D"0" width=3D"150" height=3D"150" alt=3D"J=
+ulia Angwin"></span></a><span style=3D"font-size:12pt;font-family:&quot;Tim=
+es New Roman&quot;,serif"></span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><b><span style=3D"font-size:12pt;fon=
+t-family:Helvetica,sans-serif;border:1pt none windowtext;padding:0in">By&nb=
+sp;<a href=3D"https://www.nytimes.com/by/julia-angwin"><span style=3D"color=
+:blue">Julia Angwin</span></a></span></b><b><span style=3D"font-size:12pt;f=
+ont-family:Helvetica,sans-serif"></span></b></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Helvetica,sans-serif">Ms. Angwin is a contributing Opinion writer and=
+ an investigative
+journalist.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">In San Francisco this month, a
+woman&nbsp;<a href=3D"https://sfstandard.com/2023/10/02/cruise-robotaxi-cra=
+sh-woman-injured-san-francisco/" target=3D"_blank"><span style=3D"color:blu=
+e;border:1pt none windowtext;padding:0in">suffered traumatic injuries</span=
+></a>&nbsp;from
+being struck by a driver and thrown into the path of one of hundreds of
+self-driving cars roaming the city=E2=80=99s streets. San Francisco=E2=80=
+=99s fire chief,
+Jeanine Nicholson, recently testified that as of August,&nbsp;<a href=3D"ht=
+tps://sfist.com/2023/08/08/cops-firefighters-and-of-course-tax-drivers-tee-=
+off-on-self-driving-robotaxis-before-key-regulatory-vote/" target=3D"_blank=
+"><span style=3D"color:blue;border:1pt none windowtext;padding:0in">autonom=
+ous vehicles interfered
+with firefighting duties 55 times</span></a>&nbsp;this year. Tesla=E2=80=99=
+s autopilot
+software, a driver-assistance system, has been involved in&nbsp;<a href=3D"=
+https://www.washingtonpost.com/technology/2023/06/10/tesla-autopilot-crashe=
+s-elon-musk/" target=3D"_blank"><span style=3D"color:blue;border:1pt none w=
+indowtext;padding:0in">736 crashes and 17 fatalities</span></a>&nbsp;nation=
+wide
+since 2019.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">For all the ballyhoo over the
+possibility of artificial intelligence threatening humanity someday, there=
+=E2=80=99s
+remarkably little discussion of the ways it is threatening humanity right n=
+ow.
+When it comes to self-driving cars, we are driving blind.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">The reason is simple: There are no
+federal software safety testing standards for autonomous vehicles =E2=80=94=
+ a loophole
+large enough for Elon Musk, General Motors and Waymo to drive thousands of =
+cars
+through. The National Highway Traffic Safety Administration regulates the
+hardware (such as windshield wipers, airbags and mirrors) of cars sold in t=
+he
+United States. And the states are in charge of licensing human drivers. To =
+earn
+the right to drive a car, most of us at some point have to pass a vision te=
+st,
+a written test and a driving test.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">The
+A.I. undergoes no such government scrutiny before commanding the wheel. In
+California, companies can get a permit to operate driverless cars&nbsp;<a h=
+ref=3D"https://www.dmv.ca.gov/portal/vehicle-industry-services/autonomous-v=
+ehicles/testing-autonomous-vehicles-without-a-driver/" target=3D"_blank"><s=
+pan style=3D"color:blue;border:1pt none windowtext;padding:0in">by declarin=
+g that their
+vehicles have been tested</span></a>&nbsp;and the =E2=80=9C<a href=3D"https=
+://www.dmv.ca.gov/portal/file/autonomous-vehicle-tester-atv-program-applica=
+tion-for-manufacturers-testing-permit-driverless-vehicles-ol-318-pdf/" targ=
+et=3D"_blank"><span style=3D"color:blue;border:1pt none windowtext;padding:=
+0in">manufacturer has reasonably
+determined that is safe to operate the vehicle</span></a>.=E2=80=9D</span><=
+/p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">=E2=80=9CThere=E2=80=99s this weird gap between who is
+in charge of licensing a computer driver =E2=80=94 is it N.H.T.S.A. or the =
+state?=E2=80=9D asks
+Missy Cummings, a professor and the director of the Mason Autonomy and Robo=
+tics
+Center at George Mason University.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">There=E2=80=99s an irony here: So many
+headlines have focused on fears that computers will get too smart and take
+control of the world from humans, but in our reality, computers are often t=
+oo
+dumb to avoid hurting us.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">The autonomous vehicle&nbsp;<a href=3D"https://getcrui=
+se.com/news/blog/2023/human-ridehail-crash-rate-benchmark/" target=3D"_blan=
+k"><span style=3D"color:blue;border:1pt none windowtext;padding:0in">compan=
+ies argue</span></a>&nbsp;that
+despite their publicized malfunctions, their software is still&nbsp;<a href=
+=3D"https://waymo.com/blog/2023/09/waymos-autonomous-vehicles-are.html" tar=
+get=3D"_blank"><span style=3D"color:blue;border:1pt none windowtext;padding=
+:0in">better than human drivers.</span></a>&nbsp;That
+could be true =E2=80=94 after all, autonomous vehicles don=E2=80=99t get ti=
+red, drive drunk or
+text and drive =E2=80=94 but we don=E2=80=99t have the data to make that de=
+termination yet.
+Autonomous cars make other kinds of mistakes =E2=80=94 such as stopping in =
+ways that
+block ambulances and pinning a crash victim.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">Last month Representatives Nancy
+Pelosi and Kevin Mullin&nbsp;<a href=3D"https://kevinmullin.house.gov/sites=
+/evo-subsites/kevinmullin.house.gov/files/evo-media-document/3b080d17-b33e-=
+4de0-a762-e1dd005633ee.pdf" target=3D"_blank"><span style=3D"color:blue;bor=
+der:1pt none windowtext;padding:0in">wrote a letter</span></a>&nbsp;to
+the N.H.T.S.A. asking for it to demand more data about autonomous vehicle
+incidents, particularly those involving stopped vehicles that impede emerge=
+ncy
+workers. More comparison data about human-driven car crashes would also be
+helpful; the N.H.T.S.A. provides only&nbsp;<a href=3D"https://www.nhtsa.gov=
+/crash-data-systems/crash-investigation-sampling-system" target=3D"_blank">=
+<span style=3D"color:blue;border:1pt none windowtext;padding:0in">crash est=
+imates based on
+sampling</span></a>.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">But why can=E2=80=99t we go further than
+collecting data?</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">After
+all, A.I. often makes surprising mistakes. This year, one of GM=E2=80=99s C=
+ruise
+cars&nbsp;<a href=3D"https://www.carscoops.com/2023/04/gms-cruise-recalls-a=
+utonomous-vehicles-following-crash-into-articulated-bus/" target=3D"_blank"=
+><span style=3D"color:blue;border:1pt none windowtext;padding:0in">slammed =
+into an articulated bus</span></a>&nbsp;after
+incorrectly predicting its movement. GM updated the software after the
+incident. Last year, an autonomous car&nbsp;<a href=3D"https://spectrum.iee=
+e.org/self-driving-cars-2662494269" target=3D"_blank"><span style=3D"color:=
+blue;border:1pt none windowtext;padding:0in">slammed on its brakes while ma=
+king a left turn</span></a>&nbsp;because
+it seemed to have thought that an oncoming car was going to make a right tu=
+rn
+into its path. Instead, the oncoming vehicle slammed into the stopped
+driverless vehicle. Passengers in&nbsp;<a href=3D"https://incidentdatabase.=
+ai/cite/293/" target=3D"_blank"><span style=3D"color:blue;border:1pt none w=
+indowtext;padding:0in">both cars were injured</span></a>.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:&quot;Times New Roman&quot;,serif"><a href=3D"https://www.nytimes.com=
+/2023/10/10/dining/sandra-gutierrez-latinisimo.html?action=3Dclick&amp;modu=
+le=3DeditorContent&amp;pgtype=3DArticle&amp;region=3DCompanionColumn&amp;co=
+ntentCollection=3DTrending"></a></span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">=E2=80=9CThe computer vision systems in these
+cars are extremely brittle. They will fail in ways that we simply don=E2=80=
+=99t
+understand,=E2=80=9D says Dr. Cummings, who has written that&nbsp;<a href=
+=3D"http://hal.pratt.duke.edu/sites/hal.pratt.duke.edu/files/u30/Certificat=
+ion%20of%20Autonomous%20Systems%20MAR18.compressed.pdf" target=3D"_blank"><=
+span style=3D"color:blue;border:1pt none windowtext;padding:0in">A.I. shoul=
+d be subject to
+licensing requirements</span></a>&nbsp;equivalent to the vision and perform=
+ance
+tests that pilots and drivers undergo.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">Of course, the problem isn=E2=80=99t limited
+to cars. Every day we learn a different way that the A.I. chatbots are fail=
+ing
+=E2=80=94 whether by&nbsp;<a href=3D"https://www.nytimes.com/2023/06/08/nyr=
+egion/lawyer-chatgpt-sanctions.html"><span style=3D"color:blue;border:1pt n=
+one windowtext;padding:0in">inventing case law</span></a>&nbsp;or by&nbsp;<=
+a href=3D"https://www.vice.com/en/article/z34d43/my-ai-is-sexually-harassin=
+g-me-replika-chatbot-nudes" target=3D"_blank"><span style=3D"color:blue;bor=
+der:1pt none windowtext;padding:0in">sexually harassing their users</span><=
+/a>.
+And we have long been grappling with the failures of A.I. recommendation
+systems, which at times have recommended&nbsp;<a href=3D"https://themarkup.=
+org/banned-bounty/2020/06/18/amazons-enforcement-failures-leave-open-a-back=
+-door" target=3D"_blank"><span style=3D"color:blue;border:1pt none windowte=
+xt;padding:0in">gun parts and drug
+paraphernalia</span></a>&nbsp;on Amazon, which restricts such items, or
+pushed&nbsp;<a href=3D"https://arxiv.org/pdf/2203.10666.pdf" target=3D"_bla=
+nk"><span style=3D"color:blue;border:1pt none windowtext;padding:0in">ideol=
+ogically biased content</span></a>&nbsp;on YouTube.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">Despite all these real-world examples
+of harm, many regulators remain distracted by the distant and, to some,
+far-fetched disaster scenarios spun by the A.I. doomers =E2=80=94 high-powe=
+red tech
+researchers and execs who argue that the big worry is&nbsp;<a href=3D"https=
+://www.safe.ai/statement-on-ai-risk" target=3D"_blank"><span style=3D"color=
+:blue;border:1pt none windowtext;padding:0in">the risk someday of human ext=
+inction</span></a>. The British
+government is holding an&nbsp;<a href=3D"https://www.gov.uk/government/news=
+/iconic-bletchley-park-to-host-uk-ai-safety-summit-in-early-november" targe=
+t=3D"_blank"><span style=3D"color:blue;border:1pt none windowtext;padding:0=
+in">A.I. Safety Summit</span></a>&nbsp;in
+November, and Politico reports that the A.I. task force is being&nbsp;<a hr=
+ef=3D"https://www.politico.eu/article/rishi-sunak-artificial-intelligence-p=
+ivot-safety-summit-united-kingdom-silicon-valley-effective-altruism/" targe=
+t=3D"_blank"><span style=3D"color:blue;border:1pt none windowtext;padding:0=
+in">led by such doomers</span></a>.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">In the United States,&nbsp;<a href=3D"https://www.vox.=
+com/future-perfect/23775650/ai-regulation-openai-gpt-anthropic-midjourney-s=
+table" target=3D"_blank"><span style=3D"color:blue;border:1pt none windowte=
+xt;padding:0in">a wide array of A.I.
+legislation</span></a>&nbsp;has been proposed in Congress, largely focused =
+on
+doomer concerns, such as&nbsp;<a href=3D"https://www.markey.senate.gov/news=
+/press-releases/markey-lieu-beyer-and-buck-introduce-bipartisan-legislation=
+-to-prevent-ai-from-launching-a-nuclear-weapon" target=3D"_blank"><span sty=
+le=3D"color:blue;border:1pt none windowtext;padding:0in">barring A.I. from =
+making
+nuclear launch decisions</span></a>&nbsp;and&nbsp;<a href=3D"https://www.bl=
+umenthal.senate.gov/newsroom/press/release/blumenthal-and-hawley-announce-b=
+ipartisan-framework-on-artificial-intelligence-legislation" target=3D"_blan=
+k"><span style=3D"color:blue;border:1pt none windowtext;padding:0in">requir=
+ing some high-risk A.I.
+models to be licensed and registered</span></a>.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">The
+doomer theories are =E2=80=9Ca distraction tactic to make people chase an i=
+nfinite
+amount of risks,=E2=80=9D says Heidy Khlaaf, a software safety engineer who=
+ is an
+engineering director at Trail of Bits, a technical security firm. In a&nbsp=
+;<a href=3D"https://blog.trailofbits.com/2023/03/14/ai-security-safety-audi=
+t-assurance-heidy-khlaaf-odd/" target=3D"_blank"><span style=3D"color:blue;=
+border:1pt none windowtext;padding:0in">recent paper,</span></a>&nbsp;Dr.
+Khlaaf argued for a focus on A.I. safety testing that is specific to each
+domain in which it operates =E2=80=94 for instance, ChatGPT for lawyers=E2=
+=80=99 use.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">In other words, we need to start
+acknowledging that A.I. safety is a solvable problem =E2=80=94 and that we =
+can, and
+should, solve it now with the tools we have.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">Experts in different domains need to
+evaluate the A.I. used in their fields to determine whether it is too risky=
+ =E2=80=94
+starting with making a bunch of autonomous cars take vision and driving tes=
+ts.</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif">It
+sounds boring, but that=E2=80=99s exactly what safety is. It is a bunch of =
+experts
+running tests and making checklists. And we need to start doing it now.</sp=
+an></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><b><span style=3D"font-size:12pt;fon=
+t-family:Helvetica,sans-serif">More on driverless cars</span></b></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:&quot;Times New Roman&quot;,serif"><a href=3D"https://www.nytimes.com=
+/2023/08/09/technology/san-francisco-driverless-cars.html?action=3Dclick&am=
+p;module=3DRelatedLinks&amp;pgtype=3DArticle"><span style=3D"color:blue;bor=
+der:1pt none windowtext;padding:0in;text-decoration-line:none"></span></a><=
+/span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif;color:blue;border:1pt none windowtext;padding:0in"><a h=
+ref=3D"https://www.nytimes.com/2023/08/09/technology/san-francisco-driverle=
+ss-cars.html?action=3Dclick&amp;module=3DRelatedLinks&amp;pgtype=3DArticle"=
+><span style=3D"color:blue;text-decoration-line:none">San Francisco Balks
+at Expanding Driverless Car Services on City=E2=80=99s Roads</span></a></sp=
+an></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Helvetica,sans-serif;color:blue;border:1pt none windowtext;padding:0i=
+n"><a href=3D"https://www.nytimes.com/2023/08/09/technology/san-francisco-d=
+riverless-cars.html?action=3Dclick&amp;module=3DRelatedLinks&amp;pgtype=3DA=
+rticle"><span style=3D"color:blue;text-decoration-line:none">Aug. 9, 2023</=
+span></a></span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:&quot;Times New Roman&quot;,serif">&nbsp;</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif;color:blue;border:1pt none windowtext;padding:0in"><a h=
+ref=3D"https://www.nytimes.com/2023/08/21/technology/waymo-driverless-cars-=
+san-francisco.html?action=3Dclick&amp;module=3DRelatedLinks&amp;pgtype=3DAr=
+ticle"><span style=3D"color:blue;text-decoration-line:none">=E2=80=98This E=
+xperience
+May Feel Futuristic=E2=80=99: Three Rides in Waymo Robot Taxis</span></a></=
+span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Helvetica,sans-serif;color:blue;border:1pt none windowtext;padding:0i=
+n"><a href=3D"https://www.nytimes.com/2023/08/21/technology/waymo-driverles=
+s-cars-san-francisco.html?action=3Dclick&amp;module=3DRelatedLinks&amp;pgty=
+pe=3DArticle"><span style=3D"color:blue;text-decoration-line:none">Aug. 21,=
+ 2023</span></a></span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:&quot;Times New Roman&quot;,serif"><a href=3D"https://www.nytimes.com=
+/2023/08/23/podcasts/the-daily/driverless-cars-san-francisco.html?action=3D=
+click&amp;module=3DRelatedLinks&amp;pgtype=3DArticle"><span style=3D"color:=
+windowtext;text-decoration-line:none"></span></a></span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Georgia,serif;color:blue;border:1pt none windowtext;padding:0in"><a h=
+ref=3D"https://www.nytimes.com/2023/08/23/podcasts/the-daily/driverless-car=
+s-san-francisco.html?action=3Dclick&amp;module=3DRelatedLinks&amp;pgtype=3D=
+Article"><span style=3D"color:blue;text-decoration-line:none">Ready or Not,
+Driverless Cars Are Here</span></a></span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Helvetica,sans-serif;color:blue;border:1pt none windowtext;padding:0i=
+n"><a href=3D"https://www.nytimes.com/2023/08/23/podcasts/the-daily/driverl=
+ess-cars-san-francisco.html?action=3Dclick&amp;module=3DRelatedLinks&amp;pg=
+type=3DArticle"><span style=3D"color:blue;text-decoration-line:none">Aug. 2=
+3, 2023</span></a></span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:&quot;Times New Roman&quot;,serif">&nbsp;</span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><i><span style=3D"font-size:12pt;fon=
+t-family:&quot;inherit&quot;,serif;border:1pt none windowtext;padding:0in">=
+The Times is committed to
+publishing&nbsp;</span></i><span style=3D"font-size:12pt;font-family:Helvet=
+ica,sans-serif"><a href=3D"https://www.nytimes.com/2019/01/31/opinion/lette=
+rs/letters-to-editor-new-york-times-women.html"><i><span style=3D"font-fami=
+ly:&quot;inherit&quot;,serif;color:blue;border:1pt none windowtext;padding:=
+0in">a diversity of letters</span></i></a></span><i><span style=3D"font-siz=
+e:12pt;font-family:&quot;inherit&quot;,serif;border:1pt none windowtext;pad=
+ding:0in">&nbsp;to the editor. We=E2=80=99d like to hear what you think abo=
+ut this or any
+of our articles. Here are some&nbsp;</span></i><span style=3D"font-size:12p=
+t;font-family:Helvetica,sans-serif"><a href=3D"https://help.nytimes.com/hc/=
+en-us/articles/115014925288-How-to-submit-a-letter-to-the-editor"><i><span =
+style=3D"font-family:&quot;inherit&quot;,serif;color:blue;border:1pt none w=
+indowtext;padding:0in">tips</span></i></a></span><i><span style=3D"font-siz=
+e:12pt;font-family:&quot;inherit&quot;,serif;border:1pt none windowtext;pad=
+ding:0in">. And here=E2=80=99s our email:&nbsp;</span></i><span style=3D"fo=
+nt-size:12pt;font-family:Helvetica,sans-serif"><a href=3D"mailto:letters@ny=
+times.com"><i><span style=3D"font-family:&quot;inherit&quot;,serif;color:bl=
+ue;border:1pt none windowtext;padding:0in">letters@nytimes.com</span></i></=
+a></span><i><span style=3D"font-size:12pt;font-family:&quot;inherit&quot;,s=
+erif;border:1pt none windowtext;padding:0in">.</span></i><span style=3D"fon=
+t-size:12pt;font-family:Helvetica,sans-serif"></span></p>
+
+<p class=3D"MsoNormal" style=3D"vertical-align:baseline;margin:0in;font-siz=
+e:11pt;font-family:Calibri,sans-serif"><span style=3D"font-size:12pt;font-f=
+amily:Helvetica,sans-serif"></span></p><div style=3D"background:rgb(255,255=
+,255);color:rgb(0,0,0);font-family:&quot;Helvetica Neue&quot;,Helvetica,Ari=
+al,sans-serif;font-size:18px;height:100%;line-height:140%;margin:0px;paddin=
+g:0px;width:100%" bgcolor=3D"#FFFFFF"><i style=3D"font-family:Calibri,sans-=
+serif;font-size:11pt;color:rgb(34,34,34)"><span style=3D"font-size:12pt;fon=
+t-family:&quot;inherit&quot;,serif;border:1pt none windowtext;padding:0in">=
+Follow
+The New York Times Opinion section on&nbsp;</span></i><span style=3D"color:=
+rgb(34,34,34);font-size:12pt;font-family:Helvetica,sans-serif"><a href=3D"h=
+ttps://www.facebook.com/nytopinion" target=3D"_blank"><i><span style=3D"fon=
+t-family:&quot;inherit&quot;,serif;color:blue;border:1pt none windowtext;pa=
+dding:0in">Facebook</span></i></a></span><i style=3D"font-family:Calibri,sa=
+ns-serif;font-size:11pt;color:rgb(34,34,34)"><span style=3D"font-size:12pt;=
+font-family:&quot;inherit&quot;,serif;border:1pt none windowtext;padding:0i=
+n">,&nbsp;</span></i><span style=3D"color:rgb(34,34,34);font-size:12pt;font=
+-family:Helvetica,sans-serif"><a href=3D"http://twitter.com/NYTOpinion" tar=
+get=3D"_blank"><i><span style=3D"font-family:&quot;inherit&quot;,serif;colo=
+r:blue;border:1pt none windowtext;padding:0in">Twitter (@NYTopinion)</span>=
+</i></a></span><i style=3D"font-family:Calibri,sans-serif;font-size:11pt;co=
+lor:rgb(34,34,34)"><span style=3D"font-size:12pt;font-family:&quot;inherit&=
+quot;,serif;border:1pt none windowtext;padding:0in">&nbsp;and&nbsp;</span><=
+/i><span style=3D"color:rgb(34,34,34);font-size:12pt;font-family:Helvetica,=
+sans-serif"><a href=3D"https://www.instagram.com/nytopinion/" target=3D"_bl=
+ank"><i><span style=3D"font-family:&quot;inherit&quot;,serif;color:blue;bor=
+der:1pt none windowtext;padding:0in">Instagram</span></i></a></span><i styl=
+e=3D"font-family:Calibri,sans-serif;font-size:11pt;color:rgb(34,34,34)"><sp=
+an style=3D"font-size:12pt;font-family:&quot;inherit&quot;,serif;border:1pt=
+ none windowtext;padding:0in">.</span></i><img src=3D"https://mit.us4.list-=
+manage.com/track/open.php?u=3D80f62adc67c5889c8cf03eb72&amp;id=3D03ae182187=
+&amp;e=3D66bea72eda" height=3D"1" width=3D"1" alt=3D""><br></div>
+</div></div>
+</blockquote></div></div>
+
+--00000000000076dfa20607711240--

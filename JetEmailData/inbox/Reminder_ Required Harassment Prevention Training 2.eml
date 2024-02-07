@@ -1,0 +1,512 @@
+Received: from BL1PR01MB7578.prod.exchangelabs.com (2603:10b6:208:386::16) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Wed, 8 Nov 2023 21:21:09
+ +0000
+Received: from BYAPR03CA0018.namprd03.prod.outlook.com (2603:10b6:a02:a8::31)
+ by BL1PR01MB7578.prod.exchangelabs.com (2603:10b6:208:386::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6954.28; Wed, 8 Nov 2023 21:21:09 +0000
+Received: from MWH0EPF000971E8.namprd02.prod.outlook.com
+ (2603:10b6:a02:a8:cafe::7d) by BYAPR03CA0018.outlook.office365.com
+ (2603:10b6:a02:a8::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.18 via Frontend
+ Transport; Wed, 8 Nov 2023 21:21:08 +0000
+Authentication-Results: spf=fail (sender IP is 18.7.71.73)
+ smtp.mailfrom=a619304.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of a619304.bnc3.mailjet.com
+ does not designate 18.7.71.73 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.7.71.73;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.7.71.73) by
+ MWH0EPF000971E8.mail.protection.outlook.com (10.167.243.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6977.16 via Frontend Transport; Wed, 8 Nov 2023 21:21:08 +0000
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ w92exhyb3.exchange.mit.edu (18.7.71.73) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Wed, 8 Nov 2023 16:20:54 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Wed, 8 Nov 2023 16:20:54 -0500
+Received: from DS7PR05CA0040.namprd05.prod.outlook.com (2603:10b6:8:2f::33) by
+ SJ2PR01MB8149.prod.exchangelabs.com (2603:10b6:a03:4fb::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6954.27; Wed, 8 Nov 2023 21:20:52 +0000
+Received: from CY4PEPF0000EDD4.namprd03.prod.outlook.com
+ (2603:10b6:8:2f:cafe::b9) by DS7PR05CA0040.outlook.office365.com
+ (2603:10b6:8:2f::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.18 via Frontend
+ Transport; Wed, 8 Nov 2023 21:20:51 +0000
+Authentication-Results-Original: spf=pass (sender IP is 185.189.236.52)
+ smtp.mailfrom=a619304.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=704
+Received-SPF: Pass (protection.outlook.com: domain of a619304.bnc3.mailjet.com
+ designates 185.189.236.52 as permitted sender)
+ receiver=protection.outlook.com; client-ip=185.189.236.52;
+ helo=o52.p25.mailjet.com; pr=C
+Received: from o52.p25.mailjet.com (185.189.236.52) by
+ CY4PEPF0000EDD4.mail.protection.outlook.com (10.167.241.208) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6977.19 via Frontend Transport; Wed, 8 Nov 2023 21:20:51 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; q=dns/txt;
+  d=bnc3.mailjet.com; i=oge-reply=3Dmit.edu@a619304.bnc3.mailjet.com; s=mailjet1; x=1699485650;
+  h=message-id:mime-version:from:from:to:to:subject:subject:date:date:list-id:list-unsubscribe-post:
+  list-unsubscribe:feedback-id:precedence:x-campaignid:x-csa-complaints:
+  x-mj-mid:x-mj-smtpguid:x-report-abuse-to:content-type;
+  bh=ChFPTIPhDyDlQjiEM8C86/cMkDeIypGs2sqBdJM9TV0=;
+  b=rKKkWurhTrSbC617zida2hQ+2TnWWCMcmp8tTYQ7DxqF0pT01kH2KZNde
+ rOQwgLnMN7kDyjvQVxBIuqfrpnxfpnjUDqhMJomC+Lj6F1nIZzQUNcQ4tpMm
+ iokCip4gzt4RAkoH7HrMtNoyJ3CCgvJgfiWRi7JaV2cx6f8M1a5Gtk=
+Return-Path:
+ 82ff0a87.AVMAACtSjeEAAcvFP7wAAQHEEAMAAWqa4NIAJQrDAAlzKABlS_uy@a619304.bnc3.mailjet.com
+Message-ID: <82ff0a87.AVMAACtSjeEAAcvFP7wAAQHEEAMAAWqa4NIAJQrDAAlzKABlS_uy@mailjet.com>
+From: MIT Office of Graduate Education <oge-reply@mit.edu>
+To: jiannan@mit.edu
+Subject: Reminder: Required Harassment Prevention Training
+Date: Wed,  8 Nov 2023 19:27:17 +0000 (UTC)
+List-Id: <oge-reply.mit.edu.kysz-0983g.mj>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+List-Unsubscribe: <mailto:unsub-82ff0a87.kysz.logrlmrwp9yl@bnc3.mailjet.com>,
+	<https://kysz.mjt.lu/unsub2?m=AVMAACtSjeEAAcvFP7wAAQHEEAMAAWqa4NIAJQrDAAlzKABlS_uyBTSaR-bcQmmobIH7Y0KqqwAI9Ks&b=82ff0a87&e=4b438090&x=a7iET_5Bkh8rOy7esnA68A>
+Feedback-Id: 42.619304.586923:MJ
+Precedence: bulk
+X-CampaignID: 7713669052
+X-CSA-Complaints: csa-complaints@eco.de
+X-MJ-Mid: AVMAACtSjeEAAcvFP7wAAQHEEAMAAWqa4NIAJQrDAAlzKABlS_uyBTSaR-bcQmmobIH7Y0KqqwAI9Ks
+X-MJ-SMTPGUID: 05349a47-e6dc-4269-a86c-81fb6342aaab
+X-REPORT-ABUSE-TO: Message sent by Mailjet please report to
+	abuse@mailjet.com with a copy of the message
+Content-Type: multipart/alternative; boundary="=-Sw/u1Z6pVI9l0GMrYOv0"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CY4PEPF0000EDD4:EE_|SJ2PR01MB8149:EE_|MWH0EPF000971E8:EE_|BL1PR01MB7578:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 233a887a-8c49-4842-92f0-08dbe0a09fbe
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?z30/s+hZRFVRlB4JK5Kd/wYaTCGL7XR6OBbJ7O2cxfdyWgurms1LENJf0LUP?=
+ =?us-ascii?Q?tGGnySG0/EI0HylbL9ikOT6q6EyOOIhmI3CupE2EboJgyLbs/Wirv7uq7YnX?=
+ =?us-ascii?Q?xvtuJcbzC1wQKvnVGkQxFYlxL5x9fQNqecr2LPOt6vUqVOE8ifUxV1WKxHq+?=
+ =?us-ascii?Q?BdXzM4oW0CL+0TO24uUaHt7rZnOgfMvCXe8xYT9gjg9wC22YlI74ez/+s07W?=
+ =?us-ascii?Q?VrQNLBab2C7WkelMB5Lc7m/cNcWZ7jlAf1gFMTGjuFzLsMP/xQQu81nUqjCb?=
+ =?us-ascii?Q?p31kZOzLF8auGHpICCm9+sn0NaSQNsKc36yGAJVkdE3vQliSZls9BRQZR3m/?=
+ =?us-ascii?Q?8WrRUdPPZFL0M3XfhZGkfpkvNiicD8x4Por3pq2mN2H++OeyTiw6/da44bg4?=
+ =?us-ascii?Q?CXe1GAgpJm6pQOtpnJrBHqNBhgdmu9znZ4lNruMFBwippVPDXutgF0/ELjI9?=
+ =?us-ascii?Q?SZGC4f3XLFP/wMEeJDffsRc+FDJYTbwDLIsdBf/8bnwRg7oI/exHLEXI66oI?=
+ =?us-ascii?Q?V06s1dDhwa1LdESMiK1gUQ6nSoNWD9I9kDYvKUD0XZHGlLuuF8REpzt00Adt?=
+ =?us-ascii?Q?MkLHmJGKagebCaZRpJvdwyDChVmYbdrgISaTec5Mbal1o1j2BsDXONdAa7/d?=
+ =?us-ascii?Q?cMoTzZ2AtkGyT629U5ZKcKCaIUvqjxetLcnlhwdtBgakQ9mY3NrMBu3eBvsu?=
+ =?us-ascii?Q?df1trjnfMmNFM584C/sc3rfPS0ATB3KudVK4UerdD1FVrT+kpCaR/5Bl4okJ?=
+ =?us-ascii?Q?8CWDJZeCQXnMTY1TT7CWsLJxE3o2CFA1dVEOZkM63xY4PfQfkA3BEDNhvkgE?=
+ =?us-ascii?Q?lYaGF8JZrJ2wZEz/K24yg6DYo9WIEhc9BAAtbQmH3FTlSei5TVoxSPVUCU9v?=
+ =?us-ascii?Q?CgYfsrwMnrpymS92nGRVy2a85yKEMVj3Dx8K3hj0PDtXjEWmf8ieksvdp4g7?=
+ =?us-ascii?Q?OXmQpOMNh+JuvjgrSIaHH82yFE+Lz6zEvUHh5auP1Wa/WDLPD8CNCDlvisim?=
+ =?us-ascii?Q?dlIzFX8pKTk0FPZX5LxwrTAwhU9+bcteUXbTgLk9LitRmGcWIoqwZ7wzCSkM?=
+ =?us-ascii?Q?1aSumusdm9UGb69S0JDR1Jz2/gxhPyW6ZOgTyxR6H0n8Puwvwg4RcRai5a1k?=
+ =?us-ascii?Q?5dxO/yMTcMfu+GJ65kGiOAvGKVX/q7V6PY0Qz0HqMMr49P/oHSTEQGMGlWj3?=
+ =?us-ascii?Q?47c3lfalILe339Ban7eZGKByx4wJXP3xE0fD0w=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:185.189.236.52;CTRY:FR;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:o52.p25.mailjet.com;PTR:o52.p25.mailjet.com;CAT:NONE;SFS:(13230031)(4636009)(1690799017)(451199024)(9686003)(966005)(7696005)(6506007)(956004)(19627405001)(6666004)(6486002)(4006050)(336012)(8676002)(6636002)(42882007)(83380400001)(75640400001)(1096003)(5660300002)(19810500001)(6916009)(33964004)(36736006)(58800400005)(166002)(83170400001)(7596003)(26005)(356005)(7636003)(36756003)(76236004)(66899024)(9316004)(76899018)(1406899027)(19607625013);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR01MB8149
+X-OrganizationHeadersPreserved: SJ2PR01MB8149.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb3.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb3.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92exhyb3.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 08 Nov 2023 21:21:08.2513
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 233a887a-8c49-4842-92f0-08dbe0a09fbe
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: MWH0EPF000971E8.namprd02.prod.outlook.com
+X-CrossPremisesHeadersFiltered: MWH0EPF000971E8.namprd02.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ MWH0EPF000971E8.namprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CY4PEPF0000EDD4.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 62714782-6245-47d0-8085-08dbe0a095f8
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.73;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:w92exhyb3.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2023 21:21:08.0013
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 233a887a-8c49-4842-92f0-08dbe0a09fbe
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.73];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CY4PEPF0000EDD4.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR01MB7578
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.7829391
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6954.028
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?R3AxbVYxbkhQR1g0Q2JLd3Uyc01uMVBxZEVLd3lCVGpQVUdTdW5SNnRSQW11?=
+ =?utf-8?B?OWRRaGVacURQNzFTMjJJVUhUNWQzemZiRGdSd21CUUtRclVFWGdHODR3RmtO?=
+ =?utf-8?B?WGhZMmJHK1JqaVJwSkNOVDd6U0dBMmI3aHlhUEcvZmpicXQzdVdDcm9oSXpQ?=
+ =?utf-8?B?NXcxZHNjRS9HNm5LTG1mR2VRRUZWMG1lcEhSMmxRMkhndDBRazRrV0taaCtS?=
+ =?utf-8?B?bDRIRlpDVE5Va3JWUDRNTCtDYlBTWXRYN2k0cGdrU1BkT0dyVmFrK0lZWGND?=
+ =?utf-8?B?UzE1MWxHYmVnZEVSa3BaWlkwRGdrVHRNd0NpbjRnc2oyVGlYQUpXa3BuRVBT?=
+ =?utf-8?B?Qkc3dkJ6U3BZVUhrQjRFcDhhU2NFd01GdG5TeUd1RjA0TVRSUVpWdktjRE9k?=
+ =?utf-8?B?amRheDNCWXd6U21wUnBIQkVic09PcGVGcUg2SU56WlgwVTI3WFI1TENpNWxp?=
+ =?utf-8?B?YTdla0Z0OWxLSmZYWjNlb0cweWJ6dkNZc2ZhbTJEeWs1L2ZyN1J5QkQrQ0Rx?=
+ =?utf-8?B?R2g1VmhabzNjSHZGY1pSQ1YzSERMbUlTZ3VvMis1azVpcit1QnRqbHpybTAy?=
+ =?utf-8?B?SElZM1RGOFgwYjE5ZzhvSEVuZTJWT1RkdDh3VlpEamtRUkJPSUtEVXFKVEQx?=
+ =?utf-8?B?N1ZLejFrU04yQmRyVmN5bnJZWDlUUXdhZ0djN0RZK1pDWm92bTBtTTdvek15?=
+ =?utf-8?B?US8rQVZFQVpBYkJaeSsrdFZxb3hTUzFGY3diVTBTbVBBNHRlNXBIQjY2eEIw?=
+ =?utf-8?B?czJWTXgyK3ovbDBSbmFNU1hTZGdlUnNudUNxdXgxREY4NWhsT1pYZGozTkF6?=
+ =?utf-8?B?Qm1kNDVtcitjbmhKZVBkb0pUWEtLdDJSbXVJWSsvbVlRc1RqMW01OVNkKzhT?=
+ =?utf-8?B?MlBRbnVMQkl5dXZRbWJXYW16UG5ZOGpRaTBVVXA2ZWVqUW9wbHR2ejduTXJT?=
+ =?utf-8?B?Y3ZxVTBnSHZDbGU5SnA3b29QS3VLSi84d0NrZXRLRmkvTkdTeS9YWXVEckN4?=
+ =?utf-8?B?OVd2TEhseUs0SUtEaUIrTW81MmkvVSs2VUNIaUJOZHRVTDJjbkgrTk0rUHlG?=
+ =?utf-8?B?TVlWQ2F2ZTcyLzJwR0hKcEdqc012L05lNzMwRTZkc3d5Z2xoSHVXek1BeGor?=
+ =?utf-8?B?MVV3ak9tK1JPK3B0NUpVd0dxcFg1UFpob1RtaE4wSENmRDhpd3NtV1FjeVV5?=
+ =?utf-8?B?aXluSUcxNHNvR1IveitVV3NxNVU5NXZCTmhGSU1MaWo1VEZMcWhiL3FRRHBa?=
+ =?utf-8?B?WVBkTWJ1eHlESFBkcmZNMHZnazdrTGhQZDdZV0NpNkZ6OUdEdzBuK3Z4cFdQ?=
+ =?utf-8?B?czBxR0RzblAyeXNHV3RaTFFIMFVOWGtzdk1qWFpLcmJYWHFHWkJ2ekdxVDN0?=
+ =?utf-8?B?eVRpR0E4c2N6U01zbjN5OUhkdTNZT2FMRVhiSmxiV3NmbnhHZFJ0MUJqZ2ky?=
+ =?utf-8?B?dkJEd1FaM2lEcWp6QWo4VmNaaFd5U2dBaVdtc2c2b3Nobmk0WXo1Wm8ySytt?=
+ =?utf-8?B?MXVXaUF5UWgvTkZEKzhtZFZGcTNXbnFJSk8wOWpxUFp2VUhTY0FjWERvVmhn?=
+ =?utf-8?B?cWlPUlVUVEcvUldVNUc1ZXk4SWZGL0NCSkxyN1lIM1RJYjFMMW9ET2NrY3FU?=
+ =?utf-8?B?S3lENGd3L1pJdXF2VHlsLzAzaHZFbnNXeUFSVWdWOXFObjlUMzZtWFJCQWI4?=
+ =?utf-8?B?dFUvRDluSjhDVG91eERMdm5EUGpjVGJSMlVmWjI0Q1ZhOURFVnQydldrbzlV?=
+ =?utf-8?B?MHM3eDlCVEhhUUJ0TGJWa21reC9VREdhT0dySlJnOC9FS0d0emJ0bmpGR3V3?=
+ =?utf-8?B?WUVRZk8rS1FlSUgxN0FqQlNuQnVyVmgwRUI0azIvdkhBUERiRDBFZElOb3N5?=
+ =?utf-8?B?QlZuYkw5a1kra3ZIZTluU0t5cEtQK1Q5VTFXU284MWVxT2NLUWtSdDhGUFo0?=
+ =?utf-8?B?cHI1Rms4d2YxL2tCSzh2VWpzNlh3TWU2ZGo1MVlHSGwyOHFSelZHdnUycTAx?=
+ =?utf-8?B?a3pHcXoxbEF3dEdIQ2NidUtiRWRpc3dLejFjSWFqenBUV2JMNjJYVUVFSU55?=
+ =?utf-8?B?Qlc0dmZ6a0FFV2I0cUZlbzBIU280YktpZ2FKVFdHZGFQa1VWSlh4Z3NkNExt?=
+ =?utf-8?B?ZHNlMGRHTzdnYmFtb2xSb2MrSXhEQTVMa0hBSWxib2NHK29jMEpNemlGWk02?=
+ =?utf-8?B?Zm1NT21oYitndCtxVWlhOGV2QUgyWXViNmZUM1RwNi9nVktkQm10Z0N6ZUF3?=
+ =?utf-8?B?QTYrck9kWjZqMldCQmhVbzN0dmtMSFdKZERMWnZDOS9LeUFhZTJQcHVEMUpx?=
+ =?utf-8?B?a1BTTVRjM2puSXRDSHk2K25WbkFqSXM3TXZibnBCdHJLSDJ4dk9yYkozZFlB?=
+ =?utf-8?Q?ysWhP5EDjHIOrE2g=3D?=
+MIME-Version: 1.0
+
+--=-Sw/u1Z6pVI9l0GMrYOv0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Your required training deadline is Friday, November 17.
+
+View online version http://kysz.mjt.lu/nl3/TUtvTr6YjJvyGjBhPsYRIw?m=3DAVMAA=
+CtSjeEAAcvFP7wAAQHEEAMAAWqa4NIAJQrDAAlzKABlS_uyBTSaR-bcQmmobIH7Y0KqqwAI9Ks&=
+b=3D82ff0a87&e=3D4b438090&x=3Da7iET_5Bkh8rOy7esnA68A
+
+
+
+[https://kysz.mjt.lu/tplimg/kysz/b/su70o/gsq6h.png]
+
+
+
+Your required training deadline is Friday, November 17.
+---------------------------------------------------------------------------=
+-----
+Dear graduate students,
+
+We remind you that you are required to complete the Preventing Sexual Haras=
+sment training by November 17. Our records indicate that you have not yet c=
+ompleted the training (based on information from Tuesday, November 7).=C2=
+=A0
+
+You must finish one of three course options (each course takes an hour to c=
+omplete) to fulfill the training requirement. Please note that if you do no=
+t fulfill the requirement, a registration hold will be placed on your accou=
+nt for the spring semester.=C2=A0
+<<ACCESS REQUIRED TRAINING>> [https://mit.co1.qualtrics.com/jfe/form/SV_doi=
+u5M0vPifCzZQ]
+
+We thank you for completing this important required training before the Nov=
+ember 17 deadline. You can contact pshtraining@mit.edu [pshtraining@mit.edu=
+] with questions or read the training descriptions and FAQs [https://idhr.m=
+it.edu/education/pshtraining] for more information.
+
+With warm regards,
+
+Suraiya Baluch, Associate Dean, GradSupport
+Gaurav Jashnani, Assistant Dean, GradSupport
+
+
+
+This e-mail has been sent to jiannan@mit.edu; click here to unsubscribe htt=
+p://kysz.mjt.lu/unsub2?hl=3Den&m=3DAVMAACtSjeEAAcvFP7wAAQHEEAMAAWqa4NIAJQrD=
+AAlzKABlS_uyBTSaR-bcQmmobIH7Y0KqqwAI9Ks&b=3D82ff0a87&e=3D4b438090&x=3Da7iET=
+_5Bkh8rOy7esnA68A.
+MIT Office of Graduate Education (OGE)
+77 Massachusetts Ave, 35-332 Cambridge, MA 02139
+
+
+
+[https://www.mailjet.com/?utm_source=3Dfooter&utm_medium=3Demail&utm_campai=
+gn=3Dlogo1]=
+
+--=-Sw/u1Z6pVI9l0GMrYOv0
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>Reminder: Required Harassment Prevention Training</title><!--[if !mso]=
+><!--><meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><!--<![end=
+if]--><meta name=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=
+=3D1"><style type=3D"text/css">#outlook a { padding:0; }
+      body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size=
+-adjust:100%; }
+      table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-table-r=
+space:0pt; }
+      img { border:0;height:auto;line-height:100%; outline:none;text-decora=
+tion:none;-ms-interpolation-mode:bicubic; }
+      p { display:block;margin:13px 0; }</style><!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]--><!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]--><!--[if !mso]><!--><link href=3D"https://fonts.googleapis.c=
+om/css?family=3DRoboto:300,400,500,700" rel=3D"stylesheet" type=3D"text/css=
+"><link href=3D"https://fonts.googleapis.com/css?family=3DUbuntu:300,400,50=
+0,700" rel=3D"stylesheet" type=3D"text/css"><link href=3D"https://fonts.goo=
+gleapis.com/css?family=3Dserif" rel=3D"stylesheet" type=3D"text/css"><link =
+href=3D"https://fonts.googleapis.com/css?family=3D" rel=3D"stylesheet" type=
+=3D"text/css"><style type=3D"text/css">@import url(https://fonts.googleapis=
+.com/css?family=3DRoboto:300,400,500,700);
+@import url(https://fonts.googleapis.com/css?family=3DUbuntu:300,400,500,70=
+0);
+@import url(https://fonts.googleapis.com/css?family=3Dserif);
+@import url(https://fonts.googleapis.com/css?family=3D);</style><!--<![endi=
+f]--><style type=3D"text/css">@media only screen and (min-width:480px) {
+        .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.mj-column-per-33 { width:33% !important; max-width: 33%; }
+.mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.moz-text-html .mj-column-per-33 { width:33% !important; max-width: 33%; }
+.moz-text-html .mj-column-per-100 { width:100% !important; max-width: 100%;=
+ }</style><style type=3D"text/css">[owa] .mj-column-per-67 { width:67% !imp=
+ortant; max-width: 67%; }
+[owa] .mj-column-per-33 { width:33% !important; max-width: 33%; }
+[owa] .mj-column-per-100 { width:100% !important; max-width: 100%; }</style=
+><style type=3D"text/css">@media only screen and (max-width:479px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style><style type=3D"text/css"></style></head><body style=3D"word-sp=
+acing:normal;background-color:#F4F4F4;"><div style=3D"display:none;font-siz=
+e:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;=
+overflow:hidden;">The deadline to complete part one of both the SAP-G and D=
+EI courses was July 24th.</div><div style=3D"background-color:#F4F4F4;"><!-=
+-[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px;" width=
+=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-height-ru=
+le:exactly;"><![endif]--><div style=3D"margin:0px auto;max-width:600px;"><t=
+able align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"width:100%;"><tbody><tr><td style=3D"direction:l=
+tr;font-size:0px;padding:20px 0px 20px 0px;text-align:center;"><!--[if mso =
+| IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:402px;" ><![e=
+ndif]--><div class=3D"mj-column-per-67 mj-outlook-group-fix" style=3D"font-=
+size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:=
+top;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" ro=
+le=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr=
+><td align=3D"left" style=3D"font-size:0px;padding:0px 0px 0px 25px;padding=
+-top:0px;padding-bottom:0px;word-break:break-word;"><div style=3D"font-fami=
+ly:Arial, sans-serif;font-size:11px;letter-spacing:normal;line-height:22px;=
+text-align:left;color:#55575d;"><p class=3D"text-build-content" data-testid=
+=3D"WRjTJb7nDraOO">Your required training deadline is Friday, November 17.<=
+/p></div></td></tr></tbody></table></div><!--[if mso | IE]></td><td class=
+=3D"" style=3D"vertical-align:top;width:198px;" ><![endif]--><div class=3D"=
+mj-column-per-33 mj-outlook-group-fix" style=3D"font-size:0px;text-align:le=
+ft;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><tabl=
+e border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" st=
+yle=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"right" s=
+tyle=3D"font-size:0px;padding:0px 25px 0px 0px;padding-top:0px;padding-bott=
+om:0px;word-break:break-word;"><div style=3D"font-family:Arial, sans-serif;=
+font-size:11px;letter-spacing:normal;line-height:22px;text-align:right;colo=
+r:#55575d;"><p class=3D"text-build-content" style=3D"text-align: right; mar=
+gin: 10px 0; margin-top: 10px; margin-bottom: 10px;"><a target=3D"_blank" h=
+ref=3D"http://kysz.mjt.lu/nl3/TUtvTr6YjJvyGjBhPsYRIw?m=3DAVMAACtSjeEAAcvFP7=
+wAAQHEEAMAAWqa4NIAJQrDAAlzKABlS_uyBTSaR-bcQmmobIH7Y0KqqwAI9Ks&amp;b=3D82ff0=
+a87&amp;e=3D4b438090&amp;x=3Da7iET_5Bkh8rOy7esnA68A" style=3D"; text-decora=
+tion: none;"><span style=3D"color:#55575d;font-size:13px;line-height:22px;f=
+ont-family:Arial;">View online version</span></a></p></div></td></tr></tbod=
+y></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></tr><=
+/tbody></table></div><!--[if mso | IE]></td></tr></table><table align=3D"ce=
+nter" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"p=
+resentation" style=3D"width:600px;" width=3D"600" bgcolor=3D"#ffffff" ><tr>=
+<td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><=
+![endif]--><div style=3D"background:#ffffff;background-color:#ffffff;margin=
+:0px auto;max-width:600px;"><table align=3D"center" border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"background:#ffffff=
+;background-color:#ffffff;width:100%;"><tbody><tr><td style=3D"direction:lt=
+r;font-size:0px;padding:0px 0px 0px 0px;padding-bottom:0px;padding-left:0px=
+;padding-right:0px;padding-top:0px;text-align:center;"><!--[if mso | IE]><t=
+able role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+><tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><![endif]-->=
+<div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-size:0p=
+x;text-align:left;direction:ltr;display:inline-block;vertical-align:top;wid=
+th:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td al=
+ign=3D"center" style=3D"background:#ffffff;font-size:0px;padding:30px 30px =
+40px 30px;padding-top:30px;padding-right:30px;padding-bottom:40px;padding-l=
+eft:30px;word-break:break-word;"><table border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" role=3D"presentation" style=3D"border-collapse:collapse;borde=
+r-spacing:0px;"><tbody><tr><td style=3D"width:540px;"><img alt=3D"" src=3D"=
+https://kysz.mjt.lu/tplimg/kysz/b/su70o/gsq6h.png" style=3D"border:none;bor=
+der-radius:px;display:block;outline:none;text-decoration:none;height:auto;w=
+idth:100%;font-size:13px;" width=3D"540" height=3D"auto"></td></tr></tbody>=
+</table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></table=
+><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td></tr></=
+table><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" class=3D"" role=3D"presentation" style=3D"width:600px;" width=3D"600" b=
+gcolor=3D"#ffff" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-h=
+eight-rule:exactly;"><![endif]--><div style=3D"background:#ffff;background-=
+color:#ffff;margin:0px auto;max-width:600px;"><table align=3D"center" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"=
+background:#ffff;background-color:#ffff;width:100%;"><tbody><tr><td style=
+=3D"direction:ltr;font-size:0px;padding:14px 0px 0px 0px;padding-left:0px;p=
+adding-right:0px;padding-top:14px;text-align:center;"><!--[if mso | IE]><ta=
+ble role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0">=
+<tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><![endif]--><=
+div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-size:0px=
+;text-align:left;direction:ltr;display:inline-block;vertical-align:top;widt=
+h:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pr=
+esentation" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td ali=
+gn=3D"left" style=3D"background:#ffffff;font-size:0px;padding:0px 25px 0px =
+25px;padding-top:0px;padding-right:25px;padding-bottom:0px;padding-left:25p=
+x;word-break:break-word;"><div style=3D"font-family:Arial, sans-serif;font-=
+size:19px;letter-spacing:normal;line-height:1;text-align:left;color:#000000=
+;"><h1 class=3D"text-build-content" style=3D"line-height:20px;; font-weight=
+: normal;" data-testid=3D"kWjPA3Id0S"><span style=3D"color:#A31F34;font-fam=
+ily:Arial;font-size:19px;"><b>Your required training deadline is Friday, No=
+vember 17.</b></span></h1></div></td></tr><tr><td align=3D"center" style=3D=
+"background:#ffffff;font-size:0px;padding:10px 25px 10px 25px;padding-right=
+:25px;padding-left:25px;word-break:break-word;"><p style=3D"border-top:soli=
+d 2px #E6E6E6;font-size:1px;margin:0px auto;width:100%;"></p><!--[if mso | =
+IE]><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:0px auto;width=
+:550px;" role=3D"presentation" width=3D"550px" ><tr><td style=3D"height:0;l=
+ine-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"left" style=3D"bac=
+kground:#ffffff;font-size:0px;padding:0px 25px 0px 25px;padding-top:0px;pad=
+ding-right:25px;padding-bottom:0px;padding-left:25px;word-break:break-word;=
+"><div style=3D"font-family:Arial, sans-serif;font-size:14px;letter-spacing=
+:normal;line-height:1;text-align:left;color:#000000;"><p class=3D"text-buil=
+d-content" style=3D"line-height:21px;" data-testid=3D"MoII1jJJL">Dear gradu=
+ate students,</p><p class=3D"text-build-content" style=3D"line-height:21px;=
+" data-testid=3D"MoII1jJJL">We remind you that you are required to complete=
+ the <b>Preventing Sexual Harassment training by November 17</b>. Our recor=
+ds indicate that you have not yet completed the training (based on informat=
+ion from Tuesday, November 7).&nbsp;</p><p class=3D"text-build-content" sty=
+le=3D"line-height:21px;" data-testid=3D"MoII1jJJL"><span style=3D"font-size=
+:14px;">You must finish one of three course options (each course takes an h=
+our to complete) to fulfill the training requirement. </span><b>Please note=
+ that if you do not fulfill the requirement, a registration hold will be pl=
+aced on your account for the spring semester.&nbsp;</b></p></div></td></tr>=
+<tr><td align=3D"center" vertical-align=3D"middle" style=3D"background:#fff=
+fff;font-size:0px;padding:10px 25px 10px 25px;padding-right:25px;padding-le=
+ft:25px;word-break:break-word;"><table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" style=3D"border-collapse:separate;line-h=
+eight:100%;"><tbody><tr><td align=3D"center" bgcolor=3D"#414141" role=3D"pr=
+esentation" style=3D"border:none;border-radius:3px;cursor:auto;mso-padding-=
+alt:10px 25px 10px 25px;background:#414141;" valign=3D"middle"><a href=3D"h=
+ttp://kysz.mjt.lu/lnk/AVMAACtSjeEAAcvFP7wAAQHEEAMAAWqa4NIAJQrDAAlzKABlS_uyB=
+TSaR-bcQmmobIH7Y0KqqwAI9Ks/1/WoTtPGq-HA77YDfFhBu93w/aHR0cHM6Ly9taXQuY28xLnF=
+1YWx0cmljcy5jb20vamZlL2Zvcm0vU1ZfZG9pdTVNMHZQaWZDelpR" style=3D"display:inl=
+ine-block;background:#414141;color:#ffffff;font-family:Arial, sans-serif;fo=
+nt-size:13px;font-weight:normal;line-height:120%;margin:0;text-decoration:n=
+one;text-transform:none;padding:10px 25px 10px 25px;mso-padding-alt:0px;bor=
+der-radius:3px;" target=3D"_blank"><span style=3D"font-size:14px;">ACCESS R=
+EQUIRED TRAINING</span></a></td></tr></tbody></table></td></tr><tr><td alig=
+n=3D"left" style=3D"background:#ffffff;font-size:0px;padding:10px 25px 10px=
+ 25px;padding-top:10px;padding-right:25px;padding-bottom:10px;padding-left:=
+25px;word-break:break-word;"><div style=3D"font-family:Ubuntu, Helvetica, A=
+rial, sans-serif;font-size:14px;letter-spacing:normal;line-height:1;text-al=
+ign:left;color:#000000;"><p class=3D"text-build-content" style=3D"line-heig=
+ht:21px;" data-testid=3D"WoB35paojTVf488LN5Jkw"><span style=3D"font-family:=
+Roboto, Helvetica, Arial, sans-serif;font-size:14px;">We thank you for comp=
+leting this important required training before the November 17 deadline. Yo=
+u can contact </span><a class=3D"link-build-content" style=3D"color:inherit=
+;text-decoration:none;; text-decoration: none;" href=3D"mailto:pshtraining@=
+mit.edu"><span style=3D"color:inherit;font-family:Roboto, Helvetica, Arial,=
+ sans-serif;font-size:14px;"><u>pshtraining@mit.edu</u></span></a><span sty=
+le=3D"font-family:Roboto, Helvetica, Arial, sans-serif;font-size:14px;"> wi=
+th questions or read the </span><a class=3D"link-build-content" style=3D"co=
+lor:inherit;text-decoration:none;; text-decoration: none;" target=3D"_blank=
+" href=3D"http://kysz.mjt.lu/lnk/AVMAACtSjeEAAcvFP7wAAQHEEAMAAWqa4NIAJQrDAA=
+lzKABlS_uyBTSaR-bcQmmobIH7Y0KqqwAI9Ks/2/ilVrKfs6KBrIwVNChzcRVw/aHR0cHM6Ly9p=
+ZGhyLm1pdC5lZHUvZWR1Y2F0aW9uL3BzaHRyYWluaW5n"><span style=3D"color:inherit;=
+font-family:Roboto, Helvetica, Arial, sans-serif;font-size:14px;"><u>traini=
+ng descriptions and FAQs</u></span></a><span style=3D"font-family:Roboto, H=
+elvetica, Arial, sans-serif;font-size:14px;"> for more information.</span><=
+/p><p class=3D"text-build-content" style=3D"line-height:21px;" data-testid=
+=3D"WoB35paojTVf488LN5Jkw"><span style=3D"font-family:Roboto, Helvetica, Ar=
+ial, sans-serif;font-size:14px;">With warm regards,</span></p><p class=3D"t=
+ext-build-content" style=3D"line-height:21px;" data-testid=3D"WoB35paojTVf4=
+88LN5Jkw"><span style=3D"font-family:Roboto, Helvetica, Arial, sans-serif;f=
+ont-size:14px;">Suraiya Baluch, Associate Dean, GradSupport</span><br><span=
+ style=3D"font-family:Roboto, Helvetica, Arial, sans-serif;font-size:14px;"=
+>Gaurav Jashnani, Assistant Dean, GradSupport</span></p></div></td></tr></t=
+body></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></t=
+r></tbody></table></div><!--[if mso | IE]></td></tr></table><table align=3D=
+"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=
+=3D"presentation" style=3D"width:600px;" width=3D"600" ><tr><td style=3D"li=
+ne-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]--><div=
+ style=3D"margin:0px auto;max-width:600px;"><table align=3D"center" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"w=
+idth:100%;"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20p=
+x 0px 20px 0px;text-align:center;"><!--[if mso | IE]><table role=3D"present=
+ation" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" =
+style=3D"vertical-align:top;width:600px;" ><![endif]--><div class=3D"mj-col=
+umn-per-100 mj-outlook-group-fix" style=3D"font-size:0px;text-align:left;di=
+rection:ltr;display:inline-block;vertical-align:top;width:100%;"><table bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"center" sty=
+le=3D"font-size:0px;padding:0px 20px 0px 20px;padding-top:0px;padding-botto=
+m:0px;word-break:break-word;"><div style=3D"font-family:Arial, sans-serif;f=
+ont-size:11px;letter-spacing:normal;line-height:22px;text-align:center;colo=
+r:#55575d;"><p class=3D"text-build-content" style=3D"text-align: center; ma=
+rgin: 10px 0; margin-top: 10px; margin-bottom: 10px;" data-testid=3D"QmYQS7=
+PleSfMT5"><span style=3D"color:#55575d;font-family:Arial;font-size:13px;lin=
+e-height:22px;">This e-mail has been sent to jiannan@mit.edu; </span><a cla=
+ss=3D"link-build-content" style=3D"color:inherit;; text-decoration: none;" =
+target=3D"_blank" href=3D"http://kysz.mjt.lu/unsub2?hl=3Den&amp;m=3DAVMAACt=
+SjeEAAcvFP7wAAQHEEAMAAWqa4NIAJQrDAAlzKABlS_uyBTSaR-bcQmmobIH7Y0KqqwAI9Ks&am=
+p;b=3D82ff0a87&amp;e=3D4b438090&amp;x=3Da7iET_5Bkh8rOy7esnA68A"><span style=
+=3D"color:#55575d;font-family:Arial;font-size:13px;line-height:22px;">click=
+ here to unsubscribe</span></a><span style=3D"color:#55575d;font-family:Ari=
+al;font-size:13px;line-height:22px;">.</span></p></div></td></tr><tr><td al=
+ign=3D"center" style=3D"font-size:0px;padding:0px 20px 0px 20px;padding-top=
+:0px;padding-bottom:0px;word-break:break-word;"><div style=3D"font-family:A=
+rial, sans-serif;font-size:11px;letter-spacing:normal;line-height:22px;text=
+-align:center;color:#55575d;"><p class=3D"text-build-content" style=3D"line=
+-height: 15px; text-align: center; margin: 10px 0; margin-top: 10px; margin=
+-bottom: 10px;" data-testid=3D"MKZHuA19JD3Gha"><span style=3D"color:#55575d=
+;font-family:Arial;font-size:13px;">MIT Office of Graduate Education (OGE)<=
+/span><br><span style=3D"color:#55575d;font-family:Arial;font-size:13px;">7=
+7 Massachusetts Ave, 35-332 Cambridge, MA 02139</span></p></div></td></tr><=
+/tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td><=
+/tr></tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--><=
+/div>
+<br><img src=3D"http://kysz.mjt.lu/oo/AVMAACtSjeEAAcvFP7wAAQHEEAMAAWqa4NIAJ=
+QrDAAlzKABlS_uyBTSaR-bcQmmobIH7Y0KqqwAI9Ks/a4b6e136/e.gif" height=3D"1" wid=
+th=3D"1" alt=3D"" border=3D"0" style=3D"height:1px;width:1px;border:0;">
+</body></html>=
+
+--=-Sw/u1Z6pVI9l0GMrYOv0--

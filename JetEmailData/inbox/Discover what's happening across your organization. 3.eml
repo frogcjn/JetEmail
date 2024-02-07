@@ -1,0 +1,698 @@
+Received: from PH0PR01MB7894.prod.exchangelabs.com (2603:10b6:510:288::11) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Mon, 16 Oct 2023 22:56:15
+ +0000
+Received: from CH0PR03CA0188.namprd03.prod.outlook.com (2603:10b6:610:e4::13)
+ by PH0PR01MB7894.prod.exchangelabs.com (2603:10b6:510:288::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6886.36; Mon, 16 Oct 2023 22:56:13 +0000
+Received: from DS3PEPF000099DC.namprd04.prod.outlook.com
+ (2603:10b6:610:e4:cafe::68) by CH0PR03CA0188.outlook.office365.com
+ (2603:10b6:610:e4::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.35 via Frontend
+ Transport; Mon, 16 Oct 2023 22:56:12 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.113)
+ smtp.mailfrom=yammer.com; dkim=fail (body hash did not verify)
+ header.d=yammer.com;dmarc=fail action=quarantine header.from=yammer.com;
+Received-SPF: Fail (protection.outlook.com: domain of yammer.com does not
+ designate 18.9.1.113 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.9.1.113; helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.113) by
+ DS3PEPF000099DC.mail.protection.outlook.com (10.167.17.198) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6907.20 via Frontend Transport; Mon, 16 Oct 2023 22:56:12 +0000
+Received: from oc11expo32.exchange.mit.edu (18.9.4.113) by
+ oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Mon, 16 Oct 2023 18:56:11 -0400
+Received: from oc11exhyb6.exchange.mit.edu (18.9.1.111) by
+ oc11expo32.exchange.mit.edu (18.9.4.113) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Mon, 16 Oct 2023 18:56:11 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
+ by oc11exhyb6.exchange.mit.edu (18.9.1.111) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Mon, 16 Oct 2023 18:56:11 -0400
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=S0lmWMOvp2RwDuM8UyBogK8mxLxs2f06Aaa9CLGXBrKKKUyN1+FLsn/BTqlPlE/GQdhB81qcL3yoN/hnKvdikyorPE1RQuLPjal1+lTM4YTmgsh9XTrvPGw6LZce6fiTmAPKL5gnUt6ThvukBgwAwTPETSybbStHLSeSa8/mHpqIb7uCfT7tHwDGM/9tlRVTu7mmQqJy3id53/3+gU5BY/U7snuSqhYN0wqCDV0VSfgZCfCYlq/4tjA9jQFnh0Kkozt7cU3PqmKf83CFHSt+UnfaazGOATN1k4yfNmJdMuCbtiou5iCXp/aAyflgH8m+pX/XBkDIPiNiIHO9S9NPew==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KrsJBptX41CH2QG1A+i2pH40kwlvwFVkiODxLtTZIhE=;
+ b=NASPDyS5Q1IoywDpo509f3VE51X+fPEPzC8zBtnfGSWnnm+Am6XkxhlnBakzBCMZrz9EJowYwX15PXJhn8GcOzaP7nPCGC/JFo01Kw9hafzxkdOkqATKAHzDcV3SZC4wnWV9kgKI2xwb2eqhuOjawDDBKIc4VwLQ7OybPexbgrUPokkS8GvMaRz3G4OEv6ppxldDNeAGb9F/wMY4aFtQrGOZelWGf2mtTWNfv3PnsAjh+MagI7Ft6wdxeCi73Qj1B6b5KCOIzd6Fb9I4lIIJb1QM1tylHsjdVX2V11DqR1nbUVqTJdBjbEy7QiuzfuGes1GKKPlCA/DBXhOxqUzyVw==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 40.107.100.98) smtp.rcpttodomain=mit.edu smtp.mailfrom=yammer.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=yammer.com;
+ dkim=pass (signature was verified) header.d=yammer.com; arc=pass (0 oda=1
+ ltdi=1 spf=[1,1,smtp.mailfrom=yammer.com] dmarc=[1,1,header.from=yammer.com])
+Received: from DM6PR11CA0062.namprd11.prod.outlook.com (2603:10b6:5:14c::39)
+ by PH7PR01MB7959.prod.exchangelabs.com (2603:10b6:510:277::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6886.36; Mon, 16 Oct 2023 22:55:12 +0000
+Received: from DS2PEPF00003445.namprd04.prod.outlook.com
+ (2603:10b6:5:14c:cafe::e3) by DM6PR11CA0062.outlook.office365.com
+ (2603:10b6:5:14c::39) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.36 via Frontend
+ Transport; Mon, 16 Oct 2023 22:55:12 +0000
+Authentication-Results-Original: spf=pass (sender IP is 40.107.100.98)
+ smtp.mailfrom=yammer.com; dkim=pass (signature was verified)
+ header.d=yammer.com;dmarc=pass action=none
+ header.from=yammer.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of yammer.com designates
+ 40.107.100.98 as permitted sender) receiver=protection.outlook.com;
+ client-ip=40.107.100.98; helo=NAM04-BN8-obe.outbound.protection.outlook.com;
+ pr=C
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (40.107.100.98)
+ by DS2PEPF00003445.mail.protection.outlook.com (10.167.17.72) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.20 via Frontend Transport; Mon, 16 Oct 2023 22:55:12 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DRvX81W7ef/li7/IFHWyKsmHNJKk5E+Elbpf9tOGw7EdKFaRjThNDNjhR8Q8WzXr3V7oXaUYNvuGcZbDdhj5N8kNwAGYQS1k32lYjoNGYl1bGjPCHFC42X8omKxpLfEMxa9OvDnvPXTIakyTid7sGXgVMf0dHea7k/A/T8y0+36qV2ebuDnvGGLf+kiUknDuIdRnSTD6UkEFA2sKO0RDb0HOs4Vzm9fXs7tQP4nFybleVry8AcLKdceDJgSX8woIIva9qNzgPlUHN7LIxULfvUJL6Q4e90oXGi3nuTBf9zUCxldJz+2kO4Ot+cQwgLwkbjb58T2Okd53oSon+Ug8JA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KrsJBptX41CH2QG1A+i2pH40kwlvwFVkiODxLtTZIhE=;
+ b=kDSkVbI2pJHcB9E88HGgio77Dt0nNU4TRGTanJL/RR0WrF73XWZwNAe3CBazwJOl36Atncj0qpNjree3C0Z/8JPkEzGgSBGsPUcYMAj9KtFMPaNsJ3joP14BPrw1oEalTCugm2Qdbjgk9Bp5VHk8oVtVKlYfkE66Ib3Srcx2jYxJ8LnK/YhfN3sbMZNywbjDOrATD6dsgUBy0FRM9LKK4Hf7ndGOi1j6GH7XnucHqW1BQNRg/Wdcp1wBWIxwoYhCoUDyt4gs2xbRbAcsMyVPI1l8au/GnCC3piV0Iq9BjdATXcNMNgJH9QAVVWgOHIxSROtUln4VhN0TIEbbaV38xw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 13.86.34.99) smtp.rcpttodomain=mit.edu smtp.mailfrom=yammer.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=yammer.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yammer.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KrsJBptX41CH2QG1A+i2pH40kwlvwFVkiODxLtTZIhE=;
+ b=lIMJvsJttjBSCKXRid6fS2DKLWNmM/KcTjdMCmShtf/3YcUKbADWPGAz9m+dRaJ+yDWN7eVNMBVZzPJlCe3egP6j0pPtGBpgXSRK9GuBnLIx/TGK/qnbLtscXIftsiJedfDfPG/7MbUJIOHkso92V2GTOiSbjqbYYrF4WMxW1gg=
+Received: from BN9PR03CA0734.namprd03.prod.outlook.com (2603:10b6:408:110::19)
+ by SA1PR18MB5744.namprd18.prod.outlook.com (2603:10b6:806:3a5::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.36; Mon, 16 Oct
+ 2023 22:55:10 +0000
+Received: from BN8NAM04FT066.eop-NAM04.prod.protection.outlook.com
+ (2603:10b6:408:110:cafe::dd) by BN9PR03CA0734.outlook.office365.com
+ (2603:10b6:408:110::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.36 via Frontend
+ Transport; Mon, 16 Oct 2023 22:55:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 13.86.34.99)
+ smtp.mailfrom=yammer.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=yammer.com;
+Received-SPF: Pass (protection.outlook.com: domain of yammer.com designates
+ 13.86.34.99 as permitted sender) receiver=protection.outlook.com;
+ client-ip=13.86.34.99; helo=6730f49ab36f.localdomain; pr=C
+Received: from 6730f49ab36f.localdomain (13.86.34.99) by
+ BN8NAM04FT066.mail.protection.outlook.com (10.13.161.96) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6907.19 via Frontend Transport; Mon, 16 Oct 2023 22:55:09 +0000
+Received: by 6730f49ab36f.localdomain (Postfix, from userid 0)
+	id 83D3FC40074; Mon, 16 Oct 2023 22:55:09 +0000 (UTC)
+Date: Mon, 16 Oct 2023 22:55:09 +0000
+From: Jordan Madrid <noreply@yammer.com>
+To: Jiannan Cao <jiannan@mit.edu>
+Message-ID: <652dbf4d7a905_43e3fb27f1f2f18907167@yammer.com>
+Subject: Discover what's happening across your organization.
+Content-Type: multipart/alternative;
+ boundary="--==_mimepart_652dbf4d79ea4_43e3fb27f1f2f18907045";
+ charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-MS-Outlook-YammerExtensibleContentData: s=df;threadids=eyJfdHlwZSI6IlRocmVhZCIsImlkIjoiMjQ4NzEyODU4MDU2Mjk0NCJ9;ac=bo-16mj215hc-13b0b5fda78cdef4c3b0b8bc53862425;eid=8e170a0ea64b823a7bc3e43ce353596a2cf6aba8e246a3b9add3f65ade485e6a
+X-Auto-Response-Suppress: All
+Return-Path: noreply@yammer.com
+X-EOPAttributedMessage: 2
+X-MS-TrafficTypeDiagnostic:
+ BN8NAM04FT066:EE_|SA1PR18MB5744:EE_|DS2PEPF00003445:EE_|PH7PR01MB7959:EE_|DS3PEPF000099DC:EE_|PH0PR01MB7894:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2fda03d1-d478-439a-c0ee-08dbce9b186d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: t/tpAQqwiokWd1mTcxyAT5L18Bu2JKfEQorBgHjYzXIfS8d+pQxQT16x6Q3L9oTvisHiPM3CrT21X9XOUMFDmew4aff/nhW0S+EMOEfLQqAxTlAMsob5yDdBY3sw+LhitBl7oa3fCQUr6lqRkVovXn/iicv4QILdXtAiq46Unv+EZG8EXlsL4wnnrLs6H59v5L3FYpSd7bfE9wkZj0v0j7CJN+uWJE59ufCKZZhHvM0Ko+8lHO789Q78boDeyMjvNrnWRzzhElRCvH93S3g/Kp4qulxh/t4KfTxY1dnuJX1j4p4A08RtOWM0znfAbZTXbuZ1baMRLZT74wSk8gGwyTeQVNJ1LVcxkFFCimkVHotuljqo5vdALd7a4XgBY1o+ZWCcax6kjrmlbhb/kpfO75B+lPBbv/TIolyssDX9yYhBsbBOexhYx1Lg1ZJACZgSlUC4PWnNcKtuRuASZ34lORcJFbewvpjJyvEKqvvEs1vQgnLAmu4mNH4lTTUxCUaT4Xwv0BAluvR3skBnJx/5h73oYLG6cjPaPk7fupajM4kt2SGAYXWljzRkEXF6CT/ANk0OUPQz97ejsvDQfum/9teMC547y46mdxr5zqhVGAbtyP5VXT66xq/REKR0hQJ7jsfv/MBDEvZ1GXuyGjYW7QAZu4Q/Nl78gsjGEIiV1Juy3z1tD7zPICheWOn9c1n8JTyPncX1RT2pB0lEkDMfNhPjhMspwD7Q6EzPTCDJCjxsR6GUPjpGhYYrZAY371dhZCvuhEJQhRTx/9rFdAzS5Y5V8ZhmPLdE6QUDXe3rjI/ubbnF1XRa2QD6xeMlPkAZKlGbqyLG9qFn0pqBbABkgGPyWQYuZSuiUgxkAfC8TapqObJXAk+g/nCghUapgcqZv79lfpv6Ivrg2N+L4SydvmCk5irh6NrmIElibgo1+jI=
+X-Forefront-Antispam-Report-Untrusted: CIP:13.86.34.99;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:6730f49ab36f.localdomain;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(396003)(39860400002)(346002)(376002)(136003)(230922051799003)(186009)(7200799017)(64100799003)(451199024)(82310400011)(61400799006)(1690799017)(40470700004)(46966006)(36840700001)(66899024)(47076005)(40460700003)(40480700001)(82740400003)(26005)(356005)(336012)(81166007)(2616005)(36756003)(6266002)(5660300002)(70206006)(42186006)(70586007)(41300700001)(6916009)(8936002)(8676002)(33964004)(86362001)(2906002)(508600001)(52230400001)(166002)(83380400001)(41320700001)(76236004)(36860700001)(19627405001)(8400799017)(1406899027)(36900700001)(43580500001)(27056005);DIR:OUT;SFP:1102;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR18MB5744
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DS2PEPF00003445.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersPromoted: DS2PEPF00003445.namprd04.prod.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 279ac72d-f46d-4ad3-95ab-08dbce9af2e9
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?utf-8?B?QmtuNUo2NUdEdE9rdWEva1QxTUZoM0N1K3NOdVJ3QkFMdTUvYmEyMWJhWWxF?=
+ =?utf-8?B?S3VKZXc1N2dBTktWd0JYdXNmUVpOaEFHZEV1VFUzZlJwcUVRY0Z6bG1KUEJL?=
+ =?utf-8?B?TmhFc1pmQUE2aW1tOW9qbERhT251N2l5VUdlK0tDaElUR0JWN2NVMlVYcGlV?=
+ =?utf-8?B?MjZpWnRFU0lad0Q4NlRmbi8vRDRkT1Z1M3VlN29KV1IvTWRVaVFmTHN3b2ZI?=
+ =?utf-8?B?ejdoOGpMbnczREMwaytnMHB2ckR6VTdwVWEyeG0wc2k1S210WHJDNEF0L28y?=
+ =?utf-8?B?MnUrU1AwR3I5cm5LWXczU2RDdXNCSjRNOHpvY1Nndnp2dTlsMFFOVGhVL3dv?=
+ =?utf-8?B?REx5Y2g2Wktra1YzcmFreGdYU3dzbDR5T0NuSFVXcnBzUTJ4T2NURFFzRnZq?=
+ =?utf-8?B?TjFKZVlZSFJoS3UwT1NaV0Rwa1FNTWRlUW9YcGpqMnprcFdyRFlUN2M4RVhH?=
+ =?utf-8?B?a3RZS1NCMklvb1Ura29VTzVxQ3oxQUNoODNENmM0REV2cWtKR1diSk95ZjQ3?=
+ =?utf-8?B?d1ZaMUd1RGFCSk1XOHQ0SERlVzBBaGRad2c4V0MzNkVNMEVUdFU1aEJCcVlY?=
+ =?utf-8?B?TVhrY3pvZlNsb0dVQngzUWdscG81eVZLZWtZQWYxVEVobjhsN21HdlVmNGdZ?=
+ =?utf-8?B?a01CZWM2MmpjYUpmYXduZVYvWmFJYUxIU0ZRc1htNC9GUzVsbzVrMTV6YjNC?=
+ =?utf-8?B?SmhyU1FFWDlxcG5WcTR0Z0N1aEIvOXd5WjZXSDBTWDUwbFIvUDZjVUR6ajMw?=
+ =?utf-8?B?MzNzT3pOeUtuUDlLQ0c1OGR1eTViZ1ozUHhwS09rRDU2OUVpWU12WEdDS1Z5?=
+ =?utf-8?B?UElkeWc0NGdmSExJa20wYUhrazlXM2pZWDk3NDJ1TUFQRnhaa0J6ZGVmRGsr?=
+ =?utf-8?B?NnFqM1lCNXA4OUljUHpQbUZkckt4dUhtYmpIVEM0RitzZld0R1VEZEFjVkc1?=
+ =?utf-8?B?cU13Qi96SnZFNVE3Rmw3TFlvaXVNZk8wT1RMYW9SNHVVajE0c3VaRTcvY3A4?=
+ =?utf-8?B?WmgvdW5aT0ZBQVdhZ1IyZVBmbktiWGV3MjRqamEyMVZJS3FwRHBnaFRVMnB1?=
+ =?utf-8?B?ZGFzZGFKcWxqTEk2Qkw4QlRUeUdKQ1NCNmRqN1pqaFVEK0ROYU11cUxZRGZP?=
+ =?utf-8?B?WU5jWVJjMlFXekJYM2drdWVJNDA0MlFkZzRuVW14ZGhxRklHTTZqdVpwVXBu?=
+ =?utf-8?B?bnJrR1FTc1FCR0ovWWZUVXBDZjVtZlNaWjdUMm56TVV1ZEdpdWNqa2k0a3Ri?=
+ =?utf-8?B?OGw4eGpPZ0t3ZUZRUW5OL1FBWTFZZFN6Tm5renJuSTRLRFVwckY0bmoreURU?=
+ =?utf-8?B?UjlPMFZhMTNVc3czSStnZmpGQXQ4bHRCbDY4SjYrMnRFRGx6cXNuaUtsMWNo?=
+ =?utf-8?B?L1FybFlRdHhkbUIwVG9qSWxwZy9ZU3pGYXZBWjN6TlNrSkFIcWx6cnNoeTBs?=
+ =?utf-8?B?eTJ2NTFiQ0NEcUlYNnFqcGtOVEllcHZmT0VMeGFLa1ZpY2lOMEhtdEVVWXRm?=
+ =?utf-8?B?enpOMFFrejhSczBRVGs2S1RyZGlNSDdqQUY2OUVLZ0VYL1c0cFF0Tk1aSHgx?=
+ =?utf-8?B?VTMwZW1Cb05FbzZRS05wY2VsTVZocFVwNms3YXRINUZCRlhkemdzaWhKUVhU?=
+ =?utf-8?B?WFRyS0Fva2wrSnViWU14VkpwZGZyeHYzN1JtTU1KeW0xWDAxMXdmd0lyWEZs?=
+ =?utf-8?B?QjRtWnVEVCtyWkZUUzBtU3ozZkxHNUJsR21WTitEVWNFek1VQWJYRFBLN2M0?=
+ =?utf-8?B?Wm0wTG50a1FvaDd4aGFJWmhhTjhGMkJjYmE2OE8rZnI1bGNzb2JuN0NSRmc1?=
+ =?utf-8?B?TzVPeHNjME1nOHZoczNWRzZEOHE1akkrRGJ1MWxzK0IwbUI3T1A3Z21jeXJN?=
+ =?utf-8?B?WE9hcnM5eWVwZUtIYUUveTQwa3FDYU1aNldMLzlVbUtyOGVtZEs1WkwwU1dL?=
+ =?utf-8?B?c05laUJFMEdCdXl3UjRzUFhhVVhZVjN0Y0F4NlVHUVJjaDZzMXpuSVpBVTBm?=
+ =?utf-8?B?d0dncHhCaWlqVnBoNmI3Vy9FeVlBWno5a1Q5UW9RMlhELzR5Tk4rM0JScDQr?=
+ =?utf-8?B?R1pjZHBjQzdDa21jbnBnanhVTTM0QVROYTQ1d0RZYUtjbDRsdWhISjlUb28y?=
+ =?utf-8?B?bkNMVmZpY0JQMjZOK3lRMFhEMUNaNnorVFJFVmVKTW5mWWwvNFZqOWk0ZEhD?=
+ =?utf-8?B?TVRhdHI1MUdkeVZwaEk4bUJtb1JVWklDYitKVmhCbGE1WjY3SHRKbUs1UUNH?=
+ =?utf-8?B?MXlXWExNZ1lsTWJIOXhjM1JxSnUxVUtoZWE1YTRSeDBDejFEazBncTdlRm0y?=
+ =?utf-8?B?d3VSQWxFai9rV3grYmI4NnRVQkVuM0F5OE9sYm5SMkR1QWkxeUJHRTR3cGg0?=
+ =?utf-8?B?TEZ6aGluMjNkbkt4clRIYkV3Q00vam1JWEY4QjgyOEFOWjIwSUdQSW5hVHNm?=
+ =?utf-8?B?R3hicEJwaVBSNXlRcEhtUHVVMmlqNFFzMDZOdEt4YjB4WWhSM1h5TXVjVVFX?=
+ =?utf-8?Q?fgfHCCcw6TY?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:40.107.100.98;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:NAM04-BN8-obe.outbound.protection.outlook.com;PTR:mail-bn8nam04on2098.outbound.protection.outlook.com;CAT:NONE;SFS:(13230031)(4636009)(84530400002)(84550400002)(1690799017)(451199024)(19302899012)(26402899012)(33964004)(4006050)(66899024)(5660300002)(22186003)(26005)(36756003)(2616005)(52230400001)(6266002)(336012)(8636004)(83380400001)(166002)(86362001)(76236004)(7636003)(19627405001)(6916009)(42186006)(8676002)(1096003)(58800400005)(75640400001)(76899018)(1406899027)(27056005)(43580500001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR01MB7959
+X-OrganizationHeadersPreserved: PH7PR01MB7959.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb6.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb6.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo32.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 16 Oct 2023 22:56:12.8155
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 2fda03d1-d478-439a-c0ee-08dbce9b186d
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: DS3PEPF000099DC.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: DS3PEPF000099DC.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DS3PEPF000099DC.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DS2PEPF00003445.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 175425f1-325d-4e85-f911-08dbce9af468
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.113;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb8.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2023 22:56:12.6124
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2fda03d1-d478-439a-c0ee-08dbce9b186d
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.113];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ DS2PEPF00003445.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB7894
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:03.0281253
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6863.043
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RmVybVpjcWZnWGorT2d1NHBzOGZpL0xqVDJXZHJKeHdHWjg0dWZ4b3UrSkx6?=
+ =?utf-8?B?QkRuUFpyb3d3NkNTcEVOWms1ekJNVUZHQXc1Z3VDcWRsNU50ZXRuYmh0R0tj?=
+ =?utf-8?B?RjVFK1ZobUtTdkoyY0VZaDBhSzRlRE9wQzNBb2VVTUwyT241MkFhdEZDTDZF?=
+ =?utf-8?B?SEQ1dWtkcVNwQzdUU3FnM0hJcS9OcTRLaWQ5ZnR6ZENoZkhndk5HbnFwWkhp?=
+ =?utf-8?B?OUJDV0RldlozblFGb3A2cFJoQ1h0eVQwdnZEV1BkY2t1bXVMQjV0NVdMaW8w?=
+ =?utf-8?B?bmdFcUJuQXFKOWZWd2NlRkxMSHU5Z0RrZmdjc2VpaHR0SVhHV21tcFV3SUUv?=
+ =?utf-8?B?YXQwczNHemhUcjdjWWc5by9icU9MMmtGZ3pqTEdYeTArdXRWS29ubmVKRk5n?=
+ =?utf-8?B?QnJjV3VIbWgvbzBiankxSGZJbEJRUUNjaWRmZXBRMVllLzlGU2QwSUdCMmJq?=
+ =?utf-8?B?NHdPVE1EWG5Uelpxbjl1b2tLcENWUEhENVNWK3lOcGtZRlpQa2VpWmsvcXhH?=
+ =?utf-8?B?eHN6UUh3VVhURVFIUVd1dGloMVNDdDZmVWZRVnNSaGN3OXkzK3MxbUtIWGxv?=
+ =?utf-8?B?SHVySjVRcWVLSzkxZlVFeHdPTjgwRFlFOHliN2ZyVG5qUUhJTGJwNjh6dGRu?=
+ =?utf-8?B?MmtHMko2aVNnWXdTQ1p4YlpqQlp5TW95aEcyR21Ec3BHNTJFVXl6VFl3VXhx?=
+ =?utf-8?B?aWNSb0Z5L3Avb0tDb2lGNlVaTzlCNWlRenJNOHZWTUQ2TmYrdVRVZFN2RkVR?=
+ =?utf-8?B?SWJscXErYjNQVWFBYUQyZDhHN2ZKWGhlTUhvcVY0NElQVjJ6Y0dqRSs5cUtO?=
+ =?utf-8?B?Tit6UkxZaVIyaFVvV3FEdUFnaERueEpUZzd6cmhmS0JNS1NidjZ6eXhMOWJ4?=
+ =?utf-8?B?ZGgxaEg4M2FiREhEdDE0SHNXRGoyNkF4dnVlNjhPYWdrL0Z0U3lVeHhPZDI5?=
+ =?utf-8?B?OXM5Sy9oMFM2SmdQeEV6dUVGLzR6TExNVEtwS0RsL2VsOExzbDM4bVUydnFm?=
+ =?utf-8?B?Q0FySCtqdHFKLzZNR3NxeVdad3hUREVJZC9oaXMvWHBSMkNlWm95cUtVWUN1?=
+ =?utf-8?B?VFlINDg5TkNGeVQrMzdsT3I2L2x6cXlqU2lkRWhWaGJNK05JNDhKUXpQS1dv?=
+ =?utf-8?B?Yzl2ZE01Q3Bibk03angwMGRHSFhJZzdFRUVldHcvRjVtbGRXWW1PQ0hlT29w?=
+ =?utf-8?B?QUlFaU44dUJob0RMQUdjNGtVZXVOczVhNHZyVzdEaGpCYzBIZ2ZGQ3YybFdr?=
+ =?utf-8?B?QlZWcFRlS2FzNjdYSXVYVEpVbWZmUjZNRFdIODZiMkZ1b3FJY004VUtCRmU5?=
+ =?utf-8?B?dXV3UFpPS2lGdXR0bDNpaGJGTk5HRytScFRQRUEzYm5IOThNbWtLY3doZkdG?=
+ =?utf-8?B?OEdnNGpyVXJRbCtrbmRTbU85YkVQakFFa2VYMjZldG0xaGZ3Vkk1cTV0c2dG?=
+ =?utf-8?B?ZUl1Zno1MEs0bjgzYllqY0prUzkyNlduUFBOb0pQSHJMU2NhRGo3ODhlVjVi?=
+ =?utf-8?B?am1kWlVIanppUjRQSGRycEhMSkk3YTJZRFRrMSs1Q0paS2xud1h1MjV2ZkY3?=
+ =?utf-8?B?QW1td1ZveE9QdjNQTEprRGZSVTBDb1Fxek5XVkhEUkUzbnB3RVk4S3dqT3Nr?=
+ =?utf-8?B?YUVMYzlEYXhYUCtCa05NWit5RVFHSGFyNjJKZ2ZmUTRCVXhaeksxZzc3V3pz?=
+ =?utf-8?B?ZTNoemZvM0Q5NnQrNE1vcmJ6bVV3bVpMZ0g5L0FxQW5iREdJSFJKbE1EOG8v?=
+ =?utf-8?B?RktuWjBKZXczTVZDeHVTNFlkZHBNeHRVNjArZjNmb1BlbFY4ck8wV3YrdjVU?=
+ =?utf-8?B?SkxPN256K1QwZzdWMEMwZTRDT0h0eFNTU2E1MGtWRkVhNFZ6YmRpWTZuaGxV?=
+ =?utf-8?B?Wjltc05weVNKSDRmQkVkekJVOW1YWGlJYlRGNHREcEhVRzFPZlhZVTZQeWpI?=
+ =?utf-8?B?WVpkdGlycnNkRElIWCtqZG1QSGUxSnhiODF5TEhSSFdoZEZPMWlqeVNTaU9R?=
+ =?utf-8?B?N21XdldZWVFiZFFrRVBPUzVSKzY5R1JDb2dYMUtkUHFUUDNaZjdhdzZuQVpm?=
+ =?utf-8?B?Z2xqdUdranRqUVoyM0ZZczFPZm9acEJEajN5THB0UWlza2RnRXdhUExFSyth?=
+ =?utf-8?B?RnhBYmVid0xjZG1ZWllBUCt4Q2NISFFTamVSNGlrTVJHMzNUa0VqVmV6dDhO?=
+ =?utf-8?B?MDJmWTM4enNHVDV4TXRaWThDRXBDM3RaL2hFWC9BUHhYKytsRDFlSVRnUjY4?=
+ =?utf-8?B?cXUwM29HWmpNeCtPdWZpN2NKamRSNTdDeHF3OFNKQUV2SE5KUVBiMXFMMURQ?=
+ =?utf-8?B?RHl1TmN0R3AwUmsycWVtNW1FaUxXV1NqeFVuUytsSnJhWDN3RnpJUT09?=
+MIME-Version: 1.0
+
+----==_mimepart_652dbf4d79ea4_43e3fb27f1f2f18907045
+Content-Type: text/plain;
+ charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+=0D
+** Discover what's happening across your organization.**=0D
+----------------------------------------------------------------=0D
+=0D
+=0D
+Jordan Madrid in All Company community:=0D
+=0D
+The Program in Media Arts and Sciences (MAS) at the Massachusetts Institu=
+te of Technology (MIT) Cambridge, Massachusetts invites applications for =
+a tenure-track faculty position in the area of Transformative Design. The=
+ search deadline for candidate materials has been extended to November 1,=
+... Go to conversation (https://www.yammer.com/mit.edu/threads/2487128580=
+562944?message_id=3D2487128580562944?trk_event=3Dde_thrd_clk&allow_app_re=
+direct=3D1&from=3Demail)=0D
+0 replies=0D
+=0D
+=0D
+----------------------------------------------------------------=0D
+**It's easy to get more done in a day.**=0D
+Viva Engage is a private workspace for collaboration at Massachusetts Ins=
+titute of Technology. By joining communities on Viva Engage, you and the =
+people you work with can get more done together and stay on top of what=E2=
+=80=99s happening across your organization.=0D
+=0D
+Go to Viva Engage (https://www.yammer.com/mit.edu/home/home?trk_event=3Dd=
+e_hm_clk&allow_app_redirect=3D1&from=3Demail)=0D
+
+----==_mimepart_652dbf4d79ea4_43e3fb27f1f2f18907045
+Content-Type: text/html;
+ charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=
+/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns=3D"http://www.w3.org/1999/xht=
+ml" lang=3D"en-US"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">=
+=0D
+<meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1.=
+0">=0D
+<title></title>=0D
+<style>=0D
+  #preheader {=0D
+    display: none !important;=0D
+    visibility: hidden !important;=0D
+    font-size: 0px !important;=0D
+    height: 0px !important;=0D
+    line-height: 0px !important;=0D
+  }=0D
+=0D
+  body {=0D
+    width: 100% !important;=0D
+    -webkit-text-size-adjust: 100%;=0D
+    -ms-text-size-adjust: 100%;=0D
+    margin: 0;=0D
+    padding: 0;=0D
+  }=0D
+=0D
+  img {=0D
+    outline: none;=0D
+    text-decoration: none;=0D
+    -ms-interpolation-mode: bicubic;=0D
+  }=0D
+  a img { border: none; }=0D
+  a {=0D
+    color: #346ABB;=0D
+    text-decoration: none;=0D
+  }=0D
+=0D
+  table {=0D
+    mso-table-lspace: 0pt;=0D
+    mso-table-rspace: 0pt;=0D
+  }=0D
+=0D
+  table td {=0D
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;=0D
+    font-size: 12px;=0D
+    color: #495361;=0D
+  }=0D
+</style>=0D
+=0D
+<!--[if gte mso 9]>=0D
+  <style data-immutable>=0D
+    table td { border-collapse: collapse; }=0D
+  </style>=0D
+<![endif]-->=0D
+=0D
+<style data-immutable=3D"">=0D
+    @media only screen and (min-device-width : 320px) and (max-device-width=
+ : 768px) {=0D
+    .reply { padding:5px 0 15px 0 !important }=0D
+    .mobile-wide { width: 100% !important; }=0D
+    .content { padding-left: 20px !important; padding-right: 20px !importan=
+t; }=0D
+    .content.daily-rewards { padding-left: 0!important; padding-right: 0!im=
+portant; }=0D
+    .reason { padding-top: 10px !important; }=0D
+    .group-name { font-size:12px !important; }=0D
+    .group-heading, .more-unread-in-group { white-space: normal !important;=
+ }=0D
+    .management-link { display: block; float: left; clear: both; margin-bot=
+tom: 5px; }=0D
+    .logos { text-align: left !important; padding: 0 16px !important; }=0D
+    .cta { padding-left: 5px !important; padding-right: 5px !important; }=
+=0D
+    .footer { padding-top: 28px; text-align: left !important; }=0D
+    .msft-address { text-align: left !important; }=0D
+    .mobile-daily-rewards--suggested { width: 150px!important; }=0D
+    .mobile-daily-rewards--subhead { text-align: left!important; padding-le=
+ft: 20px!important; }=0D
+      # specific CSS styles here for mobile=0D
+=0D
+  }=0D
+</style>=0D
+=0D
+</head>=0D
+=0D
+<body>=0D
+  <table role=3D"presentation" align=3D"center" lang=3D"en-US" style=3D"bor=
+der-collapse:collapse;width:100%;word-wrap:break-word;background-color:#EDE=
+DED;">=0D
+  <tr>=0D
+      <td style=3D"padding-top:0px;" align=3D"center">=0D
+        <table role=3D"presentation" align=3D"center" class=3D"mobile-wide"=
+ style=3D"width:600px;border-collapse:collapse;">=0D
+          <tr>=0D
+            <td class=3D"content" style=3D"background-color:#fafafa;padding=
+:0px;border-radius:2px;">=0D
+              <table role=3D"presentation" class=3D"mobile-wide" style=3D"b=
+order-collapse:collapse;">=0D
+                  <tr>=0D
+                    <td style=3D"padding:0;">=0D
+                          <table role=3D"presentation" align=3D"center" cla=
+ss=3D"mobile-wide" style=3D"border-collapse:collapse;min-width:100%;width:6=
+00px;">=0D
+      <tr>=0D
+        <td style=3D"padding:0">=0D
+          <table role=3D"presentation" style=3D"border-collapse:collapse;mi=
+n-width:100%;width:100%;background-color:#ffffff;">=0D
+            <tr style=3D"padding:0px 24px 0px 24px;">=0D
+              <td style=3D"padding:0px 0px 0px 24px;text-align:left;">=0D
+                  <a style=3D"font-family:'Segoe UI',Helvetica,Arial,sans-s=
+erif;line-height:1.3;text-decoration:none;color:#343a41;font-size:20px;marg=
+in:0;" href=3D"https://www.yammer.com/mit.edu/home?trk_event=3Dde_network_c=
+lick&amp;allow_app_redirect=3D1">Massachusetts Institute of Technology</a>=
+=0D
+              </td>=0D
+              <td style=3D"padding:9px 24px 9px 0px ;text-align:right">=0D
+                  <img alt=3D"Viva Engage" height=3D"32" src=3D"https://mai=
+lie.assets-yammer.com/mailer_images/viva-word-logo.png" style=3D"vertical-a=
+lign:middle; width: 82px; height: 15px;">=0D
+              </td>=0D
+        </tr>=0D
+      </table>=0D
+                    </td>=0D
+                  </tr>=0D
+                <tr>=0D
+                  <td style=3D"background-color:#fafafa;padding:0px 24px 0p=
+x 24px;">=0D
+                    <table align=3D"center" role=3D"presentation" style=3D"=
+border-collapse:collapse;margin:0; width:100%;">=0D
+                      <tr>=0D
+                        <td style=3D"padding:0;">=0D
+                          =0D
+<!--  -->=0D
+<table class=3D"discovery-email-create--content" style=3D"border-collapse:c=
+ollapse;" role=3D"presentation">=0D
+  <tr>=0D
+    <td style=3D"padding-top:16px">=0D
+      <table style=3D"border-collapse:collapse;" role=3D"presentation">=0D
+            <tr>=0D
+              <td style=3D"padding-bottom:30px">=0D
+                  <table style=3D"border-collapse:collapse;width: 100%" rol=
+e=3D"presentation">=0D
+    <tr>=0D
+      <td style=3D"border: 1px solid #E0E0E0;padding: 16px 24px 14px 24px;b=
+ackground-color:#FFFFFF;">=0D
+        <table class=3D"discovery-email-message" style=3D"border-collapse:c=
+ollapse;width:100%;" role=3D"presentation">=0D
+          <tr>=0D
+            <td colspan=3D"2" style=3D"padding-bottom:12px;padding-top:13px=
+">=0D
+              Posted in <a href=3D"https://www.yammer.com/mit.edu/groups/30=
+971543552?allow_app_redirect=3D1&amp;from=3Demail&amp;grp_id=3D30971543552&=
+amp;trk_event=3Dde_grp_clk&amp;trk_fst_thrd_id=3D2487128580562944&amp;trk_g=
+roup_id=3D30971543552&amp;trk_is_storyline=3Dfalse&amp;trk_network=3D420&am=
+p;trk_nmbr_lks=3D0&amp;trk_nmbr_rplys=3D0&amp;trk_nmbr_thrds=3D1&amp;trk_no=
+tif_id=3D8e170a0ea64b823a7bc3e43ce353596a2cf6aba8e246a3b9add3f65ade485e6a&a=
+mp;trk_outlook_origin=3Dglam_static&amp;trk_thrd_clckd_id=3D248712858056294=
+4&amp;trk_thrd_pstn=3Dfst&amp;trk_user=3D3340336373760" style=3D"color:#616=
+161">All Company</a>=0D
+            </td>=0D
+          </tr>=0D
+          <tr class=3D"discovery-email-message--info" style=3D"float:left;w=
+idth:100%;">=0D
+            <td valign=3D"top" style=3D"width:48px;padding-right:12px;" ari=
+a-hidden=3D"true">=0D
+              <table class=3D"discovery-email-message--mugshot">=0D
+  <tr>=0D
+      <td>=0D
+                      <table align=3D"center" border=3D"0" cellspacing=3D"0=
+" cellpadding=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0pt;mso=
+-table-rspace:0pt;">=0D
+            <tr>=0D
+              <td align=3D"center" style=3D"padding:0;">=0D
+                <table border=3D"0" cellspacing=3D"0" width=3D"32" height=
+=3D"32" cellpadding=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0=
+pt;mso-table-rspace:0pt;">=0D
+                  <tr>=0D
+                    <td bgcolor=3D"#b4009e;" style=3D"width:32px;font-size:=
+10px;background-color:#b4009e;padding: 8px 0;border-radius: 16px;font-weigh=
+t:bold;font-family:'Segoe UI',Helvetica,Arial,sans-serif;color:#FFF;text-al=
+ign: center;" align=3D"center" dir=3D"ltr" lang=3D"en-US">=0D
+                        <a href=3D"https://www.yammer.com/jpmadrid/users/16=
+29386350592?trk_event=3Dde_ user_click&amp;allow_app_redirect=3D1" style=3D=
+"text-decoration:none;color:#FFF;display:inline;"><span style=3D"color:#FFF=
+">JM</span></a>=0D
+                    </td>=0D
+                  </tr>=0D
+                </table>=0D
+              </td>=0D
+            </tr>=0D
+          </table>=0D
+=0D
+      </td>=0D
+  </tr>=0D
+</table>=0D
+            </td>=0D
+            <td align=3D"left" style=3D"text-align:left;width: 100%;vertica=
+l-align:center;">=0D
+              <a title=3D"View Profile" style=3D"font-size:14px;color:#343a=
+41;" href=3D"https://www.yammer.com/jpmadrid/users/1629386350592?allow_app_=
+redirect=3D1&amp;from=3Demail&amp;trk_elmnt=3Dnm&amp;trk_event=3Dde_usr_clk=
+&amp;trk_fst_thrd_id=3D2487128580562944&amp;trk_is_storyline=3Dfalse&amp;tr=
+k_network=3D420&amp;trk_nmbr_lks=3D0&amp;trk_nmbr_rplys=3D0&amp;trk_nmbr_th=
+rds=3D1&amp;trk_notif_id=3D8e170a0ea64b823a7bc3e43ce353596a2cf6aba8e246a3b9=
+add3f65ade485e6a&amp;trk_outlook_origin=3Dglam_static&amp;trk_thrd_clckd_id=
+=3D2487128580562944&amp;trk_thrd_pstn=3Dfst&amp;trk_user=3D3340336373760&am=
+p;usr_trgt=3D1629386350592">Jordan Madrid</a>=0D
+=0D
+            </td>=0D
+          </tr>=0D
+          <tr class=3D"discovery-email-message--body">=0D
+            <td align=3D"left" style=3D"font-family:'Segoe UI',Helvetica,Ar=
+ial,sans-serif;font-size:16px;color:#101010;padding-top:3px;text-align:left=
+;" colspan=3D"2" dir=3D"ltr">=0D
+              <p>The Program in Media Arts and Sciences (MAS) at the Massac=
+husetts Institute of Technology (MIT) Cambridge, Massachusetts invites appl=
+ications for a tenure-track faculty position in the area of <strong>Transfo=
+rmative Design</strong>. The search deadline for candidate materials has be=
+en extended to <strong>November 1, 2023</strong>=E2=80=A6</p>=0D
+            </td>=0D
+          </tr>=0D
+          <tr>=0D
+            <td colspan=3D"2" dir=3D"ltr" lang=3D"en-US" style=3D"padding-t=
+op:24px">=0D
+              <span class=3D"font-size:14px"><a style=3D"font-family:'Segoe=
+ UI',Helvetica,Arial,sans-serif;color:#386CBB;text-decoration:none;white-sp=
+ace:nowrap;font-size:14px;" href=3D"https://www.yammer.com/mit.edu/threads/=
+2487128580562944?allow_app_redirect=3D1&amp;from=3Demail&amp;message_id=3D2=
+487128580562944&amp;trk_elmnt=3Dgoto&amp;trk_event=3Dde_thrd_clk&amp;trk_fs=
+t_thrd_id=3D2487128580562944&amp;trk_is_storyline=3Dfalse&amp;trk_network=
+=3D420&amp;trk_nmbr_lks=3D0&amp;trk_nmbr_rplys=3D0&amp;trk_nmbr_thrds=3D1&a=
+mp;trk_notif_id=3D8e170a0ea64b823a7bc3e43ce353596a2cf6aba8e246a3b9add3f65ad=
+e485e6a&amp;trk_outlook_origin=3Dglam_static&amp;trk_thrd_clckd_id=3D248712=
+8580562944&amp;trk_thrd_pstn=3Dfst&amp;trk_user=3D3340336373760">Go to conv=
+ersation</a></span>=0D
+            </td>=0D
+          </tr>=0D
+        </table>=0D
+      </td>=0D
+    </tr>=0D
+  </table>=0D
+=0D
+=0D
+              </td>=0D
+            </tr>=0D
+      </table>=0D
+    </td>=0D
+  </tr>=0D
+</table>=0D
+=0D
+  <script type=3D"application/ld+json">=0D
+    {"@type":"SignedAdaptiveCard","signedAdaptiveCard":"eyJ0eXAiOiJKV1QiLCJ=
+hbGciOiJSUzI1NiJ9.eyJzZW5kZXIiOiJub3JlcGx5QHlhbW1lci5jb20iLCJvcmlnaW5hdG9yI=
+joiNmQ0ZjU4ZWItZGNkZC00ZmU1LWI1NTQtODJkOTMwNWNlN2VlIiwicmVjaXBpZW50c1Nlcmlh=
+bGl6ZWQiOiJbXCJqaWFubmFuQG1pdC5lZHVcIl0iLCJhZGFwdGl2ZUNhcmRTZXJpYWxpemVkIjo=
+ie1wiJHNjaGVtYVwiOlwiaHR0cDovL2FkYXB0aXZlY2FyZHMuaW8vc2NoZW1hcy9hZGFwdGl2ZS=
+1jYXJkLmpzb25cIixcInJ0bFwiOmZhbHNlLFwidHlwZVwiOlwiQWRhcHRpdmVDYXJkXCIsXCJ2Z=
+XJzaW9uXCI6XCIxLjBcIixcImhpZGVPcmlnaW5hbEJvZHlcIjpmYWxzZSxcImVuYWJsZUJvZHlU=
+b2dnbGluZ1wiOmZhbHNlLFwicGFkZGluZ1wiOntcInRvcFwiOlwiU21hbGxcIixcImJvdHRvbVw=
+iOlwiRGVmYXVsdFwiLFwibGVmdFwiOlwiRGVmYXVsdFwiLFwicmlnaHRcIjpcIkRlZmF1bHRcIn=
+0sXCJib2R5XCI6W3tcInRleHRcIjpcIkxvYWRpbmcgdGhlIGxhdGVzdCBtZXNzYWdlcy4uLlwiL=
+FwidHlwZVwiOlwiVGV4dEJsb2NrXCJ9XSxcImF1dG9JbnZva2VBY3Rpb25cIjp7XCJoaWRlQ2Fy=
+ZE9uSW52b2tlXCI6ZmFsc2UsXCJtZXRob2RcIjpcIlBPU1RcIixcInVybFwiOlwiaHR0cHM6Ly9=
+5YW1zLnlhbW1lci5jb20vYXBpL2JldGEvdGhyZWFkcz9jYXJkdHlwZT1kaXNjb3ZlcnlcIixcIm=
+lzUHJpbWFyeVwiOmZhbHNlLFwidHlwZVwiOlwiQWN0aW9uLkh0dHBcIixcImhlYWRlcnNcIjpbe=
+1wibmFtZVwiOlwiQWNjZXB0LUxhbmd1YWdlXCIsXCJ2YWx1ZVwiOlwiZW4tVVNcIn0se1wibmFt=
+ZVwiOlwidXNlck5ldHdvcmtQZXJtYUxpbmtcIixcInZhbHVlXCI6XCJtaXQuZWR1XCJ9LHtcIm5=
+hbWVcIjpcInVzZXJOZXR3b3JrTmFtZVwiLFwidmFsdWVcIjpcIk1hc3NhY2h1c2V0dHMgSW5zdG=
+l0dXRlIG9mIFRlY2hub2xvZ3lcIn0se1wibmFtZVwiOlwiZW1haWxJZFwiLFwidmFsdWVcIjpcI=
+jhlMTcwYTBlYTY0YjgyM2E3YmMzZTQzY2UzNTM1OTZhMmNmNmFiYThlMjQ2YTNiOWFkZDNmNjVh=
+ZGU0ODVlNmFcIn0se1wibmFtZVwiOlwidW5zdWJzY3JpYmVMaW5rXCIsXCJ2YWx1ZVwiOlwiaHR=
+0cHM6Ly93d3cueWFtbWVyLmNvbS9taXQuZWR1L2FjY291bnQvdG9nZ2xlX25vdGlmaWNhdGlvbj=
+9hYz1iby0xNm1qMjE1aGMtMTNiMGI1ZmRhNzhjZGVmNGMzYjBiOGJjNTM4NjI0MjVcXHUwMDI2b=
+nQ9ZGlzY292ZXJ5X2VtYWlsXFx1MDAyNm52PWZhbHNlXCJ9LHtcIm5hbWVcIjpcIm5ldHdvcmtM=
+b2dvXCIsXCJ2YWx1ZVwiOlwiXCJ9LHtcIm5hbWVcIjpcInVzZXJJZFwiLFwidmFsdWVcIjozMzQ=
+wMzM2MzczNzYwfSx7XCJuYW1lXCI6XCJuZXR3b3JrSWRcIixcInZhbHVlXCI6NDIwfV0sXCJib2=
+R5XCI6XCJ7XFxcInRocmVhZHNcXFwiOlt7XFxcInRocmVhZElkXFxcIjpcXFwiMjQ4NzEyODU4M=
+DU2Mjk0NFxcXCIsXFxcInRocmVhZFVybFxcXCI6XFxcImh0dHBzOi8vd3d3LnlhbW1lci5jb20v=
+bWl0LmVkdS90aHJlYWRzLzI0ODcxMjg1ODA1NjI5NDQ_bWVzc2FnZV9pZD0yNDg3MTI4NTgwNTY=
+yOTQ0XFxcIixcXFwibmV0d29ya1Blcm1hTGlua1xcXCI6XFxcIm1pdC5lZHVcXFwifV19XCJ9LF=
+wiYXV0b0ludm9rZU9wdGlvbnNcIjp7XCJzaG93Q2FyZE9uRmFpbHVyZVwiOmZhbHNlfSxcImNvb=
+nN0cmFpbldpZHRoXCI6dHJ1ZX0iLCJpYXQiOjE2OTc0OTY5MDl9.cpHiBIuAwXGA2AkE08xNpGf=
+l7tyM2TT12016vvrqUX0QmVHyDJ0C2OwOOPwsgUDQ_qqL2-vJuWDp-6WqAR-DwLWTiM935Y90oF=
+HSus9I41kR7VWc7264oh0heL9MrXBjHMj3zb6Dd0rwXtrj89assWuiCVwMIy_ZCmC_-nMMq5H41=
+ZgEcrpzZamJu03rCyFLhceu2IeLKC-2SwTuqsjIXnzo8IXq3vFSgXuJPAC3G19zcqaH51NmOyD6=
+LZIzJOCs3XcvL0lPeHrWlbOpRS6eY8Iv9XnHUCEAKZrYceblXFBWmstaPoWRKXL_mApAfWZpmrz=
+-ZDJsSOFjS5Qa_6SZVw","@context":"http://schema.org/extensions"}=0D
+  </script>=0D
+=0D
+=0D
+                        </td>=0D
+                      </tr>=0D
+                    </table>=0D
+                  </td>=0D
+                </tr>=0D
+              </table>=0D
+            </td>=0D
+          </tr>=0D
+        </table>=0D
+      </td>=0D
+    </tr>=0D
+        =0D
+  <table role=3D"presentation" align=3D"center" class=3D"mobile-wide" style=
+=3D"width:600px;border-collapse:collapse;">=0D
+    <tr>=0D
+        <td style=3D"background-color:#fafafa;padding:0px 24px 0px 24px;" a=
+lign=3D"center">=0D
+          <h1 style=3D"font-family:'Segoe UI',Helvetica,Arial,sans-serif;li=
+ne-height:1.3;color:#000000;font-weight:500;font-size:24px;line-height:28px=
+;;" dir=3D"ltr" lang=3D"en-US">=0D
+            Explore communities today=0D
+          </h1>=0D
+        </td>=0D
+    </tr>=0D
+    <tr>=0D
+      <td style=3D"background-color:#fafafa;padding:16px 24px 64px 24px;" a=
+lign=3D"center">=0D
+        =0D
+      <table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" role=3D"prese=
+ntation" align=3D"center">=0D
+        <tr>=0D
+          <td align=3D"center" class=3D"cta-container-col" style=3D"padding=
+:0;">=0D
+            <table border=3D"0" cellspacing=3D"0" cellpadding=3D"0" role=3D=
+"presentation">=0D
+              <tr>=0D
+                <td align=3D"center" class=3D"cta" dir=3D"ltr" lang=3D"en-U=
+S" style=3D"border:1px solid #000000;border-radius:2px;padding:0" bgcolor=
+=3D"#000000">=0D
+                  <a href=3D"https://www.yammer.com/mit.edu/home" style=3D"=
+font-size: 14px; font-weight: normal;font-family: 'Segoe UI',Helvetica,Aria=
+l,sans-serif; color: #ffffff; text-decoration: none; text-decoration: none;=
+ padding: 0 14px; display: inline-block; line-height: 200%">=0D
+                    Go to Viva Engage=0D
+                  </a>=0D
+                </td>=0D
+              </tr>=0D
+            </table>=0D
+          </td>=0D
+        </tr>=0D
+      </table>=0D
+=0D
+      </td>=0D
+    </tr>=0D
+    <tr style=3D"background-color:#F2F2F2;">=0D
+      <td>=0D
+                =0D
+        <table role=3D"presentation" style=3D"border-collapse:collapse;widt=
+h:100%;background-color:#F2F2F2">=0D
+          <tr>=0D
+            <td style=3D"font-family:'Segoe UI',Helvetica,Arial,sans-serif;=
+line-height:1.3;color:#616161;font-size:10px;text-align: left;line-height: =
+170%;padding:20px 20px 0;font-size:12px;" dir=3D"ltr" lang=3D"en-US">=0D
+                <a style=3D"font-family:'Segoe UI',Helvetica,Arial,sans-ser=
+if;line-height:1.3;font-size:12px;text-decoration: underline;" href=3D"http=
+s://www.yammer.com/mit.edu/account/toggle_notification?ac=3Dbo-16mj215hc-13=
+b0b5fda78cdef4c3b0b8bc53862425&amp;nt=3Ddiscovery_email&amp;nv=3Dfalse&amp;=
+trk_event=3Dde_unsubscribe_click&amp;trk_notif_id=3D8e170a0ea64b823a7bc3e43=
+ce353596a2cf6aba8e246a3b9add3f65ade485e6a&amp;trk_outlook_origin=3Dglam_sta=
+tic">Unsubscribe</a> <span aria-hidden=3D"true" style=3D"color:;">|</span>=
+=0D
+              <a style=3D"font-family:'Segoe UI',Helvetica,Arial,sans-serif=
+;line-height:1.3;font-size:12px;text-decoration: underline;" href=3D"https:=
+//go.microsoft.com/fwlink/?LinkId=3D521839">Privacy Statement</a>=0D
+            </td>=0D
+          </tr>=0D
+                    <tr>=0D
+            <td class=3D"msft-address" style=3D"padding:5px 20px 0;text-ali=
+gn:left;color:#495361;font-size: 12px;font-family:'Segoe UI',Helvetica,Aria=
+l,sans-serif;background-color:#F2F2F2;line-height:21px;">=0D
+              Microsoft Corporation <br>=0D
+              One Microsoft Way <br>=0D
+              Redmond, WA 98052=0D
+            </td>=0D
+          </tr>=0D
+=0D
+        </table>=0D
+                <table role=3D"presentation" style=3D"border-collapse:colla=
+pse;min-width:100%;width:100%;background-color:#F2F2F2" align=3D"center">=
+=0D
+          <tr>=0D
+            <td class=3D"logos" style=3D"padding:20px 16px 0;">=0D
+              <a title=3D"Microsoft" href=3D"https://www.microsoft.com/">=
+=0D
+                <img height=3D"24" alt=3D"Microsoft" src=3D"https://mailie.=
+assets-yammer.com/mailer_images/msft_logo.png">=0D
+</a>            </td>=0D
+          </tr>=0D
+        </table>=0D
+=0D
+        <br><br>=0D
+      </td>=0D
+    </tr>=0D
+  </table>=0D
+  </table>=0D
+=0D
+  <img src=3D"https://www.yammer.com/mit.edu/images/email-spacer.gif?email_=
+type=3Ddiscovery_email&amp;network_id=3D420&amp;trk_notif_id=3D8e170a0ea64b=
+823a7bc3e43ce353596a2cf6aba8e246a3b9add3f65ade485e6a&amp;trk_outlook_origin=
+=3Dinteractive&amp;user_id=3D3340336373760" alt=3D"">=0D
+</body>=0D
+</html>=0D
+
+----==_mimepart_652dbf4d79ea4_43e3fb27f1f2f18907045--

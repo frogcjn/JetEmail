@@ -1,0 +1,1078 @@
+Received: from BN0PR01MB6958.prod.exchangelabs.com (2603:10b6:408:16d::24) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Thu, 6 Jul 2023 14:45:15
+ +0000
+Received: from DM6PR06CA0022.namprd06.prod.outlook.com (2603:10b6:5:120::35)
+ by BN0PR01MB6958.prod.exchangelabs.com (2603:10b6:408:16d::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6565.24; Thu, 6 Jul 2023 14:45:14 +0000
+Received: from DM6NAM11FT100.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:120:cafe::e7) by DM6PR06CA0022.outlook.office365.com
+ (2603:10b6:5:120::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.18 via Frontend
+ Transport; Thu, 6 Jul 2023 14:45:14 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.99)
+ smtp.mailfrom=sfx01.ibm.com; dkim=pass (signature was verified)
+ header.d=ibm.com;dmarc=pass action=none header.from=ibm.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ sfx01.ibm.com discourages use of 18.9.1.99 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.99) by
+ DM6NAM11FT100.mail.protection.outlook.com (10.13.172.247) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6521.45 via Frontend Transport; Thu, 6 Jul 2023 14:45:14 +0000
+Received: from oc11expo31.exchange.mit.edu (18.9.4.104) by
+ oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Thu, 6 Jul 2023 10:45:10 -0400
+Received: from oc11exhyb1.exchange.mit.edu (18.9.1.60) by
+ oc11expo31.exchange.mit.edu (18.9.4.104) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Thu, 6 Jul 2023 10:45:09 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
+ by oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Thu, 6 Jul 2023 10:45:09 -0400
+Received: from DM6PR10CA0036.namprd10.prod.outlook.com (2603:10b6:5:60::49) by
+ SA0PR01MB6299.prod.exchangelabs.com (2603:10b6:806:e4::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6565.17; Thu, 6 Jul 2023 14:45:04 +0000
+Received: from DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:60:cafe::da) by DM6PR10CA0036.outlook.office365.com
+ (2603:10b6:5:60::49) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.18 via Frontend
+ Transport; Thu, 6 Jul 2023 14:45:04 +0000
+Authentication-Results-Original: spf=pass (sender IP is 167.89.39.55)
+ smtp.mailfrom=sfx01.ibm.com; dkim=pass (signature was verified)
+ header.d=ibm.com;dmarc=pass action=none header.from=ibm.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of sfx01.ibm.com designates
+ 167.89.39.55 as permitted sender) receiver=protection.outlook.com;
+ client-ip=167.89.39.55; helo=o40.sfx01.ibm.com; pr=C
+Received: from o40.sfx01.ibm.com (167.89.39.55) by
+ DM6NAM11FT032.mail.protection.outlook.com (10.13.173.93) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.45 via Frontend Transport; Thu, 6 Jul 2023 14:45:03 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com;
+	h=content-transfer-encoding:content-type:from:mime-version:subject:to:
+	cc:content-type:from:subject:to;
+	s=sfx; bh=eoed+YoevkwOU/IhCljx/uit5y3Mk62hF2ps4sbw7PU=;
+	b=oOpDYKTGjK1gm45Kc4K1ayYD0nbS81+U5ku5AcTJWczoRfP2VhSQHRnfNk0guQ3O+hDM
+	n9OcuvNmqdnAWhztjUlFz5KglPWUEpvDW/+ZqrV0WBbaPql500eha2g8+3RXzTvY3vXucc
+	XvLA3J9J6W7K2UTretULWgbHUR1PuQcztWdy3Aw9Ze9pUvtbsaU0DzuGNXMruIMKJv0wVP
+	fjqxC6xZlB/gZwDErxuchn0crFhW/wQkZcEtwF8LbeXxuwB1vZ2aFXB6eYfrP8tf+CeNS1
+	ai45h3muuWQg4dO0siXKG4jYh0FikNtOzfOBzYxmcPdBaZo7FKk5YcWKYbhbklSA==
+Received: by filterdrecv-5d69bbb444-vmgvf with SMTP id filterdrecv-5d69bbb444-vmgvf-1-64A6D366-8F
+        2023-07-06 14:44:55.160347862 +0000 UTC m=+3089624.607985374
+Received: from MTYyMDA4ODM (unknown)
+	by geopod-ismtpd-13 (SG) with HTTP
+	id oWrK6m_UQyCfTt9ylJqq2A
+	Thu, 06 Jul 2023 14:44:54.698 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=utf-8
+Date: Thu, 6 Jul 2023 14:45:02 +0000
+From: IBM Careers <talent@ibm.com>
+Message-ID: <oWrK6m_UQyCfTt9ylJqq2A@geopod-ismtpd-13>
+Subject: Update your records
+X-SG-EID: =?us-ascii?Q?oZJvFWuq9f93teqOjpxEU6KsP5CDwjyfsIvrjww4gP5tlOgjUUi+rptfn3gUoB?=
+ =?us-ascii?Q?sx7AHTCrIdJ=2F9lZm0JjXsfZTke=2FuX43hAG47xqd?=
+ =?us-ascii?Q?OpCO9gqXJDbA9vIk4aIu=2FLSe+jdF4b3IX054OKd?=
+ =?us-ascii?Q?JpgorHMuIDD+T1q68J=2FD8i7npjNiWxTP+MuURdx?=
+ =?us-ascii?Q?OF42QtoAw+9cYcpLFiVAiMrvatA6UxDDd+Oyeqn?=
+ =?us-ascii?Q?Ynl8jsp5+n67g+F+0=3D?=
+X-SG-ID: =?us-ascii?Q?N2C25iY2uzGMFz6rgvQsb8+WJS8HtJtzCprCzyMY9AhZKSS8if++G573uJEQGs?=
+ =?us-ascii?Q?0aXoXst7t3GeBZWBVtbUS4ZDPZj+aX6oH1gpcoo?=
+ =?us-ascii?Q?aAiQYvzDjmeYVEISjMo2Eo=2F9GU9uuqo0In8A1mC?=
+ =?us-ascii?Q?0OZiI+8TZC74HQ=2FqvfUdszOkUbTbPRAQphgKFZw?=
+ =?us-ascii?Q?QoizZmUPfZuDxLbD99hMzqA7vgkLKqmP4CAICFE?=
+ =?us-ascii?Q?9Z24jaKKeqHPGyi6UhMQrfjYVLMHhTEi1F7+=2F9?=
+To: "jiannan@mit.edu" <jiannan@mit.edu>
+X-Entity-ID: vMK7JIrw2imY/H+vb1BpHg==
+Return-Path: bounces+16200883-fbb4-jiannan=mit.edu@sfx01.ibm.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ DM6NAM11FT032:EE_|SA0PR01MB6299:EE_|DM6NAM11FT100:EE_|BN0PR01MB6958:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: d9411016-70ed-4a66-2ebb-08db7e2f9bcc
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:2;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?utf-8?B?V0M0VTFzRVZFcW9oKy8xSTRsVlBDQVlDTWVDNkxTUEQ0WmlRNElEdCtGSlpG?=
+ =?utf-8?B?NHJFb1VmOHdpRGx5cm5hbzRORXAxTmZQYkJ6RVFaYjNEUFVxWU1seFhRaUlz?=
+ =?utf-8?B?MGpiZEdIR2F6YjlURWdWdHlFcGY5VkhBQ0plaElWL29hc01TMGFVYnNzRmZO?=
+ =?utf-8?B?Sit5enZDRnBXcWNtT0xlTndpYVZCeGtNTnZXQ0VRNjZSd2liSmc2RjMreWli?=
+ =?utf-8?B?UlBLNDFMZ2Z0bndoR3hYTE5MSEh0ZThyK1I1Z0hrRCttc2dvQ3dMVzZjclRv?=
+ =?utf-8?B?TFg0RDNML0xYU0lBd1pmbGZURlNWLzRkd2xsU2t3SG9RdUlmZkkrbGZjcFp4?=
+ =?utf-8?B?Sk83VUY4ZlhVTDVkeUJCZi9ueDU4RUJqOHRRM3FLeHJGMWNNSFRLOTExbnha?=
+ =?utf-8?B?WW9Ka1paS0hHa1ExT2gvYlQvNTR2M3c3ckxVOCtyK0M0TVlTWndUMUlXQytR?=
+ =?utf-8?B?T1pXZzZqekdnWXVVdnhwVTJkR2RneG1LK0dNMStEcVJYR0R3cktzVU51S1lu?=
+ =?utf-8?B?M21qTG9Uam5kU3V1UStDWkdRTlRNOVNiYTVmRjYvL2h1bjRETUVOdmhNRGd0?=
+ =?utf-8?B?Y1Q5RzhkU0FDbncyandPSVpXcXRxVkErYWVSYk50ZVhNcXZ0eTVtYkpxTGJn?=
+ =?utf-8?B?UFJJbUl1bG9VcGg1ejUwa0w4aSs5dVZLVmIybFBJUnZIc3VrZkd3dTBKYjlF?=
+ =?utf-8?B?aFQvSUZwZkxBS0J6U2dIU3V2dkRhcEhjTy9nOWt1RlVxd1drb0lqaFFQTVo2?=
+ =?utf-8?B?MFMwZ2VSaFFTRll6bk9URGZ3ZUZQVXFhWmV5bndKRnRkVlNJeHZvR2hNMU9Z?=
+ =?utf-8?B?NU1pSGZ4Y2o4MDhEcURIRVpsUGpHTXlHYnBPdG1TUDQvc0drSGwxR0NIQmVt?=
+ =?utf-8?B?djFNMVI5S2c3UldSbGE0RVFkb2RDUmdFWHB6ODZLMlJCUlNnS1RTUVdJRFZQ?=
+ =?utf-8?B?MGk5MGxsOFVqcW1UM2w1VDd0bmxlaGsxTVhqTFhwT24vS1NMeUdrZzYwVXpF?=
+ =?utf-8?B?S2dvT0FGVkRrTXJESkhBQ0E3ZFZMc3MvUzgxQlBuV1pMR1NzMkpoTXhRb2RO?=
+ =?utf-8?B?V2hXZTB6aEJqYXdHbmwvdit0TXQ5UFBlQVRWeGltZHlKcHdncVYzYTNZL3U5?=
+ =?utf-8?B?dnpiY1Q4am14empKeTNoV3MvVndpRUNSYXp0ekJHTDNiUkZ4RHM0Wm44eURq?=
+ =?utf-8?B?Um5pa1ZNVkRUbkpKVFZZUlRCTlZhRC9ZdGlTMGllazg1Yjhsd0dNcENQM0h1?=
+ =?utf-8?B?VkpiWkVJYmNwS05vblgwZnNrOVBiSElhRDVJaFB5cmpGY0RmZUdEYmYyemdv?=
+ =?utf-8?B?QmJpb01tY1pqemhkNUZGRlhtdzNJVUcvd29CTk9QYmxpbnU3bWdQZFNHY0xj?=
+ =?utf-8?B?dk1POEpiaC94OGd6c1lqTUMrT2ZWK3Z0ZGdxL3BKNXgvczNnNHlNMEIzMGFu?=
+ =?utf-8?B?MUsvRlByRFMybXhqZWpNU3JUTXhHYVBpMkNJV1lCQVVrMUxhNk04N01hYUV4?=
+ =?utf-8?B?NEdxdTdQUTNhREhoTlhLdk5KRUZEdmc5QXlCdzBvckh6d3Z6NjhTSWwyc05G?=
+ =?utf-8?B?aUtPRmtzcWdaVmFwbStESXdFY0F5TnVLZzFkQ0huV29mSWFTUkVxOHZNbkc4?=
+ =?utf-8?B?bzNwMlEwOTRudnZhcDhQektvc3V2cFA1ZWZVVnFVVHNLY1J5MTI0K0U5VjZ6?=
+ =?utf-8?B?K2JKSzdyY01LTTBWWGZWMXlYTmk4RHF5d09HRkd2ek0vaWFBOHNTRXREblZy?=
+ =?utf-8?B?SThOeVRoenhkYVlmZm1ISXNLWWVWU2tkQWEwc25EbFIyb1MzL0NKMWJoMnRV?=
+ =?utf-8?B?QWpsSjBXSy9jNEtSeUVZU0ZGckRsdUtyK0VxZ2wyZDJENnkvMUMwaUVmRTFi?=
+ =?utf-8?B?alhOOEdBS2wzQXk5THE3R0U4TWdlTjVpZWN6cmdOY2ZlUmxtcy9pSVp4c0t4?=
+ =?utf-8?B?a1JKRGhTL0krQ0pSRGdlZWlDOFlYTGMzbkdBMC9ab0FqWHRBMlhmMVZpTU93?=
+ =?utf-8?B?enBRbmJpM0RPY1Zaa0R4K0NQbmg5TitFa3E3d2tnOFlVNGlibEZUWmZTczJv?=
+ =?utf-8?B?NjhINlFOeElRWnVQMlg4L3psVkxwNVc3ZFBwSzdZWGp4ZE1PNmhMUXIrbmVE?=
+ =?utf-8?B?NzJzbjg5Y0RSZ1FDakJ0TGpUdVA5Slhoa0w4TFVHb05IQzdwVWF2ckkwZXJm?=
+ =?utf-8?B?bjg2RUpPWHF5Y29CQmZXNFg0Wk11T2pPZnpxdXZGMzgvVTNXU0JsbjV4YmpF?=
+ =?utf-8?B?UW84d2YwSVBHU21KTkN2NUdnQnFyc29mMDVsVy9MQk43Sm9XdXh2OW1OdFhv?=
+ =?utf-8?B?VXEvQ0NIMktianl2Y2ZsMzc0blBDczFBM1ZvbEVMV0lKRCtMcnF4QT09?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:167.89.39.55;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:o40.sfx01.ibm.com;PTR:o40.sfx01.ibm.com;CAT:NONE;SFS:(13230028)(7916004)(4636009)(286005)(451199021)(1690799014)(39670700001)(66899021)(4006050)(75640400001)(15650500001)(1096003)(8676002)(33716001)(76236004)(9316004)(83170400001)(3480700007)(6666004)(58800400005)(166002)(19627405001)(336012)(66574015)(7116003)(9686003)(26005)(39500700002)(6512007)(84970400001)(6916009)(36736006)(83380400001)(356005)(7596003)(6486002)(1406899024)(76899015)(579004);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR01MB6299
+X-OrganizationHeadersPreserved: SA0PR01MB6299.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb1.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb1.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11expo31.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 06 Jul 2023 14:45:14.5469
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ d9411016-70ed-4a66-2ebb-08db7e2f9bcc
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted:
+ DM6NAM11FT100.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ DM6NAM11FT100.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DM6NAM11FT100.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 2c563f50-4331-47df-908a-08db7e2f95ab
+X-Microsoft-Antispam: BCL:2;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.99;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb3.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jul 2023 14:45:14.3282
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9411016-70ed-4a66-2ebb-08db7e2f9bcc
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.99];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR01MB6958
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.6267862
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6565.019
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dmpBdmhHWVNtY3psVWxVNDJIc1NnUklxRFBHdXdaaUl5QkovRWZnd1E1UEVx?=
+ =?utf-8?B?UUdwZXI1M0dNVUNTTmd4TzZ6Z2wxZi9rK254aW5IdjVzQzZVa1o5SDZLWmtM?=
+ =?utf-8?B?aGR6bGhia3YweDQ2dVBGSXkwZXJWcmFyVW95RmNMa3R0ZDBibnJkb2xyeEFr?=
+ =?utf-8?B?WlZDSHpRVXNjTFlzMkJZYW01RktTRjN0VWk5cUtSSTBtYVpXazBoSjVLY0Rj?=
+ =?utf-8?B?dTRYSGd6dzUveUVDU2xHS3MyU0JzOVRwYTgzSUhlelpMU2hpSmlMQ0FPNUQy?=
+ =?utf-8?B?RldNbEk4eVk4LzVBU1hiTkxrcjVhVnB0SmJzMVFjTmJ0QzdsVXhiYWh1Uk01?=
+ =?utf-8?B?RlRzZmlJdURHaTVuRG1EQUhIM1dEMUU5TWc0bEx5aWZKUzV5a09yaTNiRnV3?=
+ =?utf-8?B?WFlyT05PTDI3RmFoWndHYkkxend6cWVHd3B3ekpBTzhseE5QdS9CL2ZxckJZ?=
+ =?utf-8?B?UjkxaEM1MlhSd3RBRG5qREg0c0FBR0Nmc0FENTAycTdHWTc4Q09pZUlWV3hH?=
+ =?utf-8?B?SDcrZzNQaVpKK1VpdTRsZWVhM0lEellEMjRYVlpuVWwxdDJmUnFvTzdGVkww?=
+ =?utf-8?B?WEhONGg0bE14MzYwVDVIQzlKQklaRCs4Rm12NWIybVkxTWdwblorUXlzZGhR?=
+ =?utf-8?B?TFZxRkwwdk14aTdWTkZweFdYL1g3T1BjL01jY25IM1hjME03V1FvTTNaaXAz?=
+ =?utf-8?B?cCtHSGJzY0g1eTlMUGU1dGFnQmpoYTVxQWYySUpYUDAwQ25mUGptUmVnNUNH?=
+ =?utf-8?B?bXFLTHk5OFUwc2NySmtVZDc3OEtWNzdNVTNQVURBd2gvdGp1ZzBtaFF5eDZt?=
+ =?utf-8?B?ODFXLzZ1NGI1YVd4eWNLeVVvQlQ1L3IrVjg0bDArc1lNK09ZVFJIQjNSS0xt?=
+ =?utf-8?B?emtEWGpPRFQ1ZWFFOUE1TnBGZFBwdE5LWmtsY2ZGS2NkQnRidUUxajdRVUhI?=
+ =?utf-8?B?N2tLc3hkMXZXdE95U2Q5azJJWHEvRzJScnllc1VoSkN1cVE0ZWIyelZJeUxK?=
+ =?utf-8?B?ajAzTUFCd2FWSE82WkhLSFpiT3QxK2hoMGdkbExtMEN0QWl2ZUZqT1ZtakZU?=
+ =?utf-8?B?b3BrTkZSN3BYaGxPM3IwQkZRU2hTbUw4aUxhbGJFNzYwSm5hMzZxSFRaRHFO?=
+ =?utf-8?B?bzRCbkhzakt1aGhtTTZNSzlTeC9GcGVQN2o5eFpSR0pWYldsNmV3dEV3M2Zs?=
+ =?utf-8?B?aU4wWFgrUksvOHpZekxvM1hoanhGZ0FPNDk4NWpHRFZNaEtGa1pCa1B0dUJZ?=
+ =?utf-8?B?elhHS2ZEUzBCUnUxeEZRNmdNZEFxaWgxRUVEbks0QVFZazVjdXZuL2RPNHNl?=
+ =?utf-8?B?WmJWTHBZTWp2S2pjZml2d2xMYVRVcDZHN3pBV3lHY2hpbHBDMVVDM3YweEVC?=
+ =?utf-8?B?SkxHYmNQeEZxM3pOOThkNkkwK0gzeTJ2UlM2NVpSNkNnTnNVR0xCVzhVTzNQ?=
+ =?utf-8?B?NUJGQ2pnRzRZaE5vZUdmdDN2TFAvc3kwalpoSUpqdDQzb2t1bnZVWVRhNWJD?=
+ =?utf-8?B?NTVjY291OHBSUDM4RjJKb1J5bm5ES2FZemxoWThScHhPYUhNL2FoWmxFaTgw?=
+ =?utf-8?B?bUJOTUt5RWFPUExXbHpYM1lIUWp2NmFQMGF1TmJUTnBjaUc4N04rSWZpVllv?=
+ =?utf-8?B?RXlUdVpKTnJ5cVJib0VucmduWlQxL2xxQTJHODRDQThLdXBJVVl3L0tCY0NV?=
+ =?utf-8?B?VUtZY1VKRHFQMktNdnhlK2RyTWNsR0szcElIemJRbjQvUGV6TStYWlh3N2ZM?=
+ =?utf-8?B?RElLZ1RrWFRENXhhZlh0VUVkMUZKdUtTK2hjcUlCUFZiWnNoWjJaV25xRjBH?=
+ =?utf-8?B?eVZWSjBCVmRlaW1SbS9zVWE4cjBxS1RQQjNRMCtvU0dTdFRPMUg1WVRzaytV?=
+ =?utf-8?B?bDlNd0VKUzF2KzNETFRoajhpZ3VNS2RJbFd3QUNtN2lGWEFGVUdRc3d6MXJp?=
+ =?utf-8?B?QjVRTVZiKytuQUk4NWp1Q21ObGpWUVB0NnhsS2g2RnlnZ2FJRTk5SkJpL0t5?=
+ =?utf-8?B?dFIvV0dPWjlYUWhickpEcVY4WEwydUZ3OERyYjM4QVQzb0pRWWVnZkpGdjZo?=
+ =?utf-8?B?SlFwamZ2T2sxall6dm9vM1ptcjRZUWFKVDNickd2NllMSURuMHowditPcGFt?=
+ =?utf-8?B?RDJST0hhcUVxMGZnc2xUaHZjYXF0NHIxbmNnTXcvajhRb1pyR05OR2U5Rklx?=
+ =?utf-8?B?N3JkK0p0UjJWMFo4R2wxYVhoeUllckhzdERNVVVpYnRROHJRWFgwOWRubjF5?=
+ =?utf-8?Q?rCxRaGdgN6xubSuotHDwHYOdhWKIzZf3INYoltkPHw=3D?=
+MIME-Version: 1.0
+
+<!doctype html><html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"u=
+rn:schemas-microsoft-com:office:office" lang=3D"en"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle></title>
+ =20
+  <meta name=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=3D1=
+"><!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:Pixels=
+PerInch><o:AllowPNG/></o:OfficeDocumentSettings></xml><![endif]-->
+  <style>
+*{box-sizing:border-box}body{margin:0;padding:0}a[x-apple-data-detectors]{c=
+olor:inherit!important;text-decoration:inherit!important}#MessageViewBody a=
+{color:inherit;text-decoration:none}p{line-height:inherit}.desktop_hide,.de=
+sktop_hide table{mso-hide:all;display:none;max-height:0;overflow:hidden}.im=
+age_block img+div{display:none} @media (max-width:520px){.social_block.desk=
+top_hide .social-table{display:inline-block!important}.row-content{width:10=
+0%!important}.stack .column{width:100%;display:block}.mobile_hide{max-width=
+:0;min-height:0;max-height:0;font-size:0;display:none;overflow:hidden}.desk=
+top_hide,.desktop_hide table{max-height:none!important;display:table!import=
+ant}}
+</style>
+ </head>
+ <body style=3D"text-size-adjust:none;background-color:#fff;margin:0;paddin=
+g:0">
+  <table class=3D"nl-container" width=3D"100%" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspace:0;mso-=
+table-rspace:0;background-color:#fff">
+   <tbody>
+    <tr>
+     <td>
+      <table class=3D"row row-1" align=3D"center" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0">
+       <tbody>
+        <tr>
+         <td>
+          <table class=3D"row-content" align=3D"center" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspa=
+ce:0;mso-table-rspace:0;color:#000;background-color:#000;width:500px;margin=
+:0 auto" width=3D"500">
+           <tbody>
+            <tr>
+             <td class=3D"column column-1" width=3D"25%" style=3D"mso-table=
+-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400;padding-bottom=
+:5px;padding-top:5px;vertical-align:top;border-top:0;border-right:0;border-=
+bottom:0;border-left:0">
+              <table class=3D"image_block block-1" width=3D"100%" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-=
+table-lspace:0;mso-table-rspace:0">
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-left:10px;padding-right=
+:20px;padding-top:5px;width:100%">
+                  <div class=3D"alignment" align=3D"center" style=3D"line-h=
+eight:10px">
+                   <img src=3D"https://bee-collateral-prod.s3.amazonaws.com=
+/images/ibm/IBM%20Careers%20logo.png" style=3D"height:auto;display:block;bo=
+rder:0;max-width:95px;width:100%" width=3D"95">
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+             <td class=3D"column column-2" width=3D"58.333333333333336%" st=
+yle=3D"mso-table-lspace:0;mso-table-rspace:0;text-align:left;font-weight:40=
+0;padding-bottom:5px;padding-top:5px;vertical-align:top;border-top:0;border=
+-right:0;border-bottom:0;border-left:0">
+              <table class=3D"text_block block-1" width=3D"100%" border=3D"=
+0" cellpadding=3D"10" cellspacing=3D"0" role=3D"presentation" style=3D"mso-=
+table-lspace:0;mso-table-rspace:0;word-break:break-word">
+               <tbody>
+                <tr>
+                 <td class=3D"pad">
+                  <div style=3D"font-family:sans-serif">
+                   <div class=3D"" style=3D"font-size:12px;font-family:Aria=
+l,Helvetica Neue,Helvetica,sans-serif;mso-line-height-alt:14.39999999999999=
+9px;color:#555;line-height:1.2">
+                    <p style=3D"margin:0;font-size:12px;mso-line-height-alt=
+:14.399999999999999px">&nbsp;</p>
+                   </div>
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+             <td class=3D"column column-3" width=3D"16.666666666666668%" st=
+yle=3D"mso-table-lspace:0;mso-table-rspace:0;text-align:left;font-weight:40=
+0;padding-bottom:5px;padding-top:5px;vertical-align:top;border-top:0;border=
+-right:0;border-bottom:0;border-left:0">
+              <table class=3D"image_block block-1" width=3D"100%" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-=
+table-lspace:0;mso-table-rspace:0">
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-right:15px;padding-top:=
+10px;width:100%;padding-left:0">
+                  <div class=3D"alignment" align=3D"center" style=3D"line-h=
+eight:10px">=20
+                   <img src=3D"https://bee-collateral-prod.s3.amazonaws.com=
+/images/ibm/14509_18891_IBM_WHITE_LOGO_dist.png" style=3D"height:auto;displ=
+ay:block;border:0;max-width:49.99999999999999px;width:100%" width=3D"49.999=
+99999999999">
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table>
+      <table class=3D"row row-2" align=3D"center" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0">
+       <tbody>
+        <tr>
+         <td>
+          <table class=3D"row-content stack" align=3D"center" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;color:#000;background-color:#000;width:500px;=
+margin:0 auto" width=3D"500">
+           <tbody>
+            <tr>
+             <td class=3D"column column-1" width=3D"100%" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400;padding-botto=
+m:5px;padding-top:5px;vertical-align:top;border-top:0;border-right:0;border=
+-bottom:0;border-left:0">
+              <table class=3D"text_block block-1" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0;word-break:break-word">
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-bottom:20px;padding-lef=
+t:10px;padding-right:10px;padding-top:10px">
+                  <div style=3D"font-family:sans-serif">
+                   <div class=3D"" style=3D"font-size:14px;font-family:Aria=
+l,Helvetica Neue,Helvetica,sans-serif;mso-line-height-alt:16.8px;color:#555=
+;line-height:1.2">
+                    <p style=3D"margin:0;font-size:14px;mso-line-height-alt=
+:16.8px"> <span style=3D"color:#ffffff;font-size:38px;">Help us, help you!<=
+/span></p>
+                   </div>
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table>
+      <table class=3D"row row-3" align=3D"center" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0">
+       <tbody>
+        <tr>
+         <td>
+          <table class=3D"row-content" align=3D"center" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspa=
+ce:0;mso-table-rspace:0;color:#000;width:500px;margin:0 auto" width=3D"500"=
+>
+           <tbody>
+            <tr>
+             <td class=3D"column column-1" width=3D"100%" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400;padding-top:1=
+0px;vertical-align:top;border-top:0;border-right:0;border-bottom:0;border-l=
+eft:0">
+              <table class=3D"text_block block-1" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0;word-break:break-word">=20
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-bottom:10px;padding-lef=
+t:10px;padding-right:5px;padding-top:5px">
+                  <div style=3D"font-family:sans-serif">
+                   <div class=3D"" style=3D"font-size:14px;font-family:Aria=
+l,Helvetica Neue,Helvetica,sans-serif;mso-line-height-alt:21px;color:#555;l=
+ine-height:1.5">
+                    <p id=3D"magicdomid61" style=3D"margin:0;mso-line-heigh=
+t-alt:21px">Hi Jiannan,</p>
+                    <p style=3D"margin:0;mso-line-height-alt:21px">&nbsp;</=
+p>
+                    <p style=3D"margin:0;mso-line-height-alt:21px"> We know=
+ how lengthy the process of finding a new job can be =E2=80=93 countless we=
+bsites to look at, new places to upload your details, and hours spent with =
+searches and filters.</p>
+                    <p style=3D"margin:0;mso-line-height-alt:21px">&nbsp;</=
+p>
+                    <p id=3D"magicdomid63" style=3D"margin:0;mso-line-heigh=
+t-alt:21px">Help us, help you! Make sure to update your profile with your l=
+atest details to ensure you receive personalized job alerts tailored to you=
+r skills and preferences.</p>
+                    <p style=3D"margin:0;mso-line-height-alt:21px">&nbsp;</=
+p>
+                    <p style=3D"margin:0;mso-line-height-alt:21px">You can =
+simply do so by clicking the button below, it only takes 30 seconds :)</p>
+                   </div>
+                  </div></td>
+                </tr>
+               </tbody>
+              </table>
+              <table class=3D"button_block block-2" width=3D"100%" border=
+=3D"0" cellpadding=3D"10" cellspacing=3D"0" role=3D"presentation" style=3D"=
+mso-table-lspace:0;mso-table-rspace:0">
+               <tbody>
+                <tr>
+                 <td class=3D"pad">
+                  <div class=3D"alignment" align=3D"left"> <!--[if mso]><v:=
+roundrect xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:w=3D"urn:schemas-=
+microsoft-com:office:word" href=3D"https://ibm.biz/cv_update_update_records=
+" style=3D"height:42px;width:224px;v-text-anchor:middle;" arcsize=3D"0%" st=
+roke=3D"false" fillcolor=3D"#0f62fe"><w:anchorlock/><v:textbox inset=3D"0px=
+,0px,0px,0px"><center style=3D"color:#ffffff; font-family:Arial, sans-serif=
+; font-size:16px"><![endif]--> <a href=3D"https://u16200883.ct.sendgrid.net=
+/ls/click?upn=3DE9p-2BP-2FmY-2BOUNE-2Bn5oJ2Xz7tMcKfFJoGH5ux8wYUIm1uaSg-2BYP=
+TbktcEzcsDx7IVO-2F19moMak-2FWf0VrQc9I1f9dJhyhQ8srQBRftikaTkKJk8PoTS0TeP-2FY=
+uVsvpQ9HlY1qEgBRkXOdSImKI1PLC-2FbaEakqr515Gqz0uLXM4BCAe-2FYtqi0NtJgY3kANKfA=
+V-2Bk-2FPiccmcLnJjFdpbP9hrhOqEIC0LhykgULBuD4dcWXtng6V8rmvGOxr-2FhGiKWrbHA-2=
+FZU4taF9MxIk6jODt1EOqxR7BiC4eue-2FiF23mQJlrVS4EqEldZTv-2B9XjFVJ4Z1vKV0qG7-2=
+BtBrB2xzcouRDo8yTe0l2Kn3WeqNhPX-2BYLmnyLOCJXepzI4I6q0X20c8XWbxJqfzMzhMwb5uF=
+OJXCODnBOzdUGcPJID95MV3aaK-2BH0-3DKoxL_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNM=
+bpA2uTIEpfUObhpKgXQ98Fhp7lDtuYeORa-2Ff1HTpe-2BRVUXGhB6TXiSfA4OJoZJ9LoWHZC-2=
+B3at6fzqAFhc-2FgTQi1bCHBjYAd-2FvzvOPeWBhp29Jys0ecePBbCk-2Bn4GL5WLBtoH63xVD-=
+2FB-2FXrsCrYVcmsY54xVCn0h-2FokK0TmjySeruLyo5Aw4m6oOMXwFHuNWJMx2Ie2pyFzU90n4=
+auelGbtvgfb2O1VJJmEKl81g1kOKyYQDi1Ri-2Fnj96a1kbgS6epKqlD7WvZlohXH15xnsjNs-2=
+BqP6g37VsUGjsy2KhKpgumlcKn2-2F26ajb7O57uDWx48HmfOrLntxTe4sazFt9P7gVg8uLrV1u=
+QXPzT83dqUNu0mnu-2Fe-2FgUkury7ZxjEkdaQKm6us14bCLEmln8pzXEFFdsIdQdez" target=
+=3D"_blank" style=3D"text-decoration:none;display:inline-block;color:#fffff=
+f;background-color:#0f62fe;border-radius:0px;width:auto;border-top:0px soli=
+d transparent;font-weight:400;border-right:0px solid transparent;border-bot=
+tom:0px solid transparent;border-left:0px solid transparent;padding-top:5px=
+;padding-bottom:5px;font-family:Arial, Helvetica Neue, Helvetica, sans-seri=
+f;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;=
+"><span style=3D"padding-left:40px;padding-right:40px;font-size:16px;displa=
+y:inline-block;letter-spacing:normal;"><span style=3D"word-break: break-wor=
+d; line-height: 32px;">Update your records</span></span></a> <!--[if mso]><=
+/center></v:textbox></v:roundrect><![endif]-->
+                  </div></td>
+                </tr>
+               </tbody>
+              </table>
+              <table class=3D"text_block block-3" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0;word-break:break-word">
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-bottom:10px;padding-lef=
+t:10px;padding-right:5px;padding-top:10px">
+                  <div style=3D"font-family:sans-serif">
+                   <div class=3D"" style=3D"font-size:14px;font-family:Aria=
+l,Helvetica Neue,Helvetica,sans-serif;mso-line-height-alt:21px;color:#555;l=
+ine-height:1.5">
+                    <p style=3D"margin:0;mso-line-height-alt:21px">Tip: Use=
+ the same email you used before =E2=80=93 the new fields you enter will ove=
+rride your previous profile.</p>
+                   </div>
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table>
+      <table class=3D"row row-4" align=3D"center" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0">
+       <tbody>
+        <tr>
+         <td>
+          <table class=3D"row-content" align=3D"center" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspa=
+ce:0;mso-table-rspace:0;color:#000;border-radius:0;width:500px;margin:0 aut=
+o" width=3D"500">
+           <tbody>
+            <tr>
+             <td class=3D"column column-1" width=3D"25%" style=3D"mso-table=
+-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400;padding-bottom=
+:5px;padding-top:5px;vertical-align:top;border-top:0;border-right:0;border-=
+bottom:0;border-left:0">
+              <table class=3D"image_block block-1" width=3D"100%" border=3D=
+"0" cellpadding=3D"5" cellspacing=3D"0" role=3D"presentation" style=3D"mso-=
+table-lspace:0;mso-table-rspace:0">
+               <tbody>
+                <tr>
+                 <td class=3D"pad">
+                  <div class=3D"alignment" align=3D"center" style=3D"line-h=
+eight:10px">
+                   <img src=3D"https://bee-collateral-prod.s3.amazonaws.com=
+/images/ibm/R00361%20I%20AM%20IBM%20-%20anna_claudia_vieira_santos%20700x70=
+0.jpg" style=3D"height:auto;display:block;border:0;max-width:115px;width:10=
+0%" width=3D"115">
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+             <td class=3D"column column-2" width=3D"25%" style=3D"mso-table=
+-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400;padding-bottom=
+:5px;padding-top:5px;vertical-align:top;border-top:0;border-right:0;border-=
+bottom:0;border-left:0">
+              <table class=3D"image_block block-1" width=3D"100%" border=3D=
+"0" cellpadding=3D"5" cellspacing=3D"0" role=3D"presentation" style=3D"mso-=
+table-lspace:0;mso-table-rspace:0">
+               <tbody>
+                <tr>
+                 <td class=3D"pad">
+                  <div class=3D"alignment" align=3D"center" style=3D"line-h=
+eight:10px">
+                   <img src=3D"https://bee-collateral-prod.s3.amazonaws.com=
+/images/ibm/R00361%20I%20AM%20IBM%20-%20emanuele_terenzani%20700x700.jpg" s=
+tyle=3D"height:auto;display:block;border:0;max-width:115px;width:100%" widt=
+h=3D"115">
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+             <td class=3D"column column-3" width=3D"25%" style=3D"mso-table=
+-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400;padding-bottom=
+:5px;padding-top:5px;vertical-align:top;border-top:0;border-right:0;border-=
+bottom:0;border-left:0">
+              <table class=3D"image_block block-1" width=3D"100%" border=3D=
+"0" cellpadding=3D"5" cellspacing=3D"0" role=3D"presentation" style=3D"mso-=
+table-lspace:0;mso-table-rspace:0">
+               <tbody>
+                <tr>
+                 <td class=3D"pad">
+                  <div class=3D"alignment" align=3D"center" style=3D"line-h=
+eight:10px">
+                   <img src=3D"https://bee-collateral-prod.s3.amazonaws.com=
+/images/ibm/R00361%20I%20AM%20IBM%20-%20analuisa_del_rivero%20700x700.jpg" =
+style=3D"height:auto;display:block;border:0;max-width:115px;width:100%" wid=
+th=3D"115">
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+             <td class=3D"column column-4" width=3D"25%" style=3D"mso-table=
+-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400;padding-bottom=
+:5px;padding-top:5px;vertical-align:top;border-top:0;border-right:0;border-=
+bottom:0;border-left:0">
+              <table class=3D"image_block block-1" width=3D"100%" border=3D=
+"0" cellpadding=3D"5" cellspacing=3D"0" role=3D"presentation" style=3D"mso-=
+table-lspace:0;mso-table-rspace:0">
+               <tbody>
+                <tr>
+                 <td class=3D"pad">
+                  <div class=3D"alignment" align=3D"center" style=3D"line-h=
+eight:10px">
+                   <img src=3D"https://bee-collateral-prod.s3.amazonaws.com=
+/images/ibm/Daiki%20-%20Japan%20%2802%29%20-%20700x700.jpg" style=3D"height=
+:auto;display:block;border:0;max-width:115px;width:100%" width=3D"115">
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table>
+      <table class=3D"row row-5" align=3D"center" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0">
+       <tbody>
+        <tr>
+         <td>
+          <table class=3D"row-content stack" align=3D"center" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;color:#000;width:500px;margin:0 auto" width=
+=3D"500">
+           <tbody>
+            <tr>
+             <td class=3D"column column-1" width=3D"100%" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400;padding-botto=
+m:5px;vertical-align:top;border-top:0;border-right:0;border-bottom:0;border=
+-left:0">
+              <table class=3D"text_block block-1" width=3D"100%" border=3D"=
+0" cellpadding=3D"10" cellspacing=3D"0" role=3D"presentation" style=3D"mso-=
+table-lspace:0;mso-table-rspace:0;word-break:break-word">
+               <tbody>
+                <tr>
+                 <td class=3D"pad">
+                  <div style=3D"font-family:sans-serif">
+                   <div class=3D"" style=3D"font-size:14px;font-family:Aria=
+l,Helvetica Neue,Helvetica,sans-serif;mso-line-height-alt:16.8px;color:#555=
+;line-height:1.2">
+                    <p style=3D"margin:0;font-size:14px;mso-line-height-alt=
+:16.8px">We look forward to getting to know you better!</p>
+                    <p style=3D"margin:0;font-size:14px;mso-line-height-alt=
+:16.8px">&nbsp;</p>
+                    <p style=3D"margin:0;font-size:14px;mso-line-height-alt=
+:16.8px"><strong>The IBM Talent Acquisition team</strong></p>
+                   </div>
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>=20
+       </tbody>
+      </table>
+      <table class=3D"row row-6" align=3D"center" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0">
+       <tbody>
+        <tr>
+         <td>
+          <table class=3D"row-content stack" align=3D"center" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;color:#000;background-color:#000;width:500px;=
+margin:0 auto" width=3D"500">
+           <tbody>
+            <tr>
+             <td class=3D"column column-1" width=3D"100%" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400;padding-botto=
+m:5px;padding-top:5px;vertical-align:top;border-top:0;border-right:0;border=
+-bottom:0;border-left:0">
+              <table class=3D"text_block block-1" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0;word-break:break-word">
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-bottom:5px;padding-left=
+:20px;padding-right:10px;padding-top:15px">
+                  <div style=3D"font-family:sans-serif">
+                   <div class=3D"" style=3D"font-size:14px;font-family:Aria=
+l,Helvetica Neue,Helvetica,sans-serif;mso-line-height-alt:16.8px;color:#555=
+;line-height:1.2">
+                    <p style=3D"margin:0;font-size:14px;mso-line-height-alt=
+:16.8px"><span style=3D"color:#ffffff;">Did a friend forward this to you? Y=
+ou can subscribe </span><a href=3D"https://u16200883.ct.sendgrid.net/ls/cli=
+ck?upn=3DE9p-2BP-2FmY-2BOUNE-2Bn5oJ2Xz7tMcKfFJoGH5ux8wYUIm1uaSg-2BYPTbktcEz=
+csDx7IVO-2F19moMak-2FWf0VrQc9I1f9dJhyhQ8srQBRftikaTkKJk8PoTS0TeP-2FYuVsvpQ9=
+HlY1qEgBRkXOdSImKI1PLC-2FbaEakqr515Gqz0uLXM4BCAe-2FYtqi0NtJgY3kANKfAV-2Bk-2=
+FPiccmcLnJjFdpbP9hrhOqEIC0LhykgULBuD4dcWXtmM521QfuAbBn4wxEIk4-2Fy6T06s7kjsk=
+7YjXaLB1Zua-2FvZ9ch-2BFYP9hdb1OtL-2BLv04aMXGBjJfXm2OPsjhb1rJ1NJwPhESr8neCTd=
+v4bOriNsMsD-2FxSLkStWP8tcOwLKduTe4zE1-2F7N3heN-2F-2Btyib0GXWhaULtaDyLU0wBon=
+NhQqQ-3D-3Dj4po_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbpA2uTIEpfUObhpKgXQ98Fh=
+p7lDtuYeORa-2Ff1HTpe-2BRVUXGhB6TXiSfA4OJoZJ9LoWHZC-2B3at6fzqAFhc-2FgTQi1bCH=
+BjYAd-2FvzvOPeWBhp29Jys0ecePBbCk-2Bn4GL5WLBtoH63xVD-2FB-2FXrsCrYVcmsY54xVCn=
+0f78SXNct9P19ljlN0PHHkb4avD2JxkNZkvmBvNxZSMAXOnsfhmqawLUX94iM0QitNIoJCBjeW6=
+iS4qqwE1oixijM999qXXagOo-2BzzKNv1CNijCLCPrsvPJ5l1rCFMXtfrSTVfQvhQTd-2BzbwkA=
+sSCjSUaKrUXQVyO3U3WPoNMt87NA4XGRWIa341Ok0u-2FvmKANlAFXEq3G54RL0UrHeqZ3BNeek=
+EoIT4BP8I78p6zvFxfRy2G3t3Z6NLLRAGPLeMk" target=3D"_blank" style=3D"text-dec=
+oration: underline; color: #78a9ff;" rel=3D"noopener">here</a>.</p>
+                   </div>
+                  </div></td>=20
+                </tr>
+               </tbody>
+              </table>
+              <table class=3D"divider_block block-2" width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"m=
+so-table-lspace:0;mso-table-rspace:0">
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-bottom:10px;padding-lef=
+t:30px;padding-right:30px;padding-top:10px">
+                  <div class=3D"alignment" align=3D"center">
+                   <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" width=3D"100%" style=3D"mso-table-lspace:0;mso-table-=
+rspace:0">
+                    <tbody>
+                     <tr>
+                      <td class=3D"divider_inner" style=3D"font-size:1px;li=
+ne-height:1px;border-top:1px solid #bbb"><span>=E2=80=8A</span></td>
+                     </tr>
+                    </tbody>
+                   </table>
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table>
+      <table class=3D"row row-7" align=3D"center" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0">
+       <tbody>
+        <tr>
+         <td>
+          <table class=3D"row-content" align=3D"center" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-table-lspa=
+ce:0;mso-table-rspace:0;color:#000;background-color:#000;width:500px;margin=
+:0 auto" width=3D"500">
+           <tbody>
+            <tr>
+             <td class=3D"column column-1" width=3D"83.33333333333333%" sty=
+le=3D"mso-table-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400=
+;padding-top:5px;vertical-align:top;border-top:0;border-right:0;border-bott=
+om:0;border-left:0">
+              <table class=3D"social_block block-1" width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"m=
+so-table-lspace:0;mso-table-rspace:0">
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-left:20px;padding-right=
+:10px;padding-top:10px;text-align:left">
+                  <div class=3D"alignment" align=3D"left">
+                   <table class=3D"social-table" width=3D"210px" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0;display:inline-block">
+                    <tbody>
+                     <tr>
+                      <td style=3D"padding:0 10px 0 0"><a href=3D"https://u=
+16200883.ct.sendgrid.net/ls/click?upn=3DE9p-2BP-2FmY-2BOUNE-2Bn5oJ2Xz7tMcKf=
+FJoGH5ux8wYUIm1uaSg-2BYPTbktcEzcsDx7IVO-2F19moMak-2FWf0VrQc9I1f9dJhyhQ8srQB=
+RftikaTkKJk8PoTS0TeP-2FYuVsvpQ9HlY1qEgBRkXOdSImKI1PLC-2FbaEakqr515Gqz0uLXM4=
+BCAe-2FYtqi0NtJgY3kANKfAV-2Bk-2FPiccmcLnJjFdpbP9hrhOqEIC0LhykgULBuD4dcWXtlu=
+yP9ncnIVsaxTyNKyzyAp8rhogRiYzAyG1hrsXTFsNTmZtDA2-2BQ0FrCWNn2n6OQLfgxSwk9b4k=
+WneuGJ0GZGPOG1iRGCYY5tXC4mosz2F8-2BnPx-2F8tkGvkXT80HGWkMlRtXJfjKWemytZwX3qH=
+zxkJOhBqHZQNvfhfNhCCpJyeaw-3D-3Dwln1_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbp=
+A2uTIEpfUObhpKgXQ98Fhp7lDtuYeORa-2Ff1HTpe-2BRVUXGhB6TXiSfA4OJoZJ9LoWHZC-2B3=
+at6fzqAFhc-2FgTQi1bCHBjYAd-2FvzvOPeWBhp29Jys0ecePBbCk-2Bn4GL5WLBtoH63xVD-2F=
+B-2FXrsCrYVcmsY54xVCn0-2BzT2KmiyFJqFXk1XXAT5mCZ3wdEUE2logMIIu-2BFGhyy7Js0An=
+S3shQNdB96slpqOKvmNgIPpjsyWRpb3yTjPnqs2FnNrz6-2B4Dgbqe8yd5mjqDCDNzuKhk8HDsq=
+dO83h0LL4hKvn447R0grYrhFbO7Oux75-2FrqZ2YPevn-2Bs6R3N-2Fte1IwZxksKoc4ZZ-2FPB=
+eDaMyE-2Fumklk5dlH3K13SqHv3TxW5j5rD-2BlGB5J5w0nko3PzSLmEzsgxN-2BBSc0SrPKv" =
+target=3D"_blank"><img src=3D"https://app-rsrc.getbee.io/public/resources/s=
+ocial-networks-icon-sets/circle-blue/twitter@2x.png" width=3D"32" height=3D=
+"32" alt=3D"Twitter" title=3D"Twitter" style=3D"height:auto;display:block;b=
+order:0"></a></td>
+                      <td style=3D"padding:0 10px 0 0"><a href=3D"https://u=
+16200883.ct.sendgrid.net/ls/click?upn=3DE9p-2BP-2FmY-2BOUNE-2Bn5oJ2Xz7tMcKf=
+FJoGH5ux8wYUIm1uaSg-2BYPTbktcEzcsDx7IVO-2F19moMak-2FWf0VrQc9I1f9dJhyhQ8srQB=
+RftikaTkKJk8PoTS0TeP-2FYuVsvpQ9HlY1qEgBRkXOdSImKI1PLC-2FbaEakqr515Gqz0uLXM4=
+BCAe-2FYtqi0NtJgY3kANKfAV-2Bk-2FPiccmcLnJjFdpbP9hrhOqEIC0LhykgULBuD4dcWXtns=
+pVo-2FlKCJr-2BXwsIKx-2Bc9gbpTMngoum2PPxnOmYvCbcGMcARG-2BxccwT9dR37G9HsL0Dvr=
+kW9ooYovC7SRPuZE6Q9ppcp7jk1qYu0ppkxx7oMVGCUfDhBiC8NECasoSUM6vpwNFLr0eIH4W9V=
+DZGouuvmfMckNyhge68Xp9yP-2F1CA-3D-3DfpBs_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2Fxz=
+NMbpA2uTIEpfUObhpKgXQ98Fhp7lDtuYeORa-2Ff1HTpe-2BRVUXGhB6TXiSfA4OJoZJ9LoWHZC=
+-2B3at6fzqAFhc-2FgTQi1bCHBjYAd-2FvzvOPeWBhp29Jys0ecePBbCk-2Bn4GL5WLBtoH63xV=
+D-2FB-2FXrsCrYVcmsY54xVCn0FFVN74xJZDXF3ADA2xPsGs-2B-2FGEzsW9tsIq0hhh-2FjdiT=
+Da4daHJbv1xOTmC90whTSXBUIlpBsU2GSk2X5wXb8V99tzyd6RR0c2cmg5QihoFmNdG-2BdOqk0=
+2nUKFVTE74-2BPMTTeJeEILPANKwcd8KCHaW6-2FNivGQt0TvfBd0Ap31x4GRBIkdblDyRIGQaz=
+F6j8YCnLe4-2FM9yLlXyYPNY9qekDdYX31RKuICFd9zuo3WDdDuBD-2FktFJV-2BAEQMMswZv4z=
+" target=3D"_blank"><img src=3D"https://app-rsrc.getbee.io/public/resources=
+/social-networks-icon-sets/circle-blue/instagram@2x.png" width=3D"32" heigh=
+t=3D"32" alt=3D"Instagram" title=3D"Instagram" style=3D"height:auto;display=
+:block;border:0"></a></td>
+                      <td style=3D"padding:0 10px 0 0"><a href=3D"https://u=
+16200883.ct.sendgrid.net/ls/click?upn=3DE9p-2BP-2FmY-2BOUNE-2Bn5oJ2Xz7tMcKf=
+FJoGH5ux8wYUIm1uaSg-2BYPTbktcEzcsDx7IVO-2F19moMak-2FWf0VrQc9I1f9dJhyhQ8srQB=
+RftikaTkKJk8PoTS0TeP-2FYuVsvpQ9HlY1qEgBRkXOdSImKI1PLC-2FbaEakqr515Gqz0uLXM4=
+BCAe-2FYtqi0NtJgY3kANKfAV-2Bk-2FPiccmcLnJjFdpbP9hrhOqEIC0LhykgULBuD4dcWXtm-=
+2Fg3StC3IvsuY1lpUf7X6vf5Z-2BwPYOJV2BMM4esMQa8c2aKZU-2FaL9N-2B-2BYEMeWAU0l9l=
+dDDnEdq60UTe2Ktlsu4jU007kHpJunvTD-2F5Ue5iePWLaQc6XEydkjEHsK-2FO7An1MchcV67-=
+2FWavs4neIcQIQxTVilF89j-2Bw64E43Soyy9Q-3D-3D6b29_GTxtydiIV9NdZtG0G3uZKtoNSw=
+J7T-2FxzNMbpA2uTIEpfUObhpKgXQ98Fhp7lDtuYeORa-2Ff1HTpe-2BRVUXGhB6TXiSfA4OJoZ=
+J9LoWHZC-2B3at6fzqAFhc-2FgTQi1bCHBjYAd-2FvzvOPeWBhp29Jys0ecePBbCk-2Bn4GL5WL=
+BtoH63xVD-2FB-2FXrsCrYVcmsY54xVCn0Egumdd-2FRSmCTXbdqmjZEfeykBLfPf4PA7LMnPWg=
+7oWT2xFDpI4qu1p9LUiWuMO-2FIv08QjOk99EIwWQIWVf6y-2FUoQUMHtwh2CFtdPZ-2B9xlgjd=
+2OvJUpZ0Y49-2FElpjtuo5B9GZsWSn7xJ6Jg7R9XSAYxVDiEtviVaL4xtVj7Y-2BSJaTDTW-2Fh=
+xVsBIkkEQoN7C-2BjsS05oaKe-2FLz-2FOz9nC2eYhJlMreCqNyAcZnP4Spef4PSB8NadkJS8nL=
+3XWaHoLPQX" target=3D"_blank"><img src=3D"https://app-rsrc.getbee.io/public=
+/resources/social-networks-icon-sets/circle-blue/youtube@2x.png" width=3D"3=
+2" height=3D"32" alt=3D"YouTube" title=3D"YouTube" style=3D"height:auto;dis=
+play:block;border:0"></a></td>
+                      <td style=3D"padding:0 10px 0 0"><a href=3D"https://u=
+16200883.ct.sendgrid.net/ls/click?upn=3DE9p-2BP-2FmY-2BOUNE-2Bn5oJ2Xz7tMcKf=
+FJoGH5ux8wYUIm1uaSg-2BYPTbktcEzcsDx7IVO-2F19moMak-2FWf0VrQc9I1f9dJhyhQ8srQB=
+RftikaTkKJk8PoTS0TeP-2FYuVsvpQ9HlY1qEgBRkXOdSImKI1PLC-2FbaEakqr515Gqz0uLXM4=
+BCAe-2FYtqi0NtJgY3kANKfAV-2Bk-2FPiccmcLnJjFdpbP9hrhOqEIC0LhykgULBuD4dcWXtmG=
+PuJQQN1ttHzn0gFrMeBrkw4XDbopWHF1sEcdBYbqdlrEM2zWi7Do-2F5dsIvUAhHUs3JVsSs3a9=
+DhJPSJKoEHjqVswiVfg-2ByOA-2BG-2B0upWtagkV8Rf7Rtegmz2CygGs-2FD8GCBxntrTieJj9=
+sLm5a2CtUxJqWKJdtFKTw1DwVaZ8KQ-3D-3DTEfj_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2Fxz=
+NMbpA2uTIEpfUObhpKgXQ98Fhp7lDtuYeORa-2Ff1HTpe-2BRVUXGhB6TXiSfA4OJoZJ9LoWHZC=
+-2B3at6fzqAFhc-2FgTQi1bCHBjYAd-2FvzvOPeWBhp29Jys0ecePBbCk-2Bn4GL5WLBtoH63xV=
+D-2FB-2FXrsCrYVcmsY54xVCn0GHdjJSYveDKnydH7jxrA2tjjyqSEcG-2BuluskbreKWWvcgLk=
+olf6Rx4X1NivR4Gmve4L-2FTOF050G-2Bh1PtWQY3EozCkPcIGZiwXvb3qeJLnR-2FrX6jqp8qb=
+IWWnnzNpwbOGhiUTu2Wp7L3m-2FSGAoM-2FwNrThCf09KDXuzJPK4sD9cxhVCdFB0Zb8QOAn8dC=
+nREmHcsq2Rf-2BYzRQrjKdeLxit29zGVWLUmJXcJG0m8J7HfhtZzbNl1hnpXIcvcLyj5vK0" ta=
+rget=3D"_blank"><img src=3D"https://app-rsrc.getbee.io/public/resources/soc=
+ial-networks-icon-sets/circle-blue/linkedin@2x.png" width=3D"32" height=3D"=
+32" alt=3D"LinkedIn" title=3D"LinkedIn" style=3D"height:auto;display:block;=
+border:0"></a></td>
+                      <td style=3D"padding:0 10px 0 0"><a href=3D"https://u=
+16200883.ct.sendgrid.net/ls/click?upn=3DE9p-2BP-2FmY-2BOUNE-2Bn5oJ2Xz7tMcKf=
+FJoGH5ux8wYUIm1uaSg-2BYPTbktcEzcsDx7IVO-2F19moMak-2FWf0VrQc9I1f9dJhyhQ8srQB=
+RftikaTkKJk8PoTS0TeP-2FYuVsvpQ9HlY1qEgBRkXOdSImKI1PLC-2FbaEakqr515Gqz0uLXM4=
+BCAe-2FYtqi0NtJgY3kANKfAV-2Bk-2FPiccmcLnJjFdpbP9hrhOqEIC0LhykgULBuD4dcWXtmf=
+OJbRkfqstogHE5UL0Hb-2BZp3Azn-2FeckvjKuMHESPLIA7IBx2AoXPYt6byX3J-2B5YwibBhCA=
+avVaVRtMQPSL2fQPFmqH5QeF9W7vsouTQEWfRS4Gf0tejSWiJFndbdrzybaY45wajEAb7VYOtQx=
+OINbJB31m-2BcfRBDTg7yeoMjlRQ-3D-3D3KvM_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNM=
+bpA2uTIEpfUObhpKgXQ98Fhp7lDtuYeORa-2Ff1HTpe-2BRVUXGhB6TXiSfA4OJoZJ9LoWHZC-2=
+B3at6fzqAFhc-2FgTQi1bCHBjYAd-2FvzvOPeWBhp29Jys0ecePBbCk-2Bn4GL5WLBtoH63xVD-=
+2FB-2FXrsCrYVcmsY54xVCn0uZ4JC-2BWQixirdRVyVQ4r-2F5AZqakqVR-2FCq9JC-2F4ngMJQ=
+kmOI-2FtGCY4Y9N5RGTLMvtruiKk3RZLbECSMSiUAmOaixPykhbsL7zCk8ihHVI6nrEvFQ9gz7j=
+3NzYYHyptXNfkgbkcSHJvuFDOUyg-2F2CGJho6yTcUh2biIlLzNbCF0AUuCECk2411iJzFS2SPP=
+aaqjfoa7zjbTOFjkIkMp15ZY8iCglHmurUlyo3dpMc2eHhNLOvYDiqCDYhkwlG-2BCXAe" targ=
+et=3D"_blank"><img src=3D"https://app-rsrc.getbee.io/public/resources/socia=
+l-networks-icon-sets/circle-blue/glassdoor@2x.png" width=3D"32" height=3D"3=
+2" alt=3D"Glassdoor" title=3D"Glassdoor" style=3D"height:auto;display:block=
+;border:0"></a></td>
+                     </tr>
+                    </tbody>
+                   </table>
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+             <td class=3D"column column-2" width=3D"16.666666666666668%" st=
+yle=3D"mso-table-lspace:0;mso-table-rspace:0;text-align:left;font-weight:40=
+0;padding-bottom:5px;padding-top:5px;vertical-align:top;border-top:0;border=
+-right:0;border-bottom:0;border-left:0">
+              <table class=3D"image_block block-1" width=3D"100%" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-=
+table-lspace:0;mso-table-rspace:0">=20
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-bottom:5px;padding-left=
+:15px;padding-right:15px;padding-top:15px;width:100%">
+                  <div class=3D"alignment" align=3D"center" style=3D"line-h=
+eight:10px">
+                   <img src=3D"https://bee-collateral-prod.s3.amazonaws.com=
+/images/ibm/14509_18891_IBM_WHITE_LOGO_dist.png" style=3D"height:auto;displ=
+ay:block;border:0;max-width:50px;width:100%" width=3D"50">
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table>
+      <table class=3D"row row-8" align=3D"center" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0">
+       <tbody>
+        <tr>
+         <td>
+          <table class=3D"row-content stack" align=3D"center" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;color:#000;background-color:#000;width:500px;=
+margin:0 auto" width=3D"500">
+           <tbody>
+            <tr>
+             <td class=3D"column column-1" width=3D"100%" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400;padding-top:5=
+px;vertical-align:top;border-top:0;border-right:0;border-bottom:0;border-le=
+ft:0">
+              <table class=3D"text_block block-1" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0;word-break:break-word">
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-bottom:15px;padding-lef=
+t:20px;padding-right:10px;padding-top:5px">
+                  <div style=3D"font-family:sans-serif">
+                   <div class=3D"" style=3D"font-size:14px;font-family:Aria=
+l,Helvetica Neue,Helvetica,sans-serif;mso-line-height-alt:16.8px;color:#555=
+;line-height:1.2">
+                    <p style=3D"margin:0;font-size:14px;mso-line-height-alt=
+:16.8px"><span style=3D"font-size:17px;color:#ffffff;"><a href=3D"https://u=
+16200883.ct.sendgrid.net/ls/click?upn=3DE9p-2BP-2FmY-2BOUNE-2Bn5oJ2Xz7tMcKf=
+FJoGH5ux8wYUIm1uaSg-2BYPTbktcEzcsDx7IVO-2F19moMak-2FWf0VrQc9I1f9dJhyhQ8srQB=
+RftikaTkKJk8PoTS0TeP-2FYuVsvpQ9HlY1qEgBRkXOdSImKI1PLC-2FbaEakqr515Gqz0uLXM4=
+BCAe-2FYtqi0NtJgY3kANKfAV-2Bk-2FPiccmcLnJjFdpbP9hrhOqEIC0LhykgULBuD4dcWXtmS=
+ojjWK7bLI0PiVxKLBzhRAM43H1IjvELF4UTldkcV-2FMeydMa3gaQRTGyB0uIPlp2vDwc4iwEi1=
+zIp8xRgjisqy9xGME94-2FC3kchtPprJ2cXUDwL0y9BjpnJZxWsJ-2BPGN0qwBGUABshd4-2Fa0=
+fbab0V-2Bub-2FVQRkH-2FXrVmv-2B023bUg-3D-3D5uiJ_GTxtydiIV9NdZtG0G3uZKtoNSwJ7=
+T-2FxzNMbpA2uTIEpfUObhpKgXQ98Fhp7lDtuYeORa-2Ff1HTpe-2BRVUXGhB6TXiSfA4OJoZJ9=
+LoWHZC-2B3at6fzqAFhc-2FgTQi1bCHBjYAd-2FvzvOPeWBhp29Jys0ecePBbCk-2Bn4GL5WLBt=
+oH63xVD-2FB-2FXrsCrYVcmsY54xVCn0UvmWhoArruva82FQRK8chf0h3npdy5vSw9nDHtSKUGR=
+xd3hYFgjmwFJnG-2F4ODfGnQPg29dcwHGZzShIZxa8OebtEooIEm5YZHDxPnSNw93j37PaFdcLg=
+dBgwCMYoFsy043uZck4gdTIWMsY5uGbUr5b7bhKxH349tH6Z0wXmjGulT7A27b3tI7KmGFYd-2B=
+AuRN-2BVjVEuIenjXj-2FyrnN0TTPzrX34KxKHTafIuG7ktDTChk7lLK-2F7gxQeUZ3M0r6za" =
+target=3D"_blank" clicktracking=3D"on" customtag=3D"true" style=3D"text-dec=
+oration:underline;color:#ffffff;" rel=3D"noopener">ibm.com/careers</a></spa=
+n></p>
+                   </div>
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>=20
+          </table></td>
+        </tr>
+       </tbody>
+      </table>
+      <table class=3D"row row-9" align=3D"center" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0">
+       <tbody>
+        <tr>
+         <td>
+          <table class=3D"row-content stack" align=3D"center" border=3D"0" =
+cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;color:#000;background-color:#000;width:500px;=
+margin:0 auto" width=3D"500">
+           <tbody>
+            <tr>
+             <td class=3D"column column-1" width=3D"100%" style=3D"mso-tabl=
+e-lspace:0;mso-table-rspace:0;text-align:left;font-weight:400;padding-botto=
+m:5px;padding-top:5px;vertical-align:top;border-top:0;border-right:0;border=
+-bottom:0;border-left:0">
+              <table class=3D"divider_block block-1" width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"m=
+so-table-lspace:0;mso-table-rspace:0">
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-bottom:10px;padding-lef=
+t:30px;padding-right:30px;padding-top:10px">
+                  <div class=3D"alignment" align=3D"center">
+                   <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" width=3D"100%" style=3D"mso-table-lspace:0;mso-table-=
+rspace:0">
+                    <tbody>
+                     <tr>
+                      <td class=3D"divider_inner" style=3D"font-size:1px;li=
+ne-height:1px;border-top:1px solid #bbb"><span>=E2=80=8A</span></td>
+                     </tr>
+                    </tbody>
+                   </table>
+                  </div></td>
+                </tr>
+               </tbody>
+              </table>
+              <table class=3D"text_block block-2" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"mso-t=
+able-lspace:0;mso-table-rspace:0;word-break:break-word">
+               <tbody>
+                <tr>
+                 <td class=3D"pad" style=3D"padding-bottom:10px;padding-lef=
+t:20px;padding-right:15px;padding-top:10px">
+                  <div style=3D"font-family:sans-serif">
+                   <div class=3D"" style=3D"font-size:14px;font-family:Aria=
+l,Helvetica Neue,Helvetica,sans-serif;mso-line-height-alt:16.8px;color:#555=
+;line-height:1.2">
+                    <p style=3D"margin:0;font-size:14px;mso-line-height-alt=
+:16.8px"> <span style=3D"font-size:12px;color:#ffffff;">=C2=A9IBM Corporati=
+on 2023. IBM, the IBM logo, IBM Cloud=E2=84=A2 and <a href=3D"https://u1620=
+0883.ct.sendgrid.net/ls/click?upn=3DE9p-2BP-2FmY-2BOUNE-2Bn5oJ2Xz7tMcKfFJoG=
+H5ux8wYUIm1uaSg-2BYPTbktcEzcsDx7IVO-2F19moMak-2FWf0VrQc9I1f9dJhyhQ8srQBRfti=
+kaTkKJk8PoTS0TeP-2FYuVsvpQ9HlY1qEgBRkXOdSImKI1PLC-2FbaEakqr515Gqz0uLXM4BCAe=
+-2FYtqi0NtJgY3kANKfAV-2BkfcvZsT18fzQYe9ltJ-2BJmnvyNGaw0Bnk-2BYdoxyTIw5nACsR=
+Ef-2B-2BpptX0M5ncCG6dM0bI-2B75poPBEr-2B6Z87c-2BRzEhCD4j9-2BzwYC1uObUyHAv0bX=
+jbxndTnqZzGqtmkKi4FS3TnLEkCoqy8g1bQbYzVSAjnYSIPJR0u9fQKOC28-2BHw9JBgbhs0dKR=
+o3w0CZEbYDEtKqMyWL8tuUdw3QnE1NKbk0-2FxzwRvx5H1CrY9QbuV2cHLroI4bWsQAxTeYZiBe=
+Z4e4DynHgq1IPlMQ9JcN6QzRMtVFkvpEb6gamcS7LDMnrDHWfj5XxpX8bfgNPGR6HjwIUSzBmS-=
+2BelpjIA-2F4e2PCQaZpy0ifCp6UPX4B5evDU-3DXKn-_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-=
+2FxzNMbpA2uTIEpfUObhpKgXQ98Fhp7lDtuYeORa-2Ff1HTpe-2BRVUXGhB6TXiSfA4OJoZJ9Lo=
+WHZC-2B3at6fzqAFhc-2FgTQi1bCHBjYAd-2FvzvOPeWBhp29Jys0ecePBbCk-2Bn4GL5WLBtoH=
+63xVD-2FB-2FXrsCrYVcmsY54xVCn0NhRlo0B4eWcPdBURsf5W8DOGLd21y6VvkwZXBt1ePz54E=
+Fz88fI7M-2F8NaSYEB8jhA8sjAo-2BjumHDlz3D1VbK352vE9SR7P73TUhq3JZoOOKfSVdThjCW=
+OLIoKH0mwR7DFnEItb4HUBD8wqZP5z4628tenDPoZ1Cyl8jpdJ8o4QAbaqoEugiu4pi17daogEQ=
+R6ndjzd6bg0x3LdAAyMO0OUSRZfB7s16cmnC8i6vS-2FPV-2B8IbdboGdJPJ0VLsl-2FwKn" ta=
+rget=3D"_blank" style=3D"text-decoration: underline; color: #78a9ff;" rel=
+=3D"noopener">ibm.com</a>&nbsp;are trademarks of the international Business=
+ Machines Corp., registered in many jurisdictions worldwide. This document =
+is current as of the initial date of publication and maybe changed by IBM a=
+t any time. Not all offerings are available in every country in which IBM o=
+perates.</span> <br><br><span style=3D"font-size:12px;color:#ffffff;">To en=
+sure delivery to your inbox, please add&nbsp;<a href=3D"https://u16200883.c=
+t.sendgrid.net/ls/click?upn=3DE9p-2BP-2FmY-2BOUNE-2Bn5oJ2Xz7tMcKfFJoGH5ux8w=
+YUIm1uaSg-2BYPTbktcEzcsDx7IVO-2F19moMak-2FWf0VrQc9I1f9dJhyhQ8srQBRftikaTkKJ=
+k8PoTS0TeP-2FYuVsvpQ9HlY1qEgBRkXOdSImKI1PLC-2FbaEakqr515Gqz0uLXM4BCAe-2FYtq=
+i0NtJgY3kANKfAV-2BkuWSIKJxn0RbZHVcGOzKoZ3-2B2ia-2FkpOJ79I04g9JnIyhSDrHFfYEZ=
+D0sEQHsQHqJMl9tM9nV79ktGh-2F1oxJ01ahLiPr33s3EQHG58gP-2BXiE8nvHYN1XWfBW9furV=
+7YIDlJrzN9MyjMnmN8LBODo-2B6g-2BtGpo8CT7jkVGOHhNCMinl3I622avz9oZfUZkDicaCUHa=
+lfp5vuOGLYak66F8IlYg-3D-3DKMPX_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbpA2uTIE=
+pfUObhpKgXQ98Fhp7lDtuYeORa-2Ff1HTpe-2BRVUXGhB6TXiSfA4OJoZJ9LoWHZC-2B3at6fzq=
+AFhc-2FgTQi1bCHBjYAd-2FvzvOPeWBhp29Jys0ecePBbCk-2Bn4GL5WLBtoH63xVD-2FB-2FXr=
+sCrYVcmsY54xVCn04fPf6N7PYQ-2ByI-2FA5Zsyx9riNoWN5Tib33XqP8mMDlVaQUbV8JM2xL3m=
+3tNpxfJ5-2BSlJCh4Unahf-2FDhUr5Ylyk9Quj2u10vyZHE6Q144kTe6cExBJwzOrkQfl8c6R03=
+lS1v5I9ASfvLY4Zt-2Bthh0JlIZ2Qoin-2B-2BUvVKe6NMg1eFAw4awZTqsjYIu-2Bw9-2F0i6f=
+P60aGtEsvQ1ZI-2B8wGwHs0PyhLxskcYcPPSSGpjWJ70SB02gFfk56GnnSIdyigGMZl" target=
+=3D"_blank" rel=3D"noopener" style=3D"color:#ffffff;">talent@ibm.com</a>&nb=
+sp;to your address book. Please do not reply to this email, as we are unabl=
+e to respond from this address.</span><br><br> <span style=3D"font-size:12p=
+x;color:#ffffff;">If you=E2=80=99d like us to refrain from sending you simi=
+lar e-mails in the future, please click on the unsubscribe link below. You =
+may also mail a written request to IBM US at: IBM Corporation, 11=E2=80=8C5=
+0=E2=80=8C1 Burnet Rd, Bldg 90=E2=80=8C4 3=E2=80=8CB-00=E2=80=8C0, Austin, =
+TX 78=E2=80=8C75=E2=80=8C8.</span><br><br> <span style=3D"font-size:12px;co=
+lor:#ffffff;"><a href=3D"https://u16200883.ct.sendgrid.net/ls/click?upn=3DE=
+9p-2BP-2FmY-2BOUNE-2Bn5oJ2Xz7tMcKfFJoGH5ux8wYUIm1uaSg-2BYPTbktcEzcsDx7IVO-2=
+F19moMak-2FWf0VrQc9I1f9dJhyhQ8srQBRftikaTkKJk8PoTS0TeP-2FYuVsvpQ9HlY1qEgBRk=
+XOdSImKI1PLC-2FbaEakqr515Gqz0uLXM4BCAe-2FYtqi0NtJgY3kANKfAV-2BkfcvZsT18fzQY=
+e9ltJ-2BJmnvyNGaw0Bnk-2BYdoxyTIw5nBhl-2Bn7KfFgEbVAG2WdJGR6E4xmF4xHqRw1kJJT-=
+2FSbP-2Bg22FSobDVLv9Lyj-2Fd4ctWOCRVXJrm1Eh3DafScCPpFf-2F1j3mTjXjIoE3rFK68v6=
+TE-2F-2F2fdSfEnI7RpThk2PepSVdCv31u21PHshr3KkLvhWoR4C86nlq-2FbvCSxNtkRvKD83b=
+eLXQ0w7JL1gp7XRO6in68xNSPZ-2BN015tJ6efTu4PYi8BEbdXvJnQyHkZGMfR7TSZsPYq1OEuI=
+JfPcN3Eh8rYvZHzqqLr7MwPE8nl7ai7VA8ItAF834fWel2Vv-2FZP29yVl2Mv6lF-2BXKGhoXLa=
+w0cN-2F3M3sJ-2FW5oxlzj2i9s-2BUC6H_GTxtydiIV9NdZtG0G3uZKtoNSwJ7T-2FxzNMbpA2u=
+TIEpfUObhpKgXQ98Fhp7lDtuYeORa-2Ff1HTpe-2BRVUXGhB6TXiSfA4OJoZJ9LoWHZC-2B3at6=
+fzqAFhc-2FgTQi1bCHBjYAd-2FvzvOPeWBhp29Jys0ecePBbCk-2Bn4GL5WLBtoH63xVD-2FB-2=
+FXrsCrYVcmsY54xVCn0No5jd1QrIq5iPj5L1i6H3Jj-2F1Tw-2Fw7RfETwo9jLWNNTBTPWxiGtD=
+htWS67uSumzfqYjYxBK059CnnI6CjtWWyGMyM9nSIkBZAmr7f5S7Ae5Men9rxWR5o-2F12RgrP7=
+YddVadeChHctVnNBcvE3pdWWrGCpZQ5f-2Bxhe4xeR3r8zm1H7PZosSyKvMm2xTtsGQ8Gm85LJn=
+pOwac4iuWzzLm38hw0RdYwOVwQ9HV1Ph-2BZL-2FxKy-2FnJIXrvVPDFcIQLQ4A7sYN3z0tsFuo=
+DDDwcSq-2BW9Q-3D-3D" target=3D"_blank" style=3D"text-decoration: underline;=
+ color: #78a9ff;" rel=3D"noopener">=C2=A9 IBM | Data Privacy Policy</a></sp=
+an></p>
+                   </div>
+                  </div></td>
+                </tr>
+               </tbody>
+              </table></td>
+            </tr>
+           </tbody>
+          </table></td>
+        </tr>
+       </tbody>
+      </table></td>
+    </tr>
+   </tbody>
+  </table><!-- End -->
+  <img src=3D"https://d.hodes.com/i?tv=3Dpixel_tracker&amp;p=3Dweb&amp;aid=
+=3Dibm&amp;se_ca=3Demail&amp;se_ac=3Dimpression&amp;se_la=3D673071&amp;se_p=
+r=3D339372&amp;se_va=3D11930367" width=3D"1" height=3D"1">=20
+  <p style=3D"text-align:center">Click here to <a customtag=3D"False" href=
+=3D"https://d.hodes.com/r/tp2?e=3Dse&amp;tv=3Dpixel_tracker&amp;p=3Dweb&amp=
+;aid=3Dibm&amp;se_ca=3Demail_unsub&amp;se_ac=3Dunsubscribe&amp;se_la=3D6730=
+71&amp;se_pr=3D339372&amp;se_va=3D11930367&amp;tr_id=3D&amp;tr_af=3D397176&=
+amp;u=3Dhttps://careers.ibm.com//unsubscribe?token=3DeyJhbGciOiJSUzI1NiJ9.e=
+yJodHRwczovL3d3dy5zeW1waG9ueXRhbGVudC5jb20vdGVuYW50IjoiaWJtIiwiaHR0cHM6Ly93=
+d3cuc3ltcGhvbnl0YWxlbnQuY29tL3NvdXJjZSI6IlNGWCIsImh0dHBzOi8vd3d3LnN5bXBob25=
+5dGFsZW50LmNvbS9jb25uZWN0aW9uU3RyYXRlZ3kiOiJUZW1wb3JhcnkgVG9rZW4iLCJodHRwcz=
+ovL3d3dy5zeW1waG9ueXRhbGVudC5jb20vdXNlclR5cGUiOiJjYW5kaWRhdGUiLCJodHRwczovL=
+3d3dy5zeW1waG9ueXRhbGVudC5jb20vZk5hbWUiOiJKaWFubmFuIiwiaHR0cHM6Ly93d3cuc3lt=
+cGhvbnl0YWxlbnQuY29tL2xOYW1lIjoiQ2FvIiwiaHR0cHM6Ly93d3cuc3ltcGhvbnl0YWxlbnQ=
+uY29tL2VtYWlsIjoiamlhbm5hbkBtaXQuZWR1IiwiaHR0cHM6Ly93d3cuc3ltcGhvbnl0YWxlbn=
+QuY29tL2FwcHMiOlsiWENDIl0sImh0dHBzOi8vd3d3LnN5bXBob255dGFsZW50LmNvbS9yb2xlc=
+yI6W10sImZhbWlseV9uYW1lIjoiQ2FvIiwiZ2l2ZW5fbmFtZSI6IkppYW5uYW4iLCJlbWFpbCI6=
+ImppYW5uYW5AbWl0LmVkdSIsIm5hbWUiOiJKaWFubmFuIENhbyIsInVwZGF0ZWRfYXQiOjE2ODg=
+2NTQ2NzM4MzIsImVtYWlsX3ZlcmlmaWVkIjoidHJ1ZSIsImlhdCI6MTY4ODY1NDY3MzgzMiwiaX=
+NzIjoiU0ZYIENPUkUgQVBJcyBUb2tlbiBBdXRob3JpdHkiLCJzdWIiOiJUZW1wb3JhcnkgVG9rZ=
+W58amlhbm5hbkBtaXQuZWR1IiwiYXVkIjoicHJvZDp1bnN1YiIsImV4cCI6MTY5ODY1NDY3Mn0.=
+SS9hDv1EGLLA83TQQsXdPdE-trw9bIFmL9ZEpjVRwstVaqIT7s2ooAnNnYw_3fV2oXGQsNNgZED=
+0CID_zuEAS4aJhdvaBmRDA4JPfhabCwixezpn15ICJrlPH1fb1d3fPXX1h7av6SvPwYQsfWBowd=
+Fo9kJuF0dcvpsFFvFwtM4rjuYKClfB119p20FyOCAO15nnL48Wb3bGG4Lg6Vtl0kzL7C3Es40Mx=
+71UMfe8quBkUQmuQ48zDTnlLrlIxTwXsQMMOkJKuRs1GFfL5JJWuxRiz7nfyaFv6aqS5bAnYbI8=
+HbAxOJayJLe-oy1PScmIlDLPdk8dzcuvMzF-B_XhpQ" clicktracking=3D"off">Unsubscri=
+be</a></p>=20
+ <img src=3D"https://u16200883.ct.sendgrid.net/wf/open?upn=3Du-2FofFv1d43fo=
+k8UNQA60NswP6H6Tox1-2BCn-2B2MVi25azjq-2FTw8mvCiD532dCLbumQzG2Oe4e-2B34mzux3=
+pSPvVV5BEDi7rVAbALVVcH7bSjC2Z0Z05qoES8Y38vvMVHO5OPsM5waowe8UF5Hp6AKWamNiG97=
+cDgaignd4Ra9wdxuuBXVxUIjgHr1qeqSMqwTPxKIAO6xABVVtWM8puFzbvcPs45jZ5gWHMMJHJi=
+LyHInKZJsbgj7z2rbDmQklDg03G9eIu3rCme-2B1Z6zSReGI3Z6UZ-2BZPqpiHDkOvoontfbHW0=
+H4YXpA3up-2FFv1-2Ft8wq-2Fgd-2BfAxgTVxccaEBFX-2BJhuytTLhTpFovylhFQhMwIx9aaeL=
+bXhbuLxpR-2Fu5PSSNYHDtjfVdA1zg0AiH8iRvTGSomsH69-2FAN5HMPI6zhNRWop8m0iZm-2F2=
+1UcDfW570jTusNqxGqoe86YSjFuLWbjsn0cg-3D-3D" alt=3D"" width=3D"1" height=3D"=
+1" border=3D"0" style=3D"height:1px !important;width:1px !important;border-=
+width:0 !important;margin-top:0 !important;margin-bottom:0 !important;margi=
+n-right:0 !important;margin-left:0 !important;padding-top:0 !important;padd=
+ing-bottom:0 !important;padding-right:0 !important;padding-left:0 !importan=
+t;"></body>
+</html>

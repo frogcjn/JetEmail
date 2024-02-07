@@ -1,0 +1,325 @@
+Received: from DS0PR01MB7938.prod.exchangelabs.com (2603:10b6:8:150::22) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 21 Nov 2023 15:23:08
+ +0000
+Received: from DM6PR03CA0046.namprd03.prod.outlook.com (2603:10b6:5:100::23)
+ by DS0PR01MB7938.prod.exchangelabs.com (2603:10b6:8:150::22) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7002.27; Tue, 21 Nov 2023 15:23:07 +0000
+Received: from DS2PEPF00003442.namprd04.prod.outlook.com
+ (2603:10b6:5:100:cafe::5d) by DM6PR03CA0046.outlook.office365.com
+ (2603:10b6:5:100::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.27 via Frontend
+ Transport; Tue, 21 Nov 2023 15:23:07 +0000
+Authentication-Results: spf=softfail (sender IP is 18.7.71.112)
+ smtp.mailfrom=huggingface.co; dkim=fail (body hash did not verify)
+ header.d=huggingface.co;dmarc=fail action=none header.from=huggingface.co;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ huggingface.co discourages use of 18.7.71.112 as permitted sender)
+Received: from mail.exchange.mit.edu (18.7.71.112) by
+ DS2PEPF00003442.mail.protection.outlook.com (10.167.17.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7025.13 via Frontend Transport; Tue, 21 Nov 2023 15:23:07 +0000
+Received: from oc11exhyb7.exchange.mit.edu (18.9.1.112) by
+ w92exhyb7.exchange.mit.edu (18.7.71.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 21 Nov 2023 10:23:00 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by oc11exhyb7.exchange.mit.edu (18.9.1.112) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Tue, 21 Nov 2023 10:23:00 -0500
+Received: from DS7PR03CA0068.namprd03.prod.outlook.com (2603:10b6:5:3bb::13)
+ by PH0PR01MB6700.prod.exchangelabs.com (2603:10b6:510:95::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7002.28; Tue, 21 Nov 2023 15:22:58 +0000
+Received: from DS1PEPF00017096.namprd05.prod.outlook.com
+ (2603:10b6:5:3bb:cafe::34) by DS7PR03CA0068.outlook.office365.com
+ (2603:10b6:5:3bb::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.18 via Frontend
+ Transport; Tue, 21 Nov 2023 15:22:58 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.128.42)
+ smtp.mailfrom=huggingface.co; dkim=pass (signature was verified)
+ header.d=huggingface.co;dmarc=pass action=none
+ header.from=huggingface.co;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of huggingface.co
+ designates 209.85.128.42 as permitted sender)
+ receiver=protection.outlook.com; client-ip=209.85.128.42;
+ helo=mail-wm1-f42.google.com; pr=C
+Received: from mail-wm1-f42.google.com (209.85.128.42) by
+ DS1PEPF00017096.mail.protection.outlook.com (10.167.18.100) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7025.12 via Frontend Transport; Tue, 21 Nov 2023 15:22:58 +0000
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4084de32db5so30212975e9.0
+        for <jiannan@mit.edu>; Tue, 21 Nov 2023 07:22:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=huggingface.co; s=google; t=1700580177; x=1701184977; darn=mit.edu;
+        h=to:cc:date:message-id:subject:mime-version:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=124xSdkfN/p9AZ1QDPzNDS++F1l1iwRAbZmvlOLxzfI=;
+        b=hzqWQ+7GvJyJwTxdNAWXVFQO9G9F/zhMmDvkWswfc+1VqT1rrt4Di06t/UxBRwAsyh
+         BzRLp7MmSypR6b9i43qmOmz4tD9kNxIZLt0UMymCBAT3egPQNjbA/WIipr5QjtO0JlVg
+         YpsNl7Yd96wyBrZyyRcQaQGPdlo8ojNVnKXGF/y5XmfKy/2qVBGLbr7uVw8JvIp84oTh
+         ibiu3n1PIKp8K3ULRAS9dSIiQjnThZwhmTMMd/LZ/xH0GXrT4+4C1p6GSWLbZevjzvjj
+         ciRgZqoiCfHCGqCJY/47C4GZeD/zRDd5a1S9cPFyudzjeY6y86E3hYv2JX5tWEWIocfs
+         WqlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700580177; x=1701184977;
+        h=to:cc:date:message-id:subject:mime-version:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=124xSdkfN/p9AZ1QDPzNDS++F1l1iwRAbZmvlOLxzfI=;
+        b=j0Xt8F6bzdqYEwVa86oxtSppWAGTjqOXFOC7SIJd0+rge3gfjgaE9cn7ApooQ/fd2S
+         TIkl2UMbeG8PcZ9uo8y61TSAwb8c5mfST2AsQMxYQLYcLlNW9erx27JtxuGdMVzdeP3G
+         Z8ZNTYH4GrZ9pw6WO8P1bX4hW4ZIxopskiUx+IfFdmAEzzGiIM5AotbO1waKXAaBrXbB
+         lAjF7vvx23ekTQwpdp6EqDduSV5zFv5zwB2FrThee0Wgucgn1PMd00Dody2ZWrZIN8pg
+         FLe8AE6t/Z7Nu47n+cgCzioQmbuwZZtOeGFM1iEj+4jcrOJh2AYq1eVjE/HfqNo0eEv6
+         npUg==
+X-Gm-Message-State: AOJu0YxJmvQiR+EHpq20dDDrZzRSFzC+gCMKadsaKoookRVZ/EfDMUu1
+	l7q/u11BrX4JT0ABvXTyvyjAiQ==
+X-Google-Smtp-Source: AGHT+IHKxXhxpzNsqVRavbahIowAGGbJs85E12UbMRViJlwX9nKq4JNSczWWVdbc51cQYSQtPKyFTw==
+X-Received: by 2002:a05:600c:45ca:b0:405:499a:7fc1 with SMTP id s10-20020a05600c45ca00b00405499a7fc1mr9410485wmo.40.1700580176961;
+        Tue, 21 Nov 2023 07:22:56 -0800 (PST)
+Return-Path: adina@huggingface.co
+Received: from smtpclient.apple ([85.118.58.159])
+        by smtp.gmail.com with ESMTPSA id s26-20020a7bc39a000000b004064741f855sm16991763wmj.47.2023.11.21.07.22.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 21 Nov 2023 07:22:55 -0800 (PST)
+From: Adina Yakefu <adina@huggingface.co>
+Content-Type: multipart/alternative;
+	boundary="Apple-Mail=_2A33EFBB-9915-4C72-828C-77C60CEE2C7E"
+Subject: Hi from Hugging Face
+Message-ID: <BC406170-8CE7-4CEA-97CF-1AF5E1B0EF92@huggingface.co>
+Date: Tue, 21 Nov 2023 16:22:45 +0100
+Cc: papers@huggingface.co
+To: yeyn2001@gmail.com,
+ xin.cong@outlook.com,
+ tsz21@mails.tsinghua.edu.cn,
+ jiannan@mit.edu,
+ hwang4@alumni.cmu.edu,
+ hy-yu22@mails.tsinghua.edu.cn,
+ liuzy@tsinghua.edu.cn,
+ sms@tsinghua.edu.cn
+X-Mailer: Apple Mail (2.3731.600.7)
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ DS1PEPF00017096:EE_|PH0PR01MB6700:EE_|DS2PEPF00003442:EE_|DS0PR01MB7938:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1feb390a-9307-4360-612b-08dbeaa5c37c
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?kHuAK2yuAyFBz6du+iraUZRNzDeq7IW+1dMoqhoM+xtOt4CCw7fbiq1SNdzW?=
+ =?us-ascii?Q?nfOKqkJXxOzbQMU/rkWF1H1DoiJZdQnpPygx8rd+6rty+themH3aHaqPjLqe?=
+ =?us-ascii?Q?q9fhlPSAC7TmrbJ6WmexSxgHPknAHsfkKnrZYJkl6bnsWaWIobyra/k0FteK?=
+ =?us-ascii?Q?lAUkjXRijrPPs3BRTyxSlNMYjBp7/+1tTv8ir3ePuMlhBcWbrwganqSFUBvb?=
+ =?us-ascii?Q?Nr0GYiNclM/5GJJ26UJpigckYSKsdIO0Lk9h4/GFFCii4VMkKY4RcFAIzdsR?=
+ =?us-ascii?Q?w7cwZ8AAyiENMFiglcOA31zFTvqSRvZErUMMBfEw392BFqunTenpYJzpAVUw?=
+ =?us-ascii?Q?EnJS9ZYM+o/clxaBd4TD27ssblTKRGFpfUHjoKxGNLykCh7s4pdNzLECqn14?=
+ =?us-ascii?Q?UUNuWs7kN1KafYMbG8vh/7S4m/03QKrJEwqOjTITsgDJnqdf3LatlRey3IFc?=
+ =?us-ascii?Q?8NJOQG3Ixlvk7ogKst12gxvquYrYC26ekSkxp3N2SfLuldBVyTNduumyk/S9?=
+ =?us-ascii?Q?5nfUxiiyPaxwDkLC4WkDnScZoVlFZhqMKCUHapcEbX6N0a30jvA6n2jCj7q4?=
+ =?us-ascii?Q?GZ3yfCqCBKabjrjJn+wzZKnpTohXt2YYSz8PqalDkmPbaGcTKnsZsv4neoXR?=
+ =?us-ascii?Q?0Tel6YhM9I96gQg7QlVkm/pmxkok0B979cJFwvwJvyJ1uF5OEfqipmGCXNZu?=
+ =?us-ascii?Q?thuCjWgo971rgiV8JRVCVxN4fYkkLwbVnyCxB+LHY8wl94ku28tzKHuVskjk?=
+ =?us-ascii?Q?H2AHObrzSX50Xr/R2WcDkBrDfH0j0spwSui/7ekDoC4kofEvRU+9l977/4Db?=
+ =?us-ascii?Q?TmSMM+SfJLY4jAZx7dydIEJ174U7elcF5V+uGjZE1bViyaEiVZSGINF9yFjK?=
+ =?us-ascii?Q?KiUbgJRIZT2EVSFJoc1+HuDx6a3lhzL9nl56pubx+oAlBV2ariZSo7VqoluL?=
+ =?us-ascii?Q?SCeISamxdCKfO4KfvDDh04UT6k6wRhNwaKKXv7TCKFbqYi3Lc5EDBwh+e/W/?=
+ =?us-ascii?Q?UyHTw4WE5bUKQsDP3k5CcWqHlXD6gHfnR6xwOAePQCTYuET/6LBKj6Yjj2mC?=
+ =?us-ascii?Q?RgfQDWnUI0KuXC3fNPcV5n5guAKEaZd8AvL9VazhJ14v6dzBZKd5dp1tJQoT?=
+ =?us-ascii?Q?nh4mueTUr8Cc5sMVb+AHauZ9l6H/EYo5FbaeYy6WRQPK1lKIUU47tvRs+Pv2?=
+ =?us-ascii?Q?Rw9cBtLwjSlCO8FGTV6YrPAL7Q71M6r5PyO+W0VDTYT6jFlZkLSlmFBzDk03?=
+ =?us-ascii?Q?NrVkxIiqdVu5O+S/X9YZbGelyjDdWbMDY1LPBZuRrVULgOEUhKW5xDl4aPsq?=
+ =?us-ascii?Q?HhLwId/6ZqYfv//bO1GtaBjCg7e8DESdA2+fXLkTDVrvGtpqEk7zd7C1RrLj?=
+ =?us-ascii?Q?JepEBF8nNUizpzGBTRMOUhOeV1ydCMJ7KpmcZYZAreepOLjD/pYsPAcIZmxR?=
+ =?us-ascii?Q?5YWmrMfeT6d0/YBDkFGfEuBYetdCGyw/rBA0L8NWYVlC9OcJq22l/4ZcAFko?=
+ =?us-ascii?Q?1pmZxJB2f/cQ+Sw1JSvDBH2Ynr/Ge0og3hgFvlzJhVA2q6GbKh0Mb1AjXytI?=
+ =?us-ascii?Q?3Bv7KYfx/YMwTp0ZxGw5duFvYlfzRkLeOCTl1grko6goPEQFHkotpsNqycij?=
+ =?us-ascii?Q?CQxou6shV6tkemmSKf1wWStlSh7zH5lCXjEDlZRwK3l9aim84wWktkcGnaIY?=
+ =?us-ascii?Q?bC77A2sdOjwM/HZcmCYJfKCW0WauJbcH0OR5W4Uct2143uhe0XTijzWNhgwy?=
+ =?us-ascii?Q?FQQwF1H392daW66ASdzMVRJTHNrqEZhiCbgw2IxQss7A331qBrlcf0hEkvee?=
+ =?us-ascii?Q?1Rro3aAZ4HmTIqJWLytrT3IfiiuBiRIFzhU=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.128.42;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-wm1-f42.google.com;PTR:mail-wm1-f42.google.com;CAT:NONE;SFS:(13230031)(4636009)(451199024)(58800400005)(33964004)(166002)(107886003)(956004)(26005)(6666004)(2616005)(7596003)(356005)(336012)(83380400001)(7636003)(3480700007)(4006050)(75640400001)(1096003)(8676002)(4326008)(5660300002)(86362001)(15974865002)(33656002)(36756003)(22186003)(152223002)(43540500003);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6700
+X-OrganizationHeadersPreserved: PH0PR01MB6700.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb7.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb7.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92exhyb7.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 21 Nov 2023 15:23:07.3269
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 1feb390a-9307-4360-612b-08dbeaa5c37c
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: DS2PEPF00003442.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: DS2PEPF00003442.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DS2PEPF00003442.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DS1PEPF00017096.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ f3c90a39-c5b8-40d0-bec4-08dbeaa5be3e
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.112;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:w92exhyb7.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2023 15:23:07.0144
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1feb390a-9307-4360-612b-08dbeaa5c37c
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.112];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ DS1PEPF00017096.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR01MB7938
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.8520031
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7002.027
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Ny9EcCsxcVpqVytKbGI5dUE0RVJTUFZvWG94TURjajJiejE3bFk2WjhudGp2?=
+ =?utf-8?B?dnhNVy9pdW9XZG9LZFJ2N0IyNlNFVlNLZzEzYThGaFVRZVJ0V2gyMDFUdElJ?=
+ =?utf-8?B?WEVHTHVlZ1U1YjZYK2RUVCs2U29OU1F6bVNqb0xIQXg3aVdTUG41WkJVODI2?=
+ =?utf-8?B?UjdzSkhkYXBlYTVSNjBrVWN6S1NqN0JCQkJxT3JjWGFkSmVReVd3VE00aGx2?=
+ =?utf-8?B?Nm4wODZqREliM29EVWhyYVNkQldXYTZoeTlPUmlMeHFoVzFMMmZ3ZmJBYkxq?=
+ =?utf-8?B?azl4Y3hzOXk1dC92cFd5L2w4SDM5YlNxcGNZaWd6OEx6VXFJKzltazAxN3ZF?=
+ =?utf-8?B?ZSsrUzZMQnhVUmtrMHcxcUxNNmY5UTFJTWJ2Qjc0Smo0d0k4WFZoNTF0Q1cx?=
+ =?utf-8?B?QlU2QzJXbmNYVGVCdnVnK1ZrTTVjajJ6eTNXTHUrc1EycXdZVzA3aEEwWUhr?=
+ =?utf-8?B?cDRlejdzSlkrZ3V2TTlPUXZ5Y1pMSjllcUo3eTEyTFZVc0Ywd051Tm9QTjJR?=
+ =?utf-8?B?QzNhUkhwRm1oSDcrb0M0T1lVa1ZVQXVrc3ZRK1hRR0g1MlVMS0RlV2VRUHdj?=
+ =?utf-8?B?Tyt6UWVad0Q2bjVVUFhRUTB6YjcyNC9jeVR6SmtzZ3VpcFhOZ3RTTW5TSEE2?=
+ =?utf-8?B?N01XaGhSblp2ZzRUTFR0a0Z4OHM1ZDBSOVYrcmY1dUNpUG1FWkI0eVZlMTd5?=
+ =?utf-8?B?OHVvK2g3SkhkZmdWYUFrTHlVd3REdWtobWplVDZibUlPb3hEbnMxbWp1dUJp?=
+ =?utf-8?B?KzhneDJ6b29UUkRJUEJ6c2x0dURWNlRjT1JkNFJPbGhiUE0zN1hiTzRGUS81?=
+ =?utf-8?B?MnNKZTYzbzJ1UXJIZzNIYWZMRmNiaXE1OW5NRUdWSTZDZlJlNHZPSGV3TkR6?=
+ =?utf-8?B?K1A0QUxuTEhBWC9OOXk1RnR1U1lYME1PSWpqbjVSQ1ViN0FyTDJRQy9QeDly?=
+ =?utf-8?B?UllMam1PcVBoaExDZXRBQjVTYU9Remh6Z3JnNE9tRTNIcjRIVmlCaEZkeW04?=
+ =?utf-8?B?dnRSN2FZcFdTWjlqbGljZU4raHM5dmxOeUsrREwrYkRpQU92NmhBR0o2M2Q3?=
+ =?utf-8?B?WnRqNFFMRG9HSnhSc2NMQmxpYzQ2SThkVWhkYWJaRTNvVzRpSHFZTkNuK1FR?=
+ =?utf-8?B?ZzVwdHJ2a3B3NjZTYUN2V3VrZjBjMk9FVm1YYjZBY2tvSER2eGJmMjBaeFlP?=
+ =?utf-8?B?UVZOVXkzSDJLd29QWmJ5bFM0VHBpMWNkSnMzSzJmU21sOVRCZWpnclAyd3dx?=
+ =?utf-8?B?S1IvenhzeWhQRjkzaHBwb3BvYm5RU3NwS2tBVkVmdW5JNnZSQzJObXZVNUY1?=
+ =?utf-8?B?Rytlem9rS2t4LzFyYUQ5MGpaTlJ0OW1UYVBPSHphRGpZaHFXNWU3RGduUmU0?=
+ =?utf-8?B?UXk1NnlaN0oxcHFCdkJTKytubHkyUGZReTN1aUtRUGFJd2RZMVN1bVRmekFl?=
+ =?utf-8?B?ZVpQdEU4QjZFd1haekRZSkNOMnFSMzFKUUpRUEt0QlpjdHl1SGNMYnFlTFBC?=
+ =?utf-8?B?V3lhWjFpNG9JaTczVkFVa2Rqd29Rb3NxZVVERzhSZXd6YkpQNVRvY3p0dzJN?=
+ =?utf-8?B?cVZBeDZKdHV6dUZJVDZ3Y1FjUFYveWpYcXhpSE8xd2g0eGNQT01Ja0NjT05E?=
+ =?utf-8?B?Q3RCUnN3SUVyM2dxSGs5TGlRM0ZITk51aFN3TXNxTUxDTkozQTBlTitFVXdv?=
+ =?utf-8?B?MFphanV6Q21VL0dYWkxyektscXB5aUVvQnBod1NXemNScWNDZjkyV0VUTGhu?=
+ =?utf-8?B?ZmlxRmFxZlN2N0Vyc3plZm5qTnB4NEg1NWNWcXVXSUNmS09QdzlNeTRNQVJw?=
+ =?utf-8?B?azQxWnlEUzd6S0pCcjBVdTB0ZlhITjFOUXA1eWdKdVdLTnlCVUFhdEJmRWly?=
+ =?utf-8?B?bDIzSk44c2Fma1MxRjUzZlQ2VUFMUFRLYmY2RTJVMHN0dzMyQkZEWHVtV1l6?=
+ =?utf-8?B?NTl3WmZjSGh3UTJHRThGL3UrcDVQWGJpTUF1WXE4dW4rWHRNS0Z2TEpxU2Rp?=
+ =?utf-8?B?N1JPNndWUVBFU3ZMc01rVkQ1Uk1iMWszZnBlYVdtdGpTNmNwV29qK0xISjlh?=
+ =?utf-8?B?WnBJRUc4N3lyTmtzd3JydEQ3K0tPNEo4LzdtQ0RkR3lKOStTdHg5M0RyVU5w?=
+ =?utf-8?B?Yk44ZHdtWVhMRDl5MDdqcERRT3VWU2IrajVpUEIzaU9IV21kZGRRRVJKTXg0?=
+ =?utf-8?B?SFF1TzFHRGJCVnNpY2xPSkc0TjBYdmlDeTRYWXBZcENsd3A3bCt0TjBvWkVw?=
+ =?utf-8?B?QXRXa2lLb2Y5RlFNcEJ1WG9oTzJ4RFJEZmcreUZMcXNKYlhlWXdDZVl1aERK?=
+ =?utf-8?B?SFRPdTU5OUI1WUFsWXNWS1J1bmFFdUwzSmx5cTVieW1tcmpmL0MyQT09?=
+MIME-Version: 1.0
+
+--Apple-Mail=_2A33EFBB-9915-4C72-828C-77C60CEE2C7E
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+
+Hello,
+
+Congrats on the publication of your latest paper on Arxiv =F0=9F=8E=89! =
+It has just been featured by AK <https://twitter.com/_akhaliq> on our =
+=E2=80=9CDaily Papers=E2=80=9D <https://huggingface.co/papers> page.
+
+It would be great if you could  =
+<https://huggingface.co/papers/2305.07017> =
+<https://huggingface.co/docs/hub/paper-pages#claiming-authorship-to-a-pape=
+r>claim the paper to link it to your HuggingFace account, that will help =
+increase the visibility of the paper and get more feedbacks from =
+community.
+
+You just need to click your name on paper page =
+<https://huggingface.co/papers/2311.10751> to get it done.=20
+
+Btw, you could also subscribe on the page =
+<https://huggingface.co/papers> and get AK=E2=80=99s daily selection by =
+email!
+
+Feel free to reach out if you have any questions.
+
+Adina Yakefu
+@HuggingFace =F0=9F=A4=97
+www.huggingface.co <https://huggingface.co/>=
+
+--Apple-Mail=_2A33EFBB-9915-4C72-828C-77C60CEE2C7E
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="utf-8"
+
+<html><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"></=
+head><body style=3D"overflow-wrap: break-word; -webkit-nbsp-mode: space; li=
+ne-break: after-white-space;"><div>Hello,</div><div><br></div><div>Congrats=
+ on the publication of your latest paper<span style=3D"orphans: 2; widows: =
+2; background-color: rgb(255, 255, 255);">&nbsp;on Arxiv =F0=9F=8E=89!&nbsp=
+;</span>It has just been featured&nbsp;by&nbsp;<a target=3D"_blank" class=
+=3D"c-link" data-stringify-link=3D"https://twitter.com/_akhaliq" delay=3D"1=
+50" data-sk=3D"tooltip_parent" href=3D"https://twitter.com/_akhaliq" rel=3D=
+"noopener noreferrer" style=3D"font-weight: bold; box-sizing: inherit; colo=
+r: rgba(var(--sk_highlight,18,100,163),1); text-decoration: none;">AK</a><b=
+>&nbsp;</b>on our&nbsp;<a href=3D"https://huggingface.co/papers">=E2=80=9CD=
+aily Papers=E2=80=9D</a>&nbsp;page.</div><div><br></div><div>It would be gr=
+eat if you could&nbsp;<a href=3D"https://huggingface.co/papers/2305.07017">=
+</a><a href=3D"https://huggingface.co/docs/hub/paper-pages#claiming-authors=
+hip-to-a-paper"></a>claim the paper&nbsp;to link it to your HuggingFace acc=
+ount, that will help increase the visibility of the paper and get more feed=
+backs from community.</div><div><br></div><div>You just need to click your =
+name on&nbsp;<a href=3D"https://huggingface.co/papers/2311.10751">paper pag=
+e</a>&nbsp;to<b>&nbsp;</b>get it done.&nbsp;</div><div><br></div><div>Btw, =
+y<span style=3D"font-family: &quot;Source Sans Pro&quot;, ui-sans-serif, sy=
+stem-ui, -apple-system, system-ui, &quot;Segoe UI&quot;, Roboto, &quot;Helv=
+etica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Col=
+or Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &q=
+uot;Noto Color Emoji&quot;; orphans: 2; widows: 2;">ou could also subscribe=
+ on the&nbsp;</span><a href=3D"https://huggingface.co/papers">page</a><span=
+ style=3D"font-family: &quot;Source Sans Pro&quot;, ui-sans-serif, system-u=
+i, -apple-system, system-ui, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica =
+Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot;Apple Color Emo=
+ji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;, &quot;No=
+to Color Emoji&quot;; orphans: 2; widows: 2;">&nbsp;and get&nbsp;</span><sp=
+an style=3D"color: rgb(29, 28, 29); font-family: NotoSansSC, Slack-Lato, Sl=
+ack-Fractions, appleLogo, sans-serif; font-variant-ligatures: common-ligatu=
+res; orphans: 2; widows: 2; text-decoration-thickness: initial; text-decora=
+tion-style: initial; text-decoration-color: initial;">AK=E2=80=99s daily se=
+lection&nbsp;</span><span style=3D"font-family: &quot;Source Sans Pro&quot;=
+, ui-sans-serif, system-ui, -apple-system, system-ui, &quot;Segoe UI&quot;,=
+ Roboto, &quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-ser=
+if, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe =
+UI Symbol&quot;, &quot;Noto Color Emoji&quot;; orphans: 2; widows: 2;">by e=
+mail</span><span style=3D"font-family: &quot;Source Sans Pro&quot;, ui-sans=
+-serif, system-ui, -apple-system, system-ui, &quot;Segoe UI&quot;, Roboto, =
+&quot;Helvetica Neue&quot;, Arial, &quot;Noto Sans&quot;, sans-serif, &quot=
+;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol=
+&quot;, &quot;Noto Color Emoji&quot;; orphans: 2; widows: 2; background-col=
+or: rgba(243, 244, 246, 0.8);">!</span></div><div><br class=3D"Apple-interc=
+hange-newline"></div><div>Feel free to reach out if you have any questions.=
+</div><div><div style=3D"line-height: 1.656; margin-top: 0pt; margin-bottom=
+: 0pt;"><div style=3D"orphans: 2; widows: 2; line-height: 1.656; margin-top=
+: 0pt; margin-bottom: 0pt;"><br></div><div style=3D"orphans: 2; widows: 2; =
+line-height: 1.656; margin-top: 0pt; margin-bottom: 0pt;"><div style=3D"col=
+or: rgb(136, 136, 136); line-height: 1.656; margin-top: 0pt; margin-bottom:=
+ 0pt;"><div style=3D"line-height: 1.656; margin-top: 0pt; margin-bottom: 0p=
+t;"><span style=3D"font-size: 11px;"><b><span style=3D"color: rgb(34, 34, 3=
+4); font-family: Arial;">Adina Yakefu</span><span style=3D"color: rgb(34, 3=
+4, 34); font-family: Arial;"></span></b></span></div><div style=3D"caret-co=
+lor: rgb(0, 0, 0); color: rgb(0, 0, 0); line-height: 1.656; margin-top: 0pt=
+; margin-bottom: 0pt;"><span style=3D"font-size: 11px; font-family: Arial; =
+font-weight: 700; vertical-align: baseline;">@</span><span style=3D"font-si=
+ze: 11px; font-family: Arial; font-weight: 700; vertical-align: baseline;">=
+HuggingFac</span><span style=3D"font-size: 11px; font-family: Arial; font-w=
+eight: 700; vertical-align: baseline;">e&nbsp;=F0=9F=A4=97</span></div><div=
+ style=3D"color: rgb(0, 0, 0); line-height: 1.656; margin-top: 0pt; margin-=
+bottom: 0pt;"><span style=3D"vertical-align: baseline; font-size: 11px;"><d=
+iv style=3D"color: rgb(34, 34, 34); font-family: Arial; font-weight: 700;">=
+<a href=3D"https://huggingface.co/" target=3D"_blank">www.huggingface.co</a=
+></div></span></div></div></div></div></div></body></html>=
+
+--Apple-Mail=_2A33EFBB-9915-4C72-828C-77C60CEE2C7E--

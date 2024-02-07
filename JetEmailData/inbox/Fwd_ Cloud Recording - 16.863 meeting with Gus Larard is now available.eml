@@ -1,0 +1,529 @@
+Received: from BL3PR01MB7044.prod.exchangelabs.com (2603:10b6:208:35f::21) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Fri, 1 Dec 2023 17:59:55
+ +0000
+Received: from BN9PR03CA0711.namprd03.prod.outlook.com (2603:10b6:408:ef::26)
+ by BL3PR01MB7044.prod.exchangelabs.com (2603:10b6:208:35f::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.27; Fri, 1 Dec 2023 17:59:54 +0000
+Received: from SA2PEPF0000150B.namprd04.prod.outlook.com
+ (2603:10b6:408:ef:cafe::6) by BN9PR03CA0711.outlook.office365.com
+ (2603:10b6:408:ef::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.26 via Frontend
+ Transport; Fri, 1 Dec 2023 17:59:54 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.100)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ gmail.com discourages use of 18.9.1.100 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.100) by
+ SA2PEPF0000150B.mail.protection.outlook.com (10.167.242.43) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Fri, 1 Dec 2023 17:59:53 +0000
+Received: from w92extsm2.exchange.mit.edu (18.7.74.56) by
+ oc11exhyb4.exchange.mit.edu (18.9.1.100) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Fri, 1 Dec 2023 12:59:31 -0500
+Received: from oc11exhyb2.exchange.mit.edu (18.9.1.98) by
+ w92extsm2.exchange.mit.edu (18.7.74.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Fri, 1 Dec 2023 12:59:30 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ oc11exhyb2.exchange.mit.edu (18.9.1.98) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Fri, 1 Dec 2023 12:59:30 -0500
+Received: from BYAPR11CA0056.namprd11.prod.outlook.com (2603:10b6:a03:80::33)
+ by CH0PR01MB7138.prod.exchangelabs.com (2603:10b6:610:eb::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.27; Fri, 1 Dec 2023 17:59:27 +0000
+Received: from CO1PEPF000044F1.namprd05.prod.outlook.com
+ (2603:10b6:a03:80:cafe::20) by BYAPR11CA0056.outlook.office365.com
+ (2603:10b6:a03:80::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.24 via Frontend
+ Transport; Fri, 1 Dec 2023 17:59:26 +0000
+Authentication-Results-Original: spf=pass (sender IP is 209.85.208.44)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of gmail.com designates
+ 209.85.208.44 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.208.44; helo=mail-ed1-f44.google.com; pr=C
+Received: from mail-ed1-f44.google.com (209.85.208.44) by
+ CO1PEPF000044F1.mail.protection.outlook.com (10.167.241.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Fri, 1 Dec 2023 17:59:26 +0000
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-54c61fac35bso1029758a12.3;
+        Fri, 01 Dec 2023 09:59:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701453564; x=1702058364; darn=mit.edu;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M0POaY5jhipUkI2bClrc7bc/QCTcL7P7l0nEEgbI5u4=;
+        b=a82hH37wKVhpoNczcykH8noFYE3BUz53wYsynP/Y6sJKiZZr+uEHWvkLh1Gyw7MjbB
+         7RkAuh59fX6diTc9fKCPLVXkLjn58tPXE6h2x6MI6ojNzTp+eDGepSpEOaRDggv9GhyI
+         nSWGMI9r6LSAjCnHviAwkTGeDRLy8jlaS1M2ljpg/9WokJ6FGeP+VQjzec+I32juVS4M
+         G2VNv9e+NAE9tmDyiiBMWvzsSCoOHDRRLdGir8niYcufQMyj0nFmOqqKTtlZR9QUohQm
+         JGNze32kUv9Q4bp3h3NJxkanCNls/NsMCmAY0mua5dCTmtjpQqeAbALvV+/i766ZFhrw
+         hKFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701453564; x=1702058364;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M0POaY5jhipUkI2bClrc7bc/QCTcL7P7l0nEEgbI5u4=;
+        b=xUTi1NNFPaykosjYYfsVOIUWXxyQllzjIgn4xwt/ukAb2MYh8herARZuC+cr7Gik+y
+         hDBn5ATlqf483qQd+g2H6sC+SVsSB9WoHc7qv7DNuJd1nCsN7UdtpLpjU4DoDLd+e+o4
+         SyKdDm1RWz/uhyCHAyL3W+JK+vrI9v2S3AuTBJxl3Cp4UPVrVDpEl8fbi1QCRzRfoVwt
+         HIVFsPjJCx5LDHUH7tLCacUWQU4FdgFRWK2xaxNMqFewrjChdN3ESHsrjM2EEgHV3aB2
+         srfomMWzG2wSV9TK18I+3nejzsN0ekBX9epYw2Z6f+/ndN1ilZiMEOzCccVUNsj++fYh
+         +0Uw==
+X-Gm-Message-State: AOJu0Yy+yZ7DaR5JBIoIcLcKfeJ7ngqFR7cUD8Q1azpP/aMNvO8jVStg
+	xyRcopYmyhJg8i35B/Q2wRKAfRDWYhs+JC0I3dgl65aM
+X-Google-Smtp-Source: AGHT+IF34OmueCcPm3MrAo43LVw2RLJ7dhpzNj9zZg9EsJSaD82Zr2saOzW/mZIWjOBxskD1TFWSInv1yWJTwp+7ehU=
+X-Received: by 2002:a50:8745:0:b0:54c:4837:7587 with SMTP id
+ 5-20020a508745000000b0054c48377587mr1419409edv.51.1701453563917; Fri, 01 Dec
+ 2023 09:59:23 -0800 (PST)
+References: <es995Q89QqCGj4I5rtdvhg@geopod-ismtpd-21>
+In-Reply-To: <es995Q89QqCGj4I5rtdvhg@geopod-ismtpd-21>
+From: Nancy Leveson <leveson.nancy8@gmail.com>
+Date: Fri, 1 Dec 2023 12:59:10 -0500
+Message-ID: <CABMQRd7h5w2ZoJ2bT8pwh8Qy1nC=76iUo1bmUQpkGYwa-fTuZQ@mail.gmail.com>
+Subject: Fwd: Cloud Recording - 16.863 meeting with Gus Larard is now available
+To: Kristen Joyce Ammons <kjammons@mit.edu>, Natalie Ann Basnight <natbas35@mit.edu>, Tim Blackford <tblackfd@mit.edu>, 
+	Madison M Bronnimann <bronnima@mit.edu>, Braden Corrigan Brower <bcbrower@mit.edu>, Jiannan Cao <jiannan@mit.edu>, 
+	Don Duval <donduval@mit.edu>, Noam David Eisen <eisenn@mit.edu>, Joseph Estep <joeestep@mit.edu>, 
+	Leonardo Gallo <leogallo@mit.edu>, Lauren E Gutierrez <laureng2@mit.edu>, Jack Martin Hamel <jmhamel@mit.edu>, 
+	Francisco Javier Jeldres <fjeldres@mit.edu>, Billy Kline <wkline@mit.edu>, Ayaka Miyamoto <ayakam@mit.edu>, 
+	Cecilia Perez Gago <cecipg@mit.edu>, Connor Daniel Rude <rudc6118@mit.edu>, Ahaana Sarup <asarup@mit.edu>, 
+	Maryam Shamsie <mas097@mit.edu>, Anup Sreekumar <anupsk@mit.edu>, Kensuke Suzuki <ksuzuki1@mit.edu>, zukio@mit.edu, 
+	Christopher Douglas Tommila <ctommila@mit.edu>, vaccaro@mit.edu, Stephanie Walker <steph151@mit.edu>, 
+	Yutaro Watanabe <yutaro22@mit.edu>, Bingnan Zhou <bnzhou@mit.edu>, Carissma McGee <cmcgee32@mit.edu>, 
+	Joana N Nikolova <jonik@mit.edu>, Isabel de Luis <ideluis@olin.edu>, Andrew Kopeikin <kopeikin@mit.edu>, 
+	Pauline Harrington <ph1@mit.edu>, Adam Munekata <AMunekata@outlook.com>, Lawrence Wong <l_wong@mit.edu>, 
+	Elizabeth White Baker <bakerew@vcu.edu>, Andy Canady <canadyam@mit.edu>, 
+	Natalie Basnight <nbasnight75@gmail.com>, John Thomas <jthomas4@mit.edu>, 
+	Rodrigo Lopes Rose <rlrose@mit.edu>, Michael Stone <michael.r.stone@gmail.com>, 
+	"WILLIAM E JR Col USAF AETC AWC/DEW YOUNG (william.young.3@us.af.mil)" <wyoung@mit.edu>, Michael Sebasti Schmid <schmidm@mit.edu>, Sarah Summers <sesumme@gmail.com>, 
+	John Thomas Clarke Barstow <jbarstow@mit.edu>, Alexander Hillman <ahillman@mit.edu>, Brittany Bishop <brit901@mit.edu>, 
+	Justin Wei Siang Poh <jpoh@mit.edu>
+Content-Type: multipart/alternative; boundary="000000000000477a6e060b768767"
+Return-Path: leveson.nancy8@gmail.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CO1PEPF000044F1:EE_|CH0PR01MB7138:EE_|SA2PEPF0000150B:EE_|BL3PR01MB7044:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 84c499f4-3c4a-4a36-75e4-08dbf2975271
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?p7+cTCMYJGuKcPC+E6dC8pIF5sjsWdG9h9W+sw7TwS69omB2We1HpxPbfjfA?=
+ =?us-ascii?Q?8ETCII7uaLzf9T3ZXQs58HC2DZT/4849zWLsAe4nFXLRwOmFFFFptNxYnM/9?=
+ =?us-ascii?Q?ZlgXUQjAX8T8wfvuuE1UCHD8xitpUcGU50RHs9a9xzEpWrEKTdupTdq6116k?=
+ =?us-ascii?Q?DgF08ePmJ/pezQ4CeZfGGn/KkwdjFlOQLj/OZ4MoeOcWfX75OvQQq/eAQKf9?=
+ =?us-ascii?Q?k1SKCF3OF2uztdufbQQecLn1igKBslMqKfWb+hosIlo/Nexe4nmvNAUIYo6q?=
+ =?us-ascii?Q?g2pxPXGtaA206BIgBWVRGtq9xn8G/UCoaLtGK0LTEEqFYG6hp46jTmhHqQ6F?=
+ =?us-ascii?Q?5rpAjkdyLccLFe7kNporZCnSjGIGifvY5XUkyeY/D9ymPqSGS3ytT0wwpL+S?=
+ =?us-ascii?Q?mioILEH6OHv/AEVJjY0EYhiZfg6vzSQUXhxiSF97ZvDcZqyNuEam0jbu6X/n?=
+ =?us-ascii?Q?/CG2MoCoZC4qVEc0hAN4UorpeLJcrbqeo3xL8Nhz4x5tfMXvb7wJZofwT4C3?=
+ =?us-ascii?Q?kXLLGkp1Vu0TWSz7kSd6fr7gqpPIqpg2diadB+wkS5Kw8FN77/Q9FirLAZdp?=
+ =?us-ascii?Q?w1rDxZUwFTtczOMh5dA0/wrnB0IxOIBbJNG5xofCH1CHCxztsn0bbVq9pToJ?=
+ =?us-ascii?Q?ygXDe7CBkECsHhk6Y9dFtGA+zJCtZhQdNdP0JXXzg481JKwtIZXr/aQALuVc?=
+ =?us-ascii?Q?OhS+8IJyoXuxYwglzysME4JgKhCREGpXQSg0BwvSYmG4TbF0s6I/LwA4uF4O?=
+ =?us-ascii?Q?kW4UtVU9f/qp65x0N9yWNCuC+G3903y6Qxm8CnwD9a3l23GSojQEQtlwePVc?=
+ =?us-ascii?Q?je1BmmZ08ReiGhLbh6qVUA0DvrVQn3N4ik7w8umRlGlx9powLfcgULZMnp5J?=
+ =?us-ascii?Q?YFUxrGKNVzUuS3u8xFWLSuChpdj1oIhr6Qby/0Eks+qdTGKgbJiX56qLj4RB?=
+ =?us-ascii?Q?6bfPiJEEpLQTnmZCsGw5RDhdOMVM9fNY93tbbfu7aAgrDT69YxmHKC8AExNi?=
+ =?us-ascii?Q?oJI2WxMAHFF5l1G43K3gJO2P76Lf9ULDC7g2/mEvHgSkqYqMkj5bIVQP+rnA?=
+ =?us-ascii?Q?4CDMbz7MrCBXtHk5HWwDHDfRlplRVWdqVy5N1Krzh4FtwkwPOlecvCv5nvdI?=
+ =?us-ascii?Q?/4NE+pjh6gI/2XbIoJNZSS4Id68CHnCoQTqlf0MWXY92NZ2dubshTB6si+S6?=
+ =?us-ascii?Q?mDy5T9Z4PrwLPMsjsmVu3CPZ/4OU6l2RFHUN1gux8PxfzuB6PcZtLYUYH6TX?=
+ =?us-ascii?Q?50zfhDQmmys7sFbr3aGu9a51G39wSLqmgnqJ59e3gY25/tlSB5IzhbhYX6lL?=
+ =?us-ascii?Q?3i7uBtlNfv4my6CGDr8ZoXKf3qq8+zLS0ICUQPL0CdNKt89vpWhiVC+uDLhU?=
+ =?us-ascii?Q?wLx22UbxEVjc1FQwSPXWkZkulkhBxTBvc3+QHcjkbqzzlC88OKFGfgkcbZmn?=
+ =?us-ascii?Q?Et90XMoGNSyahGZo9CJ2qejwPPXdkx3urPTv6VzMKTXS00ksRn2lRQKoIf6A?=
+ =?us-ascii?Q?ZACzyPnqKRc2CyGXozkMQrflKmtzR1rc0xXNLEmMFHo48BMYvts75X3yTB8r?=
+ =?us-ascii?Q?19PQya9Ip2F+npe5HfXRWG7o/gij4RWk0woLr8MOZUrLZzE7ymE0WgGbORta?=
+ =?us-ascii?Q?DIFe9r+xBL4u2V6q6Ds94/wHNpcSvhzNaQn3bB8HFNIZSa0QokHmhFFVPFfI?=
+ =?us-ascii?Q?BE3UD2a4ngb5Wa7+CQRjMuZrYHiK/iJH6HQlk2HWaQyXXRhMpI3D5lbbcHPP?=
+ =?us-ascii?Q?SQ23hAu0Jg=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:209.85.208.44;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-ed1-f44.google.com;PTR:mail-ed1-f44.google.com;CAT:NONE;SFS:(13230031)(4636009)(451199024)(1690799017)(83380400001)(26005)(336012)(1096003)(450100002)(8676002)(75640400001)(73392003)(86362001)(53546011)(33964004)(166002)(356005)(7636003)(82202003)(7596003)(6666004)(966005)(45080400002)(110136005)(42186006)(76482006)(921008)(40140700001)(55446002)(4006050)(7416002)(5660300002);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB7138
+X-OrganizationHeadersPreserved: CH0PR01MB7138.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb2.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb2.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92extsm2.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 01 Dec 2023 17:59:54.0208
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 84c499f4-3c4a-4a36-75e4-08dbf2975271
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: SA2PEPF0000150B.namprd04.prod.outlook.com
+X-CrossPremisesHeadersFiltered: SA2PEPF0000150B.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ SA2PEPF0000150B.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CO1PEPF000044F1.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 072c4e72-792b-4dbd-bfc4-08dbf2974219
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.100;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb4.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2023 17:59:53.5208
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 84c499f4-3c4a-4a36-75e4-08dbf2975271
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.100];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CO1PEPF000044F1.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR01MB7044
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.1511077
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7046.027
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?anR1ZVhCc1Mwd1BLNVR6NUJtVTFZdHU5NEw3NFRaY09sSlNaUnZCY0xCeW5u?=
+ =?utf-8?B?VUxCNXVQcWJTcWIyLzBoUytUTldtTzYwcVl0eWZna0xiZU5UY1hZQ2tKNndQ?=
+ =?utf-8?B?ZnlXbXUrbHp0RXNLLzBMaEFVNkxFdDR3dUVuUFhkNkNmbVVMdmlDblVYYmR5?=
+ =?utf-8?B?a3FXRVE4UjZiZHV2bk5NTnBVZWRad0xyWUlIMTFlbTFBOVpidDZidjA3UlZ5?=
+ =?utf-8?B?dDQvbjl2WlVpZ2pQYVpmeGh1WlVZRnlDK2puckdiSlVhT3FTSjBOK2NRWmdG?=
+ =?utf-8?B?N1hDU2tJcDAvQTltTlhCWXU3b1hxV0NmcUp0bkdxU0ZqOS9HTytLcnIzM2dP?=
+ =?utf-8?B?bmQvQ0pFVXpVUEtXK0QxTkw4UldRbWplaUpRNG9KL0s2aWNNdWZsMkwwZUVw?=
+ =?utf-8?B?ZktCVnI3OWRIemNwSWhYdnh6MnZMMHVKM3dpSm1yTGNINFkvYmpoU3B0ZERM?=
+ =?utf-8?B?U09OOUNVeHlRQVhxZktSVGhrc2NlRUM5bHEwMnZtV3gwUENERDN2WVpqdW92?=
+ =?utf-8?B?Vm01elJkUFNmUmtzQWRDNDJ5enJtUldtclQ1aEtBSmhGc2kwdXNzYXVsODNX?=
+ =?utf-8?B?REpJbjdrSmhoNzRlTzh3UGlTOXJwaFppTngydFEyb1ZkTHV6SURXRFMxRTY2?=
+ =?utf-8?B?bjgrWEwxQllLOExsOWN1c29WQVRDajlLZUdyZjNCRjA1L0hnR284QzlQeDdK?=
+ =?utf-8?B?cDZ6N3VIUXNCcW1WdFdpRVpxaEtHNlc1eVp3clZJQjBsTUgvY21vdExFSDhn?=
+ =?utf-8?B?Skd5Z0c0OXBnTmo3L0JVaDZTVHpVdWFSMlR5bDZuVHZ1MUV1OHo4NG1NK1Nv?=
+ =?utf-8?B?NWFpRnNjeEhVN0hBcUxxNmVTVGpNM0pwSk1ISW1kWjE1N2ZOUmtXR1haK0Rm?=
+ =?utf-8?B?WHNRbGwzSGl5UFRrODdmSVcyUit0RjVEOW4ya0dCb1dSeFVUSVlCTXJwdEhI?=
+ =?utf-8?B?UDZ0ZlIvM3daSVFadTdpYWpOMFQ4RmFKem5vWFA3WVRkU051RjNJNDExdUZ4?=
+ =?utf-8?B?SHFaVmpCT2ppY3B2eTZWM2d3WjlvQ1NVd0FVRFg5cVo3Q3JOYXVIQXBpQWV3?=
+ =?utf-8?B?YWF0NTZCT0dBWWZTTlRQU1Myc0VNRDR5NVpqZU91K2pkRnl3Q0lTbUEyVitT?=
+ =?utf-8?B?RXY1VUJJWkFQVzB0ZWVhTnlGNlcrZWN1RHVYYTEzeUpoSU1qcm1hMnBVZWsy?=
+ =?utf-8?B?NDJxRWwyYXZ5L1k3S0pJQTgweDRMZHRURnFlRitPbEovWStmb2xkaEc1OXZk?=
+ =?utf-8?B?ZnI3bkNZbk9aOWJRVmNjbFBVSEtJeFdXL3dsbXYxMTFGU1paUDY1NDY1SzJI?=
+ =?utf-8?B?NVlua250RUJ6KytJb3dkakRhVGcvWVZzRTZRdHVNVEtBOVVsK1duRWFMUm5j?=
+ =?utf-8?B?ZGZEb0sxaFFqMkdvRWUxdmpiTE52SUpOdWRwaCsrWFdxMmtxSjBDWk0vZC82?=
+ =?utf-8?B?SU9kR1hMa2YxeDJXUGovdGFnTXpsTVBUUmEvYkJwTU9GcGJFMDNsZ25sQnBx?=
+ =?utf-8?B?T3hiaWhIMzNhZEZnZnpjZVkzRUwwSjRjNDY1aHh5UmF6disvUGpEVVBoUitY?=
+ =?utf-8?B?UGJ1dFdWMW1lNXJrM3hsNkxNdEhMeTdxdnl1bDE0UFYyYnBGR0FsZmRCczRU?=
+ =?utf-8?B?VDBpUzBWa2pkZzRRd01nSFdmMEs1QzA3aERjZnMvNWUxVEFQWVM5OVhicG50?=
+ =?utf-8?B?dGZXL2Y4MHVNSG50WjltdVBGSEFiQ3d6Tkx2ZEMzQWRpTlE1L1hMTkdycWp1?=
+ =?utf-8?B?YWVzc0NUSXNKRUdqd1hNdUx2SXlLOVBUWUdRczhKaVhtU2hRSnBJZkxyRkg4?=
+ =?utf-8?B?NjlZQzIzdjUxMzl3YzVlZk1oRHZjUG5wOHNNQ3ZwY2IvSUdTRzhhb0RTV0JC?=
+ =?utf-8?B?aFJGR2p3aFFRcmhNdktjNUJHTjd6T2hJMCtocXlnN2h0SWhiTkxBMGpTZUFI?=
+ =?utf-8?B?RGIxZTRVQzNGYnBLL2hQbkpXeXVYOVVhcWF4Uk5oL2VWRklHSlZXaHdHa3Zs?=
+ =?utf-8?B?ZktnUFBEZTRPU3lnNWxVZk1TRjlFWitodEZ3S014SXlsV0lydk5aRGt5Q2dh?=
+ =?utf-8?B?OFdJM01abFIzcFB4eHl4dUREQjFMb3ViRnpzcWlCREF0UUZRUUhvb296R2dB?=
+ =?utf-8?B?ZHo2MEJZM0ZaUFFCalNLWDBPeXBMb2Z5OE56QVF2MVlBTGRNVjJBUTJnTHls?=
+ =?utf-8?B?ZVRVK1U2UjhWbC9JZnJ5VDZla2E2cUlxUmF4NHFIQ0lqSjk4SzRCWTBlcWZW?=
+ =?utf-8?Q?/mZWtMOpXufsz2hVQHOM3eXDfqMeyQVYuLoPxVwnX4=3D?=
+MIME-Version: 1.0
+
+--000000000000477a6e060b768767
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+You can view the cloud recording of Gus's session using the link below.
+
+Warm Regards, Nancy
+
+---------- Forwarded message ---------
+From: Zoom <no-reply@zoom.us>
+Date: Fri, Dec 1, 2023 at 12:57=E2=80=AFPM
+Subject: Cloud Recording - 16.863 meeting with Gus Larard is now available
+To: <leveson@mit.edu>
+
+
+<https://zoom.us>
+
+Hi Nancy G Leveson,
+Your cloud recording is now available.
+Topic: 16.863 meeting with Gus Larard
+Date: Dec 1, 2023 08:59 AM Eastern Time (US and Canada)
+  View Detail
+<https://mit.zoom.us/recording/detail?meeting_id=3DTFr5mli5R1q%2B5I0CAbhffw=
+%3D%3D>
+    Share
+<https://mit.zoom.us/recording/detail?meeting_id=3DTFr5mli5R1q%2B5I0CAbhffw=
+%3D%3D&show_share=3Dtrue>
+
+
+You can copy the recording information below and share with others
+https://mit.zoom.us/rec/share/3FoCs2Lk37-85Kn3V1xMKf3_EVN7MtRwQ5FpaFEm6no9o=
+TlOt60sKQ7v2256ORNB._gWnVX4imJ9jA3X8
+Thank you,
+-The Zoom Team
+[image: Twitter] <https://twitter.com/zoom> [image: LinkedIn]
+<https://www.linkedin.com/company/zoom-video-communications/> [image: Blog]
+<https://blog.zoom.us/>
++1.888.799.9666
+=C2=A92023 Zoom Video Communications, Inc.
+Visit zoom.us
+55 Almaden Blvd
+San Jose, CA 95113
+<https://www.google.com/maps/place/55+Almaden+Blvd,+San+Jose,+CA+95113/@37.=
+3328541,-121.897097,17z/data=3D!3m1!4b1!4m5!3m4!1s0x808fcca40adf3cb7:0x5a2d=
+33d3593e0a33!8m2!3d37.3328541!4d-121.8949083>
+
+--000000000000477a6e060b768767
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><div class=3D"gmail_default" style=3D"font-size:small">You c=
+an view the cloud recording of Gus's session using the link below.</div><di=
+v><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gmail_signat=
+ure"><div dir=3D"ltr"><div><div dir=3D"ltr"><div><div dir=3D"ltr"><div><div=
+ dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D=
+"ltr"><div><font face=3D"comic sans ms, sans-serif"><br></font></div><div><=
+font face=3D"comic sans ms, sans-serif">Warm Regards, Nancy</font></div><di=
+v><br></div></div></div></div></div></div></div></div></div></div></div></d=
+iv></div></div><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_a=
+ttr">---------- Forwarded message ---------<br>From: <strong class=3D"gmail=
+_sendername" dir=3D"auto">Zoom</strong> <span dir=3D"auto">&lt;<a href=3D"m=
+ailto:no-reply@zoom.us">no-reply@zoom.us</a>&gt;</span><br>Date: Fri, Dec 1=
+, 2023 at 12:57=E2=80=AFPM<br>Subject: Cloud Recording - 16.863 meeting wit=
+h Gus Larard is now available<br>To:  &lt;<a href=3D"mailto:leveson@mit.edu=
+">leveson@mit.edu</a>&gt;<br></div><br><br><div class=3D"msg448575445853646=
+4364">    <u></u>
+   =20
+   =20
+       =20
+       =20
+	=09
+   =20
+    <div style=3D"height:100%!important;width:100%!important;background-col=
+or:#f7f9fa;margin:0;padding:0">
+   =20
+        <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" align=3D"ce=
+nter" style=3D"font-family:Arial,Helvetica,sans-serif;font-size:13px;color:=
+#131619;background-color:#f7f9fa;width:100%;height:100%;padding-bottom:10px=
+">
+        <tbody><tr>
+            <td style=3D"vertical-align:top">
+                <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" ali=
+gn=3D"center" style=3D"width:600px">
+                    <tbody><tr>
+                        <td style=3D"vertical-align:top;padding:0px;backgro=
+und-color:#f4f5f9">
+                            <table border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" align=3D"center" style=3D"margin-left:0px;margin-right:0px;width:1=
+00%;background-color:#ffffff;padding-bottom:37px">
+                               =20
+                                <tbody><tr>
+                                    <td style=3D"padding-top:28px;padding-b=
+ottom:28px;padding-left:32px;background-color:#0b5cff;text-align:left">
+                                        <a href=3D"https://zoom.us" target=
+=3D"_blank">
+                                            <img src=3D"https://click.zoom.=
+us/l/84442/2022-12-29/c4ns1t/84442/1672332921RKagdau8/Logo_white_2022.png" =
+style=3D"border-style:solid" width=3D"110" height=3D"25" border=3D"0">
+                                        </a>
+                                    </td>
+                                </tr>
+                               =20
+                                <tr>
+                                    <td style=3D"padding-left:32px;padding-=
+right:32px">
+                                        <table border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" align=3D"center" style=3D"width:100%;font-size:16px;co=
+lor:#131619">
+                                        </table>
+		<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+style=3D"max-width:600px" width=3D"100%">
+			<tbody>
+			<tr>
+				<td align=3D"left" class=3D"m_-4420694971801617271BodyCopy" style=3D"pa=
+dding:0 30px;padding-bottom:20px;font-family:'Lato',Helvetica,sans-serif;fo=
+nt-size:14px;line-height:17px;color:#ffffff;font-weight:400;color:#232333;l=
+etter-spacing:.01em;text-align:left;margin-top:40px">
+					<div style=3D"margin-top:40px">Hi  Nancy G Leveson,</div>
+						<div style=3D"margin-top:8px">Your cloud recording is now available.<=
+/div>
+						<div style=3D"margin-top:24px">
+							Topic: 16.863 meeting with Gus Larard<br>
+							Date: Dec 1, 2023 08:59 AM Eastern Time (US and Canada)
+						</div>
+				</td>
+			</tr>
+			<tr>
+				<td align=3D"left" class=3D"m_-4420694971801617271BodyCopy" style=3D"pa=
+dding:0 30px">
+						<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" align=3D"left=
+">
+							<tbody>
+							<tr>
+								<td style=3D"padding-left:16px;padding-top:8px;padding-bottom:8px;b=
+ackground-color:#2d8cff;border-top-left-radius:8px;border-bottom-left-radiu=
+s:8px">
+									&nbsp;
+								</td>
+								<td style=3D"background-color:#2d8cff;font-family:'Lato',Helvetica,=
+sans-serif;font-size:14px;line-height:20px;font-weight:500;padding-top:8px;=
+padding-bottom:8px">
+									<a style=3D"color:#ffffff;text-decoration:none" href=3D"https://mi=
+t.zoom.us/recording/detail?meeting_id=3DTFr5mli5R1q%2B5I0CAbhffw%3D%3D" tar=
+get=3D"_blank">
+										View Detail
+									</a>
+								</td>
+								<td style=3D"padding-right:16px;padding-top:8px;padding-bottom:8px;=
+background-color:#2d8cff;border-top-right-radius:8px;border-bottom-right-ra=
+dius:8px">
+									&nbsp;
+								</td>
+								<td width=3D"16px">&nbsp;</td>
+									<td style=3D"padding-left:16px;padding-top:8px;padding-bottom:8px;=
+background-color:#f1f4f6;border-top-left-radius:8px;border-bottom-left-radi=
+us:8px">
+										&nbsp;
+									</td>
+									<td style=3D"background-color:#f1f4f6;font-family:'Lato',Helvetica=
+,sans-serif;font-size:14px;line-height:20px;font-weight:500;padding-top:8px=
+;padding-bottom:8px">
+										<a style=3D"color:#000000;text-decoration:none" href=3D"https://m=
+it.zoom.us/recording/detail?meeting_id=3DTFr5mli5R1q%2B5I0CAbhffw%3D%3D&amp=
+;show_share=3Dtrue" target=3D"_blank">
+											Share
+										</a>
+									</td>
+									<td style=3D"padding-right:16px;padding-top:8px;padding-bottom:8px=
+;background-color:#f1f4f6;border-top-right-radius:8px;border-bottom-right-r=
+adius:8px">
+										&nbsp;
+									</td>
+							</tr>
+							</tbody>
+						</table>
+				</td>
+			</tr>
+				<tr>
+					<td align=3D"left" class=3D"m_-4420694971801617271BodyCopy" style=3D"p=
+adding:0 30px;padding-bottom:10px;font-family:'Lato',Helvetica,sans-serif;f=
+ont-size:12px;line-height:16px;color:#6e7680;font-weight:normal;letter-spac=
+ing:.01em;text-align:left">
+						<div style=3D"margin-top:24px">
+							<div style=3D"margin-bottom:20px">You can copy the recording informa=
+tion below and share with others</div>
+							<div style=3D"margin-top:7px">
+								<a style=3D"color:#0e71eb" href=3D"https://mit.zoom.us/rec/share/3F=
+oCs2Lk37-85Kn3V1xMKf3_EVN7MtRwQ5FpaFEm6no9oTlOt60sKQ7v2256ORNB._gWnVX4imJ9j=
+A3X8" target=3D"_blank">https://mit.zoom.us/rec/share/3FoCs2Lk37-85Kn3V1xMK=
+f3_EVN7MtRwQ5FpaFEm6no9oTlOt60sKQ7v2256ORNB._gWnVX4imJ9jA3X8</a>
+							</div>
+						</div>
+					</td>
+				</tr>
+			<tr>
+				<td align=3D"left" class=3D"m_-4420694971801617271BodyCopy" style=3D"pa=
+dding:0 30px;font-family:'Lato',Helvetica,sans-serif;font-size:14px;line-he=
+ight:17px;color:#ffffff;font-weight:400;color:#232333;letter-spacing:.01em;=
+text-align:left">
+					<div style=3D"margin-top:24px">Thank you,</div>
+					<div>-The Zoom Team</div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+                                    </td>
+                                </tr>
+                               =20
+                                <tr>
+                                    <td style=3D"padding-top:56px;backgroun=
+d-color:#ffffff">
+                                        <table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0">
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                    <a href=3D"https://twit=
+ter.com/zoom" style=3D"text-decoration:none;display:inline-block" target=3D=
+"_blank">
+                                                        <img alt=3D"Twitter=
+" border=3D"0" height=3D"32" src=3D"https://click.zoom.us/l/84442/2019-12-2=
+6/bfs1bv/84442/140021/Social_Twitter_2020.png" style=3D"width:32px;height:3=
+2px;border-width:0px;border-style:solid">
+                                                    </a>
+                                                </td>
+                                                <td style=3D"padding-left:1=
+6px;padding-right:16px">
+                                                    <a href=3D"https://www.=
+linkedin.com/company/zoom-video-communications/" style=3D"text-decoration:n=
+one;display:inline-block" target=3D"_blank">
+                                                        <img alt=3D"LinkedI=
+n" border=3D"0" height=3D"32" src=3D"https://click.zoom.us/l/84442/2019-12-=
+26/bfs1bs/84442/140023/Social_LinkedIn_2020.png" style=3D"width:32px;height=
+:32px;border-width:0px;border-style:solid">
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href=3D"https://blog=
+.zoom.us/" style=3D"text-decoration:none;display:inline-block" target=3D"_b=
+lank">
+                                                        <img alt=3D"Blog" b=
+order=3D"0" height=3D"32" src=3D"https://click.zoom.us/l/84442/2019-12-26/b=
+fs1bx/84442/140025/Social_Blog_2020.png" style=3D"width:32px;height:32px;bo=
+rder-width:0px;border-style:solid">
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <table align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%">
+                                            <tbody>
+                                            <tr>
+                                                <td style=3D"font-size:12px=
+;line-height:16px;color:#6e7680;text-align:center;padding-top:16px">+1.888.=
+799.9666</td>
+                                            </tr>
+                                            <tr>
+                                                <td style=3D"font-size:12px=
+;line-height:16px;color:#6e7680;text-align:center;padding-top:10px">
+                                                    =C2=A92023 Zoom Video C=
+ommunications, Inc.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align=3D"center" style=
+=3D"padding:16px 0 0;font-size:12px;line-height:16px;color:#6e7680" valign=
+=3D"top">
+                                                    Visit <a href=3D"https:=
+//zoom.us" style=3D"color:#6e7680" target=3D"_blank">zoom.us</a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align=3D"center" style=
+=3D"padding:4px 0 32px;font-size:12px;line-height:16px;color:#6e7680" valig=
+n=3D"top">
+                                                    <a href=3D"https://www.=
+google.com/maps/place/55+Almaden+Blvd,+San+Jose,+CA+95113/@37.3328541,-121.=
+897097,17z/data=3D!3m1!4b1!4m5!3m4!1s0x808fcca40adf3cb7:0x5a2d33d3593e0a33!=
+8m2!3d37.3328541!4d-121.8949083" style=3D"color:#969aa1;text-decoration:non=
+e" target=3D"_blank">
+55 Almaden Blvd<br>San Jose, CA 95113                                      =
+              </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody></table>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody></table>
+    </div>
+   =20
+</div></div></div>
+
+--000000000000477a6e060b768767--

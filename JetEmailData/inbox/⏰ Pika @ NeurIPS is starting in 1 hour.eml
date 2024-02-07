@@ -1,0 +1,766 @@
+Received: from MN0PR01MB7610.prod.exchangelabs.com (2603:10b6:208:375::18) by
+ BL3PR01MB7132.prod.exchangelabs.com with HTTPS; Thu, 14 Dec 2023 23:31:41
+ +0000
+Received: from DM6PR07CA0083.namprd07.prod.outlook.com (2603:10b6:5:337::16)
+ by MN0PR01MB7610.prod.exchangelabs.com (2603:10b6:208:375::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.28; Thu, 14 Dec 2023 23:31:40 +0000
+Received: from DS2PEPF0000343B.namprd02.prod.outlook.com
+ (2603:10b6:5:337:cafe::f7) by DM6PR07CA0083.outlook.office365.com
+ (2603:10b6:5:337::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26 via Frontend
+ Transport; Thu, 14 Dec 2023 23:31:40 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.60)
+ smtp.mailfrom=us-west-2.amazonses.com; dkim=pass (signature was verified)
+ header.d=luma-mail.com;dmarc=pass action=none header.from=luma-mail.com;
+Received-SPF: Fail (protection.outlook.com: domain of us-west-2.amazonses.com
+ does not designate 18.9.1.60 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.60;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.60) by
+ DS2PEPF0000343B.mail.protection.outlook.com (10.167.18.38) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7091.26 via Frontend Transport; Thu, 14 Dec 2023 23:31:39 +0000
+Received: from oc11exhyb3.exchange.mit.edu (18.9.1.99) by
+ oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Thu, 14 Dec 2023 18:31:39 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.169)
+ by oc11exhyb3.exchange.mit.edu (18.9.1.99) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Thu, 14 Dec 2023 18:31:38 -0500
+Received: from BL1PR13CA0116.namprd13.prod.outlook.com (2603:10b6:208:2b9::31)
+ by SJ0PR01MB8153.prod.exchangelabs.com (2603:10b6:a03:4e5::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.28; Thu, 14 Dec 2023 23:31:36 +0000
+Received: from BL6PEPF0001AB4C.namprd04.prod.outlook.com
+ (2603:10b6:208:2b9:cafe::bb) by BL1PR13CA0116.outlook.office365.com
+ (2603:10b6:208:2b9::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.8 via Frontend
+ Transport; Thu, 14 Dec 2023 23:31:36 +0000
+Authentication-Results-Original: spf=pass (sender IP is 54.240.86.196)
+ smtp.mailfrom=us-west-2.amazonses.com; dkim=pass (signature was verified)
+ header.d=luma-mail.com;dmarc=pass action=none
+ header.from=luma-mail.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of us-west-2.amazonses.com
+ designates 54.240.86.196 as permitted sender)
+ receiver=protection.outlook.com; client-ip=54.240.86.196;
+ helo=a86-196.smtp-out.us-west-2.amazonses.com; pr=C
+Received: from a86-196.smtp-out.us-west-2.amazonses.com (54.240.86.196) by
+ BL6PEPF0001AB4C.mail.protection.outlook.com (10.167.242.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.26 via Frontend Transport; Thu, 14 Dec 2023 23:31:36 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=s5x5ddloibvzl7dyrdrbashlyuwlaaax; d=luma-mail.com; t=1702596695;
+	h=Content-Type:From:To:Reply-To:Subject:Message-ID:Date:MIME-Version;
+	bh=zef7oHUfsl6S547vy+eBof0aFa/yS0WqyldGxZGUvNQ=;
+	b=MUEzm3srbwLnFLO96/NBdix3aqesPIWds+9lNk4RnG3ZxwGCNYQkMgdmOL1gcDpT
+	Kbar+Yfd/XyrezCMmLhk0JvsvMT1RXLKKPL4FBUuqEZNvM9H6wElJwv0OItoT5NA0VT
+	fRVeZdOVWJvx+5yh5/y/l+Uiv85okqxhHoyCuUqmqN+yiP6ePNBgOyEKMuRd/9bTCJM
+	vab1Pn49B+ZQtSuQRn5XO48dg80+M9Rw45OI/94CULtk9qO9VVsQ+rzQ8mNljeqv2iN
+	bqatiiy59kdytt9YJRk8D930UdVtYzlNVrsaWgGGW1yDhRYey6Qsss/GFW0bWyqgGB2
+	woj7VKzpmg==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1702596695;
+	h=Content-Type:From:To:Reply-To:Subject:Message-ID:Date:MIME-Version:Feedback-ID;
+	bh=zef7oHUfsl6S547vy+eBof0aFa/yS0WqyldGxZGUvNQ=;
+	b=qktq6ofGhQKHXyOliRVsgcgMC8hVUU6uMPBQRzcpgZkvNBh384rlW4lfB3rEvnsN
+	bqm6BEvpsORiOVPgwNSzscCKm4dIlpxGuuRF+AUhryJz8sKvtR43B7CaJHvh9rtUhPP
+	ZKkXz7T5U2GlDHK24rsMxiKllta9qBih1Pn4Cy2Y=
+Content-Type: multipart/alternative;
+ boundary="--_NmP-57edecc02a809e16-Part_1"
+From: Luma <noreply@luma-mail.com>
+To: jiannan@mit.edu
+Reply-To: Luma <ops@pika.art>
+Subject: =?UTF-8?Q?=E2=8F=B0_Pika_=40_NeurIPS_is_starting_i?=
+ =?UTF-8?Q?n_1_hour?=
+Message-ID: <0101018c6aabd572-90ab2d04-be6d-4fa1-8dba-e03637428524-000000@us-west-2.amazonses.com>
+Date: Thu, 14 Dec 2023 23:31:35 +0000
+Feedback-ID: 1.us-west-2.8b35YBY+LtDz6cPPlkX7VvLgReyfk0JzFCEDxPQigUM=:AmazonSES
+X-SES-Outgoing: 2023.12.14-54.240.86.196
+Return-Path:
+ 0101018c6aabd572-90ab2d04-be6d-4fa1-8dba-e03637428524-000000@us-west-2.amazonses.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BL6PEPF0001AB4C:EE_|SJ0PR01MB8153:EE_|DS2PEPF0000343B:EE_|MN0PR01MB7610:EE_|BL3PR01MB7132:EE_
+X-MS-Office365-Filtering-Correlation-Id: 71441535-40a3-4da7-9e9a-08dbfcfcd2d1
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:3;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?7IHhdHRyyfs++frS3fEaQ3RPOgF/5AWvTCv//r/IvgNdz03o2la8Di5BBh/F?=
+ =?us-ascii?Q?Xfzh91pf3zXyOqGrQdT58Rx9OLjyvr19iprke1U858CYmxlZ1fPoeDM0TO0f?=
+ =?us-ascii?Q?OnILHlP0wIv5r7LAMa/EHNrNLSdAb8AXo3vogBRIB3jtt2WDIyIQp7MRIaSu?=
+ =?us-ascii?Q?ZoUAkKVCIH5xUDxSly9n49z4LnBscMSNx0lPnk5YKpYimzL0GPp9Pr/fZhbx?=
+ =?us-ascii?Q?pJMkR+ERdA2lajpInL/ZLr8OzhJdgKQAojo6XJJz6UENNiZMGHPs/h5+g6wB?=
+ =?us-ascii?Q?R2FTjGYZgRt7Cvo1h1gUFiapRkch1SzIRrProslg2Iw6u7Sjt3QJdvC04weH?=
+ =?us-ascii?Q?plcVpILiLAje88dXPGPaMMxZ89d8+0dyGYd9Ro2tjVBl763bFssb71JCdlzI?=
+ =?us-ascii?Q?Jc8mWVzA2RZHCS4YlsBJQuqEnsDWt84ZjosDzlQ6NPCEFUsR2PT20X4dLD2W?=
+ =?us-ascii?Q?CvNWZPh4S/oXrFhZKVqda6o3uXyiTQzNlIxgdGFvPKH3PJlsFdN64n9i9PWP?=
+ =?us-ascii?Q?9mWtpfOzk0rvK5QjC98NvmP99LZlmr2fiWZCH1H1UabVcU59NgoJ4tsT4a1B?=
+ =?us-ascii?Q?Thx4MjLZdmNdJz1s9Dyti0VbXQI4B6UUo+WuyBmr3y7I5+aZbvVzRk6wgAno?=
+ =?us-ascii?Q?y7tPjsV+uXQCjr0x7bfyuLKxY9sM4Nn+Kbpg3YHLAoiyYD1mTeVNKRe7m5tN?=
+ =?us-ascii?Q?3viNi3WXxnEjZabfWyuXILCMgmjsDjmUYZsoqcl0HP0qELEca/MiBpAj+/jW?=
+ =?us-ascii?Q?A/EZsQhmoSyxHSqOZBTj5dRWsz/6fEHdZzQT9F38xemJxOiO2VJdA4CfPoMe?=
+ =?us-ascii?Q?6z70UGHQ6fc3LrdCiFavDF6DKrGD9gO2zpLxAYKQSYbpbzo789pwIkyWmP2t?=
+ =?us-ascii?Q?3l42kKFbImL5KtGc/0e0O3/T9nrorTkUU0e+ggiRJoy0eE7Avi3Kw4HuWMGH?=
+ =?us-ascii?Q?/Ru6GHAhGzwP+HKPLXVTtdvc5blu3PqlDYz8M+9ut0WaTx7Ls2EVCMqeFjG7?=
+ =?us-ascii?Q?OPHBwZxwAzGNtDVPOoPVForudLenx2UXb7PIV4ZONwI0cyylj8pjjseFVLDX?=
+ =?us-ascii?Q?un75cYm1Y0FnPC/sZV2FgOOxHp6+Bl3dX4zZ8uGKBfu4Zl4SlXcA5r8yWWiP?=
+ =?us-ascii?Q?hQpdCD/sdAfLJoKPDhi9gdhLKfu/1+Av4fE2qq4sBmh0bf9sy3LiCs72vjNk?=
+ =?us-ascii?Q?RN1LYmWrKWd5I0Pc+o/rlD8zJ/bpBo8iJEhElSgkpiDBQhXriuIE6Xjv1OIb?=
+ =?us-ascii?Q?PnK80r+U0zF6QtPnyvOfQtuzCXL9OPxrpmljizxRJH5+RwpsAW77Utgxm2PT?=
+ =?us-ascii?Q?NTk2B0aanQC8yJmf9HVPYyNf9BN+e4kJ9zH/Q3DNrsoLvn8X/buazZ8DuB/d?=
+ =?us-ascii?Q?Fm0EadDZkU+ThfOMnl5d1BZF9Jri9M4oO+fdXAelfBU2xxFwq1FxU8pqNLfs?=
+ =?us-ascii?Q?4d2QfDDXwj8hm7JbMspkJLVabUv4KS5/GwkFZZhW+BxmfBqp/5gp9rXgN1nF?=
+ =?us-ascii?Q?L7nqWu67+LiedFnLUOmB67lj/pzRl95xuydo9LkaoaR8TtMAirZRV+nq7Far?=
+ =?us-ascii?Q?cRAC5gAuLbMznF37GuP/GZeuQddj/B1WWeEnDgCIKXx6xTLRzYOtLWCDIuvI?=
+ =?us-ascii?Q?+rq8Ih0bSnw5ing6tmDOh3qETKP54R8a4CQkchNoRfrO4/3JIBU86IxXA/cn?=
+ =?us-ascii?Q?m9IAdX9INDL1c/RWNtnYuW3UZH7ufrWZrhrjL8cEgcOWOPepyqbFn8psUD56?=
+ =?us-ascii?Q?B0zYgHf/PWMdoDh/GrJN9BlUo1q2diBNr8j7nYOQYBK5jXYN+f/7A0reCPZ2?=
+ =?us-ascii?Q?XjMTbef+/LvZ70liXLIHtOdy72vIeKwTMjguyVFSexuyi8VAE8ZS9TIsdkSe?=
+ =?us-ascii?Q?CgaI72iW4ctUZAyVVihi3KOmEgBLld2FteGWa2bcc+VUeUiGIa21JD1eA/Lw?=
+ =?us-ascii?Q?72QG4SRPAQQ1++H+/7Ejf0U+jW+w7Dl1BxP7E+7KHsmBV1wisckum0hYGY1f?=
+ =?us-ascii?Q?J/J8V6t7fmhuLqnx8udWxP7mcA=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:54.240.86.196;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:a86-196.smtp-out.us-west-2.amazonses.com;PTR:a86-196.smtp-out.us-west-2.amazonses.com;CAT:NONE;SFS:(13230031)(4636009)(286005)(1690799017)(451199024)(332800013)(58800400005)(83170400001)(966005)(7596003)(7636003)(6486002)(76236004)(166002)(79850400001)(956004)(26005)(19627405001)(356005)(7696005)(6506007)(33964004)(71280400001)(9686003)(42882007)(66899024)(36736006)(83380400001)(6916009)(9316004)(75640400001)(22186003)(4006050)(1096003)(336012)(120186005)(5006899006)(1406899027)(76899018)(39450500005)(130870200001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB8153
+X-OrganizationHeadersPreserved: SJ0PR01MB8153.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb3.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb3.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb1.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 14 Dec 2023 23:31:40.1968
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 71441535-40a3-4da7-9e9a-08dbfcfcd2d1
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: DS2PEPF0000343B.namprd02.prod.outlook.com
+X-CrossPremisesHeadersFiltered: DS2PEPF0000343B.namprd02.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DS2PEPF0000343B.namprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL6PEPF0001AB4C.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 935f4bea-006a-4dd1-fe35-08dbfcfcd095
+X-Microsoft-Antispam: BCL:3;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.60;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb1.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2023 23:31:39.8999
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71441535-40a3-4da7-9e9a-08dbfcfcd2d1
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.60];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL6PEPF0001AB4C.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR01MB7610
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.7684679
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7091.028
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UXVjNWlkNG54RkFodzllRkhFYXg3bGI1OGpHNnU5YTJRbkx3VXV0ZFQ0bXl3?=
+ =?utf-8?B?VlZCNTFQMXptWDVXQThRYVdLVFBRRndGOEloM3lBdE03UW1jYjJLcGJndnQz?=
+ =?utf-8?B?bGJ2cTVyUHlwWTd1dzg5ODBMWGpuTkNDSXNZRklISitFdFBybGpZYk5CRTJ2?=
+ =?utf-8?B?V0t3dVh2Z3IwS2dYOW5GMlVnWnVSZTcrL3pHN3Z4UmNTNU5KS3ozMEVNVytG?=
+ =?utf-8?B?d0xzTlNQWGVCR01TZG11cmlmWGgvcFNNN0FTQlY0MXNxendPdjhFMEZmZTRK?=
+ =?utf-8?B?M09aWDczNnpZVTh2eWxsYmE3YVlEU2RYOXBZVVRqQmJBc2w3TXlZckNBOUlm?=
+ =?utf-8?B?eDJPMXB6b2dmQ0Y2M2hMMXdFWkk5dU1lZWNkNVFOSEIwWDFIS3g2OFdCMjhI?=
+ =?utf-8?B?K1F4U2xTVVgxYURqT0h1Q3A4bjZzM1FvS3VUeGErVzZUUGVDMzlCKzhSVXF4?=
+ =?utf-8?B?MjJPYjh6SXZRTmJIeWlUU1hjSGhsSStvbktRUlU0RkFZenZRdDJERHpmN01p?=
+ =?utf-8?B?b0dHYTRrby9kM01MdUtGekx0eWh6b25hNnVCQ2JnZmZ4WVU1OE5HWkl1SC83?=
+ =?utf-8?B?eE1idjZDbTl6T1VZaERpNHBCWXlSdDI2d1l6cE5SdUQrS01YRGdrcjE2R25Z?=
+ =?utf-8?B?bG9KTE8yMlpnSXQwdzBZYTJlYXhEN2xVbDhOZEE2dTJNVC9DOXY2R1NrZjBP?=
+ =?utf-8?B?VjFjbnlENVIyQ09Db2tZWEN1UmdvMi9iazA5dDY1c2FHbWM3YUU3a2cxVzJh?=
+ =?utf-8?B?Z0k1bEZzeWpFVWowbGFBdW51d2J3YVVBd2hCdnU2T0oxRmhwZEtEMTFsU292?=
+ =?utf-8?B?ckZ2MzJ4Y1hFR0hoYXVUNGFLWTMrdjdwQ3JQckxwS3RUZWNLZndZb0dkcitE?=
+ =?utf-8?B?cUxDalArVUNMbFNGTldFVUkzeXVLOHJvTnQ2M1huNllXYXNhMFRPTVgxTFBX?=
+ =?utf-8?B?S0JXbVdKS2U1RE5qOEUvZmtpY3psNjRHM0duSEUwUnpJR2VrcEM5UDVPYjlv?=
+ =?utf-8?B?WVQ5NEU4V1EyWG9QMnhpZlF2VXZNUHkzMzkzcGxRcTdveE56TURjQll6bGVC?=
+ =?utf-8?B?Z3RWTEI5MEFvN1FDYzlYZE1DTTJPREh5MGgyaEIvQTlKUExyTy9qemZWanVt?=
+ =?utf-8?B?S0VHaU94c1lHcStoQUx2bnljOHIxQks1NDNiTHZsY1JxellEUm4vbTZ1Vldj?=
+ =?utf-8?B?a080YVBVbUFtVWI1T2hWbFY5VktHREN0WGJiVkdSQ0dzQ0x6VzNuK25pRXg1?=
+ =?utf-8?B?RFZ5cmU4UlcySHF1TEg2QUE3eFh5bHU3dUpoU1NBbDVoVWgwaUQ0ZitySzcv?=
+ =?utf-8?B?NFBGRkV0bXZscldQM0Q5M2Y1bkxsdk5Rbm1VZDVONmpxcUcxZEorU1hodUxq?=
+ =?utf-8?B?UkpsNUdCNmZMU2thbjZJc3ZuVjJvZjY0c0tyR2tTbjBEM3FNa3BzSGxGMlI1?=
+ =?utf-8?B?ZVpZajNzeWFmTGdhY0FtMVFScUpEMXgwS0lXMXdMeUtwNitZSW5kVzA0Q0pa?=
+ =?utf-8?B?UUQ2WUpwMGxJbStMeXR4L3AwMDJNKzBZOHEzSDdReFhHTHlFWDhGV0QzM0hH?=
+ =?utf-8?B?ZXU2eHVXSlp5VkZaakFoUjhBeExKSUhtQXVYRTJNL0NEN0JSTzhuemRzbTNW?=
+ =?utf-8?B?emU1RE02OUpRRWM1QTdiNFpadVRPU1Y5dmwxMXBpVzRaVjZjZExJWUlWNWZ4?=
+ =?utf-8?B?b1k1UVliUjNWRGluOU00K0d4VXFITTFVUlhXNkNFUTR5Ym12YmFORU8yY1Vv?=
+ =?utf-8?B?U3RJekhKY1RSRTZHVDdZdEl5NHJVNDduWXI0ek11U2xnSmpzUnR1aW9aQmht?=
+ =?utf-8?B?WmVJejJYOGJCWVQvVUQrWmtwMXY1Q2ZjSlBuSjhweFpPYnpYc1ZvK2dlbGg5?=
+ =?utf-8?B?V1ZicmFuTGw3M3o3dXlsRHV2K1J2THBwckZIMlc2R0t0aG1BVkFRS29kMjhi?=
+ =?utf-8?B?eVQ3TTVoWTlRUGRSUWNJdGVXMndGUHhKd2xDV0pjVGcwd1MzbjBzS2lYajds?=
+ =?utf-8?B?WGlUbXZ3U0x1a3pKZjA4aHdLcTdmemRGaEV3RjRDSmtwc2NBbU85RzNEM1pC?=
+ =?utf-8?B?RlBNUlhUeXlHWXc0czNwci9mNVUwZndjZDNaaENpRGJVdUlINUhldHEwL1p1?=
+ =?utf-8?B?MENjcldsQW14dVNhUUFEQjRGZGR2Vkh1STJoOW84OVZnbUIzMk1odlpRVUdh?=
+ =?utf-8?B?a1lxSlJyM1dGR0N6elU4cm1YcFF3czRkQzdkOHBtK2x0VmQrTkRWNWl6TDMx?=
+ =?utf-8?B?YWF3UlMxZVlzL0N0V0xFbjM4Z2FLNXRCb1pBOEZIN3hGZDB0MUlCUjdDWUo5?=
+ =?utf-8?B?MXpSeHY5OXZmZVBUVk9NeTU3M3JWN2RPWE5wQVlVd1RBbGhOalpwQURFTWNv?=
+ =?utf-8?B?Q0EvL3hUODZ0K0p4bFdkeDJhSWJXRUFLQ21ZQy83QW05QitpeGc0MVNuTXdY?=
+ =?utf-8?B?WmRCSHl4LzkrYWF0alRneUFGd2FIOENMWE5PaWVvQ3VEVzlsRi9uRld0b1hZ?=
+ =?utf-8?B?OFJyZVQ3eFp2c1ZwRkhJSnBDZndGV0hjRUxwcENndENZbkRmOENTZzdlVmcw?=
+ =?utf-8?Q?vDULEOqBCHYGkdW+hKstUmbQ5b6cRc?=
+MIME-Version: 1.0
+
+----_NmP-57edecc02a809e16-Part_1
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+Pika @ NeurIPS
+is starting in 1 hour
+
+Thursday, December 14 6:30 PM to 9:00 PM CST
+Location: In Person
+
+View Event [https://lu.ma/4j259wcf?pk=g-xgHdsY3E2NwOJV4]
+
+My Ticket [https://lu.ma/e/ticket/evt-xAALsJuoujRV7k7?pk=g-xgHdsY3E2NwOJV4]
+
+Sent using https://lu.ma
+----_NmP-57edecc02a809e16-Part_1
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle></title>
+    <!--[if !mso]><!-->
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+    <!--<![endif]-->
+   =20
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=
+=3D1">
+    <style type=3D"text/css">
+      #outlook a { padding:0; }
+      body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size=
+-adjust:100%; }
+      table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-table-r=
+space:0pt; }
+      img { border:0;height:auto;line-height:100%; outline:none;text-decora=
+tion:none;-ms-interpolation-mode:bicubic; }
+      p { display:block;margin:13px 0; }
+    </style>
+    <!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]-->
+    <!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]-->
+   =20
+      <!--[if !mso]><!-->
+        <link href=3D"https://fonts.googleapis.com/css?family=3DRoboto:300,=
+400,500,700" rel=3D"stylesheet" type=3D"text/css">
+        <style type=3D"text/css">
+          @import url(https://fonts.googleapis.com/css?family=3DRoboto:300,=
+400,500,700);
+        </style>
+      <!--<![endif]-->
+
+   =20
+   =20
+    <style type=3D"text/css">
+      @media only screen and (min-width:480px) {
+        .mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }
+    </style>
+    <style media=3D"screen and (min-width:480px)">
+      .moz-text-html .mj-column-per-100 { width:100% !important; max-width:=
+ 100%; }
+    </style>
+   =20
+ =20
+    <style type=3D"text/css">
+   =20
+   =20
+    </style>
+    <style type=3D"text/css">
+    h1 {
+            font-size: 24px;
+            line-height: 32px;
+            margin-top: 32px;
+            margin-bottom: 28px;
+          }
+
+          h2 {
+            font-size: 20px;
+            line-height: 28px;
+            margin-top: 24px;
+            margin-bottom: 20px;
+          }
+
+          p {
+            margin-top: 0;
+            margin-bottom: 16px;
+          }
+
+          p.small {
+            font-size: 14px;
+            margin-bottom: 8px;
+          }
+
+          hr {
+            border-top: 1px solid #ebeced;
+          }
+
+          blockquote {
+            border-left: 2px solid #ebeced;
+            padding-left: 1rem;
+            margin-left: 0;
+          }
+
+          a {
+            color: #7759ca;
+            text-decoration: none !important;
+          }
+
+          .mirror-content a, a.cta-link {
+            color: #7759ca !important;
+            text-decoration: none !important;
+          }
+
+          .mirror-content li p {
+            margin: 4px 0;
+          }
+
+          .mirror-content a.btn {
+            margin-top: 0.5rem;
+            color: white !important;
+          }
+
+          .mirror-content pre {
+            /* We need to wrap long lines, otherwise the email will scroll =
+horizontally
+               on some clients like Superhuman */
+            white-space: pre-wrap !important;
+            padding: 1rem;
+            border-radius: 4px;
+            background-color: #f4f5f6 !important;
+          }
+
+          table.time-pill {
+            background-color: #f4f5f6;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            width: 30%;
+          }
+
+          td.time-pill-content {
+            text-align: center;
+            color: #737577;
+            min-width: 130px;
+          }
+
+          td.time-pill-content.date {
+            font-size: 14px;
+            font-weight: 500;
+            padding-top: 6px;
+          }
+
+          td.time-pill-content.time {
+            font-size: 12px;
+            padding-bottom: 6px;
+          }
+
+          @media all and (max-width: 400px) {
+            table.time-pill {
+              width: 40%;
+            }
+          }
+
+          table.survey-pill {
+            background-color: #f4f5f6;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            width: 20%;
+            min-width: 60px;
+          }
+
+          td.survey-pill-content {
+            text-align: center;
+            padding: 12px 8px;
+          }
+
+          td.survey-pill-content a {
+            padding: 16px 8px;
+          }
+
+          td.survey-pill-content.emoji {
+            font-size: 28px;
+          }
+
+          .calendar-red {
+            color: #d86156;
+          }
+
+          .col-50 {
+            width: 50% !important;
+            max-width: 50%;
+          }
+    </style>
+   =20
+  </head>
+  <body style=3D"word-spacing:normal;">
+   =20
+   =20
+      <div style=3D"">
+       =20
+     =20
+      <!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px=
+;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-h=
+eight-rule:exactly;"><![endif]-->
+   =20
+     =20
+      <div style=3D"margin:0px auto;max-width:600px;">
+       =20
+        <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"width:100%;">
+          <tbody>
+            <tr>
+              <td style=3D"direction:ltr;font-size:0px;padding:16px;text-al=
+ign:center;">
+                <!--[if mso | IE]><table role=3D"presentation" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-a=
+lign:top;width:568px;" ><![endif]-->
+           =20
+      <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-s=
+ize:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:t=
+op;width:100%;">
+       =20
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"prese=
+ntation" width=3D"100%">
+        <tbody>
+          <tr>
+            <td style=3D"vertical-align:top;padding:0px;">
+             =20
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"prese=
+ntation" style=3D"" width=3D"100%">
+        <tbody>
+         =20
+              <tr>
+                <td align=3D"left" style=3D"font-size:0px;padding:0px;word-=
+break:break-word;">
+                 =20
+      <div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe U=
+I', Roboto, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align=
+:left;color:#131517;"><table border=3D"0" style=3D"padding-bottom:4px;displ=
+ay:block" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" align=
+=3D"left"><tbody><tr><td style=3D"vertical-align:middle"><a target=3D"_blan=
+k" style=3D"display:flex;text-decoration:none" href=3D"https://lu.ma/u/usr-=
+YBxwUdnMMdf8yce"><img height=3D"18" width=3D"18" src=3D"https://images.luma=
+cdn.com/cdn-cgi/image/format=3Dauto,fit=3Dcover,dpr=3D2,quality=3D75,width=
+=3D18,height=3D18/avatars/ir/d7af8638-8664-460c-9c55-5c4a06ce7bf7" style=3D=
+"width:18px;height:18px;border-radius:18px"></a></td><td style=3D"vertical-=
+align:middle;padding-left:8px"><a target=3D"_blank" style=3D"color:#737577 =
+!important;font-size:16px !important;line-height:1.5 !important;text-decora=
+tion:none" href=3D"https://lu.ma/u/usr-YBxwUdnMMdf8yce">Pika</a></td></tr><=
+/tbody></table></div>
+   =20
+                </td>
+              </tr>
+           =20
+              <tr>
+                <td align=3D"left" style=3D"font-size:0px;padding:0px;word-=
+break:break-word;">
+                 =20
+      <div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe U=
+I', Roboto, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align=
+:left;color:#131517;"><h1 style=3D"margin-top:0;margin-bottom:4px;font-size=
+:24px;line-height:32px"><b>Pika @ NeurIPS</b><div style=3D"font-weight:norm=
+al;color:#b3b5b7">is starting in 1 hour</div></h1></div>
+   =20
+                </td>
+              </tr>
+           =20
+              <tr>
+                <td align=3D"center" style=3D"font-size:0px;padding:0px;pad=
+ding-top:16px;padding-bottom:16px;word-break:break-word;">
+                 =20
+      <p style=3D"border-top:solid 1px #ebeced;font-size:1px;margin:0px aut=
+o;width:100%;">
+      </p>
+     =20
+      <!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" style=3D"border-top:solid 1px #ebeced;font-size:1px;m=
+argin:0px auto;width:568px;" role=3D"presentation" width=3D"568px" ><tr><td=
+ style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]-->
+   =20
+   =20
+                </td>
+              </tr>
+           =20
+              <tr>
+                <td align=3D"left" style=3D"font-size:0px;padding:0px;word-=
+break:break-word;">
+                 =20
+      <div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe U=
+I', Roboto, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align=
+:left;color:#131517;"><table><tbody><tr><td style=3D"padding-bottom:8px"><t=
+able border=3D"0" border-spacing=3D"0"><tbody><tr><td style=3D"vertical-ali=
+gn:middle;width:40px;height:40px;padding:0"><table width=3D"40" cellspacing=
+=3D"0" cellpadding=3D"0" border=3D"0" style=3D"border-spacing:0;border-coll=
+apse:separate"><tbody><tr><td style=3D"padding:0;margin:0;background-color:=
+#eceded !important;border:1px solid #eceded;font-size:8px !important;line-h=
+eight:2 !important;border-top-right-radius:8px;border-top-left-radius:8px" =
+valign=3D"middle" align=3D"center"><span style=3D"color:#737577 !important;=
+font-size:8px !important;line-height:2 !important;font-weight:500">DEC</spa=
+n></td></tr><tr><td style=3D"padding:0;margin:0;background-color:#ffffff;bo=
+rder:1px solid #eceded;border-bottom-right-radius:8px;border-bottom-left-ra=
+dius:8px;font-size:16 !important;line-height:1.5 !important" valign=3D"top"=
+ align=3D"center"><span style=3D"font-size:16 !important;line-height:1.5 !i=
+mportant;font-weight:500;color:#737577">14</span></td></tr></tbody></table>=
+</td><td style=3D"vertical-align:middle;padding-left:12px"><div><div style=
+=3D"font-size:16px;color:#131517;font-weight:500;overflow:hidden;text-overf=
+low:ellipsis;white-space:nowrap">Thursday, December 14</div><div style=3D"f=
+ont-size:14px;color:#737577;font-weight:400;overflow:hidden;text-overflow:e=
+llipsis;white-space:nowrap">6:30 PM to 9:00 PM CST</div></div></td></tr></t=
+body></table></td></tr><tr><td><table border=3D"0" border-spacing=3D"0"><tb=
+ody><tr><td style=3D"vertical-align:middle;width:40px;height:40px;padding:0=
+"><table border=3D"0" style=3D"padding:0;border-collapse:separate;border-sp=
+acing:0"><tbody><tr><td style=3D"border:1px solid #eceded;vertical-align:mi=
+ddle;width:40px;height:40px;border-radius:8px" align=3D"center"><img style=
+=3D"display:block" src=3D"https://cdn.lu.ma/cdn-cgi/image/format=3Dauto,fit=
+=3Dcover,dpr=3D2,quality=3D75,width=3D40,height=3D40/misc/3k/95610a7f-2391-=
+4002-9779-a1e9bfb7216c" width=3D"20" height=3D"20"></td></tr></tbody></tabl=
+e></td><td style=3D"vertical-align:middle;padding-left:12px"><a target=3D"_=
+blank" style=3D"text-decoration:none" href=3D"https://www.google.com/maps/s=
+earch/?api=3D1&amp;query=3DJustine&amp;query_place_id=3DChIJ56FJRISnIIYRCTL=
+9sGbWoOA"><div><div style=3D"font-size:16px;color:#131517;font-weight:500">=
+Justine =E2=86=97</div><div style=3D"font-size:14px;color:#737577;font-weig=
+ht:400">New Orleans, Louisiana</div></div></a></td></tr></tbody></table></t=
+d></tr></tbody></table></div>
+   =20
+                </td>
+              </tr>
+           =20
+              <tr>
+                <td align=3D"center" style=3D"font-size:0px;padding:0px;pad=
+ding-top:16px;padding-bottom:16px;word-break:break-word;">
+                 =20
+      <p style=3D"border-top:solid 1px #ebeced;font-size:1px;margin:0px aut=
+o;width:100%;">
+      </p>
+     =20
+      <!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" style=3D"border-top:solid 1px #ebeced;font-size:1px;m=
+argin:0px auto;width:568px;" role=3D"presentation" width=3D"568px" ><tr><td=
+ style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]-->
+   =20
+   =20
+                </td>
+              </tr>
+           =20
+              <tr>
+                <td align=3D"left" style=3D"font-size:0px;padding:0px;paddi=
+ng-top:16px;word-break:break-word;">
+                 =20
+      <div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe U=
+I', Roboto, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align=
+:left;color:#131517;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"=
+0" role=3D"presentation" style=3D"vertical-align:top"><tbody><tr><td align=
+=3D"left"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" style=3D"border-collapse:separate;line-height:100%"><tr><td al=
+ign=3D"center" bgcolor=3D"#7759ca" role=3D"presentation" style=3D"border:no=
+ne;border-radius:8px;cursor:auto;background:#7759ca;text-decoration:none;ms=
+o-padding-alt:10px 25px" valign=3D"middle"><a href=3D"https://lu.ma/4j259wc=
+f?pk=3Dg-xgHdsY3E2NwOJV4" style=3D"display:inline-block;background-color:#7=
+759ca;color:white;font-size:16px;line-height:1;margin:0;text-decoration:non=
+e;text-transform:none;border-radius:8px;font-weight:700;padding:12px 24px;m=
+so-padding-alt:0px" target=3D"_blank">View Event</a></td></tr></table></td>=
+<td align=3D"left" style=3D"padding-left:10px"><table border=3D"0" cellpadd=
+ing=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"border-collapse:=
+separate;line-height:100%"><tr><td align=3D"center" bgcolor=3D"#f4f5f6" rol=
+e=3D"presentation" style=3D"border:none;border-radius:8px;cursor:auto;backg=
+round:#f4f5f6;text-decoration:none;mso-padding-alt:10px 25px" valign=3D"mid=
+dle"><a href=3D"https://lu.ma/e/ticket/evt-xAALsJuoujRV7k7?pk=3Dg-xgHdsY3E2=
+NwOJV4" style=3D"display:inline-block;background-color:#f4f5f6;color:#73757=
+7;font-size:16px;line-height:1;margin:0;text-decoration:none;text-transform=
+:none;border-radius:8px;font-weight:500;padding:12px 24px;mso-padding-alt:0=
+px" target=3D"_blank">My Ticket</a></td></tr></table></td></tr></tbody></ta=
+ble></div>
+   =20
+                </td>
+              </tr>
+           =20
+              <tr>
+                <td align=3D"center" style=3D"font-size:0px;padding:0px;pad=
+ding-top:32px;word-break:break-word;">
+                 =20
+      <p style=3D"border-top:solid 1px #ebeced;font-size:1px;margin:0px aut=
+o;width:100%;">
+      </p>
+     =20
+      <!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" style=3D"border-top:solid 1px #ebeced;font-size:1px;m=
+argin:0px auto;width:568px;" role=3D"presentation" width=3D"568px" ><tr><td=
+ style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]-->
+   =20
+   =20
+                </td>
+              </tr>
+           =20
+        </tbody>
+      </table>
+   =20
+            </td>
+          </tr>
+        </tbody>
+      </table>
+   =20
+      </div>
+   =20
+          <!--[if mso | IE]></td></tr></table><![endif]-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+       =20
+      </div>
+   =20
+     =20
+      <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" st=
+yle=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-s=
+ize:0px;mso-line-height-rule:exactly;"><![endif]-->
+   =20
+     =20
+      <div style=3D"margin:0px auto;max-width:600px;">
+       =20
+        <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"width:100%;">
+          <tbody>
+            <tr>
+              <td style=3D"direction:ltr;font-size:0px;padding:16px 16px 0 =
+16px;text-align:center;">
+                <!--[if mso | IE]><table role=3D"presentation" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-a=
+lign:top;width:568px;" ><![endif]-->
+           =20
+      <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-s=
+ize:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:t=
+op;width:100%;">
+       =20
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"prese=
+ntation" width=3D"100%">
+        <tbody>
+          <tr>
+            <td style=3D"vertical-align:top;padding:0px;">
+             =20
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"prese=
+ntation" style=3D"" width=3D"100%">
+        <tbody>
+         =20
+              <tr>
+                <td align=3D"left" style=3D"font-size:0px;padding:0px;word-=
+break:break-word;">
+                 =20
+      <div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe U=
+I', Roboto, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align=
+:left;color:#131517;"><div><div class=3D"col-50 mj-outlook-group-fix" style=
+=3D"font-size:0;text-align:left;display:inline-block;vertical-align:top;wid=
+th:100%;margin-bottom:8px"><table border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" role=3D"presentation" style=3D"vertical-align:top" width=3D"100%"><=
+tbody><tr><td align=3D"left" style=3D"font-size:0;padding-right:10px;word-b=
+reak:break-word"><a href=3D"https://lu.ma"><img height=3D"15" width=3D"45" =
+src=3D"https://cdn.lu.ma/email/logo.png"></a></td></tr></tbody></table></di=
+v><div class=3D"col-50 mj-outlook-group-fix" style=3D"font-size:0;text-alig=
+n:left;display:inline-block;vertical-align:top;width:100%;margin-bottom:8px=
+"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentat=
+ion" style=3D"vertical-align:top" width=3D"100%"><tbody><tr><td align=3D"le=
+ft" style=3D"font-size:0;word-break:break-word"><div style=3D"font-size:12p=
+x;text-align:right;color:#b3b5b7"><a href=3D"https://lu.ma/unsubscribe?cale=
+ndar_api_id=3Dcal-KnsUFEBK1Vxm9tv&amp;pk=3Dg-xgHdsY3E2NwOJV4" style=3D"colo=
+r:#b3b5b7;text-decoration:none !important">Unsubscribe</a></div></td></tr><=
+/tbody></table></div></div></div>
+   =20
+                </td>
+              </tr>
+           =20
+        </tbody>
+      </table>
+   =20
+            </td>
+          </tr>
+        </tbody>
+      </table>
+   =20
+      </div>
+   =20
+          <!--[if mso | IE]></td></tr></table><![endif]-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+       =20
+      </div>
+   =20
+     =20
+      <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" st=
+yle=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-s=
+ize:0px;mso-line-height-rule:exactly;"><![endif]-->
+   =20
+     =20
+      <div style=3D"margin:0px auto;max-width:600px;">
+       =20
+        <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"width:100%;">
+          <tbody>
+            <tr>
+              <td style=3D"direction:ltr;font-size:0px;padding:0 16px;text-=
+align:center;">
+                <!--[if mso | IE]><table role=3D"presentation" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0"><tr><td align=3D"left" class=3D"" styl=
+e=3D"" ><![endif]-->
+           =20
+      <div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe U=
+I', Roboto, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align=
+:left;color:#131517;"><a href=3D"https://lu.ma/holiday?ref=3Demail" style=
+=3D"font-size:12px;color:#b3b5b7;text-decoration:none !important;padding:2p=
+x">Host your holiday party with Luma =E2=86=97</a></div>
+   =20
+          <!--[if mso | IE]></td></tr></table><![endif]-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+       =20
+      </div>
+   =20
+     =20
+      <!--[if mso | IE]></td></tr></table><![endif]-->
+   =20
+   =20
+      </div>
+   =20
+  <img alt=3D"" src=3D"https://jpdm6py0.r.us-west-2.awstrack.me/I0/0101018c=
+6aabd572-90ab2d04-be6d-4fa1-8dba-e03637428524-000000/yJxb00G9ES-ShLJzlWmcpv=
+juN9E=3D353" style=3D"display: none; width: 1px; height: 1px;">
+</body>
+</html>
+  =
+
+----_NmP-57edecc02a809e16-Part_1--

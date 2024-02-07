@@ -1,0 +1,621 @@
+Received: from IA0PR01MB8239.prod.exchangelabs.com (2603:10b6:208:48b::9) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Fri, 15 Dec 2023 20:36:48
+ +0000
+Received: from CH0P220CA0013.NAMP220.PROD.OUTLOOK.COM (2603:10b6:610:ef::9) by
+ IA0PR01MB8239.prod.exchangelabs.com (2603:10b6:208:48b::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.32; Fri, 15 Dec 2023 20:36:48 +0000
+Received: from DS2PEPF0000343E.namprd02.prod.outlook.com
+ (2603:10b6:610:ef:cafe::30) by CH0P220CA0013.outlook.office365.com
+ (2603:10b6:610:ef::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.29 via Frontend
+ Transport; Fri, 15 Dec 2023 20:36:47 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.110)
+ smtp.mailfrom=mail36.us4.mcsv.net; dkim=fail (body hash did not verify)
+ header.d=mit.edu;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of mail36.us4.mcsv.net does
+ not designate 18.9.1.110 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.9.1.110;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.110) by
+ DS2PEPF0000343E.mail.protection.outlook.com (10.167.18.41) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7113.14 via Frontend Transport; Fri, 15 Dec 2023 20:36:47 +0000
+Received: from oc11exhyb1.exchange.mit.edu (18.9.1.60) by
+ oc11exhyb5.exchange.mit.edu (18.9.1.110) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Fri, 15 Dec 2023 15:35:49 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
+ by oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Fri, 15 Dec 2023 15:35:49 -0500
+Received: from BL0PR02CA0084.namprd02.prod.outlook.com (2603:10b6:208:51::25)
+ by SJ0PR01MB7330.prod.exchangelabs.com (2603:10b6:a03:3f6::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.31; Fri, 15 Dec 2023 20:35:47 +0000
+Received: from BL02EPF0001A108.namprd05.prod.outlook.com
+ (2603:10b6:208:51:cafe::35) by BL0PR02CA0084.outlook.office365.com
+ (2603:10b6:208:51::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.29 via Frontend
+ Transport; Fri, 15 Dec 2023 20:35:46 +0000
+Authentication-Results-Original: spf=pass (sender IP is 205.201.128.36)
+ smtp.mailfrom=mail36.us4.mcsv.net; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of mail36.us4.mcsv.net
+ designates 205.201.128.36 as permitted sender)
+ receiver=protection.outlook.com; client-ip=205.201.128.36;
+ helo=mail36.us4.mcsv.net; pr=C
+Received: from mail36.us4.mcsv.net (205.201.128.36) by
+ BL02EPF0001A108.mail.protection.outlook.com (10.167.241.138) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7113.14 via Frontend Transport; Fri, 15 Dec 2023 20:35:46 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=k2;
+	t=1702670433; x=1702930933; i=iaw@mit.edu;
+	bh=0OBoVu8tFxSuwcClyiaT85QJG0nxmBaDzaxL2w5xohU=;
+	h=Subject:From:Reply-To:To:Date:Message-ID:X-MC-User:Feedback-ID:
+	 List-ID:List-Unsubscribe:List-Unsubscribe-Post:Content-Type:
+	 MIME-Version:CC:Date:Subject:From;
+	b=fhJtW8rJh6KEuMj0bzWaQrHyVEmCKCT5S028UQU1txyWaadkF7aHgMh8x8ULs2ja2
+	 OpMXYJNQW+MZH9RwGioHh9T375+4cqox4bEboG+nu/zao0vDFlkFvMPcguAMDg3ExW
+	 HflDURHy4diJHzToHkpk87J8mG2PIJt/H06hAz8oML7SAKhRBWEBtxEz6rSQOr04pC
+	 moLSULK21gubeS13uHYse7S6rr78Izzv1cnPUs0mutBg3vydazbNffv7oA9/5TCATP
+	 QMPlTR0ZwL9ZYbdBLh86LSMyC1U+A775MbxpHRGhI6wh/cgY/1ph1NyrHjl82hnzq5
+	 LmjCqvsXM0YHA==
+Received: from localhost (localhost [127.0.0.1])
+	by mail36.us4.mcsv.net (Mailchimp) with ESMTP id 4SsKp94SVmzHXt7ZG
+	for <jiannan@MIT.EDU>; Fri, 15 Dec 2023 20:00:33 +0000 (GMT)
+Subject: =?utf-8?Q?New=20vision=20plan=3A=20Special=20enrollment=20period=20from=20Dec=2015=2C=202023=20=2D=20Jan=2015=2C=202024=3B=20coverage=20starts=20Feb=201=2C=202024?=
+From: =?utf-8?Q?Ian=20A.=20Waitz?= <iaw@mit.edu>
+Reply-To: =?utf-8?Q?Ian=20A.=20Waitz?= <iaw@mit.edu>
+To: <jiannan@MIT.EDU>
+Date: Fri, 15 Dec 2023 20:00:18 +0000
+Message-ID: <88f983a0e3c2a43fb2a2eabd0.d43a4cfd44.20231215200007.374a409beb.57437cac@mail36.us4.mcsv.net>
+X-Mailer: Mailchimp Mailer - **CID374a409bebd43a4cfd44**
+X-Campaign: mailchimp88f983a0e3c2a43fb2a2eabd0.374a409beb
+X-campaignid: mailchimp88f983a0e3c2a43fb2a2eabd0.374a409beb
+X-Report-Abuse: Please report abuse for this campaign here: https://mailchimp.com/contact/abuse/?u=88f983a0e3c2a43fb2a2eabd0&id=374a409beb&e=d43a4cfd44
+X-MC-User: 88f983a0e3c2a43fb2a2eabd0
+Feedback-ID: 81147954:81147954.1281409:us16:mc
+List-ID: 88f983a0e3c2a43fb2a2eabd0mc list <88f983a0e3c2a43fb2a2eabd0.192793.list-id.mcsv.net>
+X-Accounttype: pr
+List-Unsubscribe: <https://mit.us16.list-manage.com/unsubscribe?u=88f983a0e3c2a43fb2a2eabd0&id=563851b4fe&e=d43a4cfd44&c=374a409beb>,
+ <mailto:unsubscribe-mc.us16_88f983a0e3c2a43fb2a2eabd0.374a409beb-d43a4cfd44@unsubscribe.mailchimpapp.net?subject=unsubscribe>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+Content-Type: multipart/alternative; boundary="_----------=_MCPart_1916804781"
+Return-Path: bounce-mc.us16_81147954.1281409-d43a4cfd44@mail36.us4.mcsv.net
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BL02EPF0001A108:EE_|SJ0PR01MB7330:EE_|DS2PEPF0000343E:EE_|IA0PR01MB8239:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: d50bde08-f672-4123-4711-08dbfdad8f35
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?mcEIZUuktR/20u5dRAK7fOtrl2ySskvejeBDp9XPy1MhrDMH3AQg0UgHb8E+?=
+ =?us-ascii?Q?W9xxGUIMVbWA9w578gUXcWLCT4yeUWteR3iYtwUjIgopOPIuK/ErrkS4fiR0?=
+ =?us-ascii?Q?8sGqHw+xEc3NZciTyDATx37liKXvun7i1uAc+uJtMBozk7aosOS8lyJg5CT5?=
+ =?us-ascii?Q?Mdys0hyySdBgZ+JDBZlg2VvqCQI/xH2XNdJqG0zwekanWzhvHX8qfbp6HQxH?=
+ =?us-ascii?Q?nzhwYBLMYcK7eZUT2+5fxpEY5pua0wcFqeJfjeyKimasj87ff0kU1uLDC5ah?=
+ =?us-ascii?Q?pnDqOVf64t5zNCjjyDk45h8Mwp1uauk/nbnQIsMi/b/QagqgupJhO6Sp7P+8?=
+ =?us-ascii?Q?fUj4b1ysIceEaoSDswteFJw2wXAt5EoGfNv9Fj7Oph3DcZzH/gRuVb1EA9YR?=
+ =?us-ascii?Q?betbe2EbPnfcnb+CyPdchabk/3ecbfPp7ZznquCI6fxcFWp0r1Z8VomW43bL?=
+ =?us-ascii?Q?3+DUyRGDJwwqK5qPUl82usTEaYgQF8aPS2CByf7IUhxvDAXBZv5FN7+KxrFR?=
+ =?us-ascii?Q?dQ3n2pxk+4CDjVR0EMP15uNX5WwZWhNDAkU/DWByisSqTQvvp7e8A2nGKayU?=
+ =?us-ascii?Q?eUxRajxFNuzcLw003z7PKt12ZRClSff2qvXfZxUgpII6qykNC+Cph5Ghp69Y?=
+ =?us-ascii?Q?Z1Owhu1UYlWA0lO3zPDnbyidGycbxYA4Zi6JGUjBrvR0cavoL1XG1kr92nX3?=
+ =?us-ascii?Q?xEg94ld3APyw6RvBnTA6wSERmwEeNPkh2ItHHjb+OR6Ee1MDILpGEv3sQ2pP?=
+ =?us-ascii?Q?EsTzKadst+RJ6+ywH5WvKJP52axrMivZgSw2/Ia69t54zFqcPa75fC05Q/yc?=
+ =?us-ascii?Q?ellOljrg4bx3lXPnDeEg5NIUOddb6+2ahKln0T6dZdEdoz0da9Z7KHW09wjy?=
+ =?us-ascii?Q?dcVagxXVek+KkIuHWgIFX11masyq1PAXoiiG9rwXHFQLgTC4ZefgE70l6N09?=
+ =?us-ascii?Q?uXfEkiare+yrHbMrHcC1YYMNJUSetPQbxElUk8Pty8kH253Yt3xzy9MoteCS?=
+ =?us-ascii?Q?kamsI8KDswfkV1BjGEhLUsockzL/xKe1+TdOpf4F73JL0txYJGhZCTtF5j2L?=
+ =?us-ascii?Q?QugoijNfXJNq6tHe2UHu/ams11pmOPcW9ZxQUv4yTJl0W0fw7o8cj7KnkuN0?=
+ =?us-ascii?Q?UD09qBEEXdUDYnxHv/xY+g6CvNcQyNMzZ/m69oOVSt3ETkYmwkw7rgZRpJNN?=
+ =?us-ascii?Q?ydzgMiMsbl+oqltv1X1wc1BR24KAZ/9K1aqo6hr0OEZXhSgyvro7lxwSq5+S?=
+ =?us-ascii?Q?fUd45y3ua3swy5COOTxg/zytn5LPC4ZtganxLXa3f7lquMy9MnMuT0GLrn84?=
+ =?us-ascii?Q?lYZGFXKFTFuLvgody1VMKLY11K7bmv3hHJuliow8hlHZ91YlwBntWzh0tdGZ?=
+ =?us-ascii?Q?w9yx6roEpGKxoW/exy+TwWFPO0EuGT9Tt67O+ShpXMX1cT7L25kd+glARVVi?=
+ =?us-ascii?Q?ZlBtQfy9ancQ9fH1ghP8VIFLjVrLroBP?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:205.201.128.36;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail36.us4.mcsv.net;PTR:mail36.us4.mcsv.net;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB7330
+X-OrganizationHeadersPreserved: SJ0PR01MB7330.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb1.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb1.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb5.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 15 Dec 2023 20:36:47.6860
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ d50bde08-f672-4123-4711-08dbfdad8f35
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: -1
+X-CrossPremisesHeadersPromoted: DS2PEPF0000343E.namprd02.prod.outlook.com
+X-CrossPremisesHeadersFiltered: DS2PEPF0000343E.namprd02.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DS2PEPF0000343E.namprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BL02EPF0001A108.namprd05.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ c80bbd94-24ed-4042-7722-08dbfdad6af6
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.110;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SKN;H:mail.exchange.mit.edu;PTR:oc11exhyb5.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2023 20:36:47.4828
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d50bde08-f672-4123-4711-08dbfdad8f35
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.110];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BL02EPF0001A108.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR01MB8239
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.4561938
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7091.030
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RE42RVRJa0RhV1VBZE4wQkYzVW1vcnFuMmpSWUlVSmZ4anRzTndFZnN1RmxQ?=
+ =?utf-8?B?OGdLTXJDNlRTWU95SExwSTBZNUU1Qm5XQVBQcXNtSUxZWExubDVxMXhnbVhX?=
+ =?utf-8?B?YXBpYXdLMnNrSVc3eXU4eEtlcjk1NWlpRDl6d1pMVjJiSktrYVMrVldadkRJ?=
+ =?utf-8?B?MDNOMElodk1uZHhhQ2hzWUJ0UlI5SWtVaEE0cnQwY3JWL1ZzWlBqWUZYa1NW?=
+ =?utf-8?B?eHNTbzV4KzFpaGZvdlJxNUMxeGU3ZVptM2xVcDNUd055czdEWlZMSkViUmhT?=
+ =?utf-8?B?T1g2Z2NsTGZKRlJJT0dqNzRJb1dvYlNWaXdGWkc1SWxGQjdHL2lXekcwdXFS?=
+ =?utf-8?B?QU5ZTnRjL3F2NUQydExNL1dMUWhCYWU0SEhCZUpKUkZQdmo4Sy9WQnhuaU5U?=
+ =?utf-8?B?YW41N0x3USsrK25ubzliamFLb3dpNEF3aXpiZmlFdGkrT0xOQ1o2Y21NTHpI?=
+ =?utf-8?B?VWtRVlRaQ2Vsb2piZU5UY0xTMFNsNFVEVGJsKzJHczJHall4UXMzZXFDQXBa?=
+ =?utf-8?B?aEw0dE1CRVhEVUlqZjRZNzJmRVlOY1VyZTU3VndPUlMxcjVvTU1FOXdqWXFq?=
+ =?utf-8?B?QmxncWdsbUNoWjB5YlBmbjBtaFZGZFUvbVE5OGRkbVo2N1BDTFRuYUx0bzlB?=
+ =?utf-8?B?WmJYakRFWjAvUncrYmhvRjBXeWVRaVZ3bGwrNW1XMTlUV0t2SzZUdWxodmUy?=
+ =?utf-8?B?YUJSM3pzdnNJVU5LaEVVVGVOZkVtWGJMSkdiaU0vY0ZZZ1VWakRMNENKbmd6?=
+ =?utf-8?B?aXlXcitNTFFUU2VCN3lqd28xeUlSdzFEQmV3QVRjYUFhVStkVWF2OU9Vd1g1?=
+ =?utf-8?B?UTNqdnprM2NSOGE3TERyVCtZZHRLN0VKaHRkWXhySDBtMDVjeUhYTEh1T2g4?=
+ =?utf-8?B?QjlnSkpxWHVyYzJnUTFvbGZYRllxeVNBZXV4WGEwZHp3bEtnY0FKd042b2da?=
+ =?utf-8?B?RXVYNlpqQWQ2Mjh3TlNmK1hkQjZPSlAvdWJvVGZpM0tPL3U4czBWWkZYL0dz?=
+ =?utf-8?B?SWlwR2xsRG1WOUZLV1RKMitocG0zaUhwQlBNbC9FaVN3dXlKS2VPT0djdmhH?=
+ =?utf-8?B?N3kxc0ZSM09qQWg2Njdpem5hQ1ZDWnFKdGZIRDFWMHRlTXRhNXI5ODlHYkU5?=
+ =?utf-8?B?aWd6bUhnTVhUUHQ0VUZDWS9YU3FRa2dhb2RBR2lFdC8vTXFrNThrbVZpMEVX?=
+ =?utf-8?B?ckxnc2U5eVZMQnMrN096M1krNTR5YWJyTFBhOG81Y1h4cENHTXYwUTNwdHN6?=
+ =?utf-8?B?NVd5M2VPSStCeE12RzNpL1drcTdWM3N6RWpJQWxIOVBIb0ViajR6NHNsRkor?=
+ =?utf-8?B?bDVWUUFuTkZjVUFFRGt2OS9zTldWOHprLzBUWVRMOVRNcmUrNXBjaVpRcXJV?=
+ =?utf-8?B?WkxSUG1PMFBuWEdJQyszbWRCVVk0S2hKdzZLeVdlb084eUdjQWpuUjM5U0x0?=
+ =?utf-8?B?K21hRktwTWpBK0gxUU9CU1BlOXBLOHRrM1Yra0hsQnIzZks4K3QvRXdRT0NS?=
+ =?utf-8?B?bEJLeHpEL1o0TG5hbk5sSzNNb3Q1RGlGcXp2dnpuRmRkb29hUERjVU41cUF0?=
+ =?utf-8?B?N3pwdHFSZUFpQ09UeEdvcXFScHl5aGtQODRtKzNoR1QxbTdHYmpadmMxZDVF?=
+ =?utf-8?B?UVMyME9Sbk45clkzRDh2ZlR0M3FzOWU2dklLTHdiTlBmWm9kamozK2Y3ZDBH?=
+ =?utf-8?B?Q0E3VVhVMmU1bzRJbTBhQzlxMGxWQlV3b2c2L3pEbGVvTUg5ZDkzRVhtWjNu?=
+ =?utf-8?B?bE5CZHV3NC9ncmltU29vOXBiZHBRdWhSUzJGdldEWnVyUGJnUE1WamVXZU9m?=
+ =?utf-8?B?RDVhelJEY2pTMThxcTZZbFd1RW5tZXlSaEpVeW1vU0FDZUF4R29RQVBSUitZ?=
+ =?utf-8?B?Y3l2RDZXTW10ano5QUFsNTVGcDh0LzFLaCszZTNVNjhzVnNqSVZCYTdZL0xQ?=
+ =?utf-8?B?Y1JzL2ZWR1lHYUR5MjV3SUM0REd2dHhkUGVyVjAvZmNCNWJtSm1uQURHK1l4?=
+ =?utf-8?B?QnNKcHNONHhkODh0c2R2VHpRRytuS3UxMDJMdHl2Ry92Ui9hZGxtemdFZ3ls?=
+ =?utf-8?B?Q1pTM0pac2E0MjlRaWJLNitPTUp3ZUQwNDBiaCtxM056TnE4ZllRUzdIY3Fj?=
+ =?utf-8?B?cmlKbkYxU0IxN0JFZzRqbzZjNnZQbEJTU2V2TTZuMVEzMFAwaEk4QVhEbkha?=
+ =?utf-8?B?bGVMVWxlQWI1M0ZPZHF5bzZiODFGemdZQmtGbzdZam1qWW5aZERCYml3REdJ?=
+ =?utf-8?B?RURSZTQ4NllIOUxzSHNJUVJkYXJjc1BUL1hqcjFPUmt0VzAyRXdQMC9BbTQ1?=
+ =?utf-8?B?Ti9XbnBQVmtyS3lWbDR3Qms0UXFaRC9iTmh2SWtLNHhQT213SEtJOWRJU3R0?=
+ =?utf-8?B?aU9VVzZJOFJUeWhUU3cwQm9qdmpWZ2YzS0F1Z0dRbGlNaE9SRVloV2tEUjNM?=
+ =?utf-8?B?OXJKSWpGR3JmeDZKVm1GODQ2UithQXUwK2F2S3BDajNobExlN21LUjBXcTk2?=
+ =?utf-8?B?L1hXYjVSZUtHWUx1QWFTRkYzM01kbkU1WHF5WWkyWkZnU20rckhVZUt1Z0Jj?=
+ =?utf-8?B?SU9yV3licTQ4QVhnZzFkSFQ3VW1ITUxBVS8zV3AxdVJZMVZvTSt2Rk9WdUZE?=
+ =?utf-8?Q?AliOIvU4Dew4jCEWKmGhfoQzRzTg=3D?=
+MIME-Version: 1.0
+
+--_----------=_MCPart_1916804781
+Content-Type: text/plain; charset="utf-8"; format="fixed"
+Content-Transfer-Encoding: quoted-printable
+
+
+
+View this email in your browser (https://mailchi.mp/2e008cf9a397/dlci-cba-=
+trainings-your-attendance-needed-1281409?e=3Dd43a4cfd44) .
+
+To: All graduate students
+
+Cc: DLCI+=2C Grad Admins + Officers=2C DAFs=2C FOs
+
+Dear graduate students=2C
+
+We are writing to let you know that a new vision plan (https://medical.mit=
+=2Eedu/GSVP) is now available for all MIT graduate students currently enroll=
+ed in a degree-granting program.
+
+Special enrollment (https://app.smartsheet.com/b/form/75dc247b14d84dbcb332=
+fd53f81ccaa4) period is from December 15=2C 2023 (TODAY) through January 1=
+5=2C 2024 and coverage starts on February 1=2C 2024.
+
+Key Details
+* The vision plan is offered through EyeMed and is separate from the MIT S=
+tudent Health Insurance Plan (MIT SHIP). The plan offers eyeglasses and co=
+ntact lenses at significantly lower costs than retail. For complete covera=
+ge details=2C see the full Summary of Benefits (https://ovc.mit.edu/wp-con=
+tent/uploads/2023/12/Final-Benefit-Summary_MIT-Grad-Student-Plan_2024-02-0=
+1.pdf) .
+* For this initial year=2C the plan will run from February 1=2C 2024 - Aug=
+ust 30=2C 2024; in future years=2C it will mirror the open enrollment and=
+ plan year timelines of the MIT health and dental insurance plans for grad=
+uate students.
+* The plan only allows individual student enrollments. Spouses=2C domestic=
+ partners=2C or children/dependents CANNOT be enrolled. Please see Article=
+ 23: Section 3 (http://hr.mit.edu/gsu) of the Collective Bargaining Agreem=
+ent for more information about what the MIT Graduate Student Union negotia=
+ted with the Institute.
+* Students who decide to enroll will be fully responsible for paying for t=
+he premiums: $31.50 for February 1=2C 2024 - August 30=2C 2024. As with th=
+e current plan for MIT staff employees=2C and consistent with the CBA=2C t=
+here are no subsidies. Premiums will be billed to a student=E2=80=99s MITP=
+ay account and be billed in a single lump sum.
+
+To enroll=2C beginning on December 20=2C please fill out an online sign-up=
+ sheet (https://app.smartsheet.com/b/form/75dc247b14d84dbcb332fd53f81ccaa4=
+) . (Note: Students are not automatically enrolled.)
+
+If you have any questions about this plan or related benefits (https://oge=
+=2Emit.edu/student-finances/graduate-student-benefits/) =2C contact gradunio=
+nquestions@mit.edu (mailto:gradunionquestions@mit.edu) .
+
+Sincerely=2C
+
+Ian
+
+=E2=80=94
+
+Ian A. Waitz
+Vice Chancellor for Undergraduate and Graduate Education and Jerome C. Hun=
+saker Professor of Aeronautics and Astronautics
+
+Massachusetts Institute of Technology
+
+77 Massachusetts Avenue Cambridge=2C MA 02139
+
+Want to change how you receive these emails?
+You can update your preferences (https://mit.us16.list-manage.com/profile?=
+u=3D88f983a0e3c2a43fb2a2eabd0&id=3D563851b4fe&e=3Dd43a4cfd44&c=3D374a409beb)=
+ or unsubscribe from this list (https://mit.us16.list-manage.com/unsubscri=
+be?u=3D88f983a0e3c2a43fb2a2eabd0&id=3D563851b4fe&e=3Dd43a4cfd44&c=3D374a409b=
+eb) .
+--_----------=_MCPart_1916804781
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head><!--[if gte mso 15]>
+<xml>
+<o:OfficeDocumentSettings>
+<o:AllowPNG/>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+<meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D1"=
+>
+<title>New vision plan: Special enrollment period from Dec 15, 2023 - Jan 1=
+5, 2024; coverage starts Feb 1, 2024</title>
+<style>          img{-ms-interpolation-mode:bicubic;}
+          table, td{mso-table-lspace:0pt; mso-table-rspace:0pt;}
+          .mceStandardButton, .mceStandardButton td, .mceStandardButton td =
+a{mso-hide:all !important;}
+          p, a, li, td, blockquote{mso-line-height-rule:exactly;}
+          p, a, li, td, body, table, blockquote{-ms-text-size-adjust:100%; =
+-webkit-text-size-adjust:100%;}
+          @media only screen and (max-width: 480px){
+            body, table, td, p, a, li, blockquote{-webkit-text-size-adjust:=
+none !important;}
+          }
+          .mcnPreviewText{display: none !important;}
+          .bodyCell{margin:0 auto; padding:0; width:100%;}
+          .ExternalClass, .ExternalClass p, .ExternalClass td, .ExternalCla=
+ss div, .ExternalClass span, .ExternalClass font{line-height:100%;}
+          .ReadMsgBody{width:100%;} .ExternalClass{width:100%;}
+          a[x-apple-data-detectors]{color:inherit !important; text-decorati=
+on:none !important; font-size:inherit !important; font-family:inherit !impo=
+rtant; font-weight:inherit !important; line-height:inherit !important;}
+            body{height:100%; margin:0; padding:0; width:100%; background: =
+#ffffff;}
+            p{margin:0; padding:0;}
+            table{border-collapse:collapse;}
+            td, p, a{word-break:break-word;}
+            h1, h2, h3, h4, h5, h6{display:block; margin:0; padding:0;}
+            img, a img{border:0; height:auto; outline:none; text-decoration=
+:none;}
+            a[href^=3D"tel"], a[href^=3D"sms"]{color:inherit; cursor:defaul=
+t; text-decoration:none;}
+            li p {margin: 0 !important;}
+            .ProseMirror a {
+                pointer-events: none;
+            }
+            @media only screen and (max-width: 480px){
+                body{width:100% !important; min-width:100% !important; }
+                body.mobile-native {
+                    -webkit-user-select: none; user-select: none; transitio=
+n: transform 0.2s ease-in; transform-origin: top center;
+                }
+                body.mobile-native.selection-allowed a, body.mobile-native.=
+selection-allowed .ProseMirror {
+                    user-select: auto;
+                    -webkit-user-select: auto;
+                }
+                colgroup{display: none;}
+                img{height: auto !important;}
+                .mceWidthContainer{max-width: 660px !important;}
+                .mceColumn{display: block !important; width: 100% !importan=
+t;}
+                .mceColumn-forceSpan{display: table-cell !important; width:=
+ auto !important;}
+                .mceBlockContainer{padding-right:16px !important; padding-l=
+eft:16px !important;}
+                .mceBlockContainerE2E{padding-right:0px; padding-left:0px;}
+                .mceSpacing-24{padding-right:16px !important; padding-left:=
+16px !important;}
+                .mceFooterSection .mceText, .mceFooterSection .mceText p{fo=
+nt-size: 16px !important; line-height: 140% !important;}
+                .mceText, .mceText p{font-size: 16px !important; line-heigh=
+t: 140% !important;}
+                h1{font-size: 30px !important; line-height: 120% !important=
+;}
+                h2{font-size: 26px !important; line-height: 120% !important=
+;}
+                h3{font-size: 20px !important; line-height: 125% !important=
+;}
+                h4{font-size: 18px !important; line-height: 125% !important=
+;}
+            }
+            @media only screen and (max-width: 640px){
+                .mceClusterLayout td{padding: 4px !important;}
+            }
+            div[contenteditable=3D"true"] {outline: 0;}
+            .ProseMirror .empty-node, .ProseMirror:empty {position: relativ=
+e;}
+            .ProseMirror .empty-node::before, .ProseMirror:empty::before {
+                position: absolute;
+                left: 0;
+                right: 0;
+                color: rgba(0,0,0,0.2);
+                cursor: text;
+            }
+            .ProseMirror .empty-node:hover::before, .ProseMirror:empty:hove=
+r::before {
+                color: rgba(0,0,0,0.3);
+            }
+            .ProseMirror h1.empty-node:only-child::before,
+            .ProseMirror h2.empty-node:only-child::before,
+            .ProseMirror h3.empty-node:only-child::before,
+            .ProseMirror h4.empty-node:only-child::before {
+                content: 'Heading';
+            }
+            .ProseMirror p.empty-node:only-child::before, .ProseMirror:empt=
+y::before {
+                content: 'Start typing...';
+            }
+            a .ProseMirror p.empty-node::before, a .ProseMirror:empty::befo=
+re {
+                content: '';
+            }
+            .mceText, .ProseMirror {
+                white-space: pre-wrap;
+            }
+body, #bodyTable { background-color: rgb(250, 250, 250); }.mceText, .mceLab=
+el { font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif; =
+}.mceText, .mceLabel { color: rgb(32, 32, 32); }.mceText p { margin-bottom:=
+ 0px; }.mceText ul { margin-bottom: 0px; }.mceText label { margin-bottom: 0=
+px; }.mceText input { margin-bottom: 0px; }.mceSpacing-12 .mceInput + .mceE=
+rrorMessage { margin-top: -6px; }.mceText p { margin-bottom: 0px; }.mceText=
+ ul { margin-bottom: 0px; }.mceText label { margin-bottom: 0px; }.mceText i=
+nput { margin-bottom: 0px; }.mceSpacing-24 .mceInput + .mceErrorMessage { m=
+argin-top: -12px; }.mceInput { background-color: transparent; border: 2px s=
+olid rgb(208, 208, 208); width: 60%; color: rgb(77, 77, 77); display: block=
+; }.mceInput[type=3D"radio"], .mceInput[type=3D"checkbox"] { float: left; m=
+argin-right: 12px; display: inline; width: auto !important; }.mceLabel > .m=
+ceInput { margin-bottom: 0px; margin-top: 2px; }.mceLabel { display: block;=
+ }.mceText p { color: rgb(32, 32, 32); font-family: "Helvetica Neue", Helve=
+tica, Arial, Verdana, sans-serif; font-size: 16px; font-weight: normal; lin=
+e-height: 1.5; text-align: center; letter-spacing: 0px; direction: ltr; }.m=
+ceText a { color: rgb(41, 83, 221); font-style: normal; font-weight: normal=
+; text-decoration: underline; direction: ltr; }
+@media only screen and (max-width: 480px) {
+            .mceText p { font-size: 16px !important; line-height: 1.5 !impo=
+rtant; }
+          }
+@media only screen and (max-width: 480px) {
+            .mceBlockContainer { padding-left: 16px !important; padding-rig=
+ht: 16px !important; }
+          }
+#dataBlockId-9 p, #dataBlockId-9 h1, #dataBlockId-9 h2, #dataBlockId-9 h3, =
+#dataBlockId-9 h4, #dataBlockId-9 ul { text-align: center; }#dataBlockId-1 =
+p, #dataBlockId-1 h1, #dataBlockId-1 h2, #dataBlockId-1 h3, #dataBlockId-1 =
+h4, #dataBlockId-1 ul { line-height: 1; text-align: left; }#dataBlockId-5 p=
+, #dataBlockId-5 h1, #dataBlockId-5 h2, #dataBlockId-5 h3, #dataBlockId-5 h=
+4, #dataBlockId-5 ul { line-height: 1.5; text-align: left; }#dataBlockId-9 =
+p, #dataBlockId-9 h1, #dataBlockId-9 h2, #dataBlockId-9 h3, #dataBlockId-9 =
+h4, #dataBlockId-9 ul { color: rgb(101, 101, 101); font-family: "Helvetica =
+Neue", Helvetica, Arial, Verdana, sans-serif; line-height: 1.5; text-align:=
+ center; }</style></head>
+<body>
+<!--
+-->
+<center>
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" height=3D"100%" wid=
+th=3D"100%" id=3D"bodyTable" style=3D"background-color: rgb(250, 250, 250);=
+">
+<tbody><tr>
+<td class=3D"bodyCell" align=3D"center" valign=3D"top">
+<table id=3D"root" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=
+=3D"100%"><tbody data-block-id=3D"13" class=3D"mceWrapper"><tr><td align=3D=
+"center" valign=3D"top" class=3D"mceWrapperOuter"><!--[if (gte mso 9)|(IE)]=
+><table align=3D"center" border=3D"0" cellspacing=3D"0" cellpadding=3D"0" w=
+idth=3D"660" style=3D"width:660px;"><tr><td><![endif]--><table border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" style=3D"max-width:660p=
+x" role=3D"presentation"><tbody><tr><td style=3D"background-color:#ffffff;b=
+ackground-position:center;background-repeat:no-repeat;background-size:cover=
+" class=3D"mceWrapperInner" valign=3D"top"><table align=3D"center" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentat=
+ion" data-block-id=3D"2"><tbody><tr class=3D"mceRow"><td style=3D"backgroun=
+d-position:center;background-repeat:no-repeat;background-size:cover" valign=
+=3D"top"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"1=
+00%" role=3D"presentation"><tbody><tr><td style=3D"padding-top:0;padding-bo=
+ttom:0" class=3D"mceColumn" data-block-id=3D"-4" valign=3D"top" colspan=3D"=
+12" width=3D"100%"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+width=3D"100%" role=3D"presentation"><tbody><tr><td style=3D"background-col=
+or:#fafafa;padding-top:12px;padding-bottom:12px;padding-right:24px;padding-=
+left:24px" class=3D"mceBlockContainer" valign=3D"top"><div data-block-id=3D=
+"1" class=3D"mceText" id=3D"dataBlockId-1" style=3D"width:100%"><p class=3D=
+"last-child"><a href=3D"https://mailchi.mp/2e008cf9a397/dlci-cba-trainings-=
+your-attendance-needed-1281409?e=3Dd43a4cfd44" target=3D"_blank"><span styl=
+e=3D"text-decoration:underline;"><span style=3D"font-size: 12px">View this =
+email in your browser</span></span></a><span style=3D"color:#222222;"><span=
+ style=3D"font-size: 12px">.</span></span></p></div></td></tr></tbody></tab=
+le></td></tr></tbody></table></td></tr></tbody></table><table align=3D"cent=
+er" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D=
+"presentation" data-block-id=3D"4"><tbody><tr class=3D"mceRow"><td style=3D=
+"background-position:center;background-repeat:no-repeat;background-size:cov=
+er" valign=3D"top"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+width=3D"100%" role=3D"presentation"><tbody><tr><td style=3D"padding-top:0;=
+padding-bottom:0" class=3D"mceColumn" data-block-id=3D"-5" valign=3D"top" c=
+olspan=3D"12" width=3D"100%"><table border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" width=3D"100%" role=3D"presentation"><tbody><tr><td style=3D"back=
+ground-color:#FFFFFF;padding-top:12px;padding-bottom:12px;padding-right:0;p=
+adding-left:0" class=3D"mceBlockContainer" align=3D"left" valign=3D"top"><i=
+mg data-block-id=3D"3" width=3D"564" height=3D"auto" style=3D"width:564px;h=
+eight:auto;max-width:100%;display:block" alt=3D"" src=3D"https://mcusercont=
+ent.com/88f983a0e3c2a43fb2a2eabd0/images/2c8f81fe-61c4-54de-c307-a3f96145d5=
+a5.png" role=3D"presentation" class=3D"imageDropZone"></td></tr></tbody></t=
+able></td></tr></tbody></table></td></tr></tbody></table><table align=3D"ce=
+nter" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=
+=3D"presentation" data-block-id=3D"7"><tbody><tr class=3D"mceRow"><td style=
+=3D"background-position:center;background-repeat:no-repeat;background-size:=
+cover" valign=3D"top"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"=
+0" width=3D"100%" role=3D"presentation"><tbody><tr><td style=3D"padding-top=
+:0;padding-bottom:0" class=3D"mceColumn" data-block-id=3D"-6" valign=3D"top=
+" colspan=3D"12" width=3D"100%"><table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" width=3D"100%" role=3D"presentation"><tbody><tr><td style=3D"b=
+ackground-color:#ffffff;padding-top:12px;padding-bottom:12px;padding-right:=
+24px;padding-left:24px" class=3D"mceBlockContainer" valign=3D"top"><div dat=
+a-block-id=3D"5" class=3D"mceText" id=3D"dataBlockId-5" style=3D"width:100%=
+"><p><span style=3D"font-size: 14px">To: All graduate students</span></p><p=
+><span style=3D"font-size: 14px">Cc: DLCI+, Grad Admins + Officers, DAFs, F=
+Os</span></p><p><br></p><p><span style=3D"font-size: 14px">Dear graduate st=
+udents,</span></p><p><br></p><p><span style=3D"font-size: 14px">We are writ=
+ing to let you know that </span><a href=3D"https://mit.us16.list-manage.com=
+/track/click?u=3D88f983a0e3c2a43fb2a2eabd0&amp;id=3De8dcb0b65e&amp;e=3Dd43a=
+4cfd44"><span style=3D"font-size: 14px">a new vision plan</span></a><span s=
+tyle=3D"font-size: 14px"> is now available for all MIT graduate students cu=
+rrently enrolled in a degree-granting program.</span></p><p><br></p><p><a h=
+ref=3D"https://mit.us16.list-manage.com/track/click?u=3D88f983a0e3c2a43fb2a=
+2eabd0&amp;id=3D93635b4ae9&amp;e=3Dd43a4cfd44"><span style=3D"font-size: 14=
+px">Special enrollment</span></a><span style=3D"font-size: 14px"> period is=
+ from </span><strong><span style=3D"font-size: 14px">December 15, 2023 (TOD=
+AY) through January 15, 2024</span></strong><span style=3D"font-size: 14px"=
+> and coverage starts on </span><strong><span style=3D"font-size: 14px">Feb=
+ruary 1, 2024</span></strong><span style=3D"font-size: 14px">.</span></p><p=
+><br></p><p><strong><span style=3D"font-size: 14px">Key Details</span></str=
+ong></p><ul><li><p><span style=3D"font-size: 14px">The vision plan is offer=
+ed through EyeMed and is separate from the MIT Student Health Insurance Pla=
+n (MIT SHIP). The plan offers eyeglasses and contact lenses at significantl=
+y lower costs than retail. For complete coverage details, see the full </sp=
+an><a href=3D"https://mit.us16.list-manage.com/track/click?u=3D88f983a0e3c2=
+a43fb2a2eabd0&amp;id=3Dea450aea86&amp;e=3Dd43a4cfd44"><span style=3D"font-s=
+ize: 14px">Summary of Benefits</span></a><span style=3D"font-size: 14px">. =
+<br></span></p></li><li><p><span style=3D"font-size: 14px">For this initial=
+ year, the plan will run from </span><strong><span style=3D"font-size: 14px=
+">February 1, 2024 - August 30, 2024</span></strong><span style=3D"font-siz=
+e: 14px">; in future years, it will mirror the open enrollment and plan yea=
+r timelines of the MIT health and dental insurance plans for graduate stude=
+nts.<br></span></p></li><li><p><span style=3D"font-size: 14px">The plan onl=
+y allows individual student enrollments. Spouses, domestic partners, or chi=
+ldren/dependents </span><strong><span style=3D"font-size: 14px">CANNOT</spa=
+n></strong><span style=3D"font-size: 14px"> be enrolled. Please see&nbsp;</=
+span><a href=3D"https://mit.us16.list-manage.com/track/click?u=3D88f983a0e3=
+c2a43fb2a2eabd0&amp;id=3Defe3b67e1d&amp;e=3Dd43a4cfd44"><span style=3D"font=
+-size: 14px">Article 23: Section 3</span></a><span style=3D"font-size: 14px=
+"> of the Collective Bargaining Agreement for more information about what t=
+he MIT Graduate Student Union negotiated with the Institute.<br></span></p>=
+</li><li><p><span style=3D"font-size: 14px">Students who decide to enroll w=
+ill be fully responsible for paying for the premiums: $31.50 for February 1=
+, 2024 - August 30, 2024. As with the current plan for MIT staff employees,=
+ and consistent with the CBA, there are no subsidies. Premiums will be bill=
+ed to a student=E2=80=99s MITPay account and be billed in a single lump sum=
+.</span></p></li></ul><p><br></p><p><span style=3D"font-size: 14px">To enro=
+ll, beginning on December 20, please </span><a href=3D"https://mit.us16.lis=
+t-manage.com/track/click?u=3D88f983a0e3c2a43fb2a2eabd0&amp;id=3D63966a2941&=
+amp;e=3Dd43a4cfd44"><strong><span style=3D"font-size: 14px">fill out an onl=
+ine sign-up sheet</span></strong></a><span style=3D"font-size: 14px">. (Not=
+e: Students are not automatically enrolled.)</span></p><p><br></p><p><span =
+style=3D"font-size: 14px">If you have any questions about this plan or </sp=
+an><a href=3D"https://mit.us16.list-manage.com/track/click?u=3D88f983a0e3c2=
+a43fb2a2eabd0&amp;id=3D9f5caf337b&amp;e=3Dd43a4cfd44"><span style=3D"font-s=
+ize: 14px">related benefits</span></a><span style=3D"font-size: 14px">, con=
+tact </span><a href=3D"mailto:gradunionquestions@mit.edu"><span style=3D"fo=
+nt-size: 14px">gradunionquestions@mit.edu</span></a><span style=3D"font-siz=
+e: 14px">.</span></p><p><br></p><p><span style=3D"font-size: 14px">Sincerel=
+y,</span></p><p><span style=3D"font-size: 14px">Ian</span></p><p><br></p><p=
+><span style=3D"font-size: 14px">=E2=80=94</span></p><p><span style=3D"font=
+-size: 14px">Ian A. Waitz<br>Vice Chancellor for Undergraduate and Graduate=
+ Education and Jerome C. Hunsaker Professor of Aeronautics and Astronautics=
+</span></p><p class=3D"last-child"><br></p></div></td></tr><tr><td style=3D=
+"background-color:#ffffff;padding-top:0;padding-bottom:0;padding-right:0;pa=
+dding-left:0" class=3D"mceBlockContainer" valign=3D"top"><table border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" style=3D"background-co=
+lor:#ffffff" role=3D"presentation" data-block-id=3D"6"><tbody><tr><td style=
+=3D"min-width:100%;border-top:27px solid transparent" valign=3D"top"></td><=
+/tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></t=
+d></tr></tbody></table><table align=3D"center" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" width=3D"100%" role=3D"presentation" data-block-id=3D"=
+12"><tbody><tr class=3D"mceRow"><td style=3D"background-position:center;bac=
+kground-repeat:no-repeat;background-size:cover" valign=3D"top"><table borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presenta=
+tion"><tbody><tr><td style=3D"padding-top:0;padding-bottom:0" class=3D"mceC=
+olumn" data-block-id=3D"-7" valign=3D"top" colspan=3D"12" width=3D"100%"><t=
+able border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=
+=3D"presentation"><tbody><tr><td style=3D"padding-top:8px;padding-bottom:8p=
+x;padding-right:8px;padding-left:8px" valign=3D"top"><table align=3D"center=
+" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"p=
+resentation" data-block-id=3D"11" id=3D"section_572bea0824ac4d5ff8fa0e5065b=
+9d73d" class=3D"mceFooterSection"><tbody><tr class=3D"mceRow"><td style=3D"=
+background-position:center;background-repeat:no-repeat;background-size:cove=
+r" valign=3D"top"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"12" =
+width=3D"100%" role=3D"presentation"><tbody><tr><td style=3D"padding-top:0;=
+padding-bottom:0;margin-bottom:12px" class=3D"mceColumn" data-block-id=3D"-=
+3" valign=3D"top" colspan=3D"12" width=3D"100%"><table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"presentation"><tbody><t=
+r><td style=3D"background-color:#fafafa;padding-top:12px;padding-bottom:12p=
+x;padding-right:16px;padding-left:16px" class=3D"mceBlockContainer" align=
+=3D"center" valign=3D"top"><div data-block-id=3D"9" class=3D"mceText" id=3D=
+"dataBlockId-9" style=3D"display:inline-block;width:100%"><p><span style=3D=
+"font-size: 12px">Massachusetts Institute of Technology</span></p><p><span =
+style=3D"font-size: 12px">77 Massachusetts Avenue Cambridge, MA 02139</span=
+></p><p class=3D"last-child"><span style=3D"font-size: 12px">Want to change=
+ how you receive these emails?<br>You can </span><a href=3D"https://mit.us1=
+6.list-manage.com/profile?u=3D88f983a0e3c2a43fb2a2eabd0&amp;id=3D563851b4fe=
+&amp;e=3Dd43a4cfd44&amp;c=3D374a409beb"><span style=3D"font-size: 12px">upd=
+ate your preferences</span></a><span style=3D"font-size: 12px"> or </span><=
+a href=3D"https://mit.us16.list-manage.com/unsubscribe?u=3D88f983a0e3c2a43f=
+b2a2eabd0&amp;id=3D563851b4fe&amp;e=3Dd43a4cfd44&amp;c=3D374a409beb"><span =
+style=3D"font-size: 12px">unsubscribe from this list</span></a><span style=
+=3D"font-size: 12px">.</span>&nbsp;</p></div></td></tr><tr><td class=3D"mce=
+LayoutContainer" align=3D"center" valign=3D"top"><table align=3D"center" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" width=3D"100%" role=3D"prese=
+ntation" data-block-id=3D"-2"><tbody><tr class=3D"mceRow"><td style=3D"back=
+ground-position:center;background-repeat:no-repeat;background-size:cover;pa=
+dding-top:0px;padding-bottom:0px" valign=3D"top"><table border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"24" width=3D"100%" role=3D"presentation"><tbody>=
+</tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></=
+tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td=
+></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table><=
+!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]--></td></tr></tbody></=
+table>
+</td>
+</tr>
+</tbody></table>
+</center>
+<img src=3D"https://mit.us16.list-manage.com/track/open.php?u=3D88f983a0e3c=
+2a43fb2a2eabd0&amp;id=3D374a409beb&amp;e=3Dd43a4cfd44" height=3D"1" width=
+=3D"1" alt=3D""></body></html>=
+
+--_----------=_MCPart_1916804781--

@@ -11,6 +11,8 @@ import SwiftUI
 @Observable
 class WindowViewModel {
     
+    typealias MailFolder = Microsoft.Graph.MailFolder
+    
     // init
     var _userContext: UserContext
         
@@ -70,10 +72,6 @@ extension TreeNode : Hashable where Element : Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(element)
     }
-}
-
-extension MailFolder : Identifiable {
-    
 }
 
 extension WindowViewModel {

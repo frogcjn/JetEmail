@@ -1,0 +1,615 @@
+Received: from SJ2PR01MB8606.prod.exchangelabs.com (2603:10b6:a03:53a::14) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Sat, 28 Oct 2023 14:34:54
+ +0000
+Received: from DS7P222CA0009.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::11) by
+ SJ2PR01MB8606.prod.exchangelabs.com (2603:10b6:a03:53a::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6933.22; Sat, 28 Oct 2023 14:34:52 +0000
+Received: from CY4PEPF0000EDD1.namprd03.prod.outlook.com
+ (2603:10b6:8:2e:cafe::80) by DS7P222CA0009.outlook.office365.com
+ (2603:10b6:8:2e::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.25 via Frontend
+ Transport; Sat, 28 Oct 2023 14:34:52 +0000
+Authentication-Results: spf=softfail (sender IP is 18.9.1.111)
+ smtp.mailfrom=bounces.cscsw.com; dkim=pass (signature was verified)
+ header.d=hello.cscsw.com;dmarc=pass action=none header.from=hello.cscsw.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ bounces.cscsw.com discourages use of 18.9.1.111 as permitted sender)
+Received: from mail.exchange.mit.edu (18.9.1.111) by
+ CY4PEPF0000EDD1.mail.protection.outlook.com (10.167.241.205) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Sat, 28 Oct 2023 14:34:51 +0000
+Received: from w92expo6.exchange.mit.edu (18.7.74.60) by
+ oc11exhyb6.exchange.mit.edu (18.9.1.111) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Sat, 28 Oct 2023 10:34:50 -0400
+Received: from oc11exhyb1.exchange.mit.edu (18.9.1.60) by
+ w92expo6.exchange.mit.edu (18.7.74.60) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Sat, 28 Oct 2023 10:34:50 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Sat, 28 Oct 2023 10:34:50 -0400
+Received: from CH5P222CA0004.NAMP222.PROD.OUTLOOK.COM (2603:10b6:610:1ee::8)
+ by SJ0PR01MB6111.prod.exchangelabs.com (2603:10b6:a03:29a::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6933.22; Sat, 28 Oct 2023 14:34:48 +0000
+Received: from CY4PEPF0000EDD5.namprd03.prod.outlook.com
+ (2603:10b6:610:1ee:cafe::19) by CH5P222CA0004.outlook.office365.com
+ (2603:10b6:610:1ee::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.26 via Frontend
+ Transport; Sat, 28 Oct 2023 14:34:47 +0000
+Authentication-Results-Original: spf=pass (sender IP is 192.174.84.214)
+ smtp.mailfrom=bounces.cscsw.com; dkim=pass (signature was verified)
+ header.d=hello.cscsw.com;dmarc=pass action=none
+ header.from=hello.cscsw.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of bounces.cscsw.com
+ designates 192.174.84.214 as permitted sender)
+ receiver=protection.outlook.com; client-ip=192.174.84.214;
+ helo=mta-84-214.sparkpostmail.com; pr=C
+Received: from mta-84-214.sparkpostmail.com (192.174.84.214) by
+ CY4PEPF0000EDD5.mail.protection.outlook.com (10.167.241.209) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6933.15 via Frontend Transport; Sat, 28 Oct 2023 14:34:47 +0000
+X-MSFBL: YfZeXwoL/aX8f46wPbAw04pYnO+Bra1zZfr3XGp1AAE=|eyJjdXN0b21lcl9pZCI
+	6IjI4MDE3MiIsIm1lc3NhZ2VfaWQiOiI2NTM4MDYxYzNkNjU2ZTQwNTE1MyIsInN
+	1YmFjY291bnRfaWQiOiIxNCIsInIiOiJqaWFubmFuQG1pdC5lZHUiLCJ0ZW5hbnR
+	faWQiOiJzcGMifQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hello.cscsw.com;
+	s=scph0720; t=1698503686; i=@hello.cscsw.com;
+	bh=07U6pFoFvzAIgzB1qur8qVqgLMxOIQ0RJGgIlFxECjE=;
+	h=To:Message-ID:Date:Content-Type:Subject:List-Unsubscribe:From:
+	 From:To:Cc:Subject;
+	b=RbdhVnI2Pmy9tzjG/n+VJNLvMIGxLgo1FwdO1/opYrE2SyphFZbmpHgqQfw5CuL6A
+	 J7/zuaeUb5Jrf+Oy7D1iZtZbGqhiZ2wv1BWFUe+jnxlP2HBaEenJbOeAmWAZK9zukt
+	 BVnIhN5GpPcWv29pdaXZ0ZSs9u44IObpwt2bv5u4=
+To: jiannan@mit.edu
+Message-ID: <15.35.47286.60C1D356@gn.mta1vrest.cc.prd.sparkpost>
+Date: Sat, 28 Oct 2023 14:34:46 +0000
+Content-Type: multipart/alternative; boundary="_----Br4u2jmKRKQCg9rtsfm3Mw===_74/35-47286-60C1D356"
+Reply-To: <dcaldwell@cscsw.com>
+Subject: A Gift from CSC
+X-Campaign-ID: 7139722
+List-Unsubscribe: <https://links.iterable.com/e/encryptedUnsubscribe?_r=0246295a7de348f28156bd8b267796d1&_s=d5457806d87c44f395016c127d32dcd3&_t=fl66b8HtdiiEtoZ4k1L9WeVjllPCl4K0ncgrO7LhWntFa91Kx2oOPz4Mq00WDrVNcsGCxyD-HUSNd7KF07AfchCofnMebsAllTqYjXqb0EI%3D>,<mailto:unsubscribe+7139722+9530466@unsubscribe.iterable.com>
+From: "CSC GO" <cscgo@hello.cscsw.com>
+X-Message-ID: d5457806d87c44f395016c127d32dcd3
+X-Feedback-ID: 9530466:7139722:36952:iterable
+Feedback-ID: 9530466:7139722:36952:iterable
+Return-Path: msprvs1=19665EKq_NDvY=bounces-280172-14@bounces.cscsw.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CY4PEPF0000EDD5:EE_|SJ0PR01MB6111:EE_|CY4PEPF0000EDD1:EE_|SJ2PR01MB8606:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: fbed4544-6bfd-4e72-5c44-08dbd7c30beb
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:5;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?ELhh/O3KlyXa+O/cHOe4q95T95ftw9v+kyK6PuFOtcgeLGuKX3AV9tKi9Oz6?=
+ =?us-ascii?Q?68IxXnCQ55rCQZFkqTuou++GAUSnWpsuiPcnjQVKMIAF/u6U7v+XwIWeikmO?=
+ =?us-ascii?Q?CdR377f2xpxnmHvjSNHYkhTgqBTyTyelloXwHDlIy56np0Qyh0PgwfmvlMtb?=
+ =?us-ascii?Q?+pRH3J5qOGHMyqC3jVI/o1STHV45/LSBBR6DjBwb+i+8Fjy71YzPMvXLpTSE?=
+ =?us-ascii?Q?DT61MEjWEKcp4AUOPWdNuO66e/e2BX080/ljHggIWd1yUR2pcz/+eulTUrsY?=
+ =?us-ascii?Q?FHwvT31HTBIa0h7CBaZJ0rXKyLa49ikYQ/42vSlS5FJsYBxphPwQnuffiowj?=
+ =?us-ascii?Q?5rz2/wtoE46DNOGnXU3CGItt/LpJJQV6dEmweJ2Unu+uAD8yDaKVpDPB1RFe?=
+ =?us-ascii?Q?TQwIojvURtbZv/YFdijZcovPvCENnVaS+OMRYFAuGCtPgNvLtlhhsP8wZ6L+?=
+ =?us-ascii?Q?AWiVKXU6AxaZhf2Vg99iYjsBxsvbBbncUA5zpwCfVuvtByBQwTn3KIzhtPn5?=
+ =?us-ascii?Q?KFG5ITibgaoqQDq29aQStHu5WJM1d3l36V6/ir8Sl88Cr7nlGHt4WGV86xDk?=
+ =?us-ascii?Q?uHTZ7fTHiO5zZeO4uvrjkh5en789XYEuhb++AVzE46xgD5NIZ2OhGJP+OpDE?=
+ =?us-ascii?Q?oLQr8tro13GKpPiWvgaf5u6cEl5INzKXz90DaTv935swqYdMWIa3/ONnkVgJ?=
+ =?us-ascii?Q?9htWAmP8UR5r4jWLd4PqkK+XJqvm5+CGXFMRw8BRz0dIwyEK4Nw7ZJO1jgBt?=
+ =?us-ascii?Q?oLavCSb18LAHDkyCPk4/P3PVfu/KVl8J8Q7/nZtIOJE3o0UtZ81YkhNHlxZ8?=
+ =?us-ascii?Q?CN0GtOb00FeSncoFYn84ARgRnNrlqk5mdLCnMkPRqGwDUni3uDk0XKEV0nv6?=
+ =?us-ascii?Q?CyjKfTo7GCYsavWPhEu5JUlKownL+Jt79FGrz+LAq6UdyONiLoZ2HXXGvROW?=
+ =?us-ascii?Q?LwWz0xSLhFshOhMZ4bMuAKj+8ONGhl1+AE7ocpgzmhvkzQmjhoutKNUXHKJQ?=
+ =?us-ascii?Q?1KbRni2Yy0bbZOqxOPRlu448rIoq1Pq5NtJ/f/ZnOxumplq8HnMiUhJhFTwx?=
+ =?us-ascii?Q?2BwrshfGTJ5lNz9MVo7FBucbrxlbccuG0bLezZQHB27mFbB8jj4bDVtNSSWA?=
+ =?us-ascii?Q?kgoVClZO1iYZCFD3nD99oZl+MAcu/fnbIrbLIEdESgRwIi3wyp/UZ/GrA5Kv?=
+ =?us-ascii?Q?vvzKgS8m8YtTPMGnjmWbfyjuVBXSVf769aOA5EUsmjkwjIFolqDL+SkM7A2i?=
+ =?us-ascii?Q?abTYBRIP4RRFBsZnWZarbsKX76kevt6HEeD6e4e9383BDVP52mDwdhXsHEvu?=
+ =?us-ascii?Q?/CHfIEWI+JpTL4zeNURFZuwczd/4+osyZFfgMOh5lJGxzf9U5aVtBaWCJ5tB?=
+ =?us-ascii?Q?wMjT1iVHFTnYQFObN45HCP3kvfIh+RaFxvvnUnQq2rLiqOE3MWzGaSuFzvYd?=
+ =?us-ascii?Q?fVznqRInEkvzZ7/o43hzCFVh7a2lp0T8Y0FLic2YzQAxwXJZVAPkPsBkfXZ5?=
+ =?us-ascii?Q?uXMXhCQWwUt2+jjOC9A030BOOXzP4d6wPdsV7NBPLcUjNLAvbclsUWUveWlc?=
+ =?us-ascii?Q?yV8D6Nb/qBrOUpWm6FbICMGt/18t6/J9g7ACD8LS/2CMIR3m7swQWiQplmX3?=
+ =?us-ascii?Q?2PQv2TItKzAH2YNaOYL4ftkfpjN34lrQXnTMpupZYEH6/GzpKtAsDKT6nN/w?=
+ =?us-ascii?Q?h7RSIAWNg3l5QelcXvAROGbm9w7mS2u5/Pk8Fk0+dCkYi6gxfopama0Vof69?=
+ =?us-ascii?Q?SleYpZ30qVhjEoN2eXdhteto+qb+tA7xrbD4A8fFa2PuCCw4lxxGdWelFFIR?=
+ =?us-ascii?Q?LTBF31Q4K5RaYxyZ+VxSgdRsOvDEgdaTqHLuGJKlox12bSlfKSKMGCXU?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:192.174.84.214;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta-84-214.sparkpostmail.com;PTR:mta-84-214.sparkpostmail.com;CAT:NONE;SFS:(13230031)(4636009)(286005)(1690799017)(451199024)(33656002)(19627405001)(166002)(103116003)(4006050)(58800400005)(75640400001)(83380400001)(3480700007)(15974865002)(1096003)(22186003)(83170400001)(42882007)(336012)(7636003)(7596003)(356005)(9686003)(66899024)(6512007)(956004)(36736006)(6916009)(118246002)(6506007)(9316004)(6486002)(33964004)(16670700002)(8676002)(26005)(76236004)(1406899027)(5006899006)(76899018)(2804004)(32090200028)(131040200001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR01MB6111
+X-OrganizationHeadersPreserved: SJ0PR01MB6111.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb1.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb1.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo6.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 28 Oct 2023 14:34:52.1625
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ fbed4544-6bfd-4e72-5c44-08dbd7c30beb
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: CY4PEPF0000EDD1.namprd03.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CY4PEPF0000EDD1.namprd03.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CY4PEPF0000EDD1.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CY4PEPF0000EDD5.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 66ac7fd0-f0ac-4a88-f2d8-08dbd7c3090f
+X-Microsoft-Antispam: BCL:5;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.111;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb6.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2023 14:34:51.8344
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbed4544-6bfd-4e72-5c44-08dbd7c30beb
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.111];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CY4PEPF0000EDD5.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR01MB8606
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.5011935
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6933.019
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Y0FrTXdkVkI0UE1BaGIvMFpvSldPTkZDT1VYR3ZoR0UyYmMxS3U5cFRHSVIy?=
+ =?utf-8?B?RlhXbThiOWE1dDF2L2dLcldvaWhybU1kMmtlRldVa1IyMUh0SVZpb0JDMWJ6?=
+ =?utf-8?B?QWhDS1pMZjR5K0tRZFFpNmxZT3hNUjBMdmFhdUdMVmpQNHVjUlNpNGtDSGI2?=
+ =?utf-8?B?NjZMeWZ5YjlPMTB4UDdhU3hvSng2T29nbVpYTWNHRC9oRTZ1QVpuOFFmbE9P?=
+ =?utf-8?B?OVpnYVhLK2tLZTU4bTYzcXFFU0k3TnNDME4rR3ZwRHlsVnVCUnplemQwM0Mz?=
+ =?utf-8?B?RnlLRTdkYVVjNFg1aHBOdENWdzJRaVBERWs4bmxRclVWMm5SQ29ISENlamdp?=
+ =?utf-8?B?ZGJpYVNOc1JqMVZVV1QzcU1DS0JhUW1RMFh3a09iQnNLeDczOUgyclVBTGhn?=
+ =?utf-8?B?a2tvRkhUS2QxVFlNWUhSU3VnU2Z1QVBNZFR3VlhTMUIzODVTdWZvemcxdEZY?=
+ =?utf-8?B?dFlTK3ZsSDBFM2ZOVnZVVTcwb2RIWnFnZjFpMUdRTjNmcVEyS1M3YWtzSmov?=
+ =?utf-8?B?MVUwVHpLemdtSDFHaHhFbGJBa0pYTUJ2S0NHZ1pWcjdjamM1T2JKUEtOTVJj?=
+ =?utf-8?B?T2RUTm9EN1hxL1JuYWZybDZMTTNPaGlSSjVxVnRsTkVpMXkyQlVuWXc2dDgz?=
+ =?utf-8?B?OC9nOThmNjlDNXVHWUx0Qlc2OGlHcDFYbGRpWlpjZTNoSUt3YUs1eXFoOWJH?=
+ =?utf-8?B?TDZBYlh5VUFMZGRjMGRxdWZ1MkFXdnp6cmpjMTZ6T0orVEcweHhITmR3a09U?=
+ =?utf-8?B?Q2ErSkhRN2I2NGVLU2dUVVd2T2trbVNJbXBWV05PdmU2QWtjdVJ1RG95eHNy?=
+ =?utf-8?B?cUJGVzFid3RKeHJGZkljM0FSc1hFYS9BSG8zT3RMam1CSUkzVGxzaEV3bjdy?=
+ =?utf-8?B?UzFNV3U5SytOdFJEeGlIb2M4MWpmanJHRUR1MkxqYU1OallJenEwaSs4QXVt?=
+ =?utf-8?B?allhbExPYTZ5RmsrM3AzZVljeWoxLytBSGs2MnRuMTNkU3dacUZ6RHM3Y3Nw?=
+ =?utf-8?B?bjlBK05jNXdQLzFPVytWRTBuc1M2Uk9td21ya3ZrbGhqZ1NnYnpTWXVmdkY5?=
+ =?utf-8?B?ZWtGalNybHFpejVxanZsV2NLWEhSMTBPNEpEKzFWdU01aUYwY2p3SmxmcmNj?=
+ =?utf-8?B?UVZpbEdNbmtrdUlUbERlVVlGRC9SdllxWk1wVUNiYzhYS1pEd0NubUc5c20v?=
+ =?utf-8?B?U3E2cjhneEY1dFdaR25kVnFDaGJWaUx1Wm0weWhHU0NNeHJKbSs1QlNJYjAy?=
+ =?utf-8?B?dVNJam5GdUhZZFBnQlJEV1dxS0k2SnM2RFFqdkR5TXBINlpWakV6U09pLzRG?=
+ =?utf-8?B?aGZWK0tPb3BOR2RxSFlhRlZZZzNKMXdwVkNpQlRSZGhXMUFvMkxMditlV1F3?=
+ =?utf-8?B?TVdyNUNJNXNkd2gyNm5vRjBZM29mLzdkbGhKeTUwQThUdTVodVd4Z2F5MXV6?=
+ =?utf-8?B?bSt1QkhPdXJXMStMOUxOb2pERnoveWQ3TS9RSTZnMDVzOFZQZ01kRzdVa1p0?=
+ =?utf-8?B?UEJsTzBCZzRCMlpCaEUxdHJ5SDVOV2xJR1NwVWw0RVYrV2drV1Fkb1VBY3Av?=
+ =?utf-8?B?Yi9CczFKYkJTUGdaS2lGem1qY0xyMGxtMVlURjV6SFRwbEFGT0NsZ0doZ3Z0?=
+ =?utf-8?B?bkpXVHpTNGE3Z1loK1o4VGRyTEgrL1UrNXZybGtRM0V4YUQvRWRNNlpsenll?=
+ =?utf-8?B?UlQ2b2hCR25DK25ieU1TSzdDclBPZWRWcHFOV053d1ZkVTJsWDNFb3ZZMVNT?=
+ =?utf-8?B?NG04YzBQaHBFODgySkhkbkc0VE9qR3k0QkU1L2UwcjhUZmIyQ1lpeFJmbW5K?=
+ =?utf-8?B?ekF6aUdlb1EyR0NCNzhKNzRGVCtvSnE4b2dHN055bW1jUmFzWlAvdmplbjVr?=
+ =?utf-8?B?VWs4UFkxVnprM3VSK1VkaU9uUHVDZTVrd3JKRy9CMzdaYzNWd015YzdPMWJr?=
+ =?utf-8?B?Tm02dXBXUytQZldsN2VZemt0Tzd4TWE3WUxwb01qbEdzQkJpeFdoWkcrRXYr?=
+ =?utf-8?B?NXZRRkZTejVGTUNNY3ZObmNHUVN0U3JzUllEOTNKdHIvdGNpaW5URVBERmpk?=
+ =?utf-8?B?SSthYzRJcTFVUitrdjBOREJMM3AxZW85dVZqM1l4ZDF4Z2RkUThza3hRVXZo?=
+ =?utf-8?B?aXpyYXJPYU1Dd1c0TldQcCsxYVBCV0FraXhER09ReFlBRHdJbUdXbDlpMVQx?=
+ =?utf-8?B?dDYvSUtWRTJEYzh6QllBZmJ5aG8wUGdKZS9QTDdhZ0NCZkVYM0NQL1dGSHBZ?=
+ =?utf-8?B?a1VGejQ2Rm9NanpLWmsrRkc3cHFBUCtFZWRYVHZ4RXhkMFliZkIwRWVEOGVL?=
+ =?utf-8?B?TTJGTk4wRlhCc2JaTjN2UDFVeFpUd0thZTBCUmxLNFJIM0poaXQrcXdWNjIy?=
+ =?utf-8?Q?aq9kcA9nKA704G9M=3D?=
+MIME-Version: 1.0
+
+--_----Br4u2jmKRKQCg9rtsfm3Mw===_74/35-47286-60C1D356
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+
+Enjoy a $30 gift as a thank you for using CSC Laundry. Use it on wine, food=
+ =0Adelivery, clothing and more - via goNift.com=0A=0A=0A=0A <https://www.c=
+scsw.com/>=0A=0A=0A=0ATHANK YOU=0A=0A=0A=0A=0ADoing your laundry with the C=
+SC GO app has earned you a $30 gift card (valid at=0AGoNift.com <https://ww=
+w.gonift.com/gift_cards/LAUNDRYTIME30/details>). It=E2=80=99s our =0Away of=
+ saying thanks. Use your gift card to try out great new products and =0Aser=
+vices nationwide=E2=80=94wine, food delivery, clothing and more. It pays to=
+ do =0Alaundry with CSC!=0A=0ACLAIM YOUR GIFT <https://www.gonift.com/gift_=
+cards/LAUNDRYTIME30/details> =0A=0A=0A <https://www.gonift.com/gift_cards/L=
+AUNDRYTIME30/details>=0A=0A=E2=80=8A=0A=0A Get your Nift gift at: www.GoNif=
+t.com =0A<https://www.gonift.com/gift_cards/LAUNDRYTIME30/details>=0AGift C=
+ode: LAUNDRYTIME30=0AGift Value: $30=0AExpires: November 27, 2023=0A=0A=0A=
+=E2=80=8A=0A=0A=0A <https://www.cscsw.com/>=E2=80=8A=0A=0ANeed help=3F=0ACo=
+ntact Us <https://www.cscsw.com/contact-us/>=0A=0A=0A=E2=80=8A=0A=0A The re=
+presentations made herein are informational and for promotional =0Apurposes=
+ only. They do not constitute any warranty or guaranteed results; nor =0Ado=
+ they constitute an offer to provide any products or services.=0A=0A=0A=0AC=
+opyright 2023 CSC ServiceWorks, Inc. All rights reserved.=0A=0A=0A=0AThis e=
+mail was sent by: CSC GO=0A=0A=0A=0A=0A=0AWe respect your right to privacy =
+- view our policy =0A<https://www.cscsw.com/privacy-policy/>.=0A=0A=0A=0ACl=
+ick here to manage your subscription preferences =0A<https://links.iterable=
+.com/e/eh=3F_t=3D0246295a7de348f28156bd8b267796d1&_m=3Dd5457806d87c44f3950=
+16c127d32dcd3&_e=3DwaSl0fWBxv9_jKGFB7GMVIK7ejX0-cqpgyZlxE5gbiSyWShrb84yzgw4=
+YQBVFPlL_TsdknM2wQX6PYW8AoNvM8A448OmPQZrct_X4bty2IkdTlx6IT4iap5pZRArznlA7hp=
+dU-DoQ7lztExyKRb1fd-9oFTuT5LRmUaj8gHghvWXYTzhbofyuxcebR5eXFlSvnctgrKo5hTYum=
+QCcFBS9oCT_MQ98mFQute28u75p2i8qXxxiWUOHLmht8heGb4swh1S41KO8Uj0IWYHxHUngQhop=
+zLfiNYnjPE2-ud87b-pMumF3tEaEl46n_hneTwz4U74Em5aGVj0Z4mCrqS4WA%3D%3D>=0A.
+--_----Br4u2jmKRKQCg9rtsfm3Mw===_74/35-47286-60C1D356
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="UTF-8"
+
+<!DOCTYPE html><html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"u=
+rn:schemas-microsoft-com:office:office" lang=3D"en" style=3D"box-sizing: bo=
+rder-box;"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle></title><meta name=3D"viewport" content=3D"width=3Ddevice-width,initia=
+l-scale=3D1"><!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>9=
+6</o:PixelsPerInch><o:AllowPNG/></o:OfficeDocumentSettings></xml><![endif]-=
+-><style>*{box-sizing:border-box}body{margin:0;padding:0}a[x-apple-data-det=
+ectors]{color:inherit!important;text-decoration:inherit!important}#MessageV=
+iewBody a{color:inherit;text-decoration:none}p{line-height:inherit}.desktop=
+_hide,.desktop_hide table{mso-hide:all;display:none;max-height:0;overflow:h=
+idden}.image_block img+div{display:none}@media(max-width:620px){.row-4 .col=
+umn-1 .block-1.image_block img{display:inline-block!important}.image_block =
+img.fullWidth{max-width:100%!important}.mobile_hide{display:none}.row-conte=
+nt{width:100%!important}.stack .column{width:100%;display:block}.mobile_hid=
+e{min-height:0;max-height:0;max-width:0;overflow:hidden;font-size:0}.deskto=
+p_hide,.desktop_hide table{display:table!important;max-height:none!importan=
+t}.row-3 .column-1 .block-2.button_block a,.row-3 .column-1 .block-2.button=
+_block div,.row-3 .column-1 .block-2.button_block span{font-size:16px!impor=
+tant;line-height:32px!important}.row-3 .column-1 .block-1.paragraph_block t=
+d.pad>div{font-size:18px!important}.row-3 .column-1 .block-1.paragraph_bloc=
+k td.pad{padding:0 0 30px!important}.row-2 .column-1 .block-1.heading_block=
+ h1{text-align:left!important;font-size:37px!important}.row-2 .column-1 .bl=
+ock-1.heading_block td.pad,.row-4 .column-1 .block-1.image_block td.pad,.ro=
+w-5 .column-1 .block-2.paragraph_block td.pad{padding:0!important}.row-4 .c=
+olumn-1 .block-1.image_block .alignment{text-align:center!important}.row-5 =
+.column-1 .block-2.paragraph_block td.pad>div{font-size:15px!important}.row=
+-1 .column-1{padding:20px 0!important}.row-2 .column-1{padding:0 30px!impor=
+tant}.row-3 .column-1{padding:10px 30px 25px!important}.row-4 .column-1{pad=
+ding:0 10px!important}.row-7 .column-1{padding:30px 0 0 30px!important}}</s=
+tyle></head><body style=3D"box-sizing: border-box; margin: 0; padding: 0; -=
+webkit-text-size-adjust: none; text-size-adjust: none; background-color: #f=
+ff;">
+<div style=3D"color:transparent;visibility:hidden;opacity:0;font-size:0px;b=
+order:0;max-height:1px;width:1px;margin:0px;padding:0px;border-width:0px!im=
+portant;display:none!important;line-height:0px!important;"><img border=3D"0=
+" width=3D"1" height=3D"1" src=3D"http://go.sparkpostmail.com/q/ap-JBV9ZthW=
+8Yt-1lilcxw~~/AARGbAA~/RgRnH6EGPVcDc3BjQgplOAYcPWVuQFFTUg9qaWFubmFuQG1pdC5l=
+ZHVYBAAAAA4~" alt=3D""></div>
+<span style=3D"color:transparent;visibility:hidden;display:none;opacity:0;h=
+eight:0;width:0;font-size:0;">Enjoy a $30 gift as a thank you for using CSC=
+ Laundry. Use it on wine, food delivery, clothing and more - via goNift.com=
+</span><img src=3D"https://links.iterable.com/e/eo?_t=3D0246295a7de348f2815=
+6bd8b267796d1&amp;_m=3Dd5457806d87c44f395016c127d32dcd3&amp;_e=3Dfl66b8Htdi=
+iEtoZ4k1L9WeVjllPCl4K0ncgrO7LhWntFa91Kx2oOPz4Mq00WDrVNcsGCxyD-HUSNd7KF07Afc=
+uofY71JQ95yzxSuQ2FTpZwr2UEz3ENsiMy9wS4hYMby" style=3D"border:0;width:1px;he=
+ight:1px;border-width:0px!important;display:none!important;line-height:0!im=
+portant;" width=3D"1" height=3D"1"><table class=3D"nl-container" width=3D"1=
+00%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"=
+ style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0;=
+ background-color: #fff;" bgcolor=3D"#fff"><tbody style=3D"box-sizing: bord=
+er-box;"><tr style=3D"box-sizing: border-box;"><td style=3D"box-sizing: bor=
+der-box;"><table class=3D"row row-1" align=3D"center" width=3D"100%" border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"b=
+ox-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0;"><tbody st=
+yle=3D"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td s=
+tyle=3D"box-sizing: border-box;"><table class=3D"row-content stack" align=
+=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presen=
+tation" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rsp=
+ace: 0; background-color: #fff; color: #000; width: 600px; margin: 0 auto;"=
+ width=3D"600" bgcolor=3D"#fff"><tbody style=3D"box-sizing: border-box;"><t=
+r style=3D"box-sizing: border-box;"><td class=3D"column column-1" width=3D"=
+100%" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspac=
+e: 0; font-weight: 400; text-align: left; padding-bottom: 15px; padding-top=
+: 15px; vertical-align: top; border-top: 0; border-right: 0; border-bottom:=
+ 0; border-left: 0;" align=3D"left" valign=3D"top"><table class=3D"image_bl=
+ock block-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" role=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: =
+0; mso-table-rspace: 0;"><tr style=3D"box-sizing: border-box;"><td class=3D=
+"pad" style=3D"box-sizing: border-box; width: 100%; padding-right: 0; paddi=
+ng-left: 0;" width=3D"100%"><div class=3D"alignment" align=3D"right" style=
+=3D"box-sizing: border-box; line-height: 10px;"><a href=3D"https://links.it=
+erable.com/u/click?_t=3D0246295a7de348f28156bd8b267796d1&amp;_m=3Dd5457806d=
+87c44f395016c127d32dcd3&amp;_e=3DwaSl0fWBxv9_jKGFB7GMVI5Hgsg6jxzsCuJ9T93B70=
+f7oDyrhlqlpRQas2Sbz4cOI4xZxN3zAlh8w31-FXzmqPvo7V1fVcLkn93N5FfdZgYx9XZipnASI=
+Iwi_f8c_1Cs4F9Kl_NCUtcHeFgzNswL2plIdhNsW50Ssg0-ET9VJt_kpuf_8gmzlL25z9UGPmki=
+" target=3D"_blank" style=3D"box-sizing: border-box; outline: none;" tabind=
+ex=3D"-1"><img src=3D"https://d15k2d11r6t6rl.cloudfront.net/public/users/In=
+tegrators/669d5713-9b6a-46bb-bd7e-c542cff6dd6a/0246295a7de348f28156bd8b2677=
+96d1/cscsw-logo-color.png" style=3D"box-sizing: border-box; display: block;=
+ height: auto; border: 0; max-width: 120px; width: 100%;" width=3D"120" alt=
+=3D"CSC ServiceWorks Logo" title=3D"CSC ServiceWorks Logo"></a></div></td><=
+/tr></table></td></tr></tbody></table></td></tr></tbody></table><table clas=
+s=3D"row row-2" align=3D"center" width=3D"100%" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: border-box=
+; mso-table-lspace: 0; mso-table-rspace: 0;"><tbody style=3D"box-sizing: bo=
+rder-box;"><tr style=3D"box-sizing: border-box;"><td style=3D"box-sizing: b=
+order-box;"><table class=3D"row-content stack" align=3D"center" border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-si=
+zing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; background-colo=
+r: #fff; border-radius: 0; color: #000; width: 600px; margin: 0 auto;" widt=
+h=3D"600" bgcolor=3D"#fff"><tbody style=3D"box-sizing: border-box;"><tr sty=
+le=3D"box-sizing: border-box;"><td class=3D"column column-1" width=3D"100%"=
+ style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0;=
+ font-weight: 400; text-align: left; padding-bottom: 5px; padding-left: 30p=
+x; padding-right: 30px; padding-top: 15px; vertical-align: top; border-top:=
+ 0; border-right: 0; border-bottom: 0; border-left: 0;" align=3D"left" vali=
+gn=3D"top"><table class=3D"heading_block block-1" width=3D"100%" border=3D"=
+0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-s=
+izing: border-box; mso-table-lspace: 0; mso-table-rspace: 0;"><tr style=3D"=
+box-sizing: border-box;"><td class=3D"pad" style=3D"box-sizing: border-box;=
+ text-align: center; width: 100%;" width=3D"100%" align=3D"center"><h1 styl=
+e=3D"box-sizing: border-box; margin: 0; color: #00adee; direction: ltr; fon=
+t-family: Arial,Helvetica Neue,Helvetica,sans-serif; font-size: 50px; font-=
+weight: 700; letter-spacing: -1px; line-height: 120%; text-align: left; mar=
+gin-top: 0; margin-bottom: 0;"><span class=3D"tinyMce-placeholder" style=3D=
+"box-sizing: border-box;">THANK YOU</span></h1></td></tr></table></td></tr>=
+</tbody></table></td></tr></tbody></table><table class=3D"row row-3" align=
+=3D"center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ role=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: 0=
+; mso-table-rspace: 0;"> <tbody style=3D"box-sizing: border-box;"><tr style=
+=3D"box-sizing: border-box;"><td style=3D"box-sizing: border-box;"><table c=
+lass=3D"row-content stack" align=3D"center" border=3D"0" cellpadding=3D"0" =
+cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: border-box; ms=
+o-table-lspace: 0; mso-table-rspace: 0; background-color: #fff; border-radi=
+us: 0; color: #000; width: 600px; margin: 0 auto;" width=3D"600" bgcolor=3D=
+"#fff"><tbody style=3D"box-sizing: border-box;"><tr style=3D"box-sizing: bo=
+rder-box;"><td class=3D"column column-1" width=3D"100%" style=3D"box-sizing=
+: border-box; mso-table-lspace: 0; mso-table-rspace: 0; font-weight: 400; t=
+ext-align: left; padding-bottom: 20px; padding-left: 30px; padding-right: 3=
+0px; padding-top: 10px; vertical-align: top; border-top: 0; border-right: 0=
+; border-bottom: 0; border-left: 0;" align=3D"left" valign=3D"top"><table c=
+lass=3D"paragraph_block block-1" width=3D"100%" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: border-box=
+; mso-table-lspace: 0; mso-table-rspace: 0; word-break: break-word;"><tr st=
+yle=3D"box-sizing: border-box;"><td class=3D"pad" style=3D"box-sizing: bord=
+er-box; padding-bottom: 30px;"><div style=3D"box-sizing: border-box; color:=
+ #222e65; direction: ltr; font-family: Arial,'Helvetica Neue',Helvetica,san=
+s-serif; font-size: 20px; font-weight: 400; letter-spacing: 0; line-height:=
+ 150%; text-align: left; mso-line-height-alt: 30px;"><p style=3D"box-sizing=
+: border-box; line-height: inherit; margin: 0;"> <strong style=3D"box-sizin=
+g: border-box;">Doing your laundry with the CSC GO app has earned you a $30=
+ gift card (valid at <a href=3D"https://links.iterable.com/u/click?_t=3D024=
+6295a7de348f28156bd8b267796d1&amp;_m=3Dd5457806d87c44f395016c127d32dcd3&amp=
+;_e=3DwaSl0fWBxv9_jKGFB7GMVBV2Sgeu3OJceg1eIdbGJnwwrHHKZ-DmUZThF9gAYm4ZC3jBc=
+ZLFb3KbJ-R_dwaD7PvpxpGlR2HjzfEv5d6cpXxXzjd0NQkpq4hh0g_REKwOUGYzYeJyevye0P_3=
+g2MCIbf6qbJEGcHgot75K-JD81voJYvl0hEZ2dCLFlMNHiajlglNMqeAY5dtU_TGVywq9I_7ElP=
+VTtE9VpnoLPFiGK8%3D" target=3D"_blank" style=3D"box-sizing: border-box; tex=
+t-decoration: underline; color: #00adee;" rel=3D"noopener">GoNift.com</a>)<=
+/strong>. It=E2=80=99s our way of saying thanks. Use your gift card to try =
+out great new products and services nationwide=E2=80=94wine, food delivery,=
+ clothing and more. It pays to do laundry with CSC!</p></div></td></tr></ta=
+ble><table class=3D"button_block block-2" width=3D"100%" border=3D"0" cellp=
+adding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: b=
+order-box; mso-table-lspace: 0; mso-table-rspace: 0;"><tr style=3D"box-sizi=
+ng: border-box;"><td class=3D"pad" style=3D"box-sizing: border-box; text-al=
+ign: left;" align=3D"left"><div class=3D"alignment" align=3D"left" style=3D=
+"box-sizing: border-box;"> <!--[if mso]><v:roundrect xmlns:v=3D"urn:schemas=
+-microsoft-com:vml" xmlns:w=3D"urn:schemas-microsoft-com:office:word" href=
+=3D"https://links.iterable.com/u/click?_t=3D0246295a7de348f28156bd8b267796d=
+1&_m=3Dd5457806d87c44f395016c127d32dcd3&_e=3DwaSl0fWBxv9_jKGFB7GMVBV2Sgeu3O=
+Jceg1eIdbGJnwwrHHKZ-DmUZThF9gAYm4ZC3jBcZLFb3KbJ-R_dwaD7FBJm-43T58l8WxeoqX5B=
+ReNIQCrnoJV0s95fnLX8I3SuCNh6IJERjNdqypK-6WyHWjiuKakAXd6gMQs3LPt1KNFNiFOHh62=
+HOeI9ru0wbemrqvuIc9aBdPcY6z_26sBxBwDPFXPDj_nWTOeCX7Or6g%3D" style=3D"height=
+:60px;width:290px;v-text-anchor:middle;" arcsize=3D"50%" stroke=3D"false" f=
+illcolor=3D"#63bb46"><w:anchorlock/><v:textbox inset=3D"0px,0px,0px,0px"><c=
+enter style=3D"color:#ffffff; font-family:Arial, sans-serif; font-size:20px=
+"><![endif]--> <a href=3D"https://links.iterable.com/u/click?_t=3D0246295a7=
+de348f28156bd8b267796d1&amp;_m=3Dd5457806d87c44f395016c127d32dcd3&amp;_e=3D=
+waSl0fWBxv9_jKGFB7GMVBV2Sgeu3OJceg1eIdbGJnwwrHHKZ-DmUZThF9gAYm4ZC3jBcZLFb3K=
+bJ-R_dwaD7GbjvigrEb7n7L9SiQM5Rp94owmwjjz0x-Q_Xq1iu93h2BRVady5QzcD_VrqIlBip1=
+UKqmGOEyakzPo4vQICmXC-q4OvTD_3Hl5jT_zt3LUujqBdhMOyR8wL9xxpOkpBa7oOh1b7vOG_r=
+U5GBC4sNpg%3D" target=3D"_blank" style=3D"box-sizing: border-box; text-deco=
+ration: none; display: inline-block; color: #ffffff; background-color: #63b=
+b46; border-radius: 30px; width: auto; border-top: 0px solid transparent; f=
+ont-weight: 400; border-right: 0px solid transparent; border-bottom: 0px so=
+lid transparent; border-left: 0px solid transparent; padding-top: 10px; pad=
+ding-bottom: 10px; font-family: Arial, Helvetica Neue, Helvetica, sans-seri=
+f; font-size: 20px; text-align: center; mso-border-alt: none; word-break: k=
+eep-all;"><span style=3D"box-sizing: border-box; padding-left: 50px; paddin=
+g-right: 50px; font-size: 20px; display: inline-block; letter-spacing: 1px;=
+"><span style=3D"box-sizing: border-box; word-break: break-word; line-heigh=
+t: 40px;">CLAIM YOUR GIFT</span></span></a> <!--[if mso]></center></v:textb=
+ox></v:roundrect><![endif]--></div></td></tr></table></td></tr></tbody></ta=
+ble></td></tr></tbody></table><table class=3D"row row-4" align=3D"center" w=
+idth=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pres=
+entation" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-r=
+space: 0;"><tbody style=3D"box-sizing: border-box;"><tr style=3D"box-sizing=
+: border-box;"><td style=3D"box-sizing: border-box;"><table class=3D"row-co=
+ntent stack" align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace=
+: 0; mso-table-rspace: 0; background-color: #fff; border-radius: 0; color: =
+#000; width: 600px; margin: 0 auto;" width=3D"600" bgcolor=3D"#fff"><tbody =
+style=3D"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td=
+ class=3D"column column-1" width=3D"100%" style=3D"box-sizing: border-box; =
+mso-table-lspace: 0; mso-table-rspace: 0; font-weight: 400; text-align: lef=
+t; vertical-align: top; border-top: 0; border-right: 0; border-bottom: 0; b=
+order-left: 0;" align=3D"left" valign=3D"top"><table class=3D"image_block b=
+lock-1" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: 0; ms=
+o-table-rspace: 0;"> <tr style=3D"box-sizing: border-box;"><td class=3D"pad=
+" style=3D"box-sizing: border-box; padding-left: 30px; padding-right: 30px;=
+ width: 100%;" width=3D"100%"><div class=3D"alignment" align=3D"left" style=
+=3D"box-sizing: border-box; line-height: 10px;"><a href=3D"https://links.it=
+erable.com/u/click?_t=3D0246295a7de348f28156bd8b267796d1&amp;_m=3Dd5457806d=
+87c44f395016c127d32dcd3&amp;_e=3DwaSl0fWBxv9_jKGFB7GMVBV2Sgeu3OJceg1eIdbGJn=
+wwrHHKZ-DmUZThF9gAYm4ZC3jBcZLFb3KbJ-R_dwaD7EbRjhWXvdW0Rb-fe-y1f2ZHKMOHKgRNX=
+xBraJ_m06vam7DE5xW3iT_Mbenih9flCYZOPvk-cK0cdrndXifbSnwFgU2feWrX_KWgoEw4iBhb=
+5IHeTjnAACCSz_RxUMiBcdFSYwEBw2ICGL8nXGL2dpc%3D" target=3D"_blank" style=3D"=
+box-sizing: border-box; outline: none;" tabindex=3D"-1"><img class=3D"fullW=
+idth" src=3D"https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrators=
+/669d5713-9b6a-46bb-bd7e-c542cff6dd6a/0246295a7de348f28156bd8b267796d1/LAUN=
+DRYTIME30.png" style=3D"box-sizing: border-box; display: block; height: aut=
+o; border: 0; max-width: 510px; width: 100%;" width=3D"510" alt=3D"Nift Gif=
+t Card Image" title=3D"Nift Gift Card Image"></a></div></td></tr></table></=
+td></tr></tbody></table></td></tr></tbody></table><table class=3D"row row-5=
+" align=3D"center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" role=3D"presentation" style=3D"box-sizing: border-box; mso-table-ls=
+pace: 0; mso-table-rspace: 0;"><tbody style=3D"box-sizing: border-box;"><tr=
+ style=3D"box-sizing: border-box;"><td style=3D"box-sizing: border-box;"><t=
+able class=3D"row-content stack" align=3D"center" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: border-=
+box; mso-table-lspace: 0; mso-table-rspace: 0; border-radius: 0; color: #00=
+0; width: 600px; margin: 0 auto;" width=3D"600"><tbody style=3D"box-sizing:=
+ border-box;"><tr style=3D"box-sizing: border-box;"><td class=3D"column col=
+umn-1" width=3D"100%" style=3D"box-sizing: border-box; mso-table-lspace: 0;=
+ mso-table-rspace: 0; font-weight: 400; text-align: left; padding-left: 30p=
+x; padding-right: 30px; vertical-align: top; border-top: 0; border-right: 0=
+; border-bottom: 0; border-left: 0;" align=3D"left" valign=3D"top"><div cla=
+ss=3D"spacer_block block-1" style=3D"box-sizing: border-box; height: 35px; =
+line-height: 35px; font-size: 1px;">=E2=80=8A</div><table class=3D"paragrap=
+h_block block-2" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"box-sizing: border-box; mso-table-lsp=
+ace: 0; mso-table-rspace: 0; word-break: break-word;"><tr style=3D"box-sizi=
+ng: border-box;"><td class=3D"pad" style=3D"box-sizing: border-box;"><div s=
+tyle=3D"box-sizing: border-box; color: #222e65; direction: ltr; font-family=
+: Arial,Helvetica Neue,Helvetica,sans-serif; font-size: 20px; font-weight: =
+400; letter-spacing: 0; line-height: 150%; text-align: left; mso-line-heigh=
+t-alt: 30px;"><p style=3D"box-sizing: border-box; line-height: inherit; mar=
+gin: 0;"> Get your Nift gift at:&nbsp;<strong style=3D"box-sizing: border-b=
+ox;"><a target=3D"_blank" href=3D"https://links.iterable.com/u/click?_t=3D0=
+246295a7de348f28156bd8b267796d1&amp;_m=3Dd5457806d87c44f395016c127d32dcd3&a=
+mp;_e=3DwaSl0fWBxv9_jKGFB7GMVBV2Sgeu3OJceg1eIdbGJnwwrHHKZ-DmUZThF9gAYm4ZC3j=
+BcZLFb3KbJ-R_dwaD7CrLXwTei1yvcPReRH49qpm7Z793MVdxSiVxyRPaUQT7PyMLi1QUmnTt94=
+i_yfYH2SPaQO-SPYOQ6uiqOjzNUTTSeXfW_Bs52XtqW-AxAbx6PhlOx_CHq_Da4bIkjONAWR5wj=
+IxUHtcF4t6Z8yn7riQ%3D" style=3D"box-sizing: border-box; text-decoration: no=
+ne; color: #00adee;" rel=3D"noopener">www.GoNift.com</a></strong><br style=
+=3D"box-sizing: border-box;">Gift Code: <strong style=3D"box-sizing: border=
+-box;">LAUNDRYTIME30</strong><br style=3D"box-sizing: border-box;">Gift Val=
+ue:&nbsp;<strong style=3D"box-sizing: border-box;">$30</strong><br style=3D=
+"box-sizing: border-box;">Expires: <strong data-stringify-type=3D"bold" sty=
+le=3D"box-sizing: border-box;">November 27, 2023</strong></p></div></td></t=
+r></table></td></tr></tbody></table></td></tr></tbody></table><table class=
+=3D"row row-6" align=3D"center" width=3D"100%" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: border-box;=
+ mso-table-lspace: 0; mso-table-rspace: 0;"><tbody style=3D"box-sizing: bor=
+der-box;"><tr style=3D"box-sizing: border-box;"><td style=3D"box-sizing: bo=
+rder-box;"><table class=3D"row-content stack" align=3D"center" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-siz=
+ing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; border-radius: 0=
+; color: #000; width: 600px; margin: 0 auto;" width=3D"600"><tbody style=3D=
+"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td class=
+=3D"column column-1" width=3D"100%" style=3D"box-sizing: border-box; mso-ta=
+ble-lspace: 0; mso-table-rspace: 0; font-weight: 400; text-align: left; pad=
+ding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0; bor=
+der-right: 0; border-bottom: 0; border-left: 0;" align=3D"left" valign=3D"t=
+op"><div class=3D"spacer_block block-1" style=3D"box-sizing: border-box; he=
+ight: 15px; line-height: 15px; font-size: 1px;">=E2=80=8A</div></td></tr></=
+tbody></table></td></tr></tbody></table><table class=3D"row row-7" align=3D=
+"center" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" ro=
+le=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: 0; m=
+so-table-rspace: 0;"><tbody style=3D"box-sizing: border-box;"><tr style=3D"=
+box-sizing: border-box;"><td style=3D"box-sizing: border-box;"><table class=
+=3D"row-content stack" align=3D"center" border=3D"0" cellpadding=3D"0" cell=
+spacing=3D"0" role=3D"presentation" style=3D"box-sizing: border-box; mso-ta=
+ble-lspace: 0; mso-table-rspace: 0; background-color: #fff; color: #000; wi=
+dth: 600px; margin: 0 auto;" width=3D"600" bgcolor=3D"#fff"><tbody style=3D=
+"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td class=
+=3D"column column-1" width=3D"25%" style=3D"box-sizing: border-box; mso-tab=
+le-lspace: 0; mso-table-rspace: 0; font-weight: 400; text-align: left; padd=
+ing-left: 35px; padding-top: 30px; vertical-align: top; border-top: 0; bord=
+er-right: 0; border-bottom: 0; border-left: 0;" align=3D"left" valign=3D"to=
+p"><table class=3D"image_block block-1" width=3D"100%" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: bor=
+der-box; mso-table-lspace: 0; mso-table-rspace: 0;"><tr style=3D"box-sizing=
+: border-box;"><td class=3D"pad" style=3D"box-sizing: border-box; padding-b=
+ottom: 15px; padding-top: 10px; width: 100%; padding-right: 0; padding-left=
+: 0;" width=3D"100%"><div class=3D"alignment" align=3D"left" style=3D"box-s=
+izing: border-box; line-height: 10px;"><a href=3D"https://links.iterable.co=
+m/u/click?_t=3D0246295a7de348f28156bd8b267796d1&amp;_m=3Dd5457806d87c44f395=
+016c127d32dcd3&amp;_e=3DwaSl0fWBxv9_jKGFB7GMVI5Hgsg6jxzsCuJ9T93B70fM8gj6HOG=
+EkB3uFV-bhJLSCmHUh0hWj7SvgHtkrVn2wsr2UZhUUKkMx1IzZJuXPF0lEZbGrHfCvyU4gOuywt=
+S53LEuMpsYnAlQDodXFq_CZzopfv4f-ZhGN7ZALVDLD4khIPxYlHZInvUa6rQqu5ux" target=
+=3D"_blank" style=3D"box-sizing: border-box; outline: none;" tabindex=3D"-1=
+"><img src=3D"https://d15k2d11r6t6rl.cloudfront.net/public/users/Integrator=
+s/669d5713-9b6a-46bb-bd7e-c542cff6dd6a/5b4dd70feab24f0c861fbde02e9e10d5/csc=
+-serviceworks-logo_1.png" style=3D"box-sizing: border-box; display: block; =
+height: auto; border: 0; max-width: 115px; width: 100%;" width=3D"115" alt=
+=3D"CSC ServiceWorks Logo" title=3D"CSC ServiceWorks Logo"></a></div></td><=
+/tr></table></td><td class=3D"column column-2" width=3D"75%" style=3D"box-s=
+izing: border-box; mso-table-lspace: 0; mso-table-rspace: 0; font-weight: 4=
+00; text-align: left; padding-bottom: 5px; padding-left: 30px; padding-righ=
+t: 30px; vertical-align: top; border-top: 0; border-right: 0; border-bottom=
+: 0; border-left: 0;" align=3D"left" valign=3D"top"><div class=3D"spacer_bl=
+ock block-1 mobile_hide" style=3D"box-sizing: border-box; height: 30px; lin=
+e-height: 30px; font-size: 1px;">=E2=80=8A</div><table class=3D"text_block =
+block-2" width=3D"100%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" ro=
+le=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: 0; m=
+so-table-rspace: 0; word-break: break-word;"><tr style=3D"box-sizing: borde=
+r-box;"><td class=3D"pad" style=3D"box-sizing: border-box; padding-bottom: =
+10px; padding-right: 10px; padding-top: 10px;"><div style=3D"box-sizing: bo=
+rder-box; font-family: sans-serif;"><div class=3D"" style=3D"box-sizing: bo=
+rder-box; font-size: 14px; font-family: Arial,Helvetica Neue,Helvetica,sans=
+-serif; mso-line-height-alt: 21px; color: #999; line-height: 1.5;"><p style=
+=3D"box-sizing: border-box; line-height: inherit; margin: 0; font-size: 14p=
+x; mso-line-height-alt: 21px;">Need help?<br style=3D"box-sizing: border-bo=
+x;"> <a href=3D"https://links.iterable.com/u/click?_t=3D0246295a7de348f2815=
+6bd8b267796d1&amp;_m=3Dd5457806d87c44f395016c127d32dcd3&amp;_e=3DwaSl0fWBxv=
+9_jKGFB7GMVFtbFynOVee9rDcep8XLzTTABAnPrB0Yk0MzfMRz5EDu-zk_QvGyd5Pw9u2qkIEfZ=
+VLPsiaVaMra60LDJt1vevIK1IBZCgsnKgnQ_Kao7coxE_RGN7MCyOapeT3E_ZhRGg6laYw-Fwkn=
+OuondBZOOlVnb3eyB-AaawVL8xRxcN59TwBVr-57eygdm3_ML5gCvg%3D%3D" target=3D"_bl=
+ank" style=3D"box-sizing: border-box; text-decoration: none; color: #666666=
+;" rel=3D"noopener"><strong style=3D"box-sizing: border-box;">Contact Us</s=
+trong></a></p></div></div></td></tr></table></td></tr></tbody></table></td>=
+</tr></tbody></table><table class=3D"row row-8" align=3D"center" width=3D"1=
+00%" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"=
+ style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-table-rspace: 0;=
+"><tbody style=3D"box-sizing: border-box;"><tr style=3D"box-sizing: border-=
+box;"><td style=3D"box-sizing: border-box;"><table class=3D"row-content sta=
+ck" align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso=
+-table-rspace: 0; background-color: #fff; color: #000; width: 600px; margin=
+: 0 auto;" width=3D"600" bgcolor=3D"#fff"><tbody style=3D"box-sizing: borde=
+r-box;"><tr style=3D"box-sizing: border-box;"><td class=3D"column column-1"=
+ width=3D"100%" style=3D"box-sizing: border-box; mso-table-lspace: 0; mso-t=
+able-rspace: 0; font-weight: 400; text-align: left; padding-bottom: 30px; p=
+adding-left: 30px; padding-right: 30px; vertical-align: top; border-top: 0;=
+ border-right: 0; border-bottom: 0; border-left: 0;" align=3D"left" valign=
+=3D"top"><div class=3D"spacer_block block-1 mobile_hide" style=3D"box-sizin=
+g: border-box; height: 30px; line-height: 30px; font-size: 1px;">=E2=80=8A<=
+/div><table class=3D"text_block block-2" width=3D"100%" border=3D"0" cellpa=
+dding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"box-sizing: bo=
+rder-box; mso-table-lspace: 0; mso-table-rspace: 0; word-break: break-word;=
+"><tr style=3D"box-sizing: border-box;"><td class=3D"pad" style=3D"box-sizi=
+ng: border-box;"><div style=3D"box-sizing: border-box; font-family: sans-se=
+rif;"><div class=3D"" style=3D"box-sizing: border-box; font-size: 14px; fon=
+t-family: Arial,Helvetica Neue,Helvetica,sans-serif; mso-line-height-alt: 1=
+6.8px; color: #999; line-height: 1.2;"><p style=3D"box-sizing: border-box; =
+line-height: inherit; margin: 0; mso-line-height-alt: 16.8px;"> The represe=
+ntations made herein are informational and for promotional purposes only. T=
+hey do not constitute any warranty or guaranteed results; nor do they const=
+itute an offer to provide any products or services.&nbsp;</p><p style=3D"bo=
+x-sizing: border-box; line-height: inherit; margin: 0; mso-line-height-alt:=
+ 16.8px;">&nbsp;</p><p style=3D"box-sizing: border-box; line-height: inheri=
+t; margin: 0; mso-line-height-alt: 16.8px;">Copyright 2023 CSC ServiceWorks=
+, Inc. All rights reserved.</p><p style=3D"box-sizing: border-box; line-hei=
+ght: inherit; margin: 0; mso-line-height-alt: 16.8px;">&nbsp;</p><p style=
+=3D"box-sizing: border-box; line-height: inherit; margin: 0; mso-line-heigh=
+t-alt: 16.8px;">This email was sent by: CSC GO</p><p style=3D"box-sizing: b=
+order-box; line-height: inherit; margin: 0; mso-line-height-alt: 16.8px;"><=
+/p><p style=3D"box-sizing: border-box; line-height: inherit; margin: 0; mso=
+-line-height-alt: 16.8px;">&nbsp;</p><p style=3D"box-sizing: border-box; li=
+ne-height: inherit; margin: 0; mso-line-height-alt: 16.8px;">We respect you=
+r right to privacy - <a href=3D"https://links.iterable.com/u/click?_t=3D024=
+6295a7de348f28156bd8b267796d1&amp;_m=3Dd5457806d87c44f395016c127d32dcd3&amp=
+;_e=3DwaSl0fWBxv9_jKGFB7GMVJurfbrkbzTHRduakwWJN_e583EjFcTVCQ9LAJbtJgNgdA1sP=
+2DpwpgOKhx5yy28cUKKDO3QYfR6pYzAE0gHZey1hJnxhVwz896So_lpSSqxdJwcm1Zfaqa8-foE=
+qwQx4UfBExlBQk9hP8f06mAr0nGdCoQ357dxwqojeuFmW4s-Q6AXp1_HfZxaczWGRiv-Nw%3D%3=
+D" target=3D"_blank" style=3D"box-sizing: border-box; text-decoration: unde=
+rline; color: #666666;" rel=3D"noopener">view our policy</a>.</p><p style=
+=3D"box-sizing: border-box; line-height: inherit; margin: 0; mso-line-heigh=
+t-alt: 16.8px;">&nbsp;</p><p style=3D"box-sizing: border-box; line-height: =
+inherit; margin: 0; mso-line-height-alt: 16.8px;"><a href=3D"https://links.=
+iterable.com/e/eh?_t=3D0246295a7de348f28156bd8b267796d1&amp;_m=3Dd5457806d8=
+7c44f395016c127d32dcd3&amp;_e=3DwaSl0fWBxv9_jKGFB7GMVIK7ejX0-cqpgyZlxE5gbiS=
+yWShrb84yzgw4YQBVFPlL_TsdknM2wQX6PYW8AoNvM8A448OmPQZrct_X4bty2IkdTlx6IT4iap=
+5pZRArznlA7hpdU-DoQ7lztExyKRb1fd-9oFTuT5LRmUaj8gHghvWXYTzhbofyuxcebR5eXFlSv=
+nctgrKo5hTYumQCcFBS9oCT_MQ98mFQute28u75p2i8qXxxiWUOHLmht8heGb4swh1S41KO8Uj0=
+IWYHxHUngQhopzLfiNYnjPE2-ud87b-pMumF3tEaEl46n_hneTwz4U74Em5aGVj0Z4mCrqS4WA%=
+3D%3D" target=3D"_blank" rel=3D"noopener" style=3D"box-sizing: border-box; =
+text-decoration: underline; color: #666666;">Click here to manage your subs=
+cription preferences</a>.</p></div></div></td></tr></table></td></tr></tbod=
+y></table></td></tr></tbody></table></td></tr></tbody></table><!-- End -->
+<img border=3D"0" width=3D"1" height=3D"1" alt=3D"" src=3D"http://go.sparkp=
+ostmail.com/q/5_RslnrbgpZ4pbXyxaJOlg~~/AARGbAA~/RgRnH6EGPlcDc3BjQgplOAYcPWV=
+uQFFTUg9qaWFubmFuQG1pdC5lZHVYBAAAAA4~">
+</body></html>=
+
+--_----Br4u2jmKRKQCg9rtsfm3Mw===_74/35-47286-60C1D356--

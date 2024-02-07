@@ -1,0 +1,693 @@
+Received: from PH0PR01MB6326.prod.exchangelabs.com (2603:10b6:510:a::8) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Thu, 14 Dec 2023 21:56:34
+ +0000
+Received: from DS7PR03CA0292.namprd03.prod.outlook.com (2603:10b6:5:3ad::27)
+ by PH0PR01MB6326.prod.exchangelabs.com (2603:10b6:510:a::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.28; Thu, 14 Dec 2023 21:56:32 +0000
+Received: from CY4PEPF0000EDD3.namprd03.prod.outlook.com
+ (2603:10b6:5:3ad:cafe::fe) by DS7PR03CA0292.outlook.office365.com
+ (2603:10b6:5:3ad::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26 via Frontend
+ Transport; Thu, 14 Dec 2023 21:56:32 +0000
+Authentication-Results: spf=fail (sender IP is 18.7.71.111)
+ smtp.mailfrom=us-west-2.amazonses.com; dkim=pass (signature was verified)
+ header.d=lu.ma;dmarc=pass action=none header.from=lu.ma;
+Received-SPF: Fail (protection.outlook.com: domain of us-west-2.amazonses.com
+ does not designate 18.7.71.111 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.7.71.111;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.7.71.111) by
+ CY4PEPF0000EDD3.mail.protection.outlook.com (10.167.241.207) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.7091.26 via Frontend Transport; Thu, 14 Dec 2023 21:56:31 +0000
+Received: from oc11exhyb8.exchange.mit.edu (18.9.1.113) by
+ w92exhyb6.exchange.mit.edu (18.7.71.111) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Thu, 14 Dec 2023 16:56:30 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
+ by oc11exhyb8.exchange.mit.edu (18.9.1.113) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Thu, 14 Dec 2023 16:56:30 -0500
+Received: from CYZPR12CA0009.namprd12.prod.outlook.com (2603:10b6:930:8b::24)
+ by CH0PR01MB7154.prod.exchangelabs.com (2603:10b6:610:eb::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.28; Thu, 14 Dec 2023 21:56:24 +0000
+Received: from CY4PEPF0000E9D3.namprd03.prod.outlook.com
+ (2603:10b6:930:8b:cafe::92) by CYZPR12CA0009.outlook.office365.com
+ (2603:10b6:930:8b::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.29 via Frontend
+ Transport; Thu, 14 Dec 2023 21:56:24 +0000
+Authentication-Results-Original: spf=pass (sender IP is 54.240.86.146)
+ smtp.mailfrom=us-west-2.amazonses.com; dkim=pass (signature was verified)
+ header.d=lu.ma;dmarc=pass action=none header.from=lu.ma;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of us-west-2.amazonses.com
+ designates 54.240.86.146 as permitted sender)
+ receiver=protection.outlook.com; client-ip=54.240.86.146;
+ helo=a86-146.smtp-out.us-west-2.amazonses.com; pr=C
+Received: from a86-146.smtp-out.us-west-2.amazonses.com (54.240.86.146) by
+ CY4PEPF0000E9D3.mail.protection.outlook.com (10.167.241.146) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.26 via Frontend Transport; Thu, 14 Dec 2023 21:56:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=usd44pho75tnx7uqgifvwxycyrtqb4wk; d=lu.ma; t=1702590982;
+	h=Content-Type:From:To:Reply-To:Subject:Message-ID:Date:MIME-Version;
+	bh=/otc2c+jTqvYhSNJSZcmSxb5FZ/kEmBklVB1JxFE5bs=;
+	b=gCiNWSLShUL+xns8yW6RJyVTNIG2N1s6PnpDlwp/+tFXrRVaE6sy8Bg4bG+0wpKZ
+	qjUfablX8kLl2sNIO8YJhziYIJ8mksFK3724Z17kfv9ypaXkgdxTZhRidNWZvLdyzqt
+	z9YV3NFMBkrg2rph+OJkLeYoXzSN/BNuXPFsfIfGSoV4DAZ1uc85OXXidoFBOcb5h2N
+	3tZ7JlB9Lryn9Mz8MOqZRmp6Hhts0SmtmRoZE0yGCfezvoWdbeI4QKz17UKIwHI6Bc5
+	FtDCagKepwNpQLMYpTIlrIyCL4PqyaxNwEvpFgvBtw9zBxMFyTQhngWKP3WQMJ97Tbr
+	U5sGHdjmKQ==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1702590982;
+	h=Content-Type:From:To:Reply-To:Subject:Message-ID:Date:MIME-Version:Feedback-ID;
+	bh=/otc2c+jTqvYhSNJSZcmSxb5FZ/kEmBklVB1JxFE5bs=;
+	b=QuQ3HWDZCp3EZEl/ksjGoip0LNc5YGM9TCWpSsiLmX22a5h/HlMZb1KVbjUKYTVO
+	d5rUKGIYm2NpzxlpK0vkPqPYunJm5LQIzXcLXLU3AaNRISUvOzDde/sOE/fs3xKP5Dr
+	lNhhz+5gUBuW2agCRC0bc3m/ilTz1inBxlWBjNlE=
+Content-Type: multipart/alternative;
+ boundary="--_NmP-2441d7c4f86d1668-Part_1"
+From: Luma Support <support@lu.ma>
+To: jiannan@mit.edu
+Reply-To: Luma Support <support@lu.ma>
+Subject: 130077 is your Luma sign in code
+Message-ID: <0101018c6a54a9b9-133a24b6-0c10-4f7b-84df-a7d4fbe80c71-000000@us-west-2.amazonses.com>
+Date: Thu, 14 Dec 2023 21:56:22 +0000
+Feedback-ID: 1.us-west-2.8b35YBY+LtDz6cPPlkX7VvLgReyfk0JzFCEDxPQigUM=:AmazonSES
+X-SES-Outgoing: 2023.12.14-54.240.86.146
+Return-Path:
+ 0101018c6a54a9b9-133a24b6-0c10-4f7b-84df-a7d4fbe80c71-000000@us-west-2.amazonses.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ CY4PEPF0000E9D3:EE_|CH0PR01MB7154:EE_|CY4PEPF0000EDD3:EE_|PH0PR01MB6326:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8334c4ab-3242-4e81-ef7f-08dbfcef8882
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:3;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?QzVE6B5ynNBsVqYfS7GVKGVAAjH4+/KGff4avaJ5RPUOszHe1jIdpwz2xuJY?=
+ =?us-ascii?Q?asXq0W8kjogtIyFMOyVoQtKijFrZm25REk824zZQchUdOrlWRuKJd74K068A?=
+ =?us-ascii?Q?OdolDd9+8Ay654Hd6tOwzYK1iVjaa37WczVY4kGnu1Qp6/NYYrJVMu1IAQS2?=
+ =?us-ascii?Q?SNozXrC89Ze8k6FiVke/W5R2+8Z95u40JcoSyQpHBUez31VE4p03y+9po9GX?=
+ =?us-ascii?Q?2JzfEgPiECxZQlWCGNsG+G3tXcjbp/6YznVS50mh4dH4y7oCwYK/DIm+sy/Y?=
+ =?us-ascii?Q?meHLpH3LYFGpiR24arg/ssVqGg1FtWKbMWavwBMO+iRTo0C6CfTzPmW4RGDT?=
+ =?us-ascii?Q?04TPfg6HejT+kE6Ubgev7iaxz+rJ1Uo8h/TweR96DfKKTfoB9+5Nx28niTDE?=
+ =?us-ascii?Q?FarL8mnBSqMudyW1gX9niOGGlQ0Cg4+Q2CI3u0eC9z+ULeKYlLER9ErTd/f9?=
+ =?us-ascii?Q?usaSrkXn1hDsJ1mhhibs55FykBDBeBQiLzrr9HskHrbtzyFb23pC5cyW92tD?=
+ =?us-ascii?Q?ceH/ZWWwqsqbGs9ArWJeHD/XPRGw4OIkWMsBJ42i78lJQBWnEc5IXn41ZM4S?=
+ =?us-ascii?Q?coo4W7mabJUE797qW1h/rhpMQaRywvz+Djs8cuoCK5s7MvXf9D/+/eO6wwFJ?=
+ =?us-ascii?Q?WekIzmD5a4TvjwtkEjNlwkex5T++Is1Hy4kOtN8udrOLSeoL1L931fGlCU+t?=
+ =?us-ascii?Q?w7yieKZxJb8/RSFdbyXfXN2vKcSjrpW7fKmMHyjDEwV1PqCUOLZvXCsXS6qn?=
+ =?us-ascii?Q?amag8GiyxUcsooBnV8cQZSIeaadsv+AQ2UB8rFH6EjVsX6kz5/4rmZoIa7kx?=
+ =?us-ascii?Q?elSlDl2sH59pfj9GGDjFW0uF3BY9AuofNb2cXwwpOUUwuCRm/AQBPtvjFI5h?=
+ =?us-ascii?Q?PzBvrYJBHezIS3E4HuNcNAWApCiSvZaYWNRY/Au75wILIBF2ApehMZp6GwCx?=
+ =?us-ascii?Q?TUug0/cNKypRz9wUrtUXNTxeQP2cAAEApeOrZcVkW7GQqYQEJtLhFQPzSpg9?=
+ =?us-ascii?Q?Wt0xljr+prEaDsYP7UvT46Si4F4ufH+48wT7vfNn5DzcDoCFZxcxLJ9d3J4P?=
+ =?us-ascii?Q?ha1/clkbz6JpJUomt1YcOUglc0/GEqrktWTWFs4TXjJl0KV0BSqxEMMSGeqg?=
+ =?us-ascii?Q?ThR0LK+7pNMEBlTjHAUBQioXyd+cZuPRYAGT14kk239I4PKs4yJzXaf3zoy4?=
+ =?us-ascii?Q?BBWw4gE6GikPe9fqS54D3EX+tcchnMuaJJ+QgYslPVRzaKpauPcFX26zVfL1?=
+ =?us-ascii?Q?dE7xLFEL9tfwGjBaPA5/TFQi5ZGyDSt/WJZwu0HWv4yDB0NjJRg9lBq+YJpF?=
+ =?us-ascii?Q?0TzbrcLpY4onCCPVmFVSrehetW5XjUPcN9ouXuSLBcAfj/sfpjM37n/JUzNA?=
+ =?us-ascii?Q?ZfOtCtFe0ocAMZSKkdyfQj9+jjHTyOFtBfMMqSKwXuYKSG1qwDRt42rQHYXK?=
+ =?us-ascii?Q?IRKpImwf8Zr+esu5x0vLaRHLNeTjCApnDPVyHSVy9nfVlKAmbkpYnmg8S4cv?=
+ =?us-ascii?Q?H4aSackf54E1WblSxoh56S0q298sLmwUbc7SjNYjyVeBdCNCl7rKHuqfx9RN?=
+ =?us-ascii?Q?fIICap6/pifzsVVkE9jQoDBrOhOduSSLNBqDxqC+jmt9dKzolbAZRUg/RS7P?=
+ =?us-ascii?Q?9uFwngurfsVEO/LtbggmkexgTVUyFiMPFkPHnPNEQPrZf/WYhFlNg1ATM3q/?=
+ =?us-ascii?Q?6uDzz/3EpwOZT3M2RKxqcjDefKdsC63vDVVT0gL/U+iV0dSxDG9T8fwFQpdV?=
+ =?us-ascii?Q?rvQichoMuqFclZMfZ1M+yVVSaWxUUsR8bLJEjMdt7mHYGPVEtnOi9T3YJ9+p?=
+ =?us-ascii?Q?0O3XDYDN2SuCvn/RY9hb5ZIZiJWHToGqt7pQ7xOBtD1wW7coBzOFq37j8xBg?=
+ =?us-ascii?Q?TBaK9hKDLxvaY4WT6+iy57cqM+rWZUkzvU7DcNs9/Ahy+b7kRjGN0F2/SvRk?=
+ =?us-ascii?Q?xLbu4L1VkCe0QYYPkMcGsFJ45ZTLNIuPyhSBGMfi59HxZXKtB4wTAyE9mwot?=
+ =?us-ascii?Q?CZDqBhTCInuJ6lCqsATSsiC07KAj2ZxYm5t107Kq3CVVQ/r/XHTdYOkObH0H?=
+ =?us-ascii?Q?JCFL2BzJ?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:54.240.86.146;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:a86-146.smtp-out.us-west-2.amazonses.com;PTR:a86-146.smtp-out.us-west-2.amazonses.com;CAT:NONE;SFS:(13230031)(4636009)(286005)(332800013)(451199024)(1690799017)(166002)(356005)(7596003)(7636003)(19627405001)(336012)(956004)(26005)(71280400001)(83380400001)(42882007)(79850400001)(83170400001)(58800400005)(7696005)(6486002)(966005)(33964004)(6506007)(9686003)(75640400001)(6916009)(36736006)(4006050)(1096003)(8676002)(3450700001)(9316004)(39450500005)(43540500003)(130870200001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR01MB7154
+X-OrganizationHeadersPreserved: CH0PR01MB7154.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb8.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb8.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92exhyb6.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 14 Dec 2023 21:56:32.0722
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 8334c4ab-3242-4e81-ef7f-08dbfcef8882
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: CY4PEPF0000EDD3.namprd03.prod.outlook.com
+X-CrossPremisesHeadersFiltered: CY4PEPF0000EDD3.namprd03.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ CY4PEPF0000EDD3.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ CY4PEPF0000E9D3.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 708ec428-afe0-4f64-d967-08dbfcef8398
+X-Microsoft-Antispam: BCL:3;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.111;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:w92exhyb6.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2023 21:56:31.7285
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8334c4ab-3242-4e81-ef7f-08dbfcef8882
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.111];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ CY4PEPF0000E9D3.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR01MB6326
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.5367918
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7091.028
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dmtNQk9lZW5tdFRpNWJIYVJ2Q0NZVDd3T0poc2ZPc1ZleE1Sb2F0VUpQaUZH?=
+ =?utf-8?B?Zlg0SHphTFlob0VYSTluUXdqQUQ3ZnJVcUx1K1QwYjE2QVEzZ3dvNkVSTnNK?=
+ =?utf-8?B?THU5QzVITnRubyt2bmtWa0s5a0FwbGJRRE4vQm9zbmlFQjZmUUR1QzZBOFhq?=
+ =?utf-8?B?SmVUeS8wdjhLZ1loampXMmZZRDNOdnBlODRwSW13bFlxWERYV21OYVZPZmd3?=
+ =?utf-8?B?bXJEaVJSOXFwY2FrNWREZUl3cGpaVkxNY0RFVWw5SXVNL2QzeS94RlVGOTVK?=
+ =?utf-8?B?NjhiNFp5MksrN3huU2luMjRqdERhb2JIR2poa2djeE1yV1RvQ3NEdkYxcU9L?=
+ =?utf-8?B?cGZJL0xsRHpVOTAvK25xU2NJdWd2TlA2dGd4b1g1cXU0NTN0QVlHMWMvdVlY?=
+ =?utf-8?B?dlMvVkE5VTFIc3lQTmJmRk1uMHpVR2ZBRzZpSThMenpEZkVHQW1Sei9nYTVa?=
+ =?utf-8?B?c1B3dWVBeE1rVC9kcnU5VGFVZm04MHdvOEQ5T1E4aGp6TkM0alBSU1VHZFZR?=
+ =?utf-8?B?L2xQSDN5RnhoZHdDQTBiVWRmakQ1TTBJRHV2dTdJTHF3V3RMTy80MnFmVU5V?=
+ =?utf-8?B?WGQvZ3lKR2Q3ZWNCVnNWWmFXTkpBY25kaVhnQjJzWXJ5WGlhb05OOEFuREcv?=
+ =?utf-8?B?dVVOcjR5ZkFGOS9RSWUza1hsY1JTTUN6QW9leHZmZitRY3pSRHkwSGFiZFJ4?=
+ =?utf-8?B?ZUNvM1h5VTh3aW12dzlOK25DTVZ1VmMzYTZLbmE4OG9KelVqM3dOL21JMEI5?=
+ =?utf-8?B?aW96bVkxMU5pRTQ4N28vRzdvcCtSaGppQzB5SGduVllqSk1Xa0IvNCtIUHVM?=
+ =?utf-8?B?V2d1M2dpc3JvNnJ5TUlaRk9aNTBIRU5QSVFDMHp5RkxZOHg2Qm9kS1hiNXVt?=
+ =?utf-8?B?bTcvQmJXblQ1ZEhkZEFmdVI3bVVTZnZaK29OckZlZVdIN0hkdlpHdEhOazY1?=
+ =?utf-8?B?Q0JtSk9iajZGT0o0Y0wzaFlhcndURlB0elVoMVFXYkY3UHFKYWplQk40S1Q2?=
+ =?utf-8?B?SHAxYnByK284SFZkTGw5SkwrTldWVmtrdDg1N253RGUvZzlYS0IxR0FBTnVW?=
+ =?utf-8?B?NW9ndFBIK29zMmM0eVlLREFBU2VwZURzdVA4aTRIOVdSMUtmRGg2U2JHdE12?=
+ =?utf-8?B?bkIvTlk2b2svUlFGTGxnMDdGMGtlRUFzRlM0TzNicTRMYnJ0ZCtucklYOXRE?=
+ =?utf-8?B?TDdpYS8zU3gvNTltUG5pUmhxakw4blJaMkJ6Z1UvYlpDdE9MMlF0V3c5d25W?=
+ =?utf-8?B?MEN2OGIwaG83VHM2VWQ1Rms5endnMDVaVWJRV2NQYW0wbVVqd3ZCWWhESjBs?=
+ =?utf-8?B?amFVNlFLK2MxUVl6NVJlZ3hsMGxaL3lxckxjYTN4U2laTDc2b2JiNXVEdjRQ?=
+ =?utf-8?B?MDZYdjhaYW44VDQzdFB5RGJuQVk0b2QxYkl1aktVNm56cExrZWQvZCtiVXZK?=
+ =?utf-8?B?d3VrZGVkeDFSZzYyOHF3WFNleitLOENtUGFudVlNV2Erazd0ajFrZjJ6VEFF?=
+ =?utf-8?B?TzVsbjMwN1dkVkhVcWdWMHVvWG9WeGdpd0xBcjZiellqa3R4V0dqbU0yMmpl?=
+ =?utf-8?B?ZDFqZFJQeEF3aUJiZmI2ODhvNG9YRVlZS1dMSnppdnZsMlFtdDJNTXkxYTZn?=
+ =?utf-8?B?NEMrUEJNYzl4eEtyQTVLQ1B1STB3ejlrZmZBS09zN3lFVUIvb1ZJV1gydFlx?=
+ =?utf-8?B?UjNQUUlCb09ycVlFQ1pBalNtaUgwQjU3cnl4VUtKZTRRZGtsUWw2K0Y4Rnk4?=
+ =?utf-8?B?MGEva0tzbzI2U2lqVldJZndBU0NCQXRjck1oOUlkZGd5dTliekdYNytTeHNp?=
+ =?utf-8?B?WmkzSnJZMVlZNUQxOWtaeFNFbmJmME5MZStxdW5UWWNWeWxZdkRnRlAzWndB?=
+ =?utf-8?B?c3k4UFFwa0RHRmhrV0Qra0N6OE5nMnI5cWNyM0wvalNYYWpQdmZ0bzNHdHFo?=
+ =?utf-8?B?b01pTEZXSTVYNHNiMHZIN3N1Uk5tNTVDV0RrREdqdHhSOCtFWHJVdlNMQW5v?=
+ =?utf-8?B?bElxOEpKNkpzM3ovQTZaUEd1VXVRdUYyczVHU2NkaUlGbE1Ib1JrMTJrWTJQ?=
+ =?utf-8?B?NzQ5MWJaQVhFOW4yL1pjdURtYjhtWmJCd252NytmV2UvZWdhZ25kYWRSMmRv?=
+ =?utf-8?B?cXI1dWkxczRCSjJWbllqdHkzQ2l0S0dIVndRcmZNcEZLejIzbDc2a2dma3ZI?=
+ =?utf-8?B?U1NyUFB1cE84Zm40QnhaVVVxUTdVR25zRGcxM3B6bVZPL3VNcFFvSUNoeHk4?=
+ =?utf-8?B?U3R2ajJKZmVOYXdVdkhOalhVbW5wWERJbzlhOTFIT21pUHRkL2drYzNvNmlS?=
+ =?utf-8?B?MWtVQmpjWVVXeDJrcDNyTTBQTGtDWmc1N0RIUjE2U3BwNm1OYldIWFVacERE?=
+ =?utf-8?B?SkdZUnFFT2pwejE0ZGRPRnJDV1RKbXlBMU92ZVk1YXJwYktFeURyL1BuWEp1?=
+ =?utf-8?B?THU2d0ZLOFFOTW83L2orakIzNXV0ZThxd0lObnY5UUpWaE9IVVFaUVYxQmdn?=
+ =?utf-8?B?dmN6MXNiRmZVc0VIanV0Y2tNb1NHU1Zlb3NKZFJVSW5nRjU2aXJzY21IVlph?=
+ =?utf-8?Q?fTbPYujg0obkQkcIxO4acGWfYm3KVW?=
+MIME-Version: 1.0
+
+----_NmP-2441d7c4f86d1668-Part_1
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+130077
+is your Luma sign in code.
+If you didn=E2=80=99t attempt to sign in,=
+ you can safely ignore this email.
+You can also set a password [https://lu.=
+ma/reset-password?key=3Dr7eqgov9labfffb8vx0z] to sign in to your account.
+Sent using https://lu.ma
+----_NmP-2441d7c4f86d1668-Part_1
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle></title>
+    <!--[if !mso]><!-->
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+    <!--<![endif]-->
+   =20
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=
+=3D1">
+    <style type=3D"text/css">
+      #outlook a { padding:0; }
+      body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size=
+-adjust:100%; }
+      table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-table-r=
+space:0pt; }
+      img { border:0;height:auto;line-height:100%; outline:none;text-decora=
+tion:none;-ms-interpolation-mode:bicubic; }
+      p { display:block;margin:13px 0; }
+    </style>
+    <!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]-->
+    <!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]-->
+   =20
+      <!--[if !mso]><!-->
+        <link href=3D"https://fonts.googleapis.com/css?family=3DRoboto:300,=
+400,500,700" rel=3D"stylesheet" type=3D"text/css">
+        <style type=3D"text/css">
+          @import url(https://fonts.googleapis.com/css?family=3DRoboto:300,=
+400,500,700);
+        </style>
+      <!--<![endif]-->
+
+   =20
+   =20
+    <style type=3D"text/css">
+      @media only screen and (min-width:480px) {
+        .mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }
+    </style>
+    <style media=3D"screen and (min-width:480px)">
+      .moz-text-html .mj-column-per-100 { width:100% !important; max-width:=
+ 100%; }
+    </style>
+   =20
+ =20
+    <style type=3D"text/css">
+   =20
+   =20
+    </style>
+    <style type=3D"text/css">
+    h1 {
+            font-size: 24px;
+            line-height: 32px;
+            margin-top: 32px;
+            margin-bottom: 28px;
+          }
+
+          h2 {
+            font-size: 20px;
+            line-height: 28px;
+            margin-top: 24px;
+            margin-bottom: 20px;
+          }
+
+          p {
+            margin-top: 0;
+            margin-bottom: 16px;
+          }
+
+          p.small {
+            font-size: 14px;
+            margin-bottom: 8px;
+          }
+
+          hr {
+            border-top: 1px solid #ebeced;
+          }
+
+          blockquote {
+            border-left: 2px solid #ebeced;
+            padding-left: 1rem;
+            margin-left: 0;
+          }
+
+          a {
+            color: #de3163;
+            text-decoration: none !important;
+          }
+
+          .mirror-content a, a.cta-link {
+            color: #de3163 !important;
+            text-decoration: none !important;
+          }
+
+          .mirror-content li p {
+            margin: 4px 0;
+          }
+
+          .mirror-content a.btn {
+            margin-top: 0.5rem;
+            color: white !important;
+          }
+
+          .mirror-content pre {
+            /* We need to wrap long lines, otherwise the email will scroll =
+horizontally
+               on some clients like Superhuman */
+            white-space: pre-wrap !important;
+            padding: 1rem;
+            border-radius: 4px;
+            background-color: #f4f5f6 !important;
+          }
+
+          table.time-pill {
+            background-color: #f4f5f6;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            width: 30%;
+          }
+
+          td.time-pill-content {
+            text-align: center;
+            color: #737577;
+            min-width: 130px;
+          }
+
+          td.time-pill-content.date {
+            font-size: 14px;
+            font-weight: 500;
+            padding-top: 6px;
+          }
+
+          td.time-pill-content.time {
+            font-size: 12px;
+            padding-bottom: 6px;
+          }
+
+          @media all and (max-width: 400px) {
+            table.time-pill {
+              width: 40%;
+            }
+          }
+
+          table.survey-pill {
+            background-color: #f4f5f6;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            width: 20%;
+            min-width: 60px;
+          }
+
+          td.survey-pill-content {
+            text-align: center;
+            padding: 12px 8px;
+          }
+
+          td.survey-pill-content a {
+            padding: 16px 8px;
+          }
+
+          td.survey-pill-content.emoji {
+            font-size: 28px;
+          }
+
+          .calendar-red {
+            color: #d86156;
+          }
+
+          .col-50 {
+            width: 50% !important;
+            max-width: 50%;
+          }
+    </style>
+   =20
+  </head>
+  <body style=3D"word-spacing:normal;">
+   =20
+   =20
+      <div style=3D"">
+       =20
+     =20
+      <!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px=
+;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-h=
+eight-rule:exactly;"><![endif]-->
+   =20
+     =20
+      <div style=3D"margin:0px auto;max-width:600px;">
+       =20
+        <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"width:100%;">
+          <tbody>
+            <tr>
+              <td style=3D"direction:ltr;font-size:0px;padding:16px;text-al=
+ign:center;">
+                <!--[if mso | IE]><table role=3D"presentation" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-a=
+lign:top;width:568px;" ><![endif]-->
+           =20
+      <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-s=
+ize:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:t=
+op;width:100%;">
+       =20
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"prese=
+ntation" width=3D"100%">
+        <tbody>
+          <tr>
+            <td style=3D"vertical-align:top;padding:0px;">
+             =20
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"prese=
+ntation" style=3D"" width=3D"100%">
+        <tbody>
+         =20
+              <tr>
+                <td align=3D"left" style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:32px;word-break:break-word;">
+                 =20
+     =20
+     <!--[if mso | IE]><table align=3D"left" border=3D"0" cellpadding=3D"0"=
+ cellspacing=3D"0" role=3D"presentation" ><tr><td><![endif]-->
+              <table align=3D"left" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"float:none;display:inline-table;">
+                <tbody>
+                 =20
+      <tr>
+        <td style=3D"padding:0px;vertical-align:middle;">
+          <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"p=
+resentation" style=3D"border-radius:3px;width:24px;">
+            <tbody>
+              <tr>
+                <td style=3D"font-size:0;height:24px;vertical-align:middle;=
+width:24px;">
+                  <a href=3D"https://lu.ma" target=3D"_blank">
+                    <img height=3D"24" src=3D"https://cdn.lu.ma/email/luma-=
+star.png" style=3D"border-radius:3px;display:block;" width=3D"24">
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+       =20
+      </tr>
+   =20
+                </tbody>
+              </table>
+            <!--[if mso | IE]></td></tr></table><![endif]-->
+   =20
+   =20
+                </td>
+              </tr>
+           =20
+              <tr>
+                <td align=3D"left" style=3D"font-size:0px;padding:0px;paddi=
+ng-bottom:20px;word-break:break-word;">
+                 =20
+      <div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe U=
+I', Roboto, Helvetica, sans-serif;font-size:28px;font-weight:700;line-heigh=
+t:1.6;text-align:left;color:#131517;">130077</div>
+   =20
+                </td>
+              </tr>
+           =20
+              <tr>
+                <td align=3D"left" style=3D"font-size:0px;padding:0px;word-=
+break:break-word;">
+                 =20
+      <div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe U=
+I', Roboto, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align=
+:left;color:#131517;">is your Luma sign in code.</div>
+   =20
+                </td>
+              </tr>
+           =20
+              <tr>
+                <td align=3D"left" style=3D"font-size:0px;padding:0px;paddi=
+ng-top:24px;word-break:break-word;">
+                 =20
+      <div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe U=
+I', Roboto, Helvetica, sans-serif;font-size:14px;line-height:1.6;text-align=
+:left;color:#737577;"><div>If you didn=E2=80=99t attempt to sign in, you ca=
+n safely ignore this email.</div><div style=3D"padding-top:8px">You can als=
+o <a class=3D"cta-link" href=3D"https://lu.ma/reset-password?key=3Dr7eqgov9=
+labfffb8vx0z">set a password</a> to sign in to your account.</div></div>
+   =20
+                </td>
+              </tr>
+           =20
+              <tr>
+                <td align=3D"center" style=3D"font-size:0px;padding:0px;pad=
+ding-top:32px;word-break:break-word;">
+                 =20
+      <p style=3D"border-top:solid 1px #ebeced;font-size:1px;margin:0px aut=
+o;width:100%;">
+      </p>
+     =20
+      <!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" style=3D"border-top:solid 1px #ebeced;font-size:1px;m=
+argin:0px auto;width:568px;" role=3D"presentation" width=3D"568px" ><tr><td=
+ style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]-->
+   =20
+   =20
+                </td>
+              </tr>
+           =20
+        </tbody>
+      </table>
+   =20
+            </td>
+          </tr>
+        </tbody>
+      </table>
+   =20
+      </div>
+   =20
+          <!--[if mso | IE]></td></tr></table><![endif]-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+       =20
+      </div>
+   =20
+     =20
+      <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" st=
+yle=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-s=
+ize:0px;mso-line-height-rule:exactly;"><![endif]-->
+   =20
+     =20
+      <div style=3D"margin:0px auto;max-width:600px;">
+       =20
+        <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"width:100%;">
+          <tbody>
+            <tr>
+              <td style=3D"direction:ltr;font-size:0px;padding:16px 16px 0 =
+16px;text-align:center;">
+                <!--[if mso | IE]><table role=3D"presentation" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-a=
+lign:top;width:568px;" ><![endif]-->
+           =20
+      <div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-s=
+ize:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:t=
+op;width:100%;">
+       =20
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"prese=
+ntation" width=3D"100%">
+        <tbody>
+          <tr>
+            <td style=3D"vertical-align:top;padding:0px;">
+             =20
+      <table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"prese=
+ntation" style=3D"" width=3D"100%">
+        <tbody>
+         =20
+              <tr>
+                <td align=3D"left" style=3D"font-size:0px;padding:0px;word-=
+break:break-word;">
+                 =20
+      <div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe U=
+I', Roboto, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align=
+:left;color:#131517;"><div><div class=3D"col-50 mj-outlook-group-fix" style=
+=3D"font-size:0;text-align:left;display:inline-block;vertical-align:top;wid=
+th:100%;margin-bottom:8px"><table border=3D"0" cellpadding=3D"0" cellspacin=
+g=3D"0" role=3D"presentation" style=3D"vertical-align:top" width=3D"100%"><=
+tbody><tr><td align=3D"left" style=3D"font-size:0;padding-right:10px;word-b=
+reak:break-word"><a href=3D"https://lu.ma"><img height=3D"15" width=3D"45" =
+src=3D"https://cdn.lu.ma/email/logo.png"></a></td></tr></tbody></table></di=
+v><div class=3D"col-50 mj-outlook-group-fix" style=3D"font-size:0;text-alig=
+n:left;display:inline-block;vertical-align:top;width:100%;margin-bottom:8px=
+"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentat=
+ion" style=3D"vertical-align:top" width=3D"100%"><tbody><tr><td align=3D"le=
+ft" style=3D"font-size:0;word-break:break-word"><div style=3D"text-align:ri=
+ght"><a href=3D"https://lu.ma/ios" style=3D"padding-left:16px"><img width=
+=3D"16" height=3D"16" src=3D"https://cdn.lu.ma/email/appstore.png"></a><a h=
+ref=3D"https://twitter.com/lumahq" style=3D"padding-left:16px"><img width=
+=3D"16" height=3D"16" src=3D"https://cdn.lu.ma/email/twitter.png"></a><a hr=
+ef=3D"https://instagram.com/luma_hq" style=3D"padding-left:16px"><img width=
+=3D"16" height=3D"16" src=3D"https://cdn.lu.ma/email/instagram.png"></a></d=
+iv></td></tr></tbody></table></div></div></div>
+   =20
+                </td>
+              </tr>
+           =20
+        </tbody>
+      </table>
+   =20
+            </td>
+          </tr>
+        </tbody>
+      </table>
+   =20
+      </div>
+   =20
+          <!--[if mso | IE]></td></tr></table><![endif]-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+       =20
+      </div>
+   =20
+     =20
+      <!--[if mso | IE]></td></tr></table><table align=3D"center" border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" role=3D"presentation" st=
+yle=3D"width:600px;" width=3D"600" ><tr><td style=3D"line-height:0px;font-s=
+ize:0px;mso-line-height-rule:exactly;"><![endif]-->
+   =20
+     =20
+      <div style=3D"margin:0px auto;max-width:600px;">
+       =20
+        <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"width:100%;">
+          <tbody>
+            <tr>
+              <td style=3D"direction:ltr;font-size:0px;padding:0 16px;text-=
+align:center;">
+                <!--[if mso | IE]><table role=3D"presentation" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0"><tr><td align=3D"left" class=3D"" styl=
+e=3D"" ><![endif]-->
+           =20
+      <div style=3D"font-family:-apple-system, BlinkMacSystemFont, 'Segoe U=
+I', Roboto, Helvetica, sans-serif;font-size:16px;line-height:1.6;text-align=
+:left;color:#131517;"><a href=3D"https://lu.ma/holiday?ref=3Demail" style=
+=3D"font-size:12px;color:#b3b5b7;text-decoration:none !important;padding:2p=
+x">Host your holiday party with Luma =E2=86=97</a></div>
+   =20
+          <!--[if mso | IE]></td></tr></table><![endif]-->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+       =20
+      </div>
+   =20
+     =20
+      <!--[if mso | IE]></td></tr></table><![endif]-->
+   =20
+   =20
+      </div>
+   =20
+  <img alt=3D"" src=3D"https://jm54dyh1.r.us-west-2.awstrack.me/I0/0101018c=
+6a54a9b9-133a24b6-0c10-4f7b-84df-a7d4fbe80c71-000000/gnMz9I5pIsAHdyvn2q4Un7=
+T91bE=3D353" style=3D"display: none; width: 1px; height: 1px;">
+</body>
+</html>
+  =
+
+----_NmP-2441d7c4f86d1668-Part_1--

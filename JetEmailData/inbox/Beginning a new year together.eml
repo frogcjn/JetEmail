@@ -1,0 +1,621 @@
+Received: from CO1PR01MB7227.prod.exchangelabs.com (2603:10b6:303:162::10) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 12 Sep 2023 15:21:21
+ +0000
+Received: from PA7P264CA0183.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:376::15)
+ by CO1PR01MB7227.prod.exchangelabs.com (2603:10b6:303:162::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.19; Tue, 12 Sep 2023 15:21:19 +0000
+Received: from SA2PEPF000015C6.namprd03.prod.outlook.com
+ (2603:10a6:102:376:cafe::b7) by PA7P264CA0183.outlook.office365.com
+ (2603:10a6:102:376::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.35 via Frontend
+ Transport; Tue, 12 Sep 2023 15:21:18 +0000
+Authentication-Results: spf=fail (sender IP is 18.7.71.113)
+ smtp.mailfrom=a619304.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none header.from=mit.edu;
+Received-SPF: Fail (protection.outlook.com: domain of a619304.bnc3.mailjet.com
+ does not designate 18.7.71.113 as permitted sender)
+ receiver=protection.outlook.com; client-ip=18.7.71.113;
+ helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.7.71.113) by
+ SA2PEPF000015C6.mail.protection.outlook.com (10.167.241.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6792.16 via Frontend Transport; Tue, 12 Sep 2023 15:21:18 +0000
+Received: from w92expo21.exchange.mit.edu (18.7.74.75) by
+ w92exhyb8.exchange.mit.edu (18.7.71.113) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 12 Sep 2023 11:20:54 -0400
+Received: from oc11exhyb2.exchange.mit.edu (18.9.1.98) by
+ w92expo21.exchange.mit.edu (18.7.74.75) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Tue, 12 Sep 2023 11:20:54 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
+ oc11exhyb2.exchange.mit.edu (18.9.1.98) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48 via Frontend Transport; Tue, 12 Sep 2023 11:20:53 -0400
+Received: from BYAPR07CA0100.namprd07.prod.outlook.com (2603:10b6:a03:12b::41)
+ by SJ2PR01MB8194.prod.exchangelabs.com (2603:10b6:a03:4fd::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6768.31; Tue, 12 Sep 2023 15:20:48 +0000
+Received: from SA2PEPF000015CB.namprd03.prod.outlook.com
+ (2603:10b6:a03:12b:cafe::34) by BYAPR07CA0100.outlook.office365.com
+ (2603:10b6:a03:12b::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.19 via Frontend
+ Transport; Tue, 12 Sep 2023 15:20:48 +0000
+Authentication-Results-Original: spf=pass (sender IP is 87.253.233.125)
+ smtp.mailfrom=a619304.bnc3.mailjet.com; dkim=pass (signature was verified)
+ header.d=bnc3.mailjet.com;dmarc=fail action=none
+ header.from=mit.edu;compauth=pass reason=704
+Received-SPF: Pass (protection.outlook.com: domain of a619304.bnc3.mailjet.com
+ designates 87.253.233.125 as permitted sender)
+ receiver=protection.outlook.com; client-ip=87.253.233.125;
+ helo=o125.p8.mailjet.com; pr=C
+Received: from o125.p8.mailjet.com (87.253.233.125) by
+ SA2PEPF000015CB.mail.protection.outlook.com (10.167.241.201) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.11 via Frontend Transport; Tue, 12 Sep 2023 15:20:47 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; q=dns/txt;
+  d=bnc3.mailjet.com; i=dean-streete-oge=3Dmit.edu@a619304.bnc3.mailjet.com; s=mailjet1; x=1694539245;
+  h=message-id:mime-version:from:from:to:to:subject:subject:date:date:list-id:list-unsubscribe-post:
+  list-unsubscribe:feedback-id:precedence:x-campaignid:x-csa-complaints:
+  x-mj-mid:x-mj-smtpguid:x-report-abuse-to:content-type;
+  bh=fpeYh7EED7yywrrw/c7lqM8+4wFPPsTb3/zi+jD2hno=;
+  b=MoqdcgVBmODAZAA8pN8T4G+/p1AGBl4eRAD7YbhJ5VHuXYJlQ1O39XQ9j
+ 9U9blLmqCU9iONa7jmcogM/roME9TgeNTos5iXfJGaw1kD2i8JoNRM/ZObcJ
+ IPHTyJ3z7ooqJzhmiP+IpeEzKDOQ7c33eY9BuNrWd8u4F32cNfFJrQ=
+Return-Path:
+ 168d9e6e.AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN@a619304.bnc3.mailjet.com
+Message-ID: <168d9e6e.AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN@mailjet.com>
+From: "Denzil Streete, Office of Graduate Education"
+	<dean-streete-oge@mit.edu>
+To: jiannan@mit.edu
+Subject: Beginning a new year together
+Date: Tue, 12 Sep 2023 13:05:55 +0000 (UTC)
+List-Id: <dean-streete-oge.mit.edu.kysz-097r2.mj>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+List-Unsubscribe: <mailto:unsub-168d9e6e.kysz.lz8y2qm6ontm@bnc3.mailjet.com>,
+	<https://kysz.mjt.lu/unsub2?m=AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN5kgPHfjoTTi_ObUDMqlhMAAI9Ks&b=168d9e6e&e=42514f22&x=a7iET_5Bkh8rOy7esnA68A>
+Feedback-Id: 42.619304.586923:MJ
+Precedence: bulk
+X-CampaignID: 7713661246
+X-CSA-Complaints: csa-complaints@eco.de
+X-MJ-Mid: AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN5kgPHfjoTTi_ObUDMqlhMAAI9Ks
+X-MJ-SMTPGUID: e6480f1d-f8e8-4d38-bf39-b50332a96130
+X-REPORT-ABUSE-TO: Message sent by Mailjet please report to
+	abuse@mailjet.com with a copy of the message
+Content-Type: multipart/alternative; boundary="=-PGxHOqW+fvHENBD/qZxP"
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ SA2PEPF000015CB:EE_|SJ2PR01MB8194:EE_|SA2PEPF000015C6:EE_|CO1PR01MB7227:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9ba989cb-a31b-4cd2-2a82-08dbb3a3e9b5
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?PHK98y/+h+t4ogLVVGVwoG8izdh+RlquCGuv0YxCZiYJHp/xN49dRFSGF39i?=
+ =?us-ascii?Q?tinQnbn4VZ92xoQ8emjES6/xECYClbi3tRo1k5fETxQYuPODPSQKmBcNN/W9?=
+ =?us-ascii?Q?Kak5FoBzP/EcebFvL04Io4eWl9ONU1Oxzk+5wty2ycf411D/6misRw3dv/M5?=
+ =?us-ascii?Q?QpHtWlfEn7Zuzo9FX5beHF3vK5jJox+H7OOQiXtSoh5ioKA3AEh+Xxhve831?=
+ =?us-ascii?Q?cIlEEbTUQJ3v40BWTwsl9YQ+KU3cpA7IkcG7yGZjOBEI3eoCb9BedwTC2EK+?=
+ =?us-ascii?Q?sQGE8S4kSN+HeCwrVywamRW6RW6ylhDKk+/5vUnqe5IjBcHKizdsgycTFNQ1?=
+ =?us-ascii?Q?QQdKiMo1TSRs3hjnFSsYuebML4zBEg3FAORU6s2/wjWL7XbJlODYjEFsBiuQ?=
+ =?us-ascii?Q?znS999YNwWxNwRFJ1il7+Z1wwH6yInex3XawNWlS99xixocm+jiswFiI2Hnw?=
+ =?us-ascii?Q?Nmi3FuESFFir0pvLl2CIXDfW2kaCvaWtKSGksgtLYK96pqrnIjd46aAsKi/3?=
+ =?us-ascii?Q?XAugGuMkT1q0J4MsysxvlU57JqtN6tKQmjR4d0FMDJmbwXsF3rFMRFqyv7TP?=
+ =?us-ascii?Q?ned3HoX4b2xTGzpxEUA7C/IWJljlskGzciJzfYqSzlqAoqigrRPi/3gT1755?=
+ =?us-ascii?Q?lLHaVvj+ggDwFHZh7LcTx6gVXMOC/GRQMrRSlHGjKP7tpteJn2n8YGul3ZEY?=
+ =?us-ascii?Q?d6YstTL/Zd8XOoqp2GU9SaWlaff+06fzOPlO84qVA8cV5hgyoug2ciolGEsR?=
+ =?us-ascii?Q?olaVyhnVsgSBxwfAYMNU/mIPS79z/QHJJYVumkv1h3AS6omIUqQcYKnNtsKY?=
+ =?us-ascii?Q?16CRuaULGRKOt2vgMHOJAdAZUuBgmPsz6QV/yx6osmXlXJO4I6DYxp5H7x2m?=
+ =?us-ascii?Q?RTuf3Jh9TcGK70o9V1IgVUsyrRnjDfe/gB5B8dcp2iTc9lBHsNhAGuzsqMWe?=
+ =?us-ascii?Q?ucIR4ZcKvNw8VB8bis9yZ9V+Jc4MPh+jYCkqqP/0mnxajewJJV0i3u33nlUT?=
+ =?us-ascii?Q?BxT3W5RHgsYt993d+JBqhOLU12xqnMo8hB2ekXNv9win2AVMAMXZFj/AFdx/?=
+ =?us-ascii?Q?6oBogyjnlnwZbRKUCD1bLpRNy/hkfCqrisaU5nLBNj4bNk5Saywzfj6NqVSY?=
+ =?us-ascii?Q?Ubo1a53WxUmeA8mClMqKojC9nlDS1JZapA=3D=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:87.253.233.125;CTRY:FR;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:o125.p8.mailjet.com;PTR:o125.p8.mailjet.com;CAT:NONE;SFS:(13230031)(4636009)(451199024)(1690799017)(1096003)(356005)(76236004)(19810500001)(6506007)(6666004)(33964004)(6486002)(7696005)(83380400001)(58800400005)(956004)(26005)(336012)(966005)(9686003)(6636002)(6916009)(36736006)(22186003)(8676002)(42882007)(9316004)(5660300002)(7066003)(83170400001)(36756003)(166002)(7596003)(7636003)(66899024)(76899018)(1406899027)(5006899006);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR01MB8194
+X-OrganizationHeadersPreserved: SJ2PR01MB8194.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb2.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb2.exchange.mit.edu
+X-OrganizationHeadersPreserved: w92expo21.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 12 Sep 2023 15:21:18.5062
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 9ba989cb-a31b-4cd2-2a82-08dbb3a3e9b5
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted: SA2PEPF000015C6.namprd03.prod.outlook.com
+X-CrossPremisesHeadersFiltered: SA2PEPF000015C6.namprd03.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ SA2PEPF000015C6.namprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ SA2PEPF000015CB.namprd03.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ c224c242-ffdf-46ee-0c10-08dbb3a3d768
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.71.113;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:w92exhyb8.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2023 15:21:18.2875
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ba989cb-a31b-4cd2-2a82-08dbb3a3e9b5
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.71.113];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ SA2PEPF000015CB.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR01MB7227
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.9249927
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6768.024
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZWR6OTMrMHl0QytQeE5CY2VPU2U4eDEwVWpzZlBhbWFNd0lDOVpoRVZFWURF?=
+ =?utf-8?B?UGx6Vnh1bGptNXhDS0lGQTZTcjd5cVFXajJkRmxKT0RnM09Hc1VDY1hwMmpV?=
+ =?utf-8?B?bEZCemh2NExEY0ZYL1R1dVJIQURUeS85RzNYQ0htN3RnVEhPNlBDY21kalY2?=
+ =?utf-8?B?RVZBSHFvL3FpV3NGdDczQ290UlpNSkdZZmpoUmhXb3kvZGNzdDNHYkhVN3V5?=
+ =?utf-8?B?YVdLYS9RL2tWcE9pWU4wd2lHVTR3Szc4MGJLZ2xYZEVILzh2NGN1VXdrMllF?=
+ =?utf-8?B?Z2JDdHlQMThxNVVtcjdiL3VENmhuS2laRFVSQXdzekJZek52YlRTQThiZW0r?=
+ =?utf-8?B?QmlvZ2wyVFVCVmFSWmNtT1Y3TkwwNGNETnFTRFh3RTAwTi8yeUVlaTYySzB6?=
+ =?utf-8?B?WTdUc01BbFFvWnZVSXEyOFRiczFKQVd6RGFPZWhOT0JvYURaTGdsVFlSSENz?=
+ =?utf-8?B?NG42b0pqcVlrZ1V5VHRIa1lXSThyeVFsdUNTZDZFL2R3cTFPeWsxaEZsU2Y3?=
+ =?utf-8?B?NklkanV4dDNzL2Y0VmVhUlRzbE9QMTQ0Nk9KZDF3N0VWQ2NmZVlQTzZKcms4?=
+ =?utf-8?B?a3JNM20zREh6SGtEeWcva3FpKzFjdFJSSml0cVc0akx1VndoR0FacGQwOSs0?=
+ =?utf-8?B?WUN4ZDVkbzhGZklVWHZBQlBxcGpaSFBaYWZOQ0RwRFVrSVhLVWNzRmIxaHpx?=
+ =?utf-8?B?RngvVlI4MXRaNlpQek1zbUgwd3JnQ3VkSnJVbU9ITUZma0hXR2hwYWpORXZX?=
+ =?utf-8?B?Wk0yOHpxbTBncnVMSVJ6MGFtUTZ4RTF1N2pkc3Jkc3NqWlRKRnhZb2htSVFU?=
+ =?utf-8?B?emhsbSthME5ZcnZMcEEvM2dLZFc3d01OZEdxRDRNTU5QUDFSd3pXYkd1UWNz?=
+ =?utf-8?B?N1A3ZG9ndlVxRUFEUXNCK2ptYWRiRm1NamlTeHZLNWpZUittMU9MQjFnYUNQ?=
+ =?utf-8?B?VlZFelZoVVFmUUlWUUh4RTU3SGFLUG8vV0NZSXVHK3JvVGZHd3RvY0dBaTlG?=
+ =?utf-8?B?blBtMWY3Ymk4eHpwcDBvc1pjQ0R4SzFUSHJmMHhYNXVEOWtCbmRwdDAvdGRZ?=
+ =?utf-8?B?UkVTNGVGanJvdFZEQWVyQUdZZGdXVmNGYlBteFJLTUNyQjU0Z3RMaWhUTzFH?=
+ =?utf-8?B?dWZvY2dDSU1raWpJU0x2V2xHVGNLaGhMcmFQN1Era1RaZk1ZeUNEVSs5em8w?=
+ =?utf-8?B?eGlQMThOZmltSndQRVFESWlLY0xXRkdCcVBKYzdDdVY5d1pUS3ZXaG1mTlRX?=
+ =?utf-8?B?ZXhFMDFCeVlCbFdKWnZRS2IwU1dFMkVMZFRya01JcmIrdlhyUzltRm1kQzlQ?=
+ =?utf-8?B?NjlKVDB5QXBBTnJkYVpTTUdTYUtRUlhVd0FUaHBMZjluOUlkN05vcFpvUi9u?=
+ =?utf-8?B?SCtZZWZFd2xBZVBFWVk2dU9OVDlqNDAwcDliUC9ZcTRqbjRuYjRjWFpobFpu?=
+ =?utf-8?B?dTBaT0E2R1ZxOUg1QkZvMHpQSHdEcXAyRlJ1T0R1NFlIN25SNlZsM29NYm5E?=
+ =?utf-8?B?bGVmZVgzNENxZkk3Wkl0ejFkTk95WUFiWk5Lc2IzbFlPa0Zuc3lTUTIzWW5o?=
+ =?utf-8?B?QmxNTU5CaWhqWk5vamxHNlQ4R1JGdGltRWwrVUg0Y3cyb3dhM3hScmxnYmVJ?=
+ =?utf-8?B?MFM3WUtzVWtzS3FNSEdad1lFMXZZVEJOUjVwQTFMTENsUkFYbzBHMUZZMlhx?=
+ =?utf-8?B?YTBuZlFEd3RJYk5IZnlycG1OYVphOFRyTUsxRkd6VFZaUUM5MkxGSEFOZXlX?=
+ =?utf-8?B?bHlZeWtCS0h4QjZ4MlRMQldYY2FtMHl5MGtHbkJnelVqbnBaWUl2WVZFTGJz?=
+ =?utf-8?B?UXg4OFhtbXpqcDZTbWJaRGJ2MjR5UU8yV1NPVGF2eUNDblNmbVJBQzVIdWgw?=
+ =?utf-8?B?NE1qNE96TVFQazMzaVp0a01hd1F2MEFYMlE0RURnanNKRkhmNmtMc0lFRWNE?=
+ =?utf-8?B?TWQycHBsZmhkeTZIbm9mTE1WVHIwWExTRnhVQ2ExeC9VZ0FRUUZEQ3VxMFhm?=
+ =?utf-8?B?NEJGUTVQVFJTUzU2YU5tRXZoT3pUZytySXRYeUNqdGQ5VDZFTGNXN3I0UUds?=
+ =?utf-8?B?b0pBRDNiTHpob0IwMzAzRU5FNUZqVlhaa1NYVjVpU01ZWW9MUzZuMXVkTndP?=
+ =?utf-8?B?ME02NFV6TG5nTGt4a3NkZDVjZWdRNVM1bDBPOFpmOFhyZWppOEJVMnF2TjMv?=
+ =?utf-8?B?eVBGZllMOGRKZ3gwK2ZWYVJra2N1R3hXQlRDWUJkR3c0dWlZVC94YmZYYmZE?=
+ =?utf-8?Q?SO7PUgQjo8F6c0D8RcTe9hb2qzbIftXb/4TcpLlN2A=3D?=
+MIME-Version: 1.0
+
+--=-PGxHOqW+fvHENBD/qZxP
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+A warm welcome and self-introduction from the new OGE director
+
+View online version http://kysz.mjt.lu/nl3/0DP4k_3GldZjDQrUr-Fmig?m=3DAVoAA=
+CQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN5kgPHfjoTTi_ObUDMqlhMAAI9Ks&=
+b=3D168d9e6e&e=3D42514f22&x=3Da7iET_5Bkh8rOy7esnA68A
+
+
+
+[https://kysz.mjt.lu/tplimg/kysz/b/su70o/gsq6h.png]
+
+
+
+Allow me to introduce myself.=C2=A0
+---------------------------------------------------------------------------=
+-----
+Dear MIT Graduate Students,
+
+On behalf of the Office of Graduate Education (OGE), I am delighted to welc=
+ome all of you to the new academic year! We hope you had a restful and prod=
+uctive summer. We are so excited to have a new cohort join our vibrant and =
+diverse community of scholars.=C2=A0
+
+I am also new to MIT, having formally started today as the Senior Associate=
+ Dean and Director of the Office of Graduate Education.=C2=A0
+
+In my previous role at the University of California, Berkeley, I was the As=
+sistant Vice Provost of Graduate Studies and Chief of Staff in the Graduate=
+ Division. I also had the privilege to serve as the Director of the Office =
+for Graduate Diversity there.=C2=A0
+
+I have a passion for supporting graduate students in their academic and pro=
+fessional development, while centering joy and self-care. I am particularly=
+ interested in helping students to develop the skills and knowledge they ne=
+ed to succeed in their chosen careers, both inside and outside of academia.=
+=C2=A0
+
+In the coming weeks I look forward to connecting and collaborating with you=
+ all, whether it will be at an event here at the Institute, walking around =
+Cambridge with my 2 year old labradoodle Brooklyn, or cheering on my Englis=
+h Premier League football team Arsenal on social media.=C2=A0
+
+I know that graduate school can be challenging, but it is also an incredibl=
+y rewarding experience. At MIT, you have the opportunity to learn from worl=
+d-class faculty, conduct cutting-edge research, and collaborate with talent=
+ed peers from around the world. I am here to support you in every way that =
+I can, and I encourage you to reach out to me or the OGE team [https://oge.=
+mit.edu/services-team/staff/] if you have any questions or need assistance.
+
+
+Here are some ways that the OGE team can support you:
+
+ * Our GradSupport team [https://oge.mit.edu/development/gradsupport/] can =
+work with you to address issues including faculty/student relationships, pe=
+rsonal concerns, switching advisors, funding, and academic progress. They c=
+an also help with excused absences, assignment extensions and medical leave=
+s.
+ * Our Program Administrator for Graduate Students with Children can connec=
+t student families with campus support and local resources [https://oge.mit=
+.edu/families/].
+ * Our fellowships team [https://oge.mit.edu/finances/fellowships/] can hel=
+p you identify and apply for fellowships, and provide resources for financi=
+al wellbeing.
+ * We welcome your energy if you=E2=80=99d like to apply for a Graduate Stu=
+dent Experience Grant [https://oge.mit.edu/community/gseg/], become a Gradu=
+ate Community Fellow [https://oge.mit.edu/community/gcf/], or join the Grad=
+uate Diversity Ambassadors [https://oge.mit.edu/graddiversity/graduate-dive=
+rsity-ambassadors/]!
+
+The best way to reach out to me or the OGE team is by email at Grad-Ed@mit.=
+edu [Grad-Ed@mit.edu]. In the coming days I will provide a process if you=
+=E2=80=99d like to check in with me individually. You can also visit our we=
+bsite [https://oge.mit.edu/services-team/services/] to learn more about our=
+ services and resources.
+
+I look forward to getting to know you all and helping you to achieve your p=
+ersonal, academic and professional goals.
+
+Sawubona [https://www.vibratehigherdaily.com/blog-articles/2020/6/7/sawubon=
+a],=C2=A0
+<<Denzil Streete>> [https://kysz.mjt.lu/img/kysz/b/mjjh0/gujoi.jpeg]
+Denzil A. Streete, PhD=C2=A0
+
+Senior Associate Dean and Director
+
+Office of Graduate Education
+
+
+
+This e-mail has been sent to jiannan@mit.edu; click here to unsubscribe htt=
+p://kysz.mjt.lu/unsub2?hl=3Den&m=3DAVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkV=
+AAlzKABlAIHN5kgPHfjoTTi_ObUDMqlhMAAI9Ks&b=3D168d9e6e&e=3D42514f22&x=3Da7iET=
+_5Bkh8rOy7esnA68A.
+MIT Office of Graduate Education (OGE)
+77 Massachusetts Ave, 35-332 Cambridge, MA 02139
+
+
+
+[https://www.mailjet.com/?utm_source=3Dfooter&utm_medium=3Demail&utm_campai=
+gn=3Dlogo1]=
+
+--=-PGxHOqW+fvHENBD/qZxP
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><t=
+itle>Beginning a new year together</title><!--[if !mso]><!--><meta http-equ=
+iv=3D"X-UA-Compatible" content=3D"IE=3Dedge"><!--<![endif]--><meta name=3D"=
+viewport" content=3D"width=3Ddevice-width,initial-scale=3D1"><style type=3D=
+"text/css">#outlook a { padding:0; }
+      body { margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size=
+-adjust:100%; }
+      table, td { border-collapse:collapse;mso-table-lspace:0pt;mso-table-r=
+space:0pt; }
+      img { border:0;height:auto;line-height:100%; outline:none;text-decora=
+tion:none;-ms-interpolation-mode:bicubic; }
+      p { display:block;margin:13px 0; }</style><!--[if mso]>
+    <noscript>
+    <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+    </xml>
+    </noscript>
+    <![endif]--><!--[if lte mso 11]>
+    <style type=3D"text/css">
+      .mj-outlook-group-fix { width:100% !important; }
+    </style>
+    <![endif]--><!--[if !mso]><!--><link href=3D"https://fonts.googleapis.c=
+om/css?family=3Dserif" rel=3D"stylesheet" type=3D"text/css"><link href=3D"h=
+ttps://fonts.googleapis.com/css?family=3D" rel=3D"stylesheet" type=3D"text/=
+css"><style type=3D"text/css">@import url(https://fonts.googleapis.com/css?=
+family=3Dserif);
+@import url(https://fonts.googleapis.com/css?family=3D);</style><!--<![endi=
+f]--><style type=3D"text/css">@media only screen and (min-width:480px) {
+        .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.mj-column-per-33 { width:33% !important; max-width: 33%; }
+.mj-column-per-100 { width:100% !important; max-width: 100%; }
+      }</style><style media=3D"screen and (min-width:480px)">.moz-text-html=
+ .mj-column-per-67 { width:67% !important; max-width: 67%; }
+.moz-text-html .mj-column-per-33 { width:33% !important; max-width: 33%; }
+.moz-text-html .mj-column-per-100 { width:100% !important; max-width: 100%;=
+ }</style><style type=3D"text/css">[owa] .mj-column-per-67 { width:67% !imp=
+ortant; max-width: 67%; }
+[owa] .mj-column-per-33 { width:33% !important; max-width: 33%; }
+[owa] .mj-column-per-100 { width:100% !important; max-width: 100%; }</style=
+><style type=3D"text/css">@media only screen and (max-width:479px) {
+      table.mj-full-width-mobile { width: 100% !important; }
+      td.mj-full-width-mobile { width: auto !important; }
+    }</style><style type=3D"text/css"></style></head><body style=3D"word-sp=
+acing:normal;background-color:#F4F4F4;"><div style=3D"background-color:#F4F=
+4F4;"><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px=
+;" width=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-h=
+eight-rule:exactly;"><![endif]--><div style=3D"margin:0px auto;max-width:60=
+0px;"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"width:100%;"><tbody><tr><td style=3D"dir=
+ection:ltr;font-size:0px;padding:20px 0px 20px 0px;text-align:center;"><!--=
+[if mso | IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:402px=
+;" ><![endif]--><div class=3D"mj-column-per-67 mj-outlook-group-fix" style=
+=3D"font-size:0px;text-align:left;direction:ltr;display:inline-block;vertic=
+al-align:top;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><=
+tbody><tr><td align=3D"left" style=3D"font-size:0px;padding:0px 0px 0px 25p=
+x;padding-top:0px;padding-bottom:0px;word-break:break-word;"><div style=3D"=
+font-family:Arial, sans-serif;font-size:11px;letter-spacing:normal;line-hei=
+ght:22px;text-align:left;color:#55575d;"><p class=3D"text-build-content" da=
+ta-testid=3D"WRjTJb7nDraOO" style=3D"margin: 10px 0; margin-top: 10px; marg=
+in-bottom: 10px;">A warm welcome and self-introduction from the new OGE dir=
+ector</p></div></td></tr></tbody></table></div><!--[if mso | IE]></td><td c=
+lass=3D"" style=3D"vertical-align:top;width:198px;" ><![endif]--><div class=
+=3D"mj-column-per-33 mj-outlook-group-fix" style=3D"font-size:0px;text-alig=
+n:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;"><=
+table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation=
+" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr><td align=3D"righ=
+t" style=3D"font-size:0px;padding:0px 25px 0px 0px;padding-top:0px;padding-=
+bottom:0px;word-break:break-word;"><div style=3D"font-family:Arial, sans-se=
+rif;font-size:11px;letter-spacing:normal;line-height:22px;text-align:right;=
+color:#55575d;"><p class=3D"text-build-content" style=3D"text-align: right;=
+ margin: 10px 0; margin-top: 10px; margin-bottom: 10px;"><a target=3D"_blan=
+k" href=3D"http://kysz.mjt.lu/nl3/0DP4k_3GldZjDQrUr-Fmig?m=3DAVoAACQMr6wAAc=
+vFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN5kgPHfjoTTi_ObUDMqlhMAAI9Ks&amp;b=3D1=
+68d9e6e&amp;e=3D42514f22&amp;x=3Da7iET_5Bkh8rOy7esnA68A" style=3D"; text-de=
+coration: none;"><span style=3D"color:#55575d;font-size:13px;line-height:22=
+px;font-family:Arial;">View online version</span></a></p></div></td></tr></=
+tbody></table></div><!--[if mso | IE]></td></tr></table><![endif]--></td></=
+tr></tbody></table></div><!--[if mso | IE]></td></tr></table><table align=
+=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" class=3D"" rol=
+e=3D"presentation" style=3D"width:600px;" width=3D"600" bgcolor=3D"#ffffff"=
+ ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-height-rule:exact=
+ly;"><![endif]--><div style=3D"background:#ffffff;background-color:#ffffff;=
+margin:0px auto;max-width:600px;"><table align=3D"center" border=3D"0" cell=
+padding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"background:#=
+ffffff;background-color:#ffffff;width:100%;"><tbody><tr><td style=3D"direct=
+ion:ltr;font-size:0px;padding:0px 0px 0px 0px;padding-bottom:0px;padding-le=
+ft:0px;padding-right:0px;padding-top:0px;text-align:center;"><!--[if mso | =
+IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><![end=
+if]--><div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-s=
+ize:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:t=
+op;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr>=
+<td align=3D"center" style=3D"background:#ffffff;font-size:0px;padding:30px=
+ 30px 40px 30px;padding-top:30px;padding-right:30px;padding-bottom:40px;pad=
+ding-left:30px;word-break:break-word;"><table border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" role=3D"presentation" style=3D"border-collapse:collapse=
+;border-spacing:0px;"><tbody><tr><td style=3D"width:540px;"><img alt=3D"" s=
+rc=3D"https://kysz.mjt.lu/tplimg/kysz/b/su70o/gsq6h.png" style=3D"border:no=
+ne;border-radius:px;display:block;outline:none;text-decoration:none;height:=
+auto;width:100%;font-size:13px;" width=3D"540" height=3D"auto"></td></tr></=
+tbody></table></td></tr></tbody></table></div><!--[if mso | IE]></td></tr><=
+/table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></td><=
+/tr></table><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px;" width=3D"=
+600" bgcolor=3D"#ffff" ><tr><td style=3D"line-height:0px;font-size:0px;mso-=
+line-height-rule:exactly;"><![endif]--><div style=3D"background:#ffff;backg=
+round-color:#ffff;margin:0px auto;max-width:600px;"><table align=3D"center"=
+ border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" sty=
+le=3D"background:#ffff;background-color:#ffff;width:100%;"><tbody><tr><td s=
+tyle=3D"direction:ltr;font-size:0px;padding:14px 0px 0px 0px;padding-left:0=
+px;padding-right:0px;padding-top:14px;text-align:center;"><!--[if mso | IE]=
+><table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0"><tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><![endif]=
+--><div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"font-size=
+:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;=
+width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><tbody><tr><=
+td align=3D"left" style=3D"background:#ffffff;font-size:0px;padding:0px 25p=
+x 0px 25px;padding-top:0px;padding-right:25px;padding-bottom:0px;padding-le=
+ft:25px;word-break:break-word;"><div style=3D"font-family:Arial, sans-serif=
+;font-size:19px;letter-spacing:normal;line-height:1;text-align:left;color:#=
+000000;"><h1 class=3D"text-build-content" style=3D"line-height:20px;; margi=
+n-top: 10px; margin-bottom: 10px; font-weight: normal;" data-testid=3D"kWjP=
+A3Id0S"><span style=3D"color:#A31F34;font-family:Arial;font-size:19px;"><b>=
+Allow me to introduce myself.&nbsp;</b></span></h1></div></td></tr><tr><td =
+align=3D"center" style=3D"background:#ffffff;font-size:0px;padding:10px 25p=
+x 10px 25px;padding-right:25px;padding-left:25px;word-break:break-word;"><p=
+ style=3D"border-top:solid 2px #E6E6E6;font-size:1px;margin:0px auto;width:=
+100%;"></p><!--[if mso | IE]><table align=3D"center" border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" style=3D"border-top:solid 2px #E6E6E6;font-size:=
+1px;margin:0px auto;width:550px;" role=3D"presentation" width=3D"550px" ><t=
+r><td style=3D"height:0;line-height:0;"> &nbsp;
+</td></tr></table><![endif]--></td></tr><tr><td align=3D"left" style=3D"bac=
+kground:#ffffff;font-size:0px;padding:0px 25px 0px 25px;padding-top:0px;pad=
+ding-right:25px;padding-bottom:0px;padding-left:25px;word-break:break-word;=
+"><div style=3D"font-family:Arial, sans-serif;font-size:14px;letter-spacing=
+:normal;line-height:1;text-align:left;color:#000000;"><p class=3D"text-buil=
+d-content" data-testid=3D"MoII1jJJL" style=3D"margin: 10px 0; margin-top: 1=
+0px;">Dear MIT Graduate Students,</p><p class=3D"text-build-content" style=
+=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"MoII1jJJL">On behalf=
+ of the Office of Graduate Education (OGE), I am delighted to welcome <span=
+ style=3D"font-size:14px;">all of </span>you to the new academic year! We h=
+ope you had a restful and productive summer. We are so excited to have a ne=
+w cohort join our vibrant and diverse community of scholars.&nbsp;</p><p cl=
+ass=3D"text-build-content" style=3D"line-height: 22px; margin: 10px 0;" dat=
+a-testid=3D"MoII1jJJL">I am also new to MIT, having formally started today =
+as the Senior Associate Dean and Director of the Office of Graduate Educati=
+on.&nbsp;</p><p class=3D"text-build-content" style=3D"line-height: 22px; ma=
+rgin: 10px 0;" data-testid=3D"MoII1jJJL">In my previous role at the Univers=
+ity of California, Berkeley, I was the Assistant Vice Provost of Graduate S=
+tudies and Chief of Staff in the Graduate Division. I also had the privileg=
+e to serve as the Director of the Office for Graduate Diversity there.&nbsp=
+;</p><p class=3D"text-build-content" style=3D"line-height: 22px; margin: 10=
+px 0;" data-testid=3D"MoII1jJJL">I have a passion for supporting graduate s=
+tudents in their academic and professional development, while centering joy=
+ and self-care. I am particularly interested in helping students to develop=
+ the skills and knowledge they need to succeed in their chosen careers, bot=
+h inside and outside of academia.&nbsp;</p><p class=3D"text-build-content" =
+style=3D"line-height: 22px; margin: 10px 0;" data-testid=3D"MoII1jJJL">In t=
+he coming weeks I look forward to connecting and collaborating with you all=
+, whether it will be at an event here at the Institute, walking around Camb=
+ridge with my 2 year old labradoodle Brooklyn, or cheering on my English Pr=
+emier League football team Arsenal on social media.&nbsp;</p><p class=3D"te=
+xt-build-content" style=3D"line-height: 22px; margin: 10px 0;" data-testid=
+=3D"MoII1jJJL">I know that graduate school can be challenging, but it is al=
+so an incredibly rewarding experience. At MIT, you have the opportunity to =
+learn from world-class faculty, conduct cutting-edge research, and collabor=
+ate with talented peers from around the world. I am here to support you in =
+every way that I can, and I encourage you to reach out to me or the <a clas=
+s=3D"link-build-content" style=3D"color:inherit;text-decoration:none;; text=
+-decoration: none;" target=3D"_blank" href=3D"http://kysz.mjt.lu/lnk/AVoAAC=
+QMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN5kgPHfjoTTi_ObUDMqlhMAAI9Ks/1=
+/X6YVhxCpbXZxHQ1aromihw/aHR0cHM6Ly9vZ2UubWl0LmVkdS9zZXJ2aWNlcy10ZWFtL3N0YWZ=
+mLw"><span style=3D"color:inherit;font-family:Arial;"><u>OGE team</u></span=
+></a> if you have any questions or need assistance.</p><h3 class=3D"text-bu=
+ild-content" data-testid=3D"MoII1jJJL" style=3D"; font-weight: normal;"><sp=
+an style=3D"color:#A31F34;font-family:Arial;font-size:16px;"><b>Here are so=
+me ways that the OGE team can support you:</b></span></h3><ul><li style=3D"=
+line-height:22px;"><a class=3D"link-build-content" style=3D"color:inherit;t=
+ext-decoration:none;; text-decoration: none;" target=3D"_blank" href=3D"htt=
+p://kysz.mjt.lu/lnk/AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN5kg=
+PHfjoTTi_ObUDMqlhMAAI9Ks/2/nDwk1TJCyvpU-UvIcsKnZw/aHR0cHM6Ly9vZ2UubWl0LmVkd=
+S9kZXZlbG9wbWVudC9ncmFkc3VwcG9ydC8"><span style=3D"color:inherit;font-famil=
+y:Arial;"><u>Our GradSupport team</u></span></a> can work with you to addre=
+ss issues including faculty/student relationships, personal concerns, switc=
+hing advisors, funding, and academic progress. They can also help with excu=
+sed absences, assignment extensions and medical leaves.</li><li style=3D"li=
+ne-height:22px;">Our Program Administrator for Graduate Students with Child=
+ren can connect student families with <a class=3D"link-build-content" style=
+=3D"color:inherit;text-decoration:none;; text-decoration: none;" target=3D"=
+_blank" href=3D"http://kysz.mjt.lu/lnk/AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasA=
+JQkVAAlzKABlAIHN5kgPHfjoTTi_ObUDMqlhMAAI9Ks/3/GBZk58Bj8fKW5GPub7K44Q/aHR0cH=
+M6Ly9vZ2UubWl0LmVkdS9mYW1pbGllcy8"><span style=3D"color:inherit;font-family=
+:Arial;"><u>campus support and local resources</u></span></a>.</li><li styl=
+e=3D"line-height:22px;">Our <a class=3D"link-build-content" style=3D"color:=
+inherit;text-decoration:none;; text-decoration: none;" target=3D"_blank" hr=
+ef=3D"http://kysz.mjt.lu/lnk/AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKA=
+BlAIHN5kgPHfjoTTi_ObUDMqlhMAAI9Ks/4/2MP1b5hi4dKRSgyutFuzVQ/aHR0cHM6Ly9vZ2Uu=
+bWl0LmVkdS9maW5hbmNlcy9mZWxsb3dzaGlwcy8"><span style=3D"color:inherit;font-=
+family:Arial;"><u>fellowships team</u></span></a> can help you identify and=
+ apply for fellowships, and provide resources for financial wellbeing.</li>=
+<li style=3D"line-height:22px;">We welcome your energy if you=E2=80=99d lik=
+e to apply for a <a class=3D"link-build-content" style=3D"color:inherit;tex=
+t-decoration:none;; text-decoration: none;" target=3D"_blank" href=3D"http:=
+//kysz.mjt.lu/lnk/AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN5kgPH=
+fjoTTi_ObUDMqlhMAAI9Ks/5/G4XMAJT87nWNC-Z0cgiMkw/aHR0cHM6Ly9vZ2UubWl0LmVkdS9=
+jb21tdW5pdHkvZ3NlZy8"><span style=3D"color:inherit;font-family:Arial;"><u>G=
+raduate Student Experience Grant</u></span></a>, become a <a class=3D"link-=
+build-content" style=3D"color:inherit;text-decoration:none;; text-decoratio=
+n: none;" target=3D"_blank" href=3D"http://kysz.mjt.lu/lnk/AVoAACQMr6wAAcvF=
+IT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN5kgPHfjoTTi_ObUDMqlhMAAI9Ks/6/ZwSgh-CA0=
+UwUcE31E1X8VA/aHR0cHM6Ly9vZ2UubWl0LmVkdS9jb21tdW5pdHkvZ2NmLw"><span style=
+=3D"color:inherit;font-family:Arial;"><u>Graduate Community Fellow</u></spa=
+n></a>, or join the <a class=3D"link-build-content" style=3D"color:inherit;=
+text-decoration:none;; text-decoration: none;" target=3D"_blank" href=3D"ht=
+tp://kysz.mjt.lu/lnk/AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN5k=
+gPHfjoTTi_ObUDMqlhMAAI9Ks/7/lgQDW-fqlDFM3ZrA0Q64ag/aHR0cHM6Ly9vZ2UubWl0LmVk=
+dS9ncmFkZGl2ZXJzaXR5L2dyYWR1YXRlLWRpdmVyc2l0eS1hbWJhc3NhZG9ycy8"><span styl=
+e=3D"color:inherit;font-family:Arial;"><u>Graduate Diversity Ambassadors</u=
+></span></a>!</li></ul><p class=3D"text-build-content" style=3D"line-height=
+: 22px; margin: 10px 0;" data-testid=3D"MoII1jJJL">The best way to reach ou=
+t to me or the OGE team is by email at <a class=3D"link-build-content" styl=
+e=3D"color:inherit;text-decoration:none;; text-decoration: none;" href=3D"m=
+ailto:Grad-Ed@mit.edu"><span style=3D"color:inherit;font-family:Arial;"><u>=
+Grad-Ed@mit.edu</u></span></a>. In the coming days I will provide a process=
+ if you=E2=80=99d like to check in with me individually. You can also visit=
+ our <a class=3D"link-build-content" style=3D"color:inherit;text-decoration=
+:none;; text-decoration: none;" target=3D"_blank" href=3D"http://kysz.mjt.l=
+u/lnk/AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN5kgPHfjoTTi_ObUDM=
+qlhMAAI9Ks/8/vpfL3AsDeC88BIXcWCzfYg/aHR0cHM6Ly9vZ2UubWl0LmVkdS9zZXJ2aWNlcy1=
+0ZWFtL3NlcnZpY2VzLw"><span style=3D"color:inherit;font-family:Arial;"><u>we=
+bsite</u></span></a> to learn more about our services and resources.</p><p =
+class=3D"text-build-content" style=3D"line-height: 22px; margin: 10px 0;" d=
+ata-testid=3D"MoII1jJJL">I look forward to getting to know you all and help=
+ing you to achieve your personal, academic and professional goals.</p><p cl=
+ass=3D"text-build-content" data-testid=3D"MoII1jJJL" style=3D"margin: 10px =
+0; margin-bottom: 10px;"><a class=3D"link-build-content" style=3D"color:inh=
+erit;text-decoration:none;; text-decoration: none;" target=3D"_blank" href=
+=3D"http://kysz.mjt.lu/lnk/AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABl=
+AIHN5kgPHfjoTTi_ObUDMqlhMAAI9Ks/9/1xwEmA_CbOZsWiBBajr9Vw/aHR0cHM6Ly93d3cudm=
+licmF0ZWhpZ2hlcmRhaWx5LmNvbS9ibG9nLWFydGljbGVzLzIwMjAvNi83L3Nhd3Vib25h"><sp=
+an style=3D"color:inherit;font-family:Arial;"><u>Sawubona</u></span></a>,&n=
+bsp;</p></div></td></tr><tr><td align=3D"left" style=3D"font-size:0px;paddi=
+ng:10px 24px 10px 24px;padding-right:24px;padding-left:24px;word-break:brea=
+k-word;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pr=
+esentation" style=3D"border-collapse:collapse;border-spacing:0px;"><tbody><=
+tr><td style=3D"width:100px;"><img alt=3D"Denzil Streete" src=3D"https://ky=
+sz.mjt.lu/img/kysz/b/mjjh0/gujoi.jpeg" style=3D"border:none;display:block;o=
+utline:none;text-decoration:none;height:auto;width:100%;font-size:13px;" wi=
+dth=3D"100" height=3D"auto"></td></tr></tbody></table></td></tr><tr><td ali=
+gn=3D"left" style=3D"font-size:0px;padding:10px 25px;padding-top:0px;paddin=
+g-bottom:0px;word-break:break-word;"><div style=3D"font-family:Arial, sans-=
+serif;font-size:13px;letter-spacing:normal;line-height:1;text-align:left;co=
+lor:#000000;"><p class=3D"text-build-content" data-testid=3D"PFvhKTS-cSon0D=
+QU8RcBd" style=3D"margin: 10px 0; margin-top: 10px;"><span style=3D"font-fa=
+mily:Arial;font-size:13px;">Denzil A. Streete, PhD&nbsp;</span></p><p class=
+=3D"text-build-content" data-testid=3D"PFvhKTS-cSon0DQU8RcBd" style=3D"marg=
+in: 10px 0;"><span style=3D"font-family:Arial;font-size:13px;">Senior Assoc=
+iate Dean and Director</span></p><p class=3D"text-build-content" data-testi=
+d=3D"PFvhKTS-cSon0DQU8RcBd" style=3D"margin: 10px 0; margin-bottom: 10px;">=
+<span style=3D"font-family:Arial;font-size:13px;">Office of Graduate Educat=
+ion</span></p></div></td></tr></tbody></table></div><!--[if mso | IE]></td>=
+</tr></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]>=
+</td></tr></table><table align=3D"center" border=3D"0" cellpadding=3D"0" ce=
+llspacing=3D"0" class=3D"" role=3D"presentation" style=3D"width:600px;" wid=
+th=3D"600" ><tr><td style=3D"line-height:0px;font-size:0px;mso-line-height-=
+rule:exactly;"><![endif]--><div style=3D"margin:0px auto;max-width:600px;">=
+<table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" ro=
+le=3D"presentation" style=3D"width:100%;"><tbody><tr><td style=3D"direction=
+:ltr;font-size:0px;padding:20px 0px 20px 0px;text-align:center;"><!--[if ms=
+o | IE]><table role=3D"presentation" border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0"><tr><td class=3D"" style=3D"vertical-align:top;width:600px;" ><!=
+[endif]--><div class=3D"mj-column-per-100 mj-outlook-group-fix" style=3D"fo=
+nt-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-ali=
+gn:top;width:100%;"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ role=3D"presentation" style=3D"vertical-align:top;" width=3D"100%"><tbody>=
+<tr><td align=3D"center" style=3D"font-size:0px;padding:0px 20px 0px 20px;p=
+adding-top:0px;padding-bottom:0px;word-break:break-word;"><div style=3D"fon=
+t-family:Arial, sans-serif;font-size:11px;letter-spacing:normal;line-height=
+:22px;text-align:center;color:#55575d;"><p class=3D"text-build-content" sty=
+le=3D"text-align: center; margin: 10px 0; margin-top: 10px; margin-bottom: =
+10px;" data-testid=3D"QmYQS7PleSfMT5"><span style=3D"color:#55575d;font-fam=
+ily:Arial;font-size:13px;line-height:22px;">This e-mail has been sent to ji=
+annan@mit.edu; </span><a class=3D"link-build-content" style=3D"color:inheri=
+t;; text-decoration: none;" target=3D"_blank" href=3D"http://kysz.mjt.lu/un=
+sub2?hl=3Den&amp;m=3DAVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJQkVAAlzKABlAIHN5k=
+gPHfjoTTi_ObUDMqlhMAAI9Ks&amp;b=3D168d9e6e&amp;e=3D42514f22&amp;x=3Da7iET_5=
+Bkh8rOy7esnA68A"><span style=3D"color:#55575d;font-family:Arial;font-size:1=
+3px;line-height:22px;">click here to unsubscribe</span></a><span style=3D"c=
+olor:#55575d;font-family:Arial;font-size:13px;line-height:22px;">.</span></=
+p></div></td></tr><tr><td align=3D"center" style=3D"font-size:0px;padding:0=
+px 20px 0px 20px;padding-top:0px;padding-bottom:0px;word-break:break-word;"=
+><div style=3D"font-family:Arial, sans-serif;font-size:11px;letter-spacing:=
+normal;line-height:22px;text-align:center;color:#55575d;"><p class=3D"text-=
+build-content" style=3D"line-height: 15px; text-align: center; margin: 10px=
+ 0; margin-top: 10px; margin-bottom: 10px;" data-testid=3D"MKZHuA19JD3Gha">=
+<span style=3D"color:#55575d;font-family:Arial;font-size:13px;">MIT Office =
+of Graduate Education (OGE)</span><br><span style=3D"color:#55575d;font-fam=
+ily:Arial;font-size:13px;">77 Massachusetts Ave, 35-332 Cambridge, MA 02139=
+</span></p></div></td></tr></tbody></table></div><!--[if mso | IE]></td></t=
+r></table><![endif]--></td></tr></tbody></table></div><!--[if mso | IE]></t=
+d></tr></table><![endif]--></div>
+<br><img src=3D"http://kysz.mjt.lu/oo/AVoAACQMr6wAAcvFIT4AAQHEEAMAAYCroasAJ=
+QkVAAlzKABlAIHN5kgPHfjoTTi_ObUDMqlhMAAI9Ks/2448a932/e.gif" height=3D"1" wid=
+th=3D"1" alt=3D"" border=3D"0" style=3D"height:1px;width:1px;border:0;">
+</body></html>=
+
+--=-PGxHOqW+fvHENBD/qZxP--

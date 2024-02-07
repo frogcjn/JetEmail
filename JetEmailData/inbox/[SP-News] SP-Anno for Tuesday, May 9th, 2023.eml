@@ -1,0 +1,542 @@
+Received: from SA1PR01MB6797.prod.exchangelabs.com (::1) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 9 May 2023 17:35:53
+ +0000
+Received: from DM6PR12CA0014.namprd12.prod.outlook.com (2603:10b6:5:1c0::27)
+ by SA1PR01MB6797.prod.exchangelabs.com (2603:10b6:806:1a6::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.33; Tue, 9 May 2023 17:35:51 +0000
+Received: from DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1c0:cafe::9b) by DM6PR12CA0014.outlook.office365.com
+ (2603:10b6:5:1c0::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33 via Frontend
+ Transport; Tue, 9 May 2023 17:35:50 +0000
+Authentication-Results: spf=pass (sender IP is 18.7.21.50)
+ smtp.mailfrom=mit.edu; dkim=fail (signature did not verify)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.7.21.50 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.7.21.50; helo=mailman.mit.edu; pr=C
+Received: from mailman.mit.edu (18.7.21.50) by
+ DM6NAM11FT101.mail.protection.outlook.com (10.13.172.208) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.33 via Frontend Transport; Tue, 9 May 2023 17:35:50 +0000
+Received: from mailman.mit.edu (localhost [127.0.0.1])
+	by mailman.mit.edu (8.15.2/8.12.8) with ESMTP id 349EI8Vu2131229;
+	Tue, 9 May 2023 10:18:08 -0400
+Received: from outgoing-exchange-5.mit.edu (OUTGOING-EXCHANGE-5.MIT.EDU
+ [18.9.28.59])
+ by mailman.mit.edu (8.15.2/8.12.8) with ESMTPS id 349EI6iX2131226
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <sp-news@MAILMAN.MIT.EDU>; Tue, 9 May 2023 10:18:06 -0400
+Received: from w92exedge4.exchange.mit.edu (W92EXEDGE4.EXCHANGE.MIT.EDU
+ [18.7.73.16])
+ by outgoing-exchange-5.mit.edu (8.14.7/8.12.4) with ESMTP id 349EI56h004786
+ for <sp-news@PCH.MIT.EDU>; Tue, 9 May 2023 10:18:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+ t=1683641886; bh=V0V19872lqYjrpJPVTlz9pN9MMRc3XsHcUJ40oeTeIU=;
+ h=From:Date:Subject:To;
+ b=kQtmSKIUpWLZv+lNuLc4v4N9o8TWqmcz3Mhc+mUldaah0Z6r2UhErNDxWoiste1JY
+ fMB+0Pyv+XGyTwhrR/bT0HJO2p87pPbp5u02RegtcyHZ+osj1SQ9E0sshj2uh0MfRH
+ woHuPNJCobnjRhVEeq1TOujgxqcrQTnE2p/RN+L0bxtUSg+uKfsdsE/0Og4pxga5+h
+ 7NSDxLNzyxbLV73H4UNzuRxVsLss4MsUCVzK5SDVxWSacBgtXA12I8PhnTTmKmOz0a
+ KferL3NQqsl7qHkO76a3NlROcDoAkyyoJb4DM54vYGAZ5Uy4utimR1WgyxpxoLhm3A
+ UBu7xDpg0Y6lw==
+Received: from oc11expo23.exchange.mit.edu (18.9.4.88) by
+ w92exedge4.exchange.mit.edu (18.7.73.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Tue, 9 May 2023 10:16:43 -0400
+Received: from oc11exhyb1.exchange.mit.edu (18.9.1.60) by
+ oc11expo23.exchange.mit.edu (18.9.4.88) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Tue, 9 May 2023 10:17:26 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.41) by
+ oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server
+ (TLS) id
+ 15.0.1497.48 via Frontend Transport; Tue, 9 May 2023 10:17:26 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rh9ch8ItY/XFHTVUVZ/oLU3bpB/JTlG0mmyqE6Kk5eG6PMkiiJaO6bkTjarqpe2toqf6eYVYP6C452t0OIX+7h1Hl2K4kQFlqkxz7xHxt61zvAMmOsfDDw+zf85Ic6e+Kq+5vk6T3PTKRgkAxfztr9RxkRxyBXm/MWJv60+7HQepSWERx4+aqYBLRdAIPYH1cQ9XmBOvzR/WLgbAkh/c+9FqOZknYvNW980r0A4sTCcttc9HnqRaknDA+ol/SSgkhkPBvL998qMLjFDBzhTA2zcFrRG3gm2WyV/guJ2IfTESGSIMa1VrYtu0HmQXbhc3c6W33s4Xed7pu160DUNmmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=V0V19872lqYjrpJPVTlz9pN9MMRc3XsHcUJ40oeTeIU=;
+ b=hvvgWkuEdm3zcetb68BKzHr3s2QLCshekpflZOZiEpqMvta27+4sPtL/yesC5rJIfvLdsI6dHzjWFwqPcxVe3nFy3ymwG+vNLc3q/0ObTtFrcgFuXqhWP6i2tuT8hI75Lvwy0sODCtdOswU2gm0pDHP+POND6emalzILDAlTMVrqe3i6VbcMkDWtV4AT/6c0BgGOdE3gB+qOFRchEWX70c5o0KaJp4v04jSmJztc881Vdz/Me/gEVTH6Q7mqr6+fp98k0RxK5QWqQK9SjgpEz18D84dYa8wNXiUecHlPrtnhVZ9x1FYNw8HCaj7dy8qQiiC+0nP4n6tTqYpocX1wBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 18.9.28.11) smtp.rcpttodomain=mit.edu smtp.mailfrom=mit.edu; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=mit.edu; dkim=pass
+ (signature was verified) header.d=mit.edu; arc=none (0)
+Received: from BN9PR03CA0950.namprd03.prod.outlook.com (2603:10b6:408:108::25)
+ by DM8PR01MB7048.prod.exchangelabs.com (2603:10b6:8:1d::8) with
+ Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.32; Tue, 9 May 2023 14:16:22 +0000
+Received: from BN8NAM11FT077.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:108:cafe::cb) by BN9PR03CA0950.outlook.office365.com
+ (2603:10b6:408:108::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33 via Frontend
+ Transport; Tue, 9 May 2023 14:16:21 +0000
+Authentication-Results-Original: spf=pass (sender IP is 18.9.28.11)
+ smtp.mailfrom=mit.edu; dkim=pass (signature was verified)
+ header.d=mit.edu;dmarc=pass action=none header.from=mit.edu;
+Received-SPF: Pass (protection.outlook.com: domain of mit.edu designates
+ 18.9.28.11 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.9.28.11; helo=outgoing.mit.edu; pr=C
+Received: from outgoing.mit.edu (18.9.28.11) by
+ BN8NAM11FT077.mail.protection.outlook.com (10.13.177.232) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.33 via Frontend Transport; Tue, 9 May 2023 14:16:21 +0000
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com
+ [209.85.208.178]) (authenticated bits=0)
+ (User authenticated as prakitrs@ATHENA.MIT.EDU)
+ by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 349EGJXN005766
+ (version=TLSv1/SSLv3 cipher=AES128-GCM-SHA256 bits=128 verify=NOT)
+ for <sp-news@mit.edu>; Tue, 9 May 2023 10:16:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+ t=1683641781; bh=V0V19872lqYjrpJPVTlz9pN9MMRc3XsHcUJ40oeTeIU=;
+ h=From:Date:Subject:To;
+ b=LUQBNrtlsWCRd0fAcKcl2LIcfyXhW2djOLdW+aKEN2X4FuyvY/Mivp8gyenwiXtZN
+ vJPyvd5jIzS8dPAdevaPzAJZgG30Ebih7e2xmXbV9BHdw7lvTtRwZGLMOij750VhWx
+ ZX61qJ3EQuEMHy9v7IWUq6ZYP3U084VcX53eXjpHTBGQW36b9fYQ5Yrt1SP0FvZilp
+ 4ToZleo4+P3ayh+pqmQJDnUasynDJNoBpGLApZzMfzl4d7CGBpPtUhvM+hgj26kCul
+ g2mwL9b3IBDyfXPIJSYQGSflX8shDRoW1Gs1RUYnr/PjP3F0lU2sUYm2uIlkiCN/co
+ dmz6ziJW2hRLQ==
+Received: by mail-lj1-f178.google.com with SMTP id
+ 38308e7fff4ca-2ac82912a59so62540811fa.3
+ for <sp-news@mit.edu>; Tue, 09 May 2023 07:16:20 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzJcRB7o/rKGNJ+hUquwCR/gwsuqUt/DIsjJuCF9XUGohzRQ0Ba
+ cCZv18hVaApN/hXC3FFaboM54gb/YV6W57cC78w=
+X-Google-Smtp-Source: ACHHUZ7ElKV6BSdg5WhQyLyf5jGO9RvefNW6rsSG6dE4A/rxgWjvn22hvIgkv+2D8q/KPQqR5QKZrOJMNOw04fGx/KY=
+X-Received: by 2002:a2e:9bd7:0:b0:2ad:9161:7aca with SMTP id
+ w23-20020a2e9bd7000000b002ad91617acamr869193ljj.41.1683641779105; Tue, 09 May
+ 2023 07:16:19 -0700 (PDT)
+From: SP Publicity Chair <sp-publicity-chair@mit.edu>
+Date: Tue, 9 May 2023 10:16:08 -0400
+X-Gmail-Original-Message-ID: <CAHMN_F3_XPq9z=Z7ZjxWSTFMTzGscNsVL7_5MH1kWOLb436oDQ@mail.gmail.com>
+Message-ID: <CAHMN_F3_XPq9z=Z7ZjxWSTFMTzGscNsVL7_5MH1kWOLb436oDQ@mail.gmail.com>
+To: sp-news@mit.edu
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BN8NAM11FT077:EE_|DM8PR01MB7048:EE_|DM6NAM11FT101:EE_|SA1PR01MB6797:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: c308bef4-0564-45ea-71d8-08db50b3d539
+X-LD-Processed: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b,ExtAddr,ExtAddr
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ GAxR5N/C0xRyv26a7NKMQNJbXSLamFebkOF7xJpwdgkG/7gc0lF1y7yLEadBIQAieG6LeWSS4jHH/giGlGsvaSZz4cHxMXypyYc5GfciLPa8qScHHSAXztEKTtAJZTlH8Vx4qzRI4TmZ0C7/oQV7TFxjEh/y2NSoSEF+qszQakACV91+K1dLLbTHFBSLuFu18YXMk1lpIagbXnmiNKhogQ4nGSh21aa2gbX2q1n/CwWLGyI0/6GTQfi9w7PS71UsECJCwuOqd+iFTwR7HdF1dCQwF5/MTyvA0vbfnNXTjm9Sj6Tq1XeGdPxDUff35vSlrY9aoiE8fC9Y5XNlIv9lAxfVLwMj1yFRkjFM0cV+2vsTzEWUDGErDiKORdoURI62k08vSVL5NfLbNqowZzYXOnATFD5wurITzT7a12o9I0sGyUrICIPZEcmBkCObVN5i1DyiH4P9OBSEg9qjIgiVxZTxK27DlCoVb9M4appl7JYIndzErEfrI7SywAMrHtiALcu7nXNPud6Q17m8z/t76DqI4FctxmjfE1fcAbEo+jAQooYfHiVffLOlAijnpFGaMO4pZCpbF1oaZ+kmv6acZ0epd7oodXl+zgj0iE7LHxDgrbJfXbKrm3Mhy/njbW32O5wYOyBGQke/WJLmJSTpw1KyB4YcgWPb42IyVv1y3NnvOmJ/+XES8fsiPV6L6b6uElo5cjgihuQ6rIRbplNYAtV1y/VsGUYIUP5iCVnj83N3CtCryqf+0WFJqwEpjp4t73X2k2hwyLd3bL2sUbY+fw==
+X-Forefront-Antispam-Report-Untrusted: CIP:18.9.28.11; CTRY:US; LANG:en;
+ SCL:1; SRV:; IPV:CAL; SFV:NSPM; H:outgoing.mit.edu;
+ PTR:outgoing-auth-1.mit.edu; CAT:NONE;
+ SFS:(13230028)(4636009)(136003)(376002)(396003)(346002)(39860400002)(451199021)(75432002)(66899021)(966005)(6666004)(6636002)(478600001)(70586007)(68406010)(42186006)(786003)(316002)(33964004)(55446002)(86362001)(16799955002)(336012)(83380400001)(26005)(9686003)(34206002)(8676002)(2906002)(356005)(5660300002)(166002)(3480700007);
+ DIR:OUT; SFP:1102; 
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR01MB7048
+Subject: [SP-News] SP-Anno for Tuesday, May 9th, 2023
+X-BeenThere: sp-news@mit.edu
+X-Mailman-Version: 2.1.34
+Precedence: list
+List-Id: MIT Sidney-Pacific Residents <sp-news.mit.edu>
+List-Unsubscribe: <https://mailman.mit.edu/mailman/options/sp-news>,
+ <mailto:sp-news-request@mit.edu?subject=unsubscribe>
+List-Archive: <https://mailman.mit.edu/mailman/private/sp-news/>
+List-Post: <mailto:sp-news@mit.edu>
+List-Help: <mailto:sp-news-request@mit.edu?subject=help>
+List-Subscribe: <https://mailman.mit.edu/mailman/listinfo/sp-news>,
+ <mailto:sp-news-request@mit.edu?subject=subscribe>
+Content-Type: multipart/mixed; boundary="===============7736455946215759644=="
+Errors-To: sp-news-bounces@mit.edu
+Sender: "SP-News" <sp-news-bounces@mit.edu>
+Return-Path: sp-news-bounces@mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 09 May 2023 17:35:50.9736
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ c308bef4-0564-45ea-71d8-08db50b3d539
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: mitprod.onmicrosoft.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 370aa1af-ae05-4316-4383-08db5097f70d
+X-MS-Exchange-Organization-SCL: -1
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.7.21.50;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:CAL;SFV:SKN;H:mailman.mit.edu;PTR:mailman.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2023 17:35:50.4893
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c308bef4-0564-45ea-71d8-08db50b3d539
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.7.21.50];Helo=[mailman.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT101.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB6797
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.9591518
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6363.032
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TjFzc2hkQW4wWVp4ZHZtMTlPUk4vUURybnJTM3VoTlFqSHp4R1gwRHV5Q1Jj?=
+ =?utf-8?B?cmpBWWNrSU93REF0RUhoNDBIbWdBanV5MnhkM0hKcmtkOTBiSVZuaHRpNmtp?=
+ =?utf-8?B?a1FhVW5FVHltRjhCOEpjNHlOd0crVG9LTUdFSTVBSXJFck5xRnFmZHVyMFY3?=
+ =?utf-8?B?azNxa2w3UlphaFVxeTBUUDFmVkNHMDFSMDJZMExJZmNZYTZSUTBxdE1lS01N?=
+ =?utf-8?B?a1ZwUVA0T0lWMG5pU1VrMGdZZ1MyTGhUNXdJcVRYVGNwRk9BUVJmMktPdUVX?=
+ =?utf-8?B?NzVXSUJQOWdueERuR0tQdFBrWjJYOGpvZkRpeHl2Z1IydDc1alF2dTBDRWMw?=
+ =?utf-8?B?Vk1maVBBRU52Qk11VmNMcHJ0WmpqbW0reUVYbFRyQmF6VG8vandBSkRGTTE2?=
+ =?utf-8?B?ZHM0OXVNL2JXdXlVRDBQQWJyQWZIMWhEM0tEZmVQek9qM1pqR0Rsd3J4VWRz?=
+ =?utf-8?B?aVM4bWdNRng3Y0V3aHpLUW1YOE81c2xlK3pPS1RuVEVubmxUMkNTNnZ3NDBY?=
+ =?utf-8?B?REpnRDdHZkx0THRTa3UyT1lndXIvMndKVlRsWW9OZ3d6b1hlSjNMYVJxQnNw?=
+ =?utf-8?B?bUdqOCtTRUl6YTNSdGkxTm9uNXNrdHNLeVZ1QVROemhuT1hBcW1ON0REMkRj?=
+ =?utf-8?B?REQwM1lQT0RZRCtXRjd1b2lhbmRHZzVYc3poVkZjUzJGTnVDSWNseTdiTURB?=
+ =?utf-8?B?OGZWanRyclprWVlta3VsdmhmdUZrbDBQRWR0V2hrKzJRVnpSK0VmMG5DY2pC?=
+ =?utf-8?B?WWtQTXJOaVl1aEYyUFBHN2hnd0dSdW1ZdTBjU3N3b0YyUEhlNXZkNnVCQVNE?=
+ =?utf-8?B?eFh3STFQVS9TWGFDeW9sQ3BBMGlRZ0tONERQM1pKSE5TUmdVZnR3TE5Jem9Z?=
+ =?utf-8?B?ZWdYamRFTVYxcTBNZktTUytEWFZORjI1NEtlanNzN3J5bDg3R01sOUJScnpB?=
+ =?utf-8?B?M2FBdzZLOVZoaUJzRllwbStZcWQrdW1PSUZGQUplVHpJTXRkWEEyWENTZGlZ?=
+ =?utf-8?B?VHo0eWcvUW83eVF3MjdZS3MrVndmZlZHajVHMG1YUXFBVXlLZEVtWmIxd3Mw?=
+ =?utf-8?B?N3ZjVk1icDFJU3JrbjY5ZWxzeElRbGdsc3ZXMFovclFNRDNxSktiNG1LQlpG?=
+ =?utf-8?B?R3FIQ2RWM3hVN0VaY25hVjM4NWNyMGU4WmV4R3JHNGRFU29pckxzOTdQeGJl?=
+ =?utf-8?B?ZTBvNnlxa2J3ZTlhRDIyaTc2NU1KWjREK0QzMXpxMGtPYUFBbG5ydUN0K2Nm?=
+ =?utf-8?B?T2R4Zlg3K1NPdVlmT0cwMUgrNlV4NGhoQ1hEanEvREQxd1JQZk4vZENEY2Mv?=
+ =?utf-8?B?eGRnbUZIWDQ5bFFQQTJ2bm9HN2FjVWJWcFYrMUM4cnpFR1o3Q21IcUFOTXRm?=
+ =?utf-8?B?UGlNZ09pdEJHdHcvc3V1b3VENVZBVjRwcmFSbXg2K1FlOE5aZThEcnpYcU04?=
+ =?utf-8?B?U0k2SVNKcWpEUHNQVjZnWHBDRXhBL20xQ0puQnA3SUJ3aXNzc0RLNGp2VXJM?=
+ =?utf-8?B?cnBNTDdDVVhQTFV3d2R4dnpiMkR4ZVJkclNGTHZQVnN0cGpad0dYV2FTV3NP?=
+ =?utf-8?B?VFQxQXVlSHRzVGFkNW00U25qekRoOGREV2dnb1dpdVhmaTg5OENoSGpvdFJz?=
+ =?utf-8?B?aUQ3MmsrcnBVRmozWFczV1R2V0F3WDQvZUlrRkw3Y0pYNXlNSTdsNWo3S2Z2?=
+ =?utf-8?B?NmUyTEdOamVjV0owdlpCaTNaTVRlQitSYmFKNHA5ZTRqem10QUg3alo1L0VY?=
+ =?utf-8?B?KzZ5VGNOZVRsaU1PZTBDY1NRTUJsbGFudVIvekh3ZnJPWU9JeG5PU24va0sy?=
+ =?utf-8?B?QXlIaDMrSVFsTXpPQWdmaEdiYmFHR1ZPc3AzVlkvV0ZOYWtMWFRqajdLSldu?=
+ =?utf-8?B?UGE4KzYzTUxyZzFBcWZ3SXUwa2FCaHFkOEVJaU9XWGh3M1RrYkdSbXlaeDFx?=
+ =?utf-8?B?ZENjVnJYWjR6RWdCTmR4cUhESmxDaE8yaTl0YmhaU3R2YjJsMUVnNEFhSVlG?=
+ =?utf-8?B?NktQa3hoZkUyYzJ4Y2lhUGtKV3VGVzJad005alVGeW5OcHlzQ2pFMGZXdFQy?=
+ =?utf-8?B?QVBQTUlkdlBXRndpNjBnUk45OGtLUlB5ZXl5bGs1dGw2SUZBN2NBU3h0NEd2?=
+ =?utf-8?B?bGZsbzBsZm0wcmdCVmpBTWE3S01SK3I5TWNyY3pEMGNNYVNyZldUZHVtVG15?=
+ =?utf-8?B?N081SXdCcTNuK2RFMWQyK3Z5RmVZUU8rWnFsR1hqRW9HK2pEak1GZTVwMmNR?=
+ =?utf-8?B?a3Qvc3dpUHp3U1FoVnFLZHRJTTBoV0xLSHBkUk53eURRWFdReVNsZnp2anlZ?=
+ =?utf-8?Q?M89ZkimIBc8ax9NEnW?=
+MIME-Version: 1.0
+
+--===============7736455946215759644==
+Content-Type: multipart/alternative; boundary="0000000000002c3f2b05fb436650"
+
+--0000000000002c3f2b05fb436650
+Content-Type: text/plain; charset="UTF-8"
+
+SP-Anno for Tuesday, May 9th, 2023 Summary
+
+*SP events and notices:*
+
+Sunday, May 14, 12:30-2:30pm:
+
+SidPac May Brunch
+</publicity/anno_view.php#ide722c0220338c62ac778d3d2bc4ed969>
+
+Monday, May 22, 8:30-10pm:
+
+May SP Book Club
+</publicity/anno_view.php#idbe130d66bc48931f9327aceb598cb0ac>
+ By May 31:    SP Regalia Rental
+</publicity/anno_view.php#id2790c1ea1e8a2527e0895868e35f3855>
+
+
+SP Events
+
+*1.  SidPac May Brunch*
+Sunday, May 14, 12:30-2:30pm, MP room SidPac.
+
+Welcome all to SidPac's May Brunch. Enjoy a delicious brunch with fellow
+residents. Join us and also invite your friends to enjoy your Sunday
+morning in great company. Looking forward to seeing you on May 14th! Venue:
+MP room Date: 14th May Time: 12:30 pm to 2:30 pm
+Note : The Brunch is free for residents of SidPac, while for others its $5.
+We will send more details soon.
+
+
+E-mail: sp-brunch-chair
+------------------------------
+
+*2.  May SP Book Club*
+Monday, May 22, 8:30-10pm, 268.
+
+Welcome to the SP Book Club. This month we will be reading "The Glass
+Castle" (a memoir) by Jeannette Walls. If you commit to attend the
+discussion you can get a free copy. For more question please email
+nuriaj@mit.edu
+
+
+E-mail: sp-headsofhouse
+------------------------------
+SP Notices
+
+*1.  SP Regalia Rental*
+
+Need to reserve your PhD gown for graduation? Rent it now from SP! Hurry
+while they still last: https://sidpac.mit.edu/regalia/
+
+SP Regalia Rental <https://sidpac.mit.edu/regalia/>
+E-mail: sp-regalia@mit.edu
+------------------------------
+Recurring Events
+
+
+E-mail: sp-coffeehr-chair
+
+*1.  Coffee Hour*
+Wednesday, Jun 22, 9-11:30pm, MP Room.
+
+Weekly Coffee Hour as an event to relax, meet friends, and enjoy freshly
+cut fruits, snacks, and drinks.
+
+
+------------------------------
+
+SP-News is a low-volume e-mail list used by the house government to keep
+residents informed of important house activities. We usually send between
+one and two emails per week, including the SP-Anno. You can change your
+subscription settings at: https://s-p.mit.edu/myacct/resident_edit_entry.php
+
+--0000000000002c3f2b05fb436650
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"ltr"><h1 style=3D"margin-right:0in;margin-left:0in;font-size:24pt=
+;font-family:Calibri,sans-serif">SP-Anno for
+Tuesday, May 9th, 2023</h1>
+
+<h2 style=3D"margin-right:0in;margin-left:0in;font-size:18pt;font-family:Ca=
+libri,sans-serif">Summary</h2>
+
+<p class=3D"MsoNormal" style=3D"margin:0in 0in 12pt;font-size:11pt;font-fam=
+ily:Calibri,sans-serif"><b>SP events and notices:</b></p>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"4" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif">Sunday,
+  May 14, 12:30-2:30pm:</p>
+  </td>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif"><a href=3D"/publicity/anno_view.php#ide722c0220338c62ac778=
+d3d2bc4ed969" style=3D"color:blue">SidPac May
+  Brunch</a></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif">Monday,
+  May 22, 8:30-10pm:</p>
+  </td>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif"><a href=3D"/publicity/anno_view.php#idbe130d66bc48931f9327=
+aceb598cb0ac" style=3D"color:blue">May SP
+  Book Club</a></p>
+  </td>
+ </tr>
+</tbody></table>&nbsp;<font face=3D"Calibri, sans-serif"><span style=3D"fon=
+t-size:14.6667px">By May 31:</span></font>&nbsp;<span style=3D"font-family:=
+Calibri,sans-serif;font-size:14.6667px">&nbsp;</span>&nbsp;&nbsp;<a href=3D=
+"/publicity/anno_view.php#id2790c1ea1e8a2527e0895868e35f3855" style=3D"font=
+-family:Calibri,sans-serif;font-size:11pt;color:blue">SP Regalia
+Rental</a><p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-fa=
+mily:Calibri,sans-serif">&nbsp;</p>
+
+<h2 style=3D"margin-right:0in;margin-left:0in;font-size:18pt;font-family:Ca=
+libri,sans-serif">SP Events</h2>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"4" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif"><b>1.&nbsp;&nbsp;<a name=3D"ide722c0220338c62ac778d3d2bc4e=
+d969"></a>SidPac May Brunch</b><br>
+  Sunday, May 14, 12:30-2:30pm, MP room SidPac.</p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif">Welcome
+  all to SidPac's May Brunch. Enjoy a delicious brunch with fellow resident=
+s.
+  Join us and also invite your friends to enjoy your Sunday morning in grea=
+t
+  company. Looking forward to seeing you on May 14th! Venue: MP room Date: =
+14th
+  May Time: 12:30 pm to 2:30 pm<br>
+  Note : The Brunch is free for residents of SidPac, while for others its $=
+5.
+  We will send more details soon.</p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif"><br>
+  E-mail: sp-brunch-chair </p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt"></td>
+ </tr>
+</tbody></table>
+
+<div class=3D"MsoNormal" align=3D"center" style=3D"text-align:center;margin=
+:0in;font-size:11pt;font-family:Calibri,sans-serif">
+
+<hr size=3D"2" width=3D"100%" align=3D"center">
+
+</div>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"4" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif"><b>2.&nbsp;&nbsp;<a name=3D"idbe130d66bc48931f9327aceb598c=
+b0ac"></a>May SP Book Club</b><br>
+  Monday, May 22, 8:30-10pm, 268.</p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in 0in 12pt;font-size:11pt;font-f=
+amily:Calibri,sans-serif">Welcome to the SP Book Club. This month we will b=
+e reading
+  &quot;The Glass Castle&quot; (a memoir) by Jeannette Walls. If you commit=
+ to
+  attend the discussion you can get a free copy. For more question please e=
+mail
+  <a href=3D"mailto:nuriaj@mit.edu">nuriaj@mit.edu</a></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif"><br>
+  E-mail: sp-headsofhouse </p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt"></td>
+ </tr>
+</tbody></table>
+
+<div class=3D"MsoNormal" align=3D"center" style=3D"text-align:center;margin=
+:0in;font-size:11pt;font-family:Calibri,sans-serif">
+
+<hr size=3D"2" width=3D"100%" align=3D"center">
+
+</div>
+
+<h2 style=3D"margin-right:0in;margin-left:0in;font-size:18pt;font-family:Ca=
+libri,sans-serif">SP Notices</h2>
+
+<table class=3D"gmail-MsoNormalTable" border=3D"0" cellspacing=3D"4" cellpa=
+dding=3D"0">
+ <tbody><tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif"><b>1.&nbsp;&nbsp;<a name=3D"id2790c1ea1e8a2527e0895868e35f=
+3855"></a>SP Regalia Rental</b></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif">Need
+  to reserve your PhD gown for graduation? Rent it now from SP! Hurry while
+  they still last: <a href=3D"https://sidpac.mit.edu/regalia/">https://sidp=
+ac.mit.edu/regalia/</a></p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif"><a href=3D"https://sidpac.mit.edu/regalia/" style=3D"color=
+:blue">SP Regalia Rental</a><br>
+  E-mail: <a href=3D"mailto:sp-regalia@mit.edu">sp-regalia@mit.edu</a> </p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0.75pt"></td>
+ </tr>
+</tbody></table>
+
+<div class=3D"MsoNormal" align=3D"center" style=3D"text-align:center;margin=
+:0in;font-size:11pt;font-family:Calibri,sans-serif">
+
+<hr size=3D"2" width=3D"100%" align=3D"center">
+
+</div>
+
+<h2 style=3D"margin-right:0in;margin-left:0in;font-size:18pt;font-family:Ca=
+libri,sans-serif">Recurring Events</h2>
+
+<p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Calib=
+ri,sans-serif"><br>
+ E-mail: sp-coffeehr-chair </p><table class=3D"gmail-MsoNormalTable" border=
+=3D"0" cellspacing=3D"0" cellpadding=3D"0" style=3D"border-collapse:collaps=
+e">
+ <tbody><tr>
+  <td style=3D"padding:0in 0.5pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif"><b>1.&nbsp;&nbsp;<a name=3D"idd0af87df2ab0f2afc6e97855b55c=
+914c"></a>Coffee Hour</b><br>
+  Wednesday, Jun 22, 9-11:30pm, MP Room.</p>
+  </td>
+ </tr>
+ <tr>
+  <td style=3D"padding:0in 0.5pt">
+  <p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Cal=
+ibri,sans-serif">Weekly
+  Coffee Hour as an event to relax, meet friends, and enjoy freshly cut fru=
+its,
+  snacks, and drinks.</p>
+  </td>
+ </tr>
+=20
+</tbody></table>
+
+<p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Calib=
+ri,sans-serif">&nbsp;</p><div class=3D"MsoNormal" align=3D"center" style=3D=
+"margin:0in;text-align:center;font-size:11pt;font-family:Calibri,sans-serif=
+"><hr size=3D"2" width=3D"100%" align=3D"center"></div><h2 style=3D"margin-=
+right:0in;margin-left:0in;font-size:18pt;font-family:Calibri,sans-serif"><b=
+r></h2>
+
+<p class=3D"MsoNormal" style=3D"margin:0in;font-size:11pt;font-family:Calib=
+ri,sans-serif"><span style=3D"font-size:x-small;font-family:sans-serif">SP-=
+News&nbsp;is a&nbsp;low-volume&nbsp;e-mail list used by the house governmen=
+t to keep residents informed of important house activities. We usually send=
+ between one and two emails per week, including the&nbsp;SP-Anno. You can c=
+hange your subscription settings at:&nbsp;<a href=3D"https://s-p.mit.edu/my=
+acct/resident_edit_entry.php">https://s-p.mit.edu/myacct/resident_edit_entr=
+y.php</a></span></p></div>
+
+--0000000000002c3f2b05fb436650--
+
+--===============7736455946215759644==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+SP-News is a low-volume e-mail list used by the house government to
+keep residents informed of important house activites. We usually send
+between one and two e-mails per week, including the SP-Anno.
+You can change your subscription settings at:
+https://s-p.mit.edu/myacct/resident_edit_entry.php
+
+--===============7736455946215759644==--

@@ -1,0 +1,1201 @@
+Received: from SN6PR01MB4320.prod.exchangelabs.com (2603:10b6:805:af::18) by
+ BN0PR01MB7134.prod.exchangelabs.com with HTTPS; Tue, 2 May 2023 01:16:39
+ +0000
+Received: from DM6PR11CA0005.namprd11.prod.outlook.com (2603:10b6:5:190::18)
+ by SN6PR01MB4320.prod.exchangelabs.com (2603:10b6:805:af::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.30; Tue, 2 May 2023 01:16:38 +0000
+Received: from DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:190:cafe::41) by DM6PR11CA0005.outlook.office365.com
+ (2603:10b6:5:190::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30 via Frontend
+ Transport; Tue, 2 May 2023 01:16:37 +0000
+Authentication-Results: spf=fail (sender IP is 18.9.1.60)
+ smtp.mailfrom=em2540.cohere.com; dkim=pass (signature was verified)
+ header.d=cohere.com;dmarc=pass action=none header.from=cohere.com;
+Received-SPF: Fail (protection.outlook.com: domain of em2540.cohere.com does
+ not designate 18.9.1.60 as permitted sender) receiver=protection.outlook.com;
+ client-ip=18.9.1.60; helo=mail.exchange.mit.edu;
+Received: from mail.exchange.mit.edu (18.9.1.60) by
+ DM6NAM11FT099.mail.protection.outlook.com (10.13.172.241) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.6363.20 via Frontend Transport; Tue, 2 May 2023 01:16:37 +0000
+Received: from oc11exhyb2.exchange.mit.edu (18.9.1.98) by
+ oc11exhyb1.exchange.mit.edu (18.9.1.60) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.48; Mon, 1 May 2023 21:16:35 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
+ by oc11exhyb2.exchange.mit.edu (18.9.1.98) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.48 via Frontend Transport; Mon, 1 May 2023 21:16:35 -0400
+Received: from BN7PR06CA0055.namprd06.prod.outlook.com (2603:10b6:408:34::32)
+ by BYAPR01MB5287.prod.exchangelabs.com (2603:10b6:a03:8e::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.30; Tue, 2 May 2023 01:16:32 +0000
+Received: from BN8NAM11FT095.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:34:cafe::5a) by BN7PR06CA0055.outlook.office365.com
+ (2603:10b6:408:34::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30 via Frontend
+ Transport; Tue, 2 May 2023 01:16:32 +0000
+Authentication-Results-Original: spf=pass (sender IP is 168.245.114.49)
+ smtp.mailfrom=em2540.cohere.com; dkim=pass (signature was verified)
+ header.d=cohere.com;dmarc=pass action=none
+ header.from=cohere.com;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of em2540.cohere.com
+ designates 168.245.114.49 as permitted sender)
+ receiver=protection.outlook.com; client-ip=168.245.114.49;
+ helo=o1.ptr3274.cohere.com; pr=C
+Received: from o1.ptr3274.cohere.com (168.245.114.49) by
+ BN8NAM11FT095.mail.protection.outlook.com (10.13.176.206) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6363.20 via Frontend Transport; Tue, 2 May 2023 01:16:31 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cohere.com;
+	h=content-type:from:mime-version:subject:to:cc:content-type:from:
+	subject:to;
+	s=s1; bh=NWBIdViEd88tUojUo+0AIV4Y/LqkW5uX+nbWaBuzGLo=;
+	b=RIekdgpypNhLDVUeugDToF50S2nZ1A6PhdvwlvU3WF8uBlPkMT2kGpoGSpCiZr1S7Zcj
+	7tMdIHUk6NOdVdVegQGDImlZ7A/tKZLcG6Sm4GXjnsSqoa6iCjDiKKPJoHggm60e8eqK00
+	+Bm9t6/abOXf2wjFWwKUYSDrRhGo9izKe0oqFzd95PU/+cK+lafCF/TBs/XxYCCq9qgZnH
+	MF09srCto5H1d638HQwkvdFMJbFSzTopp7mg9T3IQp757og2QXHjY8Y4Tj4Hg1pQFVuQtb
+	xwoSBuixoAFf2DJTipKF66hJVmqOYzbL7LuUZnivBKlnZFO7TD0X7vx/smVFR3ow==
+Received: by filterdrecv-59cb65cf6d-2vgs6 with SMTP id filterdrecv-59cb65cf6d-2vgs6-1-6450646E-8
+        2023-05-02 01:16:30.18980583 +0000 UTC m=+5967808.601717322
+Received: from MTg3NzcwNDA (unknown)
+	by geopod-ismtpd-4 (SG) with HTTP
+	id vvXkj_G3TGq1jqgCyXOIaA
+	Tue, 02 May 2023 01:16:30.123 +0000 (UTC)
+Content-Type: multipart/alternative; boundary=1f48350009c8ed03bda927c57dc67c434fecfa4731328a0d5c611b9a76d1
+Date: Tue, 2 May 2023 01:16:30 +0000
+From: Cohere Team <team@cohere.com>
+Message-ID: <vvXkj_G3TGq1jqgCyXOIaA@geopod-ismtpd-4>
+Subject: Confirm your email address
+X-SG-EID: =?us-ascii?Q?HAE4xDja2liT3bvrsfRL+fbDby+gqolInrgJegeswmmR+W3xW1R1ZGmmQCEvNE?=
+ =?us-ascii?Q?oCrBmf0ezG0PC4VBsOpT1623Ze+g3fcHLNzQ1FI?=
+ =?us-ascii?Q?zsfmM5p7X+sEIhzmxoBmMy3HeuJIYInWU1nFgj5?=
+ =?us-ascii?Q?DZ8BD1mc8rDTDuopIsAIe=2Fq1j0xx5A06Qt89=2FY=2F?=
+ =?us-ascii?Q?0R91rS+xWwMjlityJZmzS+ytgBqXeqbhEnqJI86?=
+ =?us-ascii?Q?xzzpj9+H7o4DG4eZ4=3D?=
+To: New User <jiannan@mit.edu>
+X-Entity-ID: Z4XE6nNj2mHa/XFweFsgbw==
+Return-Path: bounces+18777040-c64f-jiannan=mit.edu@em2540.cohere.com
+X-EOPAttributedMessage: 1
+X-MS-TrafficTypeDiagnostic:
+ BN8NAM11FT095:EE_|BYAPR01MB5287:EE_|DM6NAM11FT099:EE_|SN6PR01MB4320:EE_|BN0PR01MB7134:EE_
+X-MS-Office365-Filtering-Correlation-Id: 11d8eaaa-98e8-4f5d-64c2-08db4aaae083
+X-MS-Exchange-AtpMessageProperties: SA
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?Oq2Lm7xLFC2T6nVRw32MjkN/K43scBQaNviyTFi3zBJ4Y0Isww0QgOIosynP?=
+ =?us-ascii?Q?2VAjGSWDIQvkY81UMv0tU6C/o1svx0p38Uh4WOhE7qNgryuBs+vufZO0Wqb2?=
+ =?us-ascii?Q?0WPRJYnEFOnXREwCIvcwUALlbxRmUc9ky2NMSv3IsEGH/V+yX5s+DfiOl1lx?=
+ =?us-ascii?Q?Hkn2lAj65sD3DWpBZfqh3C4MljhbWklcbR82tAwMbZQVGkadI0BOPUtodcCK?=
+ =?us-ascii?Q?cYZuA4XrDHdGca+waotnYarz/WutyNRgRbNPV9CY081MV3bPdwu5wCY92PjY?=
+ =?us-ascii?Q?9nBjGJ21K1Z73icXNr8MAotrJXt2/SqPE/chXd0e/R9I0SSWD/acBW7P+wqA?=
+ =?us-ascii?Q?4eAlzoeqiB2QfmkhN00h+IZ8SFk7hepVoOp2EgMsvhwQSPXjCOHQGx+4SYMk?=
+ =?us-ascii?Q?vNpu65PTEyyC0Wfg7icMb+gHX1/DjOLV9qtgdJ9XdOlT6deF+c/UmBjQMiLY?=
+ =?us-ascii?Q?lwqSMOds0mzgwp+D7FdZNM4xbvD8U8I1Fvb/pZKDm/x5BtDu5q/77w6HPEiy?=
+ =?us-ascii?Q?xKwiIj6wp7iIejwSNuo6W/R4mdX7Voo5nsj9C2SjjFU1wVuVXgUu9K8gYrb1?=
+ =?us-ascii?Q?DE6O52GfTulqJrti0Ld5MRkG3UVSoZH4lEGfwKVRlKy9Ngt/WLhJcB31Ypt7?=
+ =?us-ascii?Q?AVCwZ2lFQaRMvaHyAbzdOkdJrdVQ8UafTHted5huoDXyJ01y0cgK4joF/IOX?=
+ =?us-ascii?Q?R9TcLpyFrCEhDCMUoBO9vSgGQ4hXLa3ZZ/vWuQNSPnyas8WLJVcKiDTpvMAb?=
+ =?us-ascii?Q?W8mGnlrjVzw+SLLALnImR8yYCyhldlCTgfc1qgpbA2fqvArGDcIuEuQTdYn3?=
+ =?us-ascii?Q?vBsbrmAZWwJ+Hn3SVw4x+WjW/DuA3L36CJyqWxeNcH566oiGs2Psu3uqSLVw?=
+ =?us-ascii?Q?LKFdE/EiUVVOA3cfXNaYO1VaVaKqehD6uZD3V6SGWafwnHJMTIz9tKBoqMPW?=
+ =?us-ascii?Q?o5n4jn/s0/Y0TGet2yc+oXfyYdINl4Ud4LyaKqpLmTqdiJdEJqsHrG4D4/ib?=
+ =?us-ascii?Q?/d9NM+TXibuCgB/PwgZOskcdo/oSmBdHLKq1WzZ+1xFOPghS2HaloV24iZV5?=
+ =?us-ascii?Q?pTOHfGgCFvidCGJ11C7RUYv8uWt+IC+7TtXc2Cuw7FOhC8dFslRXjRBXfWvp?=
+ =?us-ascii?Q?nyQyn9pRR85ryJkkNn83f/OJKT8NPXiTbbixnOU6gMuqDHXHsf3qFRDd+uVC?=
+ =?us-ascii?Q?2OUqaM/fxofldpJ/Pm1ko8uAZLyqc2pMxfln9CzQU9dhbG/YJmu3jVG67yM3?=
+ =?us-ascii?Q?l6BmvgxfajlcGw6yeAYt/OkglsWM5iK0Nfr57ndZ1ioVt6ZeKq6K/D7NF8Zd?=
+ =?us-ascii?Q?SMaeyX/Ve4GLgsWEGIi7NcnXI7pOAb7sNgL6Yg4eUMVzES23uBEWJgAto03T?=
+ =?us-ascii?Q?uHS0PiNZCTROWMUiqd8ClMX6ZCP74BYkFuKvdV1DjnyPfkILaS1YWDMwIksj?=
+ =?us-ascii?Q?Mtt+XnZzDAcA2YY80mKdGiZUMQSMnMDN/AmUbgQfoZH6vzV6WXLyGpOzqfWu?=
+ =?us-ascii?Q?AYy0cxJT4Boj5/tLQh2kZJHD+H6FTS33NYnWNMK9cjeS/QqTu856qnqI8Iuu?=
+ =?us-ascii?Q?qpmtRQPn6gyRT1s7S37XV1MPkPfTbJ3pYs0UWW3f3qP29RX1/YkD/wUEsTU0?=
+ =?us-ascii?Q?uAV0KwGKgz4qc+xALDfwLNKOW4pHS8fmgX8ZXglLCZlF73FwpUojGwe68pfu?=
+ =?us-ascii?Q?TnDDZ/EVyRrQLmcbluaAyZW6VT8=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:168.245.114.49;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:o1.ptr3274.cohere.com;PTR:o1.ptr3274.cohere.com;CAT:NONE;SFS:(13230028)(7916004)(4636009)(1690799014)(451199021)(166002)(6486002)(6916009)(5660300002)(1096003)(8676002)(75640400001)(4006050)(22186003)(30864003)(7596003)(7636003)(26005)(6512007)(9686003)(36736006)(58800400005)(356005)(45080400002)(9316004)(336012)(33716001)(83380400001)(66899021)(3480700007)(83170400001)(564674002)(46800400005)(44000500001)(579004)(559001);DIR:INB;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB5287
+X-OrganizationHeadersPreserved: BYAPR01MB5287.prod.exchangelabs.com
+X-CrossPremisesHeadersPromoted: oc11exhyb2.exchange.mit.edu
+X-CrossPremisesHeadersFiltered: oc11exhyb2.exchange.mit.edu
+X-OrganizationHeadersPreserved: oc11exhyb1.exchange.mit.edu
+X-MS-Exchange-Organization-ExpirationStartTime: 02 May 2023 01:16:37.4660
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 11d8eaaa-98e8-4f5d-64c2-08db4aaae083
+X-MS-Exchange-Organization-MessageDirectionality: Originating
+X-MS-Exchange-Organization-SCL: 1
+X-CrossPremisesHeadersPromoted:
+ DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
+X-CrossPremisesHeadersFiltered:
+ DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DM6NAM11FT099.eop-nam11.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Exchange-Organization-AuthSource:
+ BN8NAM11FT095.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-OriginatorOrg: exchange.mit.edu
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ 5cd399c7-09e8-4358-e51b-08db4aaadd05
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:18.9.1.60;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.exchange.mit.edu;PTR:oc11exhyb1.exchange.mit.edu;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2023 01:16:37.2472
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11d8eaaa-98e8-4f5d-64c2-08db4aaae083
+X-MS-Exchange-CrossTenant-Id: 64afd9ba-0ecf-4acf-bc36-935f6235ba8b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=64afd9ba-0ecf-4acf-bc36-935f6235ba8b;Ip=[18.9.1.60];Helo=[mail.exchange.mit.edu]
+X-MS-Exchange-CrossTenant-AuthSource:
+ BN8NAM11FT095.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR01MB4320
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.1630620
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6340.030
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ZYxnqDV0u7EYlYqAoUCaMTwIgdDz3fa6UHujTV282bLv5mcaTUR8shRa6ALA?=
+ =?us-ascii?Q?uH9rglhVpZlZHSWGu1GnbDwBrkQjzlxRZwYvPVDc4G9REOcdRSO1Nr5cYpDB?=
+ =?us-ascii?Q?Y4Kt+dbQcjiSBRMa2mYf6AGdo+Dal5idcZCBdUN7M18rpyUQTvQCw2VE5i3X?=
+ =?us-ascii?Q?+6RQXJxrDZaQBWQWtRvZzjVX/sGeNoYhYz8b49CL8xfvcqNwnsSszGepiQ4o?=
+ =?us-ascii?Q?WDOG6eVPPau6jisUGJQzjDaf5QwNYx3jIs9UcY6nCS/BC0EUJMcpHQUCvQ0w?=
+ =?us-ascii?Q?4PAZyqIc9255+twxGcHqY6bj0ryJiSHg5Saj5arF5TfADW3CgpMlCiymoNFJ?=
+ =?us-ascii?Q?MtVez0U+yB1iiGcWccPqpqkOhgvDd9OKvuVFP+ae8qZgw2kYnHLhiiI0TI9A?=
+ =?us-ascii?Q?SVdQRTylu2V8DsBVQfQYLGMD9shqTBu2zNa2owoBB8qjGjZaglPDInawGY/F?=
+ =?us-ascii?Q?YNGBRWyR/QJGEkKKvLTYvpFhGp6B0U0NnPWZf7Glxwmk7ikbvSgo7MO3h+F0?=
+ =?us-ascii?Q?2fNM2bsb/wHY5SJLW2UaOzfsCwUbzgF2YdoJbXLP6G5YZxjYzyeuv6uyt0Xb?=
+ =?us-ascii?Q?4Cg0vXYszo7SR8QbeHwaNn2KF5M7DaKe7mc/xa7PX/wNF0IsiDSGrAezrniI?=
+ =?us-ascii?Q?HXvglObtmAivHGKi3+56T6hdAT+IyCme9M/Gk2QAz4ASsGQFqrJXegTZkRTD?=
+ =?us-ascii?Q?e6OpMfrG16CYb/GxsWv0wM/YM52eNohgQ2tZQkduBUWRqcufjnTT39aTe+gw?=
+ =?us-ascii?Q?XmmJ1aELiG9tDl2uWTz7XKItXezpSik/6ecLURIHwWjNtbDgnbqtoLE8oWJb?=
+ =?us-ascii?Q?0SxKn7Zv/V6j3CgHQzthIAj8K36H+ehP73k8cVowH/iRUv89gFxgFlDcZ43d?=
+ =?us-ascii?Q?gXJdGxpjIFCx8Dk7kMuhILnwAkOd1FyFjr7DltSQkkXQfEWq3yDFkTv2YfH2?=
+ =?us-ascii?Q?Z9c7dh4QZB8SvMHAIL5zDzAv1YzvcrKybkM+S8V04p16qZDAJ9Gy2/oOn5Gk?=
+ =?us-ascii?Q?C0K2Fk+sArTF18Tfn8qhUSsUkgmdJ+O6+CR8pepIXM1Hrw17bidovxLqsA7D?=
+ =?us-ascii?Q?J98yEIPVrfwI6CeeSIbNbu0jxiefJIwwxIdaUp5t1AqK+BjhmgU8bMqu6GRf?=
+ =?us-ascii?Q?M0CREUovMSLOuN1fnItFyCx+8mSewv7xLAOOpvquf58afNVOX0Mjx9JGhdrM?=
+ =?us-ascii?Q?BWc6nP76lffMMbl37V02gNV5SC3mpOCMzc8Z+7teOuLYdmm0YwN9eYAdr4TQ?=
+ =?us-ascii?Q?H5J1pEo4V0GAtduK5P7ExHS6xILIcApbicg49gZYZUmrObsSQfkwV5Vzo/Q+?=
+ =?us-ascii?Q?huzAjp7IR8oCLl109YBrchkFaaNYFoVZhMsiyv4yWSqDOde5+nkT51/KJyNU?=
+ =?us-ascii?Q?HCW6FsFMW5RKle0ElSVyjxNQDbQhx1G6I6G3ZezuL137Kx5uuHpTGTzWYW99?=
+ =?us-ascii?Q?CW41Ud9FPZQ9117hIJF/Eie1bA0nEGFzdfRLdkzvy4qUqN6evEQ2VuPmrDT/?=
+ =?us-ascii?Q?lF8jUEQSzeMPym1Xecm56QSo8g4pBA0mVv2PgsZ7H+vI9pcufJJt1CR6MxTV?=
+ =?us-ascii?Q?lPaedw5VTCkWvV5GywDq29JRNRxAlblEv4c+oDUVZ3GQTJtz5x9UfQCzcBrT?=
+ =?us-ascii?Q?pQ=3D=3D?=
+MIME-Version: 1.0
+
+--1f48350009c8ed03bda927c57dc67c434fecfa4731328a0d5c611b9a76d1
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+
+<!doctype html>
+<html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:schemas-microso=
+ft-com:vml"
+    xmlns:o=3D"urn:schemas-microsoft-com:office:office">
+
+<head>
+    <title></title>
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8=
+">
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=
+=3D1">
+    <style type=3D"text/css">
+        #outlook a {
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        table,
+        td {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        img {
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+            -ms-interpolation-mode: bicubic;
+        }
+
+        p {
+            display: block;
+            margin: 13px 0;
+        }
+    </style>
+    <link href=3D"https://fonts.googleapis.com/css?family=3DRoboto:300,400,=
+500,700" rel=3D"stylesheet" type=3D"text/css">
+    <style type=3D"text/css">
+        @import url(https://fonts.googleapis.com/css?family=3DRoboto:300,40=
+0,500,700);
+    </style>
+    <style type=3D"text/css">
+        @media only screen and (min-width:480px) {
+            .mj-column-px-743 {
+                width: 743px !important;
+                max-width: 743px;
+            }
+
+            .mj-column-px-570 {
+                width: 570px !important;
+                max-width: 570px;
+            }
+        }
+    </style>
+    <style media=3D"screen and (min-width:480px)">
+        .moz-text-html .mj-column-px-743 {
+            width: 743px !important;
+            max-width: 743px;
+        }
+
+        .moz-text-html .mj-column-px-570 {
+            width: 570px !important;
+            max-width: 570px;
+        }
+    </style>
+    <style type=3D"text/css">
+        @media only screen and (max-width:480px) {
+            table.mj-full-width-mobile {
+                width: 100% !important;
+            }
+
+            td.mj-full-width-mobile {
+                width: auto !important;
+            }
+        }
+    </style>
+    <style type=3D"text/css">
+        @font-face {
+            font-family: "CohereVar";
+            font-weight: 100 900;
+            font-display:
+                swap;
+            font-style: normal;
+            font-variation-settings: "cuts" 0, "move" 0;
+            src: url("https://assets.cohere.ai/CohereVariable.woff2") forma=
+t("woff2");
+        }
+    </style>
+</head>
+
+<body style=3D"word-spacing:normal;">
+    <div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;padding-top:0;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-743 mj-outlook-group=
+-fix"
+                                style=3D"font-size:0px;text-align:left;dire=
+ction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation"
+                                                    width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"ce=
+nter"
+                                                                style=3D"fo=
+nt-size:0px;padding:0px;word-break:break-word;">
+                                                                <table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0"
+                                                                    role=3D=
+"presentation"
+                                                                    style=
+=3D"border-collapse:collapse;border-spacing:0px;">
+                                                                    <tbody>
+                                                                        <tr=
+>
+                                                                           =
+ <td style=3D"width:743px;"><a
+                                                                           =
+         href=3D"https://cohere.com/"
+                                                                           =
+         target=3D"_blank"
+                                                                           =
+         style=3D"color: #39594D;"><img
+                                                                           =
+             height=3D"auto"
+                                                                           =
+             src=3D"https://assets.cohere.ai/transactional-header-2023-04.p=
+ng"
+                                                                           =
+             style=3D"border:0;display:block;outline:none;text-decoration:n=
+one;height:auto;width:100%;font-size:16px;"
+                                                                           =
+             width=3D"743"></a></td>
+                                                                        </t=
+r>
+                                                                    </tbody=
+>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-570 mj-outlook-group=
+-fix"
+                                style=3D"font-size:0px;text-align:left;dire=
+ction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation"
+                                                    width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"le=
+ft"
+                                                                style=3D"fo=
+nt-size:0px;padding:0 25px;word-break:break-word;">
+                                                                <div
+                                                                    style=
+=3D"font-family:'CohereVar', system-ui, -apple-system, BlinkMacSystemFont, =
+'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;font-size:24px;fo=
+nt-weight:525;line-height:36px;text-align:left;color:#212121;">
+                                                                    Welcome=
+!</div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-570 mj-outlook-group=
+-fix"
+                                style=3D"font-size:0px;text-align:left;dire=
+ction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation"
+                                                    width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"le=
+ft"
+                                                                style=3D"fo=
+nt-size:0px;padding:0 25px;word-break:break-word;">
+                                                                <div
+                                                                    style=
+=3D"font-family:'CohereVar', system-ui, -apple-system, BlinkMacSystemFont, =
+'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;font-size:16px;li=
+ne-height:24px;text-align:left;color:#212121;">
+                                                                    Before =
+we get started, we need you to verify your
+                                                                    email t=
+o make sure we got it right.</div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-570 mj-outlook-group=
+-fix"
+                                style=3D"font-size:0px;text-align:left;dire=
+ction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation"
+                                                    width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"ce=
+nter" vertical-align=3D"middle"
+                                                                style=3D"fo=
+nt-size:0px;padding:0;word-break:break-word;">
+                                                                <table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0"
+                                                                    role=3D=
+"presentation"
+                                                                    style=
+=3D"border-collapse:separate;width:220px;line-height:100%;">
+                                                                    <tr>
+                                                                        <td=
+ align=3D"center" bgcolor=3D"#39594D"
+                                                                           =
+ role=3D"presentation"
+                                                                           =
+ style=3D"border:none;border-radius:8px;cursor:auto;height:50px;mso-padding=
+-alt:10px 25px;background:#39594D;"
+                                                                           =
+ valign=3D"middle"><a href=3D"https://dashboard.cohere.ai/confirm-email?tok=
+en=3DCkGAzKUBLPduPRnsSK9Owcvu2BOMsxuA"
+                                                                           =
+     style=3D"display: inline-block; width: 170px; background: #39594D; col=
+or: #FFFFFF; font-family: 'CohereVar', system-ui, -apple-system, BlinkMacSy=
+stemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif; font-s=
+ize: 16px; font-weight: 400; line-height: 24px; margin: 0; text-decoration:=
+ none; text-transform: none; padding: 10px 25px; mso-padding-alt: 0px; bord=
+er-radius: 8px;"
+                                                                           =
+     target=3D"_blank">Confirm your email</a>
+                                                                        </t=
+d>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-570 mj-outlook-group=
+-fix"
+                                style=3D"font-size:0px;text-align:left;dire=
+ction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation"
+                                                    width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"le=
+ft"
+                                                                style=3D"fo=
+nt-size:0px;padding:0 25px;word-break:break-word;">
+                                                                <div
+                                                                    style=
+=3D"font-family:'CohereVar', system-ui, -apple-system, BlinkMacSystemFont, =
+'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;font-size:16px;li=
+ne-height:24px;text-align:left;color:#212121;">
+                                                                    Have an=
+y additional questions? Need some inspiration
+                                                                    on what=
+ to build next? Join our <a
+                                                                        hre=
+f=3D"https://discord.com/invite/co-mmunity"
+                                                                        sty=
+le=3D"color: #39594D;">Discord co:mmunity</a>!
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-570 mj-outlook-group=
+-fix"
+                                style=3D"font-size:0px;text-align:left;dire=
+ction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation"
+                                                    width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"le=
+ft"
+                                                                style=3D"fo=
+nt-size:0px;padding:0 25px;word-break:break-word;">
+                                                                <div
+                                                                    style=
+=3D"font-family:'CohereVar', system-ui, -apple-system, BlinkMacSystemFont, =
+'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;font-size:16px;li=
+ne-height:24px;text-align:left;color:#212121;">
+                                                                    <b styl=
+e=3D"font-weight: 525">The Cohere
+                                                                        Tea=
+m</b><br><a href=3D"mailto:team@cohere.ai"
+                                                                        sty=
+le=3D"color: #39594D;">team@cohere.ai</a></div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;padding-bottom:0;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-743 mj-outlook-group=
+-fix"
+                                style=3D"font-size:0px;text-align:left;dire=
+ction:ltr;display:inline-block;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td
+                                                style=3D"background-color:#=
+E0E0E0;border-radius:16px 16px 0 0;vertical-align:top;padding:30px 25px;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation"
+                                                    width=3D"100%">
+                                                    <tbody><a href=3D"https=
+://www.linkedin.com/company/cohere-ai"
+                                                            style=3D"color:=
+ #39594D; text-decoration: none; display: inline-block; margin: 0 16px 0 0;=
+"><img
+                                                                src=3D"http=
+s://assets.cohere.ai/footer-linkedin-2023-04.png"
+                                                                height=3D"2=
+4px" width=3D"24px"> </a><a
+                                                            href=3D"https:/=
+/discord.com/invite/co-mmunity"
+                                                            style=3D"color:=
+ #39594D; text-decoration: none; display: inline-block; margin: 0 16px 0 0;=
+"><img
+                                                                src=3D"http=
+s://assets.cohere.ai/footer-discord-2023-04.png"
+                                                                height=3D"2=
+4px" width=3D"24px"> </a><a
+                                                            href=3D"https:/=
+/twitter.com/cohereai"
+                                                            style=3D"color:=
+ #39594D; text-decoration: none; display: inline-block; margin: 0 0 0 0;"><=
+img
+                                                                src=3D"http=
+s://assets.cohere.ai/footer-twitter-2023-04.png"
+                                                                height=3D"2=
+4px" width=3D"24px"></a>
+                                                        <tr>
+                                                            <td align=3D"le=
+ft"
+                                                                style=3D"fo=
+nt-size:0px;padding:20px 0 0 0;word-break:break-word;">
+                                                                <div
+                                                                    style=
+=3D"font-family:ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Co=
+nsolas, 'DejaVu Sans Mono', monospace;;font-size:12px;line-height:24px;text=
+-align:left;color:#616161;">
+                                                                    2023 Co=
+here, All rights reserved. Welcome to NLP,
+                                                                    now.<br=
+>You can find us here: 171 John Street Suite
+                                                                    #200, T=
+oronto, ON</div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
+--1f48350009c8ed03bda927c57dc67c434fecfa4731328a0d5c611b9a76d1
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset=us-ascii
+
+<!doctype html><html xmlns=3D"http://www.w3.org/1999/xhtml" xmlns:v=3D"urn:=
+schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-microsoft-com:office:offi=
+ce"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+><title></title>
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+   =20
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width,initial-scale=
+=3D1">
+    <style type=3D"text/css">
+        #outlook a {
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        table,
+        td {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        img {
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+            -ms-interpolation-mode: bicubic;
+        }
+
+        p {
+            display: block;
+            margin: 13px 0;
+        }
+    </style>
+    <link href=3D"https://fonts.googleapis.com/css?family=3DRoboto:300,400,=
+500,700" rel=3D"stylesheet" type=3D"text/css">
+    <style type=3D"text/css">
+        @import url(https://fonts.googleapis.com/css?family=3DRoboto:300,40=
+0,500,700);
+    </style>
+    <style type=3D"text/css">
+        @media only screen and (min-width:480px) {
+            .mj-column-px-743 {
+                width: 743px !important;
+                max-width: 743px;
+            }
+
+            .mj-column-px-570 {
+                width: 570px !important;
+                max-width: 570px;
+            }
+        }
+    </style>
+    <style media=3D"screen and (min-width:480px)">
+        .moz-text-html .mj-column-px-743 {
+            width: 743px !important;
+            max-width: 743px;
+        }
+
+        .moz-text-html .mj-column-px-570 {
+            width: 570px !important;
+            max-width: 570px;
+        }
+    </style>
+    <style type=3D"text/css">
+        @media only screen and (max-width:480px) {
+            table.mj-full-width-mobile {
+                width: 100% !important;
+            }
+
+            td.mj-full-width-mobile {
+                width: auto !important;
+            }
+        }
+    </style>
+    <style type=3D"text/css">
+        @font-face {
+            font-family: "CohereVar";
+            font-weight: 100 900;
+            font-display:
+                swap;
+            font-style: normal;
+            font-variation-settings: "cuts" 0, "move" 0;
+            src: url("https://assets.cohere.ai/CohereVariable.woff2") forma=
+t("woff2");
+        }
+    </style>
+</head>
+
+<body style=3D"word-spacing:normal;">
+    <div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;padding-top:0;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-743 mj-outlook-group=
+-fix" style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-b=
+lock;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"ce=
+nter" style=3D"font-size:0px;padding:0px;word-break:break-word;">
+                                                                <table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D=
+"border-collapse:collapse;border-spacing:0px;">
+                                                                    <tbody>
+                                                                        <tr=
+>
+                                                                           =
+ <td style=3D"width:743px;"><a href=3D"https://cohere.com/" target=3D"_blan=
+k" style=3D"color: #39594D;"><img height=3D"auto" src=3D"https://assets.coh=
+ere.ai/transactional-header-2023-04.png" style=3D"border:0;display:block;ou=
+tline:none;text-decoration:none;height:auto;width:100%;font-size:16px;" wid=
+th=3D"743"></a></td>
+                                                                        </t=
+r>
+                                                                    </tbody=
+>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-570 mj-outlook-group=
+-fix" style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-b=
+lock;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"le=
+ft" style=3D"font-size:0px;padding:0 25px;word-break:break-word;">
+                                                                <div style=
+=3D"font-family:'CohereVar', system-ui, -apple-system, BlinkMacSystemFont, =
+'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;font-size:24px;fo=
+nt-weight:525;line-height:36px;text-align:left;color:#212121;">
+                                                                    Welcome=
+!</div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-570 mj-outlook-group=
+-fix" style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-b=
+lock;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"le=
+ft" style=3D"font-size:0px;padding:0 25px;word-break:break-word;">
+                                                                <div style=
+=3D"font-family:'CohereVar', system-ui, -apple-system, BlinkMacSystemFont, =
+'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;font-size:16px;li=
+ne-height:24px;text-align:left;color:#212121;">
+                                                                    Before =
+we get started, we need you to verify your
+                                                                    email t=
+o make sure we got it right.</div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-570 mj-outlook-group=
+-fix" style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-b=
+lock;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"ce=
+nter" vertical-align=3D"middle" style=3D"font-size:0px;padding:0;word-break=
+:break-word;">
+                                                                <table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D=
+"border-collapse:separate;width:220px;line-height:100%;">
+                                                                    <tr>
+                                                                        <td=
+ align=3D"center" bgcolor=3D"#39594D" role=3D"presentation" style=3D"border=
+:none;border-radius:8px;cursor:auto;height:50px;mso-padding-alt:10px 25px;b=
+ackground:#39594D;" valign=3D"middle"><a href=3D"https://dashboard.cohere.a=
+i/confirm-email?token=3DCkGAzKUBLPduPRnsSK9Owcvu2BOMsxuA" style=3D"display:=
+ inline-block; width: 170px; background: #39594D; color: #FFFFFF; font-fami=
+ly: 'CohereVar', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', =
+'Roboto', 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight=
+: 400; line-height: 24px; margin: 0; text-decoration: none; text-transform:=
+ none; padding: 10px 25px; mso-padding-alt: 0px; border-radius: 8px;" targe=
+t=3D"_blank">Confirm your email</a>
+                                                                        </t=
+d>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-570 mj-outlook-group=
+-fix" style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-b=
+lock;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"le=
+ft" style=3D"font-size:0px;padding:0 25px;word-break:break-word;">
+                                                                <div style=
+=3D"font-family:'CohereVar', system-ui, -apple-system, BlinkMacSystemFont, =
+'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;font-size:16px;li=
+ne-height:24px;text-align:left;color:#212121;">
+                                                                    Have an=
+y additional questions? Need some inspiration
+                                                                    on what=
+ to build next? Join our <a href=3D"https://discord.com/invite/co-mmunity" =
+style=3D"color: #39594D;">Discord co:mmunity</a>!
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-570 mj-outlook-group=
+-fix" style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-b=
+lock;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"vertical-align:top=
+;padding:0;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td align=3D"le=
+ft" style=3D"font-size:0px;padding:0 25px;word-break:break-word;">
+                                                                <div style=
+=3D"font-family:'CohereVar', system-ui, -apple-system, BlinkMacSystemFont, =
+'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;font-size:16px;li=
+ne-height:24px;text-align:left;color:#212121;">
+                                                                    <b styl=
+e=3D"font-weight: 525">The Cohere
+                                                                        Tea=
+m</b><br><a href=3D"mailto:team@cohere.ai" style=3D"color: #39594D;">team@c=
+ohere.ai</a></div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       =20
+        <div style=3D"margin:0px auto;max-width:743px;">
+            <table align=3D"center" border=3D"0" cellpadding=3D"0" cellspac=
+ing=3D"0" role=3D"presentation" style=3D"width:100%;">
+                <tbody>
+                    <tr>
+                        <td style=3D"direction:ltr;font-size:0px;padding:20=
+px 0px;padding-bottom:0;text-align:center;">
+                           =20
+                            <div class=3D"mj-column-px-743 mj-outlook-group=
+-fix" style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-b=
+lock;vertical-align:top;width:100%;">
+                                <table border=3D"0" cellpadding=3D"0" cells=
+pacing=3D"0" role=3D"presentation" width=3D"100%">
+                                    <tbody>
+                                        <tr>
+                                            <td style=3D"background-color:#=
+E0E0E0;border-radius:16px 16px 0 0;vertical-align:top;padding:30px 25px;">
+                                                <table border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%">
+                                                    <tbody><a href=3D"https=
+://www.linkedin.com/company/cohere-ai" style=3D"color: #39594D; text-decora=
+tion: none; display: inline-block; margin: 0 16px 0 0;"><img src=3D"https:/=
+/assets.cohere.ai/footer-linkedin-2023-04.png" height=3D"24px" width=3D"24p=
+x"> </a><a href=3D"https://discord.com/invite/co-mmunity" style=3D"color: #=
+39594D; text-decoration: none; display: inline-block; margin: 0 16px 0 0;">=
+<img src=3D"https://assets.cohere.ai/footer-discord-2023-04.png" height=3D"=
+24px" width=3D"24px"> </a><a href=3D"https://twitter.com/cohereai" style=3D=
+"color: #39594D; text-decoration: none; display: inline-block; margin: 0 0 =
+0 0;"><img src=3D"https://assets.cohere.ai/footer-twitter-2023-04.png" heig=
+ht=3D"24px" width=3D"24px"></a>
+                                                        <tr>
+                                                            <td align=3D"le=
+ft" style=3D"font-size:0px;padding:20px 0 0 0;word-break:break-word;">
+                                                                <div style=
+=3D"font-family:ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Co=
+nsolas, 'DejaVu Sans Mono', monospace;;font-size:12px;line-height:24px;text=
+-align:left;color:#616161;">
+                                                                    2023 Co=
+here, All rights reserved. Welcome to NLP,
+                                                                    now.<br=
+>You can find us here: 171 John Street Suite
+                                                                    #200, T=
+oronto, ON</div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>=
+
+--1f48350009c8ed03bda927c57dc67c434fecfa4731328a0d5c611b9a76d1--
