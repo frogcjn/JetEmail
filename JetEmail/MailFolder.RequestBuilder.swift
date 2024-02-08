@@ -37,8 +37,8 @@ extension Microsoft.Graph.MailFolder.RequestBuilder {
         try await getItem("mailFolders", "\(id)")
     }
     
-    func getMailFolder(name: MailFolder.WellKnownFolderName)  async throws -> MailFolder {
-        try await getItem("mailFolders", "\(name)")
+    func getMailFolder(wellKnownFolderName: MailFolder.WellKnownFolderName)  async throws -> MailFolder {
+        try await getItem("mailFolders", "\(wellKnownFolderName)")
     }
     
     func getMailFolders() async throws -> [MailFolder] {

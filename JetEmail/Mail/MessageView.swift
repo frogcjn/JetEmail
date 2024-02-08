@@ -13,39 +13,53 @@ struct MessageView : View {
     
     @Bindable
     var model : MessageViewModel
+    
     var body: some View {
         
-        
-        Text(model.subject ?? "nil")
-        
-        LabeledContent("from:") { // chair
-            Text(model.from?.emailAddress?.nameAndAddress ?? "nil")
+        VStack {
+            Text(model.subject ?? "nil")
+            
+            LabeledContent("from:") { // chair
+                Text(model.from?.emailAddress?.nameAndAddress ?? "nil")
+            }
+            
+            /*LabeledContent("sender:") { // bounces // less useful
+             Text(model.sender?.emailAddress?.nameAndAddress ?? "nil")
+             }*/
+            
+            LabeledContent("to:") { // mail list
+                Text(model.toRecipients?.map(\.nameAndAddress).joined(separator: ", ") ?? "nil")
+            }
+            
+            /*LabeledContent("replyTo:") {
+             Text(model.replyTo?.map(\.nameAndAddress).joined(separator: ", ") ?? "nil")
+             }*/
+            
+            LabeledContent("cc:") {
+                Text(model.ccRecipients?.map(\.nameAndAddress).joined(separator: ", ") ?? "nil")
+            }
+            
+            Text(model.receivedDateTime?.date.formattedRelative() ?? "")
+            
+            Text(model.body?.contentType?.rawValue ?? "")
+            
+            if let body = model.body {
+                EmailBodyView(itemBody: body)
+            }
         }
-        
-        /*LabeledContent("sender:") { // bounces // less useful
-            Text(model.sender?.emailAddress?.nameAndAddress ?? "nil")
-        }*/
-        
-        LabeledContent("to:") { // mail list
-            Text(model.toRecipients?.map(\.nameAndAddress).joined(separator: ", ") ?? "nil")
+        .toolbar {
+            Button {
+                Task { await model.classify() }
+            } label: {
+                Label("classify", systemImage: "wand.and.rays")
+                if model.isClassifying {
+                    ProgressView().progressViewStyle(.circular).controlSize(.mini)
+                }
+            }
+            if let resultText = model.classifyResultText {
+                Text(resultText)
+            }
         }
-        
-        /*LabeledContent("replyTo:") {
-            Text(model.replyTo?.map(\.nameAndAddress).joined(separator: ", ") ?? "nil")
-        }*/
-        
-        LabeledContent("cc:") {
-            Text(model.ccRecipients?.map(\.nameAndAddress).joined(separator: ", ") ?? "nil")
-        }
-        
-        Text(model.receivedDateTime?.date.formattedRelative() ?? "")
-        
-        Text(model.body?.contentType?.rawValue ?? "")
-        
-        if let body = model.body {
-            EmailBodyView(itemBody: body)
-        }
-        
     }
 }
 

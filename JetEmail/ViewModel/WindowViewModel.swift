@@ -80,7 +80,7 @@ extension WindowViewModel {
         self.isLoadingFolderTree = true
         defer { self.isLoadingFolderTree = false }
         
-        let root = try await TreeNode(value: self.mailFoldersRequest.getMailFolder(name: .msgFolderRoot))
+        let root = try await TreeNode(value: self.mailFoldersRequest.getMailFolder(wellKnownFolderName: .msgFolderRoot))
         let tree = Tree<MailFolder>(root: root)
         
         var queue: [TreeNode<MailFolder>] = [root]
@@ -101,7 +101,7 @@ extension WindowViewModel {
         
         
         let root  = _userContext.targetFolderTree.root
-        let rootFolder = try await self.mailFoldersRequest.getMailFolder(name: .msgFolderRoot)
+        let rootFolder = try await self.mailFoldersRequest.getMailFolder(wellKnownFolderName: .msgFolderRoot)
         
         var queue: [(TreeNode<FolderName>, MailFolder)] = [(root, rootFolder)]
         while !queue.isEmpty {
@@ -113,7 +113,7 @@ extension WindowViewModel {
                 
                 switch childName {
                 case .special(let specialName):
-                    childFolder = try await self.mailFoldersRequest.getMailFolder(name: specialName.graph)
+                    childFolder = try await self.mailFoldersRequest.getMailFolder(wellKnownFolderName: specialName.graph)
                     // verified existed
                     assert(childFolder.parentFolderId == parentFolder.id)
                     print("    <exists: \(childFolder.displayName)/>")

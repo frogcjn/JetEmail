@@ -18,7 +18,7 @@ class Tree<Value> {
 }
 
 extension TreeNode {
-    func descendants() -> [TreeNode<Element>] {
+    func descendants(includesSelf: Bool = true) -> [TreeNode<Element>] {
         var queue: [TreeNode<Element>] = [self]
         var result: [TreeNode<Element>] = []
         while !queue.isEmpty {
@@ -27,7 +27,11 @@ extension TreeNode {
             result.append(current)
             queue.append(contentsOf: current.children)
         }
-        return result
+        if includesSelf {
+            return result
+        } else {
+            return Array(result.dropFirst())
+        }
     }
 }
     
