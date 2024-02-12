@@ -67,6 +67,18 @@ class AppContext {
         }()
     }
     
+    func refresh() async {
+        guard let user else { return }
+        
+        (_loginResult, loginHint) = await {
+            do {
+                return try await _getTokenSilently(account: user.account)
+            } catch {
+                return (nil, "Couldn't sign in account with error: \(error)")
+            }
+        }()
+    }
+    
     func signOut() async {
         guard let user else { return }
 
@@ -111,7 +123,7 @@ private extension AppContext {
         }
 
         do {
-            return try await _geTokenSilently(account: account)
+            return try await _getTokenSilently(account: account)
         } catch MSALAppError.getTokenInteractively(let nsError as NSError) where
             allowInteractive &&
             nsError.domain == MSALErrorDomain &&
@@ -124,7 +136,7 @@ private extension AppContext {
         }
     }
     
-    func _geTokenSilently(account: MSALAccount) async throws -> (MSALResult?, String) {
+    func _getTokenSilently(account: MSALAccount) async throws -> (MSALResult?, String) {
         do {
             /**
              

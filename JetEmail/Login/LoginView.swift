@@ -19,9 +19,15 @@ struct LoginView : View {
                     Text(account.username ?? "")
                         .textSelection(.enabled)
                     Spacer()
+
+                    Button("Refresh") {
+                        Task { await msalApp.refresh() }
+                    }
+                    
                     Button("Sign out") {
                         Task { await msalApp.signOut() }
                     }
+                    
                 }
             } else {
                 Button("Sign in") {
