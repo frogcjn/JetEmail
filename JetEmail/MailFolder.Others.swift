@@ -181,21 +181,7 @@ func handleGraphResponse<T: Decodable>(_ type: T.Type, from data: Data) throws -
     }
 }
 
-extension URLRequest {
-    mutating func setAuthorization(accessToken: String) {
-        setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
-    }
-    
-    func response<T: Decodable>(_ type: T.Type) async throws -> T {
-        let (data, _) = try await URLSession.shared.data(for: self)
-        return try handleGraphResponse(T.self, from: data)
-    }
-    
-    /*func responseItems<T: Decodable>(_ type: T.Type) async throws -> [T] {
-        let (data, _) = try await URLSession.shared.data(for: self)
-        return try handleGraphResponse(GraphCollectionResponse<T>.self, from: data).value
-    }*/
-}
+
 
 extension URLQueryItem {
     static func top(_ value: Int) -> URLQueryItem {
@@ -227,67 +213,6 @@ extension String.StringInterpolation {
     }
 }
 
-extension UserContext {
-    
-    func get(url: URL) -> URLRequest {
-        var request = URLRequest(url: url)
-        print(url)
-        
-        // Set the Authorization header for the request. We use Bearer tokens, so we specify Bearer + the token we got from the result
-        request.setAuthorization(accessToken: accessToken)
-        return request
-    }
-    
-    func post(url: URL, bodyData: Data) -> URLRequest {
-        var request = URLRequest(url: url)
-        
-        // Set the Authorization header for the request. We use Bearer tokens, so we specify Bearer + the token we got from the result
-        request.httpMethod = "POST"
-        request.httpBody = bodyData
-        request.setAuthorization(accessToken: accessToken)
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        return request
-    }
-    
-    func getItem<Value: Decodable>(_ type: Value.Type = Value.self,  _ paths: [String], queryItems: [URLQueryItem] = []) async throws -> Value {
-        let request = get(url: paths.reduce(self.grapEndPointMeURL) { $0.appending(path: $1) }.appending(queryItems: queryItems))
-        let item = try await request.response(type)
-        return item
-    }
-    
-    func getItems<Value: Decodable>(_ type: Value.Type = Value.self,  _ paths: [String], queryItems: [URLQueryItem] = []) async throws -> [Value] {
-        let url = paths.reduce(self.grapEndPointMeURL) { $0.appending(path: $1) }.appending(queryItems: queryItems)
-        let countResponse = try await get(url: url.appending(queryItems: [.count()])).response(GraphCollectionResponse<Value>.self)
-        let count = countResponse.count!
-        
-        if count <= countResponse.value.count {
-            return countResponse.value
-        } else {
-            
-            return try await get(url: url.appending(queryItems: [.top(count)])).response(GraphCollectionResponse<Value>.self).value
-        }
-    }
-
-    
-    func post<T: Encodable>(url: URL, body: T) throws -> URLRequest {
-        post(url: url, bodyData: try JSONEncoder().encode(body))
-    }
-    
-    func post(_ paths: String..., bodyData: Data) -> URLRequest {
-        post(url: paths.reduce(self.grapEndPointMeURL) { $0.appending(path: $1) }, bodyData: bodyData)
-    }
-    
-    /*func post<T: Encodable>(_ paths: String..., body: T) throws -> URLRequest {
-        try post(url: paths.reduce(self.grapEndPointMeURL) { $0.appending(path: $1) }, body: body)
-    }*/
-    
-    func post<T: Encodable>(_ paths: [String], body: T) throws -> URLRequest {
-        try post(url: paths.reduce(self.grapEndPointMeURL) { $0.appending(path: $1) }, body: body)
-    }
-    
-    
-}
 
 struct MailFoldersCreateRequestBody : Codable {
     let displayName: String
@@ -299,5 +224,6 @@ extension Encodable {
         try JSONEncoder().encode(self)
     }
 }
+
 
 

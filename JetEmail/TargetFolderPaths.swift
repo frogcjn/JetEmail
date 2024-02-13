@@ -8,13 +8,13 @@
 import Foundation
 import AppKit
 
-struct FolderPaths {
+struct TargetFolderPaths {
     
 }
 
-extension FolderPaths {
+extension TargetFolderPaths {
     static var shared: [[FolderName]] = {
-        let asset = NSDataAsset(name: "FolderPaths", bundle: Bundle.main)!
+        let asset = NSDataAsset(name: "TargetFolderPaths", bundle: Bundle.main)!
         return try! JSONDecoder().decode([[FolderName]].self, from: asset.data)
     }()
     static var sharedTree: Tree<FolderName> = {

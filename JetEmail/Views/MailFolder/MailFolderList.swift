@@ -6,11 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MailFolderList : View {
     
     @Bindable
-    var model: WindowViewModel
+    var viewModel: WindowViewModel
+    
+    @Query
+    var accounts: [Account]
     
     @State
     var errorText = ""
@@ -23,17 +27,11 @@ struct MailFolderList : View {
                     ErrorText(errorText)
                 }
             } else {
-                HStack(spacing: 5) {
-                    Text(model.account.username ?? "")
-                    if model.isLoadingFolderTree {
-                        ProgressView()
-                            .progressViewStyle(.circular)
-                            .controlSize(.small)
+                
+                List(selection: $viewModel.selectedMailFolder) {
+                    ForEach(accounts) { item in
+                        MailFolderSection(viewModel: viewModel[account: item])
                     }
-                }
-                List(model.rootChildren, children: \.children.nilIfEmpty, selection: $model.selectedMailFolder) { node in
-                    Text(node.displayName)
-                        .tag(node.element) // selection tag
                 }
                 
                 /*Section("target mail folders", isExpanded: $isExpanded) {
@@ -47,7 +45,7 @@ struct MailFolderList : View {
                 }*/
             }
         }
-        .toolbar {
+        /*.toolbar {
             Button("update", systemImage: "arrow.clockwise") {
                 Task { await update() }
             }
@@ -58,10 +56,10 @@ struct MailFolderList : View {
         }
         .task {
             await update()
-        }
+        }*/
     }
     
-    func update() async {
+    /*func update() async {
         errorText = ""
         do {
             try await model.loadFolderTree()
@@ -77,8 +75,10 @@ struct MailFolderList : View {
         } catch {
             errorText = String(describing: error)
         }
-    }
+    }*/
 }
+
+
 
 extension Collection {
     var nilIfEmpty: Self? {

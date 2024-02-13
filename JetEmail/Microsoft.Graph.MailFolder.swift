@@ -20,20 +20,30 @@ struct Microsoft {
 extension Microsoft.Graph {
     struct MailFolder : Codable, Identifiable {
         let               id: ID
-        let      displayName: String
-        let         isHidden: Bool
+        let      displayName: String?
+        let         isHidden: Bool?
         
         // mail items
-        let  unreadItemCount: Int32
-        let   totalItemCount: Int32
+        let  unreadItemCount: Int32?
+        let   totalItemCount: Int32?
         
         // mail folder tree node
-        let   parentFolderId: ID
-        let childFolderCount: Int32
+        let   parentFolderId: ID?
+        let childFolderCount: Int32?
         
-        struct ID : RawRepresentable, Codable, Hashable {
-            let rawValue: String
-        }
+        typealias ID = String
+    }
+}
+
+extension Microsoft.Graph.MailFolder {
+    init() {
+        self.id = ""
+        self.displayName = ""
+        self.isHidden = false
+        self.unreadItemCount = 0
+        self.totalItemCount = 0
+        self.parentFolderId = ""
+        self.childFolderCount = 0
     }
 }
 

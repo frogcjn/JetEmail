@@ -28,7 +28,7 @@ struct WebView: NSViewRepresentable {
         let jsString = "var style = document.createElement('style'); style.innerHTML = '\(cssString)'; document.head.appendChild(style);"
         wkWebView.evaluateJavaScript(jsString)*/
         
-        if appSettings.isOnColorScheme {
+        if appSettings.isShowingWithDarkBackground {
             let lightDarkCSS = ":root { color-scheme: light dark; }"
             let base64 = lightDarkCSS.data(using: .utf8)!.base64EncodedString()
             

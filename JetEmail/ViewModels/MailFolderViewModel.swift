@@ -12,48 +12,43 @@ import OpenAI
 @Observable
 class MailFolderViewModel {
     
-    typealias MailFolder = Microsoft.Graph.MailFolder
     // init
-    var _windowViewModel: WindowViewModel
+    var _accountViewModel: AccountViewModel
     var _mailFolder: MailFolder
-    
-    init(_ windowViewModel: WindowViewModel, mailFolder: MailFolder) {
-        _windowViewModel = windowViewModel
+
+    init(_ accountViewModel: AccountViewModel, mailFolder: MailFolder) {
+        _accountViewModel = accountViewModel
         _mailFolder = mailFolder
     }
     
     var isLoadingMessages = false
-    var errorMessage = ""
-    var messages: [Microsoft.Graph.Message] = []
 }
 
 extension MailFolderViewModel {
     
-    func loadMessages() async {
-        guard !self.isLoadingMessages else { return }
+    func loadMessages() async throws -> [Message] {
+        guard !self.isLoadingMessages else { return [] }
         self.isLoadingMessages = true
         defer { self.isLoadingMessages = false }
         
-        do {
-            messages = try await self.mailFoldersRequest.getMessages(id: self.id)
-        } catch {
-            errorMessage = String(describing: error)
-        }
+        let msalMessages = try await self.mailFoldersRequest.getMessages(id: _mailFolder.id) // load from MSAL
+        let messages = try await BackgroundModelActor(modelContainer: self.container).messages(elements: msalMessages, in: _mailFolder) // MSAL to SwiftData
+        return messages
     }
 }
 
 // @dynamicMemberLookup
 extension MailFolderViewModel {
-    subscript<Value>(dynamicMember keyPath: KeyPath<WindowViewModel, Value>) -> Value {
-        _windowViewModel[keyPath: keyPath]
+    subscript<Value>(dynamicMember keyPath: KeyPath<AccountViewModel, Value>) -> Value {
+        _accountViewModel[keyPath: keyPath]
     }
     
-    subscript<Value>(dynamicMember keyPath: WritableKeyPath<WindowViewModel, Value>) -> Value {
+    subscript<Value>(dynamicMember keyPath: WritableKeyPath<AccountViewModel, Value>) -> Value {
         get {
-            _windowViewModel[keyPath: keyPath]
+            _accountViewModel[keyPath: keyPath]
         }
         set {
-            _windowViewModel[keyPath: keyPath] = newValue
+            _accountViewModel[keyPath: keyPath] = newValue
         }
     }
     

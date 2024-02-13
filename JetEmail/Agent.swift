@@ -13,7 +13,7 @@ struct Agent {
 
 extension TreeNode<Microsoft.Graph.MailFolder> {
     var path: [String] {
-        Array(sequence(first: self) { $0.parent }.map(\.displayName).reversed().dropFirst())
+        [] // Array(sequence(first: self) { $0.parent }.map(\.displayName).reversed().dropFirst())
     }
 }
 

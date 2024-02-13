@@ -12,14 +12,14 @@ struct MessageView : View {
 
     
     @Bindable
-    var model : MessageViewModel
+    var viewModel : MessageViewModel
     
     var body: some View {
         
         VStack {
-            Text(model.subject ?? "nil")
+            Text(viewModel.subject ?? "nil")
             
-            LabeledContent("from:") { // chair
+            /*LabeledContent("from:") { // chair
                 Text(model.from?.emailAddress?.nameAndAddress ?? "nil")
             }
             
@@ -45,10 +45,10 @@ struct MessageView : View {
             
             if let body = model.body {
                 EmailBodyView(itemBody: body)
-            }
+            }*/
         }
         .toolbar {
-            Button {
+            /*Button {
                 Task { await model.classify() }
             } label: {
                 Label("classify", systemImage: "wand.and.rays")
@@ -58,7 +58,7 @@ struct MessageView : View {
             }
             if let resultText = model.classifyResultText {
                 Text(resultText)
-            }
+            }*/
         }
     }
 }
@@ -75,7 +75,7 @@ struct EmailBodyView : View {
         case (.html, let htmlString?):
             WebView(htmlString: htmlString)
         case (.text, let text?):
-            if appSettings.isOnColorScheme {
+            if appSettings.isShowingWithDarkBackground {
                 Text(text)
             } else {
                 Group {

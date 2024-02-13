@@ -21,18 +21,18 @@ extension Microsoft.Graph {
          */
         let            createdDateTime: DateTimeOffset?
         let       lastModifiedDateTime: DateTimeOffset?
-        let           receivedDateTime: DateTimeOffset?
+        let           receivedDateTime: DateTimeOffset? // * Important *
         let               sentDateTime: DateTimeOffset?
         
         let                     sender: Recipient?   // sender?
-        let                       from: Recipient?   // from
-        let               toRecipients: [Recipient]? // to
+        let                       from: Recipient?   // * Important * from
+        let               toRecipients: [Recipient]? // * Important * to
         let                    replyTo: [Recipient]? // 回复给
-        let               ccRecipients: [Recipient]? // 抄送, carbon copy
+        let               ccRecipients: [Recipient]? // * Important * 抄送, carbon copy
         let              bccRecipients: [Recipient]? // 密件抄送，密送，blind carbon copy
         
-        let                bodyPreview: String?
-        let                       body: ItemBody?
+        let                bodyPreview: String? // * Important *
+        let                       body: ItemBody? // * Important * may load later
         //let                 uniqueBody: ItemBody?
         
         /*
@@ -55,11 +55,29 @@ extension Microsoft.Graph {
         
         let                    webLink: String?*/
         
-        struct ID : RawRepresentable, Codable, Hashable {
-            let rawValue: String
-        }
+        typealias ID = String
     }
 
+}
+
+extension Microsoft.Graph.Message {
+    init() {
+        self.id = ""
+        self.subject = nil
+        self.createdDateTime = nil
+        self.lastModifiedDateTime = nil
+        self.receivedDateTime = nil
+        self.sentDateTime = nil
+        
+        self.sender = nil
+        self.from = nil
+        self.toRecipients = nil
+        self.replyTo = nil
+        self.ccRecipients = nil
+        self.bccRecipients = nil
+        self.bodyPreview = nil
+        self.body = nil
+    }
 }
 
 extension Microsoft.Graph.Message : Hashable {
@@ -70,5 +88,4 @@ extension Microsoft.Graph.Message : Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
 }
