@@ -6,72 +6,45 @@
 //
 
 import SwiftUI
-import SwiftData
+import SwiftData // for @Query
 
-struct MessageList : View {
+fileprivate struct _MessageList : View {
+
+    @Environment(AppContext.Item<MailFolder>.self)
+    var context
     
-    @Bindable
-    var viewModel : MailFolderViewModel
-    
-    @State
-    var errorText: String = ""
-    
+    @Environment(MailFolder.self)
+    var mailFolder
+
+    @Environment(MailWindowModel.self)
+    var window
+
     @Query
     var messages: [Message]
-    
-    init(viewModel: MailFolderViewModel) {
-        self._viewModel = Bindable(viewModel)
-        let id = viewModel._mailFolder.id
-        self._messages = Query(filter: #Predicate<Message> { $0.mailFolder.id == id })
-    }
-    
-    var body: some View {
 
-        //NavigationSplitView {
-        Group {
-            if !errorText.isEmpty {
-                ErrorText(errorText)
-            } else {
-                List(messages, selection: $viewModel.selectedMessage) { item in
-                    VStack(alignment: .leading) {
-                        Text(item.element.sender?.emailAddress?.name ?? item.element.sender?.emailAddress?.address ?? "")
-                        Text(item.subject ?? "").lineLimit(1)
-                        Text(item.receivedDate?.formattedRelative() ?? "")
-                        Text(item.bodyPreview ?? "").lineLimit(2)
-                    }.tag(item)
-                }
-            }
+    var body: some View {
+        List(messages, selection: Bindable(window).selectedMessage) { item in
+            MessageCell()
+                .appContext(item: item)
+                .tag(item)
         }
-        .toolbar {
-            Button("update", systemImage: "arrow.clockwise") {
-                Task { await update() }
-            }
-            .buttonStyle(.borderless)
-            .disabled(viewModel.isLoadingMessages)
-            if viewModel.isLoadingMessages {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .controlSize(.small)
-            }
+        .safeAreaInset(edge: .top) {
+            MailFolderMessageListToolBar()
         }
-        .onChange(of: viewModel._mailFolder, initial: true) {
-            Task {
-                await update()
-            }
+        
+        // Feature: Account - Load Messages
+        .onChange(of: mailFolder, initial: true) {
+            Task { await context.loadMessages() }
         }
-        //} detail: {
-            // Text("Mail Content")
-        //}
     }
-    
-    func update() async {
-        print("update.start()")
-        errorText = ""
-        do {
-            _ = try await viewModel.loadMessages()
-        } catch {
-            errorText = String(describing: error)
-        }
-        print("update.end()")
+}
+
+struct MessageList : View {
+    @Environment(MailFolder.self)
+    var mailFolder
+
+    var body: some View {
+        let id = mailFolder.id
+        _MessageList(_messages: Query(filter: #Predicate<Message> { $0.mailFolder.id == id && !$0.deleteMark }, sort: \.receivedDate, order: .reverse))
     }
 }

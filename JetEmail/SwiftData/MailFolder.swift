@@ -5,27 +5,42 @@
 //  Created by Cao, Jiannan on 2/13/24.
 //
 
-import Foundation
-import SwiftData
+import SwiftData  // for @Model
+import Foundation // for KeyPathComparator
 
 @Model
 class MailFolder {
     
     @Attribute(.unique)
     var id: String
-    var _element: String
-    var name: String
+    
+    @Transient
+    var modelID: ModelID {
+        @storageRestrictions(accesses: _$backingData, initializes: _id)
+        init(initialValue) {
+            _$backingData.setValue(forKey: \.id, to: initialValue.string)
+            _id = _SwiftDataNoType()
+        }
 
+        get { ModelID(id) }
+        set { id = newValue.string }
+    }
+    
+    var name: String
+    
     /// MailFolder.account <<-> Account.mailFolders
     @Relationship(deleteRule: .nullify)
     var account: Account
+    
+    //@Relationship(deleteRule: .nullify)
+    //var rootAccount: Account?
     
     /// MailFolder.parent <<-> MailFOlder.children
     @Relationship(deleteRule: .nullify)
     var parent: MailFolder?
     
     /// MailFolder.children <->> MailFolder.parent
-    @Relationship(deleteRule: .cascade, originalName: "children", inverse: \MailFolder.parent)
+    @Relationship(deleteRule: .nullify, originalName: "children", inverse: \MailFolder.parent)
     private var _children: [MailFolder] = [] // Should be Ordered Relationship
     
     @Transient
@@ -38,26 +53,42 @@ class MailFolder {
     @Transient
     var messages: [Message] { _messages.sorted(using: KeyPathComparator(\.receivedDate, order: .reverse))}
     
-    init(element: Microsoft.Graph.MailFolder, in account: Account) {
-        self.id       = element.id
-        self.name     = element.displayName ?? ""
-        self._element = element.encodeJSON() ?? ""
+    init(modelID: ModelID, name: String, in account: Account) {
+        self.modelID  = modelID
+        self.name     = name
         self.account  = account
     }
+    
+    var _graph: String?
+    
+    @MainActor  // for isBusy
+    @Attribute(.ephemeral)
+    var isBusy = false {
+        willSet {
+            print(isBusy)
+        }
+    }
+    
+    var deleteMark = false {
+        didSet {
+            if deleteMark {
+                messages.forEach { $0.deleteMark = true }
+            }
+        }
+    }
+}
             
-    /*var data: Microsoft.Graph.MailFolder {
+    /*var graph: MSGraph.MailFolder {
         get {
-            _element.decodeJSON(Microsoft.Graph.MailFolder.self) ?? .init()
+            // (try? _element.jsonDecode(MSGraph.MailFolder.self)) ?? .init()
+            fatalError()
         }
         set {
-            guard let element = newValue.encodeJSON() else { return }
-            _element = element
+            guard let graphJSONString: String = try? newValue.jsonString else { return }
+            self._element = graphJSONString
+            self.id   = newValue.id.rawValue
+            self.name = newValue.displayName ?? ""
         }
     }*/
-}
-/*
-extension MailFolder : Hashable {
-    
-}
-*/
+
 

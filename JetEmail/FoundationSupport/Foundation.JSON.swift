@@ -8,18 +8,46 @@
 import Foundation
 
 extension String {
-    func decodeJSON<T: Decodable>(_ type: T.Type) -> T? {
-        data(using: .utf8)
-            .flatMap { try? JSONDecoder().decode(T.self, from: $0) }
+    func jsonDecode<T: Decodable>(_ type: T.Type) throws -> T {
+        guard let data = data(using: .utf8) else { throw FoudnationError.stringToData}
+        return try data.jsonDecode(type)
+    }
+}
+
+extension Data {
+    func jsonDecode<T: Decodable>(_ type: T.Type) throws -> T {
+        try JSONDecoder().decode(T.self, from: self)
+    }
+}
+
+extension Result {
+    func catching<T>(_ closure: @escaping () async throws -> T) async -> Result<T, Error> {
+        await Task { try await closure() }.result
     }
 }
 
 extension Encodable {
-    func encodeJSON() -> String? {
-        (try? JSONEncoder().encode(self))
-            .flatMap { String(data: $0, encoding: .utf8) }
+    var jsonString: String {
+        get throws {
+            guard let string = String(data: try jsonData, encoding: .utf8) else { throw FoudnationError.dataToString }
+            return string
+        }
     }
 }
+
+extension Encodable {
+    var jsonData: Data {
+        get throws {
+            try JSONEncoder().encode(self)
+        }
+    }
+    /*
+     func jsonData() throws -> Data {
+         try JSONEncoder().encode(self)
+     }
+     */
+}
+
 
 extension Date {
     func formattedRelative() -> String {
@@ -33,3 +61,33 @@ extension Date {
         }
     }
 }
+
+import SwiftData
+
+extension PersistentModel {
+    func to(_ modelContext: ModelContext) throws -> Self {
+        guard let transfered = modelContext.model(for: persistentModelID) as? Self else {
+            throw SwiftDataError.noModelInstance(id: String(describing: persistentModelID.id), in: modelContext)
+        }
+        return transfered
+    }
+}
+
+extension Sequence where Element: PersistentModel {
+    func to(_ modelContext: ModelContext) throws -> [Element] {
+        try map { try $0.to(modelContext) }
+    }
+}
+
+
+
+extension Collection {
+    var nilIfEmpty: Self? {
+        isEmpty ? nil : self
+    }
+}
+
+
+
+
+
