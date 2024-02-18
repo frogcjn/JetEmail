@@ -20,10 +20,13 @@ class AppContextInit {
                 // avoid "UI unresponsiveness" warning on MSALPublicClientApplication init
                 let graphContext = try await Task.detached { try MSGraph.Client() }.value
                 
+                let googleAPIClient = GoogleAPI.Client()
+                
                 let modelContainer = try ModelContainer(for: Account.self, MailFolder.self, Message.self)
 
                 return AppContext(
                     graphContext: graphContext,
+                    googleAPIClient: googleAPIClient,
                     modelContainer: modelContainer
                 )
             }.result

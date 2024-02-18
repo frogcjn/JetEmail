@@ -13,6 +13,10 @@ import SwiftData
 
 
 extension MSGraph.Client {
+    func addAccount() async throws -> MSGraph.Account {
+        try await _addAccount()
+    }
+    
     func accounts() throws -> [MSGraph.Account] {
         try client.allAccounts().map(MSGraph.Account.init)
     }
@@ -28,12 +32,6 @@ extension MSGraph.Client {
             throw MSGraphError.noAccountFound
         }
         return try .init(account)*/
-    }
-    
-    func addAccount() async throws -> MSGraph.Account {
-        let parameters = MSALInteractiveTokenParameters(scopes: scopes, webviewParameters: webViewParameters)
-        parameters.promptType = .selectAccount
-        return try .init(try await client.acquireToken(with: parameters).account) // interactivelty
     }
     
     func removeAccount(graph: MSGraph.Account) async throws {

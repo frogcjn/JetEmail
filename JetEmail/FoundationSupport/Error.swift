@@ -6,6 +6,7 @@
 //
 
 import SwiftData // for ModelContext
+import Foundation
 
 enum FoudnationError : Error {
     case stringToData
@@ -52,6 +53,18 @@ extension MSGraph {
         let message: String?
         let innerError: JSON?
         let details: [JSON]?
+    }
+}
+
+extension GoogleAPI {
+    /*struct AuthError: LocalizedError {
+        var message: String
+    }*/
+    
+    enum AuthError : LocalizedError {
+        case currentAuthorizationFlowIsExisted
+        case noMainWindow
+        case message(String)
     }
 }
 

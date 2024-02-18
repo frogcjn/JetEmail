@@ -8,12 +8,11 @@
 import MSAL // for MSALPublicClientApplication
 
 extension MSGraph {
-    @Observable
-    class Client {
+    final class Client {
         
         // configs
         fileprivate let     clientID = "0ef42f9f-afc7-4463-bcbe-1c6dd4076b40"
-        fileprivate let  redirectURL = URL(string: "msauth.me.frogcjn.agent://auth")!
+        fileprivate let  redirectURL = URL(string: "msauth.me.frogcjn.jet-email://auth")!
         fileprivate let authorityURL = URL(string: "https://login.microsoftonline.com/common")!
                     let  endpointURL = URL(string: "https://graph.microsoft.com/v1.0/me/")!
                     let       scopes = ["user.read", "mail.read"] // request permission to read the profile of the signed-in user
@@ -29,6 +28,12 @@ extension MSGraph {
             )
                        client = try MSALPublicClientApplication(configuration: configuration)
             webViewParameters = .init()
+        }
+        
+        func _addAccount() async throws -> MSGraph.Account {
+            let parameters = MSALInteractiveTokenParameters(scopes: scopes, webviewParameters: webViewParameters)
+            parameters.promptType = .selectAccount
+            return try .init(try await client.acquireToken(with: parameters).account) // interactivelty
         }
     }
 }

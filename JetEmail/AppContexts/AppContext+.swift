@@ -40,14 +40,26 @@ extension AppContext {
         isBusy = true
         defer { isBusy = false }
         
-        do {
+        /*do {
             let (graphContext, modelContext) = (graphClient, modelContainer.mainContext)
             let gragh = try await graphContext.addAccount()
             _ = try modelContext.addAccount(graph: gragh)
         } catch {
             logger.error("\(error)")
+        }*/
+        
+        /*let query = GTLRGmailQuery_UsersLabelsGet.query(withUserId: authorization.userEmail ?? "me", identifier: defaultLabel)
+        let service = GTLRGmailService()
+        service.authorizer = authorization*/
+        do {
+            let (googleContext, _) = (googleAPIClient, modelContainer.mainContext)
+            let google = try await googleContext.addAccount()
+            print(google)
+        } catch {
+            logger.error("\(error)")
         }
     }
+    
     
     // Feature: Accounts - Remove Account
     /// Remove an account from `MSGraph.Context` and `ModelContext`.

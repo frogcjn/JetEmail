@@ -15,18 +15,19 @@ import os        // for Logger
 class AppContext {
     // MSAL
     let graphClient: MSGraph.Client
-    
+    let googleAPIClient: GoogleAPI.Client
+
     // Model
     let modelContainer: ModelContainer
     
-    init(graphContext: MSGraph.Client, modelContainer: ModelContainer) {
+    init(graphContext: MSGraph.Client, googleAPIClient: GoogleAPI.Client, modelContainer: ModelContainer) {
         self.modelContainer = modelContainer
         self.graphClient    = graphContext
+        self.googleAPIClient = googleAPIClient
     }
     
-    var logger = Logger(subsystem: "me.frogcjn.agent.JetEmail", category: "AppContext")
+    var logger = Logger(subsystem: "me.frogcjn.jet-email", category: "AppContext")
     var willRemoveAccount = PassthroughSubject<Account, Never>()
-    
     //@MainActor
     //var busyRecorder = BusyRecorder()
     
