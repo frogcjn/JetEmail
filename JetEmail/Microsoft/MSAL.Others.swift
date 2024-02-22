@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension MSGraph {
+extension Microsoft {
     
     /*
      The date and time the message was created.
@@ -96,7 +96,7 @@ extension MSGraph {
     }
 }
 
-extension MSGraph.EmailAddress : Equatable {
+extension Microsoft.EmailAddress : Equatable {
     
 }
 

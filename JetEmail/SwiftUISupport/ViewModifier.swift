@@ -9,40 +9,48 @@ import SwiftUI
 
 
 extension View {
-    func appContext(init appContextInit: AppContextInit) -> some View {
-        modifier(AppContextInitModifier(appContextInit: appContextInit))
+    func appModel(_ appModel: AppModel) -> some View {
+        modifier(AppModelResultModifier(appModel: appModel))
     }
     
-    func appContext<Item : Observable & AnyObject>(item: Item) -> some View {
-        modifier(AppContextItemModifier(item: item))
-    }
-}
-
-// MARK: - Modifier: AppContext.Init
-
-fileprivate struct AppContextInitModifier : ViewModifier {
-    let appContextInit: AppContextInit
-    func body(content: Content) -> some View {
-        ResultView(appContextInit.result) { appContext in
-            content
-                .environment(appContext)
-                .modelContainer(appContext.modelContainer)
-        }
+    func itemModel<Item : ModelItem>(_ item: Item) -> some View {
+        modifier(ItemModelModifier(item: item))
     }
 }
 
-// MARK: - Modifier: AppContext.Item
+// MARK: - Modifier: AppModel.Init
 
-fileprivate struct AppContextItemModifier<Item: Observable & AnyObject> : ViewModifier {
-    
-    @Environment(AppContext.self)
-    var context
-    
-    let item: Item
+fileprivate struct AppModelResultModifier : ViewModifier {
+    let appModel: AppModel
     func body(content: Content) -> some View {
         content
-            .environment(item)
-            .environment(AppContext.Item(context: context, item: item))
+            .environment(appModel)
+            .modelContainer(appModel.modelContainer)
     }
 }
 
+// MARK: - Modifier: AppModel.Item
+
+fileprivate struct ItemModelModifier<Item: ModelItem> : ViewModifier {
+    
+    @Environment(AppModel.self)
+    var appModel
+    
+    let item: Item
+    
+    func body(content: Content) -> some View {
+        content
+            .environment(appModel(item))
+            .environment(item)
+    }
+}
+
+
+extension Scene {
+    func appModel(_ appModel: AppModel) -> some Scene {
+        self
+            .environment(appModel)
+            .environment(appModel.settings)
+            .modelContainer(appModel.modelContainer)
+    }
+}

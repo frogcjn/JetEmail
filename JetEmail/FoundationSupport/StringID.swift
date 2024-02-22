@@ -7,14 +7,14 @@
 
 // MARK: - StringID
 
-protocol StringID : Equatable, Codable, Hashable, ExpressibleByStringLiteral , RawRepresentable where RawValue == String, StringLiteralType == String {
-    init(_ : String)
+protocol StringID : Equatable, Codable, Hashable {
     var string: String { get }
+    init(string: String) throws // may throws
 }
 
-extension StringID {
-    init(stringLiteral value: StringLiteralType) { self.init(value) }
-    init(rawValue: RawValue) { self.init(rawValue) }
+protocol RawStringID : StringID, RawRepresentable {}
+extension RawStringID {
+    init(rawValue: String) { try! self.init(string: rawValue) }
     var rawValue: String { string }
 }
 

@@ -9,22 +9,34 @@ import SwiftData  // for @Model
 import Foundation // for Date
 
 @Model
-class Message {
+class Message : ModelItem {
     
+    /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
     @Attribute(.unique)
-    var id: String
+    private(set) var id: String
+    private(set) var platform: String
+    private(set) var platformID: String
     
-    @Transient
     var modelID: ModelID {
-        @storageRestrictions(accesses: _$backingData, initializes: _id)
+        @storageRestrictions(accesses: _$backingData, initializes: _platform, _platformID, _id)
         init(initialValue) {
-            _$backingData.setValue(forKey: \.id, to: initialValue.string)
-            _id = _SwiftDataNoType()
-        }
+            let (platform, platformID, string) = (initialValue.platform, initialValue.platformID, initialValue.string)
+            _$backingData.setValue(forKey: \.platform,   to: platform.rawValue)
+            _$backingData.setValue(forKey: \.platformID, to: platformID)
+            _$backingData.setValue(forKey: \.id,         to: string)
 
-        get { ModelID(id) }
-        set { id = newValue.string }
+            _platform   = _SwiftDataNoType()
+            _platformID = _SwiftDataNoType()
+            _id         = _SwiftDataNoType()
+        }
+        get { .init(platform: .init(rawValue: platform)!, platformID: platformID) }
+        set {
+            platform   = newValue.platform.rawValue
+            platformID = newValue.platformID
+            id = newValue.string
+        }
     }
+    
     
     var      subject: String?
     var  createdDate: Date?
@@ -59,7 +71,9 @@ class Message {
     var isBusy = false
     
     var deleteMark = false
+    
+    var account: Account { mailFolder.account }
 }
 
-typealias Recipient = MSGraph.EmailAddress
-typealias Body      = MSGraph.ItemBody
+typealias Recipient = Microsoft.EmailAddress
+typealias Body      = Microsoft.ItemBody

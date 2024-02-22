@@ -9,8 +9,8 @@ import SwiftUI
 
 struct AccountListToolbar : View {
     
-    @Environment(AppContext.self)
-    var context
+    @Environment(AppModel.self)
+    var appModel
     
     @Environment(SettingsModel.self)
     var settings
@@ -18,21 +18,28 @@ struct AccountListToolbar : View {
     var body: some View {
         HStack {
             // Feature: Accounts - Add Account
-            Button("Add", systemImage: "plus") {
-                Task { await context.addAccount() }
+            Button("Add Microsoft Account", systemImage: "plus") {
+                Task { await appModel.addAccount(platform: .microsoft) }
+            }//.disabled(context.isBusy)
+            
+            // Feature: Accounts - Add Account
+            Button("Add Google Account", systemImage: "plus") {
+                Task { await appModel.addAccount(platform: .google) }
             }//.disabled(context.isBusy)
             
             // Feature: Accounts - Remove Account
             Button("Remove", systemImage: "minus") {
                 guard let account = settings.selectedAccount else { return }
-                Task { await context.removeAccount(account) }
+                Task { await appModel(account).delete() }
             }.disabled(settings.selectedAccount?.isBusy ?? true)
             
 
             Spacer()
             
             // Feature: Accounts - Load Accounts
-            RefreshButton(isBusy: context.isBusy) { context.loadAccounts() }
+            RefreshButton(isBusy: appModel.isBusy) {
+                Task { await appModel.loadAccounts() }
+            }
         }
         .padding(4)
         .buttonStyle(.borderless)

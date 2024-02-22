@@ -10,6 +10,7 @@ import Observation
 @dynamicMemberLookup
 @Observable
 class CombineContext<Context, Item> {
+    
     let context: Context
     let item: Item
     
@@ -37,17 +38,17 @@ extension CombineContext {
     
     subscript<Value>(dynamicMember keyPath: WritableKeyPath<Context, Value>) -> Value {
         _read { yield context[keyPath: keyPath] }
-        _modify { var appContext = context; yield &appContext[keyPath: keyPath] }
+        _modify { var AppModel = context; yield &AppModel[keyPath: keyPath] }
     }
     
-    /*subscript<Value>(dynamicMember keyPath: WritableKeyPath<AppContext, Value>) -> Value {
-        //get { appContext[keyPath: keyPath] }
-        // set { appContext[keyPath: keyPath] = newValue }
+    /*subscript<Value>(dynamicMember keyPath: WritableKeyPath<AppModel, Value>) -> Value {
+        //get { AppModel[keyPath: keyPath] }
+        // set { AppModel[keyPath: keyPath] = newValue }
         _read {
-            yield appContext[keyPath: keyPath]
+            yield AppModel[keyPath: keyPath]
         }
         _modify {
-            yield &appContext[keyPath: keyPath]
+            yield &AppModel[keyPath: keyPath]
         }
     }*/
     
@@ -67,12 +68,12 @@ extension CombineContext {
 @Observable
 class AccountContext {
     
-    var appContext: AppContext
+    var AppModel: AppModel
     var model: Account
     
     
-    init(_ appViewModel: AppContext, _ model: Account) {
-        self.appContext = appViewModel
+    init(_ appViewModel: AppModel, _ model: Account) {
+        self.AppModel = appViewModel
         self.model = model
         
         requestMailFolders = .init()
@@ -91,11 +92,11 @@ class AccountContext {
     static subscript(model: Account) -> AccountContext? {
         get {
             
-            guard let appContext = AppContext.shared, !model.isDeleted else { return nil }
+            guard let AppModel = AppModel.shared, !model.isDeleted else { return nil }
             
             if let context = _contexts[model] { return context }
             
-            let context = AccountContext(appContext, model)
+            let context = AccountContext(AppModel, model)
             _contexts[model] = context
             return context
         }

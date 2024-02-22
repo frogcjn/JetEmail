@@ -9,7 +9,7 @@
 
 // https://learn.microsoft.com/en-us/graph/api/resources/mailfolder
 
-extension MSGraph {
+extension Microsoft {
     struct MailFolder : Codable, Identifiable {
         let               id: ID
         let      displayName: String?
@@ -25,8 +25,8 @@ extension MSGraph {
     }
 }
 
-extension MSGraph.MailFolder : Hashable {
-    static func == (lhs: MSGraph.MailFolder, rhs: MSGraph.MailFolder) -> Bool {
+extension Microsoft.MailFolder : Hashable {
+    static func == (lhs: Microsoft.MailFolder, rhs: Microsoft.MailFolder) -> Bool {
         lhs.id == rhs.id
     }
     
@@ -37,7 +37,7 @@ extension MSGraph.MailFolder : Hashable {
 
 // MARK: MailFolder.WellknownFolderName
 
-extension MSGraph.MailFolder {
+extension Microsoft.MailFolder {
     // Well-known folder names https://learn.microsoft.com/en-us/graph/api/resources/mailfolder?view=graph-rest-1.0#methods
     
     enum WellKnownFolderName : String {

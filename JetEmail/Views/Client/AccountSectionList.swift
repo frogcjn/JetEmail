@@ -10,8 +10,8 @@ import SwiftData
 
 struct AccountSectionList : View {
 
-    @Environment(AppContext.self)
-    var context
+    @Environment(AppModel.self)
+    var appModel
     
     @Environment(MailWindowModel.self)
     var window
@@ -29,12 +29,12 @@ struct AccountSectionList : View {
                 List(selection: Bindable(window).selectedMailFolder) {
                     ForEach(accounts) { item in
                         AccountSection()
-                            .appContext(item: item)
+                            .itemModel(item)
                     }
                     
                     // Feature: Accounts - Move Accounts
                     .onMove { source, destination in
-                        context.moveAccounts(accounts, fromOffsets: source, toOffset: destination)
+                        Task { await appModel.moveAccounts(accounts, fromOffsets: source, toOffset: destination) }
                     }
                 }
             }
@@ -42,7 +42,7 @@ struct AccountSectionList : View {
         
         // Feature: Accounts - Load Accounts
         .task {
-            context.loadAccounts()
+            await appModel.loadAccounts()
         }
          
         

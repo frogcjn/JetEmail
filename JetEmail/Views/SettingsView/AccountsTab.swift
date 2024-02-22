@@ -18,7 +18,7 @@ struct AccountsTab : View {
         } detail: {
             if let item = settings.selectedAccount {
                 AccountView()
-                    .appContext(item: item)
+                    .itemModel(item)
             } else {
                 Color.clear
             }

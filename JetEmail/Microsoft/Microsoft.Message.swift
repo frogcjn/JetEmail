@@ -9,7 +9,7 @@
 // MARK: - Message
 // https://learn.microsoft.com/en-us/graph/api/resources/message
 
-extension MSGraph {
+extension Microsoft {
     struct Message : Codable, Identifiable {
         let                         id: ID
         
@@ -56,8 +56,8 @@ extension MSGraph {
 
 }
 
-extension MSGraph.Message : Hashable {
-    static func == (lhs: MSGraph.Message, rhs: MSGraph.Message) -> Bool {
+extension Microsoft.Message : Hashable {
+    static func == (lhs: Microsoft.Message, rhs: Microsoft.Message) -> Bool {
         lhs.id == rhs.id
     }
     

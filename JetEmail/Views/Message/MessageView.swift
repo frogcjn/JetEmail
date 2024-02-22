@@ -8,11 +8,7 @@
 import SwiftUI
 
 struct MessageView : View {
-    
-    @Environment(AppContext.Item<Message>.self)
-    var context
-    
-    @Environment(Message.self)
+    @Environment(AppItemModel<Message>.self)
     var message
     
     var body: some View {
@@ -93,8 +89,8 @@ struct MessageView : View {
                 Text(resultText)
             }*/
         }*/
-        .onChange(of: message, initial: true) {
-            Task { await context.loadBody() }
+        .onChange(of: message.item, initial: true) {
+            Task { await message.loadBody() }
         }
     }
 }
@@ -104,7 +100,7 @@ struct EmailBodyView : View {
     @Environment(SettingsModel.self)
     var appSettings
     
-    var itemBody: MSGraph.ItemBody
+    var itemBody: Microsoft.ItemBody
     
     var body: some View {
         switch (itemBody.contentType, itemBody.content)  {

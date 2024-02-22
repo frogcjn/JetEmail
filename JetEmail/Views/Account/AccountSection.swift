@@ -10,43 +10,41 @@ import SwiftData // for @Query
 
 fileprivate struct _AcciontSection: View {
     
-    @Environment(AppContext.Item<Account>.self)
-    var context
     
     @Query
     var rootChildren: [MailFolder]
     
     var body: some View {
-        Section {
-            OutlineGroup(rootChildren, children: \.children.nilIfEmpty) { item in
-                MailFolderCell()
-                    .appContext(item: item)
-                    .tag(item) // selection tag
-            }
-        } header: {
-            
-            // Feature: Account - Load Mail Folders
-            AccountSectionHeader() { 
-                await context.loadMailFolders()
-                _rootChildren.update()
-            }
-        }
-        
-        // Feature: Account - Load Mail Folders
-        .task {
-            await context.loadMailFolders()
-            _rootChildren.update()
+        OutlineGroup(rootChildren, children: \.children.nilIfEmpty) { item in
+            MailFolderCell()
+                .itemModel(item)
+                .tag(item) // selection tag
         }
     }
 }
 
 
 struct AccountSection: View {
-    @Environment(Account.self)
+    @Environment(AppItemModel<Account>.self)
     var account
     
     var body: some View {
-        let rootID = account.root?.id
-        _AcciontSection(_rootChildren: Query(filter: #Predicate { $0.parent?.id == rootID && !$0.deleteMark }, sort: \MailFolder.name))
+        Section {
+            if let rootID = account.root?.id {
+                _AcciontSection(_rootChildren: Query(filter: #Predicate { rootID != nil && $0.parent?.id == rootID && !$0.deleteMark }, sort: \MailFolder.name))
+            } else {
+                Color.red
+            }
+            
+        } header: {
+            // Feature: Account - Load Mail Folders
+            AccountSectionHeader() {
+                await account.loadMailFolders()
+            }
+        }
+        .task {
+            // Feature: Account - Load Mail Folders
+            await account.loadMailFolders()
+        }
     }
 }

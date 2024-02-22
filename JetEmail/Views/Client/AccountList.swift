@@ -10,8 +10,8 @@ import SwiftData // for @Query
 
 struct AccountList: View {
     
-    @Environment(AppContext.self)
-    var context
+    @Environment(AppModel.self)
+    var appModel
     
     @Environment(SettingsModel.self)
     var settings
@@ -23,20 +23,28 @@ struct AccountList: View {
         List(selection: Bindable(settings).selectedAccount) {
             ForEach(accounts) { item in
                 AccountCell()
-                    .appContext(item: item)
+                    .itemModel(item)
                     .tag(item)
             }
             
             // Feature: Accounts - Move Accounts
             .onMove { source, destination in
-                context.moveAccounts(accounts, fromOffsets: source, toOffset: destination)
+                Task { await appModel.moveAccounts(accounts, fromOffsets: source, toOffset: destination) }
             }
         }
         .safeAreaInset(edge: .bottom) {
             AccountListToolbar()
         }
         
-        // Feature: Unselection - Remove Account
-        .onReceive(context.willRemoveAccount, perform: settings.willRemoveAccount(_:))
+        // Feature: Accounts - Load Accounts
+        .onAppear {
+            Task {
+                await appModel.loadAccounts()
+                _accounts.update()
+            }
+        }
+        
+        // Feature: Unselection - Will Remove Account
+        .onReceive(appModel.willRemoveAccount, perform: settings.willRemoveAccount(_:))
     }
 }

@@ -9,12 +9,12 @@ import SwiftUI
 
 struct MailWindow : View {
     
-    @Environment(AppContext.self) // state associate with applciation
-    var context
+    @Environment(AppModel.self) // state associate with applciation
+    var appModel
     
-    @Environment(MailWindowModel.self)
-    var window
-
+    @State
+    var window = MailWindowModel() // a MainWindowModel instance is associated with each model
+    
     var body: some View {
         NavigationSplitView(columnVisibility: Bindable(window).splitViewVisibility) {
             AccountSectionList()
@@ -22,17 +22,18 @@ struct MailWindow : View {
         } content: {
             if let item = window.selectedMailFolder {
                 MessageList()
-                    .appContext(item: item)
+                    .itemModel(item)
             }
         } detail: {
             if let item = window.selectedMessage {
                 MessageView()
-                    .appContext(item: item)
+                    .itemModel(item)
             }
         }
         .labelStyle(.iconOnly)
         
         // Feature: Unselection - Remove Account
-        .onReceive(context.willRemoveAccount, perform: window.willRemoveAccount(_:))
+        .onReceive(appModel.willRemoveAccount, perform: window.willRemoveAccount(_:))
+        .environment(window)
     }
 }

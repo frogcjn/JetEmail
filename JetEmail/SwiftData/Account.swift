@@ -5,41 +5,47 @@
 //  Created by Cao, Jiannan on 2/12/24.
 //
 
+import Foundation
 import SwiftData // for @Model
+/*
 
+ */
 @Model
-class Account {
+final class Account : ModelItem {
     
+    /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
     @Attribute(.unique)
-    var id: String
+    private(set) var id: String
+    private(set) var platform: String
+    private(set) var platformID: String
     
-    @Transient
     var modelID: ModelID {
-        @storageRestrictions(accesses: _$backingData, initializes: _id)
+        @storageRestrictions(accesses: _$backingData, initializes: _platform, _platformID, _id)
         init(initialValue) {
-            _$backingData.setValue(forKey: \.id, to: initialValue.string)
-            _id = _SwiftDataNoType()
+            let (platform, platformID, string) = (initialValue.platform, initialValue.platformID, initialValue.string)
+            _$backingData.setValue(forKey: \.platform,   to: platform.rawValue)
+            _$backingData.setValue(forKey: \.platformID, to: platformID)
+            _$backingData.setValue(forKey: \.id,         to: string)
+            
+            _platform   = _SwiftDataNoType()
+            _platformID = _SwiftDataNoType()
+            _id         = _SwiftDataNoType()
         }
-
-        get { ModelID(id) }
-        set { id = newValue.string }
+        get {
+            .init(platform: .init(rawValue: platform)!, platformID: platformID)
+        }
+        set {
+            platform   = newValue.platform.rawValue
+            platformID = newValue.platformID
+            id = newValue.string
+        }
     }
     
-    /*private var id: ID {
-        @storageRestrictions(accesses: _$backingData, initializes: __id)
-        init(initialValue) {
-            _$backingData.setValue(forKey: \._id, to: initialValue.rawValue)
-            __id = _SwiftDataNoType()
-        }
-
-        get { ID(_id) }
-        set { _id = newValue.rawValue }
-    }*/
-    
     var username: String
+    
     var orderIndex = 0
     // var isDeleted = false
-        
+    
     /// Account.root <-> MailFolder.account
     @Relationship(deleteRule: .nullify)
     var root: MailFolder?
@@ -49,14 +55,11 @@ class Account {
     var mailFolders: [MailFolder] = []
     
     init(modelID: ModelID, username: String, orderIndex: Int) {
-        self.modelID    = modelID
-        self.username   = username
-        self.orderIndex = orderIndex
+        self.modelID            = modelID
+        
+        self.username           = username
+        self.orderIndex         = orderIndex
     }
-    
-    @MainActor  // for isBusy
-    @Attribute(.ephemeral)
-    var isBusy = false
     
     var deleteMark = false {
         didSet {
@@ -65,8 +68,108 @@ class Account {
             }
         }
     }
+    
+    var account: Account { self }
+    
+    //@Attribute(.ephemeral)
+    //@MainActor
+    
+    //@Attribute(.ephemeral)
+    //@MainActor
+    //var ephemeralPropertiesUpdated = UUID()
 }
 
+@MainActor
+extension Account {
+    var platformState: PlatformState {
+        session != nil ? .hasSession : .noSession
+    }
+    
+    var isBusy: Bool {
+        get {
+            _$observationRegistrar.access(self, keyPath: \.isBusy)
+            return Self.self[self].isBusy
+        }
+        set {
+            _$observationRegistrar.withMutation(of: self, keyPath: \.isBusy) {
+                Self.self[self].isBusy = newValue
+            }
+        }
+    }
+    
+    var session: Session? {
+        get {
+            _$observationRegistrar.access(self, keyPath: \.session)
+            return Self.self[self].session
+        }
+        set {
+            _$observationRegistrar.withMutation(of: self, keyPath: \.session) {
+                Self.self[self].session = newValue
+            }
+        }
+    }
+    
+    
+   /* @Attribute(.ephemeral)
+    var hasSession: Bool?
+    
+    var state: PlatformState? {
+        hasAccount.map { $0 ? PlatformState.hasAccount(hasSession.map{ $0 ? .hasSession : .noSession }) : PlatformState.noAccount }
+    }*/
+    
+    enum PlatformState : String, Codable {
+        case noSession // no account return from platform client cached account store
+        case hasSession // no valid session return from platform client cached account
+        //case needRefreshToken
+        //case valid
+    }
+    
+    static var ephemeralStore = [Account.ModelID: Properties]()
+    
+    static subscript(model: Account) -> Properties {
+        get {
+            let properties = ephemeralStore[model.modelID, default: Properties()]
+            ephemeralStore[model.modelID] = properties
+            return properties
+        }
+        set {
+            ephemeralStore[model.modelID] = newValue
+        }
+    }
+    
+    struct Properties {
+        var isBusy = false
+        var session: Session?
+    }
+}
+
+enum Session {
+    case microsoft(id: Microsoft.Account.ID, msalSession: Microsoft.MSALSession)
+    case google(id: Google.Account.ID, gtmSession: Google.GTMAuthSession, keychain : SecKeychainItem)
+}
+
+extension Session {
+    var  modelID: Account.ModelID {
+        switch self {
+        case .microsoft(id: let id, msalSession: _): id.modelID
+        case .google(id: let id, gtmSession: _, keychain: _): id.modelID
+        }
+    }
+    
+    var newAccount: Account {
+        get throws {
+            switch self {
+            case .microsoft(id: let id, msalSession: let msalSesion):
+                let modelID = id.modelID
+                guard let username = msalSesion.account.username else { throw Microsoft.AuthError.accountNoIDOrUsername }
+                return Account.init(modelID: modelID, username: username, orderIndex: 0)
+            case .google(id: let id, gtmSession: let gtmSession, keychain: let keychain):
+                guard let username = gtmSession.userEmail else { throw Microsoft.AuthError.accountNoIDOrUsername }
+                return Account.init(modelID: id.modelID, username: username, orderIndex: 0)
+            }
+        }
+    }
+}
 
 
 // print("id", id)

@@ -1,55 +1,58 @@
 //
-//  MSALApp.swift
+//  MSGraph.Session.swift
 //  JetEmail
 //
-//  Created by Cao, Jiannan on 1/31/24.
+//  Created by Cao, Jiannan on 2/18/24.
 //
 
-import SwiftUI
 import MSAL
-import SwiftData
-
-// MARK: - MSGraph.Context: App-Accounts API
 
 
-extension MSGraph.Client {
-    func addAccount() async throws -> MSGraph.Account {
-        try await _addAccount()
+
+
+/*
+
+extension Microsoft {
+    struct Session {
+        let endpointURL         : URL
+        let accessToken         : String
+        let authorizationHeader : String
+        let authenticationScheme: String
+        let expiresOn           : Date?
     }
     
-    func accounts() throws -> [MSGraph.Account] {
-        try client.allAccounts().map(MSGraph.Account.init)
-    }
-    
-    func account(graphID: MSGraph.Account.ID) throws -> MSGraph.Account {
-        guard let account = try accounts().first(where: { $0.id == graphID }) else {
-            throw MSGraphError.noAccountFound
-        }
-        return account
-        /*let parameters = MSALAccountEnumerationParameters(identifier: id.rawValue)
-        // parameters.returnOnlySignedInAccounts = true
-        guard let account = try await client.accountsFromDevice(for: parameters).first else {
-            throw MSGraphError.noAccountFound
-        }
-        return try .init(account)*/
-    }
-    
-    func removeAccount(graph: MSGraph.Account) async throws {
-        let parameters = MSALSignoutParameters(webviewParameters: self.webViewParameters)
-        try await self.client.signout(with: graph.msal, signoutParameters: parameters)
-    }
-    
-    fileprivate func accessToken(account: MSGraph.Account) async throws -> String {
-        let parameters = MSALSilentTokenParameters(scopes: scopes, account: account.msal)
-        return try await self.client.acquireTokenSilent(with: parameters).accessToken
+}
+
+
+
+extension Microsoft.Session {
+    init(endpointURL: URL, result: MSALResult) {
+        self.init(
+            endpointURL         : endpointURL,
+            accessToken         : result.accessToken,
+            authorizationHeader : result.authorizationHeader,
+            authenticationScheme: result.authenticationScheme,
+            expiresOn           : result.expiresOn
+        )
+        
+        
+        /*
+         print(result.authority.url) // https://login.microsoftonline.com/9188040d-6c67-4c5b-b112-36a304b66dad
+         print(result.tenantProfile.environment) // login.windows.net
+         print(result.tenantProfile.identifier) // 00000000-0000-0000-6a55-0f478222bc8f
+         print(result.tenantProfile.tenantId) // 9188040d-6c67-4c5b-b112-36a304b66dad
+         print(result.tenantProfile.isHomeTenantProfile)
+         */
     }
 }
+
+*/
 
 
 // MARK: - MSGraph.Context: Account-MailFolders API
 
-extension CombineContext<MSGraph.Client, MSGraph.Account> {
-    func getRootMailFolder() async throws -> MSGraph.MailFolder {
+extension Microsoft.Account {
+    func getRootMailFolder() async throws -> Microsoft.MailFolder {
         try await getMailFolder(wellKnownFolderName: .msgFolderRoot)
     }
       
@@ -57,15 +60,15 @@ extension CombineContext<MSGraph.Client, MSGraph.Account> {
         try await getItems("mailFolders")
     }*/
     
-    func getChildFolders(graphID: MSGraph.MailFolder.ID) async throws -> [MSGraph.MailFolder]  {
-        try await getItems("mailFolders", "\(graphID)", "childFolders")
+    func getChildFolders(microsoftID: Microsoft.MailFolder.ID) async throws -> [Microsoft.MailFolder]  {
+        try await getItems("mailFolders", "\(microsoftID)", "childFolders")
     }
     
-    fileprivate func getMailFolder(graphID: MSGraph.MailFolder.ID)  async throws -> MSGraph.MailFolder {
-        try await getItem("mailFolders", "\(graphID)")
+    fileprivate func getMailFolder(microsoftID: Microsoft.MailFolder.ID)  async throws -> Microsoft.MailFolder {
+        try await getItem("mailFolders", "\(microsoftID)")
     }
     
-    fileprivate func getMailFolder(wellKnownFolderName: MSGraph.MailFolder.WellKnownFolderName) async throws -> MSGraph.MailFolder {
+    fileprivate func getMailFolder(wellKnownFolderName: Microsoft.MailFolder.WellKnownFolderName) async throws -> Microsoft.MailFolder {
         try await getItem("mailFolders", "\(wellKnownFolderName)")
     }
     
@@ -77,11 +80,11 @@ extension CombineContext<MSGraph.Client, MSGraph.Account> {
 
 // MARK: - MSGraph: MailFolder-Messaages API
 
-extension CombineContext<MSGraph.Client, MSGraph.Account> {
+extension Microsoft.Account {
     
     // https://learn.microsoft.com/en-us/graph/api/mailfolder-list-messages
-    func getMessages(graphID: MSGraph.MailFolder.ID) async throws -> [MSGraph.Message] {
-        try await getItems("mailFolders", "\(graphID)", "messages", queryItems: [
+    func getMessages(microsoftID: Microsoft.MailFolder.ID) async throws -> [Microsoft.Message] {
+        try await getItems("mailFolders", "\(microsoftID)", "messages", queryItems: [
             .orderBy(name: "receivedDateTime", .descending),
             .select(
                 "id",
@@ -104,11 +107,11 @@ extension CombineContext<MSGraph.Client, MSGraph.Account> {
 
 // MARK: - MSGraph: Messaage API
 
-extension CombineContext<MSGraph.Client, MSGraph.Account> {
+extension Microsoft.Account {
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
-    func getMessageBody(graphID: MSGraph.Message.ID) async throws -> MSGraph.Message {
-        try await getItem("messages", "\(graphID)", queryItems: [
+    func getMessageBody(microsoftID: Microsoft.Message.ID) async throws -> Microsoft.Message {
+        try await getItem("messages", "\(microsoftID)", queryItems: [
             .select(
                 "id",
                 "subject",
@@ -132,34 +135,34 @@ extension CombineContext<MSGraph.Client, MSGraph.Account> {
 
 // MARK: - MSGraph: Get, Post API
 
-fileprivate extension CombineContext<MSGraph.Client, MSGraph.Account> {
+fileprivate extension Microsoft.Account {
 
-    var accessToken: String {
+    var endpointURL: URL { client.endpointURL }
+    
+    /*var authorizationHeader: String {
         get async throws {
-            let client = context
-            let account = item
-            return try await client.accessToken(account: account)
+            try await session.authorizationHeader
         }
-    }
+    }*/
 
     func getResponse<Value: Decodable>(url: URL, _ type: Value.Type = Value.self) async throws -> Value {
-        try await URLRequest._get(url: url)._settingAuthorization(accessToken: accessToken)._response()
+        try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader)._response()
     }
     
     func postResponse<RequestBody: Encodable, Value: Decodable>(url: URL, body: RequestBody, _ type: Value.Type = Value.self) async throws -> Value {
-        try await URLRequest._post(url: url, body: body)._settingAuthorization(accessToken: accessToken)._response()
+        try await URLRequest._post(url: url, body: body)._settingAuthorization(header: authorizationHeader)._response()
     }
         
     func getItem<Value: Decodable>(_ paths: String..., queryItems: [URLQueryItem] = [], _ type: Value.Type = Value.self) async throws -> Value {
-        let url = paths.reduce(self.endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems)
+        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems)
         return try await getResponse(url: url)
     }
     
     func getItems<Value: Decodable>(type: Value.Type = Value.self,  _ paths: String..., queryItems: [URLQueryItem] = []) async throws -> [Value] {
-        let url = paths.reduce(self.endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems).appending(queryItems: [.count()])
+        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems).appending(queryItems: [.count()])
         let countResponse: GraphCollectionResponse<Value> = try await getResponse(url: url)
         
-        guard let count = countResponse.count else { throw MSGraphError.collectionResponseNoCount }
+        guard let count = countResponse.count else { throw Microsoft.AuthError.collectionResponseNoCount }
         
         let items = countResponse.value
         if count == items.count {
@@ -171,7 +174,7 @@ fileprivate extension CombineContext<MSGraph.Client, MSGraph.Account> {
     }
     
     func postItem<RequestBody: Encodable, Value: Decodable>(type: Value.Type = Value.self, _ paths: String..., body: RequestBody) async throws -> Value {
-        let url = paths.reduce(self.endpointURL) { $0.appending(path: $1) }
+        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }
         return try await postResponse(url: url, body: body)
     }
 }
@@ -202,7 +205,7 @@ fileprivate struct GraphCollectionResponse<Value : Decodable> : Decodable {
 
 // https://learn.microsoft.com/en-us/graph/errors#error-resource-type
 fileprivate struct GraphErrorResponse : Codable {
-    let error: MSGraph.PublicError
+    let error: Microsoft.PublicError
 }
 
 // typealias JSON<T: Any> = [String: T] where T: Codable
@@ -234,9 +237,9 @@ fileprivate extension URLRequest {
         _post(url: url, bodyData: try body.jsonData)
     }
     
-    func _settingAuthorization(accessToken: String) -> Self {
+    func _settingAuthorization(header: String) -> Self {
         var request = self
-        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(header, forHTTPHeaderField: "Authorization")
         return request
     }
     
@@ -246,10 +249,10 @@ fileprivate extension URLRequest {
     }
     
     func handleGraphResponse<T: Decodable>(_ type: T.Type, from data: Data) throws -> T {
-        let result = Result{ try data.jsonDecode(type) }
+        let result = Result{ try data.decodeJSON(type) }
         switch result {
         case .failure(let failure):
-            if let error = try? data.jsonDecode(GraphErrorResponse.self).error {
+            if let error = try? data.decodeJSON(GraphErrorResponse.self).error {
                 throw error
             } else {
                 throw failure
@@ -408,3 +411,33 @@ extension MSGraph.Context {
     }
 }
  */
+
+/*let items = {
+    var value: CFTypeRef?
+    
+    let kGeneralTypePrefix = 3000
+    let query = [
+        ✅kSecMatchLimit               : kSecMatchLimitAll as String, // kSecMatchLimitAll
+        
+        kSecUseDataProtectionKeychain: true,
+
+        ✅kSecAttrAccessGroup2          : "ED72FQVT6C.com.microsoft.identity.universalstorage",
+        ✅kSecClass                    : kSecClassGenericPassword as String,
+        kSecReturnAttributes         : true,
+        kSecReturnData               : true,
+        kSecAttrType                 : kGeneralTypePrefix + MSIDGeneralCacheItemType.appMetadataType.rawValue
+    ]  as [String: Any]
+    
+    assert(SecItemCopyMatching(query as CFDictionary, &value) == errSecSuccess)
+    
+    let items = value as! [NSDictionary]
+    return items.map { item in
+        let data = item[kSecValueData as String] as! Data
+        let cacheItem = MSIDCacheItemJsonSerializer().deserializeCacheItem(data, of: MSIDAppMetadataCacheItem.self) as! MSIDAppMetadataCacheItem
+        return cacheItem
+    }
+}()*/
+
+// SecItemAdd
+
+

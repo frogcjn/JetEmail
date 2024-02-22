@@ -9,11 +9,7 @@ import SwiftUI
 import SwiftData // for @Query
 
 fileprivate struct _MessageList : View {
-
-    @Environment(AppContext.Item<MailFolder>.self)
-    var context
-    
-    @Environment(MailFolder.self)
+    @Environment(AppItemModel<MailFolder>.self)
     var mailFolder
 
     @Environment(MailWindowModel.self)
@@ -25,7 +21,7 @@ fileprivate struct _MessageList : View {
     var body: some View {
         List(messages, selection: Bindable(window).selectedMessage) { item in
             MessageCell()
-                .appContext(item: item)
+                .itemModel(item)
                 .tag(item)
         }
         .safeAreaInset(edge: .top) {
@@ -33,8 +29,8 @@ fileprivate struct _MessageList : View {
         }
         
         // Feature: Account - Load Messages
-        .onChange(of: mailFolder, initial: true) {
-            Task { await context.loadMessages() }
+        .onChange(of: mailFolder.item, initial: true) {
+            Task { await mailFolder.loadMessages() }
         }
     }
 }

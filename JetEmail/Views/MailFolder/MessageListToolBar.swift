@@ -9,14 +9,14 @@ import SwiftUI
 
 struct MailFolderMessageListToolBar : View {
     
-    @Environment(AppContext.Item<MailFolder>.self)
-    var context
+    @Environment(AppItemModel<MailFolder>.self)
+    var mailFolder
     
     var body: some View {
         HStack {            
             // Feature: Account - Load Messages
             Spacer()
-            RefreshButton(isBusy: context.item.isBusy) { await context.loadMessages() }
+            RefreshButton(isBusy: mailFolder.isBusy) { await mailFolder.loadMessages() }
             Spacer()
         }.background(.bar)
     }

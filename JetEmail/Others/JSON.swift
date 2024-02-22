@@ -275,7 +275,7 @@ extension JSON {
     /// encoded JSON value the `Encodable` is serialized into.
     public init<T: Encodable>(encodable: T) throws {
         let encoded = try encodable.jsonData
-        self = try encoded.jsonDecode(JSON.self)
+        self = try encoded.decodeJSON(JSON.self)
     }
 }
 

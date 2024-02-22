@@ -8,14 +8,14 @@
 import Foundation
 
 extension String {
-    func jsonDecode<T: Decodable>(_ type: T.Type) throws -> T {
-        guard let data = data(using: .utf8) else { throw FoudnationError.stringToData}
-        return try data.jsonDecode(type)
+    func decodeJSON<T: Decodable>(_ type: T.Type) throws -> T {
+        guard let data = data(using: .utf8) else { throw FoudnationError.stringToData }
+        return try data.decodeJSON(type)
     }
 }
 
 extension Data {
-    func jsonDecode<T: Decodable>(_ type: T.Type) throws -> T {
+    func decodeJSON<T: Decodable>(_ type: T.Type) throws -> T {
         try JSONDecoder().decode(T.self, from: self)
     }
 }
@@ -88,6 +88,7 @@ extension Collection {
 }
 
 
-
-
-
+@globalActor
+actor BackgroundActor {
+    static let shared = BackgroundActor()
+}

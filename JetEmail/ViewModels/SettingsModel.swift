@@ -17,4 +17,6 @@ class SettingsModel {
     @ObservableUserDefault(.init(key: "isShowingWithDarkBackground", defaultValue: false, store: .standard))
     @ObservationIgnored
     var isShowingWithDarkBackground: Bool
+    
+    static var shared = SettingsModel()
 }

@@ -39,15 +39,41 @@ enum ClassifyError : Error {
     case noArchiveFolder
 }
 
-enum MSGraphError : Error {
-    case accountNoIDOrUsername
-    case collectionResponseNoCount
-    case noAccountFound
+extension Microsoft {
+    enum AuthError : Error {
+        case accountNoIDOrUsername
+        case collectionResponseNoCount
+        case noAccountFound
+        case notRightPlatform
+    }
 }
+
+extension Google {
+    /*struct AuthError: LocalizedError {
+        var message: String
+    }*/
+    
+    enum AuthError : LocalizedError {
+        case accountNoIDOrUsername
+        case currentAuthorizationFlowIsExisted
+        
+        case sessionStoreAddFail
+        case accountStoreExistedWhenAddNewToKeychain(Google.Session)
+        case accountStoreNotExistedWhenAddDuplicatedFound(Google.Account.ID)
+        case accountStoreNotExistedWhenDelete(Google.Account.ID)
+        case accountStoreNotExistedWhenUpdate(Google.Account.ID)
+
+        case authorizeNoMainWindow
+        case message(String)
+        case decodeFromKeychainError
+        case noAccountFound
+    }
+}
+
 
 struct JSONInitializationError: Error {}
 
-extension MSGraph {
+extension Microsoft {
     struct PublicError : Codable, Error {
         let code: String?
         let message: String?
@@ -56,17 +82,6 @@ extension MSGraph {
     }
 }
 
-extension GoogleAPI {
-    /*struct AuthError: LocalizedError {
-        var message: String
-    }*/
-    
-    enum AuthError : LocalizedError {
-        case currentAuthorizationFlowIsExisted
-        case noMainWindow
-        case message(String)
-    }
-}
 
 /*enum MSALAPIError : Error {
     case description(String)
