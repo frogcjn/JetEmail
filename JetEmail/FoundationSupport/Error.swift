@@ -103,8 +103,6 @@ enum GmailApiError: Error {
     case failedToParseData(Any?)
     /// Can't get GTLREncodeBase64 data
     case messageEncode
-    /// Message doesn't have any payload
-    case missingMessagePayload
     /// Missing message part
     case missingMessageInfo(String)
     /// Provider Error
@@ -191,3 +189,4 @@ public extension Error {
         }
     }
 }
+

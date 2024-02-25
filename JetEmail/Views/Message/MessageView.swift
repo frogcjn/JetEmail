@@ -26,49 +26,22 @@ struct MessageView : View {
                 
                 Divider()
                 
-                if let sender = message.sender, sender != message.from {
-                    LabeledContent("sender:", value: sender)
-                }
-                if let from = message.from {
-                    LabeledContent("from:", value: from)
-                }
-                if let to = message.to {
-                    LabeledContent("to:", value: to.joined(separator: ", "))
-                }
-                
-                if let replyTo = message.replyTo {
-                    LabeledContent("replayTo:", value: replyTo.joined(separator: ", "))
-                }
-                
-                if let cc = message.cc {
-                    LabeledContent("cc:", value: cc.joined(separator: ", "))
-                }
-                
-                if let bcc = message.bcc {
-                    LabeledContent("bcc:", value: bcc.joined(separator: ", "))
-                }
+                if let from    = message.from                             { LabeledContent("from:"    , value: from)    }
+                if let sender  = message.sender,   sender != message.from { LabeledContent("sender:"  , value: sender)  }
+                if let replyTo = message.replyTo                          { LabeledContent("replayTo:", value: replyTo) }
+
+                if let to      = message.to                               { LabeledContent("to:"      , value: to )     }
+                if let cc      = message.cc                               { LabeledContent("cc:"      , value: cc)      }
+                if let bcc     = message.bcc                              { LabeledContent("bcc:"     , value: bcc )    }
                 
                 Divider()
                 
                 if let bodyPreview = message.bodyPreview {
                     LabeledContent("bodyPreview:", value: bodyPreview)
                 }
-
-                /*LabeledContent("replyTo:") {
-                 Text(model.replyTo?.map(\.nameAndAddress).joined(separator: ", ") ?? "nil")
-                 }*/
-                
-                /*LabeledContent("cc:") {
-                    Text(message.ccRecipients?.map(\.nameAndAddress) ?? "nil")
-                }*/
-                
-
-                        
             }
             
-            if let body = message.body {
-                EmailBodyView(itemBody: body)
-            }
+            EmailBodyView(messageBody: message.body)
             Spacer()
         }
         .overlay {
@@ -89,7 +62,7 @@ struct MessageView : View {
                 Text(resultText)
             }*/
         }*/
-        .onChange(of: message.item.body, initial: true) {
+        .onChange(of: message.item, initial: true) {
             Task { await message.loadBody() }
         }
     }
@@ -100,23 +73,24 @@ struct EmailBodyView : View {
     @Environment(SettingsModel.self)
     var appSettings
     
-    var itemBody: Microsoft.ItemBody
+    let messageBody: Message.Body?
     
     var body: some View {
-        switch (itemBody.contentType, itemBody.content)  {
-        case (.html, let htmlString?):
-            WebView(htmlString: htmlString)
-        case (.text, let text?):
-            if appSettings.isShowingWithDarkBackground {
-                Text(text)
+        if let messageBody {
+            if let html = messageBody.html  {
+                WebView(htmlString: html)
             } else {
-                Group {
-                    Text(text)
-                        .background(.background)
+                if appSettings.isShowingWithDarkBackground {
+                    Text(messageBody.text)
+                } else {
+                    Group {
+                        Text(messageBody.text)
+                            .background(.background)
+                    }
+                    .environment(\.colorScheme, .light)
                 }
-                .environment(\.colorScheme, .light)
             }
-        default:
+        } else {
             Color.clear
         }
     }

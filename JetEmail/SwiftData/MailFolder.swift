@@ -73,11 +73,7 @@ class MailFolder : ModelItem {
     
     var _graph: String?
     var _google: String?
-    
-    @MainActor  // for isBusy
-    @Transient
-    var isBusy = false
-    
+
     var deleteMark = false {
         didSet {
             if deleteMark {
@@ -86,6 +82,37 @@ class MailFolder : ModelItem {
         }
     }
     
+}
+
+extension MailFolder {
+    
+    var isBusy: Bool {
+        get { AttributesStore[modelID].isBusy }
+        set { AttributesStore[modelID].isBusy = newValue }
+    }
+    
+    var appModel: AppModel { .shared }
+}
+
+extension MailFolder {
+    @Observable
+    class AttributesStore {
+        var rawValue = [MailFolder.ModelID: MailFolder.Attributes]()
+        
+        static subscript(modelID: MailFolder.ModelID) -> MailFolder.Attributes {
+            get {
+                if let properties = shared.rawValue[modelID] { return properties }
+                let properties = MailFolder.Attributes()
+                shared.rawValue[modelID] = properties
+                return properties
+            }
+            set { shared.rawValue[modelID] = newValue }
+        }
+    }
+    
+    struct Attributes {
+        var isBusy = false
+    }
 }
             
     /*var graph: MSGraph.MailFolder {

@@ -423,7 +423,7 @@ extension Microsoft.Message {
     }*/
 }
 
-extension Google.Message {
+extension Google.Message.Full {
     var modelID: Message.ModelID {
         .init(platform: .google, platformID: id.string)
     }

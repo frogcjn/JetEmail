@@ -18,6 +18,7 @@ extension String {
 }
 
 extension Data {
+    // // String(decoding: self, as: UTF8.self)
     var string: String { get throws {
         guard let string = String(data: self, encoding: .utf8) else { throw FoudnationError.dataToString }
         return string
@@ -55,21 +56,21 @@ extension Encodable {
 
 import SwiftData
 
-extension PersistentModel {
+/*extension PersistentModel {
     func to(_ modelContext: ModelContext) throws -> Self {
         guard let transfered = modelContext.model(for: persistentModelID) as? Self else {
             throw SwiftDataError.noModelInstance(id: persistentModelID, in: modelContext)
         }
         return transfered
     }
-}
-
+}*/
+/*
 extension Sequence where Element: PersistentModel {
     func to(_ modelContext: ModelContext) throws -> [Element] {
         try map { try $0.to(modelContext) }
     }
 }
-
+*/
 
 
 extension Collection {
@@ -144,4 +145,25 @@ extension Int64 {
 
 extension Locale {
     static let enUSPosix = Locale(identifier: "en_US_POSIX")
+}
+
+
+extension String {
+    var isHTMLString: Bool {
+        do {
+            let regex = try NSRegularExpression(pattern: "<[a-z][\\s\\S]*>", options: .caseInsensitive)
+            let range = NSRange(startIndex..., in: self)
+            return regex.firstMatch(in: self, options: [], range: range) != nil
+        } catch {
+            return false
+        }
+    }
+
+    var removingHtmlTags: String {
+        if isHTMLString {
+            replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
+        } else {
+            self
+        }
+    }
 }

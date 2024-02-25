@@ -339,7 +339,7 @@ extension ModelContext {
         return model
     }
     
-    func _insertMessage(google: Google.Message, in mailFolder: MailFolder) throws -> Message {
+    func _insertMessage(google: Google.Message.Full, in mailFolder: MailFolder) throws -> Message {
         let id = google.modelID
         
         // find existed
@@ -347,21 +347,17 @@ extension ModelContext {
             
             // If found: update
             model.deleteMark = false
-            model.google = google
+            try model.setGoogle(google)
             model.mailFolder = mailFolder
             return model
         }
         
         // If not found: create
         let model = Message(modelID: google.modelID, in: mailFolder)
-        model.google = google
+        try model.setGoogle(google)
         insert(model)
         return model
     }
-    
-    
-    
-    
     
 }
 
@@ -562,7 +558,7 @@ extension BackgroundModelActor {
     }
     
     
-    func setMessages(googles messages: [Google.Message], in mailFolderID: PersistentID<MailFolder>) throws -> [PersistentID<Message>] {
+    func setMessages(googles messages: [Google.Message.Full], in mailFolderID: PersistentID<MailFolder>) throws -> [PersistentID<Message>] {
         BackgroundModelActor.assertIsolated()
         let mailFolder = self[mailFolderID]!
         do {
@@ -601,11 +597,11 @@ extension BackgroundModelActor {
         }
     }
     
-    func setMessage(google: Google.Message, to messageID: Message.ModelID) throws -> PersistentID<Message> {
+    func setMessage(google: Google.Message.Full, to messageID: Message.ModelID) throws -> PersistentID<Message> {
         BackgroundModelActor.assertIsolated()
         let message = try modelContext._fetchMessage(modelID: messageID)!
         do {
-            message.google = google
+            try message.setGoogle(google)
             try modelContext.save()
             return message.persistentID
         } catch {

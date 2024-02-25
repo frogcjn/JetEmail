@@ -42,6 +42,15 @@ extension AccountAttributesStore {
     static var shared = AccountAttributesStore()
 }
 
+extension MailFolder.AttributesStore {
+    static var shared = MailFolder.AttributesStore()
+}
+
+extension Message.AttributesStore {
+    static var shared = Message.AttributesStore()
+}
+
+
 @globalActor
 @ModelActor
 actor BackgroundModelActor {

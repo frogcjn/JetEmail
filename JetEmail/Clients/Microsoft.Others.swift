@@ -40,20 +40,13 @@ extension Microsoft {
     
     struct Recipient : Codable {
         let emailAddress: EmailAddress?
-        var rawValue: String {
-            emailAddress?.rawValue ?? "nil"
-        }
     }
     
     // https://learn.microsoft.com/en-us/graph/api/resources/emailaddress
     
     struct EmailAddress: Codable {
-        let address: String?
+        let address: String
         let name: String?
-        
-        var rawValue: String {
-            (name ?? "nil") + " " + "<\(address ?? "nil")>"
-        }
     }
     
     // https://learn.microsoft.com/en-us/graph/api/resources/followupFlag

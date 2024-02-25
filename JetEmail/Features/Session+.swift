@@ -100,7 +100,7 @@ extension Microsoft.Session {
 extension Google.Keychain.SessionItem {
     var lazySession: Google.Session {
         if let session = Google.Session[accountID] {
-            assert(session.keychainItem === keychainItem)
+            assert(session.keychainItem == keychainItem)
             return session
         }
         return newSession

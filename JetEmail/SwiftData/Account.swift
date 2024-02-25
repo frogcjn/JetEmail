@@ -71,8 +71,18 @@ final class Account : ModelItem {
 
 extension Account {
     
+    var session: Session? {
+        get { AccountAttributesStore[modelID].session }
+        set { AccountAttributesStore[modelID].session = newValue }
+    }
+    
     var platformState: PlatformState {
         session != nil ? .hasSession : .noSession
+    }
+    
+    enum PlatformState : String, Codable {
+        case noSession // no account return from platform client cached account store
+        case hasSession // no valid session return from platform client cached account
     }
     
     var isBusy: Bool {
@@ -80,17 +90,7 @@ extension Account {
         set { AccountAttributesStore[modelID].isBusy = newValue }
     }
     
-    var session: Session? {
-        get { AccountAttributesStore[modelID].session }
-        set { AccountAttributesStore[modelID].session = newValue }
-    }
-    
     var appModel: AppModel { .shared }
-    
-    enum PlatformState : String, Codable {
-        case noSession // no account return from platform client cached account store
-        case hasSession // no valid session return from platform client cached account
-    }
 }
 
 @Observable
@@ -112,8 +112,6 @@ class AccountAttributesStore {
         var isBusy = false
     }
 }
-
-
 
 // print("id", id)
 // 00000000-0000-0000-6a55-0f478222bc8f.9188040d-6c67-4c5b-b112-36a304b66dad
