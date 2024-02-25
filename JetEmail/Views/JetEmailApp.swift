@@ -12,7 +12,8 @@ import SwiftData
 struct JetEmailApp: App {
     
     // state here associate with application for all windows
-    private let appModel = AppModel()
+    private let appModel = AppModel.shared
+    
     var body: some Scene {
         Group {
             /// Settings

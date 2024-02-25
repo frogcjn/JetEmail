@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/19/24.
 //
 
-
+/*
 
 extension Google.Client {
     
@@ -17,11 +17,11 @@ extension Google.Client {
         get async throws { try await sessionStore.sessions.map(\.account) }
     }
     
-    func deleteAccount(id: Google.Account.ID) async throws -> Google.Account? {
+    func deleteAccount(id: Google.ID) async throws -> Google.Account? {
         try await sessionStore.deleteSession(id: id)?.account
     }
     
-    func account(id: Google.Account.ID) async throws -> Google.Account {
+    func account(id: Google.ID) async throws -> Google.Account {
         guard let account = try await sessionStore.session(id: id)?.account else { throw Google.AuthError.noAccountFound }
         return account
     }
@@ -30,11 +30,11 @@ extension Google.Client {
         try await sessionStore.refreshSession(account: account)
     }*/
     
-    func hasAccount(id: Google.Account.ID) async -> Bool {
+    func hasAccount(id: Google.ID) async -> Bool {
         (try? await account(id: id)) != nil
     }
     
-    func hasSession(id: Google.Account.ID) async throws -> Bool {
+    func hasSession(id: Google.ID) async throws -> Bool {
         (try await sessionStore.session(id: id)) != nil
     }
 }
@@ -44,7 +44,7 @@ extension Google.Client {
     /*func signInSession() async throws -> Google.SessionKeychainStore.Item {
         let gtmSession = try await _gtmSignIn()
         guard let stringID = gtmSession.userID, let username = gtmSession.userEmail else { throw Google.AuthError.accountNoIDOrUsername }
-        let id = Google.Account.ID(string: stringID)
+        let id = Google.ID(string: stringID)
         // add session
         
         // try to find existed session
@@ -72,12 +72,12 @@ extension Google {
         unowned let client: Google.Client
         init(client: Google.Client) { self.client = client }
         
-        private var _rawValue = [Google.Account.ID: Google.Session]()
+        private var _rawValue = [Google.ID: Google.Session]()
 
         func signInSession() async throws -> Google.Session {
             let gtmSession = try await client._gtmSignIn()
             guard let stringID = gtmSession.userID, let username = gtmSession.userEmail else { throw Google.AuthError.accountNoIDOrUsername }
-            let id = Google.Account.ID(string: stringID)
+            let id = Google.ID(string: stringID)
             // add session
             
             // try to find existed session
@@ -123,7 +123,7 @@ extension Google {
             }
         }
         
-        fileprivate func deleteSession(id: Google.Account.ID) async throws -> Google.Session? {
+        fileprivate func deleteSession(id: Google.ID) async throws -> Google.Session? {
             if let item = try await SessionKeychainStore.shared.item(id: id) {
                 _ = try await SessionKeychainStore.shared.deleteItem(item)
             }
@@ -135,7 +135,7 @@ extension Google {
             return nil
         }
         
-        fileprivate func session(id: Google.Account.ID) async throws -> Google.Session? {
+        fileprivate func session(id: Google.ID) async throws -> Google.Session? {
             let item = try await SessionKeychainStore.shared.item(id: id)
             
             guard let item else {
@@ -204,3 +204,4 @@ extension Google.Account {
         self.init(client: session.sessionStore.client, id: session.id, username: session.username)
     }
 }*/
+*/

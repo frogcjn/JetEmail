@@ -9,30 +9,22 @@
 
 extension SettingsModel {
     
-    // Feature: Remove Account Unselection
-    func willRemoveAccount(_ account: Account) {
-        if selectedAccount == account {
-            selectedAccount = nil
-        }
+    // Feature: Unselection - Will Sign Out Account
+    func willSignOutAccount(_ account: Account) {
+        if selectedAccount == account { selectedAccount = nil }
     }
 }
 
 extension MailWindowModel {
     
-    // Feature: Unselection - Remove Account
-    func willRemoveAccount(_ account: Account) {
-        if selectedMessage?.mailFolder.account == account {
-            selectedMessage = nil
-        }
-        if selectedMailFolder?.account == account {
-            selectedMailFolder = nil
-        }
+    // Feature: Unselection - Will Sign Out Account
+    func willSignOutAccount(_ account: Account) {
+        if selectedMessage?.mailFolder.account == account { selectedMessage = nil }
+        if selectedMailFolder?.account == account { selectedMailFolder = nil }
     }
     
-    // Feature: Unselection - Change SelectedMailFolder
+    // Feature: Unselection - Change Selected Mail Folder
     func willChangeSelectedMailFolder(oldValue: MailFolder?, newValue: MailFolder?) {
-        if selectedMessage?.mailFolder != newValue {
-            selectedMessage = nil
-        }
+        if selectedMessage?.mailFolder != newValue { selectedMessage = nil }
     }
 }

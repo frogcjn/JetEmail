@@ -8,23 +8,28 @@
 import Foundation
 
 extension Google {
-    @globalActor
-    actor SessionKeychainStore {
-        static let shared = SessionKeychainStore()
-        
+    //@globalActor
+    actor Keychain {
         static let securityAttributeCreator           = "jtem".fourCharUInt32! /*Jet Email*/
         static let securityAttributeTypeGoogleAccount = "GGac".fourCharUInt32! /*Google Acccount*/
         
-        typealias Item = (id: Google.Account.ID, gtm: Google.GTMAuthSession, keychain: SecKeychainItem)
-         
-        func insertItem(id: Google.Account.ID, username: String, gtm gtmSession: Google.GTMAuthSession) throws -> Item {
-            if let item = try item(id: id) { item }
-            else if let item = try addItem(id: id, username: username, gtm: gtmSession) { item }
+        struct SessionItem {
+            let      accountID: Google.ID
+            let       username: String
+            let     gtmSession: Google.GTMSession
+            let   keychainItem: SecKeychainItem
+        }
+        
+        func insertItem(gtmSession: Google.GTMSession) throws -> SessionItem {
+            //SessionKeychain.assertIsolated()
+            if let item = try item(id: try gtmSession.id) { item }
+            else if let item = try addItem(gtmSession: gtmSession) { item }
             else { throw Google.AuthError.sessionStoreAddFail }
         }
         
-        func addItem(id: Google.Account.ID, username: String, gtm gtmSession: Google.GTMAuthSession) throws -> Item? {
-            SessionKeychainStore.assertIsolated()
+        func addItem(gtmSession: Google.GTMSession) throws -> SessionItem? {
+            let (id, username) = try gtmSession.idAndUsername
+            //SessionKeychain.assertIsolated()
             let attributes = [
                 
                 /* class */
@@ -35,9 +40,8 @@ extension Google {
                 kSecAttrCreator              : Self.securityAttributeCreator,              // mark creator: Jet Email
                 kSecAttrType                 : Self.securityAttributeTypeGoogleAccount,    // mark a data type: Google Account
                 kSecAttrAccount              : id.string,                                  // unique id under location and type
-                
+                kSecAttrGeneric              : try username.data,
                 kSecAttrLabel                : "Jet Email - Google Account: \(username)",  // label
-                
                 /* protection attributes*/
                 kSecAttrAccessible           : kSecAttrAccessibleAfterFirstUnlock,
                 // kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly, (not migrate or recover from backup)
@@ -58,7 +62,7 @@ extension Google {
             switch resultCode {
             case errSecSuccess:
                 let keychainItem = value as! SecKeychainItem
-                return (id, gtmSession, keychainItem)
+                return .init(accountID: id, username: username, gtmSession: gtmSession, keychainItem: keychainItem)
             case errSecDuplicateItem:
                 return nil
             default: fatalError()
@@ -66,18 +70,18 @@ extension Google {
         }
         
         
-        func deleteItem(_ item: Item) throws -> Item {
-            SessionKeychainStore.assertIsolated()
+        func deleteItem(_ item: SessionItem) throws -> SessionItem {
+            //SessionKeychain.assertIsolated()
             let query = [
-                kSecValuePersistentRef: item.keychain
+                kSecValueRef: item.keychainItem
             ] as [String : Any]
             let resultCode = SecItemDelete(query as CFDictionary)
             assert(resultCode == errSecSuccess)
             return item
         }
         
-        func item(id: Google.Account.ID) throws -> Item? {
-            SessionKeychainStore.assertIsolated()
+        func item(id: Google.ID) throws -> SessionItem? {
+            //SessionKeychain.assertIsolated()
             
             let query =  [
                 
@@ -102,8 +106,8 @@ extension Google {
                 kSecMatchLimit               : kSecMatchLimitOne,
                 
                 /* return type */
+                kSecReturnAttributes         : true,
                 kSecReturnData               : true, // cannot use with kSecMatchLimitAll
-                // kSecReturnAttributes         : true,
                 kSecReturnRef                : true,
                 // kSecReturnPersistentRef      : true
             ] as [String: Any]
@@ -113,9 +117,11 @@ extension Google {
             switch resultCode {
             case errSecSuccess:
                 let attributes   = value as! [CFString: Any]
-                let keychainItem = attributes[kSecValueRef] as! SecKeychainItem
-                let gtmSession   = try (attributes[kSecValueData] as! Data).gtmSession
-                return (id, gtmSession, keychainItem)
+                
+                let username     = try (attributes[kSecAttrGeneric] as! Data).string
+                let keychainItem =      attributes[kSecValueRef]    as! SecKeychainItem
+                let gtmSession   = try (attributes[kSecValueData]   as! Data).gtmSession
+                return .init(accountID: id, username: username, gtmSession: gtmSession, keychainItem: keychainItem)
             case errSecItemNotFound:
                 return nil
             default: fatalError()
@@ -123,70 +129,71 @@ extension Google {
             
         }
         
-        func items() throws -> [Item] {
-            SessionKeychainStore.assertIsolated()
-            let query =  [
-                /* class */
-                kSecClass                    : kSecClassGenericPassword,
+    var items: [SessionItem] { get throws {
+        //SessionKeychain.assertIsolated()
+        let query =  [
+            /* class */
+            kSecClass                    : kSecClassGenericPassword,
+            
+            /* attributes */
+            kSecAttrService              : "me.frogcjn.jet-email.account.google", // location
+            kSecAttrCreator              : Self.securityAttributeCreator, // mark creator
+            kSecAttrType                 : Self.securityAttributeTypeGoogleAccount, // mark type
+            // kSecAttrAccount              : "118079304514516479465", // account
+            // kSecAttrLabel                : "Jet Email - Google Account: williamfrog@gmail.com", // name
+            
+            /* protection attributes */
+            kSecAttrAccessible           : kSecAttrAccessibleAfterFirstUnlock,
+            // kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly, (not migrate or recover from backup)
+            // kSecAttrAccessGroup          : "ED72FQVT6C.com.microsoft.identity.universalstorage",
+            // if kSecAttrAccessGroup set, kSecUseDataProtectionKeychain or kSecAttrSynchronizable must be true
+            // kSecUseDataProtectionKeychain: true,
+            // kSecAttrSynchronizable       : false,
+            // kSecUseAuthenticationContext       : "Authenticate to retrieve your secret!"
+            
+            kSecMatchLimit               : kSecMatchLimitAll,
+            
+            /* return type */
+            // kSecReturnData               : true, cannot use with kSecMatchLimitAll
+            kSecReturnAttributes         : true,
+            kSecReturnRef                : true,
+            kSecReturnPersistentRef      : true
+        ] as [String: Any]
+        // errSecParam
+        var value: CFTypeRef?
+        let resultCode = SecItemCopyMatching(query as CFDictionary, &value)
+        switch resultCode {
+        case errSecItemNotFound:
+            return []
+        case errSecSuccess:
+            let attriutesList = value as! [[CFString: Any]]
+            let items: [SessionItem] = try attriutesList.map { attributes in
                 
-                /* attributes */
-                kSecAttrService              : "me.frogcjn.jet-email.account.google", // location
-                kSecAttrCreator              : Self.securityAttributeCreator, // mark creator
-                kSecAttrType                 : Self.securityAttributeTypeGoogleAccount, // mark type
-                // kSecAttrAccount              : "118079304514516479465", // account
-                // kSecAttrLabel                : "Jet Email - Google Account: williamfrog@gmail.com", // name
-
-                /* protection attributes */
-                kSecAttrAccessible           : kSecAttrAccessibleAfterFirstUnlock,
-                // kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly, (not migrate or recover from backup)
-                // kSecAttrAccessGroup          : "ED72FQVT6C.com.microsoft.identity.universalstorage",
-                // if kSecAttrAccessGroup set, kSecUseDataProtectionKeychain or kSecAttrSynchronizable must be true
-                // kSecUseDataProtectionKeychain: true,
-                // kSecAttrSynchronizable       : false,
-                // kSecUseAuthenticationContext       : "Authenticate to retrieve your secret!"
-
-                kSecMatchLimit               : kSecMatchLimitAll,
+                let id           =     (attributes[kSecAttrAccount] as! String).googleID
+                let username     = try (attributes[kSecAttrGeneric] as! Data).string
+                let keychainItem =      attributes[kSecValueRef] as! SecKeychainItem
+                let query: [String: Any] = [
+                    kSecValueRef  : keychainItem,
+                    kSecReturnData: true,
+                ] as [String: Any]
                 
-                /* return type */
-                // kSecReturnData               : true, cannot use with kSecMatchLimitAll
-                kSecReturnAttributes         : true,
-                kSecReturnRef                : true,
-                kSecReturnPersistentRef      : true
-            ] as [String: Any]
-            // errSecParam
-            var value: CFTypeRef?
-            let resultCode = SecItemCopyMatching(query as CFDictionary, &value)
-            switch resultCode {
-            case errSecItemNotFound:
-                return []
-            case errSecSuccess:
-                let attriutesList = value as! [[CFString: Any]]
-                let items: [Item] = try attriutesList.map { attributes in
-                    
-                    let id = attributes[kSecAttrAccount] as! String
-                    let keychainItem = attributes[kSecValueRef] as! SecKeychainItem
-                    let query: [String: Any] = [
-                        kSecValueRef  : keychainItem,
-                        kSecReturnData: true,
-                    ] as [String: Any]
-                    
-                    var value: CFTypeRef?
-                    let resultCode = SecItemCopyMatching(query as CFDictionary, &value)
-                    assert(resultCode == errSecSuccess)
-                    let gtmSession = try (value as! Data).gtmSession
-                    
-                    return (.init(string: id), gtmSession, keychainItem)
-                }
-                return items
+                var value: CFTypeRef?
+                let resultCode = SecItemCopyMatching(query as CFDictionary, &value)
+                assert(resultCode == errSecSuccess)
+                let gtmSession = try (value as! Data).gtmSession
                 
-            default: fatalError()
+                return (.init(accountID: id, username: username, gtmSession: gtmSession, keychainItem: keychainItem))
             }
+            return items
+            
+        default: fatalError()
         }
+    }   }
         
-        func updateItem(_ item: Item) throws -> Item {
-            BackgroundActor.assertIsolated()
+        func updateItem(_ item: SessionItem) throws -> SessionItem {
+            // BackgroundActor.assertIsolated()
             let query = [
-                kSecValuePersistentRef: item.keychain
+                kSecValueRef: item.keychainItem
             ] as [String : Any]
             let attributesToUpdate = [
                 
@@ -197,7 +204,7 @@ extension Google {
                 //kSecAttrService              : "me.frogcjn.jet-email.account.google",      // mark location: Jet Email - Account - Google
                 //kSecAttrCreator              : Self.securityAttributeCreator,              // mark creator: Jet Email
                 //kSecAttrType                 : Self.securityAttributeTypeGoogleAccount,    // mark a data type: Google Account
-                kSecAttrAccount              : item.id,                                         // unique id under location and type
+                // kSecAttrAccount                : item.id.string,                                         // unique id under location and type
                 
                 //kSecAttrLabel                : "Jet Email - Google Account: \(item.username)",  // label
                 
@@ -210,7 +217,7 @@ extension Google {
                 // kSecAttrSynchronizable       : false,
                 
                 /* value */
-                kSecValueData                : try item.gtm.data,
+                kSecValueData                  : try item.gtmSession.data,
                 //kSecReturnAttributes         : true,
                 //kSecReturnRef                : true,
                 //kSecReturnPersistentRef      : true
@@ -224,7 +231,7 @@ extension Google {
     }
 }
 
-fileprivate extension Google.GTMAuthSession {
+fileprivate extension Google.GTMSession {
     var data: Data {
         get throws {
             let keyedArchiver = NSKeyedArchiver(requiringSecureCoding: true)
@@ -236,16 +243,50 @@ fileprivate extension Google.GTMAuthSession {
 }
 
 fileprivate extension Data {
-    var gtmSession: Google.GTMAuthSession {
+    var gtmSession: Google.GTMSession {
         get throws {
             let keyedUnarchiver = try NSKeyedUnarchiver(forReadingFrom: self)
             keyedUnarchiver.requiresSecureCoding = true
             //keyedUnarchiver.setClass(AuthSession.self, forClassName: "GTMAppAuthFetcherAuthorization")
 
-            guard let authSession = keyedUnarchiver.decodeObject(of: Google.GTMAuthSession.self, forKey: NSKeyedArchiveRootObjectKey) else {
+            guard let authSession = keyedUnarchiver.decodeObject(of: Google.GTMSession.self, forKey: NSKeyedArchiveRootObjectKey) else {
                 throw Google.AuthError.decodeFromKeychainError
             }
             return authSession
         }
     }
 }
+
+fileprivate extension String {
+    var fourCharUInt32: UInt32? {
+        guard count == 4 else {
+            print("Input must be exactly four characters.")
+            return nil
+        }
+        
+        var value: UInt32 = 0
+        for (index, char) in utf8.enumerated() {
+            value += UInt32(char) << (8 * (3 - index))
+        }
+        
+        return value
+    }
+}
+
+/*
+ errSecSuccess                               = 0,       /* No error. */
+ errSecUnimplemented                         = -4,      /* Function or operation not implemented. */
+ errSecIO                                    = -36,     /*I/O error (bummers)*/
+ errSecOpWr                                  = -49,     /*file already open with with write permission*/
+ errSecParam                                 = -50,     /* One or more parameters passed to a function where not valid. */
+ errSecAllocate                              = -108,    /* Failed to allocate memory. */
+ errSecUserCanceled                          = -128,    /* User canceled the operation. */
+ errSecBadReq                                = -909,    /* Bad parameter or invalid state for operation. */
+ errSecInternalComponent                     = -2070,
+ errSecNotAvailable                          = -25291,  /* No keychain is available. You may need to restart your computer. */
+ errSecDuplicateItem                         = -25299,  /* The specified item already exists in the keychain. */
+ errSecItemNotFound                          = -25300,  /* The specified item could not be found in the keychain. */
+ errSecInteractionNotAllowed                 = -25308,  /* User interaction is not allowed. */
+ errSecDecode                                = -26275,  /* Unable to decode the provided data. */
+ errSecAuthFailed                            = -25293,  /* The user name or passphrase you entered is not correct. */
+ */

@@ -16,7 +16,7 @@ struct AccountList: View {
     @Environment(SettingsModel.self)
     var settings
     
-    @Query(filter: #Predicate<Account> { !$0.deleteMark },  sort: \Account.orderIndex)
+    @Query(sort: \Account.orderIndex, order: .forward)
     var accounts: [Account]
     
     var body: some View {
@@ -37,14 +37,11 @@ struct AccountList: View {
         }
         
         // Feature: Accounts - Load Accounts
-        .onAppear {
-            Task {
-                await appModel.loadAccounts()
-                _accounts.update()
-            }
+        .task {
+            _ = await appModel.loadAccounts()
         }
         
-        // Feature: Unselection - Will Remove Account
-        .onReceive(appModel.willRemoveAccount, perform: settings.willRemoveAccount(_:))
+        // Feature: Unselection - Will Sign Out Account
+        .onReceive(appModel.willSignOutAccount, perform: settings.willSignOutAccount(_:))
     }
 }

@@ -16,7 +16,7 @@ struct MessageCell : View {
         VStack(alignment: .leading) {
             // Text(message.lement.sender?.emailAddress?.name ?? message.lement.sender?.emailAddress?.address ?? "")
             Text(message.subject ?? "").lineLimit(1)
-            Text(message.receivedDate?.formattedRelative() ?? "")
+            Text(message.date?.formattedRelative() ?? "")
             Text(message.bodyPreview ?? "").lineLimit(2)
         }
     }

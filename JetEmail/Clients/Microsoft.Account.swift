@@ -8,7 +8,7 @@
 // Account = Client + Account.ID
 
 import MSAL // for MSALAccount
-
+/*
 extension Microsoft {
     struct Account {
         let client  : Client
@@ -25,14 +25,14 @@ extension Microsoft {
         }
     }
 }
-
+*/
 
 // Microsoft.Session -> Miccrosoft.Account
 
-extension Microsoft.Session {
-    var account: Microsoft.Account {
-        .init(client: sessionStore.client, id: id, username: username, msalAccount: msalSession.account)
-    }
+/*extension Microsoft.Session {
+    /*func account(client: Microsoft.Client) -> Microsoft.Account {
+        .init(client: client, id: id, username: username, msalAccount: msalSession.account)
+    }*/
 }
 
 // MSALAccount -> Microsoft.Account
@@ -42,5 +42,5 @@ extension MSALAccount {
         guard let id = identifier, let username = username else { throw Microsoft.AuthError.accountNoIDOrUsername }
         return Microsoft.Account(client: client, id: .init(string: id), username: username, msalAccount: self)
     }
-}
+}*/
 

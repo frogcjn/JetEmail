@@ -41,6 +41,6 @@ struct MessageList : View {
 
     var body: some View {
         let id = mailFolder.id
-        _MessageList(_messages: Query(filter: #Predicate<Message> { $0.mailFolder.id == id && !$0.deleteMark }, sort: \.receivedDate, order: .reverse))
+        _MessageList(_messages: Query(filter: #Predicate<Message> { $0.mailFolder.id == id && !$0.deleteMark }, sort: \.date, order: .reverse))
     }
 }

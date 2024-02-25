@@ -49,9 +49,9 @@ extension Microsoft.Session {
 */
 
 
-// MARK: - MSGraph.Context: Account-MailFolders API
+// MARK: - Microsoft.Context: Account-MailFolders API
 
-extension Microsoft.Account {
+extension Microsoft.Session {
     func getRootMailFolder() async throws -> Microsoft.MailFolder {
         try await getMailFolder(wellKnownFolderName: .msgFolderRoot)
     }
@@ -80,12 +80,12 @@ extension Microsoft.Account {
 
 // MARK: - MSGraph: MailFolder-Messaages API
 
-extension Microsoft.Account {
+extension Microsoft.Session {
     
     // https://learn.microsoft.com/en-us/graph/api/mailfolder-list-messages
     func getMessages(microsoftID: Microsoft.MailFolder.ID) async throws -> [Microsoft.Message] {
         try await getItems("mailFolders", "\(microsoftID)", "messages", queryItems: [
-            .orderBy(name: "receivedDateTime", .descending),
+            // .orderBy(name: "receivedDateTime", .descending),
             .select(
                 "id",
                 "subject",
@@ -107,7 +107,7 @@ extension Microsoft.Account {
 
 // MARK: - MSGraph: Messaage API
 
-extension Microsoft.Account {
+extension Microsoft.Session {
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
     func getMessageBody(microsoftID: Microsoft.Message.ID) async throws -> Microsoft.Message {
@@ -135,15 +135,9 @@ extension Microsoft.Account {
 
 // MARK: - MSGraph: Get, Post API
 
-fileprivate extension Microsoft.Account {
+fileprivate extension Microsoft.Session {
 
-    var endpointURL: URL { client.endpointURL }
-    
-    /*var authorizationHeader: String {
-        get async throws {
-            try await session.authorizationHeader
-        }
-    }*/
+    var endpointURL: URL { Microsoft.Client.endpointURL }
 
     func getResponse<Value: Decodable>(url: URL, _ type: Value.Type = Value.self) async throws -> Value {
         try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader)._response()

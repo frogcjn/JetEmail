@@ -24,17 +24,6 @@ struct AccountCell: View {
                     .progressViewStyle(.circular)
                     .controlSize(.small)
             }
-        }/*.onChange(of: account.hasAccount, initial: true) {
-            Task {
-                await account.updateState()
-            }
         }
-        .onChange(of: account.hasSession, initial: true) {
-            Task {
-                await account.updateState()
-            }
-        }*/
     }
-    
-
 }

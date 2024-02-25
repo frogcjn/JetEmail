@@ -21,31 +21,31 @@ struct MessageView : View {
                 
                 /*LabeledContent("createdDate:" , value: message.createdDate?.formattedRelative() ?? "")
                 LabeledContent("modifiedDate:", value: message.modifiedDate?.formattedRelative() ?? "")*/
-                LabeledContent("receivedDate:", value: message.receivedDate?.formattedRelative() ?? "")
-                LabeledContent("sentDate:"    , value: message.sentDate?.formattedRelative() ?? "")
+                LabeledContent("date:", value: message.date?.formattedRelative() ?? "")
+                // LabeledContent("sentDate:"    , value: message.sentDate?.formattedRelative() ?? "")
                 
                 Divider()
                 
                 if let sender = message.sender, sender != message.from {
-                    LabeledContent("sender:", value: sender.nameAndAddress)
+                    LabeledContent("sender:", value: sender)
                 }
                 if let from = message.from {
-                    LabeledContent("from:", value: from.nameAndAddress)
+                    LabeledContent("from:", value: from)
                 }
                 if let to = message.to {
-                    LabeledContent("to:", value: to.map(\.nameAndAddress).joined(separator: ", "))
+                    LabeledContent("to:", value: to.joined(separator: ", "))
                 }
                 
                 if let replyTo = message.replyTo {
-                    LabeledContent("replayTo:", value: replyTo.map(\.nameAndAddress).joined(separator: ", "))
+                    LabeledContent("replayTo:", value: replyTo.joined(separator: ", "))
                 }
                 
                 if let cc = message.cc {
-                    LabeledContent("cc:", value: cc.map(\.nameAndAddress).joined(separator: ", "))
+                    LabeledContent("cc:", value: cc.joined(separator: ", "))
                 }
                 
                 if let bcc = message.bcc {
-                    LabeledContent("bcc:", value: bcc.map(\.nameAndAddress).joined(separator: ", "))
+                    LabeledContent("bcc:", value: bcc.joined(separator: ", "))
                 }
                 
                 Divider()
@@ -89,7 +89,7 @@ struct MessageView : View {
                 Text(resultText)
             }*/
         }*/
-        .onChange(of: message.item, initial: true) {
+        .onChange(of: message.item.body, initial: true) {
             Task { await message.loadBody() }
         }
     }

@@ -9,11 +9,12 @@ import SwiftUI
 
 struct MailWindow : View {
     
-    @Environment(AppModel.self) // state associate with applciation
+    @Environment(AppModel.self) // the app model instance is associate with the applciation
     var appModel
     
-    @State
-    var window = MailWindowModel() // a MainWindowModel instance is associated with each model
+    
+    @State  // a MainWindowModel instance is associated with a window
+    var window = MailWindowModel()
     
     var body: some View {
         NavigationSplitView(columnVisibility: Bindable(window).splitViewVisibility) {
@@ -30,10 +31,11 @@ struct MailWindow : View {
                     .itemModel(item)
             }
         }
-        .labelStyle(.iconOnly)
         
-        // Feature: Unselection - Remove Account
-        .onReceive(appModel.willRemoveAccount, perform: window.willRemoveAccount(_:))
+        // Feature: Unselection - Will Sign Out Account
+        .onReceive(appModel.willSignOutAccount, perform: window.willSignOutAccount(_:))
+        
+        .labelStyle(.iconOnly)
         .environment(window)
     }
 }

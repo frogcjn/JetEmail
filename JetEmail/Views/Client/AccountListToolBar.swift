@@ -17,20 +17,21 @@ struct AccountListToolbar : View {
     
     var body: some View {
         HStack {
-            // Feature: Accounts - Add Account
-            Button("Add Microsoft Account", systemImage: "plus") {
-                Task { await appModel.addAccount(platform: .microsoft) }
+            
+            // Feature: Accounts - Sign In Account
+            Button("Sign In Microsoft Account", systemImage: "plus") {
+                Task { await appModel.signIn(platform: .microsoft) }
             }//.disabled(context.isBusy)
             
-            // Feature: Accounts - Add Account
-            Button("Add Google Account", systemImage: "plus") {
-                Task { await appModel.addAccount(platform: .google) }
+            // Feature: Accounts - Sign In Account
+            Button("Sign In Google Account", systemImage: "plus") {
+                Task { await appModel.signIn(platform: .google) }
             }//.disabled(context.isBusy)
             
-            // Feature: Accounts - Remove Account
-            Button("Remove", systemImage: "minus") {
+            // Feature: Accounts - Sign Out Account
+            Button("Sign Out", systemImage: "minus") {
                 guard let account = settings.selectedAccount else { return }
-                Task { await appModel(account).delete() }
+                Task { await appModel(account).signOut() }
             }.disabled(settings.selectedAccount?.isBusy ?? true)
             
 

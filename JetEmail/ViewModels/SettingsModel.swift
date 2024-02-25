@@ -18,5 +18,4 @@ class SettingsModel {
     @ObservationIgnored
     var isShowingWithDarkBackground: Bool
     
-    static var shared = SettingsModel()
 }

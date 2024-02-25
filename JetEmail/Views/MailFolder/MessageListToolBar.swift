@@ -15,9 +15,7 @@ struct MailFolderMessageListToolBar : View {
     var body: some View {
         HStack {            
             // Feature: Account - Load Messages
-            Spacer()
             RefreshButton(isBusy: mailFolder.isBusy) { await mailFolder.loadMessages() }
-            Spacer()
         }.background(.bar)
     }
 }

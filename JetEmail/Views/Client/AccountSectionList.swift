@@ -44,6 +44,13 @@ struct AccountSectionList : View {
         .task {
             await appModel.loadAccounts()
         }
+        
+        // Feature: Account - Load Mail Folders
+        .onChange(of: accounts, initial: true) { Task {
+            for account in accounts {
+                await appModel(account).loadMailFolders()
+            }
+        } }
          
         
         /*Section("target mail folders", isExpanded: $isExpanded) {

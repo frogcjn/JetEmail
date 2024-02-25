@@ -6,14 +6,11 @@
 //
 
 import MSAL
-import os
 
 // Google.Client = App + Microsoft
 
 struct Microsoft {
-    typealias MSALAccount = MSAL.MSALAccount
-    typealias MSALSession = MSAL.MSALResult
-    
+
     final class Client {
         
         // configs
@@ -21,7 +18,7 @@ struct Microsoft {
         fileprivate let  redirectURL          = URL(string: "msauth.me.frogcjn.jet-email://auth")!
                     let       scopes: [Scope] = [.userRead, .mailRead] // request permission to read the profile of the signed-in user
         fileprivate let authorityURL          = URL(string: "https://login.microsoftonline.com/common")!
-                    let  endpointURL          = URL(string: "https://graph.microsoft.com/v1.0/me/")!
+             static let  endpointURL          = URL(string: "https://graph.microsoft.com/v1.0/me/")!
         
         let       _msalClient: MSALPublicClientApplication
         let webViewParameters: MSALWebviewParameters
@@ -34,15 +31,11 @@ struct Microsoft {
             )
             _msalClient        = try MSALPublicClientApplication(configuration: configuration)
             webViewParameters = .init()
-            sessionStore      = SessionStore(client: self)
         }
         
-        var sessionStore: SessionStore!
-
-        // associated properties:
-        @MainActor
-        var isBusy = false
-        let logger = Logger(subsystem: "me.frogcjn.jet-email", category: "MicrosoftAPI")
+        // @MainActor
+        // var isBusy = false
+        // let logger = Logger(subsystem: "me.frogcjn.jet-email", category: "MicrosoftClient")
     }
     
 }
@@ -52,4 +45,24 @@ extension Microsoft.Client {
         case userRead = "user.read"
         case mailRead = "mail.read"
     }
+}
+
+
+extension Microsoft.Client {
+    // account for request
+    /*func account(id: Microsoft.ID) async throws -> Microsoft.Account {
+        
+        // access MSALAcount from keychain
+        let msalAccount = try _msalClient.account(forIdentifier: id.string)
+        
+        // map MSALAccount to Microsoft.Account
+        return try msalAccount.microsoftAccount(client: self)
+        /*let parameters = MSALAccountEnumerationParameters(identifier: id.rawValue)
+         // parameters.returnOnlySignedInAccounts = true
+         guard let account = try await client.accountsFromDevice(for: parameters).first else {
+         throw MSGraphError.noAccountFound
+         }
+         return try .init(account)*/
+    }*/
+    
 }

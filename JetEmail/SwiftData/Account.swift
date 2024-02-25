@@ -43,7 +43,7 @@ final class Account : ModelItem {
     
     var username: String
     
-    var orderIndex = 0
+    var orderIndex: Int?
     // var isDeleted = false
     
     /// Account.root <-> MailFolder.account
@@ -54,122 +54,65 @@ final class Account : ModelItem {
     @Relationship(deleteRule: .cascade, inverse: \MailFolder.account)
     var mailFolders: [MailFolder] = []
     
-    init(modelID: ModelID, username: String, orderIndex: Int) {
+    init(modelID: ModelID, username: String) {
         self.modelID            = modelID
-        
         self.username           = username
-        self.orderIndex         = orderIndex
+        orderIndex = nil
     }
     
-    var deleteMark = false {
-        didSet {
+    var deleteMark = false { didSet {
             if deleteMark {
                 mailFolders.forEach { $0.deleteMark = true }
             }
-        }
-    }
+    } }
     
     var account: Account { self }
-    
-    //@Attribute(.ephemeral)
-    //@MainActor
-    
-    //@Attribute(.ephemeral)
-    //@MainActor
-    //var ephemeralPropertiesUpdated = UUID()
 }
 
-@MainActor
 extension Account {
+    
     var platformState: PlatformState {
         session != nil ? .hasSession : .noSession
     }
     
     var isBusy: Bool {
-        get {
-            _$observationRegistrar.access(self, keyPath: \.isBusy)
-            return Self.self[self].isBusy
-        }
-        set {
-            _$observationRegistrar.withMutation(of: self, keyPath: \.isBusy) {
-                Self.self[self].isBusy = newValue
-            }
-        }
+        get { AccountAttributesStore[modelID].isBusy }
+        set { AccountAttributesStore[modelID].isBusy = newValue }
     }
     
     var session: Session? {
-        get {
-            _$observationRegistrar.access(self, keyPath: \.session)
-            return Self.self[self].session
-        }
-        set {
-            _$observationRegistrar.withMutation(of: self, keyPath: \.session) {
-                Self.self[self].session = newValue
-            }
-        }
+        get { AccountAttributesStore[modelID].session }
+        set { AccountAttributesStore[modelID].session = newValue }
     }
     
-    
-   /* @Attribute(.ephemeral)
-    var hasSession: Bool?
-    
-    var state: PlatformState? {
-        hasAccount.map { $0 ? PlatformState.hasAccount(hasSession.map{ $0 ? .hasSession : .noSession }) : PlatformState.noAccount }
-    }*/
+    var appModel: AppModel { .shared }
     
     enum PlatformState : String, Codable {
         case noSession // no account return from platform client cached account store
         case hasSession // no valid session return from platform client cached account
-        //case needRefreshToken
-        //case valid
     }
+}
+
+@Observable
+class AccountAttributesStore {    
+    var rawValue = [Account.ModelID: AccountAttributes]()
     
-    static var ephemeralStore = [Account.ModelID: Properties]()
-    
-    static subscript(model: Account) -> Properties {
+    static subscript(modelID: Account.ModelID) -> AccountAttributes {
         get {
-            let properties = ephemeralStore[model.modelID, default: Properties()]
-            ephemeralStore[model.modelID] = properties
+            if let properties = shared.rawValue[modelID] { return properties }
+            let properties = AccountAttributes()
+            shared.rawValue[modelID] = properties
             return properties
         }
-        set {
-            ephemeralStore[model.modelID] = newValue
-        }
+        set { shared.rawValue[modelID] = newValue }
     }
     
-    struct Properties {
-        var isBusy = false
+    struct AccountAttributes {
         var session: Session?
+        var isBusy = false
     }
 }
 
-enum Session {
-    case microsoft(id: Microsoft.Account.ID, msalSession: Microsoft.MSALSession)
-    case google(id: Google.Account.ID, gtmSession: Google.GTMAuthSession, keychain : SecKeychainItem)
-}
-
-extension Session {
-    var  modelID: Account.ModelID {
-        switch self {
-        case .microsoft(id: let id, msalSession: _): id.modelID
-        case .google(id: let id, gtmSession: _, keychain: _): id.modelID
-        }
-    }
-    
-    var newAccount: Account {
-        get throws {
-            switch self {
-            case .microsoft(id: let id, msalSession: let msalSesion):
-                let modelID = id.modelID
-                guard let username = msalSesion.account.username else { throw Microsoft.AuthError.accountNoIDOrUsername }
-                return Account.init(modelID: modelID, username: username, orderIndex: 0)
-            case .google(id: let id, gtmSession: let gtmSession, keychain: let keychain):
-                guard let username = gtmSession.userEmail else { throw Microsoft.AuthError.accountNoIDOrUsername }
-                return Account.init(modelID: id.modelID, username: username, orderIndex: 0)
-            }
-        }
-    }
-}
 
 
 // print("id", id)
@@ -230,3 +173,15 @@ extension Session {
 // print("tenantProfiles", account.tenantProfiles ?? "nil")
 // nil
 
+
+extension Session {
+    
+    var account: Account {
+        get throws {
+            switch self {
+            case .microsoft(let microsoftSession): microsoftSession.account
+            case .google(let googleSession): googleSession.account
+            }
+        }
+    }
+}

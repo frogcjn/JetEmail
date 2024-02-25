@@ -4,7 +4,7 @@
 //
 //  Created by Cao, Jiannan on 1/31/24.
 //
-
+/*
 import MSAL
 
 extension Microsoft.Client {
@@ -25,7 +25,7 @@ extension Microsoft.Client {
         }
     }
     
-    /*func deleteAccount(id: Microsoft.Account.ID) async throws -> Microsoft.Account {
+    /*func deleteAccount(id: Microsoft.ID) async throws -> Microsoft.Account {
         print("Microsoft.Client.deleteAccount")
         let account = try await account(id: id)
         try _msalClient.remove(account.msalAccount)
@@ -38,27 +38,12 @@ extension Microsoft.Client {
          */
     }
     
-    // account for request
-    func account(id: Microsoft.Account.ID) async throws -> Microsoft.Account {
-        
-        // access MSALAcount from keychain
-        let msalAccount = try _msalClient.account(forIdentifier: id.string)
-        
-        // map MSALAccount to Microsoft.Account
-        return try msalAccount.microsoftAccount(client: self)
-        /*let parameters = MSALAccountEnumerationParameters(identifier: id.rawValue)
-         // parameters.returnOnlySignedInAccounts = true
-         guard let account = try await client.accountsFromDevice(for: parameters).first else {
-         throw MSGraphError.noAccountFound
-         }
-         return try .init(account)*/
-    }
-    
-    func hasAccount(id: Microsoft.Account.ID) async -> Bool {
+
+    func hasAccount(id: Microsoft.ID) async -> Bool {
         (try? await account(id: id)) != nil
     }
     
-    func hasSession(id: Microsoft.Account.ID) async throws -> Bool {
+    func hasSession(id: Microsoft.ID) async throws -> Bool {
         (try await sessionStore.session(id: id)) != nil
     }*/
 }
@@ -99,7 +84,7 @@ extension Microsoft {
         unowned let client: Microsoft.Client
         init(client: Microsoft.Client) { self.client = client }
         
-        private var _rawValue = [Microsoft.Account.ID: Session]()
+        private var _rawValue = [Microsoft.ID: Session]()
 
         fileprivate func signInSession() async throws -> Session {
             
@@ -123,7 +108,7 @@ extension Microsoft {
         }
 
         
-        fileprivate func session(id: Microsoft.Account.ID) async throws -> Session? {
+        fileprivate func session(id: Microsoft.ID) async throws -> Session? {
             let msalAccount = try client._msalClient.allAccounts().first { $0.identifier == id.string }
             
             guard let msalAccount else {
@@ -163,7 +148,7 @@ extension Microsoft {
                 // map account items to existed or creating sessions
                 let sessions = try msalAccounts.map { msalAccount throws in
                     guard let stringID = msalAccount.identifier else { throw Microsoft.AuthError.accountNoIDOrUsername }
-                    let id = Microsoft.Account.ID(string: stringID)
+                    let id = Microsoft.ID(string: stringID)
                     if let stored = _rawValue[id] {
                         // storeAccount.gtmSession
                         assert(stored.msalSession.account == msalAccount)
@@ -230,3 +215,4 @@ extension Microsoft.Session {
     }
 }
 
+*/

@@ -38,13 +38,9 @@ struct AccountSection: View {
             
         } header: {
             // Feature: Account - Load Mail Folders
-            AccountSectionHeader() {
+            AccountSectionHeader {
                 await account.loadMailFolders()
             }
-        }
-        .task {
-            // Feature: Account - Load Mail Folders
-            await account.loadMailFolders()
         }
     }
 }

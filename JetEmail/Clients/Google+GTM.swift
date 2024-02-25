@@ -11,8 +11,15 @@ import GTMAppAuth
 
 fileprivate let kIncludeGrantedScopesParameter = "include_granted_scopes"
 
+extension Google {
+    typealias GTMSession         = GTMAppAuth.AuthSession
+    typealias GTMSessionDelegate = GTMAppAuth.AuthSessionDelegate
+    typealias SessionProtocol    = NSObject & GTMSessionDelegate & OIDAuthStateChangeDelegate & OIDAuthStateErrorDelegate
+    typealias OpenIDState        = OIDAuthState
+}
+
 extension Google.Client {
-    func _gtmSignIn() async throws -> Google.GTMAuthSession {
+    func _gtmSignIn() async throws -> Google.GTMSession {
         
         guard let window = await NSApplication.shared.windows.first else { throw Google.AuthError.authorizeNoMainWindow }
         
@@ -57,10 +64,10 @@ extension Google.Client {
     }
 }
 
-extension Google.Session {
-    func _gtmRefresh() async throws -> (acessToken: String, idToken: String) {
+extension Google.GTMSession {
+    func refresh() async throws -> (acessToken: String, idToken: String) {
         try await withCheckedThrowingContinuation { continuation in
-            self.gtmSession.authState.performAction(freshTokens: { (accessToken, idToken, error) in
+            authState.performAction(freshTokens: { (accessToken, idToken, error) in
                 if let error {
                     continuation.resume(throwing: error)
                 }

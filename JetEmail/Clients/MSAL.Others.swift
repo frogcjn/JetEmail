@@ -14,11 +14,11 @@ extension Microsoft {
      The date and time information uses ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
      */
     struct DateTimeOffset: RawRepresentable, Codable {
-        static let dateFormatter = ISO8601DateFormatter()
-        let date: Date
+        //let date: Date
         let rawValue: String
+        let date: Date
         init?(rawValue: String) {
-            guard let date = Self.dateFormatter.date(from: rawValue) else { return nil }
+            guard let date = rawValue.iso8601 else { return nil }
             self.rawValue = rawValue
             self.date = date
         }
@@ -26,7 +26,7 @@ extension Microsoft {
 
     // https://learn.microsoft.com/en-us/graph/api/resources/itembody
     
-    struct ItemBody : Codable {
+    struct ItemBody : Codable, Equatable {
         let content: String?
         let contentType: ContentType?
         
@@ -40,8 +40,8 @@ extension Microsoft {
     
     struct Recipient : Codable {
         let emailAddress: EmailAddress?
-        var nameAndAddress: String {
-            emailAddress?.nameAndAddress ?? "nil"
+        var rawValue: String {
+            emailAddress?.rawValue ?? "nil"
         }
     }
     
@@ -51,7 +51,7 @@ extension Microsoft {
         let address: String?
         let name: String?
         
-        var nameAndAddress: String {
+        var rawValue: String {
             (name ?? "nil") + " " + "<\(address ?? "nil")>"
         }
     }

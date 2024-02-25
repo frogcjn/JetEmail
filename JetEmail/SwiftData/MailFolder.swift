@@ -63,7 +63,7 @@ class MailFolder : ModelItem {
     var _messages: [Message] = [] // Should be Ordered Relationship
     
     @Transient
-    var messages: [Message] { _messages.sorted(using: KeyPathComparator(\.receivedDate, order: .reverse))}
+    var messages: [Message] { _messages.sorted(using: KeyPathComparator(\.date, order: .reverse))}
     
     init(modelID: ModelID, name: String, in account: Account) {
         self.modelID  = modelID
@@ -72,14 +72,11 @@ class MailFolder : ModelItem {
     }
     
     var _graph: String?
+    var _google: String?
     
     @MainActor  // for isBusy
-    @Attribute(.ephemeral)
-    var isBusy = false {
-        willSet {
-            print(isBusy)
-        }
-    }
+    @Transient
+    var isBusy = false
     
     var deleteMark = false {
         didSet {
