@@ -27,7 +27,7 @@ extension AppItemModel<Message> {
             case .microsoft(let session):
                 guard case .microsoft(let messageID) = message.modelID else { return }
                 
-                let microsoftMessage = try await session.getMessageBody(microsoftID: messageID) // load from MSAL
+                let microsoftMessage = try await session.getMessage(microsoftID: messageID) // load from MSAL
                 _ = try await BackgroundModelActor.shared.setMessage(microsoft: microsoftMessage, to: item.modelID) // MSAL to SwiftData
                 
             case .google(let session):

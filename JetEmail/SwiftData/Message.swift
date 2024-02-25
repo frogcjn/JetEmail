@@ -87,13 +87,13 @@ class Message : ModelItem {
         init?(text: String? = nil, html: String? = nil) {
             switch (text, html) {
             case (let text?, let html?):
-                self.text = text.removingHtmlTags
+                self.text = text.removingHTMLTags
                 self.html = html
             case (nil, let html?):
-                self.text = html.removingHtmlTags
+                self.text = html.removingHTMLTags
                 self.html = html
             case (let text?, nil):
-                self.text = text.removingHtmlTags
+                self.text = text.removingHTMLTags
                 self.html = nil
             case (nil, nil):
                 return nil

@@ -5,32 +5,33 @@
 //  Created by Cao, Jiannan on 2/7/24.
 //
 
+import Foundation
 
 // MARK: - Message
 // https://learn.microsoft.com/en-us/graph/api/resources/message
 
 extension Microsoft {
     struct Message : Codable, Identifiable {
-        let                         id: ID
+        var                         id: ID
         
         // subject
-        let                    subject: String?
+        var                    subject: String?
 
-        let            createdDateTime: DateTimeOffset?
-        let       lastModifiedDateTime: DateTimeOffset?
-        let           receivedDateTime: DateTimeOffset? // * Important *
-        let               sentDateTime: DateTimeOffset?
+        var            createdDateTime: DateTimeOffset?
+        var       lastModifiedDateTime: DateTimeOffset?
+        var           receivedDateTime: DateTimeOffset? // * Important *
+        var               sentDateTime: DateTimeOffset?
         
-        let                     sender: Recipient?   // sender?
-        let                       from: Recipient?   // * Important * from
-        let               toRecipients: [Recipient]? // * Important * to
-        let                    replyTo: [Recipient]? // 回复给
-        let               ccRecipients: [Recipient]? // * Important * 抄送, carbon copy
-        let              bccRecipients: [Recipient]? // 密件抄送，密送，blind carbon copy
+        var                     sender: Recipient?   // sender?
+        var                       from: Recipient?   // * Important * from
+        var               toRecipients: [Recipient]? // * Important * to
+        var                    replyTo: [Recipient]? // 回复给
+        var               ccRecipients: [Recipient]? // * Important * 抄送, carbon copy
+        var              bccRecipients: [Recipient]? // 密件抄送，密送，blind carbon copy
         
-        let                bodyPreview: String?   // * Important *
-        let                       body: ItemBody? // * Important * may load later
-        let                 uniqueBody: ItemBody? //?
+        var                bodyPreview: String?   // * Important *
+        var                       body: ItemBody? // * Important * may load later
+        var                 uniqueBody: ItemBody? //?
         
         /*
         let                 categories: [String]?
@@ -51,6 +52,7 @@ extension Microsoft {
         let             parentFolderId: String?
         
         let                    webLink: String?*/
+        var raw: Data?
         
     }
 

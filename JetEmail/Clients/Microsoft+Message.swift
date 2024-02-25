@@ -38,6 +38,8 @@ extension Message {
                 case .text: self.body = .init(text: content, html: nil)
                 }
             }
+            
+            if let raw = microsoft.raw { self.raw = raw }
 
             self._graph = try? microsoft.jsonString
         }

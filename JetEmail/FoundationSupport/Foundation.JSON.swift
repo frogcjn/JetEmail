@@ -159,7 +159,7 @@ extension String {
         }
     }
 
-    var removingHtmlTags: String {
+    var removingHTMLTags: String {
         if isHTMLString {
             replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
         } else {

@@ -110,8 +110,8 @@ extension Microsoft.Session {
 extension Microsoft.Session {
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
-    func getMessageBody(microsoftID: Microsoft.Message.ID) async throws -> Microsoft.Message {
-        try await getItem("messages", "\(microsoftID)", queryItems: [
+    func getMessage(microsoftID: Microsoft.Message.ID) async throws -> Microsoft.Message {
+        var message: Microsoft.Message = try await getItem("messages", "\(microsoftID)", queryItems: [
             .select(
                 "id",
                 "subject",
@@ -130,6 +130,8 @@ extension Microsoft.Session {
                 // "uniqueBody"
             )
         ])
+        message.raw = try await getData("messages", "\(microsoftID)", "$value")
+        return message
     }
 }
 
@@ -143,6 +145,10 @@ fileprivate extension Microsoft.Session {
         try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader)._response()
     }
     
+    func getResponseData(url: URL) async throws -> Data {
+        try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader)._responseData
+    }
+    
     func postResponse<RequestBody: Encodable, Value: Decodable>(url: URL, body: RequestBody, _ type: Value.Type = Value.self) async throws -> Value {
         try await URLRequest._post(url: url, body: body)._settingAuthorization(header: authorizationHeader)._response()
     }
@@ -150,6 +156,11 @@ fileprivate extension Microsoft.Session {
     func getItem<Value: Decodable>(_ paths: String..., queryItems: [URLQueryItem] = [], _ type: Value.Type = Value.self) async throws -> Value {
         let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems)
         return try await getResponse(url: url)
+    }
+    
+    func getData(_ paths: String..., queryItems: [URLQueryItem] = []) async throws -> Data {
+        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems)
+        return try await getResponseData(url: url)
     }
     
     func getItems<Value: Decodable>(type: Value.Type = Value.self,  _ paths: String..., queryItems: [URLQueryItem] = []) async throws -> [Value] {
@@ -241,6 +252,11 @@ fileprivate extension URLRequest {
         let (data, _) = try await URLSession.shared.data(for: self)
         return try handleGraphResponse(Value.self, from: data)
     }
+    
+    var _responseData: Data { get async throws {
+        let (data, _) = try await URLSession.shared.data(for: self)
+        return data
+    } }
     
     func handleGraphResponse<T: Decodable>(_ type: T.Type, from data: Data) throws -> T {
         let result = Result{ try data.decodeJSON(type) }
