@@ -91,8 +91,8 @@ public extension Session {
 
 
 @Observable
-public class GoogleSessionStore {
-    public static let shared = GoogleSessionStore()
+public class SessionStore {
+    public static let shared = SessionStore()
     public var rawValue = [Google.ID: Google.Session]()
     
     public static subscript(id: Google.ID) -> Google.Session? {
@@ -105,10 +105,10 @@ public class GoogleSessionStore {
 public extension Google.Session {
     static subscript(id: Google.ID) -> Google.Session? {
         get {
-            guard let session = GoogleSessionStore[id] else { return nil }
+            guard let session = SessionStore[id] else { return nil }
             return session
         }
-        set { GoogleSessionStore[id] = newValue }
+        set { SessionStore[id] = newValue }
     }
 }
 

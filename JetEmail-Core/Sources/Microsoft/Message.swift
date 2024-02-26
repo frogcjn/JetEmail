@@ -11,8 +11,7 @@ import MSAL
 // MARK: - Message
 // https://learn.microsoft.com/en-us/graph/api/resources/message
 
-public extension Microsoft {
-    struct Message : Codable, Identifiable {
+public struct Message : Codable, Identifiable {
         public var                         id: ID
         
         // subject
@@ -57,9 +56,7 @@ public extension Microsoft {
         
     }
 
-}
-
-extension Microsoft.Message : Hashable {
+extension Message : Hashable {
     public static func == (lhs: Microsoft.Message, rhs: Microsoft.Message) -> Bool {
         lhs.id == rhs.id
     }

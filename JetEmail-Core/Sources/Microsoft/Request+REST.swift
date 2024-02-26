@@ -51,7 +51,7 @@ extension Microsoft.Session {
 
 // MARK: - Microsoft.Context: Account-MailFolders API
 
-public extension Microsoft.Session {
+public extension Session {
     func getRootMailFolder() async throws -> Microsoft.MailFolder {
         try await getMailFolder(wellKnownFolderName: .msgFolderRoot)
     }
@@ -80,7 +80,7 @@ public extension Microsoft.Session {
 
 // MARK: - MSGraph: MailFolder-Messaages API
 
-public extension Microsoft.Session {
+public extension Session {
     
     // https://learn.microsoft.com/en-us/graph/api/mailfolder-list-messages
     func getMessages(microsoftID: Microsoft.MailFolder.ID) async throws -> [Microsoft.Message] {
@@ -107,7 +107,7 @@ public extension Microsoft.Session {
 
 // MARK: - MSGraph: Messaage API
 
-public extension Microsoft.Session {
+public extension Session {
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
     func getMessage(microsoftID: Microsoft.Message.ID) async throws -> Microsoft.Message {
@@ -137,7 +137,7 @@ public extension Microsoft.Session {
 
 // MARK: - MSGraph: Get, Post API
 
-fileprivate extension Microsoft.Session {
+fileprivate extension Session {
 
     var endpointURL: URL { Microsoft.Client.endpointURL }
 
@@ -210,7 +210,7 @@ fileprivate struct GraphCollectionResponse<Value : Decodable> : Decodable {
 
 // https://learn.microsoft.com/en-us/graph/errors#error-resource-type
 fileprivate struct GraphErrorResponse : Codable {
-    let error: Microsoft.PublicError
+    let error: PublicError
 }
 
 // typealias JSON<T: Any> = [String: T] where T: Codable

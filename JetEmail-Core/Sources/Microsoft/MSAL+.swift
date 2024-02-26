@@ -7,12 +7,10 @@
 
 import MSAL
 
-public extension Microsoft {
-    typealias MSALAccount = MSAL.MSALAccount
-    typealias MSALSession = MSAL.MSALResult
-}
+    public typealias MSALAccount = MSAL.MSALAccount
+    public typealias MSALSession = MSAL.MSALResult
 
-public extension Microsoft.Client {
+public extension Client {
     var _msalAccounts: [Microsoft.MSALAccount] { get throws {
         try _msalClient.allAccounts()
     } }
@@ -59,7 +57,7 @@ public extension Microsoft.Client {
     }
 }
 
-public extension Microsoft.MSALAccount {
+public extension MSALAccount {
     // force refresh
     var _msalRefreshMSALSession: Microsoft.MSALSession {
         get async throws {
@@ -71,8 +69,8 @@ public extension Microsoft.MSALAccount {
 }
 
 @Observable
-public class MicrosoftSessionStore {
-    public static let shared = MicrosoftSessionStore()
+public class SessionStore {
+    public static let shared = SessionStore()
     var rawValue = [Microsoft.ID: Microsoft.Session]()
     
     public static subscript(id: Microsoft.ID) -> Microsoft.Session? {
@@ -82,19 +80,19 @@ public class MicrosoftSessionStore {
 }
 
 
-public extension Microsoft.Session {
+public extension Session {
     static subscript(id: Microsoft.ID) -> Microsoft.Session? {
         get {
-            guard let session = MicrosoftSessionStore[id] else { return nil }
+            guard let session = SessionStore[id] else { return nil }
             return session
         }
-        set { MicrosoftSessionStore[id] = newValue }
+        set { SessionStore[id] = newValue }
     }
 }
 
 // MARK: - Session Lazy & Refresh
 
-public extension Microsoft.MSALAccount {
+public extension MSALAccount {
     var lazySession: Microsoft.Session { get async throws {
         if let session = try Microsoft.Session[id] { session }
         else { try await refreshSession }
@@ -108,7 +106,7 @@ public extension Microsoft.MSALAccount {
     } }
 }
 
-public extension Microsoft.MSALSession {
+public extension MSALSession {
     var lazySession: Microsoft.Session { get throws {
         if let session = try Microsoft.Session[account.id] { session }
         else { try newSession }
@@ -134,7 +132,7 @@ public extension Microsoft.MSALSession {
 
 // Microsoft.Session + refreshed
 
-public extension Microsoft.Session {
+public extension Session {
     
     private var isExpired: Bool {
         guard let expiresOn = _msalSession.expiresOn else { return false }

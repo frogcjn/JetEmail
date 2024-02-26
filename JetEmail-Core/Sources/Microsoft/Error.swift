@@ -10,13 +10,11 @@ import Foundation
 import JetEmail_Foundation
 
 
-extension Microsoft {
-    enum AuthError : Error {
+public enum AuthError : Error {
         case accountNoIDOrUsername
         case collectionResponseNoCount
         case noAccountFound
         case notRightPlatform
-    }
 }
 /*
 extension Google {
@@ -47,11 +45,9 @@ extension Google {
 */
 
 
-extension Microsoft {
-    struct PublicError : Codable, Error {
+public struct PublicError : Codable, Error {
         let code: String?
         let message: String?
         let innerError: JSON?
         let details: [JSON]?
-    }
 }

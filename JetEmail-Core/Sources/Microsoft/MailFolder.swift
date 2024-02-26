@@ -11,23 +11,21 @@ import MSAL
 
 // https://learn.microsoft.com/en-us/graph/api/resources/mailfolder
 
-public extension Microsoft {
-    struct MailFolder : Codable, Identifiable {
-        public let               id: ID
-        public let      displayName: String?
-        public let         isHidden: Bool?
-        
-        // parent-children relationship
-        public let   parentFolderId: ID?
-        public let childFolderCount: Int32?
-        
-        // mailFolder-messages relationship
-        public let  unreadItemCount: Int32?
-        public let   totalItemCount: Int32?
-    }
+public struct MailFolder : Codable, Identifiable {
+    public let               id: ID
+    public let      displayName: String?
+    public let         isHidden: Bool?
+    
+    // parent-children relationship
+    public let   parentFolderId: ID?
+    public let childFolderCount: Int32?
+    
+    // mailFolder-messages relationship
+    public let  unreadItemCount: Int32?
+    public let   totalItemCount: Int32?
 }
 
-extension Microsoft.MailFolder : Hashable {
+extension MailFolder : Hashable {
     public static func == (lhs: Microsoft.MailFolder, rhs: Microsoft.MailFolder) -> Bool {
         lhs.id == rhs.id
     }
@@ -39,7 +37,7 @@ extension Microsoft.MailFolder : Hashable {
 
 // MARK: MailFolder.WellknownFolderName
 
-public extension Microsoft.MailFolder {
+public extension MailFolder {
     // Well-known folder names https://learn.microsoft.com/en-us/graph/api/resources/mailfolder?view=graph-rest-1.0#methods
     
     enum WellKnownFolderName : String {

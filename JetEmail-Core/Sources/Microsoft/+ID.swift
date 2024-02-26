@@ -82,21 +82,20 @@ extension Message.ModelID {
 
 // MARK: - Microsoft.ID
 
-public extension Microsoft {
+public struct ID : RawStringID {
+    public let string: String
+    public init(string: String) { self.string = string }
+}
+
+
+public extension MailFolder {
     struct ID : RawStringID {
         public let string: String
         public init(string: String) { self.string = string }
     }
 }
 
-public extension Microsoft.MailFolder {
-    struct ID : RawStringID {
-        public let string: String
-        public init(string: String) { self.string = string }
-    }
-}
-
-public extension Microsoft.Message {
+public extension Message {
     struct ID : RawStringID {
         public let string: String
         public init(string: String) { self.string = string }
@@ -131,7 +130,7 @@ extension MSGraph.Account : Identifiable {
 
 // MARK: Microsoft -> Microsoft.ID
 
-public extension Microsoft.MSALAccount {
+public extension MSALAccount {
     var id: Microsoft.ID {
         get throws {
             guard let stringID = identifier else { throw Microsoft.AuthError.accountNoIDOrUsername }
@@ -147,7 +146,7 @@ public extension Microsoft.MSALAccount {
     }
 }
 
-public extension Microsoft.MSALSession {
+public extension MSALSession {
     var accountID: Microsoft.ID { get throws { try account.id } }
 }
 

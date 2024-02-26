@@ -7,13 +7,12 @@
 
 import Foundation
 
-public extension Microsoft {
     
     /*
      The date and time the message was created.
      The date and time information uses ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 is 2014-01-01T00:00:00Z.
      */
-    struct DateTimeOffset: RawRepresentable, Codable {
+    public struct DateTimeOffset: RawRepresentable, Codable {
         //let date: Date
         public let rawValue: String
         public let date: Date
@@ -26,7 +25,7 @@ public extension Microsoft {
 
     // https://learn.microsoft.com/en-us/graph/api/resources/itembody
     
-    struct ItemBody : Codable, Equatable {
+    public struct ItemBody : Codable, Equatable {
         public let content: String?
         public let contentType: ContentType?
         
@@ -38,20 +37,20 @@ public extension Microsoft {
     
     // https://learn.microsoft.com/en-us/graph/api/resources/recipient
     
-    struct Recipient : Codable {
+    public struct Recipient : Codable {
         public let emailAddress: EmailAddress?
     }
     
     // https://learn.microsoft.com/en-us/graph/api/resources/emailaddress
     
-    struct EmailAddress: Codable {
+    public struct EmailAddress: Codable {
         public let address: String
         public let name: String?
     }
     
     // https://learn.microsoft.com/en-us/graph/api/resources/followupFlag
     
-    struct FollowupFlag : Codable {
+    public struct FollowupFlag : Codable {
         // The date and time that the follow-up was finished.
         public let completedDateTime: DateTimeTimeZone?
         /**
@@ -71,25 +70,25 @@ public extension Microsoft {
     
     // https://learn.microsoft.com/en-us/graph/api/resources/datetimetimezone
     
-    struct DateTimeTimeZone : Codable {
+    public struct DateTimeTimeZone : Codable {
         public let dataTime: String
         public let timeZone: String
     }
     
-    struct Importance : Codable {
+    public struct Importance : Codable {
         
     }
     
-    struct InferenceClassificationType : Codable {
+    public struct InferenceClassificationType : Codable {
         
     }
     
-    struct InternetMessageHeader : Codable {
+    public struct InternetMessageHeader : Codable {
         
     }
-}
 
-extension Microsoft.EmailAddress : Equatable {
+
+extension EmailAddress : Equatable {
     
 }
 

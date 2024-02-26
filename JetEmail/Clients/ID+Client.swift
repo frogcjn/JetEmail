@@ -33,7 +33,7 @@ extension String {
 }*/
 
 
-extension MailFolder : Hashable, Equatable, Identifiable {
+/*extension MailFolder : Hashable, Equatable, Identifiable {
     // var id: String { id }
 
     static func ==(lhs: MailFolder, rhs: MailFolder) -> Bool {
@@ -55,7 +55,7 @@ extension Message : Hashable, Equatable, Identifiable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(persistentModelID)
     }
-}
+}*/
 
 
 
@@ -532,6 +532,11 @@ extension Account {
         guard case .microsoft(let microsoftID) = self.modelID else { return nil }
         return microsoftID
     }
+    
+    var googleID: Google.ID? {
+        guard case .google(let googleID) = modelID else { return nil }
+        return googleID
+    }
 }
 
 extension MailFolder {
@@ -550,6 +555,11 @@ extension Message {
     var microsoftID: Microsoft.Message.ID? {
         guard case .microsoft(let microsoftID) = self.modelID else { return nil }
         return microsoftID
+    }
+    
+    var googleID: Google.ID? {
+        guard case .google(let googleID) = modelID else { return nil }
+        return googleID
     }
 }
 

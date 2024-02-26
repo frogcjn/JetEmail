@@ -7,9 +7,9 @@
 
 import JetEmail_Foundation
 
-public extension Microsoft.Client {
-    static var _shared: Microsoft.Client?
-    static var shared: Microsoft.Client { get async throws {
+public extension Client {
+    static var _shared: Client?
+    static var shared: Client { get async throws {
             if let _shared { return _shared }
             let client = try await Task { @BackgroundActor in
                 BackgroundActor.assertIsolated()
