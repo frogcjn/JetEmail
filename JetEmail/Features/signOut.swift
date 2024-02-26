@@ -31,26 +31,4 @@ extension AppItemModel<Account> {
     }
 }
 
-extension Session {
-    func signOut() async throws -> Session {
-        switch self {
-        case .microsoft(let platformSession): _ = try await platformSession.signOut()
-        case .google(let platformSession): _ = try await platformSession.signOut()
-        }
-        return self
-    }
-}
 
-extension Microsoft.Session {
-    func signOut() async throws -> Microsoft.Session {
-        _ = try await Microsoft.Client.shared._msalSignout(msalAccount: _msalSession.account)
-        return self
-    }
-}
-
-extension Google.Session {
-    func signOut() async throws -> Google.Session {
-        _ = try await item.deleteFrom(keychain: Google.Keychain.shared)
-        return self
-    }
-}

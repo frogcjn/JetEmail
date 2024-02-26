@@ -14,7 +14,7 @@ extension AppModel {
         defer { isBusy = false }
         
         do {
-            let sessions = try await Microsoft.Client.shared.sessions.map(Session.microsoft) + Google.Client.shared.sessions.map(Session.google)
+            let sessions = try await Client.sessions
             _ = try await BackgroundModelActor.shared.setSessions(sessions) // load session from local keychain
         } catch {
             logger.error("\(error)")
@@ -22,17 +22,7 @@ extension AppModel {
     }
 }
 
-extension Microsoft.Client {
-    var sessions: [Microsoft.Session] { get async throws {
-        try await _msalAccounts.asyncMap { try await $0.lazySession }
-    } }
-}
 
-extension Google.Client {
-    var sessions: [Google.Session] { get async throws {
-        try await keychain.items.map(\.lazySession)
-    } }
-}
 
 extension BackgroundModelActor {
     func setSessions(_ sessions: [Session]) async throws -> [PersistentID<Account>] {

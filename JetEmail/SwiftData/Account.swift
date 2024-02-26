@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData // for @Model
+
 /*
 
  */
@@ -69,12 +70,8 @@ final class Account : ModelItem {
     var account: Account { self }
 }
 
+
 extension Account {
-    
-    var session: Session? {
-        get { AccountAttributesStore[modelID].session }
-        set { AccountAttributesStore[modelID].session = newValue }
-    }
     
     var platformState: PlatformState {
         session != nil ? .hasSession : .noSession
@@ -86,30 +83,31 @@ extension Account {
     }
     
     var isBusy: Bool {
-        get { AccountAttributesStore[modelID].isBusy }
-        set { AccountAttributesStore[modelID].isBusy = newValue }
+        get { AttributesStore[modelID].isBusy }
+        set { AttributesStore[modelID].isBusy = newValue }
     }
     
     var appModel: AppModel { .shared }
 }
 
-@Observable
-class AccountAttributesStore {    
-    var rawValue = [Account.ModelID: AccountAttributes]()
-    
-    static subscript(modelID: Account.ModelID) -> AccountAttributes {
-        get {
-            if let properties = shared.rawValue[modelID] { return properties }
-            let properties = AccountAttributes()
-            shared.rawValue[modelID] = properties
-            return properties
+extension Account {
+    @Observable
+    final class AttributesStore {
+        var rawValue = [ModelID: Attributes]()
+        
+        static subscript(modelID: ModelID) -> Attributes {
+            get {
+                if let properties = shared.rawValue[modelID] { return properties }
+                let properties = Attributes()
+                shared.rawValue[modelID] = properties
+                return properties
+            }
+            set { shared.rawValue[modelID] = newValue }
         }
-        set { shared.rawValue[modelID] = newValue }
-    }
-    
-    struct AccountAttributes {
-        var session: Session?
-        var isBusy = false
+        
+        struct Attributes {
+            var isBusy = false
+        }
     }
 }
 

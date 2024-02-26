@@ -17,10 +17,7 @@ final class AppModel {
     // settings
     let settings       = SettingsModel()
     let modelContainer = ModelContainer.shared
-    let googleClient   = Google.Client.shared
-    var microsoftClient: Microsoft.Client { get async throws {
-        try await .shared
-    }  }
+
     
     var isBusy = false
     let logger = Logger(subsystem: "me.frogcjn.jet-email", category: "AppModel")
