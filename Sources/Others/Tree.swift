@@ -8,8 +8,8 @@
 class Tree<Value> {
     var root: TreeNode<Value>
     
-    init(rootValue: Value) {
-        self.root = TreeNode(value: rootValue)
+    init(rootElement: Value) {
+        self.root = TreeNode(element: rootElement)
     }
     
     init(root: TreeNode<Value>) {
@@ -41,10 +41,10 @@ class TreeNode<Element> {
     var children: [TreeNode<Element>] = []
     var element: Element
     
-    init(parent: TreeNode<Element>? = nil, children: [TreeNode<Element>] = [], value: Element) {
+    init(parent: TreeNode<Element>? = nil, children: [TreeNode<Element>] = [], element: Element) {
         self.parent = parent
         self.children = children
-        self.element = value
+        self.element = element
     }
 }
 

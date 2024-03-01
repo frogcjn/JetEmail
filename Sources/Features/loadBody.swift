@@ -8,6 +8,12 @@
 // MARK: Feature: Message - Load Body
 
 extension AppItemModel<Message> {
+    
+    var isBusy: Bool {
+        get { item.isBusy }
+        set { item.isBusy = newValue }
+    }
+    
     // @MainActor // for .isBusy
     func loadBody() async {
         guard !isBusy else { return }

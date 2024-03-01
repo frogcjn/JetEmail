@@ -23,8 +23,8 @@ extension AppItemModel where Context == AppModel, Item : ModelItem {
     var microsoftClient: Microsoft.Client { get async throws { try await appModel.microsoftClient } }
     var    googleClient: Google.Client { get { appModel.googleClient } }
 
-    var isBusy: Bool {
+    /*var isBusy: Bool {
         get { item.isBusy }
         set { item.isBusy = newValue }
-    }
+    }*/
 }

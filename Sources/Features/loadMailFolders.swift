@@ -9,6 +9,12 @@
 
 //@BackgroundActor // for .isBusy
 extension AppItemModel<Account> {
+    
+    var isBusy: Bool {
+        get { item.isBusy }
+        set { item.isBusy = newValue }
+    }
+    
     func loadMailFolders() async {
         guard !isBusy else { return }
         isBusy = true

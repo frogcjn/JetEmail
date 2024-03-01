@@ -13,7 +13,7 @@ typealias AppItemModel<Item: ModelItem> = CombineContext<AppModel, Item>
 protocol ModelItem : Observable, AnyObject {
     associatedtype ModelID
     var modelID: ModelID { get }
-    var isBusy: Bool { get set }
+    // var isBusy: Bool { get set }
 }
 
 extension AppModel {

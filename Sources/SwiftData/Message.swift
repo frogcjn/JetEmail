@@ -8,6 +8,7 @@
 import SwiftData  // for @Model
 import Foundation // for Date
 
+@dynamicMemberLookup
 @Model
 class Message : ModelItem {
     
@@ -104,12 +105,32 @@ class Message : ModelItem {
 
 extension Message {
     
-    var isBusy: Bool {
+    var appModel: AppModel { .shared }
+    
+    /*var isBusy: Bool {
         get { AttributesStore[modelID].isBusy }
         set { AttributesStore[modelID].isBusy = newValue }
     }
     
-    var appModel: AppModel { .shared }
+    var isClassifying: Bool {
+        get { AttributesStore[modelID].isClassifying }
+        set { AttributesStore[modelID].isClassifying = newValue }
+    }
+    
+    var classifyResultText: String? {
+        get { AttributesStore[modelID].classifyResultText }
+        set { AttributesStore[modelID].classifyResultText = newValue }
+    }*/
+    
+    subscript<Value>(dynamicMember keyPath: KeyPath<Attributes, Value>) -> Value {
+        AttributesStore[modelID][keyPath: keyPath]
+    }
+    
+    subscript<Value>(dynamicMember keyPath: WritableKeyPath<Attributes, Value>) -> Value {
+        _read { yield AttributesStore[modelID][keyPath: keyPath] }
+        _modify { yield &AttributesStore[modelID][keyPath: keyPath] }
+    }
+    
 }
 
 extension Message {
@@ -130,6 +151,8 @@ extension Message {
     
     struct Attributes {
         var isBusy = false
+        var isClassifying = false
+        var classifyResultText: String? = nil
     }
 }
 /*

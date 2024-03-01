@@ -68,7 +68,7 @@ public extension Session {
         try await getItem("mailFolders", "\(microsoftID)")
     }
     
-    fileprivate func getMailFolder(wellKnownFolderName: Microsoft.MailFolder.WellKnownFolderName) async throws -> Microsoft.MailFolder {
+    func getMailFolder(wellKnownFolderName: Microsoft.MailFolder.WellKnownFolderName) async throws -> Microsoft.MailFolder {
         try await getItem("mailFolders", "\(wellKnownFolderName)")
     }
     

@@ -49,19 +49,19 @@ struct MessageView : View {
                 ProgressView()
             }
         }
-        /*/.toolbar {
-            /*Button {
-                Task { await model.classify() }
+        .toolbar {
+            Button {
+                Task { await message.classify() }
             } label: {
                 Label("classify", systemImage: "wand.and.rays")
-                if model.isClassifying {
+                if message.isClassifying {
                     ProgressView().progressViewStyle(.circular).controlSize(.mini)
                 }
             }
-            if let resultText = model.classifyResultText {
+            if let resultText = message.classifyResultText {
                 Text(resultText)
-            }*/
-        }*/
+            }
+        }
         .onChange(of: message.item, initial: true) {
             Task { await message.loadBody() }
         }

@@ -8,6 +8,12 @@
 // MARK: Feature: Account - Load Messages
 
 extension AppItemModel<MailFolder> {
+    
+    var isBusy: Bool {
+        get { item.isBusy }
+        set { item.isBusy = newValue }
+    }
+    
     // @MainActor // for .isBusy
     func loadMessages() async {
         guard !isBusy else { return }
