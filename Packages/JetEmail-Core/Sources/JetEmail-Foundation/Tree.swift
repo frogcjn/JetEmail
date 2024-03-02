@@ -5,19 +5,19 @@
 //  Created by Cao, Jiannan on 2/1/24.
 //
 
-class Tree<Value> {
-    var root: TreeNode<Value>
+public class Tree<Value> {
+    public var root: TreeNode<Value>
     
-    init(rootElement: Value) {
+    public init(rootElement: Value) {
         self.root = TreeNode(element: rootElement)
     }
     
-    init(root: TreeNode<Value>) {
+    public init(root: TreeNode<Value>) {
         self.root = root
     }
 }
 
-extension TreeNode {
+public extension TreeNode {
     func descendants(includesSelf: Bool = true) -> [TreeNode<Element>] {
         var queue: [TreeNode<Element>] = [self]
         var result: [TreeNode<Element>] = []
@@ -36,12 +36,12 @@ extension TreeNode {
     
 
 @dynamicMemberLookup
-class TreeNode<Element> {
-    weak var parent: TreeNode<Element>? = nil
-    var children: [TreeNode<Element>] = []
-    var element: Element
+public class TreeNode<Element> {
+    public weak var parent: TreeNode<Element>? = nil
+    public var children: [TreeNode<Element>] = []
+    public var element: Element
     
-    init(parent: TreeNode<Element>? = nil, children: [TreeNode<Element>] = [], element: Element) {
+    public init(parent: TreeNode<Element>? = nil, children: [TreeNode<Element>] = [], element: Element) {
         self.parent = parent
         self.children = children
         self.element = element
@@ -49,7 +49,7 @@ class TreeNode<Element> {
 }
 
 // @dynamicMemberLookup
-extension TreeNode {
+public extension TreeNode {
     
     subscript<TargetValue>(dynamicMember keyPath: KeyPath<Element, TargetValue>) -> TargetValue {
         element[keyPath: keyPath]

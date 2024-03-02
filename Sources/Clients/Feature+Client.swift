@@ -7,6 +7,8 @@
 
 import Google
 import Microsoft
+import Foundation
+import JetEmail_Foundation
 
 enum Client {
     static var sessions: [Session] { get async throws {
@@ -77,35 +79,60 @@ extension Google.Session {
 extension Session {
     func loadMailFolders(account: Account) async throws  {
         switch self {
-        case .microsoft(let session):
-            let microsoftRoot = try await session.getRootMailFolder()
-            let root = try await BackgroundModelActor.shared.setRootMailFolder(microsoft: microsoftRoot, in: account.persistentID)
-            
-            var queue: [MailFolder] = [root]
-            while !queue.isEmpty {
-                let current = queue.removeFirst()
-                
-                let microsofts = try await session.getChildFolders(microsoftID: current.microsoftID!)
-                let children = try await BackgroundModelActor.shared.setChildrenMailFolders(microsofts: microsofts, parent: current.persistentID, in: account.persistentID)
-                
-                queue.append(contentsOf: children)
-            }
-        case .google(let session):
-            let googles = try await session.getMailFolders()
-            
-            let root = try await {
-                if let root = account.root {
-                    return root
-                } else {
-                    let rootGoogleMailFolder = Google.MailFolder(id: .init(string: account.platformID), name: "folder_all_mail") // TODO:
-                    let root = try await BackgroundModelActor.shared.setRootMailFolder(google: rootGoogleMailFolder, in: account.persistentID)
-                    account.root = root
-                    return root
-                }
-            }()
-            
-            _ = try await BackgroundModelActor.shared.setChildrenMailFolders(googles: googles, parent: root.persistentID, in: account.persistentID)
+        case .microsoft(let session): try await session.loadMailFolders(account: account)
+        case .google(let session): try await session.loadMailFolders(account: account)
         }
     }
 }
 
+extension Microsoft.Session {
+    func loadMailFolders(account: Account) async throws {
+        let microsoftRoot = try await getRootMailFolder()
+        let root = try await BackgroundModelActor.shared.setRootMailFolder(microsoft: microsoftRoot, in: account.persistentID)
+        
+        var queue: [MailFolder] = [root]
+        while !queue.isEmpty {
+            let current = queue.removeFirst()
+            
+            let microsofts = try await getChildFolders(microsoftID: current.microsoftID!)
+            let children = try await BackgroundModelActor.shared.setChildrenMailFolders(microsofts: microsofts, parent: current.persistentID, in: account.persistentID)
+            
+            queue.append(contentsOf: children)
+        }
+    }
+}
+
+extension Google.Session {
+    func loadMailFolders(account: Account) async throws {
+        let rootElement = Google.MailFolder(id: .init(string: "$" + account.platformID + ":folder_all_mail"), name: "folder_all_mail")
+        let tree = try await getMailFolderTree(rootElement: rootElement)
+        let root = try await BackgroundModelActor.shared.setRootMailFolder(google: rootElement, in: account.persistentID)
+        var queue: [(model: MailFolder, google: TreeNode<Google.MailFolder>)] = [(root, tree.root)]
+        while !queue.isEmpty {
+            let current = queue.removeFirst()
+            
+            let googles = current.google.children.map(\.element)
+            let children = try await BackgroundModelActor.shared.setChildrenMailFolders(googles: googles, parent: current.model.persistentID, in: account.persistentID)
+            
+            queue.append(contentsOf: Array(zip(children, current.google.children)))
+        }
+    }
+}
+
+
+
+
+
+/*
+
+extension Tree<Google.MailFolder> {
+    func element(forPath path: [String]) -> Google.MailFolder? {
+        var current: TreeNode<Google.MailFolder>? = root
+        var currentPath = path
+        
+        while let unwrappedCurrent = current {
+            unwrappedCurrent.children.first { $0.path ==  }
+        }
+    }
+}
+*/

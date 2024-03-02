@@ -12,7 +12,8 @@
 
 public struct MailFolder : Codable {
     public let id                   : ID
-    public let name                 : String?
+    public var path                 : String?
+    public var name                 : String?
     public let messageListVisibility: MessageListVisibility?
     public let labelListVisibility  : LabelListVisibility?
     public let type                 : MailFolderType?
@@ -24,6 +25,7 @@ public struct MailFolder : Codable {
     
     public init(
         id                   : ID,
+        path                 : String? = nil,
         name                 : String? = nil,
         messageListVisibility: MessageListVisibility? = nil,
         labelListVisibility  : LabelListVisibility? = nil,
@@ -35,6 +37,7 @@ public struct MailFolder : Codable {
         color                : Color? = nil
     ) {
         self.id                    = id
+        self.path                  = path
         self.name                  = name
         self.messageListVisibility = messageListVisibility
         self.labelListVisibility   = labelListVisibility

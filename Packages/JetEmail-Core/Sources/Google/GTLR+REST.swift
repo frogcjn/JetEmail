@@ -7,6 +7,7 @@
 
 import Foundation
 import GoogleAPIClientForREST_Gmail
+import JetEmail_Foundation
 
 // MARK: - Microsoft.Context: Account-MailFolders API
 
@@ -23,13 +24,37 @@ public extension Google.Session {
             GTLRGmailQuery_UsersLabelsList.query(withUserId: accountID.string)
         } completion: { (object: GTLRGmail_ListLabelsResponse) in
             guard let labels = object.labels else { throw GmailApiError.failedToParseData(object) }
-            
-            let result: [Google.MailFolder] = try labels
+            return try labels
                 .map { try $0.swift }
-                .filter { $0.type == .user }
-            
-            return result
+                .filter { $0.type == .user || $0.path == "SPAM" }
         }
+    }
+    
+    func getMailFolderTree(rootElement: Google.MailFolder) async throws -> Tree<Google.MailFolder> {
+        let tree = Tree(rootElement: rootElement)
+        let elements = try await getMailFolders()
+        
+        var pathToNode = Dictionary(uniqueKeysWithValues: elements.compactMap { element in element.path.map { (path: $0, node: TreeNode(element: element)) } })
+        pathToNode[""] = tree.root
+            
+        for (key: path, value: node) in pathToNode.sorted(using: KeyPathComparator(\.key)) {
+            if node.id == tree.root.id { continue }
+            let components = path.components(separatedBy: "/")
+            
+            var (parent, name) = (tree.root, path)
+            for lastComponentCount in 1..<components.count {
+                let previousComponents = components.dropLast(lastComponentCount).joined(separator: "/") // try name component count
+                let lastComponent = components.suffix(lastComponentCount).joined(separator: "/")
+                if let node = pathToNode[previousComponents] { // find parent
+                    (parent, name) = (node, lastComponent)
+                    break
+                }
+            }
+            (node.parent, node.name) = (parent, name)
+            parent.children.append(node)
+        }
+        
+        return tree
     }
     
     func getMessages(mailFolderID: Google.MailFolder.ID) async throws -> [Google.Message.Full] {

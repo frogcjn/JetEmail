@@ -23,7 +23,7 @@ extension ModelContext {
         guard folder.account == account else { throw TreeError.mailFolderNotInThisAccount }
         
         // check node.parent
-        if folder.parent != nil && folder.parent != parent { throw TreeError.mailFolderAlreadyHaveParent }
+        // if folder.parent != nil && folder.parent != parent { throw TreeError.mailFolderAlreadyHaveParent }
         folder.parent = parent
         
         // check node.children
@@ -34,27 +34,27 @@ extension ModelContext {
     
     // MARK: - ModelContext: Insert or Delete Atom Operations
         
-        func _insertMailFolder(microsoft: Microsoft.MailFolder, parent: MailFolder, in account: Account) throws -> MailFolder {
-            // check account.root
-            guard account.root != nil else { throw TreeError.accountDoNotHaveRootFolder }
-            
-            // insert before check relationship
-            let folderID = try _insertMailFolder(microsoft: microsoft, in: account)
-            let folder = try _fetchMailFolder(modelID: folderID.modelID)!
+    func _insertMailFolder(microsoft: Microsoft.MailFolder, parent: MailFolder, in account: Account) throws -> MailFolder {
+        // check account.root
+        guard account.root != nil else { throw TreeError.accountDoNotHaveRootFolder }
+        
+        // insert before check relationship
+        let folderID = try _insertMailFolder(microsoft: microsoft, in: account)
+        let folder = try _fetchMailFolder(modelID: folderID.modelID)!
 
-            // check parent and folder account
-            guard parent.account == account else { throw TreeError.parentMailFolderNotInThisAccount }
-            guard folder.account == account else { throw TreeError.mailFolderNotInThisAccount }
-            
-            // check node.parent
-            if folder.parent != nil && folder.parent != parent { throw TreeError.mailFolderAlreadyHaveParent }
-            folder.parent = parent
-            
-            // check node.children
-            // guard node.children.isEmpty else { throw TreeError.alreadyHaveChild }
-            
-            return folder
-        }
+        // check parent and folder account
+        guard parent.account == account else { throw TreeError.parentMailFolderNotInThisAccount }
+        guard folder.account == account else { throw TreeError.mailFolderNotInThisAccount }
+        
+        // check node.parent
+        if folder.parent != nil && folder.parent != parent { throw TreeError.mailFolderAlreadyHaveParent }
+        folder.parent = parent
+        
+        // check node.children
+        // guard node.children.isEmpty else { throw TreeError.alreadyHaveChild }
+        
+        return folder
+    }
         
     func _insertMailFolder(microsoft: Microsoft.MailFolder, in account: Account) throws -> MailFolder {
         let id = microsoft.modelID
@@ -303,7 +303,7 @@ extension BackgroundModelActor {
         let account = self[accountID]!
         do {
             var inserts: [MailFolder] = []
-            for google in googles.dropLast() {
+            for google in googles {
                 try inserts.append(modelContext._insertMailFolder(google: google, parent: parent, in: account))
             }
             

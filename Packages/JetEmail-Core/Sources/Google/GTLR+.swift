@@ -12,7 +12,7 @@ extension GTLRGmail_Label {
         guard let id = identifier else { throw GmailApiError.missingMessageInfo("id") }
         return Google.MailFolder.init(
             id                   : .init(string: id),
-            name                 : name,
+            path                 : name,
             messageListVisibility: messageListVisibility.flatMap(Google.MailFolder.MessageListVisibility.init(rawValue:)),
             labelListVisibility  : labelListVisibility.flatMap(Google.MailFolder.LabelListVisibility.init(rawValue:)),
             type                 : type.flatMap(Google.MailFolder.MailFolderType.init(rawValue:)),

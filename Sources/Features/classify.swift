@@ -7,6 +7,7 @@
 
 import OpenAI
 import Microsoft
+import JetEmail_Foundation
 
 enum Agent {
     
@@ -40,25 +41,35 @@ extension AppItemModel<Message> {
         
         let message = item
         let account = message.mailFolder.account
-        guard let tree = account.mailFolderTree, case .microsoft(let session) = account.session else { return }
         do {
-            
-            let root = tree.root
-            
-            let archiveMailFolder = try await session.getMailFolder(wellKnownFolderName: Microsoft.MailFolder.WellKnownFolderName.archive)
-            let junkMailFolder = try await session.getMailFolder(wellKnownFolderName: .junkEmail)
-           
-            guard let archiveNode = root.children.first(where: { $0.modelID == archiveMailFolder.modelID }), let junkNode = root.children.first(where: { $0.modelID == junkMailFolder.modelID }) else {
-                throw ClassifyError.noArchiveFolder
+            guard let session = account.session, let root = account.mailFolderTree?.root else { return }
+            switch session {
+            case .microsoft(let session):
+                let archiveMailFolder = try await session.getMailFolder(wellKnownFolderName: Microsoft.MailFolder.WellKnownFolderName.archive)
+                let junkMailFolder = try await session.getMailFolder(wellKnownFolderName: .junkEmail)
+               
+                guard
+                    let archiveNode = root.children.first(where: { $0.modelID == archiveMailFolder.modelID }),
+                    let junkNode = root.children.first(where: { $0.modelID == junkMailFolder.modelID })
+                else {
+                    throw ClassifyError.noArchiveFolder
+                }
+                
+                let archiveDesendants = archiveNode.descendants(includesSelf: false)
+                let folders = archiveDesendants.map(\.path) + [junkNode.path]
+                message.classifyResultText = try await Agent.classify(folders: folders, message: message) ?? "nil"
+                print(message.classifyResultText ?? "nil")
+            case .google(let session):
+                let desendants = root.descendants(includesSelf: false)
+                let folders = desendants.map(\.path)
+                print(folders)
+                /*message.classifyResultText = try await Agent.classify(folders: folders, message: message) ?? "nil"
+                print(message.classifyResultText ?? "nil")*/
+                return
             }
-            
-            let archiveDesendants = archiveNode.descendants(includesSelf: false)
-            let folders = archiveDesendants.map(\.path) + [junkNode.path]
-            message.classifyResultText = try await Agent.classify(folders: folders, message: message) ?? "nil"
-            print(message.classifyResultText ?? "nil")
-        } catch {
-            context.logger.log("\(error)")
-        }
+            } catch {
+                context.logger.log("\(error)")
+            }
     }
     
 }
