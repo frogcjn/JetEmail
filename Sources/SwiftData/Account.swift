@@ -170,14 +170,3 @@ extension Account {
 // nil
 
 
-extension Session {
-    
-    var account: Account {
-        get throws {
-            switch self {
-            case .microsoft(let microsoftSession): microsoftSession.account
-            case .google(let googleSession): googleSession.account
-            }
-        }
-    }
-}

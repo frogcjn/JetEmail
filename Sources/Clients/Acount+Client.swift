@@ -53,16 +53,4 @@ extension Account {
     } }
 }
 
-// Microsoft.Sesion -> Account
-extension Microsoft.Session {
-    var account: Account { .init(modelID: modelID, username: username) }
-}
-
-
-
-// Google.Session -> Account, KeychainItem*/
-extension Google.Session {
-    var account: Account { .init(modelID: modelID, username: username) }
-    // var item: Google.Keychain.SessionItem { .init(accountID: accountID, username: username, gtmSession: gtmSession, keychainItem: keychainItem) }
-}
 

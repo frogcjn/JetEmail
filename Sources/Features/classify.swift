@@ -7,6 +7,7 @@
 
 import OpenAI
 import Microsoft
+import Google
 import JetEmail_Foundation
 
 enum Agent {
@@ -21,7 +22,7 @@ extension Account {
         while !queue.isEmpty {
             let currentNode = queue.removeFirst()
             
-            let children = currentNode.element.children
+            let children = currentNode.element.children.filter { !$0.deleteMark }
             let childrenNode = children.map{ TreeNode(parent: currentNode, element: $0) }
             currentNode.children = childrenNode
             queue.append(contentsOf: childrenNode)
@@ -42,39 +43,49 @@ extension AppItemModel<Message> {
         let message = item
         let account = message.mailFolder.account
         do {
-            guard let session = account.session, let root = account.mailFolderTree?.root else { return }
+            guard let session = account.session else { return }
             switch session {
-            case .microsoft(let session):
-                let archiveMailFolder = try await session.getMailFolder(wellKnownFolderName: Microsoft.MailFolder.WellKnownFolderName.archive)
-                let junkMailFolder = try await session.getMailFolder(wellKnownFolderName: .junkEmail)
-               
-                guard
-                    let archiveNode = root.children.first(where: { $0.modelID == archiveMailFolder.modelID }),
-                    let junkNode = root.children.first(where: { $0.modelID == junkMailFolder.modelID })
-                else {
-                    throw ClassifyError.noArchiveFolder
-                }
-                
-                let archiveDesendants = archiveNode.descendants(includesSelf: false)
-                let folders = archiveDesendants.map(\.path) + [junkNode.path]
-                message.classifyResultText = try await Agent.classify(folders: folders, message: message) ?? "nil"
-                print(message.classifyResultText ?? "nil")
-            case .google(let session):
-                let desendants = root.descendants(includesSelf: false)
-                let folders = desendants.map(\.path)
-                print(folders)
-                /*message.classifyResultText = try await Agent.classify(folders: folders, message: message) ?? "nil"
-                print(message.classifyResultText ?? "nil")*/
-                return
+            case .microsoft(let session): try await session.classify(account: account, message: message)
+            case .google(let session): try await session.classify(account: account, message: message)
             }
-            } catch {
-                context.logger.log("\(error)")
-            }
+        } catch {
+            context.logger.log("\(error)")
+        }
     }
     
 }
 
-extension TreeNode<MailFolder> {
+extension Microsoft.Session {
+    func classify(account: Account, message: Message) async throws {
+        guard let root = account.mailFolderTree?.root else { return }
+        
+        // get "archive", "junk" mail folders
+        let archiveMailFolder = try await getMailFolder(wellKnownFolderName: Microsoft.MailFolder.WellKnownFolderName.archive)
+        let junkMailFolder = try await getMailFolder(wellKnownFolderName: .junkEmail)
+       
+        guard
+            let archiveNode = root.children.first(where: { $0.modelID == archiveMailFolder.modelID }),
+            let junkNode = root.children.first(where: { $0.modelID == junkMailFolder.modelID })
+        else {
+            throw ClassifyError.noArchiveFolder
+        }
+        
+        let archiveDesendants = archiveNode.descendants(includesSelf: false)
+        let folders = archiveDesendants.map(\.path) + [junkNode.path]
+        message.classifyResultText = try await Agent.classify(folders: folders, message: message) ?? "nil"
+    }
+}
+
+extension Google.Session {
+    func classify(account: Account, message: Message) async throws {
+        guard let root = account.mailFolderTree?.root else { return }
+        let desendants = root.descendants(includesSelf: false)
+        let folders = desendants.map(\.path)
+        message.classifyResultText = try await Agent.classify(folders: folders, message: message) ?? "nil"
+    }
+}
+
+fileprivate extension TreeNode<MailFolder> {
     var path: [String] {
         Array(sequence(first: self) { $0.parent }.map(\.name).reversed().dropFirst())
     }
@@ -82,7 +93,7 @@ extension TreeNode<MailFolder> {
 
 extension Agent {
     static func classify(folders: [[String]], message: Message) async throws -> String? {
-        let folderDescriptions = folders.enumerated().map { "\($0.offset): \($0.element)" }
+        let folderDescriptions = folders.enumerated().map { "\($0.offset): \($0.element.joined(separator: "/"))" }
         let openAI = OpenAI(apiToken: "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")
         print(folderDescriptions.joined(separator: "\n"))
         

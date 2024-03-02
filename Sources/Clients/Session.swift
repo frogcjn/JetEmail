@@ -14,3 +14,11 @@ enum Session {
     case google(Google.Session)
 }
 
+extension Session {
+    var username: String {
+        switch self {
+        case .microsoft(let microsoftSession): microsoftSession.username
+        case .google(let googleSession): googleSession.username
+        }
+    }
+}

@@ -18,12 +18,7 @@ extension AppItemModel<Message> {
     func loadBody() async {
         guard !isBusy else { return }
         isBusy = true
-        print("loadBody start")
-
-        defer { 
-            isBusy = false
-            print("loadBody end")
-        }
+        defer { isBusy = false }
         do {
             let message = item
             let account = message.mailFolder.account

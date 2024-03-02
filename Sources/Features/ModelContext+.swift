@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData // for ModelContainer
 
+
 extension ModelContext {
     subscript<T: PersistentModel>(id: PersistentID<T>) -> T? {
         model(for: id.rawValue) as? T
@@ -170,7 +171,7 @@ extension ModelContext {
         }
         
         // If not found: create
-        let model = try session.account
+        let model = Account(modelID: modelID, username: session.username)
         model.orderIndex = try context._fetchAccountCount()
         model.deleteMark = false
         context.insert(model)
@@ -442,4 +443,3 @@ extension ModelContainer {
         BackgroundModelActor(modelContainer: self)
     }
 }
-

@@ -26,7 +26,7 @@ public extension Google.Session {
             guard let labels = object.labels else { throw GmailApiError.failedToParseData(object) }
             return try labels
                 .map { try $0.swift }
-                .filter { $0.type == .user || $0.path == "SPAM" }
+                .filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
         }
     }
     
@@ -64,9 +64,10 @@ public extension Google.Session {
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list
     private func getFolderMessageIDs(mailFolderID: Google.MailFolder.ID) async throws -> [Google.Message.ListItem] {
-        return try await service.execute {
+        try await service.execute {
             let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: accountID.string)
             query.labelIds = [mailFolderID.string]
+            query.maxResults = 500
             return query
         } completion: { (object: GTLRGmail_ListMessagesResponse) in
             guard let messages = object.messages else { throw GmailApiError.failedToParseData(object) }
@@ -76,6 +77,13 @@ public extension Google.Session {
 
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
     private func getMessages(ids: [Google.Message.ID], fields: String? = nil, format: GetMessageFormat) async throws -> [Google.Message.Full] {
+        if ids.count > 100 {
+            let first100 = ids.prefix(100)
+            let rest = ids.dropFirst(100)
+            let result = try await getMessages(ids: Array(first100), fields: fields, format: format) + getMessages(ids: Array(rest), fields: fields, format: format)
+            return result
+        }
+        
         return try await service.execute {
             GTLRBatchQuery(queries: ids.map { [accountID = accountID.string] in
                 let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID, identifier: $0.string)
