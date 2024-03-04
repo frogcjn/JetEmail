@@ -7,6 +7,8 @@
 
 // MARK: Feature: Accounts - Load Accounts
 
+import JetEmail_Foundation
+
 extension AppModel {
     
     @MainActor // for isBusy
@@ -16,11 +18,16 @@ extension AppModel {
         defer { isBusy = false }
         
         do {
-            let sessions = try await Client.sessions
-            _ = try await BackgroundModelActor.shared.setSessions(sessions) // load session from local keychain
+            try await _loadAccounts()
         } catch {
             logger.error("\(error)")
         }
+    }
+    
+    @BackgroundActor
+    private func _loadAccounts() async throws {
+        let sessions = try await Client.sessions
+        _ = try await BackgroundModelActor.shared.setSessions(sessions) // load session from local keychain
     }
 }
 

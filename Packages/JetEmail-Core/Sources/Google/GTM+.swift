@@ -31,14 +31,14 @@ public extension Google.Client {
     func _gtmSignIn() async throws -> GTMSession {
         MainActor.assertIsolated()
         #if os(iOS)
-        guard let window = UIApplication.sharedKeyWinwdow?.rootViewController else { throw Google.AuthError.authorizeNoMainWindow }
+        guard let window = UIApplication.sharedKeyWindow?.rootViewController else { throw Google.AuthError.authorizeNoMainWindow }
     
         #elseif os(visionOS)
         
-        guard let window = UIApplication.sharedKeyWinwdow else { throw Google.AuthError.authorizeNoMainWindow }
+        guard let window = UIApplication.sharedKeyWindow else { throw Google.AuthError.authorizeNoMainWindow }
 
         #elseif os(macOS)
-        guard let window = NSApplication.shared.windows.first else { throw Google.AuthError.authorizeNoMainWindow }
+        guard let window = NSApplication.sharedKeyWindow else { throw Google.AuthError.authorizeNoMainWindow }
         #endif
         
         let additionalParameters: [String: String] = [

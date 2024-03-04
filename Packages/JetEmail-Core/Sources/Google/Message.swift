@@ -8,7 +8,6 @@
 import Foundation
 
 public struct Message : Codable, Identifiable {
-    public typealias Full = Message
     public var                         id: ID
     public var               internalDate: Int64?
     public var                    snippet: String?

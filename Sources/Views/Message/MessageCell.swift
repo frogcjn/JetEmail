@@ -59,6 +59,7 @@ struct MoveTo: View {
                         if let mailFolder = message.moveTo {
                             Task {
                                 await itemModel.moveTo(mailFolder: mailFolder)
+                                message.moveTo = nil
                             }
                         }
                     }

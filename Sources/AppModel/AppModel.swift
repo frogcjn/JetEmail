@@ -15,13 +15,12 @@ import os        // for Logger
 @Observable
 final class AppModel {
 
-    
-    var isBusy = false
-    
     let logger = Logger(subsystem: "me.frogcjn.jet-email", category: "AppModel")
-
+    
     // Feature: Unselection - Will Sign Out Account
     var willSignOutAccount = PassthroughSubject<Account, Never>()
+    
+    var isBusy = false
 }
 
 extension AppModel {

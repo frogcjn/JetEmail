@@ -21,10 +21,6 @@ public final class Client {
     public init(){}
     
     public let  keychain = Keychain.shared
-    
-    //@MainActor
-    //var isBusy = false
-    //let logger = Logger(subsystem: "me.frogcjn.jet-email", category: "GoogleAPI")
 }
 
 

@@ -6,6 +6,7 @@
 //
 
 import GoogleAPIClientForREST_Gmail
+import JetEmail_Foundation
 
 extension GTLRGmail_Label {
     var swift: Google.MailFolder { get throws {
@@ -35,12 +36,12 @@ extension GTLRGmail_LabelColor {
 }
 
 extension GTLRGmail_Message {
-    var swift: Google.Message.Full { get throws {
+    var swift: Google.Message { get throws {
         guard let stringID = identifier else { throw GmailApiError.missingMessageInfo("id") }
-        return Google.Message.Full(
+        return Google.Message(
             id          :     .init(string: stringID),
             internalDate:     internalDate?.int64Value,
-            snippet     :     snippet,
+            snippet     :     snippet?.removingHTMLEntities,
             sizeEstimate:     sizeEstimate?.intValue,
             raw         :     raw?.gtlrBase64,
             payload     : try payload?.swift,

@@ -5,6 +5,8 @@
 //  Created by Cao, Jiannan on 2/23/24.
 //
 
+import JetEmail_Foundation
+
 // MARK: Feature: Accounts - Sign Out
 
 extension AppItemModel<Account> {
@@ -14,21 +16,21 @@ extension AppItemModel<Account> {
         guard !isBusy else { return }
         isBusy = true
         defer { isBusy = false }
-                
-        let model = item
-        
+                        
         // Feature: Unselection - Will Sign Out Account
-        context.willSignOutAccount.send(model)
+        context.willSignOutAccount.send(item)
         
         do {
-
-            _ = try await item.session?.signOut()
-            item.session = nil
-            _ = try await BackgroundModelActor.shared.deleteAccount(itemModel: self, id: item.persistentID)
+            try await _signOut()
         } catch {
             logger.error("\(error)")
         }
     }
+    
+    @BackgroundActor
+    private func _signOut() async throws {
+        _ = try await item.session?.signOut()
+        item.session = nil
+        _ = try await BackgroundModelActor.shared.deleteAccount(itemModel: self, id: item.persistentID)
+    }
 }
-
-

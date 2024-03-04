@@ -34,23 +34,33 @@ extension Account {
 
 extension AppItemModel<Message> {
     
+    @MainActor
+    var isClassifying: Bool {
+        get { item.isClassifying }
+        set { item.isClassifying = newValue }
+    }
+    
     @MainActor // for isClassifying
     func classify() async {
         guard !isClassifying else { return }
         isClassifying = true
         defer { isClassifying = false }
         
-        
+        do {
+            try await _classify()
+        } catch {
+            context.logger.error("\(error)")
+        }
+    }
+    
+    @BackgroundActor
+    private func _classify() async throws {
         let message = item
         let account = message.mailFolder.account
-        do {
-            guard let session = account.session else { return }
-            switch session {
-            case .microsoft(let session): try await session.classify(account: account, message: message)
-            case .google(let session): try await session.classify(account: account, message: message)
-            }
-        } catch {
-            context.logger.log("\(error)")
+        guard let session = account.session else { return }
+        switch session {
+        case .microsoft(let session): try await session.classify(account: account, message: message)
+        case .google(let session): try await session.classify(account: account, message: message)
         }
     }
     
@@ -107,7 +117,7 @@ extension Agent {
     static func classify(folders: [(folder: MailFolder, path: [String])], message: Message) async throws -> MailFolder? {
         let folderDescriptions = folders.enumerated().map { "\($0.offset): \($0.element.path.joined(separator: "/"))" }
         let openAI = OpenAI(apiToken: "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")
-        print(folderDescriptions.joined(separator: "\n"))
+        // print(folderDescriptions.joined(separator: "\n"))
         
         let messages: [Chat] =  [
             .init(role: .system, content: "You are an email classifier agent, you need classify my email into different folders."),
@@ -143,7 +153,7 @@ extension Agent {
         
         let query = ChatQuery(model: .gpt4, messages: messages, tools: tools)
         let response = try await openAI.chats(query: query)
-        print(response.choices[0].message)
+        // print(response.choices[0].message)
         guard let folderDescription = try? response.choices[0].message.toolCalls?.first?.function.arguments?.decodeJSON(ClassifyResult.self).existedFolder else { return nil }
         guard let folderIndex = folderDescription.split(separator: ":").first.flatMap({ Int($0) }) else { return nil }
         return folders[folderIndex].folder

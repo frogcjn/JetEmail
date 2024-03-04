@@ -260,8 +260,8 @@ fileprivate extension Data {
 fileprivate extension String {
     var fourCharUInt32: UInt32? {
         guard count == 4 else {
-            print("Input must be exactly four characters.")
-            return nil
+            fatalError("Input must be exactly four characters.")
+            // return nil
         }
         
         var value: UInt32 = 0

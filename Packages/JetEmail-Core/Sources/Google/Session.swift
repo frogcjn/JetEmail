@@ -64,11 +64,11 @@ Google.Session = Google.Account + GTMAuthSession
         }
         
         public func authState(_ state: OpenIDState, didEncounterAuthorizationError error: Error) {
-            print(#function, state)
+            // print(#function, state)
         }
         
         public func authState(_ state: OpenIDState, didEncounterTransientError error: Error) {
-            print(#function, state)
+            // print(#function, state)
         }
         
         fileprivate func updateKeychainItem() async throws {

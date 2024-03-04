@@ -46,20 +46,23 @@ fileprivate struct _MessageList : View {
             MailFolderMessageListToolBar()
         }
         
-        /*// Feature: Account - Load Messages
+        // Feature: Account - Load Messages
         .onChange(of: mailFolder.item, initial: true) {
             Task { await mailFolder.loadMessages() }
-        }*/
+        }
         
         // Feature: Classify
         .toolbar {
             Button {
                 Task {
-                    for message in messages.dropFirst(classifyStartIndex).prefix(5).map({ appModel($0) }) {
-                        await message.classify()
-                        print("classifyResultText", message.item.moveTo?.name ?? "nil")
+                    if let message = window.selectedMessage {
+                        await appModel(message).classify()
+                    } else {
+                        for message in messages.prefix(classifyStartIndex+5).filter({ $0.moveTo == nil }) {
+                            await appModel(message).classify()
+                        }
+                        classifyStartIndex += 5
                     }
-                    classifyStartIndex += 5
                 }
             } label: {
                 Label("classify", systemImage: "wand.and.rays")

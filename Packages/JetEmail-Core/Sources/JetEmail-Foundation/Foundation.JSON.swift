@@ -166,3 +166,24 @@ public extension String {
         }
     }
 }
+
+
+public extension String {
+    var removingHTMLEntities: String {
+        let encodedString = self
+        guard let data = encodedString.data(using: .utf8) else {
+            return encodedString
+        }
+        
+        let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
+            .documentType: NSAttributedString.DocumentType.html,
+            .characterEncoding: String.Encoding.utf8.rawValue
+        ]
+        
+        if let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) {
+            return attributedString.string
+        } else {
+            return encodedString
+        }
+    }
+}

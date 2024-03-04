@@ -426,7 +426,7 @@ extension Microsoft.Message {
     }*/
 }
 
-extension Google.Message.Full {
+extension Google.Message {
     var modelID: Message.ModelID {
         .init(platform: .google, platformID: id.string)
     }
@@ -528,37 +528,52 @@ extension MailFolder {
 // MARK: - MSGraph -> MSGraph: ID
 
 extension Account {
+    var microsoftID: Microsoft.ID? { modelID.microsoftID }
+    var googleID: Google.ID? { modelID.googleID }
+}
+
+extension Account.ModelID {
     var microsoftID: Microsoft.ID? {
-        guard case .microsoft(let microsoftID) = self.modelID else { return nil }
+        guard case .microsoft(let microsoftID) = self else { return nil }
         return microsoftID
     }
     
     var googleID: Google.ID? {
-        guard case .google(let googleID) = modelID else { return nil }
+        guard case .google(let googleID) = self else { return nil }
         return googleID
     }
 }
 
 extension MailFolder {
+    var microsoftID: Microsoft.MailFolder.ID? { modelID.microsoftID }
+    var googleID: Google.MailFolder.ID? { modelID.googleID }
+}
+
+extension MailFolder.ModelID {
     var microsoftID: Microsoft.MailFolder.ID? {
-        guard case .microsoft(let microsoftID) = modelID else { return nil }
+        guard case .microsoft(let microsoftID) = self else { return nil }
         return microsoftID
     }
     
     var googleID: Google.MailFolder.ID? {
-        guard case .google(let googleID) = modelID else { return nil }
+        guard case .google(let googleID) = self else { return nil }
         return googleID
     }
 }
 
 extension Message {
+    var microsoftID: Microsoft.Message.ID? { modelID.microsoftID }
+    var googleID: Google.Message.ID? { modelID.googleID }
+}
+
+extension Message.ModelID {
     var microsoftID: Microsoft.Message.ID? {
-        guard case .microsoft(let microsoftID) = self.modelID else { return nil }
+        guard case .microsoft(let microsoftID) = self else { return nil }
         return microsoftID
     }
     
-    var googleID: Google.ID? {
-        guard case .google(let googleID) = modelID else { return nil }
+    var googleID: Google.Message.ID? {
+        guard case .google(let googleID) = self else { return nil }
         return googleID
     }
 }

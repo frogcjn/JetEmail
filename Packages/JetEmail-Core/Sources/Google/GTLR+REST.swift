@@ -57,7 +57,7 @@ public extension Google.Session {
         return tree
     }
     
-    func getMessages(mailFolderID: Google.MailFolder.ID) async throws -> [Google.Message.Full] {
+    func getMessages(mailFolderID: Google.MailFolder.ID) async throws -> [Google.Message] {
         let ids = try await getFolderMessageIDs(mailFolderID: mailFolderID).map(\.id)
         return try await getMessages(ids: ids, format: .metadata)
     }
@@ -76,7 +76,7 @@ public extension Google.Session {
     }
 
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
-    private func getMessages(ids: [Google.Message.ID], fields: String? = nil, format: GetMessageFormat) async throws -> [Google.Message.Full] {
+    private func getMessages(ids: [Google.Message.ID], fields: String? = nil, format: GetMessageFormat) async throws -> [Google.Message] {
         if ids.count > 100 {
             let first100 = ids.prefix(100)
             let rest = ids.dropFirst(100)
@@ -101,7 +101,7 @@ public extension Google.Session {
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
-    func getMessage(id: Google.Message.ID, fields: String? = nil, format: GetMessageFormat) async throws -> Google.Message.Full {
+    func getMessage(id: Google.Message.ID, fields: String? = nil, format: GetMessageFormat) async throws -> Google.Message {
         try await service.execute{
             let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: self.accountID.string, identifier: id.string)
             query.fields = fields

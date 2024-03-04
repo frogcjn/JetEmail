@@ -79,13 +79,13 @@ extension Microsoft.EmailAddress {
 import Google
 
 extension Message {
-    var google: Google.Message.Full? {
+    var google: Google.Message? {
         get {
-            try? _google?.decodeJSON(Google.Message.Full.self)
+            try? _google?.decodeJSON(Google.Message.self)
         }
     }
     
-    func setGoogle(_ google: Google.Message.Full, in mailFolder: MailFolder) throws {
+    func setGoogle(_ google: Google.Message) throws {
         if let internalDate = google.internalDate       { self.date        = internalDate.milliSecondsTimeIntervalSince1970 }
         if let snippet      = google.snippet            { self.bodyPreview = snippet                                        }
         if let raw          = google.raw                { self.raw         = raw                                            }
@@ -126,8 +126,6 @@ extension Message {
         }
         
         self._google = try? google.jsonString
-        
-        self.mailFolder = mailFolder
     }
 }
 
@@ -189,7 +187,7 @@ extension HeaderFieldName {
 }
 
 extension Google.Message {
-    func _print() {
+    /*func _print() {
         print("id:", id) // 18dd9dd6644cb062
         print("threadId:", threadId ?? "nil") // nil
         print("labelIds:", labelIds ?? "nil") // nil
@@ -203,11 +201,11 @@ extension Google.Message {
             print("====payload====")
             payload._print()
         }
-    }
+    }*/
 }
 
 extension Google.Message.Part {
-    func _print() {
+    /*func _print() {
         print("partID:", partID ?? "nil") // nil
         print("mimeType:", mimeType ?? "nil") // nil
         print("filename:", filename ?? "nil") // nil
@@ -220,5 +218,5 @@ extension Google.Message.Part {
                 part._print()
             }
         }
-    }
+    }*/
 }

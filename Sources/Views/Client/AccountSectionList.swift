@@ -55,11 +55,11 @@ struct AccountSectionList : View {
         }
         
         // Feature: Account - Load Mail Folders
-        /*.onChange(of: accounts, initial: true) { Task {
+        .onChange(of: accounts, initial: true) { Task {
             for account in accounts {
                 await appModel(account).loadMailFolders()
             }
-        } }*/
+        } }
         
         #if !os(macOS)
         .toolbar {

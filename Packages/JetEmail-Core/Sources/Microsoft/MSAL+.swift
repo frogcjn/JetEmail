@@ -21,10 +21,10 @@ public extension Client {
         MainActor.assertIsolated()
         // TODO:
         #if !os(macOS)
-        guard let window = UIApplication.sharedKeyWinwdow, let rootViewController = window.rootViewController else { throw Microsoft.AuthError.authorizeNoMainWindow }
+        guard let window = UIApplication.sharedKeyWindow, let rootViewController = window.rootViewController else { throw Microsoft.AuthError.authorizeNoMainWindow }
         return .init(authPresentationViewController: rootViewController)
         #else
-        guard let window = NSApplication.shared.windows.first, let viewController = window.contentViewController else { throw Microsoft.AuthError.authorizeNoMainWindow }
+        guard let window = NSApplication.sharedKeyWindow, let viewController = window.contentViewController else { throw Microsoft.AuthError.authorizeNoMainWindow }
         return .init(authPresentationViewController: viewController)
         #endif
     } }

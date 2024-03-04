@@ -32,9 +32,6 @@ public final class Client {
        //webViewParameters = .init(authPresentationViewController: <#T##UIViewController#>)
     }
     
-    // @MainActor
-    // var isBusy = false
-    // let logger = Logger(subsystem: "me.frogcjn.jet-email", category: "MicrosoftClient")
 }
     
 
