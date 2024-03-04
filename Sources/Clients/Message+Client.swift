@@ -85,7 +85,7 @@ extension Message {
         }
     }
     
-    func setGoogle(_ google: Google.Message.Full) throws {
+    func setGoogle(_ google: Google.Message.Full, in mailFolder: MailFolder) throws {
         if let internalDate = google.internalDate       { self.date        = internalDate.milliSecondsTimeIntervalSince1970 }
         if let snippet      = google.snippet            { self.bodyPreview = snippet                                        }
         if let raw          = google.raw                { self.raw         = raw                                            }
@@ -124,6 +124,10 @@ extension Message {
         if let body = try google.payload?.messageBody {
             self.body = body
         }
+        
+        self._google = try? google.jsonString
+        
+        self.mailFolder = mailFolder
     }
 }
 

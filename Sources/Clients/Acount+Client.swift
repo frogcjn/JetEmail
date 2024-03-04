@@ -32,7 +32,7 @@ extension Account {
         }
     }
     
-    @MainActor
+    // @MainActor
     var refreshedIfExpiredSession: Session? { get async throws {
         if let session {
             switch session {

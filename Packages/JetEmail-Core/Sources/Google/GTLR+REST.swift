@@ -102,9 +102,7 @@ public extension Google.Session {
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
     func getMessage(id: Google.Message.ID, fields: String? = nil, format: GetMessageFormat) async throws -> Google.Message.Full {
-
-        
-        return try await service.execute{
+        try await service.execute{
             let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: self.accountID.string, identifier: id.string)
             query.fields = fields
             query.format = format.rawValue
@@ -132,6 +130,23 @@ public extension Google.Session {
                 // "uniqueBody"
             )
         ])*/
+    }
+    
+    // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/modify
+    func moveMessage(_ message: Google.Message, to mailFolderID: Google.MailFolder.ID) async throws -> Google.Message {
+        try await service.execute{
+            let accountID = self.accountID.string
+            let messageID = message.id.string
+            
+            let request = GTLRGmail_ModifyMessageRequest()
+            request.addLabelIds = [mailFolderID.string]
+            request.removeLabelIds =  message.labelIds
+            
+            let query = GTLRGmailQuery_UsersMessagesModify.query(withObject: request, userId: accountID, identifier: messageID)
+            return query
+        } completion: { (result: GTLRGmail_Message) in
+            try result.swift
+        }
     }
     
     enum GetMessageFormat: String {

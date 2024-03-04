@@ -8,7 +8,7 @@
 import SwiftData  // for @Model
 import Foundation // for Date
 
-@dynamicMemberLookup
+// @dynamicMemberLookup
 @Model
 class Message : ModelItem {
     
@@ -103,11 +103,16 @@ class Message : ModelItem {
     }
 }
 
-extension Message {
+/*extension Message {
     
     var appModel: AppModel { .shared }
     
-    /*var isBusy: Bool {
+}*/
+
+@MainActor // for @MainActor AttributesStore
+extension Message {
+    
+    var isBusy: Bool {
         get { AttributesStore[modelID].isBusy }
         set { AttributesStore[modelID].isBusy = newValue }
     }
@@ -117,23 +122,25 @@ extension Message {
         set { AttributesStore[modelID].isClassifying = newValue }
     }
     
-    var classifyResultText: String? {
-        get { AttributesStore[modelID].classifyResultText }
-        set { AttributesStore[modelID].classifyResultText = newValue }
-    }*/
+    var moveTo: MailFolder? {
+        get { AttributesStore[modelID].moveTo }
+        set { AttributesStore[modelID].moveTo = newValue }
+    }
     
-    subscript<Value>(dynamicMember keyPath: KeyPath<Attributes, Value>) -> Value {
+    /*subscript<Value>(dynamicMember keyPath: KeyPath<Attributes, Value>) -> Value {
         AttributesStore[modelID][keyPath: keyPath]
     }
     
     subscript<Value>(dynamicMember keyPath: WritableKeyPath<Attributes, Value>) -> Value {
         _read { yield AttributesStore[modelID][keyPath: keyPath] }
         _modify { yield &AttributesStore[modelID][keyPath: keyPath] }
-    }
+    }*/
     
 }
 
 extension Message {
+    
+    @MainActor // for @MainActor AttributesStore
     @Observable
     class AttributesStore {
         var rawValue = [Message.ModelID: Message.Attributes]()
@@ -152,7 +159,7 @@ extension Message {
     struct Attributes {
         var isBusy = false
         var isClassifying = false
-        var classifyResultText: String? = nil
+        var moveTo: MailFolder? = nil
     }
 }
 /*

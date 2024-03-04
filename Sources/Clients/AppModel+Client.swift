@@ -10,11 +10,11 @@ import Microsoft
 import os
 
 extension AppModel {
-    var googleClient: Google.Client  { Google.Client.shared }
+    nonisolated var googleClient: Google.Client  { Google.Client.shared }
 }
 
 extension AppModel {
-    var microsoftClient: Microsoft.Client { get async throws { try await .shared }  }
+    nonisolated var microsoftClient: Microsoft.Client { get async throws { try await .shared }  }
 }
 
 extension AppItemModel where Context == AppModel, Item : ModelItem {

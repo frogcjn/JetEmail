@@ -27,7 +27,7 @@ public typealias OpenIDState        = OIDAuthState
 
 public extension Google.Client {
     
-    @MainActor
+    @MainActor  // for window
     func _gtmSignIn() async throws -> GTMSession {
         MainActor.assertIsolated()
         #if os(iOS)

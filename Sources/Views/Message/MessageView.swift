@@ -9,6 +9,9 @@ import SwiftUI
 
 struct MessageView : View {
     @Environment(AppItemModel<Message>.self)
+    var itemModel
+    
+    @Environment(Message.self)
     var message
     
     var body: some View {
@@ -49,6 +52,7 @@ struct MessageView : View {
                 ProgressView()
             }
         }
+        /*// Feature: Classify
         .toolbar {
             Button {
                 Task { await message.classify() }
@@ -61,9 +65,9 @@ struct MessageView : View {
             if let resultText = message.classifyResultText {
                 Text(resultText)
             }
-        }
-        .onChange(of: message.item, initial: true) {
-            Task { await message.loadBody() }
+        }*/
+        .onChange(of: message, initial: true) {
+            Task { await itemModel.loadBody() }
         }
     }
 }

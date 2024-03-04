@@ -16,7 +16,7 @@ public extension Client {
         try _msalClient.allAccounts()
     } }
     
-    @MainActor
+    @MainActor // for webViewParameters
     var webViewParameters: MSALWebviewParameters { get throws {
         MainActor.assertIsolated()
         // TODO:
@@ -33,7 +33,7 @@ public extension Client {
         try await _msalAccounts.asyncMap{ try await $0.lazyMSALSession }
     } }*/
     
-    @MainActor
+    @MainActor // for webViewParameters
     func _msalSignIn() async throws -> Microsoft.MSALSession {
         MainActor.assertIsolated()
         let parameters = try MSALInteractiveTokenParameters(scopes: scopes.map(\.rawValue), webviewParameters: webViewParameters)
@@ -64,7 +64,7 @@ public extension Client {
          */
     }*/
     
-    @MainActor
+    @MainActor // for webViewParameters
     func _msalSignout(msalAccount: MSALAccount) async throws -> Bool {
         MainActor.assertIsolated()
         let parameters = try MSALSignoutParameters(webviewParameters: webViewParameters)

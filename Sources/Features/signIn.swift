@@ -10,7 +10,7 @@
 extension AppModel {
     
     // Feature: Accounts - Sign In
-    // @MainActor // for isAppModelBusy
+    @MainActor // for isBusy
     func signIn(platform: Platform) async {
         guard !isBusy else { return }
         isBusy = true

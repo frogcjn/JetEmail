@@ -9,12 +9,19 @@
 
 extension AppItemModel<Message> {
     
+    @MainActor
     var isBusy: Bool {
         get { item.isBusy }
         set { item.isBusy = newValue }
     }
     
-    // @MainActor // for .isBusy
+    @MainActor
+    var isClassifying: Bool {
+        get { item.isClassifying }
+        set { item.isClassifying = newValue }
+    }
+    
+    @MainActor // for .isBusy
     func loadBody() async {
         guard !isBusy else { return }
         isBusy = true

@@ -11,19 +11,23 @@ import Combine   // for PassthroughSubject
 import os        // for Logger
 
 // @dynamicMemberLookup
+@MainActor // for @MainActor AppModel
 @Observable
 final class AppModel {
-    
-    // settings
-    var settings       = SettingsModel()
-    let modelContainer = ModelContainer.shared
 
     
     var isBusy = false
+    
     let logger = Logger(subsystem: "me.frogcjn.jet-email", category: "AppModel")
 
     // Feature: Unselection - Will Sign Out Account
     var willSignOutAccount = PassthroughSubject<Account, Never>()
+}
+
+extension AppModel {
+    // settings
+    nonisolated var settings: SettingsModel { .shared }
+    nonisolated var modelContainer: ModelContainer { .shared }
 }
 
 

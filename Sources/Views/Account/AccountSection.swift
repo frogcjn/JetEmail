@@ -30,7 +30,7 @@ struct AccountSection: View {
     
     var body: some View {
         Section {
-            if let rootID = account.root?.id {
+            if let rootID = account.item.root?.id {
                 _AcciontSection(_rootChildren: Query(filter: #Predicate { rootID != nil && $0.parent?.id == rootID && !$0.deleteMark }, sort: \MailFolder.name))
             } else {
                 Color.red

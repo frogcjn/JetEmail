@@ -8,6 +8,8 @@
 // MARK: Feature: Accounts - Load Accounts
 
 extension AppModel {
+    
+    @MainActor // for isBusy
     func loadAccounts() async {
         guard !isBusy else { return }
         isBusy = true

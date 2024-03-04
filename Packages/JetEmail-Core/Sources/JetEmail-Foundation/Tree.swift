@@ -37,7 +37,7 @@ public extension TreeNode {
 
 @dynamicMemberLookup
 public class TreeNode<Element> {
-    public weak var parent: TreeNode<Element>? = nil
+    public var parent: TreeNode<Element>?
     public var children: [TreeNode<Element>] = []
     public var element: Element
     

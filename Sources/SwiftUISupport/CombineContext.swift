@@ -7,7 +7,7 @@
 
 import Observation
 
-@dynamicMemberLookup
+//@dynamicMemberLookup
 @Observable
 class CombineContext<Context, Item> {
     
@@ -21,7 +21,7 @@ class CombineContext<Context, Item> {
 }
 
 // @dynamicMemberLookup
-extension CombineContext {
+/*extension CombineContext {
     
     subscript<Value>(dynamicMember keyPath: KeyPath<Item, Value>) -> Value {
         item[keyPath: keyPath]
@@ -60,7 +60,7 @@ extension CombineContext {
         get { requestMailFolders[keyPath: keyPath] }
         set { requestMailFolders[keyPath: keyPath] = newValue }
     }*/
-}
+}*/
 
 
 

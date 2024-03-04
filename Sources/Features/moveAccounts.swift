@@ -11,7 +11,7 @@ import Foundation
 
 extension AppModel {
     
-    // @MainActor
+    @MainActor // for isBusy
     func moveAccounts(_ accounts: [Account], fromOffsets source: IndexSet, toOffset destination: Int) async {
         guard !isBusy else { return }
         isBusy = true

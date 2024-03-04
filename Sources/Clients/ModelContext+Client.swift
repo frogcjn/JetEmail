@@ -124,14 +124,13 @@ extension ModelContext {
             
             // If found: update
             model.deleteMark = false
-            try model.setGoogle(google)
-            model.mailFolder = mailFolder
+            try model.setGoogle(google, in: mailFolder)
             return model
         }
         
         // If not found: create
         let model = Message(modelID: google.modelID, in: mailFolder)
-        try model.setGoogle(google)
+        try model.setGoogle(google, in: mailFolder)
         insert(model)
         return model
     }
@@ -190,7 +189,7 @@ extension BackgroundModelActor {
         BackgroundModelActor.assertIsolated()
         let message = try modelContext._fetchMessage(modelID: messageID)!
         do {
-            try message.setGoogle(google)
+            try message.setGoogle(google, in: message.mailFolder)
             try modelContext.save()
             return message.persistentID
         } catch {

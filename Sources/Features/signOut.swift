@@ -9,7 +9,7 @@
 
 extension AppItemModel<Account> {
 
-    // @MainActor // for isAppModelBusy, item.isBusy
+    @MainActor // for isBusy, willSignOutAccount
     func signOut() async {
         guard !isBusy else { return }
         isBusy = true
