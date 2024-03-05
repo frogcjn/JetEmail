@@ -13,6 +13,11 @@ struct MailFolderCell : View {
     var mailFolder
     
     var body: some View {
-        Text(mailFolder.name)
+        HStack {
+            Image(systemName: mailFolder.systemImage)
+                .frame(width: 8, height: 8)
+                .foregroundStyle(.tint)
+            Text(mailFolder.localizedName)
+        }.padding(.horizontal, 5)
     }
 }

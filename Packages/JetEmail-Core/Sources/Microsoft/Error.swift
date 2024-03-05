@@ -47,8 +47,8 @@ extension Google {
 
 
 public struct PublicError : Codable, Error {
-        let code: String?
-        let message: String?
-        let innerError: JSON?
-        let details: [JSON]?
+    public let code: String?
+    public let message: String?
+    public let innerError: JSON?
+    public let details: [JSON]?
 }

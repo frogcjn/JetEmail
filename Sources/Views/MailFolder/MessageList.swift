@@ -65,9 +65,9 @@ fileprivate struct _MessageList : View {
                 
                 Menu {
                     ForEach([1,5,10,50], id: \.self) { count in
-                        Button("Auto Classify ^[\(count) Message](inflect: true)" ) { Task { await classifyMultiple(auto: true, count: count) } }
+                        Button("Auto Classify ^[\(count) Message](inflect: true)" , systemImage: "wand.and.rays") { Task { await classifyMultiple(auto: true, count: count) } }
                     }
-                    Button("Manual Classify") { Task { await classifyMultiple(auto: false, count:1) } }
+                    Button("Manual Classify", systemImage: "cursorarrow.rays") { Task { await classifyMultiple(auto: false, count:1) } }
                 } label: {
                     Label("Classify", systemImage: "wand.and.rays")
                 }

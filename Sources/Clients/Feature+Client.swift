@@ -77,15 +77,35 @@ extension Session {
 
 extension Microsoft.Session {
     func loadMailFolders(account: Account) async throws {
-        let microsoftRoot = try await getRootMailFolder()
+        var microsoftRoot = try await getRootMailFolder()
+        microsoftRoot.wellKnownFolderName = .msgFolderRoot
         let root = try await BackgroundModelActor.shared.setRootMailFolder(microsoft: microsoftRoot, in: account.persistentID)
+        
+        
+        var folderToWellKnownFolderName = [Microsoft.MailFolder.ID: Microsoft.MailFolder.WellKnownFolderName]()
+        for name in Microsoft.MailFolder.WellKnownFolderName.allCases {
+            do {
+                let folder = try await getMailFolder(wellKnownFolderName: name)
+                folderToWellKnownFolderName[folder.id] = name
+            } catch let error as Microsoft.PublicError where error.code == "ErrorFolderNotFound" {
+                continue
+            }
+        }
         
         var queue: [MailFolder] = [root]
         while !queue.isEmpty {
             let current = queue.removeFirst()
             
-            let microsofts = try await getChildFolders(microsoftID: current.microsoftID!)
-            let children = try await BackgroundModelActor.shared.setChildrenMailFolders(microsofts: microsofts, parent: current.persistentID, in: account.persistentID)
+            var mailFolders = try await getChildFolders(microsoftID: current.microsoftID!)
+            mailFolders = mailFolders.map {
+                var mailFolder = $0
+                if let wellKnownFolderName = folderToWellKnownFolderName[mailFolder.id] {
+                    mailFolder.wellKnownFolderName = wellKnownFolderName
+                }
+                return mailFolder
+            }
+            
+            let children = try await BackgroundModelActor.shared.setChildrenMailFolders(microsofts: mailFolders, parent: current.persistentID, in: account.persistentID)
             
             queue.append(contentsOf: children)
         }

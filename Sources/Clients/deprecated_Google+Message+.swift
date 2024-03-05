@@ -352,40 +352,10 @@ extension AppItemModel<Account> {
     }*/
 }*/
 
-/*
+
+
+
  
- import MimeEmailParser
-
- struct MailBox : Codable, Equatable {
-     let    addrSpec: String
-     let displayName: String?
- }
-
- extension MailBox {
-     var rawValue: String {
-         if let displayName { "\(displayName) <\(addrSpec)>" }
-         else { addrSpec }
-     }
- }
-
- extension String {
-     var paringAddressList: [MailBox] { get throws {
-         try MimeEmailParser().parseAddressList(addresses: self).map(\.mailbox)
-     } }
-     
-     var parsingAddress: MailBox { get throws {
-         try MimeEmailParser().parseSingleAddress(address: self).mailbox
-     } }
- }
-
- extension Address {
-     var mailbox: MailBox {
-         .init(addrSpec: Address, displayName: Name)
-     }
- }
-
-
- */
 /*
 extension Address {
     init(rawValue: String) {

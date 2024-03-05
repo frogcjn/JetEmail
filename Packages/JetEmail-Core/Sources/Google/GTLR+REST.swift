@@ -26,7 +26,7 @@ public extension Google.Session {
             guard let labels = object.labels else { throw GmailApiError.failedToParseData(object) }
             return try labels
                 .map { try $0.swift }
-                .filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
+                // .filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
         }
     }
     

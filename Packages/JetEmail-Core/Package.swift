@@ -22,7 +22,8 @@ let package = Package(
         .package(url: "https://github.com/frogcjn/AppAuth-iOS.git", branch: "frogcjn/visionOS"), //.package(url: "https://github.com/openid/AppAuth-iOS.git", .upToNextMajor(from: "1.6.2")),
         .package(url: "https://github.com/frogcjn/GTMAppAuth.git", branch: "frogcjn/visionOS"), // .package(url: "https://github.com/google/GTMAppAuth.git", .upToNextMajor(from: "4.0.0")),
         .package(url: "https://github.com/google/google-api-objectivec-client-for-rest.git", .upToNextMajor(from: "3.5.1")),
-        .package(url: "https://github.com/frogcjn/MSAL.git", branch: "main")// .package(url: "https://github.com/frogcjn/microsoft-authentication-library-for-objc.git", .upToNextMajor(from: "1.3.0")),
+        .package(url: "https://github.com/frogcjn/MSAL.git", branch: "main"), // .package(url: "https://github.com/frogcjn/microsoft-authentication-library-for-objc.git", .upToNextMajor(from: "1.3.0")),
+        .package(url: "https://github.com/igorrendulic/MimeEmailParser.git", .upToNextMajor(from: "1.0.5"))
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -44,7 +45,10 @@ let package = Package(
             ]
         ),
         .target(
-            name: "JetEmail-Foundation"
+            name: "JetEmail-Foundation",
+            dependencies: [
+                .product(name: "MimeEmailParser", package: "MimeEmailParser")
+            ]
         ),
         /*.binaryTarget(
             name: "MSAL",
