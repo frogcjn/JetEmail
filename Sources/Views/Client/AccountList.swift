@@ -16,7 +16,7 @@ struct AccountList: View {
     @Environment(SettingsModel.self)
     var settings
     
-    @Query(sort: \Account.orderIndex, order: .forward)
+    @Query(filter: #Predicate { $0.deleteMark == false } , sort: \Account.orderIndex, order: .forward)
     var accounts: [Account]
     
     var body: some View {
