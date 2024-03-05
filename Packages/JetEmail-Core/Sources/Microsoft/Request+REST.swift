@@ -133,6 +133,14 @@ public extension Session {
         message.raw = try await getData("messages", "\(microsoftID)", "$value")
         return message
     }
+    
+    // https://learn.microsoft.com/en-us/graph/api/message-move?view=graph-rest-1.0
+    func moveMessage(id messageID: Microsoft.Message.ID, to toID: Microsoft.MailFolder.ID) async throws -> Microsoft.Message {
+        struct MessageMoveRequestBody : Encodable {
+            let destinationId: Microsoft.MailFolder.ID
+        }
+        return try await postItem("messages", "\(messageID)", "move", body: MessageMoveRequestBody(destinationId: toID))
+    }
 }
 
 // MARK: - MSGraph: Get, Post API

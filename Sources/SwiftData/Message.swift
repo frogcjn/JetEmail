@@ -160,6 +160,7 @@ extension Message {
         var isBusy = false
         var isClassifying = false
         var moveTo: MailFolder? = nil
+        var isMoveToVisible = false
     }
 }
 /*

@@ -33,6 +33,9 @@ struct MoveTo: View {
     @Environment(AppItemModel<Message>.self)
     var itemModel
     
+    @Environment(MailFolder.self)
+    var moveFrom
+    
     @Environment(Message.self)
     var message
             
@@ -43,32 +46,39 @@ struct MoveTo: View {
     }
     
     var body: some View {
-        if let _ = message.moveTo {
+        if message.isClassifying {
+            HStack {
+                Spacer()
+                Text("Auto Classifying…").foregroundStyle(.secondary)
+                ProgressView().progressViewStyle(.circular).controlSize(.small)
+                Spacer()
+            }
+        } else if let _ = message.moveTo {
             //VStack(alignment: .leading) {
             HStack {
                 //Toggle(isOn: $isSelectedToMove) {
                 //HStack {
                 
                 Picker(selection: Bindable(message).moveTo) {
-                    Text("").tag(MailFolder?.none)
+                    Image(systemName: "xmark.circle.fill").tag(MailFolder?.none)
                     ForEach(selectionRange(), id: \.modelID) {
                         Text($0.path.joined(separator: "/")).tag(Optional($0.element))
                     }
                 } label: {
-                    Button("move") {
-                        if let mailFolder = message.moveTo {
+                    Button("Move To:", systemImage: "folder") {
+                        if let moveTo = message.moveTo {
                             Task {
-                                await itemModel.moveTo(mailFolder: mailFolder)
+                                await itemModel.move(from: moveFrom, to: moveTo)
                                 message.moveTo = nil
                             }
                         }
-                    }
+                    }.labelStyle(.titleAndIcon)
                 }
                 
                 //}
                 //}
                 Spacer()
-                Button("don't move", systemImage: "xmark.circle.fill") {
+                Button("Cancel Moving", systemImage: "xmark.circle.fill") {
                     message.moveTo = nil
                 }.buttonStyle(.borderless)
             }

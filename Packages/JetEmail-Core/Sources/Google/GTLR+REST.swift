@@ -133,14 +133,14 @@ public extension Google.Session {
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/modify
-    func moveMessage(_ message: Google.Message, to mailFolderID: Google.MailFolder.ID) async throws -> Google.Message {
+    func moveMessage(id messageID: Google.Message.ID, from fromID: Google.MailFolder.ID, to toID: Google.MailFolder.ID) async throws -> Google.Message {
         try await service.execute{
             let accountID = self.accountID.string
-            let messageID = message.id.string
+            let messageID = messageID.string
             
             let request = GTLRGmail_ModifyMessageRequest()
-            request.addLabelIds = [mailFolderID.string]
-            request.removeLabelIds =  message.labelIds
+            request.removeLabelIds =  [fromID.string]
+            request.addLabelIds = [toID.string]
             
             let query = GTLRGmailQuery_UsersMessagesModify.query(withObject: request, userId: accountID, identifier: messageID)
             return query
