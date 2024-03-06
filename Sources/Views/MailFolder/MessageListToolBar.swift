@@ -13,9 +13,25 @@ struct MailFolderMessageListToolBar : View {
     var mailFolder
     
     var body: some View {
-        HStack {            
+        HStack {  
+            Spacer()
             // Feature: Account - Load Messages
-            RefreshButton(isBusy: mailFolder.isBusy) { await mailFolder.loadMessages() }
+            if mailFolder.isBusy {
+                HStack(spacing: 5) {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .controlSize(.small)
+                    Text("Loading…")
+                        .foregroundStyle(.secondary)
+                }
+            } else {
+                Button("Refresh", systemImage: "arrow.clockwise") {
+                    Task { await mailFolder.loadMessages() }
+                }
+                .buttonStyle(.link)
+                .labelStyle(.titleAndIcon)
+            }
+            Spacer()
         }.background(.bar)
     }
 }

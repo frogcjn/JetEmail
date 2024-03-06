@@ -20,9 +20,9 @@ struct JetEmailApp: App {
             #if os(macOS)
             Settings {
                 SettingsView()
-                    .frame(width: 600, height: 300)
+                    .frame(width: 720, height: 300)
             }
-            .defaultSize(width: 600, height: 300)
+            .defaultSize(width: 720, height: 300)
             #endif
             
 

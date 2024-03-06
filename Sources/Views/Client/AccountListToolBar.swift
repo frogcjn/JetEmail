@@ -18,15 +18,27 @@ struct AccountListToolbar : View {
     var body: some View {
         HStack {
             
-            // Feature: Accounts - Sign In Account
-            Button("Sign In Microsoft Account", systemImage: "plus") {
-                Task { await appModel.signIn(platform: .microsoft) }
-            }//.disabled(context.isBusy)
+
             
             // Feature: Accounts - Sign In Account
-            Button("Sign In Google Account", systemImage: "plus") {
-                Task { await appModel.signIn(platform: .google) }
-            }//.disabled(context.isBusy)
+            Menu {
+                Group {
+                    Button {
+                        Task { await appModel.signIn(platform: .microsoft) }
+                    } label: {
+                        Label("Microsoft Outlook", image: "Outlook")
+                    }//.disabled(context.isBusy)
+                    
+                    Button {
+                        Task { await appModel.signIn(platform: .google) }
+                    } label: {
+                        Label("Google Gmail", image: "Gmail")
+                    }
+                    //.disabled(context.isBusy)
+                }.labelStyle(.titleAndIcon)
+            } label: {
+                Label("Sign In", systemImage: "plus")
+            }.menuIndicator(.hidden)
             
             // Feature: Accounts - Sign Out Account
             Button("Sign Out", systemImage: "minus") {

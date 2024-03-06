@@ -18,6 +18,8 @@ struct AccountCell: View {
     var body: some View {
         HStack {
             Text(account.username)
+                .lineLimit(1)
+                .minimumScaleFactor(0)
             // Text(account.platformState.rawValue)
             
             Spacer()

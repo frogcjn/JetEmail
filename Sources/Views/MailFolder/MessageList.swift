@@ -25,10 +25,13 @@ fileprivate struct _MessageList : View {
     var messages: [Message]
     
     var body: some View {
-        List(messages, selection: Bindable(window).selectedMessage) { item in
-            MessageCell()
-                .itemModel(item)
-                .tag(item)
+        List(selection: Bindable(window).selectedMessage) {
+            ForEach(messages) { item in
+                MessageCell()
+                    .itemModel(item)
+                    .tag(item)
+            }
+            MailFolderMessageListToolBar()
         }
         /*Table(messages.map { TableDataRow(id: $0, item: $0) },  selection: Bindable(window).selectedMessage) {
             TableColumn("Content") { row in
@@ -42,9 +45,9 @@ fileprivate struct _MessageList : View {
             }
         }*/
     
-        .safeAreaInset(edge: .top) {
+        /*.safeAreaInset(edge: .top) {
             MailFolderMessageListToolBar()
-        }
+        }*/
         
         // Feature: Account - Load Messages
         .onChange(of: mailFolder, initial: true) {
@@ -65,13 +68,12 @@ fileprivate struct _MessageList : View {
                 
                 Menu {
                     ForEach([1,5,10,50], id: \.self) { count in
-                        Button("Auto Classify ^[\(count) Message](inflect: true)" , systemImage: "wand.and.rays") { Task { await classifyMultiple(auto: true, count: count) } }
+                        Button("^[\(count) Message](inflect: true)" /*, systemImage: "wand.and.rays"*/) { Task { await classifyMultiple(auto: true, count: count) } }
                     }
-                    Button("Manual Classify", systemImage: "cursorarrow.rays") { Task { await classifyMultiple(auto: false, count:1) } }
+                    Button("Manual"/*, systemImage: "cursorarrow.rays"*/) { Task { await classifyMultiple(auto: false, count:1) } }
                 } label: {
                     Label("Classify", systemImage: "wand.and.rays")
                 }
-                .menuStyle(.automatic)
                 .disabled(messages.contains(where: { $0.isClassifying }))
                 //.menuStyle(.default)
                 

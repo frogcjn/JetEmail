@@ -109,7 +109,7 @@ extension Google.Session {
 
 extension TreeNode<MailFolder> {
     var path: [String] {
-        Array(sequence(first: self) { $0.parent }.map(\.name).reversed().dropFirst())
+        Array(sequence(first: self) { $0.parent }.map(\.localizedName).reversed().dropFirst())
     }
 }
 

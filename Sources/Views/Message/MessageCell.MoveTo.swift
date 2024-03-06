@@ -28,10 +28,12 @@ extension MessageCell {
         
         var body: some View {
             if message.isClassifying {
-                HStack {
+                HStack(spacing: 5) {
                     Spacer()
-                    Text("Auto Classifying…").foregroundStyle(.secondary)
-                    ProgressView().progressViewStyle(.circular).controlSize(.small)
+                    ProgressView()
+                        .progressViewStyle(.circular).controlSize(.small)
+                    Text("Auto Classifying…")
+                        .foregroundStyle(.secondary)
                     Spacer()
                 }
             } else if let _ = message.moveTo {
