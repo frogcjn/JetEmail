@@ -70,7 +70,7 @@ func removeAccount(_ model: Account) async {
 
 
 
-/*func loadMailFolders(account accountPersistentID: PersistentID<Account>) async throws {
+/*func loadMailFolders(account accountPersistentID: Account.PersistentID) async throws {
     BackgroundModelActor.assertIsolated()
     
     let account = self[accountPersistentID]!
@@ -160,7 +160,7 @@ extension Google.Client {
         }
         
         // try to add to keychain
-        let item = try await SessionKeychainStore.shared.addItem(id: id, username: username, gtm: gtmSession)
+        let item = try await SessionKeychainStore..addItem(id: id, username: username, gtm: gtmSession)
         
         // find duplicated existed keychain item add fail
         guard let item else { throw Google.AuthError.sessionStoreAddFail  }
@@ -193,7 +193,7 @@ extension Google {
             }
             
             // try to add to keychain
-            let item = try await SessionKeychainStore.shared.addItem(id: id, username: username, gtm: gtmSession)
+            let item = try await SessionKeychainStore..addItem(id: id, username: username, gtm: gtmSession)
             
             // find duplicated existed keychain item add fail
             guard let item else { throw Google.AuthError.sessionStoreAddFail  }
@@ -205,7 +205,7 @@ extension Google {
         var sessions: [Google.Session] {
             get async throws {
                 // access from keychain
-                let items = try await SessionKeychainStore.shared.items()
+                let items = try await SessionKeychainStore..items()
                 
                 // map keychain items to existed or creating sessions
                 let sessions = try items.map { item throws in
@@ -229,8 +229,8 @@ extension Google {
         }
         
         fileprivate func deleteSession(id: Google.ID) async throws -> Google.Session? {
-            if let item = try await SessionKeychainStore.shared.item(id: id) {
-                _ = try await SessionKeychainStore.shared.deleteItem(item)
+            if let item = try await SessionKeychainStore..item(id: id) {
+                _ = try await SessionKeychainStore..deleteItem(item)
             }
             
             if let storedSession = _rawValue[id] {
@@ -241,7 +241,7 @@ extension Google {
         }
         
         fileprivate func session(id: Google.ID) async throws -> Google.Session? {
-            let item = try await SessionKeychainStore.shared.item(id: id)
+            let item = try await SessionKeychainStore..item(id: id)
             
             guard let item else {
                 // Not found item in keychain
@@ -270,7 +270,7 @@ extension Google {
             let id = session.id
             
             // update keychain
-            let item = try await SessionKeychainStore.shared.updateItem(session.keychainItem)
+            let item = try await SessionKeychainStore..updateItem(session.keychainItem)
             
             // varify sessionStore
             if let storedSession = _rawValue[id] {

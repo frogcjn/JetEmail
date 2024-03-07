@@ -9,20 +9,10 @@ import Google
 import Microsoft
 import os
 
-extension AppModel {
-    nonisolated var googleClient: Google.Client  { Google.Client.shared }
-}
-
-extension AppModel {
-    nonisolated var microsoftClient: Microsoft.Client { get async throws { try await .shared }  }
-}
-
+@MainActor
 extension AppItemModel where Context == AppModel, Item : ModelItem {
     var appModel: AppModel { context }
     var logger: Logger { appModel.logger }
-    var microsoftClient: Microsoft.Client { get async throws { try await appModel.microsoftClient } }
-    var    googleClient: Google.Client { get { appModel.googleClient } }
-
     /*var isBusy: Bool {
         get { item.isBusy }
         set { item.isBusy = newValue }

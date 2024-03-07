@@ -24,32 +24,28 @@ extension AppItemModel<Message> {
         defer { isBusy = false }
         
         do {
-            try await _loadBody()
+            guard let session = try await item.mailFolder.account.modelID.refreshedIfExpiredSession else { return }
+            try await _loadBody(messageModelID: item.modelID, session: session)
         } catch {
             logger.error("\(error)")
         }
     }
-    
-    @BackgroundActor
-    func _loadBody() async throws {
-        let message = item
-        let account = message.mailFolder.account
-
-        guard let session = try await account.refreshedIfExpiredSession else { return }
-        
-        switch session {
-        case .microsoft(let session):
-            guard case .microsoft(let messageID) = message.modelID else { return }
-            
-            let microsoftMessage = try await session.getMessage(microsoftID: messageID) // load from MSAL
-            _ = try await BackgroundModelActor.shared.setMessage(microsoft: microsoftMessage, to: message.modelID) // MSAL to SwiftData
-            
-        case .google(let session):
-            guard case .google(let messageID) = message.modelID else { return }
-            var googleMessage = try await session.getMessage(id: messageID, format: .full)
-            googleMessage.raw = try await session.getMessage(id: messageID, format: .raw).raw
-            _ = try await BackgroundModelActor.shared.setMessage(google: googleMessage, to: message.modelID) // MSAL to SwiftData
-        }
-    }
 }
 
+
+fileprivate func _loadBody(messageModelID: Message.ModelID, session: Session) async throws {
+    checkBackgroundThread()
+    switch session {
+    case .microsoft(let session):
+        guard case .microsoft(let messageID) = messageModelID else { return }
+        
+        async let microsoftMessage = session.getMessage(microsoftID: messageID) // load from MSAL
+        _ = try await ModelStore.instance.setMessage(microsoft: microsoftMessage, to: messageModelID) // MSAL to SwiftData
+        
+    case .google(let session):
+        guard case .google(let messageID) = messageModelID else { return }
+        var googleMessage = try await session.getMessage(id: messageID, format: .full)
+        googleMessage.raw = try await session.getMessage(id: messageID, format: .raw).raw
+        _ = try await ModelStore.instance.setMessage(google: googleMessage, to: messageModelID) // MSAL to SwiftData
+    }
+}

@@ -277,7 +277,7 @@ class MyVC: NSViewController {
         request.setValue("Bearer \(endPoint.accessToken)", forHTTPHeaderField: "Authorization")
         print(endPoint.accessToken)
 
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession..dataTask(with: request) { data, response, error in
 
             if let error = error {
                 self.updateLogging(text: "Couldn't get graph result: \(error)")

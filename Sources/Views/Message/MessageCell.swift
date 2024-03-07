@@ -28,7 +28,7 @@ struct MessageCell : View {
             Text(message.bodyPreview ?? "(No Preview)").lineLimit(2)
                 .foregroundStyle(.secondary)
             
-            MoveTo()
+            MovePlan()
         }
     }
 }

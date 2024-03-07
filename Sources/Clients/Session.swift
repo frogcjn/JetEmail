@@ -9,7 +9,7 @@ import Observation
 import Google
 import Microsoft
 
-enum Session {
+enum Session : Sendable {
     case microsoft(Microsoft.Session)
     case google(Google.Session)
 }

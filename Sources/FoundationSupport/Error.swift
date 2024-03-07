@@ -13,11 +13,10 @@ enum FoudnationError : Error {
     case dataToString
 }
 
-enum SwiftDataError : Error {
+/*enum SwiftDataError : Error {
     //case noModelInstance(id: String, in: ModelContext)
-    case noModelInstance(id: PersistentIdentifier, in: ModelContext)
-    case noGraphInstance(model: any PersistentModel)
-}
+    case noModelInstance(id: PersistentIdentifier)
+}*/
 
 enum TreeError : Error {
     /*case multipleRoot*/

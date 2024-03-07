@@ -37,9 +37,7 @@ struct AccountList: View {
         }
         
         // Feature: Accounts - Load Accounts
-        .task {
-            _ = await appModel.loadAccounts()
-        }
+        .task { await appModel.loadAccounts() }
         
         // Feature: Unselection - Will Sign Out Account
         .onReceive(appModel.willSignOutAccount, perform: settings.willSignOutAccount(_:))

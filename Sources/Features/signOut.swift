@@ -21,16 +21,22 @@ extension AppItemModel<Account> {
         context.willSignOutAccount.send(item)
         
         do {
-            try await _signOut()
+            try await _signOut(modelID: item.modelID, persistentID: item.persistentID)
         } catch {
             logger.error("\(error)")
         }
     }
     
-    @BackgroundActor
-    private func _signOut() async throws {
-        _ = try await item.session?.signOut()
-        item.session = nil
-        _ = try await BackgroundModelActor.shared.deleteAccount(itemModel: self, id: item.persistentID)
+    // @BackgroundActor
+    
+}
+
+
+fileprivate func _signOut(modelID: Account.ModelID, persistentID: Account.PersistentID) async throws {
+    checkBackgroundThread()
+    _ = try await modelID.session?.signOut()
+    await MainActor.run {
+        modelID.session = nil
     }
+    _ = try await ModelStore.instance.deleteAccount(id: persistentID)
 }

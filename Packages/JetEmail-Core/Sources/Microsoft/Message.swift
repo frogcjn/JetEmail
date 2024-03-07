@@ -11,7 +11,7 @@ import MSAL
 // MARK: - Message
 // https://learn.microsoft.com/en-us/graph/api/resources/message
 
-public struct Message : Codable, Identifiable {
+public struct Message : Codable, Identifiable, Sendable {
         public var                         id: ID
         
         // subject

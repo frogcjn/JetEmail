@@ -15,8 +15,8 @@ enum FoudnationError : Error {
 
 enum SwiftDataError : Error {
     //case noModelInstance(id: String, in: ModelContext)
-    case noModelInstance(id: PersistentIdentifier, in: ModelContext)
-    case noGraphInstance(model: any PersistentModel)
+    case noModelInstance(id: PersistentIdentifier)
+    //ccase noGraphInstance(model: any PersistentModel)
 }
 
 enum TreeError : Error {

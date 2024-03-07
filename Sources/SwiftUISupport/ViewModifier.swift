@@ -9,9 +9,9 @@ import SwiftUI
 
 
 extension View {
-    func appModel(_ appModel: AppModel) -> some View {
+    /*func appModel(_ appModel: AppModel) -> some View {
         modifier(AppModelResultModifier(appModel: appModel))
-    }
+    }*/
     
     func itemModel<Item : ModelItem>(_ item: Item) -> some View {
         modifier(ItemModelModifier(item: item))
@@ -20,14 +20,14 @@ extension View {
 
 // MARK: - Modifier: AppModel.Init
 
-fileprivate struct AppModelResultModifier : ViewModifier {
+/*fileprivate struct AppModelResultModifier : ViewModifier {
     let appModel: AppModel
     func body(content: Content) -> some View {
         content
             .environment(appModel)
-            .modelContainer(appModel.modelContainer)
+            .modelContainer(.shared)
     }
-}
+}*/
 
 // MARK: - Modifier: AppModel.Item
 
@@ -46,11 +46,12 @@ fileprivate struct ItemModelModifier<Item: ModelItem> : ViewModifier {
 }
 
 
+@MainActor
 extension Scene {
     func appModel(_ appModel: AppModel) -> some Scene {
         self
             .environment(appModel)
-            .environment(appModel.settings)
-            .modelContainer(appModel.modelContainer)
+            .environment(SettingsModel.shared)
+            .modelContainer(.shared)
     }
 }

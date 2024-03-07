@@ -301,7 +301,7 @@ extension AppItemModel<Account> {
 
 /*fileprivate extension AppModel {
     func graphContext(graphID: MicrosoftAPI.Account.ID) async throws -> CombineContext<MicrosoftAPI, MicrosoftAPI.Account> {
-        let graphClient = try await MicrosoftAPI.shared
+        let graphClient = try await MicrosoftAPI.
         return .init(context: graphClient, item: try graphClient.account(graphID: graphID))
     }
 }*/
@@ -314,7 +314,7 @@ extension AppItemModel<Account> {
     defer { self.isLoadingFolderTree = false }
     
     
-    let root  = TargetFolderPaths.sharedTree.root
+    let root  = TargetFolderPaths..root
     let rootFolder = try await self.mailFoldersRequest.getMailFolder(wellKnownFolderName: .msgFolderRoot)
     
     var queue: [(TreeNode<FolderName>, MailFolder)] = [(root, rootFolder)]
@@ -395,7 +395,7 @@ extension Microsoft.EmailAddress {
 extension Microsoft.ID {
     var refreshSession: Microsoft.MSALSession {
         get async throws {
-            let client = try await Microsoft.Client.shared
+            let client = try await Microsoft.Client.
             return try await client._msalClient.account(forIdentifier: string).refreshMSALSession
         }
     }
@@ -485,7 +485,7 @@ extension Microsoft.MSALSession {
          }
          
          fileprivate func updateKeychainItem() async throws {
-             _ = try await Google.Client.shared.keychain.updateItem(item)
+             _ = try await Google.Client.sared.keychain.updateItem(item)
          }
          
          func refresh() async throws {

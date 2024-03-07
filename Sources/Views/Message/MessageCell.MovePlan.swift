@@ -9,7 +9,7 @@ import SwiftUI
 import JetEmail_Foundation
 
 extension MessageCell {
-    struct MoveTo: View {
+    struct MovePlan: View {
         
         @Environment(AppItemModel<Message>.self)
         var itemModel
@@ -36,23 +36,23 @@ extension MessageCell {
                         .foregroundStyle(.secondary)
                     Spacer()
                 }
-            } else if let _ = message.moveTo {
+            } else if let _ = message.movePlan {
                 //VStack(alignment: .leading) {
                 HStack {
                     //Toggle(isOn: $isSelectedToMove) {
                     //HStack {
                     
-                    Picker(selection: Bindable(message).moveTo) {
+                    Picker(selection: Bindable(message).movePlan) {
                         Image(systemName: "xmark.circle.fill").tag(MailFolder?.none)
-                        ForEach(selectionRange(), id: \.modelID) {
+                        ForEach(selectionRange(), id: \.element.modelID) {
                             Text($0.path.joined(separator: "/")).tag(Optional($0.element))
                         }
                     } label: {
                         Button("Move To:", systemImage: "folder") {
-                            if let moveTo = message.moveTo {
+                            if let moveTo = message.movePlan {
                                 Task {
                                     await itemModel.move(from: moveFrom, to: moveTo)
-                                    message.moveTo = nil
+                                    message.movePlan = nil
                                 }
                             }
                         }.labelStyle(.titleAndIcon)
@@ -62,7 +62,7 @@ extension MessageCell {
                     //}
                     Spacer()
                     Button("Cancel Moving", systemImage: "xmark.circle.fill") {
-                        message.moveTo = nil
+                        message.movePlan = nil
                     }.buttonStyle(.borderless)
                 }
             }

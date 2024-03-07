@@ -17,13 +17,13 @@ public extension String {
     }
 }
 
-public struct ID : RawStringID {
+public struct ID : RawStringID, Sendable {
     public let string: String
     public init(string: String) { self.string = string }
 }
 
 public extension MailFolder {
-    struct ID : RawStringID {
+    struct ID : RawStringID, Sendable {
         public let string: String
         public init(string: String) { self.string = string }
     }

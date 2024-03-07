@@ -8,6 +8,7 @@
 // MARK: Feature: Accounts - Load Accounts
 
 import JetEmail_Foundation
+import Foundation
 
 extension AppModel {
     
@@ -18,32 +19,25 @@ extension AppModel {
         defer { isBusy = false }
         
         do {
-            try await _loadAccounts()
+            _ = try await ModelStore.instance.setSessions(Client.sessions) // load session from local keychain
         } catch {
             logger.error("\(error)")
         }
-    }
-    
-    @BackgroundActor
-    private func _loadAccounts() async throws {
-        let sessions = try await Client.sessions
-        _ = try await BackgroundModelActor.shared.setSessions(sessions) // load session from local keychain
     }
 }
 
 
 
-extension BackgroundModelActor {
-    func setSessions(_ sessions: [Session]) async throws -> [PersistentID<Account>] {
-        BackgroundModelActor.assertIsolated()
+extension ModelStore {
+    func setSessions(_ sessions: [Session]) async throws -> [Account.PersistentID] {
+        checkBackgroundThread()
         do {
             // inserts
             let inserts: [Account] = try sessions.map(modelContext._insertAccount(session:))
             
             // others: not have session
-            let others = try modelContext._fetchAccountNotIn(Array(inserts), in: .google)
-            others.forEach { $0.session = nil }
-            
+            let otherModelIDs = try modelContext._fetchAccountNotIn(Array(inserts), in: .google).map(\.modelID)
+            await otherModelIDs.forEachTask { @MainActor in $0.session = nil }
             // save
             try modelContext.save()
             

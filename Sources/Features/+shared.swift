@@ -11,13 +11,8 @@ extension AppModel {
     static let shared = AppModel()
 }
 
-
-/*
-extension Google.Client {
-    static var shared = Google.Client()
-}
-*/
 extension ModelContainer {
+    @MainActor
     static var shared = try! ModelContainer(for: Account.self, MailFolder.self, Message.self)
 }
 
@@ -37,18 +32,13 @@ extension Message.AttributesStore {
     static var shared = Message.AttributesStore()
 }
 
-
-
-/*
-extension Google.Keychain {
-    static let shared = Google.Keychain()
-}
-*/
-
 import SwiftData
 
-@globalActor
-@ModelActor
-public actor BackgroundModelActor {
-    public static var shared = BackgroundModelActor(modelContainer: .shared)
+extension ModelStore {
+    public static var instance: ModelStore {
+        get async {
+            await ModelStore(modelContainer: .shared)
+        }
+    }
 }
+

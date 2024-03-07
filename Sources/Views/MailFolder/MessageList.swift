@@ -68,9 +68,13 @@ fileprivate struct _MessageList : View {
                 
                 Menu {
                     ForEach([1,5,10,50], id: \.self) { count in
-                        Button("^[\(count) Message](inflect: true)" /*, systemImage: "wand.and.rays"*/) { Task { await classifyMultiple(auto: true, count: count) } }
+                        Button("^[\(count) Message](inflect: true)" /*, systemImage: "wand.and.rays"*/) { 
+                            Task { await classifyMultiple(auto: true, count: count) }
+                        }
                     }
-                    Button("Manual"/*, systemImage: "cursorarrow.rays"*/) { Task { await classifyMultiple(auto: false, count:1) } }
+                    Button("Manual"/*, systemImage: "cursorarrow.rays"*/) { 
+                        Task { await classifyMultiple(auto: false, count: 1) }
+                    }
                 } label: {
                     Label("Classify", systemImage: "wand.and.rays")
                 }
@@ -81,13 +85,13 @@ fileprivate struct _MessageList : View {
                  Text(resultText)
                  }*/
                 
-                if messages.contains(where: { $0.moveTo != nil }) {
+                if messages.contains(where: { $0.movePlan != nil }) {
                     Button {
-                        for message in messages.filter({ $0.moveTo != nil }) {
-                            if let to = message.moveTo {
+                        for message in messages.filter({ $0.movePlan != nil }) {
+                            if let to = message.movePlan {
                                 Task {
                                     await appModel(message).move(from: mailFolder, to: to)
-                                    message.moveTo = nil
+                                    message.movePlan = nil
                                 }
                             }
                         }
@@ -106,18 +110,14 @@ fileprivate struct _MessageList : View {
         if let message = window.selectedMessage, let selectedIndex = messages.firstIndex(of: message) {
             classifyStartIndex = selectedIndex
         } else {
-            classifyStartIndex = (messages.lastIndex { $0.moveTo != nil } ?? -1) + 1
+            classifyStartIndex = (messages.lastIndex { $0.movePlan != nil } ?? -1) + 1
         }
         
-        let classifyMessages = messages.dropFirst(classifyStartIndex).prefix(count).filter({ $0.moveTo == nil })
+        let classifyMessages = messages.dropFirst(classifyStartIndex).prefix(count).filter({ $0.movePlan == nil })
         if auto {
-            for message in classifyMessages {
-                await appModel(message).classify()
-            }
+            await classifyMessages.map(\.persistentID).forEachTask { @MainActor in await appModel($0)?.classify() }
         } else {
-            for message in classifyMessages {
-                message.moveTo = mailFolder
-            }
+            classifyMessages.forEach { message in message.movePlan = mailFolder }
         }
     }
 }

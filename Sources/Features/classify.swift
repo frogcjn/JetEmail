@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/7/24.
 //
 
-import OpenAI
+@preconcurrency import OpenAI
 import Microsoft
 import Google
 import JetEmail_Foundation
@@ -47,32 +47,27 @@ extension AppItemModel<Message> {
         defer { isClassifying = false }
         
         do {
-            try await _classify()
+            let message = item
+            let account = message.mailFolder.account
+            guard let session = account.modelID.session else { return }
+            switch session {
+            case .microsoft(let session): try await session.classify(account: account, message: message)
+            case .google(let session): try await session.classify(account: account, message: message)
+            }
         } catch {
             context.logger.error("\(error)")
         }
     }
-    
-    @BackgroundActor
-    private func _classify() async throws {
-        let message = item
-        let account = message.mailFolder.account
-        guard let session = account.session else { return }
-        switch session {
-        case .microsoft(let session): try await session.classify(account: account, message: message)
-        case .google(let session): try await session.classify(account: account, message: message)
-        }
-    }
-    
 }
 
 extension Microsoft.Session {
     @MainActor // for classifyResultText
     func classify(account: Account, message: Message) async throws {
         guard let folders = try await classifyRange(account: account) else { return }
-        message.moveTo = try await Agent.classify(folders: folders.map { (folder: $0.element, path: $0.path ) }, message: message)
+        message.movePlan = try await Agent.classify(folders: folders.map { (folder: $0.element, path: $0.path ) }, message: message)
     }
     
+    @MainActor // for classifyResultText
     func classifyRange(account: Account) async throws -> [TreeNode<MailFolder>]? {
         guard let root = account.mailFolderTree?.root else { return nil }
 
@@ -81,8 +76,8 @@ extension Microsoft.Session {
         let junkMailFolder = try await getMailFolder(wellKnownFolderName: .junkEmail)
        
         guard
-            let archiveNode = root.children.first(where: { $0.modelID == archiveMailFolder.modelID }),
-            let junkNode = root.children.first(where: { $0.modelID == junkMailFolder.modelID })
+            let archiveNode = root.children.first(where: { $0.element.modelID == archiveMailFolder.modelID }),
+            let junkNode = root.children.first(where: { $0.element.modelID == junkMailFolder.modelID })
         else {
             throw ClassifyError.noArchiveFolder
         }
@@ -97,9 +92,10 @@ extension Google.Session {
     @MainActor // for classifyResultText
     func classify(account: Account, message: Message) async throws {
         guard let folders = try await classifyRange(account: account) else { return }
-        message.moveTo = try await Agent.classify(folders: folders.map { (folder: $0.element, path: $0.path ) }, message: message)
+        message.movePlan = try await Agent.classify(folders: folders.map { (folder: $0.element, path: $0.path ) }, message: message)
     }
     
+    @MainActor // for classifyResultText
     func classifyRange(account: Account) async throws -> [TreeNode<MailFolder>]? {
         guard let root = account.mailFolderTree?.root else { return nil }
         let desendants = root.descendants(includesSelf: false)
@@ -109,11 +105,12 @@ extension Google.Session {
 
 extension TreeNode<MailFolder> {
     var path: [String] {
-        Array(sequence(first: self) { $0.parent }.map(\.localizedName).reversed().dropFirst())
+        Array(sequence(first: self) { $0.parent }.map(\.element.localizedName).reversed().dropFirst())
     }
 }
 
 extension Agent {
+    @MainActor
     static func classify(folders: [(folder: MailFolder, path: [String])], message: Message) async throws -> MailFolder? {
         let folderDescriptions = folders.enumerated().map { "\($0.offset): \($0.element.path.joined(separator: "/"))" }
         let openAI = OpenAI(apiToken: "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")

@@ -18,7 +18,7 @@ struct AccountView: View {
             LabeledContent("id"      , value: account.id)
             LabeledContent("order"   , value: account.orderIndex.debugDescription)
             LabeledContent("delete"  , value: account.deleteMark.description)
-            LabeledContent("session" , value: account.session.debugDescription)
+            LabeledContent("session" , value: account.modelID.session.debugDescription)
         }
     }
 }

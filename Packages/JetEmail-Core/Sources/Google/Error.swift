@@ -34,7 +34,7 @@ public enum ResponseError : Error {
 
 public enum GmailApiError: Error {
     /// Gmail API response parsing
-    case failedToParseData(Any?)
+    case failedToParseData(Sendable?)
     /// Can't get GTLREncodeBase64 data
     case messageEncode
     /// Missing message part
@@ -93,7 +93,7 @@ public enum AppErr: Error, CustomStringConvertible {
     case unexpected(String) // we did not expect to ever see this error in practice
 
     /// something as? Something is unexpectedly nil
-    case cast(Any)
+    case cast(Sendable)
     /// user error (user did something wrong?)
     case user(String)
     /// when you want to cancel execution without showing any error (eg after user clicks cancel button)

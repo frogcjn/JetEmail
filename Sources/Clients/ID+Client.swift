@@ -88,7 +88,7 @@ extension Message {
     }
 }
 
-protocol ModelIDProtocol: StringID {
+protocol ModelIDProtocol: StringID, Sendable {
     var platform: Platform { get }
     var platformID: String { get }
 }
@@ -98,7 +98,7 @@ extension ModelIDProtocol {
     init(string: String) throws { fatalError() }
 }
 
-struct PersistentID<Model : PersistentModel> {
+struct PersistentID<Model : PersistentModel> : Sendable {
     let rawValue: PersistentIdentifier
 }
 
@@ -109,7 +109,8 @@ extension PersistentID : Equatable {
 }
 
 extension PersistentModel {
-    var persistentID: PersistentID<Self> {
+    typealias PersistentID = JetEmail.PersistentID<Self>
+    var persistentID: PersistentID {
         .init(rawValue: persistentModelID)
     }
 }

@@ -35,7 +35,7 @@ public extension TreeNode {
 }
     
 
-@dynamicMemberLookup
+// @dynamicMemberLookup
 public class TreeNode<Element> {
     public var parent: TreeNode<Element>?
     public var children: [TreeNode<Element>] = []
@@ -49,7 +49,7 @@ public class TreeNode<Element> {
 }
 
 // @dynamicMemberLookup
-public extension TreeNode {
+/*public extension TreeNode {
     
     subscript<TargetValue>(dynamicMember keyPath: KeyPath<Element, TargetValue>) -> TargetValue {
         element[keyPath: keyPath]
@@ -63,4 +63,4 @@ public extension TreeNode {
             element[keyPath: keyPath] = newValue
         }
     }
-}
+}*/

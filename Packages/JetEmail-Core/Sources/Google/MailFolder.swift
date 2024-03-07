@@ -10,7 +10,7 @@
 
 // https://learn.microsoft.com/en-us/graph/api/resources/mailfolder
 
-public struct MailFolder : Codable {
+public struct MailFolder : Codable, Sendable {
     public let id                   : ID
     public var path                 : String?
     public var name                 : String?
@@ -49,23 +49,23 @@ public struct MailFolder : Codable {
         self.color                 = color
     }
     
-    public enum MessageListVisibility : String, Codable {
+    public enum MessageListVisibility : String, Codable, Sendable {
         case show
         case hide
     }
     
-    public enum LabelListVisibility : String, Codable {
+    public enum LabelListVisibility : String, Codable, Sendable {
         case labelShow
         case labelShowIfUnread
         case labelHide
     }
     
-    public enum MailFolderType : String, Codable {
+    public enum MailFolderType : String, Codable, Sendable {
         case system
         case user
     }
     
-    public struct Color : Codable {
+    public struct Color : Codable, Sendable {
         let textColor: String?
         let backgroundColor: String?
     }

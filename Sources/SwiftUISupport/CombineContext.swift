@@ -92,7 +92,7 @@ class AccountContext {
     static subscript(model: Account) -> AccountContext? {
         get {
             
-            guard let AppModel = AppModel.shared, !model.isDeleted else { return nil }
+            guard let AppModel = AppModel., !model.isDeleted else { return nil }
             
             if let context = _contexts[model] { return context }
             

@@ -7,11 +7,12 @@
 
 import Foundation
 
-
+/*
 @globalActor
 public actor BackgroundActor {
     public static let shared = BackgroundActor()
-}
+}*/
+
 #if !os(macOS)
 import UIKit
 public extension UIApplication {
@@ -36,3 +37,9 @@ public extension NSApplication {
     }
 }
 #endif
+
+public func checkBackgroundThread(function: String = #function) {
+    if Thread.isMainThread {
+        print(function, "on main thread")
+    }
+}

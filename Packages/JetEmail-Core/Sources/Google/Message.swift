@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Message : Codable, Identifiable {
+public struct Message : Codable, Identifiable, Sendable {
     public var                         id: ID
     public var               internalDate: Int64?
     public var                    snippet: String?
@@ -20,7 +20,7 @@ public struct Message : Codable, Identifiable {
     public var                   threadId: String?
     public var                  historyId: UInt64?
     
-    public struct Part : Codable {
+    public struct Part : Codable, Sendable {
         public var   partID: String?
         public var filename: String?
         public var mimeType: String?
@@ -28,12 +28,12 @@ public struct Message : Codable, Identifiable {
         public var     body: Body?
         public var    parts: [Part]?
         
-        public struct Header : Codable {
+        public struct Header : Codable, Sendable {
             public var name: String
             public var value: String?
         }
         
-        public struct Body : Codable {
+        public struct Body : Codable, Sendable {
             public var size: Int
             public var data: Data?
             public var attachmentId: String?

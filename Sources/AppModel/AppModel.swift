@@ -23,13 +23,6 @@ final class AppModel {
     var isBusy = false
 }
 
-extension AppModel {
-    // settings
-    nonisolated var settings: SettingsModel { .shared }
-    nonisolated var modelContainer: ModelContainer { .shared }
-}
-
-
 // @dynamicMemberLookup
 extension AppModel {
     // Model

@@ -13,7 +13,7 @@ import SwiftData
 // MARK: - AppModel: Account-MailFolders API
 
 /*extension Account {
-    var appModel: AppModel { .shared }
+ 
     
     // Feature: Accounts - Remove Account
     fileprivate func removeAccountForGoogle() async {

@@ -11,7 +11,7 @@ import MSAL
 
 // https://learn.microsoft.com/en-us/graph/api/resources/mailfolder
 
-public struct MailFolder : Codable, Identifiable {
+public struct MailFolder : Codable, Identifiable, Sendable {
     public var                  id: ID
     public var         displayName: String?
     public var wellKnownFolderName: WellKnownFolderName?
@@ -41,7 +41,7 @@ extension MailFolder : Hashable {
 public extension MailFolder {
     // Well-known folder names https://learn.microsoft.com/en-us/graph/api/resources/mailfolder?view=graph-rest-1.0#methods
     
-    enum WellKnownFolderName : String, Codable, CaseIterable {
+    enum WellKnownFolderName : String, Codable, CaseIterable, Sendable {
         case msgFolderRoot             = "msgfolderroot"
         case archive
         case clutter

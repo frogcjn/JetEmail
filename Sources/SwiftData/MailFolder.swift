@@ -56,7 +56,7 @@ class MailFolder : ModelItem {
     private var _children: [MailFolder] = [] // Should be Ordered Relationship
     
     @Transient
-    var children: [MailFolder] { _children.sorted(using: KeyPathComparator(\.name)) }
+    var children: [MailFolder] { _children.sorted { $0.name < $1.name }/*.sorted(using: KeyPathComparator(\.name))*/ } // TODO: After Swift 6.0
     
     /// MailFolder.messages <->> Message.mailFolder
     @Relationship(deleteRule: .cascade, originalName: "messages", inverse: \Message.mailFolder)
@@ -84,6 +84,7 @@ class MailFolder : ModelItem {
     
 }
 
+@MainActor
 extension MailFolder {
     
     var isBusy: Bool {
@@ -91,10 +92,11 @@ extension MailFolder {
         set { AttributesStore[modelID].isBusy = newValue }
     }
     
-    var appModel: AppModel { .shared }
 }
 
 extension MailFolder {
+    
+    @MainActor
     @Observable
     class AttributesStore {
         var rawValue = [MailFolder.ModelID: MailFolder.Attributes]()

@@ -6,12 +6,11 @@
 //
 
 import Foundation
-import GTMAppAuth
+@preconcurrency import AppAuth
 
 // Google.Client = App + Google
 
-
-public final class Client {
+public final class Client : Sendable {
     public let      clientID               = "383073233076-bs69m1og40cpgqr4d209hlk40mlmdfo4.apps.googleusercontent.com"
     public let   redirectURL               = URL(string: "com.googleusercontent.apps.383073233076-bs69m1og40cpgqr4d209hlk40mlmdfo4:/oauth2callback")!
     public let        scopes: [Scope]      = [.email, .profile /* optional*/, .gmailReadOnly, .gmailLabels, .gmailModify]
@@ -19,14 +18,11 @@ public final class Client {
     public let  responseType: ResponseType = .code
     
     public init(){}
-    
-    public let  keychain = Keychain.shared
 }
 
 
-
 public extension Client {
-    enum Scope: String {
+    enum Scope: String, Sendable {
         case openid
         case email // OIDScopeEmail
         case profile
@@ -36,7 +32,7 @@ public extension Client {
         case gmailModify   = "https://www.googleapis.com/auth/gmail.modify"
     }
     
-    enum ResponseType: String {
+    enum ResponseType: String, Sendable {
         case code // OIDResponseTypeCode
     }
 }

@@ -5,12 +5,12 @@
 //  Created by Cao, Jiannan on 2/15/24.
 //
 
-import MSAL
+@preconcurrency import MSAL
+import JetEmail_Foundation
 
 // Google.Client = App + Microsoft
 
-
-public final class Client {
+public final class Client : Sendable {
     
     // configs
     fileprivate let     clientID          = "0ef42f9f-afc7-4463-bcbe-1c6dd4076b40"
@@ -22,13 +22,16 @@ public final class Client {
     public let       _msalClient: MSALPublicClientApplication
     //public let webViewParameters: MSALWebviewParameters
     
-    public init() throws {
+    public init() async throws {
         let configuration = MSALPublicClientApplicationConfig(
             clientId: clientID,
             redirectUri: redirectURL.absoluteString,
             authority: try MSALAADAuthority(url: authorityURL)
         )
-        _msalClient        = try MSALPublicClientApplication(configuration: configuration)
+        _msalClient = try await Task.detached { [configuration] in
+            checkBackgroundThread()
+            return try MSALPublicClientApplication(configuration: configuration)
+        }.value
        //webViewParameters = .init(authPresentationViewController: <#T##UIViewController#>)
     }
     
@@ -36,7 +39,7 @@ public final class Client {
     
 
 public extension Client {
-    enum Scope: String {
+    enum Scope: String, Sendable {
         case userRead = "user.read"
         case mailRead = "mail.read"
     }

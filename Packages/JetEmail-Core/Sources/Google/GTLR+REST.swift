@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import GoogleAPIClientForREST_Gmail
+@preconcurrency import GoogleAPIClientForREST_Gmail
 import JetEmail_Foundation
 
 // MARK: - Microsoft.Context: Account-MailFolders API
@@ -38,7 +38,7 @@ public extension Google.Session {
         pathToNode[""] = tree.root
             
         for (key: path, value: node) in pathToNode.sorted(using: KeyPathComparator(\.key)) {
-            if node.id == tree.root.id { continue }
+            if node.element.id == tree.root.element.id { continue }
             let components = path.components(separatedBy: "/")
             
             var (parent, name) = (tree.root, path)
@@ -50,7 +50,7 @@ public extension Google.Session {
                     break
                 }
             }
-            (node.parent, node.name) = (parent, name)
+            (node.parent, node.element.name) = (parent, name)
             parent.children.append(node)
         }
         
@@ -149,7 +149,7 @@ public extension Google.Session {
         }
     }
     
-    enum GetMessageFormat: String {
+    enum GetMessageFormat: String, Sendable {
         case raw
         case full
         case metadata
@@ -180,7 +180,7 @@ public extension Google.Session {
 }
 
 extension GTLRGmailService {
-    func execute<Q: GTLRQueryProtocol, T: NSObject, Result>(query: () -> Q, type: T.Type = T.self, completion: @escaping (T) async throws -> Result) async throws -> Result {
+    func execute<Q: GTLRQueryProtocol, T: NSObject & Sendable, Result : Sendable>(query: () -> Q, type: T.Type = T.self, completion: @Sendable @escaping (T) async throws -> Result) async throws -> Result {
         try await withCheckedThrowingContinuation { continuation in
             executeQuery(query()) { (ticket: GTLRServiceTicket, object: Any?, error: Error?) in
                 if let error { return continuation.resume(throwing: GmailApiError.convert(from: error as NSError)) }

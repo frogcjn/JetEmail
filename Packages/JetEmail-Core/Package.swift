@@ -35,6 +35,9 @@ let package = Package(
                 .product(name: "GTMAppAuth"                  , package: "GTMAppAuth"                           ),
                 .product(name: "GoogleAPIClientForREST_Gmail", package: "google-api-objectivec-client-for-rest"),
                 .target (name: "JetEmail-Foundation"                                                           )
+            ],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
             ]
         ),
         .target(
@@ -42,12 +45,18 @@ let package = Package(
             dependencies: [
                 .product(name: "MSAL"               , package: "MSAL"),
                 .target (name: "JetEmail-Foundation"                 )
+            ],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
             ]
         ),
         .target(
             name: "JetEmail-Foundation",
             dependencies: [
                 .product(name: "MimeEmailParser", package: "MimeEmailParser")
+            ],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
             ]
         ),
         /*.binaryTarget(

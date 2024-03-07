@@ -8,6 +8,8 @@
 import SwiftData
 import Google
 import Microsoft
+import JetEmail_Foundation
+import Foundation
 
 extension ModelContext {
     func _insertMailFolder(google: Google.MailFolder, parent: MailFolder, in account: Account) throws -> MailFolder {
@@ -163,9 +165,9 @@ extension ModelContext {
 }
 
 
-extension BackgroundModelActor {
-    func setMessages(googles messages: [Google.Message], in mailFolderID: PersistentID<MailFolder>) throws -> [PersistentID<Message>] {
-        BackgroundModelActor.assertIsolated()
+extension ModelStore {
+    func setMessages(googles messages: [Google.Message], in mailFolderID: MailFolder.PersistentID) throws -> [Message.PersistentID] {
+        checkBackgroundThread()
         let mailFolder = self[mailFolderID]!
         do {
             
@@ -187,8 +189,8 @@ extension BackgroundModelActor {
         }
     }
     
-    func setMessage(google: Google.Message, to messageID: Message.ModelID) throws -> PersistentID<Message> {
-        BackgroundModelActor.assertIsolated()
+    func setMessage(google: Google.Message, to messageID: Message.ModelID) throws -> Message.PersistentID {
+        checkBackgroundThread()
         let message = try modelContext._fetchMessage(modelID: messageID)!
         do {
             try message.setGoogle(google)
@@ -204,8 +206,8 @@ extension BackgroundModelActor {
     
     
     //let batchSize = 1
-    func setMessages(microsofts messages: [Microsoft.Message], in mailFolderID: PersistentID<MailFolder>) throws -> [PersistentID<Message>] {
-        BackgroundModelActor.assertIsolated()
+    func setMessages(microsofts messages: [Microsoft.Message], in mailFolderID: MailFolder.PersistentID) throws -> [Message.PersistentID] {
+        checkBackgroundThread()
         let mailFolder = self[mailFolderID]!
         do {
             
@@ -233,8 +235,8 @@ extension BackgroundModelActor {
     // MARK: - Message -> Contents API
     
     
-    func setMessage(microsoft: Microsoft.Message, to messageID: Message.ModelID) throws -> PersistentID<Message> {
-        BackgroundModelActor.assertIsolated()
+    func setMessage(microsoft: Microsoft.Message, to messageID: Message.ModelID) throws -> Message.PersistentID {
+        checkBackgroundThread()
         let message = try modelContext._fetchMessage(modelID: messageID)!
         do {
             message.microsoft = microsoft
@@ -247,37 +249,37 @@ extension BackgroundModelActor {
     }
 }
 
-extension BackgroundModelActor {
+extension ModelStore {
 
-    func setRootMailFolder(microsoft: Microsoft.MailFolder, in accountID: PersistentID<Account>) throws -> MailFolder {
+    func setRootMailFolder(microsoft: Microsoft.MailFolder, in accountID: Account.PersistentID) throws -> (persistentID: MailFolder.PersistentID, modelID: MailFolder.ModelID) {
         let account = self[accountID]!
         do {
-            if let root = account.root { return root }
+            if let root = account.root { return (root.persistentID, root.modelID) }
             let root = try modelContext._insertMailFolder(microsoft: microsoft, in: account)
             account.root = root
             try modelContext.save()
-            return root
+            return (root.persistentID, root.modelID)
         } catch {
             modelContext.rollback()
             throw error
         }
     }
     
-    func setRootMailFolder(google: Google.MailFolder, in accountID: PersistentID<Account>) throws -> MailFolder {
+    func setRootMailFolder(google: Google.MailFolder, in accountID: Account.PersistentID) throws -> (persistentID: MailFolder.PersistentID, modelID: MailFolder.ModelID) {
         let account = self[accountID]!
         do {
-            if let root = account.root { return root }
+            if let root = account.root { return (root.persistentID, root.modelID) }
             let root = try modelContext._insertMailFolder(google: google, in: account)
             account.root = root
             try modelContext.save()
-            return root
+            return (root.persistentID, root.modelID)
         } catch {
             modelContext.rollback()
             throw error
         }
     }
     
-    func setChildrenMailFolders(microsofts: [Microsoft.MailFolder], parent parentID: PersistentID<MailFolder>, in accountID: PersistentID<Account>) throws -> [MailFolder] {
+    func setChildrenMailFolders(microsofts: [Microsoft.MailFolder], parent parentID: MailFolder.PersistentID, in accountID: Account.PersistentID) throws -> [(persistentID: MailFolder.PersistentID, modelID: MailFolder.ModelID)] {
         let parent = self[parentID]!
         let account = self[accountID]!
         do {
@@ -292,14 +294,14 @@ extension BackgroundModelActor {
             try removings.forEach { _ = try modelContext._deleteMailFolder($0) }
             
             try modelContext.save()
-            return inserts
+            return inserts.map { ($0.persistentID, $0.modelID) }
         } catch {
             modelContext.rollback()
             throw error
         }
     }
 
-    func setChildrenMailFolders(googles: [Google.MailFolder], parent parentID: PersistentID<MailFolder>, in accountID: PersistentID<Account>) throws -> [MailFolder] {
+    func setChildrenMailFolders(googles: [Google.MailFolder], parent parentID: MailFolder.PersistentID, in accountID: Account.PersistentID) throws -> [(persistentID: MailFolder.PersistentID, modelID: MailFolder.ModelID)] {
         let parent = self[parentID]!
         let account = self[accountID]!
         do {
@@ -313,7 +315,7 @@ extension BackgroundModelActor {
             try removings.forEach { _ = try modelContext._deleteMailFolder($0) }
             
             try modelContext.save()
-            return inserts
+            return inserts.map { ($0.persistentID, $0.modelID) }
         } catch {
             modelContext.rollback()
             throw error

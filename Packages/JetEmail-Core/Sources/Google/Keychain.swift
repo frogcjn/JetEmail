@@ -6,6 +6,8 @@
 //
 
 import Foundation
+@preconcurrency import GTMAppAuth
+import JetEmail_Foundation
 
 //public extension Google {
     //@globalActor
@@ -13,7 +15,7 @@ import Foundation
         public static let securityAttributeCreator           = "jtem".fourCharUInt32! /*Jet Email*/
         public static let securityAttributeTypeGoogleAccount = "GGac".fourCharUInt32! /*Google Acccount*/
         
-        public struct SessionItem {
+        public struct SessionItem : Sendable {
             public let      accountID: ID
             public let       username: String
             public let     gtmSession: GTMSession
@@ -191,7 +193,7 @@ import Foundation
     }   }
         
         public func updateItem(_ item: SessionItem) throws -> SessionItem {
-            // BackgroundActor.assertIsolated()
+            checkBackgroundThread()
             let query = [
                 kSecValuePersistentRef: item.keychainItem
             ] as [String : Any]

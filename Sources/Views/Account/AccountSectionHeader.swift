@@ -19,33 +19,23 @@ struct AccountSectionHeader: View {
     
     var body: some View {
         HStack(spacing: 4) {
-            ZStack(alignment: .center) {
-                if account.isBusy {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                        .controlSize(.small)
-                } else if isOnHover {
-                    Button("update", systemImage: "arrow.clockwise") {
-                        Task { await action() }
+            Image(systemName: "circle.fill")
+                .foregroundColor(account.platformState.color)
+                .frame(width: 18, alignment: .center)
+                .opacity(isOnHover || account.isBusy ? 0 : 1)
+                .overlay {
+                    if account.isBusy {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .controlSize(.small)
+                    } else if isOnHover {
+                        Button("update", systemImage: "arrow.clockwise") {
+                            Task { await action() }
+                        }
+                        .buttonStyle(.borderless)
                     }
-                    .buttonStyle(.borderless)
-                } else {
-                    switch account.platformState {
-                    case .hasSession:
-                        Image(systemName: "circle.fill")
-                            .foregroundColor(.green)
-                            //.dynamicTypeSize(.xSmall)
-                    case .noSession:
-                        Image(systemName: "circle.fill")
-                            .foregroundColor(.red)
-                            //.dynamicTypeSize(.xSmall)
-                    }
-                    
                 }
-            }.onHover {
-                isOnHover = $0
-            }
-            .frame(width: 18, alignment: .center)
+                .onHover { isOnHover = $0 }
             
             Text(account.username)
             switch account.modelID.platform {

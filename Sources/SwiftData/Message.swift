@@ -103,12 +103,6 @@ class Message : ModelItem {
     }
 }
 
-/*extension Message {
-    
-    var appModel: AppModel { .shared }
-    
-}*/
-
 @MainActor // for @MainActor AttributesStore
 extension Message {
     
@@ -122,9 +116,9 @@ extension Message {
         set { AttributesStore[modelID].isClassifying = newValue }
     }
     
-    var moveTo: MailFolder? {
-        get { AttributesStore[modelID].moveTo }
-        set { AttributesStore[modelID].moveTo = newValue }
+    var movePlan: MailFolder? {
+        get { AttributesStore[modelID].movePlan }
+        set { AttributesStore[modelID].movePlan = newValue }
     }
     
     /*subscript<Value>(dynamicMember keyPath: KeyPath<Attributes, Value>) -> Value {
@@ -159,7 +153,7 @@ extension Message {
     struct Attributes {
         var isBusy = false
         var isClassifying = false
-        var moveTo: MailFolder? = nil
+        var movePlan: MailFolder? = nil
         var isMoveToVisible = false
     }
 }

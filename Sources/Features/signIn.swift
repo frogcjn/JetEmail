@@ -27,11 +27,12 @@ extension AppModel {
         }
     }
     
-    @BackgroundActor
+    // @BackgroundActor
     private func _signIn(platform: Platform) async throws {
+        checkBackgroundThread()
         switch platform {
-        case .microsoft: _ = try await BackgroundModelActor.shared.addSession(.microsoft(microsoftClient.signIn()))
-        case .google:    _ = try await BackgroundModelActor.shared.addSession(   .google(   googleClient.signIn()))
+        case .microsoft: _ = try await ModelStore.instance.addSession(.microsoft(Microsoft.Client.shared.signIn()))
+        case .google:    _ = try await ModelStore.instance.addSession(   .google(   Google.Client.shared.signIn()))
         }
     }
 }

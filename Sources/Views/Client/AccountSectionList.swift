@@ -8,7 +8,8 @@
 import SwiftUI
 import SwiftData
 
-struct AccountSectionList : View {
+@MainActor
+struct AccountSectionList : View, Sendable {
 
     @Environment(AppModel.self)
     var appModel
@@ -50,16 +51,12 @@ struct AccountSectionList : View {
         }
         
         // Feature: Accounts - Load Accounts
-        .task {
-            await appModel.loadAccounts()
-        }
+        .task { await appModel.loadAccounts() }
         
         // Feature: Account - Load Mail Folders
-        .onChange(of: accounts, initial: true) { Task {
-            for account in accounts {
-                await appModel(account).loadMailFolders()
-            }
-        } }
+        .onChange(of: accounts, initial: true) { 
+            Task{ await appModel.loadMailFolders(accounts: accounts) }
+        }
         
         #if !os(macOS)
         .toolbar {

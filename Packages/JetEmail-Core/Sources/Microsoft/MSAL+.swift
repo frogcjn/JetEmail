@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/20/24.
 //
 
-import MSAL
+@preconcurrency import MSAL
 import JetEmail_Foundation
 
     public typealias MSALAccount = MSAL.MSALAccount
@@ -68,8 +68,7 @@ public extension Client {
     func _msalSignout(msalAccount: MSALAccount) async throws -> Bool {
         MainActor.assertIsolated()
         let parameters = try MSALSignoutParameters(webviewParameters: webViewParameters)
-        let result = try await _msalClient.signout(with: msalAccount, signoutParameters: parameters)
-        return result
+        return try await _msalClient.signout(with: msalAccount, signoutParameters: parameters)
     }
 }
 
@@ -77,16 +76,15 @@ public extension MSALAccount {
     // force refresh
     var _msalRefreshMSALSession: Microsoft.MSALSession {
         get async throws {
-            let client = try await Microsoft.Client.shared
-            let parameters = MSALSilentTokenParameters(scopes: client.scopes.map(\.rawValue), account: self)
-            return try await client._msalClient.acquireTokenSilent(with: parameters)
+            let parameters = try await MSALSilentTokenParameters(scopes: Microsoft.Client.shared.scopes.map(\.rawValue), account: self)
+            return try await Microsoft.Client.shared._msalClient.acquireTokenSilent(with: parameters)
         }
     }
 }
 
+@MainActor
 @Observable
 public class SessionStore {
-    public static let shared = SessionStore()
     var rawValue = [Microsoft.ID: Microsoft.Session]()
     
     public static subscript(id: Microsoft.ID) -> Microsoft.Session? {
@@ -96,6 +94,7 @@ public class SessionStore {
 }
 
 
+@MainActor
 public extension Session {
     static subscript(id: Microsoft.ID) -> Microsoft.Session? {
         get {
@@ -108,6 +107,7 @@ public extension Session {
 
 // MARK: - Session Lazy & Refresh
 
+@MainActor
 public extension MSALAccount {
     var lazySession: Microsoft.Session { get async throws {
         if let session = try Microsoft.Session[id] { session }
@@ -122,6 +122,7 @@ public extension MSALAccount {
     } }
 }
 
+@MainActor
 public extension MSALSession {
     var lazySession: Microsoft.Session { get throws {
         if let session = try Microsoft.Session[account.id] { session }

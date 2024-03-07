@@ -19,14 +19,15 @@ extension AppModel {
         defer { isBusy = false }
         
         do {
-            try await _moveAccounts(accounts, fromOffsets: source, toOffset: destination)
+            try await _moveAccounts(accounts.map(\.persistentID), fromOffsets: source, toOffset: destination)
         } catch {
             logger.error("\(error)")
         }
     }
     
-    @BackgroundActor
-    private func _moveAccounts(_ accounts: [Account], fromOffsets source: IndexSet, toOffset destination: Int) async throws {
-        _ = try await BackgroundModelActor.shared.moveAccounts(appModel: self, ids: accounts.map(\.persistentID), fromOffsets: source, toOffset: destination)
+    // @BackgroundActor
+    private func _moveAccounts(_ accounts: [Account.PersistentID], fromOffsets source: IndexSet, toOffset destination: Int) async throws {
+        checkBackgroundThread()
+        _ = try await ModelStore.instance.moveAccounts(appModel: self, ids: accounts, fromOffsets: source, toOffset: destination)
     }
 }

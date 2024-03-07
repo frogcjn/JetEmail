@@ -6,7 +6,7 @@
 //
 
 @dynamicMemberLookup
-public enum JSON: Equatable {
+public enum JSON: Equatable, Sendable {
     case string(String)
     case number(Double)
     case object([String:JSON])

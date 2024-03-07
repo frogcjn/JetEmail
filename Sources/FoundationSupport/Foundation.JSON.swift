@@ -28,11 +28,11 @@ extension Data {
     }
 }
 
-extension Result {
-    func catching<T>(_ closure: @escaping () async throws -> T) async -> Result<T, Error> {
+/*extension Result {
+    func catching<T: Sendable>(_ closure: @Sendable @escaping () async throws -> T) async -> Result<T, Error> {
         await Task { try await closure() }.result
     }
-}
+}*/
 
 extension Encodable {
     var jsonString: String { get throws {
@@ -84,7 +84,7 @@ extension Collection {
 
 extension Sequence {
     func asyncMap<T>(
-        _ transform: (Element) async throws -> T
+        _ transform: @Sendable (Element) async throws -> T
     ) async rethrows -> [T] {
         var values = [T]()
 

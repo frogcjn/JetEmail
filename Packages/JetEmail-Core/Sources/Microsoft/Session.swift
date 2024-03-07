@@ -7,9 +7,9 @@
 
 // Session -> Account, KeychainItem
 
-import MSAL
+@preconcurrency import MSAL
 
-public class Session {
+public final class Session : Sendable {
     public let accountID   : Microsoft.ID
     public let username    : String
     public let _msalSession: MSALSession
@@ -20,6 +20,3 @@ public class Session {
         self._msalSession  = msalSession
     }
 }
-
-
-

@@ -8,15 +8,20 @@
 import JetEmail_Foundation
 
 public extension Client {
+    
+    @MainActor
     static var _shared: Client?
+    
+    @MainActor
     static var shared: Client { get async throws {
-            if let _shared { return _shared }
-            let client = try await Task { @BackgroundActor in
-                BackgroundActor.assertIsolated()
-                return try Microsoft.Client()
-            }.value
-            _shared = client
-            return client
-        }
-    }
+        if let _shared { return _shared }
+        let client = try await Microsoft.Client()
+        _shared = client
+        return client
+    } }
 }
+
+public extension SessionStore {
+    static let shared = SessionStore()
+}
+

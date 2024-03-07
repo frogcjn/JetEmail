@@ -7,7 +7,12 @@
 
 import Foundation
 import SwiftData // for ModelContainer
+import JetEmail_Foundation
 
+
+@ModelActor
+public actor ModelStore {
+}
 
 extension ModelContext {
     subscript<T: PersistentModel>(id: PersistentID<T>) -> T? {
@@ -21,7 +26,7 @@ extension ModelContext {
 
 /*
 protocol AppStorage {
-    func setSessions(_ sessions: [Session]) async throws -> [PersistentID<Account>]
+    func setSessions(_ sessions: [Session]) async throws -> [Account.PersistentID]
     nonisolated var modelContainer: ModelContainer { get }
 }
 
@@ -31,7 +36,7 @@ extension AppStorage {
     
 }*/
 
-extension BackgroundModelActor {
+extension ModelStore {
         
     subscript<T: PersistentModel>(id: PersistentID<T>) -> T? {
         self[id.rawValue ,as: T.self]
@@ -226,11 +231,11 @@ extension ModelContext {
 
 
 
-extension BackgroundModelActor {
+extension ModelStore {
     
     // MARK: - ModelContext: Client-Accounts API
     
-    /*func setAccounts(microsofts: [Microsoft.Account]) async throws -> [PersistentID<Account>] {
+    /*func setAccounts(microsofts: [Microsoft.Account]) async throws -> [Account.PersistentID] {
      MainActor.assertIsolated()
      do {
      // insert
@@ -259,7 +264,7 @@ extension BackgroundModelActor {
      }
      }*/
     
-    /*func setAccounts(googles: [Google.Account]) throws -> [PersistentID<Account>] {
+    /*func setAccounts(googles: [Google.Account]) throws -> [Account.PersistentID] {
      MainActor.assertIsolated()
      do {
      // insert
@@ -283,8 +288,8 @@ extension BackgroundModelActor {
      }*/
     
 
-    func addSession(_ session: Session) async throws -> PersistentID<Account> {
-        BackgroundModelActor.assertIsolated()
+    func addSession(_ session: Session) async throws -> Account.PersistentID {
+        checkBackgroundThread()
         // insert
         do {
             let account = try modelContext._insertAccount(session: session)
@@ -298,8 +303,8 @@ extension BackgroundModelActor {
     
 
     
-    func deleteAccount(itemModel: AppItemModel<Account>, id: PersistentID<Account>) throws -> PersistentID<Account> {
-        BackgroundModelActor.assertIsolated()
+    func deleteAccount(id: Account.PersistentID) throws -> Account.PersistentID {
+        checkBackgroundThread()
         do {
             var updatedItems = try modelContext._fetchAccounts()
             updatedItems.removeAll { $0.persistentID == id }
@@ -319,8 +324,8 @@ extension BackgroundModelActor {
         }
     }
     
-    func moveAccounts(appModel: AppModel, ids: [PersistentID<Account>], fromOffsets source: IndexSet, toOffset destination: Int) throws -> [PersistentID<Account>] {
-        BackgroundModelActor.assertIsolated()
+    func moveAccounts(appModel: AppModel, ids: [Account.PersistentID], fromOffsets source: IndexSet, toOffset destination: Int) throws -> [Account.PersistentID] {
+        checkBackgroundThread()
         do {
             // contacts.move(fromOffsets: from, toOffset: to)
             // Make a copy of the current list of items
@@ -355,12 +360,12 @@ extension BackgroundModelActor {
 
 
 
-extension BackgroundModelActor {
-    
-    var appModel: AppModel { .shared }
+extension ModelStore {
     
     
-    /*func addAccount(microsoft: Microsoft.Account) throws -> PersistentID<Account> {
+    
+    
+    /*func addAccount(microsoft: Microsoft.Account) throws -> Account.PersistentID {
      BackgroundModelActor.assertIsolated()
      do {
      // insert
@@ -373,7 +378,7 @@ extension BackgroundModelActor {
      }
      }
      
-     func addAccount(google: Google.Account) throws -> PersistentID<Account> {
+     func addAccount(google: Google.Account) throws -> Account.PersistentID {
      BackgroundModelActor.assertIsolated()
      do {
      // insert
@@ -438,8 +443,3 @@ struct ClassifyResult : Codable {
 
 // MARK: - Background Model Actors
 
-extension ModelContainer {
-    var backgroundContext: BackgroundModelActor {
-        BackgroundModelActor(modelContainer: self)
-    }
-}

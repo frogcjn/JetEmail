@@ -11,6 +11,7 @@ import JetEmail_Foundation
 
 extension AppItemModel<MailFolder> {
     
+    @MainActor
     var isBusy: Bool {
         get { item.isBusy }
         set { item.isBusy = newValue }
@@ -23,28 +24,31 @@ extension AppItemModel<MailFolder> {
         defer { isBusy = false }
         
         do {
-            try await _loadMessages()
+            let mailFolder = item
+            let account = mailFolder.account
+            guard let session = try await account.modelID.refreshedIfExpiredSession else { return }
+            try await _loadMessages(mailFolderPersistentID: mailFolder.persistentID, mailFolderModelID: mailFolder.modelID, session: session)
         } catch {
             logger.error("\(error)")
         }
     }
     
-    @BackgroundActor
-    private func _loadMessages() async throws {
-        let mailFolder = item
-        let account = mailFolder.account
-        guard let session = try await account.refreshedIfExpiredSession else { return }
-        switch session {
-        case .microsoft(let session):
-            guard case .microsoft(let mailFolderID) = mailFolder.modelID else { return }
-            let messages = try await session.getMessages(microsoftID: mailFolderID) // load from MSAL
-            _ = try await BackgroundModelActor.shared.setMessages(microsofts: messages, in: mailFolder.persistentID) // MSAL to SwiftData
-        case .google(let session):
-            guard case .google(let mailFolderID) = mailFolder.modelID else { return }
-            let messages = try await session.getMessages(mailFolderID: mailFolderID)
-            _ = try await BackgroundModelActor.shared.setMessages(googles: messages, in: mailFolder.persistentID) // MSAL to SwiftData
-            // _ = try await BackgroundModelActor.shared.setMessages
-            // let messages = try await session.getMessages
-        }
+
+}
+
+// @BackgroundActor
+private func _loadMessages(mailFolderPersistentID: MailFolder.PersistentID, mailFolderModelID: MailFolder.ModelID, session: Session) async throws {
+    checkBackgroundThread()
+    switch session {
+    case .microsoft(let session):
+        guard case .microsoft(let mailFolderID) = mailFolderModelID else { return }
+        async let messages = session.getMessages(microsoftID: mailFolderID) // load from MSAL
+        _ = try await ModelStore.instance.setMessages(microsofts: messages, in: mailFolderPersistentID) // MSAL to SwiftData
+    case .google(let session):
+        guard case .google(let mailFolderID) = mailFolderModelID else { return }
+        async let messages = session.getMessages(mailFolderID: mailFolderID)
+        _ = try await ModelStore.instance.setMessages(googles: messages, in: mailFolderPersistentID) // MSAL to SwiftData
+        // _ = try await BackgroundModelActor.instance.setMessages
+        // let messages = try await session.getMessages
     }
 }

@@ -8,6 +8,7 @@
 import SwiftUI
 import ObservableUserDefault
 
+@MainActor
 @Observable
 class SettingsModel {
     

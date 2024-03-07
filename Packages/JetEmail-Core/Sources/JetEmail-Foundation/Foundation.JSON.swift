@@ -83,15 +83,25 @@ public extension Collection {
 
 public extension Sequence {
     func asyncMap<T>(
-        _ transform: (Element) async throws -> T
+        _ transform: @Sendable (Element) async throws -> T
     ) async rethrows -> [T] {
         var values = [T]()
-
+        
         for element in self {
             try await values.append(transform(element))
         }
-
+        
         return values
+    }
+}
+
+public extension Sequence where Element: Sendable {
+    func forEachTask(operation: @Sendable @escaping (Element) async -> Void) async { // TODO: Swift 6.0, infer actor
+        await withDiscardingTaskGroup { group in
+            forEach { element in
+                group.addTask { await operation(element) }
+            }
+        }
     }
 }
 

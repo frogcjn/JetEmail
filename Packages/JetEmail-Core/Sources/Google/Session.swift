@@ -8,6 +8,8 @@
 import Security
 import Observation
 import Foundation
+@preconcurrency import GTMAppAuth
+
 /*
 Google.Session = Google.Account + GTMAuthSession
 */
@@ -28,9 +30,8 @@ Google.Session = Google.Account + GTMAuthSession
     //public typealias SecurityFrameworkType = Data
 #endif
 
-
 //public extension Google {
-    public class Session: SessionProtocol {
+    public final class Session: SessionProtocol, Sendable {
         public let  accountID  : Google.ID
         public let  username   : String
         public let  gtmSession : GTMSession
@@ -72,7 +73,7 @@ Google.Session = Google.Account + GTMAuthSession
         }
         
         fileprivate func updateKeychainItem() async throws {
-            _ = try await Google.Client.shared.keychain.updateItem(item)
+            _ = try await Google.Keychain.shared.updateItem(item)
         }
         
         public func refresh() async throws {
@@ -108,9 +109,9 @@ public extension Session {
 
 
 
+@MainActor
 @Observable
 public class SessionStore {
-    public static let shared = SessionStore()
     public var rawValue = [Google.ID: Google.Session]()
     
     public static subscript(id: Google.ID) -> Google.Session? {
@@ -120,6 +121,7 @@ public class SessionStore {
 }
 
 
+@MainActor
 public extension Google.Session {
     static subscript(id: Google.ID) -> Google.Session? {
         get {
@@ -131,6 +133,7 @@ public extension Google.Session {
 }
 
 // Google.SessionKeychainStore.Item -> Google.Session -> Session
+@MainActor
 public extension Google.Keychain.SessionItem {
     var lazySession: Google.Session {
         if let session = Google.Session[accountID] {

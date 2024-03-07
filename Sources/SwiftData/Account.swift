@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData // for @Model
+import SwiftUI
 
 /*
 
@@ -71,26 +72,35 @@ final class Account : ModelItem {
 }
 
 
+@MainActor
 extension Account {
     
     var platformState: PlatformState {
-        session != nil ? .hasSession : .noSession
+        modelID.session != nil ? .hasSession : .noSession
     }
     
     enum PlatformState : String, Codable {
         case noSession // no account return from platform client cached account store
         case hasSession // no valid session return from platform client cached account
+        
+        var color: Color {
+            switch self {
+            case .hasSession: .green
+            case .noSession: .red
+            }
+        }
     }
     
     var isBusy: Bool {
         get { AttributesStore[modelID].isBusy }
         set { AttributesStore[modelID].isBusy = newValue }
     }
-    
-    var appModel: AppModel { .shared }
+
 }
 
 extension Account {
+    
+    @MainActor
     @Observable
     final class AttributesStore {
         var rawValue = [ModelID: Attributes]()

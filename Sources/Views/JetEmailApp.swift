@@ -10,10 +10,6 @@ import SwiftData
 
 @main
 struct JetEmailApp: App {
-    
-    // state here associate with application for all windows
-    private let appModel = AppModel.shared
-    
     var body: some Scene {
         Group {
             /// Settings
@@ -36,6 +32,6 @@ Text("Target_OS_IPHONE")
             }
             .defaultSize(width: 800, height: 600)
         }
-        .appModel(appModel)
+        .appModel(.shared)
     }
 }
