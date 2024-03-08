@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JetEmail_Foundation
 
 public struct Message : Codable, Identifiable, Sendable {
     public var                         id: ID

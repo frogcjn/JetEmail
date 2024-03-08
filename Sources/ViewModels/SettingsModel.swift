@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ObservableUserDefault
+import JetEmail_Data
 
 @MainActor
 @Observable

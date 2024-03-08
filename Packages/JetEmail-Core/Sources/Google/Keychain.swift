@@ -24,13 +24,13 @@ import JetEmail_Foundation
         
         public func insertItem(gtmSession: GTMSession) throws -> SessionItem {
             //SessionKeychain.assertIsolated()
-            if let item = try item(id: try gtmSession.id) { item }
+            if let item = try item(id: try gtmSession.accountID) { item }
             else if let item = try addItem(gtmSession: gtmSession) { item }
             else { throw Google.AuthError.sessionStoreAddFail }
         }
         
         public func addItem(gtmSession: GTMSession) throws -> SessionItem? {
-            let (id, username) = try gtmSession.idAndUsername
+            let (id, username) = try gtmSession.accountIDAndUsername
             //SessionKeychain.assertIsolated()
             let attributes = [
                 
@@ -41,7 +41,7 @@ import JetEmail_Foundation
                 kSecAttrService              : "me.frogcjn.jet-email.account.google",      // mark location: Jet Email - Account - Google
                 kSecAttrCreator              : Self.securityAttributeCreator,              // mark creator: Jet Email
                 kSecAttrType                 : Self.securityAttributeTypeGoogleAccount,    // mark a data type: Google Account
-                kSecAttrAccount              : id.string,                                  // unique id under location and type
+                kSecAttrAccount              : id.rawValue,                                  // unique id under location and type
                 kSecAttrGeneric              : try username.data,
                 kSecAttrLabel                : "Jet Email - Google Account: \(username)",  // label
                 /* protection attributes*/
@@ -94,7 +94,7 @@ import JetEmail_Foundation
                 kSecAttrService              : "me.frogcjn.jet-email.account.google",       // mark location: Jet Email - Account - Google
                 kSecAttrCreator              : Self.securityAttributeCreator,           // mark creator: Jet Email
                 kSecAttrType                 : Self.securityAttributeTypeGoogleAccount, // mark this keychain type: Google Account
-                kSecAttrAccount              : id.string, // account
+                kSecAttrAccount              : id.rawValue, // account
                 // kSecAttrLabel                : "Jet Email - Google Account: \(name)", // name
                 
                 /* protection attributes*/

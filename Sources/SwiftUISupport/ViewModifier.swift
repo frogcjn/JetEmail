@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JetEmail_Data
 
 
 extension View {
@@ -13,7 +14,7 @@ extension View {
         modifier(AppModelResultModifier(appModel: appModel))
     }*/
     
-    func itemModel<Item : ModelItem>(_ item: Item) -> some View {
+    func itemModel<Item : DataModel>(_ item: Item) -> some View {
         modifier(ItemModelModifier(item: item))
     }
 }
@@ -31,7 +32,7 @@ extension View {
 
 // MARK: - Modifier: AppModel.Item
 
-fileprivate struct ItemModelModifier<Item: ModelItem> : ViewModifier {
+fileprivate struct ItemModelModifier<Item: DataModel> : ViewModifier {
     
     @Environment(AppModel.self)
     var appModel

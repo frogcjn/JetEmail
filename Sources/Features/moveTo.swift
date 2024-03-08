@@ -7,11 +7,12 @@
 
 import Google
 import JetEmail_Foundation
+import JetEmail_Data
 
-extension AppItemModel<Message> {
+extension AppItemModel<JetEmail_Data.Message> {
     
     @MainActor // for isClassifying
-    func move(from moveFrom: MailFolder, to moveTo: MailFolder) async { // message and mailFolder should in the same context
+    func move(from moveFrom: JetEmail_Data.MailFolder, to moveTo: JetEmail_Data.MailFolder) async { // message and mailFolder should in the same context
         guard !isBusy else { return }
         isBusy = true
         defer { isBusy = false }
@@ -19,7 +20,7 @@ extension AppItemModel<Message> {
         do {
             let message = item
             let account = message.mailFolder.account
-            guard let session = account.modelID.session else { return }
+            guard let session = account.id.storedSession else { return }
             switch session {
             case .microsoft(let session):
                 guard let microsoftMessage = message.microsoft, let moveToID = moveTo.microsoftID else { return }

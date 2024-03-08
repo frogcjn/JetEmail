@@ -10,6 +10,8 @@ import SwiftData
 import Google
 import Microsoft
 import JetEmail_Foundation
+import JetEmail_Data
+
 /*
 // MARK: - Model + StringID
 
@@ -19,7 +21,7 @@ extension String {
     }
 }*/
 
-/*extension Account : Hashable, Equatable, Identifiable {
+/*extension Account : Hashable, , Identifiable {
     typealias ID = String
     // var id: String { id }
     
@@ -33,15 +35,15 @@ extension String {
 }*/
 
 
-/*extension MailFolder : Hashable, Equatable, Identifiable {
+/*extension MailFolder : Hashable, , Identifiable {
     // var id: String { id }
 
     static func ==(lhs: MailFolder, rhs: MailFolder) -> Bool {
-        lhs.persistentModelID == rhs.persistentModelID
+        lhs.persistentID == rhs.persistentID
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(persistentModelID)
+        hasher.combine(persistentID)
     }
 }
 
@@ -49,173 +51,28 @@ extension Message : Hashable, Equatable, Identifiable {
     // var id: String { id }
 
     static func ==(lhs: Message, rhs: Message) -> Bool {
-        lhs.persistentModelID == rhs.persistentModelID
+        lhs.persistentID == rhs.persistentID
     }
     
     func hash(into hasher: inout Hasher) {
-        hasher.combine(persistentModelID)
+        hasher.combine(persistentID)
     }
 }*/
 
 
 
 
-extension Account {
-    /*struct ModelID: ModelIDProtocol {
-        let platform: Platform
-        let platformID: String
-    }*/
-    
-    enum ModelID : ModelIDProtocol {
-        case microsoft(Microsoft.ID)
-        case google(Google.ID)
-    }
-}
-
-extension MailFolder {
-    enum ModelID : ModelIDProtocol {
-        case microsoft(Microsoft.MailFolder.ID)
-        case google(Google.MailFolder.ID)
-    }
-}
-
-extension Message {
-    enum ModelID: ModelIDProtocol {
-        case microsoft(Microsoft.Message.ID)
-        case google(Google.Message.ID)
-        //let platform: Platform
-        //let platformID: String
-    }
-}
-
-protocol ModelIDProtocol: StringID, Sendable {
-    var platform: Platform { get }
-    var platformID: String { get }
-}
-
-extension ModelIDProtocol {
-    var string: String { "\(platform.rawValue)/\(platformID)" }
-    init(string: String) throws { fatalError() }
-}
-
-struct PersistentID<Model : PersistentModel> : Sendable {
-    let rawValue: PersistentIdentifier
-}
-
-extension PersistentID : Equatable {
-    static func ==(lhs: PersistentID, rhs: PersistentID) -> Bool {
-        lhs.rawValue == rhs.rawValue
-    }
-}
-
-extension PersistentModel {
-    typealias PersistentID = JetEmail.PersistentID<Self>
-    var persistentID: PersistentID {
-        .init(rawValue: persistentModelID)
-    }
-}
 
 
-enum Platform : String, Codable {
-    case microsoft
-    case google
-}
-
-extension Account.ModelID {
-    
-    var platform: Platform {
-        switch self {
-        case .microsoft: .microsoft
-        case .google   : .google
-        }
-    }
-    
-    var platformID: String {
-        switch self {
-        case .microsoft(let platformID): platformID.string
-        case .google   (let platformID): platformID.string
-        }
-    }
-    
-    init(platform: Platform, platformID: String) {
-        self = switch platform {
-        case .microsoft: .microsoft(.init(string:platformID))
-        case .google   : .google   (.init(string:platformID))
-        }
-    }
-}
-
-extension MailFolder.ModelID {
-
-    /*enum Enum : Codable {
-        case microsoft(Microsoft.MailFolder.ID)
-        //case google(Google.MailFolder.ID)
-    }
-    
-    var enumValue: Enum {
-        switch platform {
-        case .microsoft: .microsoft(.init(string: platformID))
-        case .google: fatalError()
-        //case .google   : .google   (.init(string: platformID))
-        }
-    }
-    
-    init(enumValue: Enum) {
-        (platform, platformID) = switch enumValue {
-        case .microsoft(let platformID): (.microsoft, platformID.string)
-        //case .google   (let platformID): (.google   , platformID.string)
-        }
-    }*/
-    
-    var platform: Platform {
-        switch self {
-        case .microsoft: .microsoft
-        case .google   : .google
-        }
-    }
-    
-    var platformID: String {
-        switch self {
-        case .microsoft(let platformID): platformID.string
-        case .google   (let platformID): platformID.string
-        }
-    }
-    
-    init(platform: Platform, platformID: String) {
-        self = switch platform {
-        case .microsoft: .microsoft(.init(string:platformID))
-        case .google   : .google   (.init(string:platformID))
-        }
-    }
-}
 
 
-extension Message.ModelID {
-    
-    var platform: Platform {
-        switch self {
-        case .microsoft: .microsoft
-        case .google   : .google
-        }
-    }
-    
-    var platformID: String {
-        switch self {
-        case .microsoft(let platformID): platformID.string
-        case .google   (let platformID): platformID.string
-        }
-    }
-    
-    init(platform: Platform, platformID: String) {
-        self = switch platform {
-        case .microsoft: .microsoft(.init(string:platformID))
-        case .google   : .google   (.init(string:platformID))
-        }
-    }
-}
+
+
+
+
 
 /*
-extension Message.ModelID {
+extension Message.ID {
 
     enum Enum : Codable {
         case microsoft(Microsoft.Message.ID)
@@ -247,14 +104,14 @@ extension Message.ModelID {
 
 
 /*extension MailFolder {
-    public struct ModelID : StringID {
+    public struct ID {
         public let string: String
         public init(string: String) { self.string = string }
     }
 }*/
 
 /*extension Message {
-    public struct ModelID : StringID {
+    public struct ID {
         public let string: String
         public init(string: String) { self.string = string }
     }
@@ -351,87 +208,8 @@ extension Google.GTMSession {
 }
 
 */
-// MARK: - Microsoft -> Account.ModelID
-
-extension Microsoft.ID {
-    var modelID: Account.ModelID {
-        .microsoft(self)
-    }
-}
-/*
-extension Microsoft.Account {
-    var modelID: Account.ModelID { id.modelID }
-}*/
-
-extension Microsoft.MSALAccount {
-    var modelID: Account.ModelID { get throws { try id.modelID } }
-}
 
 
-extension Microsoft.MSALSession {
-    var accountModelID: Account.ModelID { get throws { try accountID.modelID } }
-}
-
-// MARK: - Google -> Account.ModelID
-
-extension Google.ID {
-    var modelID: Account.ModelID {
-        .google(self)
-    }
-}
-
-extension Google.Session {
-    var modelID: Account.ModelID { accountID.modelID }
-}
-
-extension Google.GTMSession {
-    var modelID: Account.ModelID { get throws { try id.modelID } }
-}
-
-
-// MARK: - GOOGLE.MSALAccount, Microsoft.MSALSession -> Microsoft.ID
-
-
-extension Microsoft.Session {
-    var modelID: Account.ModelID { accountID.modelID }
-}
-
-
-extension Microsoft.MailFolder {
-    var modelID: MailFolder.ModelID {
-        .init(platform: .microsoft, platformID: id.string)
-    }
-    
-    /*func model(_ context: ModelContext) throws -> MailFolder? {
-        return try context.fetchMailFolder(modelID: modelID)
-    }*/
-}
-
-extension Google.MailFolder {
-    var modelID: MailFolder.ModelID {
-        .init(platform: .google, platformID: id.string)
-    }
-    
-    /*func model(_ context: ModelContext) throws -> MailFolder? {
-        return try context.fetchMailFolder(modelID: modelID)
-    }*/
-}
-
-extension Microsoft.Message {
-    var modelID: Message.ModelID {
-        .init(platform: .microsoft, platformID: id.string)
-    }
-    
-    /*func model(_ context: ModelContext) throws -> Message? {
-        return try context.message(modelID: modelID)
-    }*/
-}
-
-extension Google.Message {
-    var modelID: Message.ModelID {
-        .init(platform: .google, platformID: id.string)
-    }
-}
 
 // MARK: - Model <-> MSGraph
 /*
@@ -465,10 +243,12 @@ extension Account {
 }
 */
 
-extension MailFolder {
-    convenience init(microsoft: Microsoft.MailFolder, in account: Account) {
+// MARK: - MailFolder <-> Google, Microsoft
+
+extension JetEmail_Data.MailFolder {
+    convenience init(microsoft: Microsoft.MailFolder, in account: JetEmail_Data.Account) {
         self.init(
-            modelID: microsoft.modelID,
+            modelID: microsoft.unifiedID,
             name   : microsoft.displayName ?? "",
             in     : account
         )
@@ -476,14 +256,14 @@ extension MailFolder {
         self._graph = try? microsoft.jsonString
     }
     
-    convenience init(google: Google.MailFolder, in account: Account) {
+    convenience init(google: Google.MailFolder, in account: JetEmail_Data.Account) {
         self.init(
-            modelID: google.modelID,
+            modelID: google.unifiedID,
             name   : google.name ?? "",
             in     : account
         )
         
-        self._graph = try? microsoft.jsonString
+        self._google = try? google.jsonString
     }
     
     var microsoft: Microsoft.MailFolder? {
@@ -492,7 +272,7 @@ extension MailFolder {
         }
         set {
             guard let graph = newValue else { return }
-            self.modelID  = graph.modelID
+            self.id  = graph.unifiedID
             self.name     = graph.displayName ?? ""
             
             self._graph   = try? graph.jsonString
@@ -506,7 +286,7 @@ extension MailFolder {
         }
         set {
             guard let google = newValue else { return }
-            self.modelID = google.modelID
+            self.id = google.unifiedID
             self.name = google.name ?? ""
             self._google = try? google.jsonString
             self._graph = nil
@@ -523,74 +303,3 @@ extension MailFolder {
      }
      */
 }
-
-
-
-// MARK: - MSGraph -> MSGraph: ID
-
-extension Account {
-    var microsoftID: Microsoft.ID? { modelID.microsoftID }
-    var googleID: Google.ID? { modelID.googleID }
-}
-
-extension Account.ModelID {
-    var microsoftID: Microsoft.ID? {
-        guard case .microsoft(let microsoftID) = self else { return nil }
-        return microsoftID
-    }
-    
-    var googleID: Google.ID? {
-        guard case .google(let googleID) = self else { return nil }
-        return googleID
-    }
-}
-
-extension MailFolder {
-    var microsoftID: Microsoft.MailFolder.ID? { modelID.microsoftID }
-    var googleID: Google.MailFolder.ID? { modelID.googleID }
-}
-
-extension MailFolder.ModelID {
-    var microsoftID: Microsoft.MailFolder.ID? {
-        guard case .microsoft(let microsoftID) = self else { return nil }
-        return microsoftID
-    }
-    
-    var googleID: Google.MailFolder.ID? {
-        guard case .google(let googleID) = self else { return nil }
-        return googleID
-    }
-}
-
-extension Message {
-    var microsoftID: Microsoft.Message.ID? { modelID.microsoftID }
-    var googleID: Google.Message.ID? { modelID.googleID }
-}
-
-extension Message.ModelID {
-    var microsoftID: Microsoft.Message.ID? {
-        guard case .microsoft(let microsoftID) = self else { return nil }
-        return microsoftID
-    }
-    
-    var googleID: Google.Message.ID? {
-        guard case .google(let googleID) = self else { return nil }
-        return googleID
-    }
-}
-
-// MARK: - Model <- MSGraph: ID
-
-
-
-
-extension Session {
-    var modelID: Account.ModelID {
-        switch self {
-        case .microsoft(let microsoftSession): microsoftSession.modelID
-        case .google(let googleSession): googleSession.modelID
-        }
-    }
-}
-
-

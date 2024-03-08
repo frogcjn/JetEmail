@@ -17,6 +17,5 @@ struct SettingsView : View {
             GeneralTab()
                 .tabItem { Label("General", systemImage: "gearshape") }
         }
-        .labelStyle(.iconOnly)
     }
 }

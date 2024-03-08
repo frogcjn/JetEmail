@@ -6,13 +6,18 @@
 //
 
 import JetEmail_Foundation
+import JetEmail_Data
 
 // MARK: Feature: Account - Load Mail Folder
 
 extension AppModel {
     @MainActor
     func loadMailFolders(accounts: [Account]) async {
-        await accounts.map(\.persistentID).forEachTask { @MainActor in await self($0)?.loadMailFolders() }
+        do {
+            try await accounts.map(\.id).forEachTask { @MainActor in try await self($0)?.loadMailFolders() }
+        } catch {
+            logger.error("\(error)")
+        }
     }
 }
 
@@ -33,8 +38,9 @@ extension AppItemModel<Account> {
         
         do {
             let account = item
-            guard let session = try await account.modelID.refreshedIfExpiredSession else { return }
-            try await session.loadMailFolders(persistentID: account.persistentID, modelID: account.modelID)
+            guard let session = try await account.id.refreshSession else { return }
+            try await session.loadMailFolders(persistentID: account.id, modelID: account.id)
+            account.root = account.root
         } catch {
             logger.error("\(error)")
         }

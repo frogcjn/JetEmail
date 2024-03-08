@@ -58,8 +58,8 @@ import SwiftData
 
 /*extension PersistentModel {
     func to(_ modelContext: ModelContext) throws -> Self {
-        guard let transfered = modelContext.model(for: persistentModelID) as? Self else {
-            throw SwiftDataError.noModelInstance(id: persistentModelID, in: modelContext)
+        guard let transfered = modelContext.model(for: persistentID) as? Self else {
+            throw SwiftDataError.noModelInstance(id: persistentID, in: modelContext)
         }
         return transfered
     }
@@ -96,10 +96,10 @@ public extension Sequence {
 }
 
 public extension Sequence where Element: Sendable {
-    func forEachTask(operation: @Sendable @escaping (Element) async -> Void) async { // TODO: Swift 6.0, infer actor
-        await withDiscardingTaskGroup { group in
+    func forEachTask(operation: @Sendable @escaping (Element) async throws -> Void) async throws { // TODO: Swift 6.0, infer actor
+        try await withThrowingDiscardingTaskGroup { group in
             forEach { element in
-                group.addTask { await operation(element) }
+                group.addTask { try await operation(element) }
             }
         }
     }

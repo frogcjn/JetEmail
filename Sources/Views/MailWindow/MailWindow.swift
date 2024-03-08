@@ -32,18 +32,20 @@ struct MailWindow : View {
             if let item = window.selectedMailFolder {
                 MessageList()
                     .itemModel(item)
+                    .itemModel(item.account)
             }
         } detail: {
             if let item = window.selectedMessage {
                 MessageView()
                     .itemModel(item)
+                    .itemModel(item.mailFolder)
+                    .itemModel(item.mailFolder.account)
             }
         }
         
         // Feature: Unselection - Will Sign Out Account
         .onReceive(appModel.willSignOutAccount, perform: window.willSignOutAccount(_:))
         
-        .labelStyle(.iconOnly)
         .environment(window)
         
         #if !os(macOS)

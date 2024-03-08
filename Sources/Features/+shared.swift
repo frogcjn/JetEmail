@@ -6,6 +6,8 @@
 //
 
 import SwiftData
+import Foundation
+import JetEmail_Data
 
 extension AppModel {
     static let shared = AppModel()
@@ -13,23 +15,18 @@ extension AppModel {
 
 extension ModelContainer {
     @MainActor
-    static var shared = try! ModelContainer(for: Account.self, MailFolder.self, Message.self)
+    static var shared = {
+        do {
+            return try ModelContainer(for: Account.self, MailFolder.self, Message.self)
+        } catch {
+            print(error)
+            fatalError()
+        }
+    }()
 }
 
 extension SettingsModel {
     static var shared = SettingsModel()
-}
-
-extension Account.AttributesStore {
-    static var shared = Account.AttributesStore()
-}
-
-extension MailFolder.AttributesStore {
-    static var shared = MailFolder.AttributesStore()
-}
-
-extension Message.AttributesStore {
-    static var shared = Message.AttributesStore()
 }
 
 import SwiftData

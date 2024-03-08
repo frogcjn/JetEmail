@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JetEmail_Data
 
 struct AccountCell: View {
     
@@ -23,22 +24,18 @@ struct AccountCell: View {
             // Text(account.platformState.rawValue)
             
             Spacer()
-            if account.isBusy {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .controlSize(.small)
-            } else {
-                switch account.platformState {
-                case .hasSession:
-                    Image(systemName: "circle.fill")
-                        .foregroundColor(.green)
-                        .dynamicTypeSize(.xSmall)
-                case .noSession:
-                    Image(systemName: "circle.fill")
-                        .foregroundColor(.red)
-                        .dynamicTypeSize(.xSmall)
+            
+            Image(systemName: "circle.fill")
+                .foregroundColor(account.sessionState.color)
+                .dynamicTypeSize(.xSmall)
+                .opacity(account.isBusy ? 0 : 1)
+                .overlay {
+                    if account.isBusy {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .controlSize(.small)
+                    }
                 }
-            }
         }
     }
 }

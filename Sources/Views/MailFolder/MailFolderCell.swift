@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JetEmail_Data
 
 struct MailFolderCell : View {
     
@@ -13,11 +14,6 @@ struct MailFolderCell : View {
     var mailFolder
     
     var body: some View {
-        HStack {
-            Image(systemName: mailFolder.systemImage)
-                .frame(width: 8, height: 8)
-                .foregroundStyle(.tint)
-            Text(mailFolder.localizedName)
-        }.padding(.horizontal, 5)
+        Label(mailFolder.localizedName, systemImage: mailFolder.systemImage)
     }
 }

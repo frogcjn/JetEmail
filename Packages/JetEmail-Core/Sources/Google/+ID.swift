@@ -13,38 +13,36 @@ import JetEmail_Foundation
 
 public extension String {
     var googleID: ID {
-        .init(string: self)
+        .init(rawValue: self)
     }
 }
 
-public struct ID : RawStringID, Sendable {
-    public let string: String
-    public init(string: String) { self.string = string }
-}
+public enum Account {}
+
+public typealias ID = StringID<Account>
 
 public extension MailFolder {
-    struct ID : RawStringID, Sendable {
-        public let string: String
-        public init(string: String) { self.string = string }
-    }
+    typealias ID = StringID<MailFolder>
 }
 
-
+public extension Message {
+    typealias ID = StringID<Message>
+}
 
 // MARK: Google -> Google.ID
 
 public extension GTMSession {
-    var id: Google.ID {
+    var accountID: Google.ID {
         get throws {
             guard let stringID = userID else { throw Google.AuthError.accountNoIDOrUsername }
-            return .init(string: stringID)
+            return .init(rawValue: stringID)
         }
     }
     
-    var idAndUsername: (id: Google.ID, username: String) {
+    var accountIDAndUsername: (id: Google.ID, username: String) {
         get throws {
             guard let stringID = userID, let username = userEmail else { throw Google.AuthError.accountNoIDOrUsername }
-            return (.init(string: stringID), username)
+            return (.init(rawValue: stringID), username)
         }
     }
 }

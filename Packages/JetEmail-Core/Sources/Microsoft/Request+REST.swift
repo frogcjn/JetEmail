@@ -5,8 +5,7 @@
 //  Created by Cao, Jiannan on 2/18/24.
 //
 
-import MSAL
-
+import Foundation
 
 
 
@@ -25,7 +24,7 @@ extension Microsoft {
 
 
 
-extension Microsoft.Session {
+extension Session {
     init(endpointURL: URL, result: MSALResult) {
         self.init(
             endpointURL         : endpointURL,
@@ -49,10 +48,10 @@ extension Microsoft.Session {
 */
 
 
-// MARK: - Microsoft.Context: Account-MailFolders API
+// MARK: - Context: Account-MailFolders API
 
 public extension Session {
-    func getRootMailFolder() async throws -> Microsoft.MailFolder {
+    func getRootMailFolder() async throws -> MailFolder {
         try await getMailFolder(wellKnownFolderName: .msgFolderRoot)
     }
       
@@ -60,15 +59,15 @@ public extension Session {
         try await getItems("mailFolders")
     }*/
     
-    func getChildFolders(microsoftID: Microsoft.MailFolder.ID) async throws -> [Microsoft.MailFolder]  {
-        try await getItems("mailFolders", "\(microsoftID)", "childFolders")
+    func getChildFolders(id: MailFolder.ID) async throws -> [MailFolder]  {
+        try await getItems("mailFolders", "\(id)", "childFolders")
     }
     
-    fileprivate func getMailFolder(microsoftID: Microsoft.MailFolder.ID)  async throws -> Microsoft.MailFolder {
-        try await getItem("mailFolders", "\(microsoftID)")
+    fileprivate func getMailFolder(id: MailFolder.ID)  async throws -> MailFolder {
+        try await getItem("mailFolders", "\(id)")
     }
     
-    func getMailFolder(wellKnownFolderName: Microsoft.MailFolder.WellKnownFolderName) async throws -> Microsoft.MailFolder {
+    func getMailFolder(wellKnownFolderName: MailFolder.WellKnownFolderName) async throws -> MailFolder {
         try await getItem("mailFolders", "\(wellKnownFolderName)")
     }
     
@@ -83,7 +82,7 @@ public extension Session {
 public extension Session {
     
     // https://learn.microsoft.com/en-us/graph/api/mailfolder-list-messages
-    func getMessages(microsoftID: Microsoft.MailFolder.ID) async throws -> [Microsoft.Message] {
+    func getMessages(microsoftID: MailFolder.ID) async throws -> [Message] {
         try await getItems("mailFolders", "\(microsoftID)", "messages", queryItems: [
             // .orderBy(name: "receivedDateTime", .descending),
             .select(
@@ -110,8 +109,8 @@ public extension Session {
 public extension Session {
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
-    func getMessage(microsoftID: Microsoft.Message.ID) async throws -> Microsoft.Message {
-        var message: Microsoft.Message = try await getItem("messages", "\(microsoftID)", queryItems: [
+    func getMessage(microsoftID: Message.ID) async throws -> Message {
+        var message: Message = try await getItem("messages", "\(microsoftID)", queryItems: [
             .select(
                 "id",
                 "subject",
@@ -135,9 +134,9 @@ public extension Session {
     }
     
     // https://learn.microsoft.com/en-us/graph/api/message-move?view=graph-rest-1.0
-    func moveMessage(id messageID: Microsoft.Message.ID, to toID: Microsoft.MailFolder.ID) async throws -> Microsoft.Message {
+    func moveMessage(id messageID: Message.ID, to toID: MailFolder.ID) async throws -> Message {
         struct MessageMoveRequestBody : Encodable {
-            let destinationId: Microsoft.MailFolder.ID
+            let destinationId: MailFolder.ID
         }
         return try await postItem("messages", "\(messageID)", "move", body: MessageMoveRequestBody(destinationId: toID))
     }
@@ -147,7 +146,7 @@ public extension Session {
 
 fileprivate extension Session {
 
-    var endpointURL: URL { Microsoft.Client.endpointURL }
+    var endpointURL: URL { Client.endpointURL }
 
     func getResponse<Value: Decodable>(url: URL, _ type: Value.Type = Value.self) async throws -> Value {
         try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader)._response()
@@ -175,7 +174,7 @@ fileprivate extension Session {
         let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems).appending(queryItems: [.count()])
         let countResponse: GraphCollectionResponse<Value> = try await getResponse(url: url)
         
-        guard let count = countResponse.count else { throw Microsoft.AuthError.collectionResponseNoCount }
+        guard let count = countResponse.count else { throw AuthError.collectionResponseNoCount }
         
         let items = countResponse.value
         if count == items.count {

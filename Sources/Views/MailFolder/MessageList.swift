@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData // for @Query
+import JetEmail_Data
 
 fileprivate struct _MessageList : View {
     @Environment(AppModel.self)
@@ -106,18 +107,22 @@ fileprivate struct _MessageList : View {
         
     @MainActor
     func classifyMultiple(auto: Bool, count: Int) async {
-        let classifyStartIndex: Int
-        if let message = window.selectedMessage, let selectedIndex = messages.firstIndex(of: message) {
-            classifyStartIndex = selectedIndex
-        } else {
-            classifyStartIndex = (messages.lastIndex { $0.movePlan != nil } ?? -1) + 1
-        }
+        do {
+            let classifyStartIndex: Int
+            if let message = window.selectedMessage, let selectedIndex = messages.firstIndex(of: message) {
+                classifyStartIndex = selectedIndex
+            } else {
+                classifyStartIndex = (messages.lastIndex { $0.movePlan != nil } ?? -1) + 1
+            }
         
-        let classifyMessages = messages.dropFirst(classifyStartIndex).prefix(count).filter({ $0.movePlan == nil })
-        if auto {
-            await classifyMessages.map(\.persistentID).forEachTask { @MainActor in await appModel($0)?.classify() }
-        } else {
-            classifyMessages.forEach { message in message.movePlan = mailFolder }
+            let classifyMessages = messages.dropFirst(classifyStartIndex).prefix(count) // .filter({ $0.movePlan == nil })
+            if auto {
+                try await classifyMessages.map(\.id).forEachTask { @MainActor in try await appModel($0)?.classify() }
+            } else {
+                classifyMessages.forEach { message in message.movePlan = mailFolder }
+            }
+        } catch {
+            appModel.logger.error("\(error)")
         }
     }
 }
@@ -127,8 +132,8 @@ struct MessageList : View {
     var mailFolder
 
     var body: some View {
-        let id = mailFolder.id
-        _MessageList(_messages: Query(filter: #Predicate<Message> { $0.mailFolder.id == id && !$0.deleteMark }, sort: \.date, order: .reverse))
+        let rawID = mailFolder.rawID
+        _MessageList(_messages: Query(filter: #Predicate<Message> { $0.mailFolder.rawID == rawID && !$0.deleteMark }, sort: \.date, order: .reverse))
     }
 }
 

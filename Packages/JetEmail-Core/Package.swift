@@ -14,9 +14,10 @@ let package = Package(
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(name: "Google", targets: ["Google"]),
-        .library(name: "Microsoft", targets: ["Microsoft"]),
+        .library(name: "Google"             , targets: ["Google"]),
+        .library(name: "Microsoft"          , targets: ["Microsoft"]),
         .library(name: "JetEmail-Foundation", targets: ["JetEmail-Foundation"]),
+        .library(name: "JetEmail-Data"      , targets: ["JetEmail-Data"])
     ],
     dependencies: [
         .package(url: "https://github.com/frogcjn/AppAuth-iOS.git", branch: "frogcjn/visionOS"), //.package(url: "https://github.com/openid/AppAuth-iOS.git", .upToNextMajor(from: "1.6.2")),
@@ -28,6 +29,17 @@ let package = Package(
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
+        .target(
+            name: "JetEmail-Data",
+            dependencies: [
+                .target(name: "Google"),
+                .target(name: "Microsoft"),
+                .target(name: "JetEmail-Foundation")
+            ],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
         .target(
             name: "Google",
             dependencies: [
@@ -59,6 +71,7 @@ let package = Package(
                 .enableExperimentalFeature("StrictConcurrency")
             ]
         ),
+        
         /*.binaryTarget(
             name: "MSAL",
             path: "../MSAL/MSAL.xcframework"

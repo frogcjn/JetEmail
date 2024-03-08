@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JetEmail_Data
 
 struct AccountSectionHeader: View {
     
@@ -20,7 +21,7 @@ struct AccountSectionHeader: View {
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: "circle.fill")
-                .foregroundColor(account.platformState.color)
+                .foregroundColor(account.sessionState.color)
                 .frame(width: 18, alignment: .center)
                 .opacity(isOnHover || account.isBusy ? 0 : 1)
                 .overlay {
@@ -38,7 +39,7 @@ struct AccountSectionHeader: View {
                 .onHover { isOnHover = $0 }
             
             Text(account.username)
-            switch account.modelID.platform {
+            switch account.id.platform {
             case .microsoft:
                 Text("(Outlook)")
             case .google:

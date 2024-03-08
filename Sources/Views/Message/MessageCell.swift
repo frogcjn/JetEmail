@@ -7,6 +7,7 @@
 
 import SwiftUI
 import JetEmail_Foundation
+import JetEmail_Data
 
 struct MessageCell : View {
     
@@ -28,7 +29,7 @@ struct MessageCell : View {
             Text(message.bodyPreview ?? "(No Preview)").lineLimit(2)
                 .foregroundStyle(.secondary)
             
-            MovePlan()
+            MovePlan(style: .menu)
         }
     }
 }

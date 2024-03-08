@@ -7,11 +7,38 @@
 
 import SwiftUI
 import SwiftData // for @Query
+import JetEmail_Data
 
-fileprivate struct _AcciontSection: View {
+struct AccountSection: View {
+    @Environment(AppItemModel<Account>.self)
+    private var itemModel
     
+    @Environment(Account.self)
+    private var account
     
-    @Query
+    @State
+    private var rootChildren: [MailFolder] = []
+    
+    var body: some View {
+        Section {
+            // _AcciontSection(rootChildren: (rootChildren.filter { !$0.deleteMark })/*.sorted(using: KeyPathComparator(\MailFolder.name))*/)
+            OutlineGroup(rootChildren.filter { !$0.deleteMark }, children: \.children.nilIfEmpty) { item in
+                MailFolderCell()
+                    .itemModel(item)
+                    .tag(item) // selection tag
+            }
+        } header: {
+            // Feature: Account - Load Mail Folders
+            AccountSectionHeader { await itemModel.loadMailFolders() }
+        }.onChange(of: account.root, initial: true) { oldValue, newValue in
+            rootChildren = newValue?.children ?? []
+        }
+    }
+}
+
+
+/*fileprivate struct _AcciontSection: View {
+    
     var rootChildren: [MailFolder]
     
     var body: some View {
@@ -21,24 +48,6 @@ fileprivate struct _AcciontSection: View {
                 .tag(item) // selection tag
         }
     }
-}
+}*/
 
 
-struct AccountSection: View {
-    @Environment(AppItemModel<Account>.self)
-    var account
-    
-    var body: some View {
-        Section {
-            if let rootID = account.item.root?.id {
-                _AcciontSection(_rootChildren: Query(filter: #Predicate { rootID != nil && $0.parent?.id == rootID && !$0.deleteMark }, sort: \MailFolder.name))
-            } else {
-                Color.red
-            }
-            
-        } header: {
-            // Feature: Account - Load Mail Folders
-            AccountSectionHeader { await account.loadMailFolders() }
-        }
-    }
-}

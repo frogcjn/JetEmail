@@ -6,6 +6,7 @@
 //
 
 import JetEmail_Foundation
+import JetEmail_Data
 
 // MARK: Feature: Account - Load Messages
 
@@ -26,8 +27,8 @@ extension AppItemModel<MailFolder> {
         do {
             let mailFolder = item
             let account = mailFolder.account
-            guard let session = try await account.modelID.refreshedIfExpiredSession else { return }
-            try await _loadMessages(mailFolderPersistentID: mailFolder.persistentID, mailFolderModelID: mailFolder.modelID, session: session)
+            guard let session = try await account.id.refreshSession else { return }
+            try await _loadMessages(mailFolderPersistentID: mailFolder.id, mailFolderID: mailFolder.id, session: session)
         } catch {
             logger.error("\(error)")
         }
@@ -37,15 +38,15 @@ extension AppItemModel<MailFolder> {
 }
 
 // @BackgroundActor
-private func _loadMessages(mailFolderPersistentID: MailFolder.PersistentID, mailFolderModelID: MailFolder.ModelID, session: Session) async throws {
+private func _loadMessages(mailFolderPersistentID: MailFolder.ID, mailFolderID: MailFolder.ID, session: Session) async throws {
     checkBackgroundThread()
     switch session {
     case .microsoft(let session):
-        guard case .microsoft(let mailFolderID) = mailFolderModelID else { return }
+        guard case .microsoft(let mailFolderID) = mailFolderID else { return }
         async let messages = session.getMessages(microsoftID: mailFolderID) // load from MSAL
         _ = try await ModelStore.instance.setMessages(microsofts: messages, in: mailFolderPersistentID) // MSAL to SwiftData
     case .google(let session):
-        guard case .google(let mailFolderID) = mailFolderModelID else { return }
+        guard case .google(let mailFolderID) = mailFolderID else { return }
         async let messages = session.getMessages(mailFolderID: mailFolderID)
         _ = try await ModelStore.instance.setMessages(googles: messages, in: mailFolderPersistentID) // MSAL to SwiftData
         // _ = try await BackgroundModelActor.instance.setMessages

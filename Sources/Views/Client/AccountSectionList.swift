@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import JetEmail_Data
 
 @MainActor
 struct AccountSectionList : View, Sendable {

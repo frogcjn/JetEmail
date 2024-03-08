@@ -6,8 +6,9 @@
 //
 
 import Microsoft
+import JetEmail_Data
 
-extension Message {
+extension JetEmail_Data.Message {
 
     var microsoft: Microsoft.Message? {
         get {
@@ -15,7 +16,7 @@ extension Message {
         }
         set {
             guard let microsoft = newValue else { return }
-            self.modelID      = microsoft.modelID
+            self.id      = microsoft.unifiedID
             self.subject      = microsoft.subject?.nilIfEmpty
             
             self.createdDate  = microsoft.createdDateTime?     .date
@@ -78,7 +79,7 @@ extension Microsoft.EmailAddress {
 
 import Google
 
-extension Message {
+extension JetEmail_Data.Message {
     var google: Google.Message? {
         get {
             try? _google?.decodeJSON(Google.Message.self)
@@ -130,14 +131,14 @@ extension Message {
 }
 
 fileprivate enum MIMEType: String {
-case textPlain            = "text/plain"
-case textHtml             = "text/html"
-case multipartAlternative = "multipart/alternative"
-case multipartMixed       = "multipart/mixed"
+    case textPlain            = "text/plain"
+    case textHtml             = "text/html"
+    case multipartAlternative = "multipart/alternative"
+    case multipartMixed       = "multipart/mixed"
 }
 
 fileprivate extension Google.Message.Part {
-    var messageBody: Message.Body? { get throws {
+    var messageBody: JetEmail_Data.Message.Body? { get throws {
         let html = try firstBodyContent(mimeType: .textHtml)
         let text = try firstBodyContent(mimeType: .textPlain)
         return .init(text: text, html: html)

@@ -58,8 +58,8 @@ import SwiftData
 
 /*extension PersistentModel {
     func to(_ modelContext: ModelContext) throws -> Self {
-        guard let transfered = modelContext.model(for: persistentModelID) as? Self else {
-            throw SwiftDataError.noModelInstance(id: persistentModelID, in: modelContext)
+        guard let transfered = modelContext.model(for: persistentID) as? Self else {
+            throw SwiftDataError.noModelInstance(id: persistentID, in: modelContext)
         }
         return transfered
     }

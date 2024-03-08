@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JetEmail_Data
 
 struct AccountView: View {
     
@@ -14,11 +15,11 @@ struct AccountView: View {
         
     var body: some View {
         Form {
+            LabeledContent("_id"     , value: account.rawID)
             LabeledContent("username", value: account.username)
-            LabeledContent("id"      , value: account.id)
             LabeledContent("order"   , value: account.orderIndex.debugDescription)
             LabeledContent("delete"  , value: account.deleteMark.description)
-            LabeledContent("session" , value: account.modelID.session.debugDescription)
+            LabeledContent("session" , value: account.id.storedSession.debugDescription)
         }
     }
 }

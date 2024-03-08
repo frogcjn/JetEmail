@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData // for ModelContainer
 import Combine   // for PassthroughSubject
 import os        // for Logger
+import JetEmail_Data
 
 // @dynamicMemberLookup
 @MainActor // for @MainActor AppModel

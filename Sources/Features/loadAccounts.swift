@@ -27,25 +27,3 @@ extension AppModel {
 }
 
 
-
-extension ModelStore {
-    func setSessions(_ sessions: [Session]) async throws -> [Account.PersistentID] {
-        checkBackgroundThread()
-        do {
-            // inserts
-            let inserts: [Account] = try sessions.map(modelContext._insertAccount(session:))
-            
-            // others: not have session
-            let otherModelIDs = try modelContext._fetchAccountNotIn(Array(inserts), in: .google).map(\.modelID)
-            await otherModelIDs.forEachTask { @MainActor in $0.session = nil }
-            // save
-            try modelContext.save()
-            
-            // return
-            return inserts.map(\.persistentID)
-        } catch {
-            modelContext.rollback()
-            throw error
-        }
-    }
-}

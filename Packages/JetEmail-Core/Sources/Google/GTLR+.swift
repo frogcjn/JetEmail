@@ -12,7 +12,7 @@ extension GTLRGmail_Label {
     var swift: Google.MailFolder { get throws {
         guard let id = identifier else { throw GmailApiError.missingMessageInfo("id") }
         return Google.MailFolder.init(
-            id                   : .init(string: id),
+            id                   : .init(rawValue: id),
             path                 : name,
             messageListVisibility: messageListVisibility.flatMap(Google.MailFolder.MessageListVisibility.init(rawValue:)),
             labelListVisibility  : labelListVisibility.flatMap(Google.MailFolder.LabelListVisibility.init(rawValue:)),
@@ -39,7 +39,7 @@ extension GTLRGmail_Message {
     var swift: Google.Message { get throws {
         guard let stringID = identifier else { throw GmailApiError.missingMessageInfo("id") }
         return Google.Message(
-            id          :     .init(string: stringID),
+            id          :     .init(rawValue: stringID),
             internalDate:     internalDate?.int64Value,
             snippet     :     snippet?.removingHTMLEntities,
             sizeEstimate:     sizeEstimate?.intValue,

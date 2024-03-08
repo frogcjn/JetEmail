@@ -21,7 +21,7 @@ public extension Google.Session {
     
     func getMailFolders() async throws -> [Google.MailFolder] {
         try await service.execute {
-            GTLRGmailQuery_UsersLabelsList.query(withUserId: accountID.string)
+            GTLRGmailQuery_UsersLabelsList.query(withUserId: accountID.rawValue)
         } completion: { (object: GTLRGmail_ListLabelsResponse) in
             guard let labels = object.labels else { throw GmailApiError.failedToParseData(object) }
             return try labels
@@ -65,8 +65,8 @@ public extension Google.Session {
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list
     private func getFolderMessageIDs(mailFolderID: Google.MailFolder.ID) async throws -> [Google.Message.ListItem] {
         try await service.execute {
-            let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: accountID.string)
-            query.labelIds = [mailFolderID.string]
+            let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: accountID.rawValue)
+            query.labelIds = [mailFolderID.rawValue]
             query.maxResults = 500
             return query
         } completion: { (object: GTLRGmail_ListMessagesResponse) in
@@ -85,8 +85,8 @@ public extension Google.Session {
         }
         
         return try await service.execute {
-            GTLRBatchQuery(queries: ids.map { [accountID = accountID.string] in
-                let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID, identifier: $0.string)
+            GTLRBatchQuery(queries: ids.map { [accountID = accountID.rawValue] in
+                let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID, identifier: $0.rawValue)
                 query.fields = fields
                 query.format = format.rawValue
                 return query
@@ -103,7 +103,7 @@ public extension Google.Session {
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
     func getMessage(id: Google.Message.ID, fields: String? = nil, format: GetMessageFormat) async throws -> Google.Message {
         try await service.execute{
-            let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: self.accountID.string, identifier: id.string)
+            let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: self.accountID.rawValue, identifier: id.rawValue)
             query.fields = fields
             query.format = format.rawValue
             return query
@@ -135,12 +135,12 @@ public extension Google.Session {
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/modify
     func moveMessage(id messageID: Google.Message.ID, from fromID: Google.MailFolder.ID, to toID: Google.MailFolder.ID) async throws -> Google.Message {
         try await service.execute{
-            let accountID = self.accountID.string
-            let messageID = messageID.string
+            let accountID = self.accountID.rawValue
+            let messageID = messageID.rawValue
             
             let request = GTLRGmail_ModifyMessageRequest()
-            request.removeLabelIds =  [fromID.string]
-            request.addLabelIds = [toID.string]
+            request.removeLabelIds =  [fromID.rawValue]
+            request.addLabelIds = [toID.rawValue]
             
             let query = GTLRGmailQuery_UsersMessagesModify.query(withObject: request, userId: accountID, identifier: messageID)
             return query

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JetEmail_Data
 
 struct MailFolderMessageListToolBar : View {
     
@@ -29,7 +30,6 @@ struct MailFolderMessageListToolBar : View {
                     Task { await mailFolder.loadMessages() }
                 }
                 .buttonStyle(.link)
-                .labelStyle(.titleAndIcon)
             }
             Spacer()
         }.background(.bar)

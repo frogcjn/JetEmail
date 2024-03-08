@@ -35,7 +35,8 @@ struct AccountListToolbar : View {
                         Label("Google Gmail", image: "Gmail")
                     }
                     //.disabled(context.isBusy)
-                }.labelStyle(.titleAndIcon)
+                }
+                .labelStyle(.titleAndIcon)
             } label: {
                 Label("Sign In", systemImage: "plus")
             }.menuIndicator(.hidden)
@@ -45,7 +46,6 @@ struct AccountListToolbar : View {
                 guard let account = settings.selectedAccount else { return }
                 Task { await appModel(account).signOut() }
             }.disabled(settings.selectedAccount?.isBusy ?? true)
-            
 
             Spacer()
             
@@ -54,6 +54,7 @@ struct AccountListToolbar : View {
                 Task { await appModel.loadAccounts() }
             }
         }
+        .labelStyle(.iconOnly)
         .padding(4)
         .buttonStyle(.borderless)
     }
