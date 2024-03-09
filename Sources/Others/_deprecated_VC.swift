@@ -366,3 +366,14 @@ class MyVC: NSViewController {
     }*/
 }
 */
+
+/*// get "archive", "junk" mail folders
+let archiveMailFolder = try await getMailFolder(wellKnownFolderName: Microsoft.MailFolder.WellKnownFolderName.archive)
+let junkMailFolder = try await getMailFolder(wellKnownFolderName: .junkEmail)
+
+guard
+    let archiveNode = root.children.first(where: { $0.element.id == archiveMailFolder.unifiedID }),
+    let junkNode = root.children.first(where: { $0.element.id == junkMailFolder.unifiedID })
+else {
+    throw ClassifyError.noArchiveFolder
+}*/

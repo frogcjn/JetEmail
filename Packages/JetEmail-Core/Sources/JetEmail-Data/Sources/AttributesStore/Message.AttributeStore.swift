@@ -19,18 +19,18 @@ public extension Message {
 @MainActor
 public extension Message.ID {
     var isBusy: Bool {
-        get { AttributesStore.shared[self].isBusy }
-        set { AttributesStore.shared[self].isBusy = newValue }
+        get { Message.AttributesStore.shared[self].isBusy }
+        set { Message.AttributesStore.shared[self].isBusy = newValue }
     }
     
     var isClassifying: Bool {
-        get { AttributesStore.shared[self].isClassifying }
-        set { AttributesStore.shared[self].isClassifying = newValue }
+        get { Message.AttributesStore.shared[self].isClassifying }
+        set { Message.AttributesStore.shared[self].isClassifying = newValue }
     }
     
     var movePlan: MailFolder? {
-        get { AttributesStore.shared[self].movePlan }
-        set { AttributesStore.shared[self].movePlan = newValue }
+        get { Message.AttributesStore.shared[self].movePlan }
+        set { Message.AttributesStore.shared[self].movePlan = newValue }
     }
 }
 

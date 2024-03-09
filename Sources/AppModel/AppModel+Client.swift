@@ -11,7 +11,7 @@ import os
 import JetEmail_Data
 
 @MainActor
-extension AppItemModel where Context == AppModel, Item : DataModel {
+extension AppItemModel where Context == AppModel, Item : UnifiedModel {
     var appModel: AppModel { context }
     var logger: Logger { appModel.logger }
     /*var isBusy: Bool {

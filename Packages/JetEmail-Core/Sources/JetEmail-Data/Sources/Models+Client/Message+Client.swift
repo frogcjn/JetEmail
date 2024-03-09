@@ -15,7 +15,7 @@ public extension JetEmail_Data.Message {
         }
         set {
             guard let microsoft = newValue else { return }
-            self.id      = microsoft.unifiedID
+            self.id      = microsoft.id.unifiedID(accountID: .init(id.innerAccountID))
             self.subject      = microsoft.subject?.nilIfEmpty
             
             self.createdDate  = microsoft.createdDateTime?     .date

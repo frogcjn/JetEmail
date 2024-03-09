@@ -497,7 +497,7 @@ extension ModelContext {
     }
         
     func _insertMailFolder(microsoft: Microsoft.MailFolder, in account: JetEmail_Data.Account) throws -> JetEmail_Data.MailFolder {
-        let id = microsoft.unifiedID
+        let id = microsoft.id.unifiedID(accountID: account.microsoftID!)
         
         // find existed
         if let model = try self[id] {
@@ -527,7 +527,7 @@ extension ModelContext {
     }
     
     func _insertMailFolder(google: Google.MailFolder, in account: JetEmail_Data.Account) throws -> JetEmail_Data.MailFolder {
-        let id = google.unifiedID
+        let id = google.id.unifiedID(accountID: account.googleID!)
         
         // find existed
         if let model = try self[id] {
@@ -557,7 +557,7 @@ extension ModelContext {
     }
     
     func _insertMessage(google: Google.Message, in mailFolder: JetEmail_Data.MailFolder) throws -> JetEmail_Data.Message {
-        let id = google.unifiedID
+        let id = google.id.unifiedID(accountID: mailFolder.account.googleID!)
         
         // find existed
         if let model = try self[id] {
@@ -570,7 +570,7 @@ extension ModelContext {
         }
         
         // If not found: create
-        let model = Message(modelID: google.unifiedID, in: mailFolder)
+        let model = Message(modelID: id, in: mailFolder)
         try model.setGoogle(google)
         insert(model)
         model.mailFolder = mailFolder
@@ -580,7 +580,7 @@ extension ModelContext {
     
     
     func _insertMessage(microsoft: Microsoft.Message, in mailFolder: JetEmail_Data.MailFolder) throws -> JetEmail_Data.Message {
-        let id = microsoft.unifiedID
+        let id = microsoft.id.unifiedID(accountID: mailFolder.account.microsoftID!)
         
         // find existed
         if let model = try self[id] {
@@ -593,7 +593,7 @@ extension ModelContext {
         }
         
         // If not found: create
-        let model = Message(modelID: microsoft.unifiedID, in: mailFolder)
+        let model = Message(modelID: id, in: mailFolder)
         model.microsoft = microsoft
         insert(model)
         return model
@@ -712,6 +712,7 @@ extension ModelStore {
             try modelContext.save()
             return (root.id, root.id)
         } catch {
+            print(error)
             modelContext.rollback()
             throw error
         }
@@ -739,7 +740,7 @@ extension ModelStore {
         }
     }
 
-    func setChildrenMailFolders(googles: [Google.MailFolder], parent parentID: JetEmail_Data.MailFolder.ID, in accountID: JetEmail_Data.Account.ID) throws -> [(persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID)] {
+    func setChildrenMailFolders(googles: [Google.MailFolder], parent parentID: JetEmail_Data.MailFolder.ID, in accountID: JetEmail_Data.Account.ID) throws -> [ JetEmail_Data.MailFolder.ID] {
         let parent = try self[parentID]!
         let account = try self[accountID]!
         do {
@@ -753,7 +754,7 @@ extension ModelStore {
             try removings.forEach { _ = try modelContext._deleteMailFolder($0) }
             
             try modelContext.save()
-            return inserts.map { ($0.id, $0.id) }
+            return inserts.map { ($0.id) }
         } catch {
             modelContext.rollback()
             throw error

@@ -40,13 +40,13 @@ fileprivate func _loadBody(messageID: Message.ID, session: Session) async throws
     case .microsoft(let session):
         guard case .microsoft(let microsoftMessageID) = messageID else { return }
         
-        async let microsoftMessage = session.getMessage(microsoftID: microsoftMessageID) // load from MSAL
+        async let microsoftMessage = session.getMessage(microsoftID: microsoftMessageID.innerID) // load from MSAL
         _ = try await ModelStore.instance.setMessage(microsoft: microsoftMessage, to: messageID) // MSAL to SwiftData
         
     case .google(let session):
         guard case .google(let googleMessageID) = messageID else { return }
-        var googleMessage = try await session.getMessage(id: googleMessageID, format: .full)
-        googleMessage.raw = try await session.getMessage(id: googleMessageID, format: .raw).raw
+        var googleMessage = try await session.getMessage(id: googleMessageID.innerID, format: .full)
+        googleMessage.raw = try await session.getMessage(id: googleMessageID.innerID, format: .raw).raw
         _ = try await ModelStore.instance.setMessage(google: googleMessage, to: messageID) // MSAL to SwiftData
     }
 }

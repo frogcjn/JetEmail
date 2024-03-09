@@ -9,10 +9,10 @@ import JetEmail_Data
 import SwiftData
 import os
 
-typealias AppItemModel<Item: DataModel> = CombineContext<AppModel, Item>
+typealias AppItemModel<Item: UnifiedModel> = CombineContext<AppModel, Item>
 
 extension AppModel {
-    func callAsFunction<Item: DataModel>(_ item: Item) -> AppItemModel<Item> {
+    func callAsFunction<Item: UnifiedModel>(_ item: Item) -> AppItemModel<Item> {
         AppItemModel(context: self, item: item)
     }
     

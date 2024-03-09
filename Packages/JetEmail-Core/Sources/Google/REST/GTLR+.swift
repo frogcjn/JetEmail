@@ -9,10 +9,11 @@ import GoogleAPIClientForREST_Gmail
 import JetEmail_Foundation
 
 extension GTLRGmail_Label {
-    var swift: MailFolder { get throws {
-        guard let id = identifier else { throw GmailApiError.missingMessageInfo("id") }
-        return MailFolder.init(
-            id                   : .init(rawValue: id),
+    func mailFolder(accountID: Account.ID) throws -> MailFolder {
+        guard let innerID = identifier else { throw GmailApiError.missingMessageInfo("identifier") }
+        print(identifier ?? "")
+        return MailFolder(
+            id                   : .init(innerID),
             path                 : name,
             messageListVisibility: messageListVisibility.flatMap(MailFolder.MessageListVisibility.init(rawValue:)),
             labelListVisibility  : labelListVisibility.flatMap(MailFolder.LabelListVisibility.init(rawValue:)),
@@ -23,7 +24,7 @@ extension GTLRGmail_Label {
             threadsUnread        : threadsUnread?.intValue,
             color                : color.map(\.swift)
         )
-    } }
+    }
 }
 
 extension GTLRGmail_LabelColor {
@@ -36,10 +37,10 @@ extension GTLRGmail_LabelColor {
 }
 
 extension GTLRGmail_Message {
-    var swift: Message { get throws {
-        guard let stringID = identifier else { throw GmailApiError.missingMessageInfo("id") }
+    func message(accountID: Account.ID) throws -> Message {
+        guard let innerID = identifier else { throw GmailApiError.missingMessageInfo("id") }
         return Message(
-            id          :     .init(rawValue: stringID),
+            id          :     .init(innerID),
             internalDate:     internalDate?.int64Value,
             snippet     :     snippet?.removingHTMLEntities,
             sizeEstimate:     sizeEstimate?.intValue,
@@ -49,7 +50,7 @@ extension GTLRGmail_Message {
             threadId    :     threadId,
             historyId   :     historyId?.uint64Value
         )
-    } }
+    }
 }
 
 extension GTLRGmail_MessagePart {

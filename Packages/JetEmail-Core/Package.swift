@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "JetEmail-Core",
+    defaultLocalization: "en",
     platforms: [
         .macOS(.v14),
         .iOS(.v17),
@@ -36,6 +37,7 @@ let package = Package(
                 .target(name: "Microsoft"),
                 .target(name: "JetEmail-Foundation")
             ],
+            resources: [.process("Resources/Localizable.xcstrings")],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
             ]

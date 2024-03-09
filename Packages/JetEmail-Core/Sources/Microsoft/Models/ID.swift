@@ -9,35 +9,35 @@ import JetEmail_Foundation
 
 // MARK: - Account.ID
 
-public typealias ID = StringID<Account>
+public typealias ID = Account.ID
 
 public extension Account {
-    typealias ID = Microsoft.ID
+    typealias ID = ModelID<Account>
 }
 
 // MARK: - MailFolder.ID
 
 public extension MailFolder {
-    typealias ID = StringID<MailFolder>
+    typealias ID = ModelID<MailFolder>
 }
 
 // MARK: - Message.ID
 
 public extension Message {
-    typealias ID = StringID<Message>
+    typealias ID = ModelID<Message>
 }
 
 // MARK: - Account.ID <- MSAL
 
 extension MSALAccount {
     var id: ID { get throws {
-        guard let stringID = identifier else { throw AuthError.accountNoIDOrUsername }
-        return .init(rawValue: stringID)
+        guard let innerID = identifier else { throw AuthError.accountNoIDOrUsername }
+        return .init(innerID)
     } }
     
     var idAndUsername: (id: ID, username: String) { get throws {
-        guard let stringID = identifier, let username else { throw AuthError.accountNoIDOrUsername }
-        return (.init(rawValue: stringID), username)
+        guard let innerID = identifier, let username else { throw AuthError.accountNoIDOrUsername }
+        return (.init(innerID), username)
     } }
 }
 

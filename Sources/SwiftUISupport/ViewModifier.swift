@@ -14,7 +14,7 @@ extension View {
         modifier(AppModelResultModifier(appModel: appModel))
     }*/
     
-    func itemModel<Item : DataModel>(_ item: Item) -> some View {
+    func itemModel<Item : UnifiedModel>(_ item: Item) -> some View {
         modifier(ItemModelModifier(item: item))
     }
 }
@@ -32,7 +32,7 @@ extension View {
 
 // MARK: - Modifier: AppModel.Item
 
-fileprivate struct ItemModelModifier<Item: DataModel> : ViewModifier {
+fileprivate struct ItemModelModifier<Item: UnifiedModel> : ViewModifier {
     
     @Environment(AppModel.self)
     var appModel

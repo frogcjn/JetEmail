@@ -71,21 +71,7 @@ extension Microsoft.Session {
     @MainActor // for classifyResultText
     func classifyRange(account: JetEmail_Data.Account) async throws -> [TreeNode<JetEmail_Data.MailFolder>]? {
         guard let root = account.mailFolderTree?.root else { return nil }
-
-        // get "archive", "junk" mail folders
-        let archiveMailFolder = try await getMailFolder(wellKnownFolderName: Microsoft.MailFolder.WellKnownFolderName.archive)
-        let junkMailFolder = try await getMailFolder(wellKnownFolderName: .junkEmail)
-       
-        guard
-            let archiveNode = root.children.first(where: { $0.element.id == archiveMailFolder.unifiedID }),
-            let junkNode = root.children.first(where: { $0.element.id == junkMailFolder.unifiedID })
-        else {
-            throw ClassifyError.noArchiveFolder
-        }
-        
-        let archiveDesendants = archiveNode.descendants(includesSelf: false)
-        let folders = (archiveDesendants + [junkNode])
-        return folders
+        return root.descendants(includesSelf: false)
     }
 }
 
@@ -99,8 +85,7 @@ extension Google.Session {
     @MainActor // for classifyResultText
     func classifyRange(account: JetEmail_Data.Account) async throws -> [TreeNode<JetEmail_Data.MailFolder>]? {
         guard let root = account.mailFolderTree?.root else { return nil }
-        let desendants = root.descendants(includesSelf: false)
-        return desendants
+        return root.descendants(includesSelf: false)
     }
 }
 
@@ -160,7 +145,7 @@ extension Agent {
         // print(response.choices[0].message)
         guard let folderDescription = try? response.choices[0].message.toolCalls?.first?.function.arguments?.decodeJSON(ClassifyResult.self).existedFolder else { return nil }
         guard let folderIndex = folderDescription.split(separator: ":").first.flatMap({ Int($0) }) else { return nil }
-        return folders[folderIndex].folder
+        return folders.dropFirst(folderIndex).first?.folder
     }
 }
 

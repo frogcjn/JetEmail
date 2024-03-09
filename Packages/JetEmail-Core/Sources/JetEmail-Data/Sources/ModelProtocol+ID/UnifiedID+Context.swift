@@ -14,19 +14,19 @@ public extension ModelContext {
         return try? fetch(.init(predicate: #Predicate<Model> { $0.uniqueID == uniqueID })).first // Error,  keypath could not figure right, since it is from protocol key path
     } }*/
     
-    subscript(id: UnifiedID<Account>) -> Account? { get throws {
-        let uniqueID = id.rawValue
-        return try fetch(.init(predicate: #Predicate<Account> { $0.rawID == uniqueID })).first
+    subscript(id: Account.ID) -> Account? { get throws {
+        let rawID = id.rawValue
+        return try fetch(.init(predicate: #Predicate<Account> { $0.rawID == rawID })).first
     } }
     
-    subscript(id: UnifiedID<MailFolder>) -> MailFolder? { get throws {
-        let uniqueID = id.rawValue
-        return try fetch(.init(predicate: #Predicate<MailFolder> { $0.rawID == uniqueID })).first
+    subscript(id: MailFolder.ID) -> MailFolder? { get throws {
+        let rawID = id.rawValue
+        return try fetch(.init(predicate: #Predicate<MailFolder> { $0.rawID == rawID })).first
     } }
     
-    subscript(id: UnifiedID<Message>) -> Message? { get throws {
-        let uniqueID = id.rawValue
-        return try fetch(.init(predicate: #Predicate<Message> { $0.rawID == uniqueID })).first
+    subscript(id: Message.ID) -> Message? { get throws {
+        let rawID = id.rawValue
+        return try fetch(.init(predicate: #Predicate<Message> { $0.rawID == rawID })).first
     } }
 }
 
@@ -35,16 +35,16 @@ public extension ModelActor {
         try? modelContext[id]
     } }*/
     
-    subscript(id: UnifiedID<Account>) -> Account? { get throws {
+    subscript(id: Account.ID) -> Account? { get throws {
         try modelContext[id]
     } }
     
-    subscript(id: UnifiedID<MailFolder>) -> MailFolder? { get throws {
+    subscript(id: MailFolder.ID) -> MailFolder? { get throws {
         try modelContext[id]
 
     } }
     
-    subscript(id: UnifiedID<Message>) -> Message? { get throws {
+    subscript(id: Message.ID) -> Message? { get throws {
         try modelContext[id]
     } }
 }

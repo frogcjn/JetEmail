@@ -16,34 +16,37 @@ public final class Account {
     public private(set) var rawPlatform : String
     public private(set) var platform    : Platform
     
-    public private(set) var platformID  : String
+    public private(set) var innerID     : String
     
     /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
     @Attribute(.unique, originalName: "id")
     public private(set) var rawID       : String
     
     public var id: ID {
-        @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _platformID, _rawID)
+        @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _innerID, _rawID)
         init(initialValue) {
-            let (platform, platformID, uniqueID) = (initialValue.platform, initialValue.platformID, initialValue.rawValue)
+            let (platform, innerID, rawID) = (initialValue.platform, initialValue.innerID, initialValue.rawValue)
             _$backingData.setValue(forKey: \.platform,    to: platform         )
             _$backingData.setValue(forKey: \.rawPlatform, to: platform.rawValue)
-            _$backingData.setValue(forKey: \.platformID,  to: platformID       )
-            _$backingData.setValue(forKey: \.rawID,       to: uniqueID         )
+            _$backingData.setValue(forKey: \.innerID,     to: innerID          )
+            _$backingData.setValue(forKey: \.rawID,       to: rawID            )
             
             _platform    = _SwiftDataNoType()
             _rawPlatform = _SwiftDataNoType()
-            _platformID  = _SwiftDataNoType()
+            _innerID     = _SwiftDataNoType()
             _rawID       = _SwiftDataNoType()
         }
         get {
-            .init(platform: platform, platformID: platformID)
+            switch platform {
+            case .microsoft: .microsoft(.init(innerID))
+            case .google:       .google(.init(innerID))
+            }
         }
         set {
-            platform    = newValue.platform
-            rawPlatform = newValue.platform.rawValue
-            platformID  = newValue.platformID
-            rawID       = newValue.rawValue
+            platform      = newValue.platform
+            rawPlatform   = newValue.platform.rawValue
+            innerID       = newValue.innerID
+            rawID         = newValue.rawValue
         }
     }
     

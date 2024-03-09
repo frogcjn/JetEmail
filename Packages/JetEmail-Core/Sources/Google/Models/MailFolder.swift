@@ -47,6 +47,8 @@ public struct MailFolder : IdentifiableValueType {
         self.threadsTotal          = threadsTotal
         self.threadsUnread         = threadsUnread
         self.color                 = color
+        
+        print("Google.Account", "Google.Mail:", id)
     }
     
     public enum MessageListVisibility : String, CodableValueType {

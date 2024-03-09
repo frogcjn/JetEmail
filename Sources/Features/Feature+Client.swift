@@ -74,7 +74,7 @@ extension Microsoft.Session {
         while !queue.isEmpty {
             let current = queue.removeFirst()
             
-            let id = current.modelID.microsoftID! as Microsoft.MailFolder.ID
+            let id = current.modelID.microsoftID!.innerID as Microsoft.MailFolder.ID
             var mailFolders = try await self.getChildFolders(id: id)
             mailFolders = mailFolders.map {
                 var mailFolder = $0
@@ -91,15 +91,15 @@ extension Microsoft.Session {
 
 extension Google.Session {
     func loadMailFolders(persistentID: JetEmail_Data.Account.ID, modelID: JetEmail_Data.Account.ID) async throws {
-        let rootElement = Google.MailFolder(id: .init(rawValue: "$" + modelID.platformID + ":folder_all_mail"), name: "folder_all_mail")
+        let rootElement = Google.MailFolder(id: .init("folder_all_mail"), name: "folder_all_mail")
         let tree = try await getMailFolderTree(rootElement: rootElement)
         let root = try await ModelStore.instance.setRootMailFolder(google: rootElement, in: persistentID)
-        var queue: [((persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID), google: TreeNode<Google.MailFolder>)] = [((root.persistentID, root.modelID), tree.root)]
+        var queue: [(modelID: JetEmail_Data.MailFolder.ID, google: TreeNode<Google.MailFolder>)] = [(root.modelID, tree.root)]
         while !queue.isEmpty {
             let current = queue.removeFirst()
             
             let googles = current.google.children.map(\.element)
-            let children = try await ModelStore.instance.setChildrenMailFolders(googles: googles, parent: current.0.persistentID, in: persistentID)
+            let children = try await ModelStore.instance.setChildrenMailFolders(googles: googles, parent: current.modelID, in: persistentID)
             
             queue.append(contentsOf: Array(zip(children, current.google.children)))
         }

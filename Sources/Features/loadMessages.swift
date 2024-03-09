@@ -43,11 +43,11 @@ private func _loadMessages(mailFolderPersistentID: MailFolder.ID, mailFolderID: 
     switch session {
     case .microsoft(let session):
         guard case .microsoft(let mailFolderID) = mailFolderID else { return }
-        async let messages = session.getMessages(microsoftID: mailFolderID) // load from MSAL
+        async let messages = session.getMessages(microsoftID: mailFolderID.innerID) // load from MSAL
         _ = try await ModelStore.instance.setMessages(microsofts: messages, in: mailFolderPersistentID) // MSAL to SwiftData
     case .google(let session):
         guard case .google(let mailFolderID) = mailFolderID else { return }
-        async let messages = session.getMessages(mailFolderID: mailFolderID)
+        async let messages = session.getMessages(mailFolderID: mailFolderID.innerID)
         _ = try await ModelStore.instance.setMessages(googles: messages, in: mailFolderPersistentID) // MSAL to SwiftData
         // _ = try await BackgroundModelActor.instance.setMessages
         // let messages = try await session.getMessages

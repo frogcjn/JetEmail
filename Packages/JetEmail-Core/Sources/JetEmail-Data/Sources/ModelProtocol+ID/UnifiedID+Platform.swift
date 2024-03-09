@@ -8,15 +8,9 @@
 import Microsoft
 import Google
 
-public extension UnifiedID {
-    var platform: Platform {
-        switch self {
-        case .microsoft: .microsoft
-        case .google   : .google
-        }
-    }
+
     
-    var platformID: String {
+/*    /*var platformID: String {
         switch self {
         case .microsoft(let platformID): platformID.rawValue
         case .google   (let platformID): platformID.rawValue
@@ -29,6 +23,6 @@ public extension UnifiedID {
         case .microsoft: .microsoft(.init(rawValue: platformID))
         case .google   : .google   (.init(rawValue: platformID))
         }
-    }
-}
+    }*/
+}*/
 

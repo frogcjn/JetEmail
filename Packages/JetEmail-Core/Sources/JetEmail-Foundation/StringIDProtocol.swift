@@ -13,24 +13,24 @@ public protocol PartialRawRepresentable<RawValue> {
     var rawValue: RawValue { get }
 }
 
-public extension PartialRawRepresentable where Self : Equatable, RawValue : Equatable {
+/*public extension PartialRawRepresentable where Self : Equatable, RawValue : Equatable {
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.rawValue == rhs.rawValue
     }
-}
-   
+}*/
+/*
 public extension PartialRawRepresentable where Self : Encodable, RawValue : Encodable {
     func encode(to encoder: any Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
     }
-}
+}*/
 
-public extension PartialRawRepresentable where Self : Hashable, RawValue : Hashable {
+/*public extension PartialRawRepresentable where Self : Hashable, RawValue : Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(rawValue)
     }
-}
+}*/
 
 public extension String.StringInterpolation {
     mutating func appendInterpolation<ID: PartialRawRepresentable<String>>(_ id: ID) {
@@ -57,7 +57,7 @@ public extension LocalizedStringKey.StringInterpolation {
         appendInterpolation(id.rawValue)
     }
 }
-
+/*
 // MARK: - Fully
 
 public protocol FullyRawRepresentable<RawValue> : PartialRawRepresentable {
@@ -70,8 +70,13 @@ public extension FullyRawRepresentable where Self : Decodable, RawValue : Decoda
         let rawValue = try container.decode(RawValue.self)
         self.init(rawValue: rawValue)
     }
-}
+}*/
 
 // MARK: - StringID Protocol
 
-public typealias StringIDProtocol = FullyRawRepresentable<String>
+/*public protocol StringIDProtocol<OwnerType> : PartialRawRepresentable, Decodable where RawValue == String {
+    associatedtype OwnerType
+}*/
+
+
+

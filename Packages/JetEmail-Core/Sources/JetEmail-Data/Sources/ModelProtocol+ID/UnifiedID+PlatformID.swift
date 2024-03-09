@@ -7,6 +7,7 @@
 
 import Google
 import Microsoft
+import JetEmail_Foundation
 
 // MARK: - Account.ID <- Google, Microsoft
 
@@ -41,70 +42,71 @@ public extension Google.Session {
 // MARK: - MailFolder.ID <- Google, Microsoft
 
 public extension Microsoft.MailFolder.ID {
-    var unifiedID: JetEmail_Data.MailFolder.ID {
-        .init(platform: .microsoft, platformID: rawValue)
+    func unifiedID(accountID: Microsoft.ID) -> JetEmail_Data.MailFolder.ID {
+        .microsoft(AccountModelID(accountID: accountID, self))
     }
 }
 
-public extension Microsoft.MailFolder {
+/*public extension Microsoft.MailFolder {
     var unifiedID: JetEmail_Data.MailFolder.ID {
         id.unifiedID
     }
-}
+}*/
 
 public extension Google.MailFolder.ID {
-    var unifiedID: JetEmail_Data.MailFolder.ID {
-        .init(platform: .google, platformID: rawValue)
+    func unifiedID(accountID: Google.ID) -> JetEmail_Data.MailFolder.ID {
+        .google(AccountModelID(accountID: accountID, self))
     }
 }
 
-public extension Google.MailFolder {
+/*public extension Google.MailFolder {
     var unifiedID: JetEmail_Data.MailFolder.ID {
         id.unifiedID
     }
-}
+}*/
 
 // MARK: - Message.ID <- Google, Microsoft
 
 public extension Microsoft.Message.ID {
-    var unifiedID: JetEmail_Data.Message.ID {
-        .init(platform: .microsoft, platformID: rawValue)
+    func unifiedID(accountID: Microsoft.ID) -> JetEmail_Data.Message.ID {
+        .microsoft(AccountModelID(accountID: accountID, self))
     }
 }
 
-public extension Microsoft.Message {
+/*public extension Microsoft.Message {
     var unifiedID: JetEmail_Data.Message.ID {
         id.unifiedID
     }
-}
+}*/
 
 public extension Google.Message.ID {
-    var unifiedID: JetEmail_Data.Message.ID {
-        .init(platform: .google, platformID: rawValue)
+    func unifiedID(accountID: Google.ID) -> JetEmail_Data.Message.ID {
+        .google(AccountModelID(accountID: accountID, self))
     }
 }
 
-public extension Google.Message {
+/*public extension Google.Message {
     var unifiedID: JetEmail_Data.Message.ID {
         id.unifiedID
     }
-}
+}*/
 
 // MARK: - Account|MailFolder|Message -> Google, Microsoft
 
 public extension JetEmail_Data.UnifiedID {
-    var microsoftID: Model.MicrosoftID? {
+    var microsoftID: Owner.MicrosoftID? {
         guard case .microsoft(let microsoftID) = self else { return nil }
         return microsoftID
     }
     
-    var googleID: Model.GoogleID? {
+    var googleID: Owner.GoogleID? {
         guard case .google(let googleID) = self else { return nil }
         return googleID
     }
 }
 
-public extension DataModel where ID == UnifiedID<Self> {
+public extension UnifiedModel where ID == UnifiedID<Self> {
     var microsoftID: MicrosoftID? { id.microsoftID }
     var    googleID:    GoogleID? { id.googleID    }
 }
+

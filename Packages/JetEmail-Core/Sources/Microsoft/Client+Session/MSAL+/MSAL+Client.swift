@@ -17,7 +17,7 @@ extension Client {
         MainActor.assertIsolated()
         // TODO:
 #if !os(macOS)
-        guard let window = UIApplication.sharedKeyWindow, let ViewController = window.rootViewController else { throw AuthError.authorizeNoMainWindow }
+        guard let window = UIApplication.sharedKeyWindow, let viewController = window.rootViewController else { throw AuthError.authorizeNoMainWindow }
 #else
         guard let window = NSApplication.sharedKeyWindow, let viewController = window.contentViewController else { throw AuthError.authorizeNoMainWindow }
 #endif
@@ -42,7 +42,7 @@ extension Client {
 
     func refresh(id: ID) async throws -> MSALSession {
         let scopes = Client.scopes.map(\.rawValue)
-        let msalAccount = try _msalClient.account(forIdentifier: id.rawValue)
+        let msalAccount = try _msalClient.account(forIdentifier: id.innerID)
         
         let parameters = MSALSilentTokenParameters(scopes: scopes, account: msalAccount)
         return try await _msalClient.acquireTokenSilent(with: parameters)

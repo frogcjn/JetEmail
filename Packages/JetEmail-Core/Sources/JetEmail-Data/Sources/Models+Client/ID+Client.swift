@@ -16,7 +16,7 @@ import JetEmail_Foundation
 public extension JetEmail_Data.MailFolder {
     convenience init(microsoft: Microsoft.MailFolder, in account: JetEmail_Data.Account) {
         self.init(
-            modelID: microsoft.unifiedID,
+            modelID: microsoft.id.unifiedID(accountID: account.id.microsoftID!),
             name   : microsoft.displayName ?? "",
             in     : account
         )
@@ -26,7 +26,7 @@ public extension JetEmail_Data.MailFolder {
     
     convenience init(google: Google.MailFolder, in account: JetEmail_Data.Account) {
         self.init(
-            modelID: google.unifiedID,
+            modelID: google.id.unifiedID(accountID: account.id.googleID!),
             name   : google.name ?? "",
             in     : account
         )
@@ -40,7 +40,7 @@ public extension JetEmail_Data.MailFolder {
         }
         set {
             guard let graph = newValue else { return }
-            self.id  = graph.unifiedID
+            self.id  = graph.id.unifiedID(accountID: account.id.microsoftID!)
             self.name     = graph.displayName ?? ""
             
             self._graph   = try? graph.jsonString
@@ -54,7 +54,7 @@ public extension JetEmail_Data.MailFolder {
         }
         set {
             guard let google = newValue else { return }
-            self.id = google.unifiedID
+            self.id = google.id.unifiedID(accountID: account.id.googleID!)
             self.name = google.name ?? ""
             self._google = try? google.jsonString
             self._graph = nil

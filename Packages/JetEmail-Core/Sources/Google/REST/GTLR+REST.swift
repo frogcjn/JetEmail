@@ -20,16 +20,15 @@ public extension Session {
     }
     
     func getMailFolders() async throws -> [MailFolder] {
-        try await service.execute {
+        let response = try await service.execute(GTLRGmail_ListLabelsResponse.self) {
             GTLRGmailQuery_UsersLabelsList.query(withUserId: accountID.rawValue)
-        } completion: { (object: GTLRGmail_ListLabelsResponse) in
-            guard let labels = object.labels else { throw GmailApiError.failedToParseData(object) }
-            return try labels
-                .map { try $0.swift }
-                //.sorted { "\($0.type?.rawValue)" > "\($1.type?.rawValue)" }
-                //.filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
-                .sorted(using: KeyPathComparator(\MailFolder.name))
         }
+        guard let labels = response.labels else { throw GmailApiError.failedToParseData(response) }
+        return try labels
+            .map { try $0.mailFolder(accountID: accountID) }
+            //.sorted { "\($0.type?.rawValue)" > "\($1.type?.rawValue)" }
+            //.filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
+            //.sorted(using: KeyPathComparator(\MailFolder.name))
     }
     
     func getMailFolderTree(rootElement: MailFolder) async throws -> Tree<MailFolder> {
@@ -66,15 +65,15 @@ public extension Session {
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list
     private func getFolderMessageIDs(mailFolderID: MailFolder.ID) async throws -> [Message.ListItem] {
-        try await service.execute {
+        let response = try await service.execute(GTLRGmail_ListMessagesResponse.self) {
             let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: accountID.rawValue)
             query.labelIds = [mailFolderID.rawValue]
             query.maxResults = 500
             return query
-        } completion: { (object: GTLRGmail_ListMessagesResponse) in
-            guard let messages = object.messages else { throw GmailApiError.failedToParseData(object) }
-            return try messages.map{ try $0.swift.listItem }
         }
+        
+        guard let messages = response.messages else { throw GmailApiError.failedToParseData(response) }
+        return try messages.map{ try $0.message(accountID: accountID).listItem }
     }
 
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
@@ -86,32 +85,30 @@ public extension Session {
             return result
         }
         
-        return try await service.execute {
+        let batchResult = try await service.execute(GTLRBatchResult.self) {
             GTLRBatchQuery(queries: ids.map { [accountID = accountID.rawValue] in
                 let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID, identifier: $0.rawValue)
                 query.fields = fields
                 query.format = format.rawValue
                 return query
             })
-        } completion: { (batchResult: GTLRBatchResult) in
-            if let messagesDict = batchResult.successes as? [String: GTLRGmail_Message] {
-                try messagesDict.values.map { try $0.swift }
-            } else {
-                fatalError()
-            }
+        }
+        
+        return if let messagesDict = batchResult.successes as? [String: GTLRGmail_Message] {
+            try messagesDict.values.map { try $0.message(accountID: accountID) }
+        } else {
+            fatalError()
         }
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
     func getMessage(id: Message.ID, fields: String? = nil, format: GetMessageFormat) async throws -> Message {
-        try await service.execute{
-            let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: self.accountID.rawValue, identifier: id.rawValue)
+        try await service.execute(GTLRGmail_Message.self) {
+            let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID.rawValue, identifier: id.rawValue)
             query.fields = fields
             query.format = format.rawValue
             return query
-        } completion: { (result: GTLRGmail_Message) in
-            try result.swift
-        }
+        }.message(accountID: accountID)
         
         /*try await getItem("messages", "\(microsoftID)", queryItems: [
             .select(
@@ -136,8 +133,8 @@ public extension Session {
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/modify
     func moveMessage(id messageID: Message.ID, from fromID: MailFolder.ID, to toID: MailFolder.ID) async throws -> Message {
-        try await service.execute{
-            let accountID = self.accountID.rawValue
+        try await service.execute(GTLRGmail_Message.self) {
+            let accountID = accountID.rawValue
             let messageID = messageID.rawValue
             
             let request = GTLRGmail_ModifyMessageRequest()
@@ -146,9 +143,7 @@ public extension Session {
             
             let query = GTLRGmailQuery_UsersMessagesModify.query(withObject: request, userId: accountID, identifier: messageID)
             return query
-        } completion: { (result: GTLRGmail_Message) in
-            try result.swift
-        }
+        }.message(accountID: accountID)
     }
     
     enum GetMessageFormat: String, Sendable {
@@ -182,14 +177,13 @@ public extension Session {
 }
 
 extension GTLRGmailService {
-    func execute<Q: GTLRQueryProtocol, T: NSObject & Sendable, Result : Sendable>(query: () -> Q, type: T.Type = T.self, completion: @Sendable @escaping (T) async throws -> Result) async throws -> Result {
+    func execute<Q: GTLRQueryProtocol, T: NSObject & Sendable>( _ type: T.Type = T.self, query: () -> Q) async throws -> T {
         try await withCheckedThrowingContinuation { continuation in
             executeQuery(query()) { (ticket: GTLRServiceTicket, object: Any?, error: Error?) in
                 if let error { return continuation.resume(throwing: GmailApiError.convert(from: error as NSError)) }
                 guard let result = object as? T else { return continuation.resume(throwing: AppErr.cast(T.description())) }
                 Task {
-                    do { continuation.resume(returning: try await completion(result)) }
-                    catch { continuation.resume(throwing: error) }
+                    continuation.resume(returning: result)
                 }
             }
         }

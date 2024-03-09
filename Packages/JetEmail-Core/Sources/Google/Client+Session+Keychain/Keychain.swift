@@ -171,7 +171,7 @@ actor Keychain {
             let attriutesList = value as! [[CFString: Any]]
             let items: [SessionItem] = try attriutesList.map { attributes in
                 
-                let id           =     ID(rawValue: attributes[kSecAttrAccount] as! String)
+                let id           =     ID(attributes[kSecAttrAccount] as! String)
                 let username     = try (attributes[kSecAttrGeneric] as! Data).string
                 let keychainItem =      attributes[kSecValuePersistentRef] as! Data
                 let query: [String: Any] = [
