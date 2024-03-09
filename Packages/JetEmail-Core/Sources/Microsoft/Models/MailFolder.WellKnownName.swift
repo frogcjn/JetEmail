@@ -32,6 +32,8 @@ public extension MailFolder {
     }
     
     /*
+     Contacts 1 The Contacts folder.
+     DeletedItems 2 The Deleted Items folder.
      ArchiveDeletedItems    22 The Deleted Items folder in the archive mailbox.
      ArchiveMsgFolderRoot    21 The root of the message folder hierarchy in the archive mailbox.
      ArchiveRecoverableItemsDeletions    24
@@ -48,12 +50,10 @@ public extension MailFolder {
      The Calendar folder.
      Conflicts    28
      The Conflicts folder. The Conflicts field is applicable for clients that target Exchange Online and versions of Exchange starting with Exchange Server 2013.
-     Contacts    1
-     The Contacts folder.
+
      ConversationHistory    33
      The Conversation History folder. The ConversationHistory field is applicable for clients that target Exchange Online and versions of Exchange starting with Exchange Server 2013.
-     DeletedItems    2
-     The Deleted Items folder.
+
      Drafts    3
      The Drafts folder.
      Inbox    4

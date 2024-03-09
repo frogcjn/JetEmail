@@ -16,14 +16,70 @@ public extension MailFolder {
         }
     }
     
+    var systemOrder: Int? {
+        guard isSystemFolder else { return nil }
+        switch id {
+        case .google:
+            switch name {
+            case "INBOX"              : return 0
+            case "STARRED"            : return 1
+            // 已延后
+            case "IMPORTANT"          : return 3
+            case "CHAT"               : return 4
+            case "SENT"               : return 5
+            // 定时发送
+            case "DRAFT"              : return 7
+            // 所有邮件
+            case "SPAM"               : return 9
+            case "TRASH"              : return 10
+            case "UNREAD"             : return 11 //?
+                
+            case "CATEGORY_SOCIAL"    : return 100
+            case "CATEGORY_FORUMS"    : return 101
+            case "CATEGORY_UPDATES"   : return 102
+            case "CATEGORY_PROMOTIONS": return 103
+
+            case "CATEGORY_PERSONAL"  : return 104
+            default: return nil
+            }
+            
+        case .microsoft:
+            guard let wellKnownFolderName = microsoft?.wellKnownFolderName else { return nil }
+            switch wellKnownFolderName {
+            case .inbox                    : return 0
+            case .drafts                   : return 1
+            case .archive                  : return 2
+            case .sentItems                : return 3
+            case .deletedItems             : return 4
+            case .junkEmail                : return 5
+            case .outbox                   : return 6
+            case .scheduled                : return 7
+                // 便笺
+            case .conversationHistory      : return Int.max
+            default: return nil
+            }
+                
+            /*case .clutter                  : return String(localized: "Microsoft.MailFolder.clutter")
+            case .conflicts                : return String(localized: "Microsoft.MailFolder.conflicts")
+            case .localFailures            : return String(localized: "Microsoft.MailFolder.localFailures")
+            case .msgFolderRoot            : return String(localized: "Microsoft.MailFolder.msgFolderRoot")
+            case .recoverableItemsDeletions: return String(localized: "Microsoft.MailFolder.recoverableItemsDeletions")
+            case .searchFolders            : return String(localized: "Microsoft.MailFolder.searchFolders")
+            case .serverFailures           : return String(localized: "Microsoft.MailFolder.serverFailures")
+            case .syncIssues               : return String(localized: "Microsoft.MailFolder.syncIssues")*/
+                
+        }
+    }
+    
+    
     var localizedName: String {
         switch self.id {
         case .google:
-            guard let type = google?.type, let id = google?.id.rawValue else { return name }
+            guard let type = google?.type else { return name }
             switch type {
             case .system:
                 // https://developers.google.com/gmail/api/guides/labels
-                switch id {
+                switch name {
                 case "INBOX"              : return String(localized: "Google.MailFolder.INBOX")
                 case "SPAM"               : return String(localized: "Google.MailFolder.SPAM")
                 case "TRASH"              : return String(localized: "Google.MailFolder.TRASH")
