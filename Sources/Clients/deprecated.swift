@@ -318,7 +318,6 @@ extension Google.Account {
 //  Created by Cao, Jiannan on 1/31/24.
 //
 /*
-import MSAL
 
 extension Microsoft.Client {
     
@@ -511,7 +510,7 @@ extension Microsoft {
         
         private func _storeSession(msalSession: MSALSession) throws -> Microsoft.Session {
             let id = try msalSession.id
-            guard let username = msalSession.account.username else { throw Microsoft.AuthError.accountNoIDOrUsername }
+            guard let username = msalSession..username else { throw Microsoft.AuthError.accountNoIDOrUsername }
             
             let session = Microsoft.Session(sessionStore: self, id: id, username: username, msalSession: msalSession)
             _rawValue[id] = session
@@ -539,7 +538,6 @@ extension Microsoft.Session {
 
 // Account = Client + Account.ID
 
-import MSAL // for MSALAccount
 /*
 extension Microsoft {
     struct Account {

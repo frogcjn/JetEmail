@@ -1,14 +1,14 @@
 //
-//  Google.Message.swift
+//  Message.swift
 //  JetEmail
 //
 //  Created by Cao, Jiannan on 2/24/24.
 //
 
-import Foundation
 import JetEmail_Foundation
+import Foundation
 
-public struct Message : Codable, Identifiable, Sendable {
+public struct Message : IdentifiableValueType {
     public var                         id: ID
     public var               internalDate: Int64?
     public var                    snippet: String?
@@ -21,7 +21,7 @@ public struct Message : Codable, Identifiable, Sendable {
     public var                   threadId: String?
     public var                  historyId: UInt64?
     
-    public struct Part : Codable, Sendable {
+    public struct Part : CodableValueType {
         public var   partID: String?
         public var filename: String?
         public var mimeType: String?
@@ -29,16 +29,15 @@ public struct Message : Codable, Identifiable, Sendable {
         public var     body: Body?
         public var    parts: [Part]?
         
-        public struct Header : Codable, Sendable {
+        public struct Header : CodableValueType {
             public var name: String
             public var value: String?
         }
         
-        public struct Body : Codable, Sendable {
+        public struct Body : CodableValueType {
             public var size: Int
             public var data: Data?
             public var attachmentId: String?
         }
     }
 }
-

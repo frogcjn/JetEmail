@@ -771,7 +771,7 @@ extension ModelStore {
             
             // others: not have session
             let otherIDs = try modelContext._fetchAccountNotIn(Array(inserts), in: .google).map(\.id)
-            try await otherIDs.forEachTask { @MainActor in $0.storedSession = nil }
+            try await otherIDs.forEachTask { @MainActor in _ = $0.removeSession() }
             // save
             try modelContext.save()
             

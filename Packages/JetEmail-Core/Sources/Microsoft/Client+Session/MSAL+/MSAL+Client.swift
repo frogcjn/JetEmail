@@ -7,6 +7,9 @@
 
 @preconcurrency import MSAL
 
+typealias MSALAccount = MSAL.MSALAccount
+typealias MSALSession = MSAL.MSALResult
+
 extension Client {
     
     @MainActor // for webViewParameters
@@ -37,7 +40,7 @@ extension Client {
         return try await _msalClient.signout(with: msalAccount, signoutParameters: parameters)
     }
 
-    func _forceRefresh(id: ID) async throws -> MSALSession {
+    func refresh(id: ID) async throws -> MSALSession {
         let scopes = Client.scopes.map(\.rawValue)
         let msalAccount = try _msalClient.account(forIdentifier: id.rawValue)
         

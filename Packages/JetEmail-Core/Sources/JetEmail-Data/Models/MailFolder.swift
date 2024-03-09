@@ -37,9 +37,11 @@ public final class MailFolder {
             _platformID  = _SwiftDataNoType()
             _rawID       = _SwiftDataNoType()
         }
+        
         get {
             .init(platform: platform, platformID: platformID)
         }
+        
         set {
             platform    = newValue.platform
             rawPlatform = newValue.platform.rawValue
@@ -66,7 +68,7 @@ public final class MailFolder {
     private var _children: [MailFolder] = [] // Should be Ordered Relationship
     
     @Transient
-    public var children: [MailFolder] { _children/*.sorted { $0.name < $1.name }*//*.sorted(using: KeyPathComparator(\.name))*/ } // TODO: After Swift 6.0
+    public var children: [MailFolder] {_children.sidebarSorted() } // TODO: After Swift 6.0
     
     /// MailFolder.messages <->> Message.mailFolder
     @Relationship(deleteRule: .cascade, originalName: "messages", inverse: \Message.mailFolder)
@@ -92,3 +94,5 @@ public final class MailFolder {
         }
     }
 }
+
+

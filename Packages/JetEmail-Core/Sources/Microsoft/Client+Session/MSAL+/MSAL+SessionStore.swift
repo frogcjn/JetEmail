@@ -10,18 +10,19 @@
 // Session new remove
 @MainActor
 extension SessionStore {
-
-    func insert(msalSession: MSALSession, forceReplacing: Bool) async throws -> Session {
-        try await insert(id: msalSession.accountID, forceReplacing: forceReplacing, msalSession: msalSession)
-    }
     
-    func insert(id: ID, forceReplacing: Bool, msalSession: MSALSession? = nil) async throws -> Session {
-        if !forceReplacing {
+    func session(id: ID, forceRefresh: Bool) async throws -> Session {
+        if forceRefresh {
             if let session = SessionStore.shared[id] { return session }
         }
         
-        let msalSession = if let msalSession { msalSession } else { try await Client.shared._forceRefresh(id: id) }
-        let (id, username) = try msalSession.account.idAndUsername
+        let msalSession = try await Client.shared.refresh(id: id)
+        
+        return try insert(msalSession: msalSession, forceReplacing: true)
+    }
+    
+    func insert(msalSession: MSALSession, forceReplacing: Bool) throws -> Session {
+        let (id, username) = try msalSession.accountIDAndUsername
         
         if !forceReplacing {
             if let session = SessionStore.shared[id] { return session }
@@ -30,10 +31,9 @@ extension SessionStore {
         let session = Session(accountID: id, username: username, msalSession: msalSession)
         self[id] = session
         return session
-
     }
     
-    func remove(id: ID) throws -> Session? {
+    func remove(id: ID) -> Session? {
         let session = self[id]
         self[id] = nil
         return session

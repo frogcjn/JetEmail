@@ -9,7 +9,6 @@ import Google
 import Microsoft
 import Foundation
 import JetEmail_Foundation
-@preconcurrency import GTMAppAuth
 import JetEmail_Data
 
 enum Client {
@@ -18,21 +17,6 @@ enum Client {
         async let googleSessions = Google.Client.shared.sessions.map(JetEmail_Data.Session.google)
         return try await microsoftSessions + googleSessions
     } }
-}
-
-fileprivate extension Google.Client {
-    @MainActor
-    var sessions: [Google.Session] { get async throws {
-        try await Google.Keychain.shared.items.map { $0.lazySession }
-    } }
-}
-
-
-
-extension Google.Client {
-    func signIn() async throws -> Google.Session {
-        try await _gtmSignIn().insertTo(keychain: .shared).lazySession
-    }
 }
 
 extension JetEmail_Data.Session {
@@ -47,12 +31,7 @@ extension JetEmail_Data.Session {
 
 
 
-extension Google.Session {
-    func signOut() async throws -> Google.Session {
-        _ = try await Keychain.shared.deleteItem(item)
-        return self
-    }
-}
+
 
 extension JetEmail_Data.Session {
     func loadMailFolders(persistentID: JetEmail_Data.Account.ID, modelID: JetEmail_Data.Account.ID) async throws  {
@@ -65,21 +44,31 @@ extension JetEmail_Data.Session {
 }
 
 extension Microsoft.Session {
+    var idToWellKnownFolderName:  [Microsoft.MailFolder.ID: Microsoft.MailFolder.WellKnownFolderName] { get async {
+        do {
+            // catch wellknownFolderName
+            var idToWellKnownFolderName = [Microsoft.MailFolder.ID: Microsoft.MailFolder.WellKnownFolderName]()
+            for name in Microsoft.MailFolder.WellKnownFolderName.allCases {
+                do {
+                    let folder = try await getMailFolder(wellKnownFolderName: name)
+                    idToWellKnownFolderName[folder.id] = name
+                } catch let error as Microsoft.PublicError where error.code == "ErrorFolderNotFound" {
+                    continue
+                }
+            }
+            return idToWellKnownFolderName
+        } catch {
+            return [:]
+        }
+    } }
+    
     func loadMailFolders(persistentID: JetEmail_Data.Account.ID) async throws {
         var microsoftRoot = try await getRootMailFolder()
         microsoftRoot.wellKnownFolderName = .msgFolderRoot
         let (rootPersistentID, modelID) = try await ModelStore.instance.setRootMailFolder(microsoft: microsoftRoot, in: persistentID)
         
         
-        var folderToWellKnownFolderName = [Microsoft.MailFolder.ID: Microsoft.MailFolder.WellKnownFolderName]()
-        for name in Microsoft.MailFolder.WellKnownFolderName.allCases {
-            do {
-                let folder = try await getMailFolder(wellKnownFolderName: name)
-                folderToWellKnownFolderName[folder.id] = name
-            } catch let error as Microsoft.PublicError where error.code == "ErrorFolderNotFound" {
-                continue
-            }
-        }
+        let idToWellKnownFolderName = await idToWellKnownFolderName
         
         var queue: [(persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID)] = [(rootPersistentID, modelID)]
         while !queue.isEmpty {
@@ -89,9 +78,7 @@ extension Microsoft.Session {
             var mailFolders = try await self.getChildFolders(id: id)
             mailFolders = mailFolders.map {
                 var mailFolder = $0
-                if let wellKnownFolderName = folderToWellKnownFolderName[mailFolder.id] {
-                    mailFolder.wellKnownFolderName = wellKnownFolderName
-                }
+                if let wellKnownFolderName = idToWellKnownFolderName[mailFolder.id] { mailFolder.wellKnownFolderName = wellKnownFolderName }
                 return mailFolder
             }
             

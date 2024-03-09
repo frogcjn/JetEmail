@@ -5,14 +5,12 @@
 //  Created by Cao, Jiannan on 2/22/24.
 //
 
-import JetEmail_Foundation
-
-public extension Client {
+extension Client {
     @MainActor
     static var _shared: Client?
     
     @MainActor
-    static var shared: Client { get async throws {
+    public static var shared: Client { get async throws {
         if let _shared { return _shared }
         let client = try await Client()
         _shared = client
@@ -20,7 +18,6 @@ public extension Client {
     } }
 }
 
-public extension SessionStore {
+extension SessionStore {
     static let shared = SessionStore()
 }
-

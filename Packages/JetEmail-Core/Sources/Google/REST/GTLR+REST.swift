@@ -11,26 +11,28 @@ import JetEmail_Foundation
 
 // MARK: - Microsoft.Context: Account-MailFolders API
 
-public extension Google.Session {
+public extension Session {
     var service: GTLRGmailService {
         let service = GTLRGmailService()
-        service.authorizer = gtmSession
+        service.authorizer = _gtmSession
         service.shouldFetchNextPages = true
         return service
     }
     
-    func getMailFolders() async throws -> [Google.MailFolder] {
+    func getMailFolders() async throws -> [MailFolder] {
         try await service.execute {
             GTLRGmailQuery_UsersLabelsList.query(withUserId: accountID.rawValue)
         } completion: { (object: GTLRGmail_ListLabelsResponse) in
             guard let labels = object.labels else { throw GmailApiError.failedToParseData(object) }
             return try labels
                 .map { try $0.swift }
-                // .filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
+                //.sorted { "\($0.type?.rawValue)" > "\($1.type?.rawValue)" }
+                //.filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
+                .sorted(using: KeyPathComparator(\MailFolder.name))
         }
     }
     
-    func getMailFolderTree(rootElement: Google.MailFolder) async throws -> Tree<Google.MailFolder> {
+    func getMailFolderTree(rootElement: MailFolder) async throws -> Tree<MailFolder> {
         let tree = Tree(rootElement: rootElement)
         let elements = try await getMailFolders()
         
@@ -57,13 +59,13 @@ public extension Google.Session {
         return tree
     }
     
-    func getMessages(mailFolderID: Google.MailFolder.ID) async throws -> [Google.Message] {
+    func getMessages(mailFolderID: MailFolder.ID) async throws -> [Message] {
         let ids = try await getFolderMessageIDs(mailFolderID: mailFolderID).map(\.id)
         return try await getMessages(ids: ids, format: .metadata)
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list
-    private func getFolderMessageIDs(mailFolderID: Google.MailFolder.ID) async throws -> [Google.Message.ListItem] {
+    private func getFolderMessageIDs(mailFolderID: MailFolder.ID) async throws -> [Message.ListItem] {
         try await service.execute {
             let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: accountID.rawValue)
             query.labelIds = [mailFolderID.rawValue]
@@ -76,7 +78,7 @@ public extension Google.Session {
     }
 
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
-    private func getMessages(ids: [Google.Message.ID], fields: String? = nil, format: GetMessageFormat) async throws -> [Google.Message] {
+    private func getMessages(ids: [Message.ID], fields: String? = nil, format: GetMessageFormat) async throws -> [Message] {
         if ids.count > 100 {
             let first100 = ids.prefix(100)
             let rest = ids.dropFirst(100)
@@ -101,7 +103,7 @@ public extension Google.Session {
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
-    func getMessage(id: Google.Message.ID, fields: String? = nil, format: GetMessageFormat) async throws -> Google.Message {
+    func getMessage(id: Message.ID, fields: String? = nil, format: GetMessageFormat) async throws -> Message {
         try await service.execute{
             let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: self.accountID.rawValue, identifier: id.rawValue)
             query.fields = fields
@@ -133,7 +135,7 @@ public extension Google.Session {
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/modify
-    func moveMessage(id messageID: Google.Message.ID, from fromID: Google.MailFolder.ID, to toID: Google.MailFolder.ID) async throws -> Google.Message {
+    func moveMessage(id messageID: Message.ID, from fromID: MailFolder.ID, to toID: MailFolder.ID) async throws -> Message {
         try await service.execute{
             let accountID = self.accountID.rawValue
             let messageID = messageID.rawValue
@@ -157,7 +159,7 @@ public extension Google.Session {
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
-    /*func getMessages(mailFolderID: Google.MailFolder.ID) async throws -> [Google.Message] {
+    /*func getMessages(mailFolderID: MailFolder.ID) async throws -> [Message] {
         try await getItems("mailFolders", "\(microsoftID)", "messages", queryItems: [
             .orderBy(name: "receivedDateTime", .descending),
             .select(
@@ -196,7 +198,7 @@ extension GTLRGmailService {
 
 
 // import GoogleAPIClientForREST_Gmail
-/*extension Google.Client {
+/*extension Client {
     func loadAccountMailFolders() async {
         
             [service executeQuery:query completionHandler:^(GTLRServiceTicket *ticket, GTLRGmail_ListLabelsResponse *response, NSError *error) {
@@ -209,7 +211,7 @@ extension GTLRGmailService {
     }
 }*/
 
-extension Google.Session {
+extension Session {
     
 }
 

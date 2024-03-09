@@ -15,22 +15,6 @@ public extension Account {
     typealias ID = Microsoft.ID
 }
 
-public extension MSALAccount {
-    var id: ID { get throws {
-            guard let stringID = identifier else { throw AuthError.accountNoIDOrUsername }
-            return .init(rawValue: stringID)
-    } }
-    
-    var idAndUsername: (id: ID, username: String) { get throws {
-            guard let stringID = identifier, let username else { throw AuthError.accountNoIDOrUsername }
-            return (.init(rawValue: stringID), username)
-    } }
-}
-
-public extension MSALSession {
-    var accountID: ID { get throws { try account.id } }
-}
-
 // MARK: - MailFolder.ID
 
 public extension MailFolder {
@@ -41,4 +25,23 @@ public extension MailFolder {
 
 public extension Message {
     typealias ID = StringID<Message>
+}
+
+// MARK: - Account.ID <- MSAL
+
+extension MSALAccount {
+    var id: ID { get throws {
+        guard let stringID = identifier else { throw AuthError.accountNoIDOrUsername }
+        return .init(rawValue: stringID)
+    } }
+    
+    var idAndUsername: (id: ID, username: String) { get throws {
+        guard let stringID = identifier, let username else { throw AuthError.accountNoIDOrUsername }
+        return (.init(rawValue: stringID), username)
+    } }
+}
+
+extension MSALSession {
+    var accountID: ID { get throws { try account.id } }
+    var accountIDAndUsername: (id: ID, username: String) { get throws { try account.idAndUsername }}
 }

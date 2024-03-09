@@ -1,16 +1,16 @@
 //
-//  Google.MailFolder.swift
+//  MailFolder.swift
 //  JetEmail
 //
 //  Created by Cao, Jiannan on 2/23/24.
 //
 
+import JetEmail_Foundation
 
 // MARK: - MailFolder
-
 // https://learn.microsoft.com/en-us/graph/api/resources/mailfolder
 
-public struct MailFolder : Codable, Sendable {
+public struct MailFolder : IdentifiableValueType {
     public let id                   : ID
     public var path                 : String?
     public var name                 : String?
@@ -49,23 +49,23 @@ public struct MailFolder : Codable, Sendable {
         self.color                 = color
     }
     
-    public enum MessageListVisibility : String, Codable, Sendable {
+    public enum MessageListVisibility : String, CodableValueType {
         case show
         case hide
     }
     
-    public enum LabelListVisibility : String, Codable, Sendable {
+    public enum LabelListVisibility : String, CodableValueType {
         case labelShow
         case labelShowIfUnread
         case labelHide
     }
     
-    public enum MailFolderType : String, Codable, Sendable {
+    public enum MailFolderType : String, CodableValueType {
         case system
         case user
     }
     
-    public struct Color : Codable, Sendable {
+    public struct Color : CodableValueType {
         let textColor: String?
         let backgroundColor: String?
     }

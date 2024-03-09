@@ -1,16 +1,34 @@
 //
-//  Model.IDs.swift
-//  JetEmail
+//  File.swift
+//  
 //
-//  Created by Cao, Jiannan on 2/15/24.
+//  Created by Cao, Jiannan on 3/8/24.
 //
 
-import Foundation
-import SwiftData
-import Google
-import Microsoft
-import JetEmail_Foundation
-import JetEmail_Data
+
+
+
+/*convenience init(graph: MSGraph.Message, in mailFolder: MailFolder) {
+    self.init(modelID: graph.modelID, in: mailFolder)
+    self.graph = graph
+}*/
+
+/*var graph: MSGraph.Message {
+    get throws {
+        guard let _graph else { throw SwiftDataError.noGraphInstance(model: self) }
+        return try _graph.jsonDecode(MSGraph.Message.self)
+    }
+}*/
+
+/*
+ func update(graph: MSGraph.MailFolder, in account: Account) {
+     self.modelID  = graph.modelID
+     self.name     = graph.displayName ?? ""
+     self.account  = account
+     
+     self._graph   = try? graph.jsonString
+ }
+ */
 
 /*
 // MARK: - Model + StringID
@@ -242,64 +260,3 @@ extension Account {
     }
 }
 */
-
-// MARK: - MailFolder <-> Google, Microsoft
-
-extension JetEmail_Data.MailFolder {
-    convenience init(microsoft: Microsoft.MailFolder, in account: JetEmail_Data.Account) {
-        self.init(
-            modelID: microsoft.unifiedID,
-            name   : microsoft.displayName ?? "",
-            in     : account
-        )
-        
-        self._graph = try? microsoft.jsonString
-    }
-    
-    convenience init(google: Google.MailFolder, in account: JetEmail_Data.Account) {
-        self.init(
-            modelID: google.unifiedID,
-            name   : google.name ?? "",
-            in     : account
-        )
-        
-        self._google = try? google.jsonString
-    }
-    
-    var microsoft: Microsoft.MailFolder? {
-        get {
-            try? _graph?.decodeJSON(Microsoft.MailFolder.self)
-        }
-        set {
-            guard let graph = newValue else { return }
-            self.id  = graph.unifiedID
-            self.name     = graph.displayName ?? ""
-            
-            self._graph   = try? graph.jsonString
-            self._google = nil
-        }
-    }
-    
-    var google: Google.MailFolder? {
-        get {
-            try? _google?.decodeJSON(Google.MailFolder.self)
-        }
-        set {
-            guard let google = newValue else { return }
-            self.id = google.unifiedID
-            self.name = google.name ?? ""
-            self._google = try? google.jsonString
-            self._graph = nil
-        }
-    }
-    
-    /*
-     func update(graph: MSGraph.MailFolder, in account: Account) {
-         self.modelID  = graph.modelID
-         self.name     = graph.displayName ?? ""
-         self.account  = account
-         
-         self._graph   = try? graph.jsonString
-     }
-     */
-}

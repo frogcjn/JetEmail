@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 3/8/24.
 //
 
-public protocol ValueType : Equatable, Hashable, Sendable {}
-public protocol CodableValueType : ValueType, Codable {}
-public protocol CodableErrorType : Error, CodableValueType {}
-public protocol IdentifiableValueType : CodableValueType, Identifiable {}
+public typealias ValueType = Equatable & Hashable & Sendable
+public typealias CodableValueType = ValueType & Codable
+public typealias CodableErrorType = CodableValueType & Error
+public typealias IdentifiableValueType = CodableValueType & Identifiable

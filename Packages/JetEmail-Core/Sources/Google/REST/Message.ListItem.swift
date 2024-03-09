@@ -1,13 +1,13 @@
 //
-//  Google.Message.ListItem.swift
+//  Message.ListItem.swift
 //  JetEmail
 //
 //  Created by Cao, Jiannan on 2/25/24.
 //
 
-extension Google.Message {
+extension Message {
     struct ListItem {
-        let id      : Google.Message.ID
+        let id      : Message.ID
         let threadID: String?
     }
     

@@ -10,10 +10,10 @@ import JetEmail_Foundation
 
 @MainActor
 @Observable
-public class SessionStore {
-    public var rawValue = [ID: Session]()
+class SessionStore {
+    var rawValue = [ID: Session]()
     
-    public subscript(id: ID) -> Session? {
+    subscript(id: ID) -> Session? {
         get { rawValue[id] }
         set { rawValue[id] = newValue }
     }

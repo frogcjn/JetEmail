@@ -4,9 +4,18 @@
 //
 //  Created by Cao, Jiannan on 3/7/24.
 //
-import JetEmail_Data
 
-extension MailFolder {
+public extension MailFolder {
+    var isSystemFolder: Bool {
+        switch self.id {
+        case .google:
+            guard let type = google?.type else { return false }
+            return type == .system
+        case .microsoft:
+            return microsoft?.wellKnownFolderName != nil
+        }
+    }
+    
     var localizedName: String {
         switch self.id {
         case .google:

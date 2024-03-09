@@ -7,21 +7,18 @@
 
 import JetEmail_Foundation
 @preconcurrency import MSAL
-public typealias MSALAccount = MSAL.MSALAccount
-public typealias MSALSession = MSAL.MSALResult
 
-public final class Client : Sendable {
+public actor Client : Sendable {
          static let       scopes: [Scope] = [.userRead, .mailRead] // request permission to read the profile of the signed-in user
          static let  endpointURL          = URL(string: "https://graph.microsoft.com/v1.0/me/")!
     
     fileprivate let     clientID          = "0ef42f9f-afc7-4463-bcbe-1c6dd4076b40"
     fileprivate let  redirectURL          = URL(string: "msauth.me.frogcjn.jet-email://auth")!
-
     fileprivate let authorityURL          = URL(string: "https://login.microsoftonline.com/common")!
     
-    public let       _msalClient: MSALPublicClientApplication
+                let _msalClient: MSALPublicClientApplication
     
-    public init() async throws {
+    init() async throws {
         let configuration = MSALPublicClientApplicationConfig(
             clientId: clientID,
             redirectUri: redirectURL.absoluteString,
@@ -35,10 +32,9 @@ public final class Client : Sendable {
 }
     
 
-public extension Client {
-    enum Scope: String, Sendable {
+extension Client {
+    enum Scope: String, CodableValueType {
         case userRead = "user.read"
         case mailRead = "mail.read"
     }
 }
-

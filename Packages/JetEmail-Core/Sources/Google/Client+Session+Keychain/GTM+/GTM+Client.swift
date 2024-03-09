@@ -6,39 +6,34 @@
 //
 
 // import AppKit
-import Foundation
-import AppAuth
-import AppAuthCore
+@preconcurrency import AppAuthCore
 import GTMAppAuth
-import JetEmail_Foundation
 
-#if canImport(UIKit)
+#if os(iOS) || os(visionOS)
 import UIKit
+#elseif os(macOS)
+import AppKit
 #endif
 
 fileprivate let kIncludeGrantedScopesParameter = "include_granted_scopes"
 
 //public extension Google {
-public typealias GTMSession         = GTMAppAuth.AuthSession
-public typealias GTMSessionDelegate = GTMAppAuth.AuthSessionDelegate
-public typealias SessionProtocol    = NSObject & GTMSessionDelegate & OIDAuthStateChangeDelegate & OIDAuthStateErrorDelegate
-public typealias OpenIDState        = OIDAuthState
 //}
 
-public extension Google.Client {
+extension Client {
     
     @MainActor  // for window
-    func _gtmSignIn() async throws -> GTMSession {
+    func _gtmSignIn() async throws -> AuthSession {
         MainActor.assertIsolated()
         #if os(iOS)
-        guard let window = UIApplication.sharedKeyWindow?.rootViewController else { throw Google.AuthError.authorizeNoMainWindow }
+        guard let window = UIApplication.sharedKeyWindow?.rootViewController else { throw AuthError.authorizeNoMainWindow }
     
         #elseif os(visionOS)
         
-        guard let window = UIApplication.sharedKeyWindow else { throw Google.AuthError.authorizeNoMainWindow }
+        guard let window = UIApplication.sharedKeyWindow else { throw AuthError.authorizeNoMainWindow }
 
         #elseif os(macOS)
-        guard let window = NSApplication.sharedKeyWindow else { throw Google.AuthError.authorizeNoMainWindow }
+        guard let window = NSApplication.sharedKeyWindow else { throw AuthError.authorizeNoMainWindow }
         #endif
         
         let additionalParameters: [String: String] = [
@@ -74,7 +69,7 @@ public extension Google.Client {
                 if let state = state {
                     continuation.resume(returning: state)
                 } else {
-                    let error: Error = error ?? Google.AuthError.message("Auth with Google failed.")
+                    let error: Error = error ?? AuthError.message("Auth with Google failed.")
                     continuation.resume(throwing: error)
                 }
             }
@@ -85,8 +80,8 @@ public extension Google.Client {
     }
 }
 
-extension GTMSession {
-    func refresh() async throws -> (acessToken: String, idToken: String) {
+extension AuthSession {
+    func _refresh() async throws -> (acessToken: String, idToken: String) {
         try await withCheckedThrowingContinuation { continuation in
             authState.performAction(freshTokens: { (accessToken, idToken, error) in
                 if let error {

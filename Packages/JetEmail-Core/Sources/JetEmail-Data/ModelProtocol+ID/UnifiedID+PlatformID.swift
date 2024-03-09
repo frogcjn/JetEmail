@@ -14,13 +14,13 @@ public extension Microsoft.ID {
     var unifiedAccountID: JetEmail_Data.Account.ID { .microsoft(self) }
 }
 
-public extension Microsoft.MSALAccount {
+/*public extension Microsoft.MSALAccount {
     var unifiedAccountID: JetEmail_Data.Account.ID { get throws { try id.unifiedAccountID } }
 }
 
 public extension Microsoft.MSALSession {
     var unifiedAccountID: JetEmail_Data.Account.ID { get throws { try account.unifiedAccountID } }
-}
+}*/
 
 public extension Microsoft.Session {
     var unifiedAccountID: JetEmail_Data.Account.ID { accountID.unifiedAccountID }
@@ -30,9 +30,9 @@ public extension Google.ID {
     var unifiedAccountID: JetEmail_Data.Account.ID { .google(self) }
 }
 
-public extension Google.GTMSession {
+/*public extension Google.GTMSession {
     var unifiedAccountID: JetEmail_Data.Account.ID { get throws { try accountID.unifiedAccountID } }
-}
+}*/
 
 public extension Google.Session {
     var unifiedAccountID: JetEmail_Data.Account.ID { accountID.unifiedAccountID }

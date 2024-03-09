@@ -30,7 +30,7 @@ public struct ItemBody : CodableValueType {
     public let content: String?
     public let contentType: ContentType?
     
-    public enum ContentType : String, Codable, Sendable {
+    public enum ContentType : String, CodableValueType {
         case text
         case html
     }
