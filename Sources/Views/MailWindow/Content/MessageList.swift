@@ -38,7 +38,7 @@ fileprivate struct _MessageList : View {
             }
         }
         .toolbar {
-            MailFolderMessageListToolBar()
+            MailFolderRefreshButton()
         }
         
         // Feature: Account - Load Messages

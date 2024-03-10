@@ -38,7 +38,7 @@ struct LoadingMessageProgressBar : View {
     }
 }
 
-struct MailFolderMessageListToolBar : View {
+struct MailFolderRefreshButton : View {
     
     @Environment(AppItemModel<MailFolder>.self)
     var mailFolder
@@ -47,6 +47,7 @@ struct MailFolderMessageListToolBar : View {
         Button("Refresh", systemImage: "arrow.clockwise") {
             Task { await mailFolder.loadMessages() }
         }
+        .labelStyle(.titleAndIcon)
         .disabled(mailFolder.item.id.loadingMessageState.isLoading)
     }
 }

@@ -55,12 +55,13 @@ public extension MailFolder {
             case .junkEmail                : return 5
             case .outbox                   : return 6
             case .scheduled                : return 7
+            case .clutter                  : return 8
                 // 便笺
             case .conversationHistory      : return Int.max
             default: return nil
             }
                 
-            /*case .clutter                  : return String(localized: "Microsoft.MailFolder.clutter")
+            /* return String(localized: "Microsoft.MailFolder.clutter")
             case .conflicts                : return String(localized: "Microsoft.MailFolder.conflicts")
             case .localFailures            : return String(localized: "Microsoft.MailFolder.localFailures")
             case .msgFolderRoot            : return String(localized: "Microsoft.MailFolder.msgFolderRoot")
