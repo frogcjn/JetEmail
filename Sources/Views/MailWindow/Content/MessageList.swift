@@ -143,8 +143,8 @@ struct MessageList : View {
     var mailFolder
 
     var body: some View {
-        let rawID = mailFolder.rawID
-        _MessageList(_messages: Query(filter: #Predicate<Message> { $0.mailFolder.rawID == rawID && !$0.deleteMark }, sort: \.date, order: .reverse))
+        let rawID = mailFolder.uniqueID
+        _MessageList(_messages: Query(filter: #Predicate<Message> { $0.mailFolder.uniqueID == rawID && !$0.deleteMark }, sort: \.date, order: .reverse))
     }
 }
 

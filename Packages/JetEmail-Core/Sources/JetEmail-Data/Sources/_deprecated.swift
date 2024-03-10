@@ -260,3 +260,266 @@ extension Account {
     }
 }
 */
+//
+//  UnifiedID+.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 3/7/24.
+//
+
+import Microsoft
+import Google
+
+
+    
+/*    /*var platformID: String {
+        switch self {
+        case .microsoft(let platformID): platformID.rawValue
+        case .google   (let platformID): platformID.rawValue
+        }
+    }
+    
+
+    init(platform: Platform, platformID: String) {
+        self = switch platform {
+        case .microsoft: .microsoft(.init(rawValue: platformID))
+        case .google   : .google   (.init(rawValue: platformID))
+        }
+    }*/
+}*/
+
+//
+//  File.swift
+//
+//
+//  Created by Cao, Jiannan on 3/7/24.
+//
+
+import Google
+import Microsoft
+import JetEmail_Foundation
+
+// MARK: - Account.ID <- Google, Microsoft
+
+/*public extension MicrosoftAccountID {
+    var unifiedAccountID: JetEmail_Data.Account.ID { self }
+}*/
+
+/*public extension Microsoft.MSALAccount {
+    var unifiedAccountID: JetEmail_Data.Account.ID { get throws { try id.unifiedAccountID } }
+}
+
+public extension Microsoft.MSALSession {
+    var unifiedAccountID: JetEmail_Data.Account.ID { get throws { try account.unifiedAccountID } }
+}*/
+
+/*public extension Microsoft.Session {
+    var unifiedAccountID: JetEmail_Data.Account.ID { accountID.unifiedAccountID }
+}*/
+
+/*public extension GoogleAccountID {
+    var unifiedAccountID: JetEmail_Data.Account.ID { self }
+}*/
+
+/*public extension Google.GTMSession {
+    var unifiedAccountID: JetEmail_Data.Account.ID { get throws { try accountID.unifiedAccountID } }
+}*/
+
+/*public extension Google.Session {
+    var unifiedAccountID: JetEmail_Data.Account.ID { accountID.unifiedAccountID }
+}*/
+
+// MARK: - MailFolder.ID <- Google, Microsoft
+
+/*public extension MicrosoftMailFolderID {
+    var unifiedID: JetEmail_Data.MailFolder.ID {
+        self
+    }
+}*/
+
+/*public extension Microsoft.MailFolder {
+    var unifiedID: JetEmail_Data.MailFolder.ID {
+        id.unifiedID
+    }
+}*/
+
+/*public extension GoogleMailFolderID {
+    var unifiedID: JetEmail_Data.MailFolder.ID {
+        self
+    }
+}*/
+
+/*public extension Google.MailFolder {
+    var unifiedID: JetEmail_Data.MailFolder.ID {
+        id.unifiedID
+    }
+}*/
+
+// MARK: - Message.ID <- Google, Microsoft
+
+/*public extension MicrosoftMessageID {
+    var unifiedID: JetEmail_Data.Message.ID {
+        self
+    }
+}*/
+
+/*public extension Microsoft.Message {
+    var unifiedID: JetEmail_Data.Message.ID {
+        id.unifiedID
+    }
+}*/
+
+/*public extension GoogleMessageID {
+    var unifiedID: JetEmail_Data.Message.ID {
+        self
+    }
+}*/
+
+/*public extension Google.Message {
+    var unifiedID: JetEmail_Data.Message.ID {
+        id.unifiedID
+    }
+}*/
+
+// MARK: - Account|MailFolder|Message -> Google, Microsoft
+
+/*public extension JetEmail_Data.UnifiedID {
+    var microsoftID: Owner.MicrosoftID? {
+        guard case .microsoft(let microsoftID) = self else { return nil }
+        return microsoftID
+    }
+    
+    var googleID: Owner.GoogleID? {
+        guard case .google(let googleID) = self else { return nil }
+        return googleID
+    }
+}
+
+public extension UnifiedModel where ID == UnifiedID<Self> {
+    var microsoftID: MicrosoftID? { id.microsoftID }
+    var    googleID:    GoogleID? { id.googleID    }
+}*/
+
+//
+//  ID.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 3/7/24.
+//
+
+import JetEmail_Foundation
+
+/*public enum UnifiedID<Owner : UnifiedModel> : IDProtocol {
+    case microsoft(Owner.MicrosoftID)
+    case    google(Owner.GoogleID)
+}
+
+public extension UnifiedID {
+
+    var platform: Platform {
+        switch self {
+        case .microsoft: .microsoft
+        case .google   : .google
+        }
+    }
+    
+    var resourceID: String {
+        switch self {
+        case .microsoft(let platformID): platformID.resourceID
+        case .google   (let platformID): platformID.resourceID
+        }
+    }
+}*/
+
+
+
+
+
+
+/*
+extension UnifiedID : PartialRawRepresentable {
+    public var rawValue: String { "\(platform.rawValue)/\(platformID)" }
+}
+
+extension UnifiedID : Sendable where MicrosoftID : Sendable, GoogleID : Sendable {}
+extension UnifiedID : Hashable, Equatable, Encodable/* where Model.MicrosoftID : StringIDProtocol, Model.GoogleID: StringIDProtocol*/ {}
+*/
+
+//
+//  Platform.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 3/7/24.
+//
+
+import JetEmail_Foundation
+
+
+
+//public typealias MicrosoftID = MicrosoftAccountID
+// public typealias    GoogleID =    GoogleAccountID
+// public typealias ID = UnifiedID<Account>
+
+//public typealias MicrosoftID = MicrosoftMailFolderID
+//public typealias    GoogleID =    GoogleMailFolderID
+// public typealias ID = UnifiedID<MailFolder>
+
+//public typealias MicrosoftID = MicrosoftMessageID
+//public typealias    GoogleID =    GoogleMessageID
+//public typealias ID = UnifiedID<Message>
+/*
+public extension UnifiedID<Account> {
+    var innerID: String {
+        switch self {
+        case .microsoft(let id): id.innerID
+        case    .google(let id): id.innerID
+        }
+    }
+}
+
+public extension UnifiedID<MailFolder> {
+    var innerID: String {
+        switch self {
+        case .microsoft(let id): id.innerID
+        case    .google(let id): id.innerID
+        }
+    }
+    
+    var innerAccountID : String {
+        switch self {
+        case .microsoft(let id): id.accountID.innerID
+        case    .google(let id): id.accountID.innerID
+        }
+    }
+}
+
+public extension UnifiedID<Message> {
+    var innerID: String {
+        switch self {
+        case .microsoft(let id): id.innerID
+        case    .google(let id): id.innerID
+        }
+    }
+    
+    var innerAccountID : String {
+        switch self {
+        case .microsoft(let id): id.accountID.innerID
+        case    .google(let id): id.accountID.innerID
+        }
+    }
+}
+*/
+//
+//  ModelItem.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 3/7/24.
+//
+
+import SwiftData
+import JetEmail_Foundation
+
+
+
+
+// MicrosoftID : CodableValueType & PartialRawRepresentable<String>, GoogleID : CodableValueType & PartialRawRepresentable<String>

@@ -10,8 +10,18 @@ import JetEmail_Foundation
 // MARK: - MailFolder
 // https://learn.microsoft.com/en-us/graph/api/resources/mailfolder
 
-public struct MailFolder : IdentifiableValueType {
-    public let id                   : ID
+public struct GoogleMailFolder : IdentifiableValueType {
+    public let   id: GoogleMailFolderID
+    public var data: GoogleMailFolderData
+    
+    public init(_ session: Session, data: GoogleMailFolderData) {
+        self.id   = .init(accountID: session.accountID, innerID: data.id)
+        self.data = data
+    }
+}
+
+public struct GoogleMailFolderData : CodableValueType {
+    public let id                   : String
     public var path                 : String?
     public var name                 : String?
     public let messageListVisibility: MessageListVisibility?
@@ -24,7 +34,7 @@ public struct MailFolder : IdentifiableValueType {
     public let color                : Color?
     
     public init(
-        id                   : ID,
+        id                   : String,
         path                 : String? = nil,
         name                 : String? = nil,
         messageListVisibility: MessageListVisibility? = nil,

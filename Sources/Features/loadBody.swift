@@ -7,6 +7,7 @@
 
 import JetEmail_Foundation
 import JetEmail_Data
+import Google
 
 // MARK: Feature: Message - Load Body
 
@@ -34,19 +35,19 @@ extension AppItemModel<Message> {
 }
 
 
-fileprivate func _loadBody(messageID: Message.ID, session: Session) async throws {
+fileprivate func _loadBody(messageID: Message.ID, session: JetEmail_Data.Session) async throws {
     checkBackgroundThread()
     switch session {
     case .microsoft(let session):
-        guard case .microsoft(let microsoftMessageID) = messageID else { return }
+        let microsoftMessageID = messageID.microsoft!
         
-        async let microsoftMessage = session.getMessage(microsoftID: microsoftMessageID.innerID) // load from MSAL
-        _ = try await ModelStore.instance.setMessage(microsoft: microsoftMessage, to: messageID) // MSAL to SwiftData
+        async let microsoftMessage = session.getMessage(id: microsoftMessageID) // load from MSAL
+        _ = try await ModelStore.instance.setMessage(microsoft: .init(session, data: microsoftMessage), to: messageID) // MSAL to SwiftData
         
     case .google(let session):
-        guard case .google(let googleMessageID) = messageID else { return }
-        var googleMessage = try await session.getMessage(id: googleMessageID.innerID, format: .full)
-        googleMessage.raw = try await session.getMessage(id: googleMessageID.innerID, format: .raw).raw
-        _ = try await ModelStore.instance.setMessage(google: googleMessage, to: messageID) // MSAL to SwiftData
+        let googleMessageID = messageID.google!
+        var googleMessage = try await session.getMessage(id: googleMessageID, format: .full)
+        googleMessage.raw = try await session.getMessage(id: googleMessageID, format: .raw).raw
+        _ = try await ModelStore.instance.setMessage(google: .init(session, data: googleMessage), to: messageID) // MSAL to SwiftData
     }
 }

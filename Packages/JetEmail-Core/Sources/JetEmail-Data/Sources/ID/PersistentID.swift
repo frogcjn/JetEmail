@@ -6,6 +6,7 @@
 //
 
 import SwiftData
+import JetEmail_Foundation
 
 public struct PersistentID<Model : PersistentModel> : RawRepresentable {
     public let rawValue: PersistentIdentifier
@@ -14,5 +15,11 @@ public struct PersistentID<Model : PersistentModel> : RawRepresentable {
     }
 }
 
-extension PersistentID : Equatable, Hashable, Codable {}
-extension PersistentID : Sendable {}
+extension PersistentID : CodableValueType {}
+
+public extension PersistentModel {
+    typealias PersistentID = JetEmail_Data.PersistentID<Self>
+    var persistentID: PersistentID {
+        .init(rawValue: persistentModelID)
+    }
+}

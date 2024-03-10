@@ -6,6 +6,7 @@
 //
 
 @preconcurrency import MSAL
+import JetEmail_Foundation
 
 typealias MSALAccount = MSAL.MSALAccount
 typealias MSALSession = MSAL.MSALResult
@@ -40,7 +41,7 @@ extension Client {
         return try await _msalClient.signout(with: msalAccount, signoutParameters: parameters)
     }
 
-    func refresh(id: ID) async throws -> MSALSession {
+    func refresh(id: MicrosoftAccountID) async throws -> MSALSession {
         let scopes = Client.scopes.map(\.rawValue)
         let msalAccount = try _msalClient.account(forIdentifier: id.innerID)
         

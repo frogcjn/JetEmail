@@ -11,9 +11,9 @@ import JetEmail_Foundation
 @MainActor
 @Observable
 class SessionStore {
-    var rawValue = [ID: Session]()
+    var rawValue = [GoogleAccountID: Session]()
     
-    subscript(id: ID) -> Session? {
+    subscript(id: GoogleAccountID) -> Session? {
         get { rawValue[id] }
         set { rawValue[id] = newValue }
     }

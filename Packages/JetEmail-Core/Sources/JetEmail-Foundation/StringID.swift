@@ -5,11 +5,49 @@
 //  Created by Cao, Jiannan on 2/15/24.
 //
 
-public protocol IDProtocol<Owner> : CodableValueType, PartialRawRepresentable<String> {
-    associatedtype Owner
+
+/*
+public protocol AccountResource : ResourceIDProtocol {
+}
+extension AccountResource {
+    var   type : ResourceType { .account }
+    var account: String       { element  }
 }
 
-public struct ModelID<Owner> : IDProtocol, Decodable {
+public protocol MailFolderResource : ResourceIDProtocol {
+}
+
+extension MailFolderResource {
+    var   type : ResourceType { .mailFolder }
+}
+
+public protocol MessageResponse : ResourceIDProtocol {
+}
+
+extension MessageResponse {
+    var   type : ResourceType { .message }
+}
+
+public protocol MicrosoftResource : ResourceIDProtocol {
+}
+
+extension MicrosoftResource {
+    var platform: Platform { .microsoft }
+}
+
+public protocol GoogleResource : ResourceIDProtocol {
+    
+}
+
+extension GoogleResource {
+    var platform: Platform { .google }
+}*/
+
+
+
+
+/*
+public struct StringID<Owner> : IDProtocol, Decodable {
     public let innerID: String
     public init(_ innerID: String) {
         self.innerID = innerID
@@ -26,20 +64,20 @@ public struct ModelID<Owner> : IDProtocol, Decodable {
         try container.encode(self.innerID)
     }
     
-    public var rawValue: String { innerID }
+    public var rawID: String { innerID }
 }
 
 public struct AccountModelID<AccountType, Owner> : IDProtocol {
         
-    public let accountID: ModelID<AccountType>
-    public let   innerID: ModelID<Owner>
+    public let accountID: StringID<AccountType>
+    public let   innerID: StringID<Owner>
     
-    public init(accountID: ModelID<AccountType>, _ innerID: ModelID<Owner>) {
+    public init(accountID: StringID<AccountType>, _ innerID: StringID<Owner>) {
         self.accountID = accountID
         self  .innerID = innerID
     }
     
-    public var rawValue: String { "\(accountID)/\(innerID)" }
+    public var rawID: String { "\(accountID)/\(innerID)" }
 }
 /*
 public protocol PlatformAccountModelIDProtocol<OwnerType> : IDProtocol /*where*PlatformType : CodableValueType, AccountID : CodableValueType, InnerID : CodableValueType*/  {
@@ -67,4 +105,5 @@ public struct ModelID<OwnerType> : IDProtocol {
     
     public var rawValue: String { innerID }
 }
+*/
 */

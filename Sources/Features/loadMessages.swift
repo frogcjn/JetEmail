@@ -8,6 +8,7 @@
 import JetEmail_Foundation
 import JetEmail_Data
 import Microsoft
+import Foundation
 
 // MARK: Feature: Account - Load Messages
 
@@ -31,10 +32,9 @@ extension AppItemModel<JetEmail_Data.MailFolder> {
             guard let session = try await account.id.refreshSession else { return }
             switch session {
             case .microsoft(let session):
-                guard case .microsoft(let platformID) = mailFolder.id else { return }
-                try await loadMessagesProgressing(id: mailFolder.id, innerID: platformID.innerID, session: session)
-            case .google(let session): guard case .google(let platformID) = mailFolder.id else { return }
-                async let messages = session.getMessages(id: platformID.innerID)
+                try await loadMessagesProgressing(id: mailFolder.id, session: session)
+            case .google(let session): guard let platformID = mailFolder.id.google else { return }
+                async let messages = session.getMessages(id: platformID)
                 _ = try await ModelStore.instance.setMessages(googles: messages, in: mailFolder.id) // MSAL to SwiftData
                 // _ = try await BackgroundModelActor.instance.setMessages
                 // let messages = try await session.getMessages
@@ -47,15 +47,27 @@ extension AppItemModel<JetEmail_Data.MailFolder> {
 }
 
 @MainActor
-private func loadMessagesProgressing(id: JetEmail_Data.MailFolder.ID, innerID: Microsoft.MailFolder.ID, session: Microsoft.Session) async throws {
-    var inserts = [JetEmail_Data.Message.ID]()
+private func loadMessagesProgressing(id: JetEmail_Data.MailFolder.ID, session: Microsoft.Session) async throws {
+    let newMessageIDs: [JetEmail_Data.Message.ID] = try await session.getMessagesID(in: id.microsoft!).map { $0.general }
     
-    let (total, stream) = try await session.getMessagesStream(id: innerID)
-    id.loadingMessageState = .loading(value: inserts.count, total: total)
+    // remove
+    let firstIndexToLoad = try await ModelStore.instance.setMessagesDeletePart(newMessageIDs: newMessageIDs, in: id)
     
-    for try await messages in stream {
-        inserts.append(contentsOf: try await ModelStore.instance.setMessagesInsertPart(microsofts: messages, in: id)) // MSAL to SwiftData
-        id.loadingMessageState = .loading(value: inserts.count, total: total)
+    
+    let (total, stream): (total: Int, stream: AsyncThrowingStream<[MicrosoftMessage], Error>)
+    
+    if let firstIndexToLoad {
+       // do {
+        (total, stream) = try await session.getMessagesStream(id: id.microsoft!, skip: firstIndexToLoad)
+        //}
+        /* catch let error as URLError where error.code == .badURL {
+            (total, stream) = try await session.getMessagesStream(id: innerID)
+        }*/
+        var value = firstIndexToLoad
+        id.loadingMessageState = .loading(value: value, total: total)
+        for try await messages in stream {
+            value += try await ModelStore.instance.setMessagesInsertPart(microsofts: messages, in: id).count // MSAL to SwiftData
+            id.loadingMessageState = .loading(value: value, total: total)
+        }
     }
-    _ = try await ModelStore.instance.setMessagesDeletePart(inserts: inserts, in: id)
 }

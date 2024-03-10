@@ -5,17 +5,7 @@
 //  Created by Cao, Jiannan on 2/25/24.
 //
 
-extension Message {
-    struct ListItem {
-        let id      : Message.ID
-        let threadID: String?
-    }
+extension GoogleMessageData {
     
-    var listItem: ListItem {
-        .init(
-            id      : id,
-            threadID: threadId
-        )
-    }
 }
 

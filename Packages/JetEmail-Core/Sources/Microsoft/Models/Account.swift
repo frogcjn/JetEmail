@@ -7,4 +7,4 @@
 
 import JetEmail_Foundation
 
-public enum Account : ValueType {}
+public enum MicrosoftAccount : ValueType {}

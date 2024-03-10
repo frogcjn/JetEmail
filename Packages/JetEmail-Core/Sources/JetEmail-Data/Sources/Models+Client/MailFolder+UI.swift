@@ -8,18 +8,18 @@
 
 public extension MailFolder {
     var isSystemFolder: Bool {
-        switch id {
+        switch id.platform {
         case .google:
-            guard let type = google?.type else { return false }
+            guard let type = google?.data.type else { return false }
             return type == .system
         case .microsoft:
-            return microsoft?.wellKnownFolderName != nil
+            return microsoft?.data.wellKnownFolderName != nil
         }
     }
     
     var systemOrder: Int? {
         guard isSystemFolder else { return nil }
-        switch id {
+        switch id.platform {
         case .google:
             switch name {
             case "INBOX"              : return 0
@@ -45,7 +45,7 @@ public extension MailFolder {
             }
             
         case .microsoft:
-            guard let wellKnownFolderName = microsoft?.wellKnownFolderName else { return nil }
+            guard let wellKnownFolderName = microsoft?.data.wellKnownFolderName else { return nil }
             switch wellKnownFolderName {
             case .inbox                    : return 0
             case .drafts                   : return 1
@@ -75,9 +75,9 @@ public extension MailFolder {
     
     
     var localizedName: String {
-        switch id {
+        switch id.platform {
         case .google:
-            guard let type = google?.type else { return name }
+            guard let type = google?.data.type else { return name }
             switch type {
             case .system:
                 // https://developers.google.com/gmail/api/guides/labels
@@ -108,7 +108,7 @@ public extension MailFolder {
                 return name
             }
         case .microsoft:
-            guard let wellKnownFolderName = microsoft?.wellKnownFolderName else { return name }
+            guard let wellKnownFolderName = microsoft?.data.wellKnownFolderName else { return name }
             switch wellKnownFolderName {
             case .archive                  : return String(localized: "Microsoft.MailFolder.archive", bundle: .module)
             case .clutter                  : return String(localized: "Microsoft.MailFolder.clutter", bundle: .module)
@@ -132,9 +132,9 @@ public extension MailFolder {
     }
     
     var systemImage: String {
-        switch id {
+        switch id.platform {
         case .google:
-            guard let type = google?.type, let innerID = google?.id.rawValue else { return name }
+            guard let type = google?.data.type, let innerID = google?.id.innerID else { return name }
             switch type {
             case .system:
                 // https://developers.google.com/gmail/api/guides/labels
@@ -160,7 +160,7 @@ public extension MailFolder {
                 return "folder"
             }
         case .microsoft:
-            guard let wellKnownFolderName = microsoft?.wellKnownFolderName else { return "folder" }
+            guard let wellKnownFolderName = microsoft?.data.wellKnownFolderName else { return "folder" }
             switch wellKnownFolderName {
             case .archive                  : return "archivebox"
             case .clutter                  : return "shippingbox"

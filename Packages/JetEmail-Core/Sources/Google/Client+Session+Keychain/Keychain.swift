@@ -16,7 +16,7 @@ actor Keychain {
     static let securityAttributeTypeGoogleAccount = "GGac".fourCharUInt32! /*Google Acccount*/
     
     struct SessionItem : ValueType {
-        public let      accountID: ID
+        public let      accountID: GoogleAccountID
         public let       username: String
         public let     gtmSession: AuthSession
         public let   keychainItem: Data
@@ -41,7 +41,7 @@ actor Keychain {
             kSecAttrService              : "me.frogcjn.jet-email.account.google",      // mark location: Jet Email - Account - Google
             kSecAttrCreator              : Self.securityAttributeCreator,              // mark creator: Jet Email
             kSecAttrType                 : Self.securityAttributeTypeGoogleAccount,    // mark a data type: Google Account
-            kSecAttrAccount              : id.rawValue,                                  // unique id under location and type
+            kSecAttrAccount              : id.innerID,                                  // unique id under location and type
             kSecAttrGeneric              : try username.data,
             kSecAttrLabel                : "Jet Email - Google Account: \(username)",  // label
             /* protection attributes*/
@@ -82,7 +82,7 @@ actor Keychain {
         return item
     }
     
-    func item(id: ID) throws -> SessionItem? {
+    func item(id: GoogleAccountID) throws -> SessionItem? {
         //SessionKeychain.assertIsolated()
         
         let query =  [
@@ -94,7 +94,7 @@ actor Keychain {
             kSecAttrService              : "me.frogcjn.jet-email.account.google",       // mark location: Jet Email - Account - Google
             kSecAttrCreator              : Self.securityAttributeCreator,           // mark creator: Jet Email
             kSecAttrType                 : Self.securityAttributeTypeGoogleAccount, // mark this keychain type: Google Account
-            kSecAttrAccount              : id.rawValue, // account
+            kSecAttrAccount              : id.innerID, // account
             // kSecAttrLabel                : "Jet Email - Google Account: \(name)", // name
             
             /* protection attributes*/
@@ -171,7 +171,7 @@ actor Keychain {
             let attriutesList = value as! [[CFString: Any]]
             let items: [SessionItem] = try attriutesList.map { attributes in
                 
-                let id           =     ID(attributes[kSecAttrAccount] as! String)
+                let id           = GoogleAccountID(innerID: attributes[kSecAttrAccount] as! String)
                 let username     = try (attributes[kSecAttrGeneric] as! Data).string
                 let keychainItem =      attributes[kSecValuePersistentRef] as! Data
                 let query: [String: Any] = [

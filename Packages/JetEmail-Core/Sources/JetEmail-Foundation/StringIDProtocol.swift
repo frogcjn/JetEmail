@@ -8,10 +8,7 @@ import SwiftUI
 
 // MARK: - Partial
 
-public protocol PartialRawRepresentable<RawValue> {
-    associatedtype RawValue
-    var rawValue: RawValue { get }
-}
+
 
 /*public extension PartialRawRepresentable where Self : Equatable, RawValue : Equatable {
     static func == (lhs: Self, rhs: Self) -> Bool {
@@ -32,31 +29,7 @@ public extension PartialRawRepresentable where Self : Encodable, RawValue : Enco
     }
 }*/
 
-public extension String.StringInterpolation {
-    mutating func appendInterpolation<ID: PartialRawRepresentable<String>>(_ id: ID) {
-        appendInterpolation(id.rawValue)
-    }
-}
 
-public extension LocalizedStringKey.StringInterpolation {
-    mutating func appendInterpolation<ID: PartialRawRepresentable<String>>(_ id: ID)  {
-        appendInterpolation(id.rawValue)
-    }
-}
-
-// MARK: - Normal
-
-public extension String.StringInterpolation {
-    mutating func appendInterpolation<ID: RawRepresentable<String>>(_ id: ID) {
-        appendInterpolation(id.rawValue)
-    }
-}
-
-public extension LocalizedStringKey.StringInterpolation {
-    mutating func appendInterpolation<ID: RawRepresentable<String>>(_ id: ID)  {
-        appendInterpolation(id.rawValue)
-    }
-}
 /*
 // MARK: - Fully
 

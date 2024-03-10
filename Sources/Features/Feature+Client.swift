@@ -44,10 +44,10 @@ extension JetEmail_Data.Session {
 }
 
 extension Microsoft.Session {
-    var idToWellKnownFolderName:  [Microsoft.MailFolder.ID: Microsoft.MailFolder.WellKnownFolderName] { get async {
+    var idToWellKnownFolderName:  [MicrosoftMailFolderID: Microsoft.MailFolder.WellKnownFolderName] { get async {
         do {
             // catch wellknownFolderName
-            var idToWellKnownFolderName = [Microsoft.MailFolder.ID: Microsoft.MailFolder.WellKnownFolderName]()
+            var idToWellKnownFolderName = [MicrosoftMailFolderID: Microsoft.MailFolder.WellKnownFolderName]()
             for name in Microsoft.MailFolder.WellKnownFolderName.allCases {
                 do {
                     let folder = try await getMailFolder(wellKnownFolderName: name)
@@ -64,8 +64,9 @@ extension Microsoft.Session {
     
     func loadMailFolders(persistentID: JetEmail_Data.Account.ID) async throws {
         var microsoftRoot = try await getRootMailFolder()
-        microsoftRoot.wellKnownFolderName = .msgFolderRoot
-        let (rootPersistentID, modelID) = try await ModelStore.instance.setRootMailFolder(microsoft: microsoftRoot, in: persistentID)
+        microsoftRoot.data.wellKnownFolderName = .msgFolderRoot
+        let x = microsoftRoot
+        let (rootPersistentID, modelID) = try await ModelStore.instance.setRootMailFolder(microsoft: x, in: persistentID)
         
         
         let idToWellKnownFolderName = await idToWellKnownFolderName
@@ -74,11 +75,11 @@ extension Microsoft.Session {
         while !queue.isEmpty {
             let current = queue.removeFirst()
             
-            let id = current.modelID.microsoftID!.innerID as Microsoft.MailFolder.ID
+            let id = current.modelID.microsoft! as MicrosoftMailFolderID
             var mailFolders = try await self.getChildFolders(id: id)
             mailFolders = mailFolders.map {
                 var mailFolder = $0
-                if let wellKnownFolderName = idToWellKnownFolderName[mailFolder.id] { mailFolder.wellKnownFolderName = wellKnownFolderName }
+                if let wellKnownFolderName = idToWellKnownFolderName[mailFolder.id] { mailFolder.data.wellKnownFolderName = wellKnownFolderName }
                 return mailFolder
             }
             
@@ -91,10 +92,10 @@ extension Microsoft.Session {
 
 extension Google.Session {
     func loadMailFolders(persistentID: JetEmail_Data.Account.ID, modelID: JetEmail_Data.Account.ID) async throws {
-        let rootElement = Google.MailFolder(id: .init("folder_all_mail"), name: "folder_all_mail")
+        let rootElement = GoogleMailFolder.init(self, data: GoogleMailFolderData(id: .init("folder_all_mail"), name: "folder_all_mail"))
         let tree = try await getMailFolderTree(rootElement: rootElement)
         let root = try await ModelStore.instance.setRootMailFolder(google: rootElement, in: persistentID)
-        var queue: [(modelID: JetEmail_Data.MailFolder.ID, google: TreeNode<Google.MailFolder>)] = [(root.modelID, tree.root)]
+        var queue: [(modelID: JetEmail_Data.MailFolder.ID, google: TreeNode<GoogleMailFolder>)] = [(root.modelID, tree.root)]
         while !queue.isEmpty {
             let current = queue.removeFirst()
             

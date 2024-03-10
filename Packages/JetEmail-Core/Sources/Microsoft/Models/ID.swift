@@ -9,39 +9,51 @@ import JetEmail_Foundation
 
 // MARK: - Account.ID
 
-public typealias ID = Account.ID
+// public typealias ID = MicrosoftAccountID
 
-public extension Account {
-    typealias ID = ModelID<Account>
+public extension MicrosoftAccount {
+    //typealias ID = MicrosoftAccountID
 }
 
 // MARK: - MailFolder.ID
 
 public extension MailFolder {
-    typealias ID = ModelID<MailFolder>
+    //typealias ID = MicrosoftMailFolderID
 }
 
 // MARK: - Message.ID
 
-public extension Message {
-    typealias ID = ModelID<Message>
-}
+//public typealias MicrosoftAccountID    = AccountID
+//public typealias MicrosoftMessageID    = MessageID<AccountID>
+//public typealias MicrosoftMailFolderID = MailFolderID<AccountID>
+
+
+/*public extension Message {
+    //typealias ID = StringID<Message>
+    func resourceID(accountID: MicrosoftAccountID) -> MicrosoftMessageID {
+        .init(platform: .microsoft, accountID: accountID, innerID: id)
+    }
+}*/
+
+
+
+
 
 // MARK: - Account.ID <- MSAL
 
 extension MSALAccount {
-    var id: ID { get throws {
-        guard let innerID = identifier else { throw AuthError.accountNoIDOrUsername }
-        return .init(innerID)
+    var id: MicrosoftAccountID { get throws {
+        guard let id = identifier else { throw AuthError.accountNoIDOrUsername }
+        return .init(innerID: id)
     } }
     
-    var idAndUsername: (id: ID, username: String) { get throws {
-        guard let innerID = identifier, let username else { throw AuthError.accountNoIDOrUsername }
-        return (.init(innerID), username)
+    var idAndUsername: (id: MicrosoftAccountID, username: String) { get throws {
+        guard let id = identifier, let username else { throw AuthError.accountNoIDOrUsername }
+        return (.init(innerID: id), username)
     } }
 }
 
 extension MSALSession {
-    var accountID: ID { get throws { try account.id } }
-    var accountIDAndUsername: (id: ID, username: String) { get throws { try account.idAndUsername }}
+    var accountID: MicrosoftAccountID { get throws { try account.id } }
+    var accountIDAndUsername: (id: MicrosoftAccountID, username: String) { get throws { try account.idAndUsername }}
 }

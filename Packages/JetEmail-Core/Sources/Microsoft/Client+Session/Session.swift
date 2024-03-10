@@ -5,14 +5,16 @@
 //  Created by Cao, Jiannan on 2/20/24.
 //
 
+
+import JetEmail_Foundation
 @preconcurrency import MSAL
 
 public final class Session : Sendable {
-    public let accountID   : ID
+    public let accountID   : MicrosoftAccountID
     public let username    : String
            let _msalSession: MSALSession
             
-    init(accountID: ID, username: String, msalSession: MSALSession) {
+    init(accountID: MicrosoftAccountID, username: String, msalSession: MSALSession) {
         self.accountID     = accountID
         self.username      = username
         self._msalSession  = msalSession

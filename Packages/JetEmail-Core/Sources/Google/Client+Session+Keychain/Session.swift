@@ -7,15 +7,16 @@
 
 @preconcurrency import GTMAppAuth
 import AppAuth
+import JetEmail_Foundation
 
 public final class Session: NSObject & AuthSessionDelegate & OIDAuthStateChangeDelegate & OIDAuthStateErrorDelegate, Sendable {
-    public let  accountID  : ID
+    public let  accountID  : GoogleAccountID
     public let  username   : String
            let _gtmSession : AuthSession
     
            let keychainItem: Data
     
-    init(accountID: ID, username: String, gtmSession: AuthSession, keychainItem: Data) {
+    init(accountID: GoogleAccountID, username: String, gtmSession: AuthSession, keychainItem: Data) {
         self.accountID    = accountID
         self.username     = username
         self._gtmSession  = gtmSession

@@ -14,9 +14,9 @@ import JetEmail_Data
 extension JetEmail_Data.Account.ID {
     
     var storedSession: JetEmail_Data.Session? {
-        switch self {
+        switch platformCase {
         case .microsoft(let id): id.storedSession.map(Session.microsoft)
-        case .google   (let id): id.storedSession.map(Session.google)
+        case    .google(let id): id.storedSession.map(Session.google   )
         }
     }
     
@@ -25,16 +25,16 @@ extension JetEmail_Data.Account.ID {
     }
     
     var refreshSession: JetEmail_Data.Session? { get async throws {
-        switch self {
-        case .microsoft(let id): return .microsoft(try await id.refreshSession)
-        case .google   (let id): return try await id.refreshSession.map(Session.google)
+        switch platformCase {
+        case .microsoft(let id): return try await JetEmail_Data.Session.microsoft(id.refreshMicrosoftSession)
+        case    .google(let id): return try await id.refreshGoogleSession.map(JetEmail_Data.Session.google)
         }
     } }
     
     func removeSession() -> JetEmail_Data.Session? {
-        switch self {
-        case .microsoft(let id): id.removeSession().map(Session.microsoft)
-        case .google   (let id): id.removeSession().map(Session.google)
+        switch platformCase {
+        case .microsoft(let id): id.removeSession().map(JetEmail_Data.Session.microsoft)
+        case    .google(let id): id.removeSession().map(JetEmail_Data.Session.google)
         }
     }
 }

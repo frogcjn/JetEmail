@@ -9,25 +9,25 @@ import GoogleAPIClientForREST_Gmail
 import JetEmail_Foundation
 
 extension GTLRGmail_Label {
-    func mailFolder(accountID: Account.ID) throws -> MailFolder {
+    var mailFolderData: GoogleMailFolderData { get throws  {
         guard let innerID = identifier else { throw GmailApiError.missingMessageInfo("identifier") }
-        return MailFolder(
+        return GoogleMailFolderData(
             id                   : .init(innerID),
-            path                 : name,
-            messageListVisibility: messageListVisibility.flatMap(MailFolder.MessageListVisibility.init(rawValue:)),
-            labelListVisibility  : labelListVisibility.flatMap(MailFolder.LabelListVisibility.init(rawValue:)),
-            type                 : type.flatMap(MailFolder.MailFolderType.init(rawValue:)),
+            name                 : name,
+            messageListVisibility: messageListVisibility.flatMap(GoogleMailFolderData.MessageListVisibility.init(rawValue:)),
+            labelListVisibility  : labelListVisibility.flatMap(GoogleMailFolderData.LabelListVisibility.init(rawValue:)),
+            type                 : type.flatMap(GoogleMailFolderData.MailFolderType.init(rawValue:)),
             messagesTotal        : messagesTotal?.intValue,
             messagesUnread       : messagesUnread?.intValue,
             threadsTotal         : threadsTotal?.intValue,
             threadsUnread        : threadsUnread?.intValue,
-            color                : color.map(\.swift)
+            color                : color.map(\.colorData)
         )
-    }
+    } }
 }
 
 extension GTLRGmail_LabelColor {
-    var swift: MailFolder.Color {
+    var colorData: GoogleMailFolderData.Color {
         .init(
             textColor      : textColor,
             backgroundColor: backgroundColor
@@ -36,37 +36,37 @@ extension GTLRGmail_LabelColor {
 }
 
 extension GTLRGmail_Message {
-    func message(accountID: Account.ID) throws -> Message {
-        guard let innerID = identifier else { throw GmailApiError.missingMessageInfo("id") }
-        return Message(
-            id          :     .init(innerID),
+    var messageData : GoogleMessageData { get throws {
+        guard let id = identifier else { throw GmailApiError.missingMessageInfo("id") }
+        return .init(
+            id          :     id,
             internalDate:     internalDate?.int64Value,
             snippet     :     snippet?.removingHTMLEntities,
             sizeEstimate:     sizeEstimate?.intValue,
             raw         :     raw?.gtlrBase64,
-            payload     : try payload?.swift,
+            payload     : try payload?.messagePartData,
             labelIds    :     labelIds,
             threadId    :     threadId,
             historyId   :     historyId?.uint64Value
         )
-    }
+    } }
 }
 
 extension GTLRGmail_MessagePart {
-    var swift: Message.Part { get throws {
+    var messagePartData: GoogleMessageData.Part { get throws {
         .init(
             partID  :     partId?.nilIfEmpty,
             filename:     filename?.nilIfEmpty,
             mimeType:     mimeType?.nilIfEmpty,
-            headers : try headers?.map { try $0.swift },
-            body    : try body?.swift,
-            parts   : try parts?.map { try $0.swift }
+            headers : try headers?.map { try $0.headerData },
+            body    : try body?.bodyData,
+            parts   : try parts?.map { try $0.messagePartData }
         )
     } }
 }
 
 extension GTLRGmail_MessagePartHeader {
-    var swift: Message.Part.Header { get throws {
+    var headerData: GoogleMessageData.Part.Header { get throws {
         guard let name, let value else { throw GmailApiError.missingMessageInfo("name") }
         return .init(
             name : name,
@@ -76,7 +76,7 @@ extension GTLRGmail_MessagePartHeader {
 }
 
 extension GTLRGmail_MessagePartBody {
-    var swift: Message.Part.Body? { get throws {
+    var bodyData: GoogleMessageData.Part.Body? { get throws {
         guard let size else { throw GmailApiError.missingMessageInfo("size") }
         if size.intValue == 0 && data  == nil { return nil }
         return .init(

@@ -23,12 +23,13 @@ extension AppItemModel<JetEmail_Data.Message> {
             guard let session = account.id.storedSession else { return }
             switch session {
             case .microsoft(let session):
-                guard let microsoftMessage = message.microsoft, let moveToID = moveTo.microsoftID else { return }
-                let microsoft = try await session.moveMessage(id: microsoftMessage.id, to: moveToID.innerID)
-                item.microsoft = microsoft
+                guard let microsoftMessage = message.microsoft else { return }
+                _ = try await session.moveMessage(id: microsoftMessage.id, to: moveTo.id.microsoft!)
+                //item.microsoft = microsoft
             case .google(let session):
-                guard let googleMessage = message.google, let moveFromID = moveFrom.googleID, let moveToID = moveTo.googleID else { return }
-                try message.setGoogle(try await session.moveMessage(id: googleMessage.id, from: moveFromID.innerID, to: moveToID.innerID))
+                guard let googleMessage = message.google else { return }
+                _ = try await session.moveMessage(id: googleMessage.id, from: moveFrom.id.google!, to: moveTo.id.google!)
+                // try message.setGoogle(
             }
             item.mailFolder = moveTo
         } catch {

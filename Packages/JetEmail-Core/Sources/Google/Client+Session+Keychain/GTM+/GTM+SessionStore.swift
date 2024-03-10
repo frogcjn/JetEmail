@@ -5,10 +5,12 @@
 //  Created by Cao, Jiannan on 3/8/24.
 //
 
+import JetEmail_Foundation
+
 // Session new remove
 @MainActor
 extension SessionStore {
-    func session(id: ID, forceRefresh: Bool) async throws -> Session? {
+    func session(id: GoogleAccountID, forceRefresh: Bool) async throws -> Session? {
         if !forceRefresh {
             if let session = SessionStore.shared[id] { return session }
         }
@@ -32,7 +34,7 @@ extension SessionStore {
         return session
     }
     
-    func remove(id: ID) -> Session? {
+    func remove(id: GoogleAccountID) -> Session? {
         let session = self[id]
         self[id] = nil
         return session

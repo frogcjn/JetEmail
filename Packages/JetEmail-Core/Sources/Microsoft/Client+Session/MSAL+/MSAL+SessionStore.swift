@@ -6,12 +6,13 @@
 //
 
 @preconcurrency import MSAL
+import JetEmail_Foundation
 
 // Session new remove
 @MainActor
 extension SessionStore {
     
-    func session(id: ID, forceRefresh: Bool) async throws -> Session {
+    func session(id: MicrosoftAccountID, forceRefresh: Bool) async throws -> Session {
         if forceRefresh {
             if let session = SessionStore.shared[id] { return session }
         }
@@ -33,7 +34,7 @@ extension SessionStore {
         return session
     }
     
-    func remove(id: ID) -> Session? {
+    func remove(id: MicrosoftAccountID) -> Session? {
         let session = self[id]
         self[id] = nil
         return session

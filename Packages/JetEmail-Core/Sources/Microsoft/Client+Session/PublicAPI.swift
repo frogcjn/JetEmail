@@ -7,6 +7,7 @@
 
 import Foundation
 @preconcurrency import MSAL
+import JetEmail_Foundation
 
 // MARK: - Sessions
 
@@ -41,15 +42,15 @@ public extension Session {
 // used for checking status
 
 @MainActor
-public extension ID {
+public extension MicrosoftAccountID {
     var storedSession: Session? { SessionStore.shared[self] }
 }
 
 // MARK: - Refresh Session
 // used for request, refresh if neccessary
 
-public extension ID {
-    var refreshSession: Session { get async throws {
+public extension MicrosoftAccountID {
+    var refreshMicrosoftSession: Session { get async throws {
         let session = try await SessionStore.shared.session(id: self, forceRefresh: false)
         return try await session.refresh
     } }
@@ -80,6 +81,6 @@ public extension Session {
 // MARK: - Remove Session
 
 @MainActor
-public extension ID {
+public extension MicrosoftAccountID {
     func removeSession() -> Session? { SessionStore.shared.remove(id: self) }
 }

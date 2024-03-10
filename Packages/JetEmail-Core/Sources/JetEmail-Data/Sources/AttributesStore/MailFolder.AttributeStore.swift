@@ -31,10 +31,9 @@ public extension MailFolder {
 @MainActor
 public extension MailFolder.ID {
     var loadingMessageState: MailFolder.LoadingMessageState {
-        get { AttributesStore.shared[self].loadingMesageState }
-        nonmutating set { 
-            AttributesStore.shared[self].loadingMesageState = newValue
-            print(loadingMessageState)
+        get { MailFolder.AttributesStore.shared[self].loadingMesageState }
+        nonmutating set {
+            MailFolder.AttributesStore.shared[self].loadingMesageState = newValue
         }
     }
 }

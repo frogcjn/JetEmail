@@ -9,6 +9,7 @@ import SwiftData  // for @Model
 import Foundation // for Date
 import Google
 import Microsoft
+import JetEmail_Foundation
 
 // @dynamicMemberLookup
 @Model
@@ -22,37 +23,37 @@ public final class Message {
     public private(set) var innerID       : String
     
     /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
-    @Attribute(.unique, originalName: "id")
-    public private(set) var rawID       : String
+    @Attribute(.unique)
+    public private(set) var uniqueID      : String
     
     public var id: ID {
-        @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _innerAccountID, _innerID, _rawID)
+        @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _innerAccountID, _innerID, _uniqueID)
         init(initialValue) {
-            let (platform, innerAccountID, innerID, rawID) = (initialValue.platform, initialValue.innerAccountID, initialValue.innerID, initialValue.rawValue)
+            let (platform, innerAccountID, innerID, resourceID) = (initialValue.platform, initialValue.accountID.innerID, initialValue.innerID, initialValue.uniqueID)
             _$backingData.setValue(forKey: \.platform,       to: platform         )
             _$backingData.setValue(forKey: \.rawPlatform,    to: platform.rawValue)
             _$backingData.setValue(forKey: \.innerAccountID, to: innerAccountID   )
             _$backingData.setValue(forKey: \.innerID,        to: innerID          )
-            _$backingData.setValue(forKey: \.rawID,          to: rawID            )
+            _$backingData.setValue(forKey: \.uniqueID,       to: resourceID       )
             
             _platform       = _SwiftDataNoType()
             _rawPlatform    = _SwiftDataNoType()
             _innerAccountID = _SwiftDataNoType()
             _innerID        = _SwiftDataNoType()
-            _rawID          = _SwiftDataNoType()
+            _uniqueID       = _SwiftDataNoType()
         }
         get {
             switch platform {
-            case .microsoft: .microsoft(.init(accountID: .init(innerAccountID), .init(innerID)))
-            case .google:       .google(.init(accountID: .init(innerAccountID), .init(innerID)))
+            case .microsoft: .init(platform: .microsoft, accountID: .init(platform: .microsoft, innerID: innerAccountID), innerID: innerID)
+            case .google:    .init(platform: .google   , accountID: .init(platform: .google   , innerID: innerAccountID), innerID: innerID)
             }
         }
         set {
             platform       = newValue.platform
             rawPlatform    = newValue.platform.rawValue
-            innerAccountID = newValue.innerAccountID
+            innerAccountID = newValue.accountID.innerID
             innerID        = newValue.innerID
-            rawID          = newValue.rawValue
+            uniqueID       = newValue.uniqueID
         }
     }
     
@@ -90,7 +91,7 @@ public final class Message {
     
     public init(modelID: ID, in mailFolder: MailFolder) {
         self.id          = modelID
-        self.mailFolder       = mailFolder
+        self.mailFolder  = mailFolder
     }
     
     public var deleteMark = false

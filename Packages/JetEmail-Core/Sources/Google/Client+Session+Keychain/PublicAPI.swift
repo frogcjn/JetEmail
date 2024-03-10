@@ -6,6 +6,7 @@
 //
 
 @preconcurrency import GTMAppAuth
+import JetEmail_Foundation
 
 // MARK: - Sessions
 
@@ -42,15 +43,15 @@ public extension Google.Session {
 // used for checking status
 
 @MainActor
-public extension ID {
+public extension GoogleAccountID {
     var storedSession: Session? { SessionStore.shared[self] }
 }
 
 // MARK: - Refresh Session 
 // used for request, refresh if neccessary
 
-public extension ID {
-    var refreshSession: Session? { get async throws {
+public extension GoogleAccountID {
+    var refreshGoogleSession: Session? { get async throws {
         try await SessionStore.shared.session(id: self, forceRefresh: false)?.refresh
     } }
 }
@@ -64,6 +65,6 @@ public extension Session {
 
 // MARK: - Remove Session
 @MainActor
-public extension ID {
+public extension GoogleAccountID {
     func removeSession() -> Session? { SessionStore.shared.remove(id: self) }
 }

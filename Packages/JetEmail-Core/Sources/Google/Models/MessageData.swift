@@ -7,18 +7,8 @@
 
 import JetEmail_Foundation
 import Foundation
-
-public struct GoogleMessage : IdentifiableValueType {
-    public let   id: GoogleMessageID
-    public let data: GoogleMessageData
-    
-    public init(_ session: Session, data: GoogleMessageData) {
-        self.id   = .init(accountID: session.accountID, innerID: data.id)
-        self.data = data
-    }
-}
-
-public struct GoogleMessageData : CodableValueType {
+/*
+public struct MessageData : IdentifiableValueType {
     public var                         id: String
     public var               internalDate: Int64?
     public var                    snippet: String?
@@ -51,3 +41,4 @@ public struct GoogleMessageData : CodableValueType {
         }
     }
 }
+*/

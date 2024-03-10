@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JetEmail_Foundation
 
     /*struct AuthError: LocalizedError {
         var message: String
@@ -17,9 +18,9 @@ public enum AuthError : LocalizedError {
     
     case sessionStoreAddFail
     case accountStoreExistedWhenAddNewToKeychain(Session)
-    case accountStoreNotExistedWhenAddDuplicatedFound(ID)
-    case accountStoreNotExistedWhenDelete(ID)
-    case accountStoreNotExistedWhenUpdate(ID)
+    case accountStoreNotExistedWhenAddDuplicatedFound(GoogleAccountID)
+    case accountStoreNotExistedWhenDelete(GoogleAccountID)
+    case accountStoreNotExistedWhenUpdate(GoogleAccountID)
 
     case authorizeNoMainWindow
     case message(String)

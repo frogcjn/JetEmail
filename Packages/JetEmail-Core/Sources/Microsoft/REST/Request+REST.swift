@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import JetEmail_Foundation
 
 
 
@@ -51,7 +52,7 @@ extension Session {
 // MARK: - Context: Account-MailFolders API
 
 public extension Session {
-    func getRootMailFolder() async throws -> MailFolder {
+    func getRootMailFolder() async throws -> MicrosoftMailFolder {
         try await getMailFolder(wellKnownFolderName: .msgFolderRoot)
     }
       
@@ -59,16 +60,16 @@ public extension Session {
         try await getItems("mailFolders")
     }*/
     
-    func getChildFolders(id: MailFolder.ID) async throws -> [MailFolder]  {
-        try await getValues("mailFolders", "\(id)", "childFolders")
+    func getChildFolders(id: MicrosoftMailFolderID) async throws -> [MicrosoftMailFolder]  {
+        try await getValues(MailFolder.self, paths: "mailFolders", "\(id.innerID)", "childFolders").map { $0.with(session: self) }
     }
     
-    fileprivate func getMailFolder(id: MailFolder.ID)  async throws -> MailFolder {
-        try await getValue("mailFolders", "\(id)")
+    fileprivate func getMailFolder(id: MicrosoftMailFolderID)  async throws -> MicrosoftMailFolder {
+        try await getValue(paths: "mailFolders", "\(id.innerID)")
     }
     
-    func getMailFolder(wellKnownFolderName: MailFolder.WellKnownFolderName) async throws -> MailFolder {
-        try await getValue("mailFolders", "\(wellKnownFolderName)")
+    func getMailFolder(wellKnownFolderName: MailFolder.WellKnownFolderName) async throws -> MicrosoftMailFolder {
+        try await getValue(MailFolder.self, paths: "mailFolders", "\(wellKnownFolderName)").with(session: self)
     }
     
     /*func createChildFolder(id: MSGraph.MailFolder.ID, displayName: String, isHidden: Bool? = nil) async throws -> MSGraph.MailFolder {
@@ -82,8 +83,8 @@ public extension Session {
 public extension Session {
     
     // https://learn.microsoft.com/en-us/graph/api/mailfolder-list-messages
-    func getMessages(id: MailFolder.ID) async throws -> [Message] {
-        try await getValues("mailFolders", "\(id)", "messages", queryItems: [
+    func getMessages(id: MicrosoftMailFolderID) async throws -> [Message] {
+        try await getValues(paths: "mailFolders", "\(id.innerID)", "messages", queryItems:
             // .orderBy(name: "receivedDateTime", .descending),
             .select(
                 "id",
@@ -100,12 +101,57 @@ public extension Session {
                 "bccRecipients",
                 "bodyPreview"
             )
-        ])
+        )
     }
     
-    // pageSize => $top: 1-1000, default: 10
-    func getMessagesStream(id: MailFolder.ID, pageSize: Int? = nil) async throws -> (count: Int, stream: AsyncThrowingStream<[Message], Error>)  {
-        try await getValuesStream("mailFolders", "\(id)", "messages", queryItems: [
+    // pageSize => $top: 1-1000, default: 1000
+    func getMessagesID(in mailFolderID: MicrosoftMailFolderID, pageSize: Int? = 1000) async throws -> [MicrosoftMessageID] {
+        let values = try await getValues(Message.self, paths: "mailFolders", "\(mailFolderID.innerID)", "messages", queryItems:
+            pageSize.map(URLQueryItem.top),
+            .select("id")
+        )
+        return values.map { .init(accountID: mailFolderID.accountID, innerID: $0.id) }
+    }
+    
+    
+    
+    // pageSize => $top: 1-1000, default: nil (10)
+    func getMessagesStream(id: MicrosoftMailFolderID, pageSize: Int? = nil, skip: Int? = nil) async throws -> (count: Int, stream: AsyncThrowingStream<[MicrosoftMessage], Error>)  {
+        let (count, stream) = try await getValuesStream(Microsoft.Message.self, paths: "mailFolders", "\(id.innerID)", "messages", queryItems:
+                // .orderBy(name: "receivedDateTime", .descending),
+                pageSize.map(URLQueryItem.top),
+                skip.flatMap(URLQueryItem.skip),
+                .select(
+                    "id",
+                    "subject",
+                    "createdDateTime",
+                    "lastModifiedDateTime",
+                    "receivedDateTime",
+                    "sentDateTime",
+                    "sender",
+                    "from",
+                    "toRecipients",
+                    "replyTo",
+                    "ccRecipients",
+                    "bccRecipients",
+                    "bodyPreview"
+                )
+            )
+        
+            return (count, AsyncThrowingStream<[MicrosoftMessage], Error> { continuation in Task {
+                do {
+                    for try await item in stream {
+                        continuation.yield(item.map { $0.with(session: self) })
+                    }
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            } })
+    }
+    
+    /*func getMessagesStream(ids: [Message.ID]) async throws -> (count: Int, stream: AsyncThrowingStream<[Message], Error>)  {
+        try await getValuesStream(paths: "mailFolders", "\(id)", "messages", queryItems:
             // .orderBy(name: "receivedDateTime", .descending),
             pageSize.map(URLQueryItem.top),
             .select(
@@ -123,8 +169,8 @@ public extension Session {
                 "bccRecipients",
                 "bodyPreview"
             )
-        ])
-    }
+        )
+    }*/
 }
 
 // MARK: - MSGraph: Messaage API
@@ -132,8 +178,8 @@ public extension Session {
 public extension Session {
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
-    func getMessage(microsoftID: Message.ID) async throws -> Message {
-        var message: Message = try await getValue("messages", "\(microsoftID)", queryItems: [
+    func getMessage(id: MicrosoftMessageID) async throws -> Message {
+        var message: Message = try await getValue(paths: "messages", "\(id.innerID)", queryItems:
             .select(
                 "id",
                 "subject",
@@ -151,15 +197,15 @@ public extension Session {
                 "body"
                 // "uniqueBody"
             )
-        ])
-        message.raw = try await getMultipartData("messages", "\(microsoftID)", "$value")
+        )
+        message.raw = try await getMultipartData(paths: "messages", "\(id.innerID)", "$value")
         return message
     }
     
     // https://learn.microsoft.com/en-us/graph/api/message-move?view=graph-rest-1.0
-    func moveMessage(id messageID: Message.ID, to toID: MailFolder.ID) async throws -> Message {
+    func moveMessage(id messageID: MicrosoftMessageID, to toID: MicrosoftMailFolderID) async throws -> Message {
         struct MessageMoveRequestBody : Encodable {
-            let destinationId: MailFolder.ID
+            let destinationId: MicrosoftMailFolderID
         }
         return try await postItem("messages", "\(messageID)", "move", body: MessageMoveRequestBody(destinationId: toID))
     }
@@ -190,21 +236,20 @@ fileprivate extension Session {
 
 fileprivate extension Session {
 
-    func getMultipartData(_ paths: String..., queryItems: [URLQueryItem] = []) async throws -> Data {
+    func getMultipartData(paths: String..., queryItems: [URLQueryItem] = []) async throws -> Data {
         var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
         if queryItems.count > 0 { url.append(queryItems: queryItems) }
         return try await getResponseDataForString(url: url)
     }
     
-    func getValue<Value: Decodable>(type: Value.Type = Value.self, _ paths: String..., queryItems: [URLQueryItem] = []) async throws -> Value {
+    func getValue<Value: Decodable>(_ type: Value.Type = Value.self, paths: String..., queryItems: URLQueryItem?...) async throws -> Value {
         var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
-        if queryItems.count > 0 { url.append(queryItems: queryItems) }
+        if let queryItems = queryItems.compactMap({ $0 }).nilIfEmpty { url.append(queryItems: queryItems) }
         return try await getResponse(url: url)
     }
     
-    func getValues<Value: Decodable>(type: Value.Type = Value.self,  _ paths: String..., queryItems: [URLQueryItem] = []) async throws -> [Value] {
+    func getValues<Value: Decodable>(_ type: Value.Type = Value.self,  paths: String..., queryItems: URLQueryItem?...) async throws -> [Value] {
         var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
-       
         // get count
         /*let count = try await {
             let url = urlPaths.appending(path: "$count")
@@ -215,8 +260,8 @@ fileprivate extension Session {
         
         // get paging results
         
-        if queryItems.count > 0 { url.append(queryItems: queryItems) }
-        
+        if let queryItems = queryItems.compactMap({ $0 }).nilIfEmpty { url.append(queryItems: queryItems) }
+
         var nextLink: URL? = url
         var values = [Value]()
         
@@ -230,25 +275,29 @@ fileprivate extension Session {
         return values
     }
     
-    func getValuesStream<Value: Decodable>(type: Value.Type = Value.self,  _ paths: String..., queryItems: [URLQueryItem?] = []) async throws -> (count: Int, stream: AsyncThrowingStream<[Value], Error>) {
-        let queryItems = queryItems.compactMap { $0 }.nilIfEmpty
-        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }
+    func getValuesStream<Value: Sendable & Decodable>(_ type: Value.Type = Value.self,  paths: String..., queryItems: URLQueryItem?...) async throws -> (count: Int, stream: AsyncThrowingStream<[Value], Error>) {
+        let queryItems = queryItems.compactMap({ $0 }) + [URLQueryItem.count()]
+        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems)
+        var firlstNextLink: URL?
         
         // get count
-        let count = try await {
-            let url = url.appending(path: "$count")
-            let string = try await getResponseString(url: url)
-            guard let count = Int(string) else { throw AuthError.collectionResponseNoCount }
-            return count
+        let (count, firstValues) = try await {
+            let response = try await getResponse(GraphCollectionResponse<Value>.self, url: url)
+            guard let count = response.count else { throw AuthError.collectionResponseNoCount }
+            let values = response.values
+            firlstNextLink = response.nextLink
+            return (count, values)
         }()
         
-        let stream: AsyncThrowingStream<[Value], Error> = .init { continuation in Task {
+        
+        let stream: AsyncThrowingStream<[Value], Error> = .init { continuation in Task { [firstValues, firlstNextLink] in
             do {
                 // get paging results
-                var url = url
-                if let queryItems { url.append(queryItems: queryItems) }
                 
-                var nextLink: URL? = url
+                continuation.yield(firstValues)
+                await Task.yield()
+
+                var nextLink: URL? = firlstNextLink
                 
                 while let url = nextLink {
                     let response = try await getResponse(GraphCollectionResponse<Value>.self, url: url)
@@ -376,6 +425,11 @@ extension URLQueryItem {
         return .init(name: "$top", value: "\(value)")
     }
     
+    static func skip(_ value: Int) -> URLQueryItem? {
+        if value <= 0 { return nil }
+        return .init(name: "$skip", value: "\(value)")
+    }
+    
     static func orderBy(name: String, _ order: URLQueryItemOrder? = nil) -> URLQueryItem {
         if let order {
             .init(name: "$orderby", value: "\(name) \(order)")
@@ -388,10 +442,13 @@ extension URLQueryItem {
         .init(name: "$select", value: names.joined(separator: ","))
     }
     
-
-    
     static func count(_ value: Bool = true) -> URLQueryItem {
         .init(name: "$count", value: "\(value)")
+    }
+    
+    static func filter(ids: [String]) -> URLQueryItem {
+        let ids = ids.map { "'\($0)'" }.joined(separator: ", ")
+        return  .init(name: "$filter", value: "id in (\(ids))")
     }
 }
 

@@ -9,13 +9,14 @@ import Microsoft
 
 public extension JetEmail_Data.Message {
 
-    var microsoft: Microsoft.Message? {
+    var microsoft: MicrosoftMessage? {
         get {
-            try? _graph?.decodeJSON(Microsoft.Message.self)
+            try? _graph?.decodeJSON(MicrosoftMessage.self)
         }
         set {
-            guard let microsoft = newValue else { return }
-            self.id      = microsoft.id.unifiedID(accountID: .init(id.innerAccountID))
+            guard let newValue else { return }
+            let microsoft = newValue.data
+            self.id           = newValue.id.general
             self.subject      = microsoft.subject?.nilIfEmpty
             
             self.createdDate  = microsoft.createdDateTime?     .date
@@ -66,13 +67,15 @@ extension Microsoft.EmailAddress {
 import Google
 
 public extension JetEmail_Data.Message {
-    var google: Google.Message? {
+    var google: GoogleMessage? {
         get {
-            try? _google?.decodeJSON(Google.Message.self)
+            try? _google?.decodeJSON(GoogleMessage.self)
         }
     }
     
-    func setGoogle(_ google: Google.Message) throws {
+    func setGoogle(_ google: GoogleMessage) throws {
+        // TODO: id
+        let google = google.data
         if let internalDate = google.internalDate       { self.date        = internalDate.milliSecondsTimeIntervalSince1970 }
         if let snippet      = google.snippet            { self.bodyPreview = snippet                                        }
         if let raw          = google.raw                { self.raw         = raw                                            }
@@ -123,7 +126,7 @@ fileprivate enum MIMEType: String {
     case multipartMixed       = "multipart/mixed"
 }
 
-fileprivate extension Google.Message.Part {
+fileprivate extension GoogleMessageData.Part {
     var messageBody: JetEmail_Data.Message.Body? { get throws {
         let html = try firstBodyContent(mimeType: .textHtml)
         let text = try firstBodyContent(mimeType: .textPlain)
@@ -137,17 +140,17 @@ fileprivate extension Google.Message.Part {
         else { nil }
     }
 
-    var nonFileParts: [Google.Message.Part] {
+    var nonFileParts: [GoogleMessageData.Part] {
         parts?.filter { $0.filename?.nilIfEmpty == nil } ?? []
     }
 }
 
-fileprivate extension [Google.Message.Part] {
-    func firstPart(mimeType: MIMEType) -> Google.Message.Part? {
+fileprivate extension [GoogleMessageData.Part] {
+    func firstPart(mimeType: MIMEType) -> GoogleMessageData.Part? {
         first(where: { $0.mimeType == mimeType.rawValue })
     }
 
-    var firstMultipartPart: Google.Message.Part? {
+    var firstMultipartPart: GoogleMessageData.Part? {
         first { ([.multipartMixed, .multipartAlternative] as [MIMEType]).map(\.rawValue).map(Optional.init).contains($0.mimeType) }
     }
 }

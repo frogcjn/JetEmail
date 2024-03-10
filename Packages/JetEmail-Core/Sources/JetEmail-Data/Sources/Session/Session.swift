@@ -16,8 +16,8 @@ public enum Session : Sendable {
 public extension Session {
     var accountID: JetEmail_Data.Account.ID {
         switch self {
-        case .microsoft(let microsoftSession): microsoftSession.unifiedAccountID
-        case .google   (let googleSession   ):    googleSession.unifiedAccountID
+        case .microsoft(let microsoftSession): microsoftSession.accountID.general
+        case .google   (let googleSession   ):    googleSession.accountID.general
         }
     }
 }

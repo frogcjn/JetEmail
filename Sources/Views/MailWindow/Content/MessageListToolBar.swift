@@ -17,7 +17,7 @@ struct LoadingMessageProgressBar : View {
         case .start:
             ProgressView(value: Float?.none) {
                 HStack {
-                    Text("Checking Mess in \(mailFolderName)…")
+                    Text("Checking Messages in \(mailFolderName)…")
                     Spacer()
                 }
             }
@@ -25,10 +25,10 @@ struct LoadingMessageProgressBar : View {
         case .loading(value: let value, total: let total):
             ProgressView(value: Float(value), total: Float(total)) {
                 HStack {
-                    Text("Downloading Mess in \(mailFolderName)…")
+                    Text("Downloading Messages in \(mailFolderName)…")
                     Spacer()
                     if value > 0 && total > 0 {
-                        Text("\(value)/\(total)")
+                        Text("\(value) of \(total)")
                             .foregroundStyle(.secondary)
                     }
                 }

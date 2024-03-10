@@ -8,11 +8,23 @@
 import JetEmail_Foundation
 import Foundation // for Data
 
+
+public struct MicrosoftMessage : CodableValueType {
+    public let   id: MicrosoftMessageID
+    public let data: Message
+    
+    public init(_ session: Session, data: Message) {
+        self.id   = .init(accountID: session.accountID, innerID: data.id)
+        self.data = data
+    }
+}
+
+
 // MARK: - Message
 // https://learn.microsoft.com/en-us/graph/api/resources/message
 
-public struct Message : IdentifiableValueType {
-    public var                         id: ID
+public struct Message : CodableValueType {
+    public var                         id: String
     
     // subject
     public var                    subject: String?
@@ -54,4 +66,10 @@ public struct Message : IdentifiableValueType {
     
     let                    webLink: String?*/
     
+}
+
+public extension Message {
+    func with(session: Session) -> MicrosoftMessage {
+        .init(session, data: self)
+    }
 }

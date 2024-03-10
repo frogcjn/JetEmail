@@ -93,26 +93,34 @@ fileprivate extension ModelContext {
     func _fetchAccountNotIn(_ accounts: [JetEmail_Data.Account], in platform: Platform) throws -> [JetEmail_Data.Account] {
         //let platform = platform.rawValue
         let rawPlatform = platform.rawValue
-        let ids = accounts.map(\.id.rawValue)
-        return try fetch(.init(predicate: #Predicate<JetEmail_Data.Account> { $0.rawPlatform == rawPlatform && !ids.contains($0.rawID) }))
+        let ids = accounts.map(\.id.uniqueID)
+        return try fetch(.init(predicate: #Predicate<JetEmail_Data.Account> { $0.rawPlatform == rawPlatform && !ids.contains($0.uniqueID) }))
     }
     
     func _fetchMailFolderNotIn(_ mailFolders: [JetEmail_Data.MailFolder], in parent: JetEmail_Data.MailFolder) throws -> [JetEmail_Data.MailFolder] {
-        let rawID = mailFolders.map(\.id.rawValue)
-        let parentRawID = parent.id.rawValue
-        return try fetch(.init(predicate: #Predicate<JetEmail_Data.MailFolder> { $0.parent?.rawID == parentRawID && !rawID.contains($0.rawID) }))
+        let rawID = mailFolders.map(\.id.uniqueID)
+        let parentRawID = parent.id.uniqueID
+        return try fetch(.init(predicate: #Predicate<JetEmail_Data.MailFolder> { $0.parent?.uniqueID == parentRawID && !rawID.contains($0.uniqueID) }))
     }
     
     func _fetchMessageNotIn(_ messages: [JetEmail_Data.Message], in mailFolder: JetEmail_Data.MailFolder) throws -> [JetEmail_Data.Message] {
-        let rawIDs = messages.map(\.id.rawValue)
-        let mailFolderRawID = mailFolder.id.rawValue
-        return try fetch(.init(predicate: #Predicate<JetEmail_Data.Message> { $0.mailFolder.rawID == mailFolderRawID && !rawIDs.contains($0.rawID) }))
+        let rawIDs = messages.map(\.id.uniqueID)
+        let mailFolderRawID = mailFolder.id.uniqueID
+        return try fetch(.init(predicate: #Predicate<JetEmail_Data.Message> { $0.mailFolder.uniqueID == mailFolderRawID && !rawIDs.contains($0.uniqueID) }))
     }
     
     func _fetchMessageNotIn(_ messages: [JetEmail_Data.Message.ID], in mailFolder: JetEmail_Data.MailFolder) throws -> [JetEmail_Data.Message] {
-        let rawIDs = messages.map(\.rawValue)
-        let mailFolderRawID = mailFolder.id.rawValue
-        return try fetch(.init(predicate: #Predicate<JetEmail_Data.Message> { $0.mailFolder.rawID == mailFolderRawID && !rawIDs.contains($0.rawID) }))
+        let rawIDs = messages.map(\.uniqueID)
+        let mailFolderRawID = mailFolder.id.uniqueID
+        return try fetch(.init(predicate: #Predicate<JetEmail_Data.Message> { $0.mailFolder.uniqueID == mailFolderRawID && !rawIDs.contains($0.uniqueID) }))
+    }
+    
+    func _fetchMessageRawIDs(in id: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message] {
+        let mailFolderRawID = id.uniqueID
+        var fetchDescriptor = FetchDescriptor<JetEmail_Data.Message>()
+        fetchDescriptor.predicate = #Predicate<JetEmail_Data.Message> { $0.mailFolder.uniqueID == mailFolderRawID }
+        fetchDescriptor.propertiesToFetch = [\.uniqueID]
+        return try fetch(fetchDescriptor)
     }
 
 
@@ -456,7 +464,7 @@ import JetEmail_Foundation
 import Foundation
 
 extension ModelContext {
-    func _insertMailFolder(google: Google.MailFolder, parent: JetEmail_Data.MailFolder, in account: JetEmail_Data.Account) throws -> JetEmail_Data.MailFolder {
+    func _insertMailFolder(google: GoogleMailFolder, parent: JetEmail_Data.MailFolder, in account: JetEmail_Data.Account) throws -> JetEmail_Data.MailFolder {
         // check account.root
         guard account.root != nil else { throw TreeError.accountDoNotHaveRootFolder }
         
@@ -480,7 +488,7 @@ extension ModelContext {
     
     // MARK: - ModelContext: Insert or Delete Atom Operations
         
-    func _insertMailFolder(microsoft: Microsoft.MailFolder, parent: JetEmail_Data.MailFolder, in account: JetEmail_Data.Account) throws -> JetEmail_Data.MailFolder {
+    func _insertMailFolder(microsoft: MicrosoftMailFolder, parent: JetEmail_Data.MailFolder, in account: JetEmail_Data.Account) throws -> JetEmail_Data.MailFolder {
         // check account.root
         guard account.root != nil else { throw TreeError.accountDoNotHaveRootFolder }
         
@@ -502,9 +510,9 @@ extension ModelContext {
         return folder
     }
         
-    func _insertMailFolder(microsoft: Microsoft.MailFolder, in account: JetEmail_Data.Account) throws -> JetEmail_Data.MailFolder {
-        let id = microsoft.id.unifiedID(accountID: account.microsoftID!)
-        
+    func _insertMailFolder(microsoft: MicrosoftMailFolder, in account: JetEmail_Data.Account) throws -> JetEmail_Data.MailFolder {
+        let id = microsoft.id.general
+
         // find existed
         if let model = try self[id] {
             
@@ -532,8 +540,8 @@ extension ModelContext {
          */
     }
     
-    func _insertMailFolder(google: Google.MailFolder, in account: JetEmail_Data.Account) throws -> JetEmail_Data.MailFolder {
-        let id = google.id.unifiedID(accountID: account.googleID!)
+    func _insertMailFolder(google: GoogleMailFolder, in account: JetEmail_Data.Account) throws -> JetEmail_Data.MailFolder {
+        let id = google.id.general
         
         // find existed
         if let model = try self[id] {
@@ -562,9 +570,9 @@ extension ModelContext {
          */
     }
     
-    func _insertMessage(google: Google.Message, in mailFolder: JetEmail_Data.MailFolder) throws -> JetEmail_Data.Message {
-        let id = google.id.unifiedID(accountID: mailFolder.account.googleID!)
-        
+    func _insertMessage(google: GoogleMessage, in mailFolder: JetEmail_Data.MailFolder) throws -> JetEmail_Data.Message {
+        let id = google.id.general
+
         // find existed
         if let model = try self[id] {
             
@@ -585,9 +593,9 @@ extension ModelContext {
     
     
     
-    func _insertMessage(microsoft: Microsoft.Message, in mailFolder: JetEmail_Data.MailFolder) throws -> JetEmail_Data.Message {
-        let id = microsoft.id.unifiedID(accountID: mailFolder.account.microsoftID!)
-        
+    func _insertMessage(microsoft: MicrosoftMessage, in mailFolder: JetEmail_Data.MailFolder) throws -> JetEmail_Data.Message {
+        let id = microsoft.id.general
+
         // find existed
         if let model = try self[id] {
             
@@ -610,7 +618,7 @@ extension ModelContext {
 
 
 extension ModelStore {
-    func setMessages(googles messages: [Google.Message], in mailFolderID: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message.PersistentID] {
+    func setMessages(googles messages: [GoogleMessage], in mailFolderID: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message.PersistentID] {
         checkBackgroundThread()
         let mailFolder = try self[mailFolderID]!
         do {
@@ -633,7 +641,7 @@ extension ModelStore {
         }
     }
     
-    func setMessage(google: Google.Message, to messageID: JetEmail_Data.Message.ID) throws -> JetEmail_Data.Message.PersistentID {
+    func setMessage(google: GoogleMessage, to messageID: JetEmail_Data.Message.ID) throws -> JetEmail_Data.Message.PersistentID {
         checkBackgroundThread()
         let message = try self[messageID]!
         do {
@@ -650,7 +658,7 @@ extension ModelStore {
     
     
     //let batchSize = 1
-    func setMessages(microsofts messages: [Microsoft.Message], in mailFolderID: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message.PersistentID] {
+    func setMessages(microsofts messages: [MicrosoftMessage], in mailFolderID: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message.PersistentID] {
         checkBackgroundThread()
         let mailFolder = try self[mailFolderID]!
         do {
@@ -673,7 +681,7 @@ extension ModelStore {
         }
     }
     
-    func setMessagesInsertPart(microsofts messages: [Microsoft.Message], in mailFolderID: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message.ID] {
+    func setMessagesInsertPart(microsofts messages: [MicrosoftMessage], in mailFolderID: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message.ID] {
         checkBackgroundThread()
         let mailFolder = try self[mailFolderID]!
         do {
@@ -682,6 +690,7 @@ extension ModelStore {
             for message in messages {
                 try inserts.append(modelContext._insertMessage(microsoft: message, in: mailFolder))
             }
+            try modelContext.save()
             return inserts.map(\.id)
         } catch {
             modelContext.rollback()
@@ -689,12 +698,14 @@ extension ModelStore {
         }
     }
     
-    func setMessagesDeletePart(inserts: [JetEmail_Data.Message.ID], in mailFolderID: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message.ID] {
+    
+    
+    func setMessagesDeletePart(keep: [JetEmail_Data.Message.ID], in mailFolderID: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message.ID] {
         checkBackgroundThread()
         let mailFolder = try self[mailFolderID]!
         do {
             // delete
-            let removings = try modelContext._fetchMessageNotIn(inserts, in: mailFolder)
+            let removings = try modelContext._fetchMessageNotIn(keep, in: mailFolder)
             try removings.forEach { _ = try modelContext._deleteMessage($0) }
             
             try modelContext.save()
@@ -705,13 +716,36 @@ extension ModelStore {
         }
     }
     
+    func messageRawIDs(in id: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message] {
+        checkBackgroundThread()
+        // let mailFolder = try self[id]!
+        return try modelContext._fetchMessageRawIDs(in: id)
+        // return mailFolder.messages.map(\.id)
+    }
+    
+    func setMessagesDeletePart(newMessageIDs: [JetEmail_Data.Message.ID], in id: JetEmail_Data.MailFolder.ID) async throws -> Int? {
+        checkBackgroundThread()
+        
+        let newMessageRawIDs = newMessageIDs.map(\.uniqueID)
+        let oldMessages = Set(try modelContext._fetchMessageRawIDs(in: id))
+        
+        let shouldDeleteMessages = oldMessages.filter { !newMessageRawIDs.contains($0.uniqueID) }
+        let shouldInsertFirstIndex = newMessageIDs.firstIndex { !oldMessages.map(\.uniqueID).contains($0.uniqueID) }
+        
+        
+        try modelContext.transaction {
+            try shouldDeleteMessages.forEach { _ = try modelContext._deleteMessage($0) }
+        }
+        return shouldInsertFirstIndex
+    }
+    
     
     
     
     // MARK: - Message -> Contents API
     
     
-    func setMessage(microsoft: Microsoft.Message, to messageID: JetEmail_Data.Message.ID) throws -> JetEmail_Data.Message.PersistentID {
+    func setMessage(microsoft: MicrosoftMessage, to messageID: JetEmail_Data.Message.ID) throws -> JetEmail_Data.Message.PersistentID {
         checkBackgroundThread()
         let message = try self[messageID]!
         do {
@@ -727,7 +761,7 @@ extension ModelStore {
 
 extension ModelStore {
 
-    func setRootMailFolder(microsoft: Microsoft.MailFolder, in accountID: JetEmail_Data.Account.ID) throws -> (persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID) {
+    func setRootMailFolder(microsoft: MicrosoftMailFolder, in accountID: JetEmail_Data.Account.ID) throws -> (persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID) {
         let account = try self[accountID]!
         do {
             if let root = account.root { return (root.id, root.id) }
@@ -741,7 +775,7 @@ extension ModelStore {
         }
     }
     
-    func setRootMailFolder(google: Google.MailFolder, in accountID: JetEmail_Data.Account.ID) throws -> (persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID) {
+    func setRootMailFolder(google: GoogleMailFolder, in accountID: JetEmail_Data.Account.ID) throws -> (persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID) {
         let account = try self[accountID]!
         do {
             if let root = account.root { return (root.id, root.id) }
@@ -756,7 +790,7 @@ extension ModelStore {
         }
     }
     
-    func setChildrenMailFolders(microsofts: [Microsoft.MailFolder], parent parentID: JetEmail_Data.MailFolder.ID, in accountID: JetEmail_Data.Account.ID) throws -> [(persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID)] {
+    func setChildrenMailFolders(microsofts: [MicrosoftMailFolder], parent parentID: JetEmail_Data.MailFolder.ID, in accountID: JetEmail_Data.Account.ID) throws -> [(persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID)] {
         let parent = try self[parentID]!
         let account = try self[accountID]!
         do {
@@ -778,7 +812,7 @@ extension ModelStore {
         }
     }
 
-    func setChildrenMailFolders(googles: [Google.MailFolder], parent parentID: JetEmail_Data.MailFolder.ID, in accountID: JetEmail_Data.Account.ID) throws -> [ JetEmail_Data.MailFolder.ID] {
+    func setChildrenMailFolders(googles: [GoogleMailFolder], parent parentID: JetEmail_Data.MailFolder.ID, in accountID: JetEmail_Data.Account.ID) throws -> [ JetEmail_Data.MailFolder.ID] {
         let parent = try self[parentID]!
         let account = try self[accountID]!
         do {

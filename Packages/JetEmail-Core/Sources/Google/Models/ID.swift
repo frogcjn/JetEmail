@@ -10,35 +10,41 @@ import GTMAppAuth
 
 // MARK: - Account.ID
 
-public typealias ID = Account.ID
 
-public extension Account {
-    typealias ID = ModelID<Account>
-}
+/*public extension Account {
+}*/
 
 // MARK: - MailFolder.ID
 
-public extension MailFolder {
-    typealias ID = ModelID<MailFolder>
-}
+/*public extension MailFolder {
+}*/
 
 // MARK: - Message.ID
 
-public extension Message {
-    typealias ID = ModelID<Message>
-}
+/*public extension GoogleMessageData {
+    func resourceID(accountID: GoogleAccountID) -> GoogleMessageID {
+        .init(platform: .google, accountID: accountID, innerID: id)
+    }
+}*/
+
+
+//public typealias GoogleAccountID    = AccountID
+//public typealias GoogleMessageID    = MessageID<AccountID>
+//public typealias GoogleMailFolderID = MailFolderID<AccountID>
+
+
 
 // MARK: - Account.ID <- GTM
 
 extension AuthSession {
-    var accountID: ID { get throws {
+    var accountID: GoogleAccountID { get throws {
         guard let innerID = userID else { throw AuthError.accountNoIDOrUsername }
-        return .init(innerID)
+        return .init(innerID: innerID)
     } }
     
-    var accountIDAndUsername: (id: ID, username: String) { get throws {
+    var accountIDAndUsername: (id: GoogleAccountID, username: String) { get throws {
         guard let innerID = userID, let username = userEmail else { throw AuthError.accountNoIDOrUsername }
-        return (.init(innerID), username)
+        return (.init(innerID: innerID), username)
     } }
 }
 

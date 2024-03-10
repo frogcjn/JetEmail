@@ -19,23 +19,24 @@ public extension Session {
         return service
     }
     
-    func getMailFolders() async throws -> [MailFolder] {
+    private func getMailFolders() async throws -> [GoogleMailFolder] {
         let response = try await service.execute(GTLRGmail_ListLabelsResponse.self) {
-            GTLRGmailQuery_UsersLabelsList.query(withUserId: accountID.rawValue)
+            GTLRGmailQuery_UsersLabelsList.query(withUserId: accountID.innerID)
         }
         guard let labels = response.labels else { throw GmailApiError.failedToParseData(response) }
-        return try labels
-            .map { try $0.mailFolder(accountID: accountID) }
+        return try labels.map { .init(self, data: try $0.mailFolderData) }
             //.sorted { "\($0.type?.rawValue)" > "\($1.type?.rawValue)" }
             //.filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
             //.sorted(using: KeyPathComparator(\MailFolder.name))
     }
     
-    func getMailFolderTree(rootElement: MailFolder) async throws -> Tree<MailFolder> {
+    func getMailFolderTree(rootElement: GoogleMailFolder) async throws -> Tree<GoogleMailFolder> {
         let tree = Tree(rootElement: rootElement)
-        let elements = try await getMailFolders()
         
-        var pathToNode = Dictionary(uniqueKeysWithValues: elements.compactMap { element in element.path.map { (path: $0, node: TreeNode(element: element)) } })
+        // copy name to path
+        let elements = try await getMailFolders().map { var item = $0; item.data.path = $0.data.name; return item }
+        var pathToNode = Dictionary(uniqueKeysWithValues: elements.compactMap { element in element.data.path.map { (path: $0, node: TreeNode(element: element)) } })
+        // var pathToNode = [String : TreeNode<GoogleMailFolder>]()
         pathToNode[""] = tree.root
             
         for (key: path, value: node) in pathToNode.sorted(using: KeyPathComparator(\.key)) {
@@ -51,33 +52,33 @@ public extension Session {
                     break
                 }
             }
-            (node.parent, node.element.name) = (parent, name)
+            (node.parent, node.element.data.name) = (parent, name)
             parent.children.append(node)
         }
         
         return tree
     }
     
-    func getMessages(id: MailFolder.ID) async throws -> [Message] {
-        let ids = try await getFolderMessageIDs(id: id).map(\.id)
-        return try await getMessages(ids: ids, format: .metadata)
+    func getMessages(id mailFolderID: GoogleMailFolderID) async throws -> [GoogleMessage] {
+        let ids: [GoogleMessageID] = try await getFolderMessageIDs(id: mailFolderID).map { .init(accountID: mailFolderID.accountID,  innerID: $0.id) }
+        return try await getMessages(ids: ids, format: .metadata).map { .init(self, data: $0) }
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list
-    private func getFolderMessageIDs(id: MailFolder.ID) async throws -> [Message.ListItem] {
+    private func getFolderMessageIDs(id: GoogleMailFolderID) async throws -> [GoogleMessageData] {
         let response = try await service.execute(GTLRGmail_ListMessagesResponse.self) {
-            let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: accountID.rawValue)
-            query.labelIds = [id.rawValue]
+            let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: accountID.innerID)
+            query.labelIds = [id.innerID]
             query.maxResults = 500
             return query
         }
         
         guard let messages = response.messages else { throw GmailApiError.failedToParseData(response) }
-        return try messages.map{ try $0.message(accountID: accountID).listItem }
+        return try messages.map{ try $0.messageData }
     }
 
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
-    private func getMessages(ids: [Message.ID], fields: String? = nil, format: GetMessageFormat) async throws -> [Message] {
+    private func getMessages(ids: [GoogleMessageID], fields: String? = nil, format: GetMessageFormat) async throws -> [GoogleMessageData] {
         if ids.count > 100 {
             let first100 = ids.prefix(100)
             let rest = ids.dropFirst(100)
@@ -86,8 +87,8 @@ public extension Session {
         }
         
         let batchResult = try await service.execute(GTLRBatchResult.self) {
-            GTLRBatchQuery(queries: ids.map { [accountID = accountID.rawValue] in
-                let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID, identifier: $0.rawValue)
+            GTLRBatchQuery(queries: ids.map { [accountID = accountID.innerID] in
+                let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID, identifier: $0.innerID)
                 query.fields = fields
                 query.format = format.rawValue
                 return query
@@ -95,20 +96,20 @@ public extension Session {
         }
         
         return if let messagesDict = batchResult.successes as? [String: GTLRGmail_Message] {
-            try messagesDict.values.map { try $0.message(accountID: accountID) }
+            try messagesDict.values.map { try $0.messageData }
         } else {
             fatalError()
         }
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
-    func getMessage(id: Message.ID, fields: String? = nil, format: GetMessageFormat) async throws -> Message {
-        try await service.execute(GTLRGmail_Message.self) {
-            let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID.rawValue, identifier: id.rawValue)
+    func getMessage(id: GoogleMessageID, fields: String? = nil, format: GetMessageFormat) async throws -> GoogleMessageData {
+         try await service.execute(GTLRGmail_Message.self) {
+            let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID.innerID, identifier: id.innerID)
             query.fields = fields
             query.format = format.rawValue
             return query
-        }.message(accountID: accountID)
+        }.messageData
         
         /*try await getItem("messages", "\(microsoftID)", queryItems: [
             .select(
@@ -132,18 +133,18 @@ public extension Session {
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/modify
-    func moveMessage(id messageID: Message.ID, from fromID: MailFolder.ID, to toID: MailFolder.ID) async throws -> Message {
+    func moveMessage(id messageID: GoogleMessageID, from fromID: GoogleMailFolderID, to toID: GoogleMailFolderID) async throws -> GoogleMessageData {
         try await service.execute(GTLRGmail_Message.self) {
-            let accountID = accountID.rawValue
-            let messageID = messageID.rawValue
+            let accountID = accountID.innerID
+            let messageID = messageID.innerID
             
             let request = GTLRGmail_ModifyMessageRequest()
-            request.removeLabelIds =  [fromID.rawValue]
-            request.addLabelIds = [toID.rawValue]
+            request.removeLabelIds =  [fromID.innerID]
+            request.addLabelIds = [toID.innerID]
             
             let query = GTLRGmailQuery_UsersMessagesModify.query(withObject: request, userId: accountID, identifier: messageID)
             return query
-        }.message(accountID: accountID)
+        }.messageData
     }
     
     enum GetMessageFormat: String, Sendable {

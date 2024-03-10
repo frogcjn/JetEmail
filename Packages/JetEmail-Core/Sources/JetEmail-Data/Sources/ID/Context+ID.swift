@@ -5,8 +5,8 @@
 //  Created by Cao, Jiannan on 3/7/24.
 //
 
-import Foundation
-import SwiftData
+import Foundation // for #Predicate
+import SwiftData // for ModelContext, ModelActor
 
 public extension ModelContext {
     /*subscript<Model: DataModel>(id: UnifiedID<Model>) -> Model? { get throws { // TODO: WWDC2024
@@ -15,18 +15,18 @@ public extension ModelContext {
     } }*/
     
     subscript(id: Account.ID) -> Account? { get throws {
-        let rawID = id.rawValue
-        return try fetch(.init(predicate: #Predicate<Account> { $0.rawID == rawID })).first
+        let uniqueID = id.uniqueID
+        return try fetch(.init(predicate: #Predicate<Account> { $0.uniqueID == uniqueID })).first
     } }
     
     subscript(id: MailFolder.ID) -> MailFolder? { get throws {
-        let rawID = id.rawValue
-        return try fetch(.init(predicate: #Predicate<MailFolder> { $0.rawID == rawID })).first
+        let uniqueID = id.uniqueID
+        return try fetch(.init(predicate: #Predicate<MailFolder> { $0.uniqueID == uniqueID })).first
     } }
     
     subscript(id: Message.ID) -> Message? { get throws {
-        let rawID = id.rawValue
-        return try fetch(.init(predicate: #Predicate<Message> { $0.rawID == rawID })).first
+        let uniqueID = id.uniqueID
+        return try fetch(.init(predicate: #Predicate<Message> { $0.uniqueID == uniqueID })).first
     } }
 }
 

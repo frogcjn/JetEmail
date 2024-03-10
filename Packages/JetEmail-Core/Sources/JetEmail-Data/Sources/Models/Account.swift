@@ -9,6 +9,7 @@ import Foundation
 import SwiftData // for @Model
 import Microsoft
 import Google
+import JetEmail_Foundation
 
 @Model
 public final class Account {
@@ -19,34 +20,35 @@ public final class Account {
     public private(set) var innerID     : String
     
     /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
-    @Attribute(.unique, originalName: "id")
-    public private(set) var rawID       : String
+    @Attribute(.unique)
+    public private(set) var uniqueID   : String
     
     public var id: ID {
-        @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _innerID, _rawID)
+        @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _innerID, _uniqueID)
         init(initialValue) {
-            let (platform, innerID, rawID) = (initialValue.platform, initialValue.innerID, initialValue.rawValue)
-            _$backingData.setValue(forKey: \.platform,    to: platform         )
-            _$backingData.setValue(forKey: \.rawPlatform, to: platform.rawValue)
-            _$backingData.setValue(forKey: \.innerID,     to: innerID          )
-            _$backingData.setValue(forKey: \.rawID,       to: rawID            )
+            let (platform, innerID, resourceID) = (initialValue.platform, initialValue.innerID, initialValue.uniqueID)
+            _$backingData.setValue(forKey: \.platform,       to: platform         )
+            _$backingData.setValue(forKey: \.rawPlatform,    to: platform.rawValue)
+            _$backingData.setValue(forKey: \.innerID,        to: innerID          )
+            _$backingData.setValue(forKey: \.uniqueID,       to: resourceID       )
             
-            _platform    = _SwiftDataNoType()
-            _rawPlatform = _SwiftDataNoType()
-            _innerID     = _SwiftDataNoType()
-            _rawID       = _SwiftDataNoType()
+            _platform       = _SwiftDataNoType()
+            _rawPlatform    = _SwiftDataNoType()
+            _innerID        = _SwiftDataNoType()
+            _uniqueID       = _SwiftDataNoType()
         }
         get {
-            switch platform {
-            case .microsoft: .microsoft(.init(innerID))
-            case .google:       .google(.init(innerID))
-            }
+            .init(platform: platform, innerID: innerID)
+            /*switch platform {
+            case .microsoft: MicrosoftAccountID(platform: .microsoft, innerID: innerID)
+            case .google:       GoogleAccountID(platform: .google,    innerID: innerID)
+            }*/
         }
         set {
-            platform      = newValue.platform
-            rawPlatform   = newValue.platform.rawValue
-            innerID       = newValue.innerID
-            rawID         = newValue.rawValue
+            platform       = newValue.platform
+            rawPlatform    = newValue.platform.rawValue
+            innerID        = newValue.innerID
+            uniqueID       = newValue.uniqueID
         }
     }
     
