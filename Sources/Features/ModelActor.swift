@@ -108,6 +108,12 @@ fileprivate extension ModelContext {
         let mailFolderRawID = mailFolder.id.rawValue
         return try fetch(.init(predicate: #Predicate<JetEmail_Data.Message> { $0.mailFolder.rawID == mailFolderRawID && !rawIDs.contains($0.rawID) }))
     }
+    
+    func _fetchMessageNotIn(_ messages: [JetEmail_Data.Message.ID], in mailFolder: JetEmail_Data.MailFolder) throws -> [JetEmail_Data.Message] {
+        let rawIDs = messages.map(\.rawValue)
+        let mailFolderRawID = mailFolder.id.rawValue
+        return try fetch(.init(predicate: #Predicate<JetEmail_Data.Message> { $0.mailFolder.rawID == mailFolderRawID && !rawIDs.contains($0.rawID) }))
+    }
 
 
 // MARK: - ModelContext: Delete
@@ -661,6 +667,38 @@ extension ModelStore {
             
             try modelContext.save()
             return inserts.map(\.persistentID)
+        } catch {
+            modelContext.rollback()
+            throw error
+        }
+    }
+    
+    func setMessagesInsertPart(microsofts messages: [Microsoft.Message], in mailFolderID: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message.ID] {
+        checkBackgroundThread()
+        let mailFolder = try self[mailFolderID]!
+        do {
+            // insert
+            var inserts: [JetEmail_Data.Message] = []
+            for message in messages {
+                try inserts.append(modelContext._insertMessage(microsoft: message, in: mailFolder))
+            }
+            return inserts.map(\.id)
+        } catch {
+            modelContext.rollback()
+            throw error
+        }
+    }
+    
+    func setMessagesDeletePart(inserts: [JetEmail_Data.Message.ID], in mailFolderID: JetEmail_Data.MailFolder.ID) throws -> [JetEmail_Data.Message.ID] {
+        checkBackgroundThread()
+        let mailFolder = try self[mailFolderID]!
+        do {
+            // delete
+            let removings = try modelContext._fetchMessageNotIn(inserts, in: mailFolder)
+            try removings.forEach { _ = try modelContext._deleteMessage($0) }
+            
+            try modelContext.save()
+            return removings.map(\.id)
         } catch {
             modelContext.rollback()
             throw error

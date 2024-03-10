@@ -58,16 +58,16 @@ public extension Session {
         return tree
     }
     
-    func getMessages(mailFolderID: MailFolder.ID) async throws -> [Message] {
-        let ids = try await getFolderMessageIDs(mailFolderID: mailFolderID).map(\.id)
+    func getMessages(id: MailFolder.ID) async throws -> [Message] {
+        let ids = try await getFolderMessageIDs(id: id).map(\.id)
         return try await getMessages(ids: ids, format: .metadata)
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list
-    private func getFolderMessageIDs(mailFolderID: MailFolder.ID) async throws -> [Message.ListItem] {
+    private func getFolderMessageIDs(id: MailFolder.ID) async throws -> [Message.ListItem] {
         let response = try await service.execute(GTLRGmail_ListMessagesResponse.self) {
             let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: accountID.rawValue)
-            query.labelIds = [mailFolderID.rawValue]
+            query.labelIds = [id.rawValue]
             query.maxResults = 500
             return query
         }

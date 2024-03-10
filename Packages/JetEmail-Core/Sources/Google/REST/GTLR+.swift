@@ -11,7 +11,6 @@ import JetEmail_Foundation
 extension GTLRGmail_Label {
     func mailFolder(accountID: Account.ID) throws -> MailFolder {
         guard let innerID = identifier else { throw GmailApiError.missingMessageInfo("identifier") }
-        print(identifier ?? "")
         return MailFolder(
             id                   : .init(innerID),
             path                 : name,

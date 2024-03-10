@@ -27,13 +27,24 @@ fileprivate struct _MessageList : View {
     
     var body: some View {
         List(selection: Bindable(window).selectedMessage) {
-            ForEach(messages) { item in
-                MessageCell()
-                    .itemModel(item)
-                    .tag(item)
+            Section {
+                ForEach(messages) { item in
+                    MessageCell()
+                        .itemModel(item)
+                        .tag(item)
+                }
+            } header: {
+                LoadingMessageProgressBar(mailFolderName: mailFolder.localizedName, loadingMessageState: mailFolder.id.loadingMessageState)
             }
+        }
+        .toolbar {
             MailFolderMessageListToolBar()
         }
+        
+        // Feature: Account - Load Messages
+        /*.refreshable {
+            await itemModel.loadMessages()
+        }*/
         /*Table(messages.map { TableDataRow(id: $0, item: $0) },  selection: Bindable(window).selectedMessage) {
             TableColumn("Content") { row in
                 MessageCell()

@@ -60,15 +60,15 @@ public extension Session {
     }*/
     
     func getChildFolders(id: MailFolder.ID) async throws -> [MailFolder]  {
-        try await getItems("mailFolders", "\(id)", "childFolders")
+        try await getValues("mailFolders", "\(id)", "childFolders")
     }
     
     fileprivate func getMailFolder(id: MailFolder.ID)  async throws -> MailFolder {
-        try await getItem("mailFolders", "\(id)")
+        try await getValue("mailFolders", "\(id)")
     }
     
     func getMailFolder(wellKnownFolderName: MailFolder.WellKnownFolderName) async throws -> MailFolder {
-        try await getItem("mailFolders", "\(wellKnownFolderName)")
+        try await getValue("mailFolders", "\(wellKnownFolderName)")
     }
     
     /*func createChildFolder(id: MSGraph.MailFolder.ID, displayName: String, isHidden: Bool? = nil) async throws -> MSGraph.MailFolder {
@@ -82,9 +82,32 @@ public extension Session {
 public extension Session {
     
     // https://learn.microsoft.com/en-us/graph/api/mailfolder-list-messages
-    func getMessages(microsoftID: MailFolder.ID) async throws -> [Message] {
-        try await getItems("mailFolders", "\(microsoftID)", "messages", queryItems: [
+    func getMessages(id: MailFolder.ID) async throws -> [Message] {
+        try await getValues("mailFolders", "\(id)", "messages", queryItems: [
             // .orderBy(name: "receivedDateTime", .descending),
+            .select(
+                "id",
+                "subject",
+                "createdDateTime",
+                "lastModifiedDateTime",
+                "receivedDateTime",
+                "sentDateTime",
+                "sender",
+                "from",
+                "toRecipients",
+                "replyTo",
+                "ccRecipients",
+                "bccRecipients",
+                "bodyPreview"
+            )
+        ])
+    }
+    
+    // pageSize => $top: 1-1000, default: 10
+    func getMessagesStream(id: MailFolder.ID, pageSize: Int? = nil) async throws -> (count: Int, stream: AsyncThrowingStream<[Message], Error>)  {
+        try await getValuesStream("mailFolders", "\(id)", "messages", queryItems: [
+            // .orderBy(name: "receivedDateTime", .descending),
+            pageSize.map(URLQueryItem.top),
             .select(
                 "id",
                 "subject",
@@ -110,7 +133,7 @@ public extension Session {
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
     func getMessage(microsoftID: Message.ID) async throws -> Message {
-        var message: Message = try await getItem("messages", "\(microsoftID)", queryItems: [
+        var message: Message = try await getValue("messages", "\(microsoftID)", queryItems: [
             .select(
                 "id",
                 "subject",
@@ -129,7 +152,7 @@ public extension Session {
                 // "uniqueBody"
             )
         ])
-        message.raw = try await getData("messages", "\(microsoftID)", "$value")
+        message.raw = try await getMultipartData("messages", "\(microsoftID)", "$value")
         return message
     }
     
@@ -145,45 +168,103 @@ public extension Session {
 // MARK: - MSGraph: Get, Post API
 
 fileprivate extension Session {
-
+    
     var endpointURL: URL { Client.endpointURL }
-
-    func getResponse<Value: Decodable>(url: URL, _ type: Value.Type = Value.self) async throws -> Value {
-        try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader)._response()
+    
+    func getResponseString(url: URL) async throws -> String {
+        try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader).responseString
     }
     
-    func getResponseData(url: URL) async throws -> Data {
-        try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader)._responseData
+    func getResponseDataForString(url: URL) async throws -> Data {
+        try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader).responseDataForString
+    }
+    
+    func getResponse<Value: Decodable>(_ type: Value.Type = Value.self, url: URL) async throws -> Value {
+        try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader).responseJSON(Value.self)
     }
     
     func postResponse<RequestBody: Encodable, Value: Decodable>(url: URL, body: RequestBody, _ type: Value.Type = Value.self) async throws -> Value {
-        try await URLRequest._post(url: url, body: body)._settingAuthorization(header: authorizationHeader)._response()
+        try await URLRequest._post(url: url, body: body)._settingAuthorization(header: authorizationHeader).responseJSON(Value.self)
     }
-        
-    func getItem<Value: Decodable>(_ paths: String..., queryItems: [URLQueryItem] = [], _ type: Value.Type = Value.self) async throws -> Value {
-        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems)
+}
+
+fileprivate extension Session {
+
+    func getMultipartData(_ paths: String..., queryItems: [URLQueryItem] = []) async throws -> Data {
+        var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
+        if queryItems.count > 0 { url.append(queryItems: queryItems) }
+        return try await getResponseDataForString(url: url)
+    }
+    
+    func getValue<Value: Decodable>(type: Value.Type = Value.self, _ paths: String..., queryItems: [URLQueryItem] = []) async throws -> Value {
+        var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
+        if queryItems.count > 0 { url.append(queryItems: queryItems) }
         return try await getResponse(url: url)
     }
     
-    func getData(_ paths: String..., queryItems: [URLQueryItem] = []) async throws -> Data {
-        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems)
-        return try await getResponseData(url: url)
+    func getValues<Value: Decodable>(type: Value.Type = Value.self,  _ paths: String..., queryItems: [URLQueryItem] = []) async throws -> [Value] {
+        var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
+       
+        // get count
+        /*let count = try await {
+            let url = urlPaths.appending(path: "$count")
+            let string = try await getResponseString(url: url)
+            guard let count = Int(string) else { throw AuthError.collectionResponseNoCount }
+            return count
+        }()*/
+        
+        // get paging results
+        
+        if queryItems.count > 0 { url.append(queryItems: queryItems) }
+        
+        var nextLink: URL? = url
+        var values = [Value]()
+        
+        
+        while let url = nextLink {
+            let response = try await getResponse(GraphCollectionResponse<Value>.self, url: url)
+            values.append(contentsOf: response.values)
+            nextLink = response.nextLink
+        }
+
+        return values
     }
     
-    func getItems<Value: Decodable>(type: Value.Type = Value.self,  _ paths: String..., queryItems: [URLQueryItem] = []) async throws -> [Value] {
-        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems).appending(queryItems: [.count()])
-        let countResponse: GraphCollectionResponse<Value> = try await getResponse(url: url)
+    func getValuesStream<Value: Decodable>(type: Value.Type = Value.self,  _ paths: String..., queryItems: [URLQueryItem?] = []) async throws -> (count: Int, stream: AsyncThrowingStream<[Value], Error>) {
+        let queryItems = queryItems.compactMap { $0 }.nilIfEmpty
+        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }
         
-        guard let count = countResponse.count else { throw AuthError.collectionResponseNoCount }
+        // get count
+        let count = try await {
+            let url = url.appending(path: "$count")
+            let string = try await getResponseString(url: url)
+            guard let count = Int(string) else { throw AuthError.collectionResponseNoCount }
+            return count
+        }()
         
-        let items = countResponse.value
-        if count == items.count {
-            return items
-        } else {
-            let url = url.appending(queryItems: [.top(count)])
-            return try await getResponse(url: url, GraphCollectionResponse<Value>.self).value
-        }
+        let stream: AsyncThrowingStream<[Value], Error> = .init { continuation in Task {
+            do {
+                // get paging results
+                var url = url
+                if let queryItems { url.append(queryItems: queryItems) }
+                
+                var nextLink: URL? = url
+                
+                while let url = nextLink {
+                    let response = try await getResponse(GraphCollectionResponse<Value>.self, url: url)
+                    continuation.yield(response.values)
+                    await Task.yield()
+                    nextLink = response.nextLink
+                }
+                
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
+            }
+        } }
+        return (count, stream)
     }
+    
     
     func postItem<RequestBody: Encodable, Value: Decodable>(type: Value.Type = Value.self, _ paths: String..., body: RequestBody) async throws -> Value {
         let url = paths.reduce(endpointURL) { $0.appending(path: $1) }
@@ -201,7 +282,7 @@ struct MailFoldersCreateRequestBody : Codable {
 
 
 fileprivate struct GraphCollectionResponse<Value : Decodable> : Decodable {
-    let value: [Value]
+    let values: [Value]
 
     let  context: URL?
     let    count: Int?
@@ -211,7 +292,7 @@ fileprivate struct GraphCollectionResponse<Value : Decodable> : Decodable {
         case  context = "@odata.context"
         case    count = "@odata.count"
         case nextLink = "@odata.nextLink"
-        case    value
+        case   values = "value"
     }
 }
 
@@ -234,7 +315,11 @@ fileprivate extension URLRequest {
         URLRequest(url: url)
     }
     
-    private static func _post(url: URL, bodyData: Data) -> Self {
+    static func _post<T: Encodable>(url: URL, body: T) throws -> URLRequest {
+        __post(url: url, bodyData: try body.jsonData)
+    }
+    
+    private static func __post(url: URL, bodyData: Data) -> Self {
         var request = URLRequest(url: url)
         
         // Set the Authorization header for the request. We use Bearer tokens, so we specify Bearer + the token we got from the result
@@ -245,28 +330,31 @@ fileprivate extension URLRequest {
         return request
     }
     
-    static func _post<T: Encodable>(url: URL, body: T) throws -> URLRequest {
-        _post(url: url, bodyData: try body.jsonData)
-    }
-    
     func _settingAuthorization(header: String) -> Self {
         var request = self
         request.setValue(header, forHTTPHeaderField: "Authorization")
         return request
     }
     
-    func _response<Value: Decodable>(_ type: Value.Type = Value.self) async throws -> Value {
-        let (data, _) = try await URLSession.shared.data(for: self)
-        return try handleGraphResponse(Value.self, from: data)
-    }
-    
-    var _responseData: Data { get async throws {
-        let (data, _) = try await URLSession.shared.data(for: self)
+    private var _responseDataForJSON: Data { get async throws {
+        let (data, response) = try await URLSession.shared.data(for: self)
+        assert(response.mimeType == "application/json")
         return data
     } }
     
-    func handleGraphResponse<T: Decodable>(_ type: T.Type, from data: Data) throws -> T {
-        let result = Result{ try data.decodeJSON(type) }
+    var responseDataForString: Data { get async throws {
+        let (data, response) = try await URLSession.shared.data(for: self)
+        assert(response.mimeType == "text/plain")
+        return data
+    } }
+
+    var responseString: String { get async throws {
+        try await responseDataForString.string
+    } }
+
+    func responseJSON<T: Decodable>(_ type: T.Type) async throws -> T {
+        let data = try await _responseDataForJSON
+        let result = Result { try data.decodeJSON(type) }
         switch result {
         case .failure(let failure):
             if let error = try? data.decodeJSON(GraphErrorResponse.self).error {
@@ -278,6 +366,8 @@ fileprivate extension URLRequest {
             return success
         }
     }
+    
+
 }
 
 extension URLQueryItem {
