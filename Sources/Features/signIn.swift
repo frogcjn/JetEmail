@@ -31,8 +31,8 @@ extension AppModel {
     // @BackgroundActor
     private func _signIn(platform: Platform) async throws {
         switch platform {
-        case .microsoft: _ = try await ModelStore.instance.addSession(.microsoft(Microsoft.Client.shared.signIn()))
-        case .google:    _ = try await ModelStore.instance.addSession(   .google(   Google.Client.shared.signIn()))
+        case .microsoft: _ = try await ModelStore.shared.addSession(.microsoft(Microsoft.Client.shared.signIn()))
+        case .google:    _ = try await ModelStore.shared.addSession(   .google(   Google.Client.shared.signIn()))
         }
     }
 }

@@ -8,6 +8,7 @@
 import Observation
 
 //@dynamicMemberLookup
+@MainActor
 @Observable
 class CombineContext<Context, Item> {
     

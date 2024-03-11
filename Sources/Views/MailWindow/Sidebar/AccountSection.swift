@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData // for @Query
 import JetEmail_Data
+import JetEmail_Foundation
 
 struct AccountSection: View {
     @Environment(AppItemModel<Account>.self)
@@ -17,37 +18,33 @@ struct AccountSection: View {
     private var account
     
     @State
-    private var rootChildren: [MailFolder] = []
+    var root: MailFolder?
     
     var body: some View {
         Section {
-            // _AcciontSection(rootChildren: (rootChildren.filter { !$0.deleteMark })/*.sorted(using: KeyPathComparator(\MailFolder.name))*/)
-            OutlineGroup(rootChildren.filter { !$0.deleteMark }, children: \.children.nilIfEmpty) { item in
-                MailFolderCell()
-                    .itemModel(item)
-                    .tag(item) // selection tag
+            if let rootID = account.root?.uniqueID {
+                _AcciontSection(_rootChildren: Query(filter: #Predicate<MailFolder> { !$0.deleteMark &&  $0.parent?.uniqueID == rootID }))
             }
         } header: {
             // Feature: Account - Load Mail Folders
             AccountSectionHeader { await itemModel.loadMailFolders() }
-        }.onChange(of: account.root, initial: true) { oldValue, newValue in
-            rootChildren = newValue?.children ?? []
         }
     }
 }
 
 
-/*fileprivate struct _AcciontSection: View {
-    
+fileprivate struct _AcciontSection: View {
+
+    @Query  /*sort: \Account.orderIndex*/
     var rootChildren: [MailFolder]
     
     var body: some View {
-        OutlineGroup(rootChildren, children: \.children.nilIfEmpty) { item in
+        OutlineGroup(rootChildren.sortedInParentMailFolderUsingIndex, children: \.children.nilIfEmpty) { item in
             MailFolderCell()
                 .itemModel(item)
                 .tag(item) // selection tag
         }
     }
-}*/
+}
 
 

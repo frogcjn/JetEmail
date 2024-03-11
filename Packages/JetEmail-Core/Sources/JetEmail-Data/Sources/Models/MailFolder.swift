@@ -56,7 +56,7 @@ public final class MailFolder {
     public var name: String
     
     /// MailFolder.account <<-> Account.mailFolders
-    @Relationship(deleteRule: .nullify)
+    //@Relationship(deleteRule: .nullify)
     public var account: Account
     
     //@Relationship(deleteRule: .nullify)
@@ -65,13 +65,14 @@ public final class MailFolder {
     /// MailFolder.parent <<-> MailFOlder.children
     @Relationship(deleteRule: .nullify)
     public var parent: MailFolder?
+    public var  _childIndex: Int? // cached child index in parent folder
     
     /// MailFolder.children <->> MailFolder.parent
     @Relationship(deleteRule: .nullify, originalName: "children", inverse: \MailFolder.parent)
     private var _children: [MailFolder] = [] // Should be Ordered Relationship
-    
-    @Transient
-    public var children: [MailFolder] {_children.sidebarSorted() } // TODO: After Swift 6.0
+
+    //@Transient
+    public var children: [MailFolder] { _children.sortedInParentMailFolderUsingIndex } // TODO: After Swift 6.0
     
     /// MailFolder.messages <->> Message.mailFolder
     @Relationship(deleteRule: .cascade, originalName: "messages", inverse: \Message.mailFolder)
@@ -80,10 +81,15 @@ public final class MailFolder {
     @Transient
     public var messages: [Message] { _messages.sorted(using: KeyPathComparator(\.date, order: .reverse))}
     
-    public init(modelID: ID, name: String, in account: Account) {
-        self.id  = modelID
-        self.name     = name
-        self.account  = account
+    
+    public init(modelID: ID, name: String, info: MailFolderInfo, in account: Account) {
+        self.id      = modelID
+        self.name    = name
+        self._isSystemFolder = info._isSystemFolder
+        self._systemOrder = info._systemOrder
+        self._nameLocalizedKey = info._nameLocalizedKey
+        self._systemImage = info._systemImage
+        self.account = account
     }
     
     public var _graph: String?
@@ -96,6 +102,46 @@ public final class MailFolder {
             }
         }
     }
+    
+    
+    public let   _isSystemFolder: Bool    // cached whether it is a system folder
+    public let      _systemOrder: Int?    // cached sytem older
+    public let _nameLocalizedKey: String? // cached localized name
+    public let      _systemImage: String? // cached system image
+    
+    // parent - children relationship
 }
 
 
+
+public struct MailFolderInfo : Codable {
+
+    public let   _isSystemFolder: Bool
+    public let      _systemOrder: Int?
+    public let _nameLocalizedKey: String?
+    public let      _systemImage: String?
+    
+    init(isSystemFolder: Bool, systemOrder: Int?, nameLocalizedKey: String?, systemImage: String?) {
+        self._isSystemFolder   = isSystemFolder
+        self._systemOrder      = systemOrder
+        self._nameLocalizedKey = nameLocalizedKey
+        self._systemImage      = systemImage
+    }
+}
+
+public extension MailFolder {
+    
+    @Transient
+    var localizedName : String {
+        if let key = _nameLocalizedKey {
+            return String(localized: String.LocalizationValue(key), bundle: .module)
+        } else {
+            return name
+        }
+    }
+    
+    @Transient
+    var systemImage : String {
+        _systemImage ?? "folder"
+    }
+}

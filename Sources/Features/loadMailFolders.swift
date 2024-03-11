@@ -7,6 +7,7 @@
 
 import JetEmail_Foundation
 import JetEmail_Data
+import Microsoft
 
 // MARK: Feature: Account - Load Mail Folder
 
@@ -38,12 +39,24 @@ extension AppItemModel<Account> {
         
         do {
             let account = item
-            guard let session = try await account.id.refreshSession else { return }
-            try await session.loadMailFolders(persistentID: account.id, modelID: account.id)
-            account.root = account.root
+            let accountID = account.id
+            guard let session = try await accountID.refreshSession else { return }
+            
+            // SessionActor
+            let platform = try await session.getRootMailFolder(id: accountID)
+            
+            // ModelActor
+            let mailFolderID = try await ModelStore.shared.insertMailFolder(platform: platform, in: accountID)
+            
+            // MainActor
+            _ = try accountID.setRootMailFolder(id: mailFolderID)
+            
+            
+            try await session.loadMailFolders(id: accountID, rootID: mailFolderID)
+            account.loadedMailFolder = true
         } catch {
             logger.error("\(error)")
         }
     }
+    
 }
-

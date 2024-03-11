@@ -42,12 +42,12 @@ fileprivate func _loadBody(messageID: Message.ID, session: JetEmail_Data.Session
         let microsoftMessageID = messageID.microsoft!
         
         async let microsoftMessage = session.getMessage(id: microsoftMessageID) // load from MSAL
-        _ = try await ModelStore.instance.setMessage(microsoft: .init(session, data: microsoftMessage), to: messageID) // MSAL to SwiftData
+        _ = try await ModelStore.shared.setMessage(microsoft: microsoftMessage, to: messageID) // MSAL to SwiftData
         
     case .google(let session):
         let googleMessageID = messageID.google!
         var googleMessage = try await session.getMessage(id: googleMessageID, format: .full)
         googleMessage.raw = try await session.getMessage(id: googleMessageID, format: .raw).raw
-        _ = try await ModelStore.instance.setMessage(google: .init(session, data: googleMessage), to: messageID) // MSAL to SwiftData
+        _ = try await ModelStore.shared.setMessage(google: .init(session, data: googleMessage), to: messageID) // MSAL to SwiftData
     }
 }

@@ -387,3 +387,33 @@ extension Google.Message.Part {
     }*/
 }
 */
+/*
+// MARK: - Account.ID
+
+// public typealias ID = MicrosoftAccountID
+
+public extension MicrosoftAccount {
+    //typealias ID = MicrosoftAccountID
+}
+
+// MARK: - MailFolder.ID
+
+public extension Inner {
+    //typealias ID = MicrosoftMailFolderID
+}
+
+// MARK: - Message.ID
+
+//public typealias MicrosoftAccountID    = AccountID
+//public typealias MicrosoftMessageID    = MessageID<AccountID>
+//public typealias MicrosoftMailFolderID = MailFolderID<AccountID>
+
+
+/*public extension Message {
+    //typealias ID = StringID<Message>
+    func resourceID(accountID: MicrosoftAccountID) -> MicrosoftMessageID {
+        .init(platform: .microsoft, accountID: accountID, innerID: id)
+    }
+}*/
+
+*/

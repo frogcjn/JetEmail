@@ -53,7 +53,9 @@ extension Session {
 
 public extension Session {
     func getRootMailFolder() async throws -> MicrosoftMailFolder {
-        try await getMailFolder(wellKnownFolderName: .msgFolderRoot)
+        var mailFolder = try await getMailFolder(wellKnownFolderName: .msgFolderRoot)
+        mailFolder.wellKnownFolderName = .msgFolderRoot
+        return mailFolder
     }
       
     /*func getMailFolders() async throws -> [MSGraph.MailFolder] {
@@ -61,15 +63,15 @@ public extension Session {
     }*/
     
     func getChildFolders(id: MicrosoftMailFolderID) async throws -> [MicrosoftMailFolder]  {
-        try await getValues(MailFolder.self, paths: "mailFolders", "\(id.innerID)", "childFolders").map { $0.with(session: self) }
+        try await getValues(MicrosoftMailFolder.Inner.self, paths: "mailFolders", "\(id.innerID)", "childFolders").map { $0.outer(self) }
     }
     
     fileprivate func getMailFolder(id: MicrosoftMailFolderID)  async throws -> MicrosoftMailFolder {
         try await getValue(paths: "mailFolders", "\(id.innerID)")
     }
     
-    func getMailFolder(wellKnownFolderName: MailFolder.WellKnownFolderName) async throws -> MicrosoftMailFolder {
-        try await getValue(MailFolder.self, paths: "mailFolders", "\(wellKnownFolderName)").with(session: self)
+    func getMailFolder(wellKnownFolderName: MicrosoftMailFolder.WellKnownFolderName) async throws -> MicrosoftMailFolder {
+        try await getValue(MicrosoftMailFolder.Inner.self, paths: "mailFolders", "\(wellKnownFolderName)").outer(self)
     }
     
     /*func createChildFolder(id: MSGraph.MailFolder.ID, displayName: String, isHidden: Bool? = nil) async throws -> MSGraph.MailFolder {
@@ -80,11 +82,26 @@ public extension Session {
 
 // MARK: - MSGraph: MailFolder-Messaages API
 
+public extension AsyncThrowingStream {
+    
+    func map<T>(_ transform: @Sendable @escaping (Element) throws -> T) rethrows -> AsyncThrowingStream<T, Error> where Element : Sendable {
+        return  AsyncThrowingStream<T, Error> { continuation in Task {
+            do {
+                for try await element in self {
+                    try continuation.yield(transform(element))
+                }
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
+            }
+        } }
+    }
+}
 public extension Session {
     
     // https://learn.microsoft.com/en-us/graph/api/mailfolder-list-messages
-    func getMessages(id: MicrosoftMailFolderID) async throws -> [Message] {
-        try await getValues(paths: "mailFolders", "\(id.innerID)", "messages", queryItems:
+    func getMessages(id: MicrosoftMailFolderID) async throws -> [MicrosoftMessage] {
+        try await getValues(MicrosoftMessage.Inner.self, paths: "mailFolders", "\(id.innerID)", "messages", queryItems:
             // .orderBy(name: "receivedDateTime", .descending),
             .select(
                 "id",
@@ -101,23 +118,23 @@ public extension Session {
                 "bccRecipients",
                 "bodyPreview"
             )
-        )
+        ).map { $0.outer(self) }
     }
     
     // pageSize => $top: 1-1000, default: 1000
     func getMessagesID(in mailFolderID: MicrosoftMailFolderID, pageSize: Int? = 1000) async throws -> [MicrosoftMessageID] {
-        let values = try await getValues(Message.self, paths: "mailFolders", "\(mailFolderID.innerID)", "messages", queryItems:
+        let values = try await getValues(MicrosoftMessage.Inner.self, paths: "mailFolders", "\(mailFolderID.innerID)", "messages", queryItems:
             pageSize.map(URLQueryItem.top),
             .select("id")
         )
-        return values.map { .init(accountID: mailFolderID.accountID, innerID: $0.id) }
+        return values.map { $0.outer(self).id }
     }
     
     
     
     // pageSize => $top: 1-1000, default: nil (10)
     func getMessagesStream(id: MicrosoftMailFolderID, pageSize: Int? = nil, skip: Int? = nil) async throws -> (count: Int, stream: AsyncThrowingStream<[MicrosoftMessage], Error>)  {
-        let (count, stream) = try await getValuesStream(Microsoft.Message.self, paths: "mailFolders", "\(id.innerID)", "messages", queryItems:
+        let (count, stream) = try await getValuesStream(MicrosoftMessage.Inner.self, paths: "mailFolders", "\(id.innerID)", "messages", queryItems:
                 // .orderBy(name: "receivedDateTime", .descending),
                 pageSize.map(URLQueryItem.top),
                 skip.flatMap(URLQueryItem.skip),
@@ -138,17 +155,10 @@ public extension Session {
                 )
             )
         
-            return (count, AsyncThrowingStream<[MicrosoftMessage], Error> { continuation in Task {
-                do {
-                    for try await item in stream {
-                        continuation.yield(item.map { $0.with(session: self) })
-                    }
-                    continuation.finish()
-                } catch {
-                    continuation.finish(throwing: error)
-                }
-            } })
+        return (count, stream.map { $0.map { $0.outer(self) } })
     }
+    
+    
     
     /*func getMessagesStream(ids: [Message.ID]) async throws -> (count: Int, stream: AsyncThrowingStream<[Message], Error>)  {
         try await getValuesStream(paths: "mailFolders", "\(id)", "messages", queryItems:
@@ -178,8 +188,8 @@ public extension Session {
 public extension Session {
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
-    func getMessage(id: MicrosoftMessageID) async throws -> Message {
-        var message: Message = try await getValue(paths: "messages", "\(id.innerID)", queryItems:
+    func getMessage(id: MicrosoftMessageID) async throws -> MicrosoftMessage {
+        var message: MicrosoftMessage.Inner = try await getValue(paths: "messages", "\(id.innerID)", queryItems:
             .select(
                 "id",
                 "subject",
@@ -199,11 +209,11 @@ public extension Session {
             )
         )
         message.raw = try await getMultipartData(paths: "messages", "\(id.innerID)", "$value")
-        return message
+        return message.outer(self)
     }
     
     // https://learn.microsoft.com/en-us/graph/api/message-move?view=graph-rest-1.0
-    func moveMessage(id messageID: MicrosoftMessageID, to toID: MicrosoftMailFolderID) async throws -> Message {
+    func moveMessage(id messageID: MicrosoftMessageID, to toID: MicrosoftMailFolderID) async throws -> MicrosoftMessage {
         struct MessageMoveRequestBody : Encodable {
             let destinationId: MicrosoftMailFolderID
         }
@@ -387,7 +397,9 @@ fileprivate extension URLRequest {
     
     private var _responseDataForJSON: Data { get async throws {
         let (data, response) = try await URLSession.shared.data(for: self)
-        assert(response.mimeType == "application/json")
+        if !data.isEmpty {
+            assert(response.mimeType == "application/json")
+        }
         return data
     } }
     

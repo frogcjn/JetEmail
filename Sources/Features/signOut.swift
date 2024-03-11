@@ -36,5 +36,5 @@ extension AppItemModel<Account> {
 fileprivate func _signOut(modelID: Account.ID, persistentID: Account.ID) async throws {
     checkBackgroundThread()
     _ = try await modelID.storedSession?.signOut()
-    _ = try await ModelStore.instance.deleteAccount(id: persistentID)
+    _ = try await ModelStore.shared.deleteAccount(id: persistentID)
 }

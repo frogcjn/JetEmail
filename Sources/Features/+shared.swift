@@ -31,11 +31,21 @@ extension SettingsModel {
 
 import SwiftData
 
+@ModelStoreActor
 extension ModelStore {
-    public static var instance: ModelStore {
-        get async {
-            await ModelStore(modelContainer: .shared)
-        }
-    }
+    
+    static var _shared: ModelStore?
+    
+    public static var shared: ModelStore { get async {
+        if let _shared { return _shared }
+        let modelStore = await ModelStore(modelContainer: .shared)
+        _shared = modelStore
+        return modelStore
+    } }
+}
+
+@globalActor
+actor ModelStoreActor : Actor {
+    static let shared = ModelStoreActor()
 }
 

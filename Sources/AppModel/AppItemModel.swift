@@ -8,6 +8,7 @@
 import JetEmail_Data
 import SwiftData
 import os
+import JetEmail_Foundation
 
 typealias AppItemModel<Item: UnifiedModel> = CombineContext<AppModel, Item>
 
@@ -43,3 +44,23 @@ extension AppModel {
         return AppItemModel(context: self, item: item)
     }
 }
+
+extension AppModel {
+    var mainContext: ModelContext {
+        ModelContainer.shared.mainContext
+    }
+}
+
+extension AccountID {
+    @MainActor
+    var mainContext: ModelContext {
+        ModelContainer.shared.mainContext
+    }
+}
+
+extension AppItemModel where Context == AppModel {
+    var mainContext: ModelContext {
+        context.mainContext
+    }
+}
+

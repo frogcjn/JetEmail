@@ -9,7 +9,7 @@ import JetEmail_Foundation
 
 // MARK: - WellKnownFolderName
 // Well-known folder names https://learn.microsoft.com/en-us/graph/api/resources/mailfolder?view=graph-rest-1.0#methods
-public extension MailFolder {
+public extension MicrosoftMailFolder {
     
     enum WellKnownFolderName : String, CaseIterable, CodableValueType {
         case msgFolderRoot             = "msgfolderroot"

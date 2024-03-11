@@ -11,7 +11,7 @@ public enum Platform : String, CodableValueType {
     case google
 }
 
-public enum PlatformCase<Microsoft, Google> {
+public enum PlatformCase<Microsoft : CodableValueType, Google : CodableValueType> : CodableValueType {
     case microsoft(Microsoft)
     case google(Google)
 }

@@ -488,6 +488,12 @@ extension ModelContext {
     
     // MARK: - ModelContext: Insert or Delete Atom Operations
         
+    func _insertMailFolder(_ platformCase: PlatformCase<MicrosoftMailFolder, GoogleMailFolder>, parent: MailFolder, in account: Account) throws -> MailFolder {
+        switch platformCase {
+        case .microsoft(let microsoft): return try _insertMailFolder(microsoft: microsoft, parent: parent, in: account)
+        case    .google(let    google): return try _insertMailFolder(   google:    google, parent: parent, in: account)
+        }
+    }
     func _insertMailFolder(microsoft: MicrosoftMailFolder, parent: JetEmail_Data.MailFolder, in account: JetEmail_Data.Account) throws -> JetEmail_Data.MailFolder {
         // check account.root
         guard account.root != nil else { throw TreeError.accountDoNotHaveRootFolder }
@@ -524,7 +530,7 @@ extension ModelContext {
         }
         
         // If not found: create
-        let model = MailFolder(microsoft: microsoft, in: account)
+        let model = MailFolder(platformCase: .microsoft(microsoft), in: account)
         insert(model)
         return model
         /*
@@ -554,7 +560,7 @@ extension ModelContext {
         }
         
         // If not found: create
-        let model = MailFolder(google: google, in: account)
+        let model = MailFolder(platformCase: .google(google), in: account)
         insert(model)
         return model
         /*
@@ -568,6 +574,13 @@ extension ModelContext {
                     the new instance is deleted.
             *It is unsafe to keep the new instance and access its properties. Developer should refetch to get the right instance after saving.*
          */
+    }
+    
+    func _insertMailFolder(_ platformCase: PlatformCase<MicrosoftMailFolder, GoogleMailFolder>, in account: Account) throws -> MailFolder {
+        switch platformCase {
+        case .microsoft(let microsoft): return try _insertMailFolder(microsoft: microsoft, in: account)
+        case    .google(let    google): return try _insertMailFolder(   google:    google, in: account)
+        }
     }
     
     func _insertMessage(google: GoogleMessage, in mailFolder: JetEmail_Data.MailFolder) throws -> JetEmail_Data.Message {
@@ -761,58 +774,76 @@ extension ModelStore {
 
 extension ModelStore {
 
-    func setRootMailFolder(microsoft: MicrosoftMailFolder, in accountID: JetEmail_Data.Account.ID) throws -> (persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID) {
+    func insertMailFolder(platform: PlatformCase<MicrosoftMailFolder, GoogleMailFolder>, in accountID: AccountID) throws -> MailFolderID {
+        let account = try self[accountID]!
+        var mailFolder: MailFolder!
+        try modelContext.transaction {
+            mailFolder = try modelContext._insertMailFolder(platform, in: account)
+        }
+        return mailFolder.id
+    }
+    
+        
+    /*func insertMailFolder(platform: MicrosoftMailFolder, in accountID: JetEmail_Data.Account.ID) throws -> MailFolderID {
         let account = try self[accountID]!
         do {
-            if let root = account.root { return (root.id, root.id) }
             let root = try modelContext._insertMailFolder(microsoft: microsoft, in: account)
-            account.root = root
             try modelContext.save()
-            return (root.id, root.id)
+            return root.id
         } catch {
             modelContext.rollback()
             throw error
         }
     }
     
-    func setRootMailFolder(google: GoogleMailFolder, in accountID: JetEmail_Data.Account.ID) throws -> (persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID) {
+    func setRootMailFolder(google: GoogleMailFolder, in accountID: JetEmail_Data.Account.ID) throws -> MailFolderID {
         let account = try self[accountID]!
         do {
-            if let root = account.root { return (root.id, root.id) }
+            if let root = account.root { return root.id }
             let root = try modelContext._insertMailFolder(google: google, in: account)
             account.root = root
             try modelContext.save()
-            return (root.id, root.id)
+            return root.id
         } catch {
             print(error)
             modelContext.rollback()
             throw error
         }
+    }*/
+    
+    func rootGoogleMailFolder(in accountID: JetEmail_Data.Account.ID) throws -> GoogleMailFolder? {
+        let account = try self[accountID]!
+        return account.root?.google
     }
     
-    func setChildrenMailFolders(microsofts: [MicrosoftMailFolder], parent parentID: JetEmail_Data.MailFolder.ID, in accountID: JetEmail_Data.Account.ID) throws -> [(persistentID: JetEmail_Data.MailFolder.ID, modelID: JetEmail_Data.MailFolder.ID)] {
+    func setChildrenMailFolders(platform: [PlatformCase<MicrosoftMailFolder, GoogleMailFolder>], parent parentID: JetEmail_Data.MailFolder.ID, in accountID: JetEmail_Data.Account.ID) throws -> [MailFolder.ID] {
         let parent = try self[parentID]!
         let account = try self[accountID]!
         do {
             // insert
-            var inserts: [JetEmail_Data.MailFolder] = []
-            for microsoft in microsofts {
-                try inserts.append(modelContext._insertMailFolder(microsoft: microsoft, parent: parent, in: account))
+            var inserts: [MailFolder] = []
+            for platform in platform {
+                try inserts.append(modelContext._insertMailFolder(platform, parent: parent, in: account))
             }
             
             // delete
             let removings = try modelContext._fetchMailFolderNotIn(inserts, in: parent)
             try removings.forEach { _ = try modelContext._deleteMailFolder($0) }
             
+            inserts = inserts.sortedInParentMailFolder
+            for (index, insert) in inserts.enumerated() {
+                insert._childIndex = index
+            }
+
             try modelContext.save()
-            return inserts.map { ($0.id, $0.id) }
+            return inserts.map { $0.id }
         } catch {
             modelContext.rollback()
             throw error
         }
     }
 
-    func setChildrenMailFolders(googles: [GoogleMailFolder], parent parentID: JetEmail_Data.MailFolder.ID, in accountID: JetEmail_Data.Account.ID) throws -> [ JetEmail_Data.MailFolder.ID] {
+    /*func setChildrenMailFolders(googles: [GoogleMailFolder], parent parentID: JetEmail_Data.MailFolder.ID, in accountID: JetEmail_Data.Account.ID) throws -> [ JetEmail_Data.MailFolder.ID] {
         let parent = try self[parentID]!
         let account = try self[accountID]!
         do {
@@ -831,7 +862,7 @@ extension ModelStore {
             modelContext.rollback()
             throw error
         }
-    }
+    }*/
 }
 
 

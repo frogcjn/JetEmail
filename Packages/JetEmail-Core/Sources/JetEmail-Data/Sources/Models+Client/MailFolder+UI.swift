@@ -5,23 +5,32 @@
 //  Created by Cao, Jiannan on 3/7/24.
 //
 
+// isSystemFolder
+// systemOrder
+// localized: LocalizedStringResource
+// systemImage
+import JetEmail_Foundation
+import Google
+import Microsoft
+import Foundation
 
-public extension MailFolder {
+
+public extension PlatformCase<MicrosoftMailFolder, GoogleMailFolder> {
     var isSystemFolder: Bool {
-        switch id.platform {
-        case .google:
-            guard let type = google?.data.type else { return false }
+        switch self {
+        case .google(let google):
+            guard let type = google.data.type else { return false }
             return type == .system
-        case .microsoft:
-            return microsoft?.data.wellKnownFolderName != nil
+        case .microsoft(let microsoft):
+            return microsoft.wellKnownFolderName != nil
         }
     }
     
     var systemOrder: Int? {
         guard isSystemFolder else { return nil }
-        switch id.platform {
-        case .google:
-            switch name {
+        switch self {
+        case .google(let google):
+            switch google.data.name {
             case "INBOX"              : return 0
             case "STARRED"            : return 1
             case "SNOOZED"            : return 2 // ?
@@ -44,8 +53,8 @@ public extension MailFolder {
             default: return nil
             }
             
-        case .microsoft:
-            guard let wellKnownFolderName = microsoft?.data.wellKnownFolderName else { return nil }
+        case .microsoft(let microsoft):
+            guard let wellKnownFolderName = microsoft.wellKnownFolderName else { return nil }
             switch wellKnownFolderName {
             case .inbox                    : return 0
             case .drafts                   : return 1
@@ -73,72 +82,71 @@ public extension MailFolder {
         }
     }
     
-    
-    var localizedName: String {
-        switch id.platform {
-        case .google:
-            guard let type = google?.data.type else { return name }
+    var nameLocalizedKey: String? {
+        switch self {
+        case .google(let google):
+            guard let type = google.data.type else { return nil }
             switch type {
             case .system:
                 // https://developers.google.com/gmail/api/guides/labels
-                switch name {
+                switch google.data.name {
                     
-                case "INBOX"              : return String(localized: "Google.MailFolder.INBOX", bundle: .module)
-                case "STARRED"            : return String(localized: "Google.MailFolder.STARRED", bundle: .module)
-                case "SNOOZED"            : return String(localized: "Google.MailFolder.SNOOZED", bundle: .module)
-                case "IMPORTANT"          : return String(localized: "Google.MailFolder.IMPORTANT", bundle: .module)
-                case "CHAT"               : return String(localized: "Google.MailFolder.CHAT", bundle: .module)
-                case "SENT"               : return String(localized: "Google.MailFolder.SENT", bundle: .module)
-                case "SCHEDULED"          : return String(localized: "Google.MailFolder.SCHEDULED", bundle: .module)
-                case "DRAFT"              : return String(localized: "Google.MailFolder.DRAFT", bundle: .module)
-                case ""                   : return String(localized: "Google.MailFolder.", bundle: .module)
-                case "SPAM"               : return String(localized: "Google.MailFolder.SPAM", bundle: .module)
-                case "TRASH"              : return String(localized: "Google.MailFolder.TRASH", bundle: .module)
-                case "UNREAD"             : return String(localized: "Google.MailFolder.UNREAD", bundle: .module)
+                case "INBOX"              : return LocalizedStringResource("Google.MailFolder.INBOX").key
+                case "STARRED"            : return LocalizedStringResource("Google.MailFolder.STARRED").key
+                case "SNOOZED"            : return LocalizedStringResource("Google.MailFolder.SNOOZED").key
+                case "IMPORTANT"          : return LocalizedStringResource("Google.MailFolder.IMPORTANT").key
+                case "CHAT"               : return LocalizedStringResource("Google.MailFolder.CHAT").key
+                case "SENT"               : return LocalizedStringResource("Google.MailFolder.SENT").key
+                case "SCHEDULED"          : return LocalizedStringResource("Google.MailFolder.SCHEDULED").key
+                case "DRAFT"              : return LocalizedStringResource("Google.MailFolder.DRAFT").key
+                case ""                   : return LocalizedStringResource("Google.MailFolder.").key
+                case "SPAM"               : return LocalizedStringResource("Google.MailFolder.SPAM").key
+                case "TRASH"              : return LocalizedStringResource("Google.MailFolder.TRASH").key
+                case "UNREAD"             : return LocalizedStringResource("Google.MailFolder.UNREAD").key
 
-                case "CATEGORY_PERSONAL"  : return String(localized: "Google.MailFolder.CATEGORY_PERSONAL", bundle: .module)
-                case "CATEGORY_SOCIAL"    : return String(localized: "Google.MailFolder.CATEGORY_SOCIAL", bundle: .module)
-                case "CATEGORY_PROMOTIONS": return String(localized: "Google.MailFolder.CATEGORY_PROMOTIONS", bundle: .module)
-                case "CATEGORY_UPDATES"   : return String(localized: "Google.MailFolder.CATEGORY_UPDATES", bundle: .module)
-                case "CATEGORY_FORUMS"    : return String(localized: "Google.MailFolder.CATEGORY_FORUMS", bundle: .module)
+                case "CATEGORY_PERSONAL"  : return LocalizedStringResource("Google.MailFolder.CATEGORY_PERSONAL").key
+                case "CATEGORY_SOCIAL"    : return LocalizedStringResource("Google.MailFolder.CATEGORY_SOCIAL").key
+                case "CATEGORY_PROMOTIONS": return LocalizedStringResource("Google.MailFolder.CATEGORY_PROMOTIONS").key
+                case "CATEGORY_UPDATES"   : return LocalizedStringResource("Google.MailFolder.CATEGORY_UPDATES").key
+                case "CATEGORY_FORUMS"    : return LocalizedStringResource("Google.MailFolder.CATEGORY_FORUMS").key
                 default:
-                    return name
+                    return nil
                 }
             case .user:
-                return name
+                return nil
             }
-        case .microsoft:
-            guard let wellKnownFolderName = microsoft?.data.wellKnownFolderName else { return name }
+        case .microsoft(let microsoft):
+            guard let wellKnownFolderName = microsoft.wellKnownFolderName else { return nil }
             switch wellKnownFolderName {
-            case .archive                  : return String(localized: "Microsoft.MailFolder.archive", bundle: .module)
-            case .clutter                  : return String(localized: "Microsoft.MailFolder.clutter", bundle: .module)
-            case .conflicts                : return String(localized: "Microsoft.MailFolder.conflicts", bundle: .module)
-            case .conversationHistory      : return String(localized: "Microsoft.MailFolder.conversationHistory", bundle: .module)
-            case .deletedItems             : return String(localized: "Microsoft.MailFolder.deletedItems", bundle: .module)
-            case .drafts                   : return String(localized: "Microsoft.MailFolder.drafts", bundle: .module)
-            case .inbox                    : return String(localized: "Microsoft.MailFolder.inbox", bundle: .module)
-            case .junkEmail                : return String(localized: "Microsoft.MailFolder.junkEmail", bundle: .module)
-            case .localFailures            : return String(localized: "Microsoft.MailFolder.localFailures", bundle: .module)
-            case .msgFolderRoot            : return String(localized: "Microsoft.MailFolder.msgFolderRoot", bundle: .module)
-            case .outbox                   : return String(localized: "Microsoft.MailFolder.outbox", bundle: .module)
-            case .recoverableItemsDeletions: return String(localized: "Microsoft.MailFolder.recoverableItemsDeletions", bundle: .module)
-            case .scheduled                : return String(localized: "Microsoft.MailFolder.scheduled", bundle: .module)
-            case .searchFolders            : return String(localized: "Microsoft.MailFolder.searchFolders", bundle: .module)
-            case .sentItems                : return String(localized: "Microsoft.MailFolder.sentItems", bundle: .module)
-            case .serverFailures           : return String(localized: "Microsoft.MailFolder.serverFailures", bundle: .module)
-            case .syncIssues               : return String(localized: "Microsoft.MailFolder.syncIssues", bundle: .module)
+            case .archive                  : return LocalizedStringResource("Microsoft.MailFolder.archive").key
+            case .clutter                  : return LocalizedStringResource("Microsoft.MailFolder.clutter").key
+            case .conflicts                : return LocalizedStringResource("Microsoft.MailFolder.conflicts").key
+            case .conversationHistory      : return LocalizedStringResource("Microsoft.MailFolder.conversationHistory").key
+            case .deletedItems             : return LocalizedStringResource("Microsoft.MailFolder.deletedItems").key
+            case .drafts                   : return LocalizedStringResource("Microsoft.MailFolder.drafts").key
+            case .inbox                    : return LocalizedStringResource("Microsoft.MailFolder.inbox").key
+            case .junkEmail                : return LocalizedStringResource("Microsoft.MailFolder.junkEmail").key
+            case .localFailures            : return LocalizedStringResource("Microsoft.MailFolder.localFailures").key
+            case .msgFolderRoot            : return LocalizedStringResource("Microsoft.MailFolder.msgFolderRoot").key
+            case .outbox                   : return LocalizedStringResource("Microsoft.MailFolder.outbox").key
+            case .recoverableItemsDeletions: return LocalizedStringResource("Microsoft.MailFolder.recoverableItemsDeletions").key
+            case .scheduled                : return LocalizedStringResource("Microsoft.MailFolder.scheduled").key
+            case .searchFolders            : return LocalizedStringResource("Microsoft.MailFolder.searchFolders").key
+            case .sentItems                : return LocalizedStringResource("Microsoft.MailFolder.sentItems").key
+            case .serverFailures           : return LocalizedStringResource("Microsoft.MailFolder.serverFailures").key
+            case .syncIssues               : return LocalizedStringResource("Microsoft.MailFolder.syncIssues").key
             }
         }
     }
     
-    var systemImage: String {
-        switch id.platform {
-        case .google:
-            guard let type = google?.data.type, let innerID = google?.id.innerID else { return name }
+    var systemImage: String? {
+        switch self {
+        case .google(let google):
+            guard let type = google.data.type else { return nil }
             switch type {
             case .system:
                 // https://developers.google.com/gmail/api/guides/labels
-                switch innerID {
+                switch google.id.innerID {
                 case "INBOX"              : return "tray"
                 case "SPAM"               : return "xmark.bin"
                 case "TRASH"              : return "trash"
@@ -154,13 +162,13 @@ public extension MailFolder {
                 case "CATEGORY_UPDATES"   : return "info.circle"
                 case "CATEGORY_FORUMS"    : return "bubble.left.and.bubble.right"
                 default:
-                    return "folder"
+                    return nil
                 }
             case .user:
-                return "folder"
+                return nil
             }
-        case .microsoft:
-            guard let wellKnownFolderName = microsoft?.data.wellKnownFolderName else { return "folder" }
+        case .microsoft(let microsoft):
+            guard let wellKnownFolderName = microsoft.wellKnownFolderName else { return nil }
             switch wellKnownFolderName {
             case .archive                  : return "archivebox"
             case .clutter                  : return "shippingbox"

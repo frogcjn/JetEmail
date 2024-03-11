@@ -29,6 +29,6 @@ extension AppModel {
     // @BackgroundActor
     private func _moveAccounts(_ accounts: [Account.ID], fromOffsets source: IndexSet, toOffset destination: Int) async throws {
         checkBackgroundThread()
-        _ = try await ModelStore.instance.moveAccounts(appModel: self, ids: accounts, fromOffsets: source, toOffset: destination)
+        _ = try await ModelStore.shared.moveAccounts(appModel: self, ids: accounts, fromOffsets: source, toOffset: destination)
     }
 }

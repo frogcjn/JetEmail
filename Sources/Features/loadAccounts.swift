@@ -19,7 +19,7 @@ extension AppModel {
         defer { isBusy = false }
         
         do {
-            _ = try await ModelStore.instance.setSessions(Client.sessions) // load session from local keychain
+            _ = try await ModelStore.shared.setSessions(Client.sessions) // load session from local keychain
         } catch {
             logger.error("\(error)")
         }

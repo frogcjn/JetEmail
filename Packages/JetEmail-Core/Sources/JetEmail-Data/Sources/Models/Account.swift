@@ -69,7 +69,7 @@ public final class Account {
     
     public var orderIndex: Int?
     // var isDeleted = false
-    
+        
     public var deleteMark = false { didSet {
         // .casecade
         if deleteMark {

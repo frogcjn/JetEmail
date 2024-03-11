@@ -55,8 +55,9 @@ struct AccountSectionList : View, Sendable {
         .task { await appModel.loadAccounts() }
         
         // Feature: Account - Load Mail Folders
-        .onChange(of: accounts, initial: true) { 
-            Task{ await appModel.loadMailFolders(accounts: accounts) }
+        .onChange(of: accounts, initial: true) { (oldValue, newValue) in
+            let shouldLoad = newValue.filter { !$0.loadedMailFolder }
+            Task{ await appModel.loadMailFolders(accounts: shouldLoad) }
         }
         
         #if !os(macOS)
