@@ -81,3 +81,9 @@ public struct GoogleMailFolderData : CodableValueType {
     }
 }
 
+public extension GoogleMailFolderData {
+    func outer(_ session: Session) -> GoogleMailFolder {
+        .init(session, data: self)
+    }
+}
+

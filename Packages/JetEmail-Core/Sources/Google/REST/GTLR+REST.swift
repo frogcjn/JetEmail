@@ -19,6 +19,7 @@ public extension Session {
         return service
     }
     
+    
     private func getMailFolders() async throws -> [GoogleMailFolder] {
         let response = try await service.execute(GTLRGmail_ListLabelsResponse.self) {
             GTLRGmailQuery_UsersLabelsList.query(withUserId: accountID.innerID)
@@ -59,8 +60,9 @@ public extension Session {
         return tree
     }
     
-    func getMessages(id mailFolderID: GoogleMailFolderID) async throws -> [GoogleMessage] {
-        let ids: [GoogleMessageID] = try await getFolderMessageIDs(id: mailFolderID).map { .init(accountID: mailFolderID.accountID,  innerID: $0.id) }
+
+    
+    func getMessages(ids: [GoogleMessageID]) async throws -> [GoogleMessage] {
         return try await getMessages(ids: ids, format: .metadata).map { .init(self, data: $0) }
     }
     
@@ -75,6 +77,12 @@ public extension Session {
         
         guard let messages = response.messages else { throw GmailApiError.failedToParseData(response) }
         return try messages.map{ try $0.messageData }
+    }
+    
+    // pageSize => $top: 1-1000, default: 1000
+    func xxxgetMessagesID(in mailFolderID: GoogleMailFolderID, pageSize: Int? = 1000) async throws -> [GoogleMessageID] {
+        let ids: [GoogleMessageID] = try await getFolderMessageIDs(id: mailFolderID).map { .init(accountID: mailFolderID.accountID,  innerID: $0.id) }
+        return ids
     }
 
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
@@ -100,6 +108,39 @@ public extension Session {
         } else {
             fatalError()
         }
+    }
+    
+    func getMessagesStream(ids: [GoogleMessageID], fields: String? = nil, format: GetMessageFormat) async throws -> AsyncThrowingStream<[GoogleMessage], Error> {
+        .init { continuation in Task { [service] in
+            do {
+                let chunkSize = 10
+                var rest = ids[...]
+                
+                while rest.count > 0 {
+                    let chunk = rest.prefix(chunkSize)
+                    rest = rest.dropFirst(chunkSize)
+                    
+                    let batchResult = try await service.execute(GTLRBatchResult.self) {
+                        GTLRBatchQuery(queries: chunk.map { [accountID = accountID.innerID] in
+                            let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID, identifier: $0.innerID)
+                            query.fields = fields
+                            query.format = format.rawValue
+                            return query
+                        })
+                    }
+                    
+                    guard let messagesDict = batchResult.successes as? [String: GTLRGmail_Message] else { fatalError() } // TODO: fatalError replace with error
+                    let result = try messagesDict.values.map { try $0.messageData.outer(self) }
+                    
+                    continuation.yield(result)
+                    await Task.yield()
+                }
+                
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
+            }
+        } }
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get

@@ -51,3 +51,9 @@ public struct GoogleMessageData : CodableValueType {
         }
     }
 }
+
+public extension GoogleMessageData {
+    func outer(_ session: Session) -> GoogleMessage {
+        .init(session, data: self)
+    }
+}

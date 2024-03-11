@@ -711,6 +711,23 @@ extension ModelStore {
         }
     }
     
+    func setMessagesInsertPart(googles messages: [GoogleMessage], in mailFolderID: MailFolderID) throws -> [MessageID] {
+        checkBackgroundThread()
+        let mailFolder = try self[mailFolderID]!
+        do {
+            // insert
+            var inserts: [JetEmail_Data.Message] = []
+            for message in messages {
+                try inserts.append(modelContext._insertMessage(google: message, in: mailFolder))
+            }
+            try modelContext.save()
+            return inserts.map(\.resourceID)
+        } catch {
+            modelContext.rollback()
+            throw error
+        }
+    }
+    
     
     
     func setMessagesDeletePart(keep: [MessageID], in mailFolderID: MailFolderID) throws -> [MessageID] {
@@ -736,20 +753,21 @@ extension ModelStore {
         // return mailFolder.messages.map(\.id)
     }
     
-    func setMessagesDeletePart(newMessageIDs: [MessageID], in id: MailFolderID) async throws -> Int? {
+    
+    func setMessagesDeletePart(newMessageIDs: [MessageID], in id: MailFolderID) async throws -> [(offset: Int,  element: MessageID)] {
         checkBackgroundThread()
         
         let newMessageRawIDs = newMessageIDs.map(\.uniqueID)
         let oldMessages = Set(try modelContext._fetchMessageRawIDs(in: id))
         
         let shouldDeleteMessages = oldMessages.filter { !newMessageRawIDs.contains($0.uniqueID) }
-        let shouldInsertFirstIndex = newMessageIDs.firstIndex { !oldMessages.map(\.uniqueID).contains($0.uniqueID) }
+        let shouldInsertIndexAndMessage = newMessageIDs.enumerated().filter { !oldMessages.map(\.uniqueID).contains($0.element.uniqueID) }
         
         
         try modelContext.transaction {
             try shouldDeleteMessages.forEach { _ = try modelContext._deleteMessage($0) }
         }
-        return shouldInsertFirstIndex
+        return shouldInsertIndexAndMessage
     }
     
     
