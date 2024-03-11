@@ -18,6 +18,7 @@ extension AccountID {
         switch platformCase {
         case .microsoft(let id): id.storedSession.map(Session.microsoft)
         case    .google(let id): id.storedSession.map(Session.google   )
+        default: nil
         }
     }
     
@@ -27,8 +28,9 @@ extension AccountID {
     
     var refreshSession: JetEmail_Data.Session? { get async throws {
         switch platformCase {
-        case .microsoft(let id): return try await JetEmail_Data.Session.microsoft(id.refreshMicrosoftSession)
-        case    .google(let id): return try await id.refreshGoogleSession.map(JetEmail_Data.Session.google)
+        case .microsoft(let id): try await JetEmail_Data.Session.microsoft(id.refreshMicrosoftSession)
+        case    .google(let id): try await id.refreshGoogleSession.map(JetEmail_Data.Session.google)
+        default: nil
         }
     } }
     
@@ -36,6 +38,7 @@ extension AccountID {
         switch platformCase {
         case .microsoft(let id): id.removeSession().map(JetEmail_Data.Session.microsoft)
         case    .google(let id): id.removeSession().map(JetEmail_Data.Session.google)
+        default: nil
         }
     }
 }

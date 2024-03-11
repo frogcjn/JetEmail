@@ -27,7 +27,7 @@ public final class MailFolder {
     
     @Transient
     public lazy var resourceID: MailFolderID = {
-        .init(platform: .init(rawValue: platform)!, innerAccountID: innerAccountID, innerID: innerID)
+        .init(platform: .init(rawValue: platform), innerAccountID: innerAccountID, innerID: innerID)
     }()
     /*public var id: ID {
         @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _innerAccountID, _innerID, _uniqueID)

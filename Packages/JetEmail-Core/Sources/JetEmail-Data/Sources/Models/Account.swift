@@ -24,7 +24,7 @@ public final class Account {
     
     @Transient
     public lazy var resourceID: AccountID = {
-        .init(platform: .init(rawValue: platform)!, innerID: innerID)
+        .init(platform: .init(rawValue: platform), innerID: innerID)
     }()
     /*public var id: ID {
         @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _innerID, _uniqueID)

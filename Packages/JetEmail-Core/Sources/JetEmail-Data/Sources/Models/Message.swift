@@ -28,7 +28,7 @@ public final class Message {
     
     @Transient
     public lazy var resourceID: MessageID = {
-        .init(platform: .init(rawValue: platform)!, innerAccountID: innerAccountID, innerID: innerID)
+        .init(platform: .init(rawValue: platform), innerAccountID: innerAccountID, innerID: innerID)
     }()
     
     /*public var id: ID {

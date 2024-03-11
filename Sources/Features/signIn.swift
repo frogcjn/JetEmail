@@ -33,6 +33,7 @@ extension AppModel {
         switch platform {
         case .microsoft: _ = try await ModelStore.shared.addSession(.microsoft(Microsoft.Client.shared.signIn()))
         case .google:    _ = try await ModelStore.shared.addSession(   .google(   Google.Client.shared.signIn()))
+        default: fatalError() // TODO: Throw Error
         }
     }
 }

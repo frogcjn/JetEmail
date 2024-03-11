@@ -72,7 +72,6 @@ extension Microsoft.Session {
         if let idToWellKnownFolderName = accountID.general.idToWellKnownFolderName { return idToWellKnownFolderName }
         let idToWellKnownFolderName: [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName] =  await {
             do {
-                print("idToWellKnownFolderName")
                 // catch wellknownFolderName
                 var idToWellKnownFolderName = [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName]()
                 for name in MicrosoftMailFolder.WellKnownFolderName.allCases {

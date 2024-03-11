@@ -6,9 +6,25 @@
 //
 
 
-public enum Platform : String, CodableValueType {
+public enum Platform : RawRepresentable, CodableValueType {
     case microsoft
     case google
+    case other(String)
+    
+    public init(rawValue: String) {
+        self = switch rawValue {
+        case "microsoft": .microsoft
+           case "google": .google
+                 default: .other(rawValue)
+        }
+    }
+    public var rawValue: RawValue {
+        switch self {
+        case .microsoft: "microsoft"
+        case .google   : "google"
+        case .other(let rawValue): rawValue
+        }
+    }
 }
 
 public enum PlatformCase<Microsoft : CodableValueType, Google : CodableValueType> : CodableValueType {
@@ -106,10 +122,11 @@ public extension AccountID {
         return .init(innerID: innerID)
     }
     
-    var platformCase: PlatformCase<MicrosoftAccountID, GoogleAccountID> {
+    var platformCase: PlatformCase<MicrosoftAccountID, GoogleAccountID>? {
         switch platform {
         case .microsoft: .microsoft(.init(innerID: innerID))
         case    .google:    .google(.init(innerID: innerID))
+        case     .other: nil
         }
     }
 }
