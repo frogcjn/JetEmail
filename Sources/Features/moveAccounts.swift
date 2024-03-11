@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import JetEmail_Foundation
 import JetEmail_Data
+import JetEmail_ID
 
 // MARK: Feature: Accounts - Move Accounts
 

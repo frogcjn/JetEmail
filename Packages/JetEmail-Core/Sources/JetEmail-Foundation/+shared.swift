@@ -38,8 +38,4 @@ public extension NSApplication {
 }
 #endif
 
-public func checkBackgroundThread(function: String = #function) {
-    if Thread.isMainThread {
-        print(function, "on main thread")
-    }
-}
+

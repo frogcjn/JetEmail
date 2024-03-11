@@ -6,7 +6,7 @@
 //
 
 @preconcurrency import MSAL
-import JetEmail_Foundation
+import JetEmail_ID
 
 typealias MSALAccount = MSAL.MSALAccount
 typealias MSALSession = MSAL.MSALResult

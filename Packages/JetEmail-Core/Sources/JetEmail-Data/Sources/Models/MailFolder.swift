@@ -9,7 +9,7 @@ import Foundation // for KeyPathComparator
 import SwiftData  // for @Model
 import Google
 import Microsoft
-import JetEmail_Foundation
+import JetEmail_ID
 
 @Model
 public final class MailFolder {

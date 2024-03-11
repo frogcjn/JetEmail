@@ -9,11 +9,10 @@
 // systemOrder
 // localized: LocalizedStringResource
 // systemImage
-import JetEmail_Foundation
 import Google
 import Microsoft
 import Foundation
-
+import JetEmail_ID
 
 public extension PlatformCase<MicrosoftMailFolder, GoogleMailFolder> {
     var isSystemFolder: Bool {

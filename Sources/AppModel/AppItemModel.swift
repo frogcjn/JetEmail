@@ -8,7 +8,7 @@
 import JetEmail_Data
 import SwiftData
 import os
-import JetEmail_Foundation
+import JetEmail_ID
 
 typealias AppItemModel<Item: UnifiedModel> = CombineContext<AppModel, Item>
 

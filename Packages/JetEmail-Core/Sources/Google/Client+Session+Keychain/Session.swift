@@ -7,7 +7,7 @@
 
 @preconcurrency import GTMAppAuth
 import AppAuth
-import JetEmail_Foundation
+import JetEmail_ID
 
 public final class Session: NSObject & AuthSessionDelegate & OIDAuthStateChangeDelegate & OIDAuthStateErrorDelegate, Sendable {
     public let  accountID  : GoogleAccountID

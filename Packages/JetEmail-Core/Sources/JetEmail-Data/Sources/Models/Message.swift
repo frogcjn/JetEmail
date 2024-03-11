@@ -9,7 +9,7 @@ import SwiftData  // for @Model
 import Foundation // for Date
 import Google
 import Microsoft
-import JetEmail_Foundation
+import JetEmail_ID
 
 // @dynamicMemberLookup
 @Model

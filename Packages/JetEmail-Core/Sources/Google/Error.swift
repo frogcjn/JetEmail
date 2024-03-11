@@ -7,6 +7,7 @@
 
 import Foundation
 import JetEmail_Foundation
+import JetEmail_ID
 
     /*struct AuthError: LocalizedError {
         var message: String

@@ -6,7 +6,7 @@
 //
 
 import Observation
-import JetEmail_Foundation
+import JetEmail_ID
 
 @MainActor
 @Observable

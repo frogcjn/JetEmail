@@ -6,7 +6,7 @@
 //
 
 import SwiftData
-import JetEmail_Foundation
+import JetEmail_ID
 
 public struct PersistentID<Model : PersistentModel> : RawRepresentable {
     public let rawValue: PersistentIdentifier

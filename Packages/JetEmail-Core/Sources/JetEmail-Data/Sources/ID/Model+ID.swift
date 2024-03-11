@@ -5,8 +5,8 @@
 //  Created by Cao, Jiannan on 3/7/24.
 //
 
-import JetEmail_Foundation
 import SwiftData
+import JetEmail_ID
 
 public protocol UnifiedModel : PersistentModel  {
     associatedtype ResourceID : ResourceIDProtocol & UniqueID

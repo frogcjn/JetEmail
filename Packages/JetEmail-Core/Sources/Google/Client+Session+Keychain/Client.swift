@@ -8,7 +8,7 @@
 import Foundation
 import AppAuth
 import GTMAppAuth
-import JetEmail_Foundation
+import JetEmail_ID
 
 public actor Client : Sendable {
     let      clientID               = "383073233076-bs69m1og40cpgqr4d209hlk40mlmdfo4.apps.googleusercontent.com"

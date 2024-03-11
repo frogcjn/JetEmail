@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/24/24.
 //
 
-import JetEmail_Foundation
+import JetEmail_ID
 import JetEmail_Data
 import Google
 

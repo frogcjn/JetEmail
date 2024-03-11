@@ -9,7 +9,7 @@ import Foundation
 import SwiftData // for @Model
 import Microsoft
 import Google
-import JetEmail_Foundation
+import JetEmail_ID
 
 @Model
 public final class Account {

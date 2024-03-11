@@ -7,7 +7,7 @@
 
 import Foundation // for #Predicate
 import SwiftData // for ModelContext, ModelActor
-import JetEmail_Foundation
+import JetEmail_ID
 
 public extension ModelContext {
     /*subscript<Model: DataModel>(id: UnifiedID<Model>) -> Model? { get throws { // TODO: WWDC2024

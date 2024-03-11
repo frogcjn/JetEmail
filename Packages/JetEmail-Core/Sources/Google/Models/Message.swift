@@ -5,8 +5,8 @@
 //  Created by Cao, Jiannan on 2/24/24.
 //
 
-import JetEmail_Foundation
 import Foundation
+import JetEmail_ID
 
 public struct GoogleMessage : IdentifiableValueType {
     public let   id: GoogleMessageID

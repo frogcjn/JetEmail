@@ -9,7 +9,7 @@ import Foundation
 import Google
 import Microsoft
 import JetEmail_Data
-import JetEmail_Foundation
+import JetEmail_ID
 
 @MainActor
 extension AccountID {

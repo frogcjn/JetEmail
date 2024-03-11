@@ -6,7 +6,7 @@
 //
 
 @preconcurrency import GTMAppAuth
-import JetEmail_Foundation
+import JetEmail_ID
 
 // MARK: - Sessions
 

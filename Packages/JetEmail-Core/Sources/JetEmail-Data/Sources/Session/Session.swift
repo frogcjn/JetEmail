@@ -7,7 +7,7 @@
 
 import Google
 import Microsoft
-import JetEmail_Foundation
+import JetEmail_ID
 
 public enum Session : Sendable {
     case microsoft(Microsoft.Session)

@@ -107,3 +107,59 @@ public struct ModelID<OwnerType> : IDProtocol {
 }
 */
 */
+
+//
+//  File.swift
+//
+//
+//  Created by Cao, Jiannan on 3/7/24.
+//
+// import SwiftUI
+
+// MARK: - Partial
+
+
+
+/*public extension PartialRawRepresentable where Self : Equatable, RawValue : Equatable {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.rawValue == rhs.rawValue
+    }
+}*/
+/*
+public extension PartialRawRepresentable where Self : Encodable, RawValue : Encodable {
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}*/
+
+/*public extension PartialRawRepresentable where Self : Hashable, RawValue : Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(rawValue)
+    }
+}*/
+
+
+/*
+// MARK: - Fully
+
+public protocol FullyRawRepresentable<RawValue> : PartialRawRepresentable {
+    init(rawValue: RawValue)
+}
+
+public extension FullyRawRepresentable where Self : Decodable, RawValue : Decodable {
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(RawValue.self)
+        self.init(rawValue: rawValue)
+    }
+}*/
+
+// MARK: - StringID Protocol
+
+/*public protocol StringIDProtocol<OwnerType> : PartialRawRepresentable, Decodable where RawValue == String {
+    associatedtype OwnerType
+}*/
+
+
+

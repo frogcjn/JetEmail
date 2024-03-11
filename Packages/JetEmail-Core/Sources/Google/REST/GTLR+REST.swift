@@ -7,7 +7,8 @@
 
 import Foundation
 @preconcurrency import GoogleAPIClientForREST_Gmail
-import JetEmail_Foundation
+import JetEmail_Foundation // for Tree
+import JetEmail_ID
 
 // MARK: - Microsoft.Context: Account-MailFolders API
 

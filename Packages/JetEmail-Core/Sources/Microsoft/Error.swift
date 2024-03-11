@@ -5,7 +5,8 @@
 //  Created by Cao, Jiannan on 2/15/24.
 //
 
-import JetEmail_Foundation
+import JetEmail_ID
+import JetEmail_Foundation // for JSON
 
 public enum AuthError : CodableErrorType {
     case accountNoIDOrUsername

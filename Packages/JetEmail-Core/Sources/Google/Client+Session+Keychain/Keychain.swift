@@ -7,7 +7,7 @@
 
 import Foundation
 @preconcurrency import GTMAppAuth
-import JetEmail_Foundation
+import JetEmail_ID
 
 //public extension Google {
     //@globalActor

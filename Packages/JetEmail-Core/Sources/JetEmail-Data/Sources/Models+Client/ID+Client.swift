@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 import Google
 import Microsoft
-import JetEmail_Foundation
+import JetEmail_ID
 
 // MARK: - MailFolder <-> Google, Microsoft
 

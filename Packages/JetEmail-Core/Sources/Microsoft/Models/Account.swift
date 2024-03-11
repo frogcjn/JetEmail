@@ -5,6 +5,6 @@
 //  Created by Cao, Jiannan on 3/8/24.
 //
 
-import JetEmail_Foundation
+import JetEmail_ID
 
 public enum MicrosoftAccount : ValueType {}

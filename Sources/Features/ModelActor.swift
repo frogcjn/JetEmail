@@ -7,8 +7,8 @@
 
 import Foundation
 import SwiftData // for ModelContainer
-import JetEmail_Foundation
 import JetEmail_Data
+import JetEmail_ID
 
 
 @ModelActor

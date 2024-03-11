@@ -17,6 +17,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(name: "Google"             , targets: ["Google"]),
         .library(name: "Microsoft"          , targets: ["Microsoft"]),
+        .library(name: "JetEmail-ID"        , targets: ["JetEmail-ID"]),
         .library(name: "JetEmail-Foundation", targets: ["JetEmail-Foundation"]),
         .library(name: "JetEmail-Data"      , targets: ["JetEmail-Data"])
     ],
@@ -48,7 +49,8 @@ let package = Package(
                 .product(name: "AppAuth"                     , package: "AppAuth-iOS"                          ),
                 .product(name: "GTMAppAuth"                  , package: "GTMAppAuth"                           ),
                 .product(name: "GoogleAPIClientForREST_Gmail", package: "google-api-objectivec-client-for-rest"),
-                .target (name: "JetEmail-Foundation"                                                           )
+                .target (name: "JetEmail-Foundation"                                                           ),
+                .target (name: "JetEmail-ID"                                                                   )
             ],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
@@ -58,7 +60,17 @@ let package = Package(
             name: "Microsoft",
             dependencies: [
                 .product(name: "MSAL"               , package: "MSAL"),
-                .target (name: "JetEmail-Foundation"                 )
+                .target (name: "JetEmail-Foundation"                 ),
+                .target (name: "JetEmail-ID"                         )
+            ],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
+        .target(
+            name: "JetEmail-ID",
+            dependencies: [
+                .target(name: "JetEmail-Foundation")
             ],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")

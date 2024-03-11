@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/7/24.
 //
 
-import JetEmail_Foundation
+import JetEmail_ID
 import Foundation
 
     
