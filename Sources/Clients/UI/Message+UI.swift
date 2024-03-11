@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 3/7/24.
 //
 
-import JetEmail_Data
+import JetEmailData
 
 extension Message {
     var senderField: String? {

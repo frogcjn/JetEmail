@@ -7,7 +7,7 @@
 
 import SwiftUI
 import SwiftData // for @Query
-import JetEmail_Data
+import JetEmailData
 
 fileprivate struct _MessageList : View {
     @Environment(AppModel.self)

@@ -5,8 +5,8 @@
 //  Created by Cao, Jiannan on 2/23/24.
 //
 
-import JetEmail_Data
-import JetEmail_ID
+import JetEmailData
+import JetEmailID
 
 // MARK: Feature: Accounts - Sign Out
 

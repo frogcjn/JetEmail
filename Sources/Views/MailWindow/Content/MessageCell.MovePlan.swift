@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import JetEmail_Foundation
-import JetEmail_Data
+import JetEmailFoundation
+import JetEmailData
 
 extension MessageCell {
     struct MovePlan: View {

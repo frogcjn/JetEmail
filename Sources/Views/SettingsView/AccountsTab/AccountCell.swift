@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import JetEmail_Data
-import JetEmail_ID
+import JetEmailData
+import JetEmailID
 
 struct AccountCell: View {
     

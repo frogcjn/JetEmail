@@ -5,10 +5,10 @@
 //  Created by Cao, Jiannan on 2/25/24.
 //
 
-import Google
-import Microsoft
+import JetEmailGoogle
+import JetEmailMicrosoft
 import os
-import JetEmail_Data
+import JetEmailData
 
 @MainActor
 extension AppItemModel where Context == AppModel, Item : UnifiedModel {

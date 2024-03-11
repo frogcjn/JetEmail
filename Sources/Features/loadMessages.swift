@@ -5,19 +5,19 @@
 //  Created by Cao, Jiannan on 2/24/24.
 //
 
-import JetEmail_Foundation
-import JetEmail_Data
-import Microsoft
-import Google
+import JetEmailFoundation
+import JetEmailData
+import JetEmailMicrosoft
+import JetEmailGoogle
 import Foundation
-import JetEmail_ID
+import JetEmailID
 
 // MARK: Feature: Account - Load Messages
 
-extension AppItemModel<JetEmail_Data.MailFolder> {
+extension AppItemModel<MailFolder> {
     
     @MainActor
-    var loadingMessageState: JetEmail_Data.MailFolder.LoadingMessageState {
+    var loadingMessageState: MailFolder.LoadingMessageState {
         get { item.resourceID.loadingMessageState }
         set { item.resourceID.loadingMessageState = newValue }
     }
@@ -47,7 +47,7 @@ extension AppItemModel<JetEmail_Data.MailFolder> {
 }
 
 @MainActor
-private func loadMessagesProgressing(id: MailFolderID, session: Microsoft.Session) async throws {
+private func loadMessagesProgressing(id: MailFolderID, session: MicrosoftSession) async throws {
     let newMessageIDs: [MessageID] = try await session.getMessagesID(in: id.microsoft!).map { $0.general }
     
     // remove
@@ -73,7 +73,7 @@ private func loadMessagesProgressing(id: MailFolderID, session: Microsoft.Sessio
 }
 
 @MainActor
-private func loadMessagesProgressing(id: MailFolderID, session: Google.Session) async throws {
+private func loadMessagesProgressing(id: MailFolderID, session: GoogleSession) async throws {
     let newMessageIDs: [MessageID] = try await session.xxxgetMessagesID(in: id.google!).map { $0.general }
     
     // remove

@@ -5,10 +5,10 @@
 //  Created by Cao, Jiannan on 2/23/24.
 //
 
-import JetEmail_ID
-import Google
-import Microsoft
-import JetEmail_Data
+import JetEmailID
+import JetEmailGoogle
+import JetEmailMicrosoft
+import JetEmailData
 
 // MARK: Feature: Accounts - Sign In
 
@@ -31,8 +31,8 @@ extension AppModel {
     // @BackgroundActor
     private func _signIn(platform: Platform) async throws {
         switch platform {
-        case .microsoft: _ = try await ModelStore.shared.addSession(.microsoft(Microsoft.Client.shared.signIn()))
-        case .google:    _ = try await ModelStore.shared.addSession(   .google(   Google.Client.shared.signIn()))
+        case .microsoft: _ = try await ModelStore.shared.addSession(.microsoft(MicrosoftClient.shared.signIn()))
+        case .google:    _ = try await ModelStore.shared.addSession(   .google(   GoogleClient.shared.signIn()))
         default: fatalError() // TODO: Throw Error
         }
     }

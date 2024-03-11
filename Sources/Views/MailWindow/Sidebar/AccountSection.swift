@@ -7,8 +7,8 @@
 
 import SwiftUI
 import SwiftData // for @Query
-import JetEmail_Data
-import JetEmail_Foundation
+import JetEmailData
+import JetEmailFoundation
 
 struct AccountSection: View {
     @Environment(AppItemModel<Account>.self)

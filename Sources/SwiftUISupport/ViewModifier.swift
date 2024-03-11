@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import JetEmail_Data
+import JetEmailData
 
 
 extension View {

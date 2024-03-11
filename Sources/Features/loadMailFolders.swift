@@ -5,9 +5,9 @@
 //  Created by Cao, Jiannan on 2/23/24.
 //
 
-import JetEmail_Foundation
-import JetEmail_Data
-import Microsoft
+import JetEmailFoundation
+import JetEmailData
+import JetEmailMicrosoft
 
 // MARK: Feature: Account - Load Mail Folder
 

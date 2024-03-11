@@ -7,7 +7,7 @@
 
 import SwiftData
 import Foundation
-import JetEmail_Data
+import JetEmailData
 
 extension AppModel {
     static let shared = AppModel()

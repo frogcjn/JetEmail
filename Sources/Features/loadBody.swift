@@ -5,9 +5,9 @@
 //  Created by Cao, Jiannan on 2/24/24.
 //
 
-import JetEmail_ID
-import JetEmail_Data
-import Google
+import JetEmailID
+import JetEmailData
+import JetEmailGoogle
 
 // MARK: Feature: Message - Load Body
 
@@ -35,7 +35,7 @@ extension AppItemModel<Message> {
 }
 
 
-fileprivate func _loadBody(messageID: MessageID, session: JetEmail_Data.Session) async throws {
+fileprivate func _loadBody(messageID: MessageID, session: Session) async throws {
     checkBackgroundThread()
     switch session {
     case .microsoft(let session):

@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/15/24.
 //
 
-import JetEmail_Data
+import JetEmailData
 
 // MARK: - View Context
 

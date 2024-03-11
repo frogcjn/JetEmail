@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import JetEmail_Data
+import JetEmailData
 
 struct MessageView : View {
     @Environment(AppItemModel<Message>.self)

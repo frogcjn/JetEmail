@@ -436,7 +436,7 @@ extension Microsoft.MSALSession {
  //
 
  import Security
- import Google
+ import JetEmailGoogle
 
  /*
  Google.Session = Google.Account + GTMAuthSession

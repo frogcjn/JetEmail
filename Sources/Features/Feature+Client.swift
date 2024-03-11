@@ -5,23 +5,23 @@
 //  Created by Cao, Jiannan on 2/25/24.
 //
 
-import Google
-import Microsoft
+import JetEmailGoogle
+import JetEmailMicrosoft
 import Foundation
-import JetEmail_Foundation // Tree
-import JetEmail_Data
-import JetEmail_ID
+import JetEmailFoundation // Tree
+import JetEmailData
+import JetEmailID
 
 enum Client {
-    static var sessions: [JetEmail_Data.Session] { get async throws {
-        async let microsoftSessions = Microsoft.Client.shared.sessions.map(JetEmail_Data.Session.microsoft)
-        async let googleSessions = Google.Client.shared.sessions.map(JetEmail_Data.Session.google)
+    static var sessions: [Session] { get async throws {
+        async let microsoftSessions = MicrosoftClient.shared.sessions.map(Session.microsoft)
+        async let googleSessions = GoogleClient.shared.sessions.map(Session.google)
         return try await microsoftSessions + googleSessions
     } }
 }
 
-extension JetEmail_Data.Session {
-    func signOut() async throws -> JetEmail_Data.Session {
+extension Session {
+    func signOut() async throws -> Session {
         switch self {
         case .microsoft(let session): _ = try await session.signOut()
         case .google(let platformSession): _ = try await platformSession.signOut()
@@ -45,7 +45,7 @@ extension AccountID {
     }
 }
 
-extension JetEmail_Data.Session {
+extension Session {
     
     func getRootMailFolder(id: AccountID) async throws -> PlatformCase<MicrosoftMailFolder, GoogleMailFolder> {
         checkBackgroundThread()
@@ -66,7 +66,7 @@ extension JetEmail_Data.Session {
     }
 }
 
-extension Microsoft.Session {
+extension MicrosoftSession {
     
     @MainActor
     var idToWellKnownFolderName:  [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName] { get async {
@@ -79,7 +79,7 @@ extension Microsoft.Session {
                     do {
                         let folder = try await getMailFolder(wellKnownFolderName: name)
                         idToWellKnownFolderName[folder.id] = name
-                    } catch let error as Microsoft.PublicError where error.code == "ErrorFolderNotFound" {
+                    } catch let error as JetEmailMicrosoft.PublicError where error.code == "ErrorFolderNotFound" {
                         continue
                     }
                 }
@@ -113,7 +113,7 @@ extension Microsoft.Session {
     }
 }
 
-extension Google.Session {
+extension GoogleSession {
     
     func getRootMailFolder() -> GoogleMailFolder {
         GoogleMailFolder(self, data: GoogleMailFolderData(id: .init("folder_all_mail"), name: "folder_all_mail"))

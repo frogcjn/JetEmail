@@ -5,14 +5,14 @@
 //  Created by Cao, Jiannan on 3/4/24.
 //
 
-import Google
-import JetEmail_Foundation
-import JetEmail_Data
+import JetEmailGoogle
+import JetEmailFoundation
+import JetEmailData
 
-extension AppItemModel<JetEmail_Data.Message> {
+extension AppItemModel<Message> {
     
     @MainActor // for isClassifying
-    func move(from moveFrom: JetEmail_Data.MailFolder, to moveTo: JetEmail_Data.MailFolder) async { // message and mailFolder should in the same context
+    func move(from moveFrom: MailFolder, to moveTo: MailFolder) async { // message and mailFolder should in the same context
         guard !isBusy else { return }
         isBusy = true
         defer { isBusy = false }
@@ -39,7 +39,7 @@ extension AppItemModel<JetEmail_Data.Message> {
 }
 
 
-extension Google.Session {
+extension GoogleSession {
     /*@MainActor // for classifyResultText
     func moveTo(account: Account, message: Message, mailFolder: MailFolder) async throws {
         

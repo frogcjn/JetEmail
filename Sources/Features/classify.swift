@@ -6,17 +6,17 @@
 //
 
 @preconcurrency import OpenAI
-import Microsoft
-import Google
-import JetEmail_Foundation
-import JetEmail_Data
+import JetEmailMicrosoft
+import JetEmailGoogle
+import JetEmailFoundation
+import JetEmailData
 
 enum Agent {
     
 }
 
-extension JetEmail_Data.Account {
-    var mailFolderTree: Tree<JetEmail_Data.MailFolder>? {
+extension Account {
+    var mailFolderTree: Tree<MailFolder>? {
         guard let root = root else { return nil }
         let tree = Tree(rootElement: root)
         var queue = [tree.root]
@@ -33,7 +33,7 @@ extension JetEmail_Data.Account {
 }
 
 
-extension AppItemModel<JetEmail_Data.Message> {
+extension AppItemModel<Message> {
     
     @MainActor
     var isClassifying: Bool {
@@ -61,41 +61,41 @@ extension AppItemModel<JetEmail_Data.Message> {
     }
 }
 
-extension Microsoft.Session {
+extension MicrosoftSession {
     @MainActor // for classifyResultText
-    func classify(account: JetEmail_Data.Account, message: JetEmail_Data.Message) async throws {
+    func classify(account: Account, message: Message) async throws {
         guard let folders = try await classifyRange(account: account) else { return }
         message.movePlan = try await Agent.classify(folders: folders.map { (folder: $0.element, path: $0.path ) }, message: message)
     }
     
     @MainActor // for classifyResultText
-    func classifyRange(account: JetEmail_Data.Account) async throws -> [TreeNode<JetEmail_Data.MailFolder>]? {
+    func classifyRange(account: Account) async throws -> [TreeNode<MailFolder>]? {
         guard let root = account.mailFolderTree?.root else { return nil }
         return root.descendants(includesSelf: false)
     }
 }
 
-extension Google.Session {
+extension GoogleSession {
     @MainActor // for classifyResultText
-    func classify(account: JetEmail_Data.Account, message: JetEmail_Data.Message) async throws {
+    func classify(account: Account, message: Message) async throws {
         guard let folders = try await classifyRange(account: account) else { return }
         message.movePlan = try await Agent.classify(folders: folders.map { (folder: $0.element, path: $0.path ) }, message: message)
     }
     
     @MainActor // for classifyResultText
-    func classifyRange(account: JetEmail_Data.Account) async throws -> [TreeNode<JetEmail_Data.MailFolder>]? {
+    func classifyRange(account: Account) async throws -> [TreeNode<MailFolder>]? {
         guard let root = account.mailFolderTree?.root else { return nil }
         return root.descendants(includesSelf: false)
     }
 }
 
-extension TreeNode<JetEmail_Data.MailFolder> {
+extension TreeNode<MailFolder> {
     var path: [String] {
         Array(sequence(first: self) { $0.parent }.map(\.element.localizedName).reversed().dropFirst())
     }
 }
 
-extension JetEmail_Data.MailFolder {
+extension MailFolder {
     var path: [String] {
         Array(sequence(first: self) { $0.parent }.map(\.localizedName).reversed().dropFirst())
     }
@@ -103,7 +103,7 @@ extension JetEmail_Data.MailFolder {
 
 extension Agent {
     @MainActor
-    static func classify(folders: [(folder: JetEmail_Data.MailFolder, path: [String])], message: JetEmail_Data.Message) async throws -> JetEmail_Data.MailFolder? {
+    static func classify(folders: [(folder: MailFolder, path: [String])], message: Message) async throws -> MailFolder? {
         let folderDescriptions = folders.enumerated().map { "\($0.offset): \($0.element.path.reversed().joined(separator: "/"))" }
         let openAI = OpenAI(apiToken: "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")
         // print(folderDescriptions.joined(separator: "\n"))

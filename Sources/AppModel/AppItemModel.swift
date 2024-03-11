@@ -5,10 +5,10 @@
 //  Created by Cao, Jiannan on 2/15/24.
 //
 
-import JetEmail_Data
+import JetEmailData
 import SwiftData
 import os
-import JetEmail_ID
+import JetEmailID
 
 typealias AppItemModel<Item: UnifiedModel> = CombineContext<AppModel, Item>
 

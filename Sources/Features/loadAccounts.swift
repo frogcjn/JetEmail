@@ -7,7 +7,7 @@
 
 // MARK: Feature: Accounts - Load Accounts
 
-import JetEmail_Foundation
+import JetEmailFoundation
 import Foundation
 
 extension AppModel {
