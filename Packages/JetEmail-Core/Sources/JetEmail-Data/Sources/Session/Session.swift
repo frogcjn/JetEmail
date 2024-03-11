@@ -7,6 +7,7 @@
 
 import Google
 import Microsoft
+import JetEmail_Foundation
 
 public enum Session : Sendable {
     case microsoft(Microsoft.Session)
@@ -14,7 +15,7 @@ public enum Session : Sendable {
 }
 
 public extension Session {
-    var accountID: JetEmail_Data.Account.ID {
+    var accountID: AccountID {
         switch self {
         case .microsoft(let microsoftSession): microsoftSession.accountID.general
         case .google   (let googleSession   ):    googleSession.accountID.general

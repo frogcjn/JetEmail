@@ -7,6 +7,7 @@
 
 import Foundation // for #Predicate
 import SwiftData // for ModelContext, ModelActor
+import JetEmail_Foundation
 
 public extension ModelContext {
     /*subscript<Model: DataModel>(id: UnifiedID<Model>) -> Model? { get throws { // TODO: WWDC2024
@@ -14,17 +15,17 @@ public extension ModelContext {
         return try? fetch(.init(predicate: #Predicate<Model> { $0.uniqueID == uniqueID })).first // Error,  keypath could not figure right, since it is from protocol key path
     } }*/
     
-    subscript(id: Account.ID) -> Account? { get throws {
+    subscript(id: AccountID) -> Account? { get throws {
         let uniqueID = id.uniqueID
         return try fetch(.init(predicate: #Predicate<Account> { $0.uniqueID == uniqueID })).first
     } }
     
-    subscript(id: MailFolder.ID) -> MailFolder? { get throws {
+    subscript(id: MailFolderID) -> MailFolder? { get throws {
         let uniqueID = id.uniqueID
         return try fetch(.init(predicate: #Predicate<MailFolder> { $0.uniqueID == uniqueID })).first
     } }
     
-    subscript(id: Message.ID) -> Message? { get throws {
+    subscript(id: MessageID) -> Message? { get throws {
         let uniqueID = id.uniqueID
         return try fetch(.init(predicate: #Predicate<Message> { $0.uniqueID == uniqueID })).first
     } }
@@ -35,16 +36,16 @@ public extension ModelActor {
         try? modelContext[id]
     } }*/
     
-    subscript(id: Account.ID) -> Account? { get throws {
+    subscript(id: AccountID) -> Account? { get throws {
         try modelContext[id]
     } }
     
-    subscript(id: MailFolder.ID) -> MailFolder? { get throws {
+    subscript(id: MailFolderID) -> MailFolder? { get throws {
         try modelContext[id]
 
     } }
     
-    subscript(id: Message.ID) -> Message? { get throws {
+    subscript(id: MessageID) -> Message? { get throws {
         try modelContext[id]
     } }
 }

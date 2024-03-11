@@ -7,7 +7,7 @@
 
 @MainActor
 public extension MailFolder {
-    typealias AttributesStore = JetEmail_Data.AttributesStore<MailFolder.ID, MailFolder.Attributes>
+    typealias AttributesStore = JetEmail_Data.AttributesStore<MailFolder, String, Attributes>
     struct Attributes : AttributesProtocol {
         public var loadingMesageState = LoadingMessageState.none
         public init() {}
@@ -29,11 +29,11 @@ public extension MailFolder {
 }
 
 @MainActor
-public extension MailFolder.ID {
+public extension MailFolder.ResourceID {
     var loadingMessageState: MailFolder.LoadingMessageState {
-        get { MailFolder.AttributesStore.shared[self].loadingMesageState }
+        get { MailFolder.AttributesStore.shared[uniqueID].loadingMesageState }
         nonmutating set {
-            MailFolder.AttributesStore.shared[self].loadingMesageState = newValue
+            MailFolder.AttributesStore.shared[uniqueID].loadingMesageState = newValue
         }
     }
 }

@@ -26,8 +26,8 @@ extension AppItemModel<Message> {
         defer { isBusy = false }
         
         do {
-            guard let session = try await item.mailFolder.account.id.refreshSession else { return }
-            try await _loadBody(messageID: item.id, session: session)
+            guard let session = try await item.mailFolder.account.resourceID.refreshSession else { return }
+            try await _loadBody(messageID: item.resourceID, session: session)
         } catch {
             logger.error("\(error)")
         }
@@ -35,7 +35,7 @@ extension AppItemModel<Message> {
 }
 
 
-fileprivate func _loadBody(messageID: Message.ID, session: JetEmail_Data.Session) async throws {
+fileprivate func _loadBody(messageID: MessageID, session: JetEmail_Data.Session) async throws {
     checkBackgroundThread()
     switch session {
     case .microsoft(let session):

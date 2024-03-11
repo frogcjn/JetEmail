@@ -19,7 +19,7 @@ struct AccountView: View {
             LabeledContent("username", value: account.username)
             LabeledContent("order"   , value: account.orderIndex.debugDescription)
             LabeledContent("delete"  , value: account.deleteMark.description)
-            LabeledContent("session" , value: account.id.storedSession.debugDescription)
+            LabeledContent("session" , value: account.resourceID.storedSession.debugDescription)
         }
     }
 }

@@ -40,7 +40,7 @@ extension AccountID {
         try mainContext.transaction {
             account.root = mailFolder // set root mail folder relation on main
         }
-        return mailFolder.id
+        return mailFolder.resourceID
     }
 }
 
@@ -119,7 +119,7 @@ extension Google.Session {
         GoogleMailFolder(self, data: GoogleMailFolderData(id: .init("folder_all_mail"), name: "folder_all_mail"))
     }
     
-    func loadMailFolders(id: Account.ID) async throws {
+    func loadMailFolders(id: AccountID) async throws {
         guard let rootElement = try await ModelStore.shared.rootGoogleMailFolder(in: id) else { return }
         let tree = try await getMailFolderTree(rootElement: rootElement)
         var queue: [TreeNode<GoogleMailFolder>] = [tree.root]

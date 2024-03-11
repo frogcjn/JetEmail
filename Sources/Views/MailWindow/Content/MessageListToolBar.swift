@@ -48,6 +48,6 @@ struct MailFolderRefreshButton : View {
             Task { await mailFolder.loadMessages() }
         }
         .labelStyle(.titleAndIcon)
-        .disabled(mailFolder.item.id.loadingMessageState.isLoading)
+        .disabled(mailFolder.item.resourceID.loadingMessageState.isLoading)
     }
 }

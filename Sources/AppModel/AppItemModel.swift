@@ -29,17 +29,17 @@ extension AppModel {
         return AppItemModel(context: self, item: item)
     }*/
     
-    func callAsFunction(_ persistentID: Account.ID) throws -> AppItemModel<Account>? {
+    func callAsFunction(_ persistentID: AccountID) throws -> AppItemModel<Account>? {
         guard let item = try ModelContainer.shared.mainContext[persistentID] else { return nil }
         return AppItemModel(context: self, item: item)
     }
     
-    func callAsFunction(_ persistentID: MailFolder.ID) throws -> AppItemModel<MailFolder>? {
+    func callAsFunction(_ persistentID: MailFolderID) throws -> AppItemModel<MailFolder>? {
         guard let item = try ModelContainer.shared.mainContext[persistentID] else { return nil }
         return AppItemModel(context: self, item: item)
     }
     
-    func callAsFunction(_ persistentID: Message.ID) throws -> AppItemModel<Message>? {
+    func callAsFunction(_ persistentID: MessageID) throws -> AppItemModel<Message>? {
         guard let item = try ModelContainer.shared.mainContext[persistentID] else { return nil }
         return AppItemModel(context: self, item: item)
     }

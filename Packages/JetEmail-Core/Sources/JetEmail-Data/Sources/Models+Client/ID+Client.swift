@@ -25,7 +25,7 @@ public extension JetEmail_Data.MailFolder {
         switch platformCase {
         case .microsoft(let microsoft):
             self.init(
-                modelID: microsoft.id.general,
+                resourceID: microsoft.id.general,
                 name   : microsoft.inner.displayName ?? "",
                 info   : info,
                 in     : account
@@ -33,7 +33,7 @@ public extension JetEmail_Data.MailFolder {
             self._graph = try? microsoft.jsonString
         case .google(let google):
             self.init(
-                modelID: google.id.general,
+                resourceID: google.id.general,
                 name   : google.data.name ?? "",
                 info   : info,
                 in     : account
@@ -49,7 +49,7 @@ public extension JetEmail_Data.MailFolder {
         }
         set {
             guard let microsoft = newValue else { return }
-            self.id   = microsoft.id.general
+            // self.id   = microsoft.id.general
             self.name = microsoft.inner.displayName ?? ""
             
             self._graph   = try? microsoft.jsonString
@@ -63,7 +63,7 @@ public extension JetEmail_Data.MailFolder {
         }
         set {
             guard let google = newValue else { return }
-            self.id = google.id.general
+            // self.id = google.id.general
             self.name = google.data.name ?? ""
             self._google = try? google.jsonString
             self._graph = nil

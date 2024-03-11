@@ -21,7 +21,7 @@ struct AccountSectionHeader: View {
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: "circle.fill")
-                .foregroundColor(account.id.sessionState.color)
+                .foregroundColor(account.resourceID.sessionState.color)
                 .frame(width: 18, alignment: .center)
                 .opacity(isOnHover || account.isBusy ? 0 : 1)
                 .overlay {
@@ -39,7 +39,7 @@ struct AccountSectionHeader: View {
                 .onHover { isOnHover = $0 }
             
             Text(account.username)
-            switch account.id.platform {
+            switch account.resourceID.platform {
             case .microsoft:
                 Text("(Outlook)")
             case .google:

@@ -13,19 +13,23 @@ import JetEmail_Foundation
 
 @Model
 public final class MailFolder {
-    
+
     /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
-    public private(set) var rawPlatform : String
-    public private(set) var platform    : Platform
+    public private(set) var platform       : String
+    // public private(set) var platform    : Platform
     
     public private(set) var innerAccountID: String
     public private(set) var innerID       : String
     
     /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
     @Attribute(.unique)
-    public private(set) var uniqueID   : String
+    public private(set) var uniqueID      : String
     
-    public var id: ID {
+    @Transient
+    public lazy var resourceID: MailFolderID = {
+        .init(platform: .init(rawValue: platform)!, innerAccountID: innerAccountID, innerID: innerID)
+    }()
+    /*public var id: ID {
         @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _innerAccountID, _innerID, _uniqueID)
         init(initialValue) {
             let (platform, innerAccountID, innerID, uniqueID) = (initialValue.platform, initialValue.accountID.innerID, initialValue.innerID, initialValue.uniqueID)
@@ -51,12 +55,12 @@ public final class MailFolder {
             innerID        = newValue.innerID
             uniqueID       = newValue.uniqueID
         }
-    }
+    }*/
     
     public var name: String
     
     /// MailFolder.account <<-> Account.mailFolders
-    //@Relationship(deleteRule: .nullify)
+    @Relationship(deleteRule: .nullify)
     public var account: Account
     
     //@Relationship(deleteRule: .nullify)
@@ -81,12 +85,17 @@ public final class MailFolder {
     @Transient
     public var messages: [Message] { _messages.sorted(using: KeyPathComparator(\.date, order: .reverse))}
     
-    
-    public init(modelID: ID, name: String, info: MailFolderInfo, in account: Account) {
-        self.id      = modelID
-        self.name    = name
-        self._isSystemFolder = info._isSystemFolder
-        self._systemOrder = info._systemOrder
+    public init(resourceID: MailFolderID, name: String, info: MailFolderInfo, in account: Account) {
+        // self.id      = modelID
+        // self.platform       = modelID.platform
+        self.platform          = resourceID.platform.rawValue
+        self.innerAccountID    = resourceID.accountID.innerID
+        self.innerID           = resourceID.innerID
+        self.uniqueID          = resourceID.uniqueID
+        
+        self.name              = name
+        self._isSystemFolder   = info._isSystemFolder
+        self._systemOrder      = info._systemOrder
         self._nameLocalizedKey = info._nameLocalizedKey
         self._systemImage = info._systemImage
         self.account = account

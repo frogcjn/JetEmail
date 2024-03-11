@@ -13,7 +13,7 @@ public protocol AttributesProtocol {
 
 @MainActor
 @Observable
-public final class AttributesStore<ID: Hashable, Attributes: AttributesProtocol> {
+public final class AttributesStore<Owner, ID: Hashable, Attributes: AttributesProtocol> {
 
     public var rawValue = [ID: Attributes]()
     

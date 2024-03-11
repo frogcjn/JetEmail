@@ -22,7 +22,7 @@ extension AppItemModel<Account> {
         context.willSignOutAccount.send(item)
         
         do {
-            try await _signOut(modelID: item.id, persistentID: item.id)
+            try await _signOut(resourceID: item.resourceID)
         } catch {
             logger.error("\(error)")
         }
@@ -33,8 +33,8 @@ extension AppItemModel<Account> {
 }
 
 
-fileprivate func _signOut(modelID: Account.ID, persistentID: Account.ID) async throws {
+fileprivate func _signOut(resourceID: AccountID) async throws {
     checkBackgroundThread()
-    _ = try await modelID.storedSession?.signOut()
-    _ = try await ModelStore.shared.deleteAccount(id: persistentID)
+    _ = try await resourceID.storedSession?.signOut()
+    _ = try await ModelStore.shared.deleteAccount(id: resourceID)
 }

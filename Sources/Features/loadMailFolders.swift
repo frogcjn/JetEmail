@@ -15,7 +15,7 @@ extension AppModel {
     @MainActor
     func loadMailFolders(accounts: [Account]) async {
         do {
-            try await accounts.map(\.id).forEachTask { @MainActor in try await self($0)?.loadMailFolders() }
+            try await accounts.map(\.resourceID).forEachTask { @MainActor in try await self($0)?.loadMailFolders() }
         } catch {
             logger.error("\(error)")
         }
@@ -39,7 +39,7 @@ extension AppItemModel<Account> {
         
         do {
             let account = item
-            let accountID = account.id
+            let accountID = account.resourceID
             guard let session = try await accountID.refreshSession else { return }
             
             // SessionActor

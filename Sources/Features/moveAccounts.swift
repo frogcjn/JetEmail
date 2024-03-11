@@ -20,14 +20,14 @@ extension AppModel {
         defer { isBusy = false }
         
         do {
-            try await _moveAccounts(accounts.map(\.id), fromOffsets: source, toOffset: destination)
+            try await _moveAccounts(accounts.map(\.resourceID), fromOffsets: source, toOffset: destination)
         } catch {
             logger.error("\(error)")
         }
     }
     
     // @BackgroundActor
-    private func _moveAccounts(_ accounts: [Account.ID], fromOffsets source: IndexSet, toOffset destination: Int) async throws {
+    private func _moveAccounts(_ accounts: [AccountID], fromOffsets source: IndexSet, toOffset destination: Int) async throws {
         checkBackgroundThread()
         _ = try await ModelStore.shared.moveAccounts(appModel: self, ids: accounts, fromOffsets: source, toOffset: destination)
     }

@@ -16,7 +16,7 @@ public extension JetEmail_Data.Message {
         set {
             guard let newValue else { return }
             let microsoft = newValue.inner
-            self.id           = newValue.id.general
+            // self.id           = newValue.id.general
             self.subject      = microsoft.subject?.nilIfEmpty
             
             self.createdDate  = microsoft.createdDateTime?     .date

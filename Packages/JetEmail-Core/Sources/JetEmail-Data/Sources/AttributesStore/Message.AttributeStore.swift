@@ -7,7 +7,7 @@
 
 @MainActor
 public extension Message {
-    typealias AttributesStore = JetEmail_Data.AttributesStore<Message.ID, Message.Attributes>
+    typealias AttributesStore = JetEmail_Data.AttributesStore<Message, String, Attributes>
     struct Attributes : AttributesProtocol {
         public var isBusy        = false
         public var isClassifying = false
@@ -17,37 +17,37 @@ public extension Message {
 }
 
 @MainActor
-public extension Message.ID {
+public extension Message.ResourceID {
     var isBusy: Bool {
-        get { Message.AttributesStore.shared[self].isBusy }
-        set { Message.AttributesStore.shared[self].isBusy = newValue }
+        get { Message.AttributesStore.shared[uniqueID].isBusy }
+        nonmutating set { Message.AttributesStore.shared[uniqueID].isBusy = newValue }
     }
     
     var isClassifying: Bool {
-        get { Message.AttributesStore.shared[self].isClassifying }
-        set { Message.AttributesStore.shared[self].isClassifying = newValue }
+        get { Message.AttributesStore.shared[uniqueID].isClassifying }
+        nonmutating set { Message.AttributesStore.shared[uniqueID].isClassifying = newValue }
     }
     
     var movePlan: MailFolder? {
-        get { Message.AttributesStore.shared[self].movePlan }
-        set { Message.AttributesStore.shared[self].movePlan = newValue }
+        get { Message.AttributesStore.shared[uniqueID].movePlan }
+        nonmutating set { Message.AttributesStore.shared[uniqueID].movePlan = newValue }
     }
 }
 
 @MainActor
 public extension Message {
     var isBusy: Bool {
-        get { id.isBusy }
-        set { id.isBusy = newValue }
+        get { resourceID.isBusy }
+        set { resourceID.isBusy = newValue }
     }
     
     var isClassifying: Bool {
-        get { id.isClassifying }
-        set { id.isClassifying = newValue }
+        get { resourceID.isClassifying }
+        set { resourceID.isClassifying = newValue }
     }
     
     var movePlan: MailFolder? {
-        get { id.movePlan }
-        set { id.movePlan = newValue }
+        get { resourceID.movePlan }
+        set { resourceID.movePlan = newValue }
     }
 }

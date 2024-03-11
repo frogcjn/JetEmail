@@ -8,21 +8,28 @@
 import JetEmail_Foundation
 import SwiftData
 
-public protocol UnifiedModel : PersistentModel where ID : ResourceIDProtocol & UniqueID {
+public protocol UnifiedModel : PersistentModel  {
+    associatedtype ResourceID : ResourceIDProtocol & UniqueID
+    var resourceID : ResourceID { get }
 }
 
 public protocol UniqueID {
     var uniqueID: String { get }
 }
 
-extension Account: UnifiedModel {
-    public typealias ID = AccountID
+extension String : UniqueID {
+    public var uniqueID: String { self }
 }
+
+extension Account: UnifiedModel {
+    public typealias ResourceID = AccountID
+}
+
 extension MailFolder: UnifiedModel {
-    public typealias ID = MailFolderID
+    public typealias ResourceID = MailFolderID
 }
 extension Message: UnifiedModel {
-    public typealias ID = MessageID
+    public typealias ResourceID = MessageID
 }
 
 extension AccountID : UniqueID {

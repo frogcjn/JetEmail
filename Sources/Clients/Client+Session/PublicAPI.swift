@@ -9,9 +9,10 @@ import Foundation
 import Google
 import Microsoft
 import JetEmail_Data
+import JetEmail_Foundation
 
 @MainActor
-extension JetEmail_Data.Account.ID {
+extension AccountID {
     
     var storedSession: JetEmail_Data.Session? {
         switch platformCase {

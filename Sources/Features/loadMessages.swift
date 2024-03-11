@@ -16,8 +16,8 @@ extension AppItemModel<JetEmail_Data.MailFolder> {
     
     @MainActor
     var loadingMessageState: JetEmail_Data.MailFolder.LoadingMessageState {
-        get { item.id.loadingMessageState }
-        set { item.id.loadingMessageState = newValue }
+        get { item.resourceID.loadingMessageState }
+        set { item.resourceID.loadingMessageState = newValue }
     }
     
     @MainActor // for .isBusy
@@ -29,13 +29,14 @@ extension AppItemModel<JetEmail_Data.MailFolder> {
         do {
             let mailFolder = item
             let account = mailFolder.account
-            guard let session = try await account.id.refreshSession else { return }
+            guard let session = try await account.resourceID.refreshSession else { return }
             switch session {
             case .microsoft(let session):
-                try await loadMessagesProgressing(id: mailFolder.id, session: session)
-            case .google(let session): guard let platformID = mailFolder.id.google else { return }
+                try await loadMessagesProgressing(id: mailFolder.resourceID, session: session)
+            case .google(let session):
+                guard let platformID = mailFolder.resourceID.google else { return }
                 async let messages = session.getMessages(id: platformID)
-                _ = try await ModelStore.shared.setMessages(googles: messages, in: mailFolder.id) // MSAL to SwiftData
+                _ = try await ModelStore.shared.setMessages(googles: messages, in: mailFolder.resourceID) // MSAL to SwiftData
                 // _ = try await BackgroundModelActor.instance.setMessages
                 // let messages = try await session.getMessages
             }
@@ -47,8 +48,8 @@ extension AppItemModel<JetEmail_Data.MailFolder> {
 }
 
 @MainActor
-private func loadMessagesProgressing(id: JetEmail_Data.MailFolder.ID, session: Microsoft.Session) async throws {
-    let newMessageIDs: [JetEmail_Data.Message.ID] = try await session.getMessagesID(in: id.microsoft!).map { $0.general }
+private func loadMessagesProgressing(id: MailFolderID, session: Microsoft.Session) async throws {
+    let newMessageIDs: [MessageID] = try await session.getMessagesID(in: id.microsoft!).map { $0.general }
     
     // remove
     let firstIndexToLoad = try await ModelStore.shared.setMessagesDeletePart(newMessageIDs: newMessageIDs, in: id)

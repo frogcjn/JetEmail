@@ -20,15 +20,15 @@ extension AppItemModel<JetEmail_Data.Message> {
         do {
             let message = item
             let account = message.mailFolder.account
-            guard let session = account.id.storedSession else { return }
+            guard let session = account.resourceID.storedSession else { return }
             switch session {
             case .microsoft(let session):
                 guard let microsoftMessage = message.microsoft else { return }
-                _ = try await session.moveMessage(id: microsoftMessage.id, to: moveTo.id.microsoft!)
+                _ = try await session.moveMessage(id: microsoftMessage.id, to: moveTo.resourceID.microsoft!)
                 //item.microsoft = microsoft
             case .google(let session):
                 guard let googleMessage = message.google else { return }
-                _ = try await session.moveMessage(id: googleMessage.id, from: moveFrom.id.google!, to: moveTo.id.google!)
+                _ = try await session.moveMessage(id: googleMessage.id, from: moveFrom.resourceID.google!, to: moveTo.resourceID.google!)
                 // try message.setGoogle(
             }
             item.mailFolder = moveTo

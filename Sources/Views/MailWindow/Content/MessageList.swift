@@ -34,7 +34,7 @@ fileprivate struct _MessageList : View {
                         .tag(item)
                 }
             } header: {
-                LoadingMessageProgressBar(mailFolderName: mailFolder.localizedName, loadingMessageState: mailFolder.id.loadingMessageState)
+                LoadingMessageProgressBar(mailFolderName: mailFolder.localizedName, loadingMessageState: mailFolder.resourceID.loadingMessageState)
             }
         }
         .toolbar {
@@ -128,7 +128,7 @@ fileprivate struct _MessageList : View {
         
             let classifyMessages = messages.dropFirst(classifyStartIndex).prefix(count) // .filter({ $0.movePlan == nil })
             if auto {
-                try await classifyMessages.map(\.id).forEachTask { @MainActor in try await appModel($0)?.classify() }
+                try await classifyMessages.map(\.resourceID).forEachTask { @MainActor in try await appModel($0)?.classify() }
             } else {
                 classifyMessages.forEach { message in message.movePlan = mailFolder }
             }

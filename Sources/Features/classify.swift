@@ -50,7 +50,7 @@ extension AppItemModel<JetEmail_Data.Message> {
         do {
             let message = item
             let account = message.mailFolder.account
-            guard let session = account.id.storedSession else { return }
+            guard let session = account.resourceID.storedSession else { return }
             switch session {
             case .microsoft(let session): try await session.classify(account: account, message: message)
             case .google(let session): try await session.classify(account: account, message: message)

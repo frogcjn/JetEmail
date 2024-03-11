@@ -10,7 +10,7 @@ import Microsoft
 
 @MainActor
 public extension Account {
-    typealias AttributesStore = JetEmail_Data.AttributesStore<Account.ID, Account.Attributes>
+    typealias AttributesStore = JetEmail_Data.AttributesStore<Account, String, Attributes>
     struct Attributes : AttributesProtocol {
         public var isBusy = false
         public var idToWellKnownFolderName : [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName]?
@@ -22,35 +22,35 @@ public extension Account {
 @MainActor
 public extension Account {
     var isBusy: Bool {
-        get { id.isBusy }
-        set { id.isBusy = newValue }
+        get { resourceID.isBusy }
+        set { resourceID.isBusy = newValue }
     }
     
     var idToWellKnownFolderName: [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName]? {
-        get { id.idToWellKnownFolderName }
-        set { id.idToWellKnownFolderName = newValue }
+        get { resourceID.idToWellKnownFolderName }
+        set { resourceID.idToWellKnownFolderName = newValue }
     }
     
     var loadedMailFolder: Bool {
-        get { id.loadedMailFolder }
-        set { id.loadedMailFolder = newValue }
+        get { resourceID.loadedMailFolder }
+        set { resourceID.loadedMailFolder = newValue }
     }
 }
 
 @MainActor
-public extension Account.ID {
+public extension Account.ResourceID {
     var isBusy: Bool {
-        get { AttributesStore.shared[self].isBusy }
-        nonmutating set { AttributesStore.shared[self].isBusy = newValue }
+        get { Account.AttributesStore.shared[uniqueID].isBusy }
+        nonmutating set { Account.AttributesStore.shared[uniqueID].isBusy = newValue }
     }
     
     var idToWellKnownFolderName: [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName]? {
-        get { AttributesStore.shared[self].idToWellKnownFolderName }
-        nonmutating set { AttributesStore.shared[self].idToWellKnownFolderName = newValue }
+        get { Account.AttributesStore.shared[uniqueID].idToWellKnownFolderName }
+        nonmutating set { Account.AttributesStore.shared[uniqueID].idToWellKnownFolderName = newValue }
     }
     
     var loadedMailFolder: Bool {
-        get { AttributesStore.shared[self].loadedMailFolder }
-        nonmutating set { AttributesStore.shared[self].loadedMailFolder = newValue }
+        get { Account.AttributesStore.shared[uniqueID].loadedMailFolder }
+        nonmutating set {Account.AttributesStore.shared[uniqueID].loadedMailFolder = newValue }
     }
 }

@@ -164,6 +164,12 @@ public struct MessageID : MessageIDProtocol {
         self.platform  = platform
         self.innerID   = innerID
     }
+    
+    public init(platform: Platform, innerAccountID: String, innerID: String) {
+        self.platform  = platform
+        self.accountID = .init(platform: platform, innerID: innerAccountID)
+        self.innerID   = innerID
+    }
 }
 
 

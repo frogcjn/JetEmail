@@ -14,8 +14,7 @@ import JetEmail_Foundation
 @Model
 public final class Account {
     /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
-    public private(set) var rawPlatform : String
-    public private(set) var platform    : Platform
+    public private(set) var platform    : String
     
     public private(set) var innerID     : String
     
@@ -23,7 +22,11 @@ public final class Account {
     @Attribute(.unique)
     public private(set) var uniqueID   : String
     
-    public var id: ID {
+    @Transient
+    public lazy var resourceID: AccountID = {
+        .init(platform: .init(rawValue: platform)!, innerID: innerID)
+    }()
+    /*public var id: ID {
         @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _innerID, _uniqueID)
         init(initialValue) {
             let (platform, innerID, resourceID) = (initialValue.platform, initialValue.innerID, initialValue.uniqueID)
@@ -50,12 +53,15 @@ public final class Account {
             innerID        = newValue.innerID
             uniqueID       = newValue.uniqueID
         }
-    }
+    }*/
     
     public var username: String
     
-    public init(id: ID, username: String) {
-        self.id       = id
+    public init(resourceID: ResourceID, username: String) {
+        self.platform          = resourceID.platform.rawValue
+        self.innerID           = resourceID.innerID
+        self.uniqueID          = resourceID.uniqueID
+        
         self.username = username
     }
 

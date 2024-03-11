@@ -14,10 +14,10 @@ import JetEmail_Foundation
 // @dynamicMemberLookup
 @Model
 public final class Message {
-    
+
     /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
-    public private(set) var rawPlatform : String
-    public private(set) var platform    : Platform
+    public private(set) var platform       : String
+    // public private(set) var platform    : Platform
     
     public private(set) var innerAccountID: String
     public private(set) var innerID       : String
@@ -26,15 +26,20 @@ public final class Message {
     @Attribute(.unique)
     public private(set) var uniqueID      : String
     
-    public var id: ID {
+    @Transient
+    public lazy var resourceID: MessageID = {
+        .init(platform: .init(rawValue: platform)!, innerAccountID: innerAccountID, innerID: innerID)
+    }()
+    
+    /*public var id: ID {
         @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _innerAccountID, _innerID, _uniqueID)
         init(initialValue) {
-            let (platform, innerAccountID, innerID, resourceID) = (initialValue.platform, initialValue.accountID.innerID, initialValue.innerID, initialValue.uniqueID)
+            let (platform, innerAccountID, innerID, uniqueID) = (initialValue.platform, initialValue.accountID.innerID, initialValue.innerID, initialValue.uniqueID)
             _$backingData.setValue(forKey: \.platform,       to: platform         )
             _$backingData.setValue(forKey: \.rawPlatform,    to: platform.rawValue)
             _$backingData.setValue(forKey: \.innerAccountID, to: innerAccountID   )
             _$backingData.setValue(forKey: \.innerID,        to: innerID          )
-            _$backingData.setValue(forKey: \.uniqueID,       to: resourceID       )
+            _$backingData.setValue(forKey: \.uniqueID,       to: uniqueID         )
             
             _platform       = _SwiftDataNoType()
             _rawPlatform    = _SwiftDataNoType()
@@ -43,10 +48,7 @@ public final class Message {
             _uniqueID       = _SwiftDataNoType()
         }
         get {
-            switch platform {
-            case .microsoft: .init(platform: .microsoft, accountID: .init(platform: .microsoft, innerID: innerAccountID), innerID: innerID)
-            case .google:    .init(platform: .google   , accountID: .init(platform: .google   , innerID: innerAccountID), innerID: innerID)
-            }
+            .init(platform: platform, accountID: .init(platform: platform, innerID: innerAccountID), innerID: innerID)
         }
         set {
             platform       = newValue.platform
@@ -55,7 +57,7 @@ public final class Message {
             innerID        = newValue.innerID
             uniqueID       = newValue.uniqueID
         }
-    }
+    }*/
     
     public var      subject: String?
     
@@ -89,8 +91,13 @@ public final class Message {
     @Relationship(deleteRule: .nullify)
     public var mailFolder: MailFolder
     
-    public init(modelID: ID, in mailFolder: MailFolder) {
-        self.id          = modelID
+    public init(resourceID: ResourceID, in mailFolder: MailFolder) {
+        // self.id          = modelID
+        self.platform          = resourceID.platform.rawValue
+        self.innerAccountID    = resourceID.accountID.innerID
+        self.innerID           = resourceID.innerID
+        self.uniqueID          = resourceID.uniqueID
+        
         self.mailFolder  = mailFolder
     }
     
