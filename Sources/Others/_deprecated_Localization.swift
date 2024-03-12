@@ -1,3 +1,5 @@
+/*
+@ -1,81 +0,0 @@
 //
 //  Localizatino.swift
 //  JetEmail
@@ -79,3 +81,4 @@ fileprivate extension MicrosoftMailFolder.WellKnownFolderName {
         }
     }
 }
+*/

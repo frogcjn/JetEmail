@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 struct AccountsTab : View {
     
@@ -14,6 +15,9 @@ struct AccountsTab : View {
     
     @Environment(AppModel.self)
     var appModel
+    
+    @Environment(\.webAuthenticationSession)
+    var webAuthenticationSession
     
     var body: some View {
         SplitView {
@@ -25,13 +29,13 @@ struct AccountsTab : View {
             } else {
                 VStack {
                     Button {
-                        Task { await appModel.signIn(platform: .microsoft) }
+                        Task { await appModel.signIn(platform: .microsoft, webAuthenticationSession: webAuthenticationSession) }
                     } label: {
                         Label("Microsoft Outlook", image: "Outlook")
                     }//.disabled(context.isBusy)
                     
                     Button {
-                        Task { await appModel.signIn(platform: .google) }
+                        Task { await appModel.signIn(platform: .google, webAuthenticationSession: webAuthenticationSession) }
                     } label: {
                         Label("Google Gmail", image: "Gmail")
                     }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 struct AccountListToolbar : View {
     
@@ -14,6 +15,9 @@ struct AccountListToolbar : View {
     
     @Environment(SettingsModel.self)
     var settings
+    
+    @Environment(\.webAuthenticationSession)
+    var webAuthenticationSession
     
     var body: some View {
         HStack {
@@ -24,13 +28,13 @@ struct AccountListToolbar : View {
             Menu {
                 Group {
                     Button {
-                        Task { await appModel.signIn(platform: .microsoft) }
+                        Task { await appModel.signIn(platform: .microsoft, webAuthenticationSession: webAuthenticationSession) }
                     } label: {
                         Label("Microsoft Outlook", image: "Outlook")
                     }//.disabled(context.isBusy)
                     
                     Button {
-                        Task { await appModel.signIn(platform: .google) }
+                        Task { await appModel.signIn(platform: .google, webAuthenticationSession: webAuthenticationSession) }
                     } label: {
                         Label("Google Gmail", image: "Gmail")
                     }

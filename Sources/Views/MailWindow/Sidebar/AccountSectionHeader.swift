@@ -43,9 +43,9 @@ struct AccountSectionHeader: View {
                     .lineLimit(2)
 
                 switch account.resourceID.platform {
-                case .microsoft:           makePlatformLabel(LocalizedStringKey("mail.microsoft"))
-                case .google:              makePlatformLabel(LocalizedStringKey("mail.google"))
-                case .other(let rawValue): Text("Unknown \(rawValue)")
+                case .microsoft:           platformLabel(LocalizedStringKey("Microsoft Outlook"))
+                case .google:              platformLabel(LocalizedStringKey("Google Gmail"))
+                case .other(let rawValue): platformLabel(LocalizedStringKey("Unknown \(rawValue)"))
                 }
             }
             //Text(account.platformState.rawValue)
@@ -54,7 +54,7 @@ struct AccountSectionHeader: View {
     }
 
     @ViewBuilder
-    private func makePlatformLabel(_ description: LocalizedStringKey) -> some View {
+    private func platformLabel(_ description: LocalizedStringKey) -> some View {
         Text(description)
             .font(.footnote)
             .foregroundStyle(.secondary)

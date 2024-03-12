@@ -9,6 +9,9 @@
 @preconcurrency import AppAuthCore
 import GTMAppAuth
 
+import SwiftUI
+import AuthenticationServices
+
 #if os(iOS) || os(visionOS)
 import UIKit
 #elseif os(macOS)
@@ -19,19 +22,10 @@ fileprivate let kIncludeGrantedScopesParameter = "include_granted_scopes"
 
 extension GoogleClient {
     
-    @MainActor  // for window
-    func _gtmSignIn() async throws -> AuthSession {
-        MainActor.assertIsolated()
-        #if os(iOS)
-        guard let window = UIApplication.sharedKeyWindow?.rootViewController else { throw AuthError.authorizeNoMainWindow }
     
-        #elseif os(visionOS)
-        
-        guard let window = UIApplication.sharedKeyWindow else { throw AuthError.authorizeNoMainWindow }
-
-        #elseif os(macOS)
-        guard let window = NSApplication.sharedKeyWindow else { throw AuthError.authorizeNoMainWindow }
-        #endif
+    @MainActor  // for WebAuthenticationSession
+    func _gtmSignIn(webAuthenticationSession: WebAuthenticationSession) async throws -> AuthSession {
+        MainActor.assertIsolated()
         
         let additionalParameters: [String: String] = [
             kIncludeGrantedScopesParameter: "true"
@@ -52,27 +46,7 @@ extension GoogleClient {
             additionalParameters: additionalParameters
         )
         
-        var authFlow: OIDExternalUserAgentSession?
-        
-        let authState = try await withCheckedThrowingContinuation { continuation in
-            // guard authorizationFlow is not existe
-            
-            
-            
-            
-            authFlow = OIDAuthState.authState(byPresenting: request, presenting: window) { state, error in
-                // Brings this app to the foreground.
-                // NSRunningApplication.current.activate(options: [.activateAllWindows, .activateAllWindows])
-                if let state = state {
-                    continuation.resume(returning: state)
-                } else {
-                    let error: Error = error ?? AuthError.message("Auth with Google failed.")
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
-        withExtendedLifetime(authFlow) {} // keep authFlow after get auth state
-        
+        let authState = try await OIDAuthState.present(request: request, webAuthenticationSession: webAuthenticationSession)
         return AuthSession(authState: authState)
     }
 }

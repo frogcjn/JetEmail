@@ -11,6 +11,8 @@ import Combine   // for PassthroughSubject
 import os        // for Logger
 import JetEmailData
 
+import AuthenticationServices
+
 // @dynamicMemberLookup
 @MainActor // for @MainActor AppModel
 @Observable

@@ -30,14 +30,14 @@ extension MicrosoftClient {
     func _msalSignIn() async throws -> MSALSession {
         let scopes = MicrosoftClient.scopes.map(\.rawValue)
         
-        let parameters = try await MSALInteractiveTokenParameters(scopes: scopes, webviewParameters: webViewParameters)
+        let parameters = try MSALInteractiveTokenParameters(scopes: scopes, webviewParameters: webViewParameters)
         parameters.promptType = .selectAccount
         return try await _msalClient.acquireToken(with: parameters)
     }
     
     @MainActor // for webViewParameters
     func _msalSignout(msalAccount: MSALAccount) async throws -> Bool {        
-        let parameters = try await MSALSignoutParameters(webviewParameters: webViewParameters)
+        let parameters = try MSALSignoutParameters(webviewParameters: webViewParameters)
         return try await _msalClient.signout(with: msalAccount, signoutParameters: parameters)
     }
 

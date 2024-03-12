@@ -8,6 +8,9 @@
 @preconcurrency import GTMAppAuth
 import JetEmailID
 
+import SwiftUI
+import AuthenticationServices
+
 // MARK: - Sessions
 
 public extension GoogleClient {
@@ -22,10 +25,11 @@ public extension GoogleClient {
 // MARK: - Sign In
 
 public extension GoogleClient {
-    func signIn() async throws -> GoogleSession {
-        let gtmSession = try await _gtmSignIn()
+    @MainActor // for WebAuthenticationSession
+    func signIn(webAuthenticationSession: WebAuthenticationSession) async throws -> GoogleSession {
+        let gtmSession = try await _gtmSignIn(webAuthenticationSession: webAuthenticationSession)
         let sessionItem = try await Keychain.shared.insertItem(gtmSession: gtmSession)
-        return await SessionStore.shared.insert(sessionItem: sessionItem, forceReplacing: false)
+        return SessionStore.shared.insert(sessionItem: sessionItem, forceReplacing: false)
     }
 }
 
