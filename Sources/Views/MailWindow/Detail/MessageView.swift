@@ -12,40 +12,13 @@ import JetEmailID
 struct MessageView : View {
     @Environment(AppItemModel<Message>.self)
     var itemModel
-    
+
     @Environment(Message.self)
     var message
-    
-    var body: some View {
-        
-        VStack {
-            Form {
-                LabeledContent("subject:", value: message.subject ?? "nil")
-                
-                Divider()
-                
-                /*LabeledContent("createdDate:" , value: message.createdDate?.formattedRelative() ?? "")
-                LabeledContent("modifiedDate:", value: message.modifiedDate?.formattedRelative() ?? "")*/
-                LabeledContent("date:", value: message.date?.formattedRelative() ?? "")
-                // LabeledContent("sentDate:"    , value: message.sentDate?.formattedRelative() ?? "")
-                
-                Divider()
-                
-                if let from    = message.from                             { LabeledContent("from:"    , value: from)    }
-                if let sender  = message.sender,   sender != message.from { LabeledContent("sender:"  , value: sender)  }
-                if let replyTo = message.replyTo                          { LabeledContent("replayTo:", value: replyTo) }
 
-                if let to      = message.to                               { LabeledContent("to:"      , value: to )     }
-                if let cc      = message.cc                               { LabeledContent("cc:"      , value: cc)      }
-                if let bcc     = message.bcc                              { LabeledContent("bcc:"     , value: bcc )    }
-                
-                Divider()
-                
-                if let bodyPreview = message.bodyPreview {
-                    LabeledContent("bodyPreview:", value: bodyPreview)
-                }
-            }
-            
+    var body: some View {
+        VStack {
+            EmailMetadataView(message: message)
             EmailBodyView(messageBody: message.body)
             Spacer()
         }
@@ -74,8 +47,42 @@ struct MessageView : View {
     }
 }
 
+struct EmailMetadataView: View {
+    let message: Message
+
+    var body: some View {
+        Form {
+            LabeledContent("subject:", value: message.subject ?? "nil")
+
+            Divider()
+
+            /*LabeledContent("createdDate:" , value: message.createdDate?.formattedRelative() ?? "")
+            LabeledContent("modifiedDate:", value: message.modifiedDate?.formattedRelative() ?? "")*/
+            LabeledContent("date:", value: message.date?.formattedRelative() ?? "")
+            // LabeledContent("sentDate:"    , value: message.sentDate?.formattedRelative() ?? "")
+
+            Divider()
+
+            if let from    = message.from                             { LabeledContent("from:"    , value: from)    }
+            if let sender  = message.sender,   sender != message.from { LabeledContent("sender:"  , value: sender)  }
+            if let replyTo = message.replyTo                          { LabeledContent("replayTo:", value: replyTo) }
+
+            if let to      = message.to                               { LabeledContent("to:"      , value: to )     }
+            if let cc      = message.cc                               { LabeledContent("cc:"      , value: cc)      }
+            if let bcc     = message.bcc                              { LabeledContent("bcc:"     , value: bcc )    }
+
+            Divider()
+
+            if let bodyPreview = message.bodyPreview {
+                LabeledContent("bodyPreview:", value: bodyPreview)
+            }
+        }
+        .padding(4)
+    }
+}
+
 struct EmailBodyView : View {
-    
+
     @Environment(SettingsModel.self)
     var appSettings
     
