@@ -12,6 +12,9 @@ struct AccountsTab : View {
     @Environment(SettingsModel.self)
     var settings
     
+    @Environment(AppModel.self)
+    var appModel
+    
     var body: some View {
         SplitView {
             AccountList()
@@ -20,7 +23,21 @@ struct AccountsTab : View {
                 AccountView()
                     .itemModel(item)
             } else {
-                Color.clear
+                VStack {
+                    Button {
+                        Task { await appModel.signIn(platform: .microsoft) }
+                    } label: {
+                        Label("Microsoft Outlook", image: "Outlook")
+                    }//.disabled(context.isBusy)
+                    
+                    Button {
+                        Task { await appModel.signIn(platform: .google) }
+                    } label: {
+                        Label("Google Gmail", image: "Gmail")
+                    }
+                    //.disabled(context.isBusy)
+                }
+                .labelStyle(.titleAndIcon)
             }
         }
     }
