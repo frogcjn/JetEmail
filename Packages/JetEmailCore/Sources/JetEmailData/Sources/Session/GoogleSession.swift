@@ -9,7 +9,7 @@ import JetEmailGoogle
 import JetEmailMicrosoft
 import JetEmailID
 
-public typealias Session = PlatformCase<MicrosoftSession, GoogleSession>
+public typealias Session = PlatformEnum<AccountID, MicrosoftSession, GoogleSession>
 
 public extension Session {
     var accountID: AccountID {

@@ -5,6 +5,8 @@
 //  Created by Cao, Jiannan on 3/7/24.
 //
 
+import JetEmailID
+
 extension Account.AttributesStore {
     static var shared = AttributesStore()
 }

@@ -7,15 +7,28 @@
 
 import Foundation // for KeyPathComparator
 import SwiftData  // for @Model
-import JetEmailGoogle
-import JetEmailMicrosoft
 import JetEmailID
 
 @Model
 public final class MailFolder {
+    
+    // MARK: - Delete Mark
+    
+    public var deleteMark = false {
+        didSet {
+            if deleteMark {
+                messages.forEach { $0.deleteMark = true }
+            }
+        }
+    }
+    
+    
+    // MARK: - Resource
+
+    // MARK: ResourceID
 
     /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
-    public private(set) var platform       : String
+    public private(set) var platform      : String
     // public private(set) var platform    : Platform
     
     public private(set) var innerAccountID: String
@@ -29,42 +42,66 @@ public final class MailFolder {
     public lazy var resourceID: MailFolderID = {
         .init(platform: .init(rawValue: platform), innerAccountID: innerAccountID, innerID: innerID)
     }()
-    /*public var id: ID {
-        @storageRestrictions(accesses: _$backingData, initializes: _platform, _rawPlatform, _innerAccountID, _innerID, _uniqueID)
-        init(initialValue) {
-            let (platform, innerAccountID, innerID, uniqueID) = (initialValue.platform, initialValue.accountID.innerID, initialValue.innerID, initialValue.uniqueID)
-            _$backingData.setValue(forKey: \.platform,       to: platform         )
-            _$backingData.setValue(forKey: \.rawPlatform,    to: platform.rawValue)
-            _$backingData.setValue(forKey: \.innerAccountID, to: innerAccountID   )
-            _$backingData.setValue(forKey: \.innerID,        to: innerID          )
-            _$backingData.setValue(forKey: \.uniqueID,       to: uniqueID         )
-            
-            _platform       = _SwiftDataNoType()
-            _rawPlatform    = _SwiftDataNoType()
-            _innerAccountID = _SwiftDataNoType()
-            _innerID        = _SwiftDataNoType()
-            _uniqueID       = _SwiftDataNoType()
-        }
-        get {
-            .init(platform: platform, accountID: .init(platform: platform, innerID: innerAccountID), innerID: innerID)
-        }
-        set {
-            platform       = newValue.platform
-            rawPlatform    = newValue.platform.rawValue
-            innerAccountID = newValue.accountID.innerID
-            innerID        = newValue.innerID
-            uniqueID       = newValue.uniqueID
-        }
-    }*/
     
-    public var name: String
+    // MARK: name
+    
+    public var name: String?
+    
+    
+    // MARK: systemInfo
+    
+    public var   _isSystemFolder: Bool    // cached whether it is a system folder
+    public var      _systemOrder: Int?    // cached sytem older
+    public var _nameLocalizedKey: String? // cached localized name
+    public var      _systemImage: String? // cached system image
+    
+    
+    // MARK: resource
+    
+    public var _resource: String?
+
+
+    public init(resource: MailFolderResource, in account: Account) {
+        checkBackgroundThread()
+        
+        platform          = resource.id.platform.rawValue
+        innerAccountID    = resource.id.accountID.innerID
+        innerID           = resource.id.innerID
+        uniqueID          = resource.id.uniqueID
+        
+        name              = resource.name
+        _isSystemFolder   = resource.systemInfo != nil
+        _systemOrder      = resource.systemInfo?.order
+        _nameLocalizedKey = resource.systemInfo?.nameLocalizedKey
+        _systemImage      = resource.systemInfo?.systemImage
+        
+        _resource         = try? resource.jsonString
+        
+        self.account = account
+    }
+    
+    public func update(resource: MailFolderResource, in account: Account) {
+        checkBackgroundThread()
+
+        platform          = resource.id.platform.rawValue
+        innerAccountID    = resource.id.accountID.innerID
+        innerID           = resource.id.innerID
+        uniqueID          = resource.id.uniqueID
+        
+        name              = resource.name
+        _isSystemFolder   = resource.systemInfo != nil
+        _systemOrder      = resource.systemInfo?.order
+        _nameLocalizedKey = resource.systemInfo?.nameLocalizedKey
+        _systemImage      = resource.systemInfo?.systemImage
+        
+        _resource         = try? resource.jsonString
+        
+        self.account = account
+    }
     
     /// MailFolder.account <<-> Account.mailFolders
     @Relationship(deleteRule: .nullify)
     public var account: Account
-    
-    //@Relationship(deleteRule: .nullify)
-    //var rootAccount: Account?
     
     /// MailFolder.parent <<-> MailFOlder.children
     @Relationship(deleteRule: .nullify)
@@ -84,68 +121,19 @@ public final class MailFolder {
     
     @Transient
     public var messages: [Message] { _messages.sorted(using: KeyPathComparator(\.date, order: .reverse))}
-    
-    public init(resourceID: MailFolderID, name: String, info: MailFolderInfo, in account: Account) {
-        // self.id      = modelID
-        // self.platform       = modelID.platform
-        self.platform          = resourceID.platform.rawValue
-        self.innerAccountID    = resourceID.accountID.innerID
-        self.innerID           = resourceID.innerID
-        self.uniqueID          = resourceID.uniqueID
-        
-        self.name              = name
-        self._isSystemFolder   = info._isSystemFolder
-        self._systemOrder      = info._systemOrder
-        self._nameLocalizedKey = info._nameLocalizedKey
-        self._systemImage = info._systemImage
-        self.account = account
-    }
-    
-    public var _graph: String?
-    public var _google: String?
-
-    public var deleteMark = false {
-        didSet {
-            if deleteMark {
-                messages.forEach { $0.deleteMark = true }
-            }
-        }
-    }
-    
-    
-    public let   _isSystemFolder: Bool    // cached whether it is a system folder
-    public let      _systemOrder: Int?    // cached sytem older
-    public let _nameLocalizedKey: String? // cached localized name
-    public let      _systemImage: String? // cached system image
-    
-    // parent - children relationship
 }
 
-
-
-public struct MailFolderInfo : Codable {
-
-    public let   _isSystemFolder: Bool
-    public let      _systemOrder: Int?
-    public let _nameLocalizedKey: String?
-    public let      _systemImage: String?
-    
-    init(isSystemFolder: Bool, systemOrder: Int?, nameLocalizedKey: String?, systemImage: String?) {
-        self._isSystemFolder   = isSystemFolder
-        self._systemOrder      = systemOrder
-        self._nameLocalizedKey = nameLocalizedKey
-        self._systemImage      = systemImage
-    }
-}
 
 public extension MailFolder {
     
     @Transient
     var localizedName : String {
         if let key = _nameLocalizedKey {
-            return String(localized: String.LocalizationValue(key), bundle: .module)
+            let result = String(localized: .init(key), bundle: .module)
+            if key == result { return name ?? "" }
+            else { return result }
         } else {
-            return name
+            return name ?? String(localized: "(MailFolder.NoName)", defaultValue: .init(name ?? ""))
         }
     }
     

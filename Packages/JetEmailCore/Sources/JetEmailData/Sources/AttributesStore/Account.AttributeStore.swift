@@ -11,7 +11,7 @@ import JetEmailMicrosoft
 
 @MainActor
 public extension Account {
-    typealias AttributesStore = JetEmailData.AttributesStore<Account, String, Attributes>
+    typealias AttributesStore = JetEmailID.AttributesStore<String, Attributes>
     struct Attributes : AttributesProtocol {
         public var isBusy = false
         public var idToWellKnownFolderName : [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName]?

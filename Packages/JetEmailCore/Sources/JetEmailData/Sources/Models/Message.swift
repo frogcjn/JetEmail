@@ -5,8 +5,8 @@
 //  Created by Cao, Jiannan on 2/13/24.
 //
 
-import SwiftData  // for @Model
 import Foundation // for Date
+import SwiftData  // for @Model
 import JetEmailGoogle
 import JetEmailMicrosoft
 import JetEmailID

@@ -5,9 +5,11 @@
 //  Created by Cao, Jiannan on 3/7/24.
 //
 
+import JetEmailID
+
 @MainActor
 public extension Message {
-    typealias AttributesStore = JetEmailData.AttributesStore<Message, String, Attributes>
+    typealias AttributesStore = JetEmailID.AttributesStore<String, Attributes>
     struct Attributes : AttributesProtocol {
         public var isBusy        = false
         public var isClassifying = false

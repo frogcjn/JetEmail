@@ -5,6 +5,8 @@
 //  Created by Cao, Jiannan on 2/22/24.
 //
 
+import JetEmailID
+
 extension MicrosoftClient {
     @MainActor
     static var _shared: MicrosoftClient?
@@ -20,4 +22,8 @@ extension MicrosoftClient {
 
 extension SessionStore {
     static let shared = SessionStore()
+}
+
+extension MicrosoftAccountID.AttributesStore {
+    static var shared = AttributesStore()
 }

@@ -5,9 +5,11 @@
 //  Created by Cao, Jiannan on 3/7/24.
 //
 
+import JetEmailID
+
 @MainActor
 public extension MailFolder {
-    typealias AttributesStore = JetEmailData.AttributesStore<MailFolder, String, Attributes>
+    typealias AttributesStore = JetEmailID.AttributesStore<String, Attributes>
     struct Attributes : AttributesProtocol {
         public var loadingMesageState = LoadingMessageState.none
         public init() {}

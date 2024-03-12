@@ -9,17 +9,15 @@ import Foundation
 @preconcurrency import GTMAppAuth
 import JetEmailID
 
-//public extension Google {
-    //@globalActor
 actor Keychain {
     static let securityAttributeCreator           = "jtem".fourCharUInt32! /*Jet Email*/
     static let securityAttributeTypeGoogleAccount = "GGac".fourCharUInt32! /*Google Acccount*/
     
-    struct SessionItem : ValueType {
-        public let      accountID: GoogleAccountID
-        public let       username: String
-        public let     gtmSession: AuthSession
-        public let   keychainItem: Data
+    struct SessionItem : ValueType, Sendable {
+        let      accountID: GoogleAccountID
+        let       username: String
+        let     gtmSession: AuthSession
+        let   keychainItem: Data
     }
     
     func insertItem(gtmSession: AuthSession) throws -> SessionItem {

@@ -15,7 +15,7 @@ public struct PersistentID<Model : PersistentModel> : RawRepresentable {
     }
 }
 
-extension PersistentID : CodableValueType {}
+extension PersistentID : CodableValueType, Sendable {}
 
 public extension PersistentModel {
     typealias PersistentID = JetEmailData.PersistentID<Self>

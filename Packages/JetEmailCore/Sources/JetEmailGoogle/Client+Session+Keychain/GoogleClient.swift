@@ -21,7 +21,7 @@ public actor GoogleClient : Sendable {
 }
 
 extension GoogleClient {
-    enum Scope: String, CodableValueType {
+    enum Scope: String, CodableValueType, Sendable {
         case openid
         case email // OIDScopeEmail
         case profile

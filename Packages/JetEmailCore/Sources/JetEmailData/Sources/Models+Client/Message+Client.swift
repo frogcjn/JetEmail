@@ -15,35 +15,37 @@ public extension Message {
         }
         set {
             guard let newValue else { return }
-            let microsoft = newValue.inner
+            let inner = newValue.inner
             // self.id           = newValue.id.general
-            self.subject      = microsoft.subject?.nilIfEmpty
+            self.subject      = inner.subject?.nilIfEmpty
             
-            self.createdDate  = microsoft.createdDateTime?     .date
-            self.modifiedDate = microsoft.lastModifiedDateTime?.date
-            self.receivedDate = microsoft.receivedDateTime?    .date
-            self.sentDate     = microsoft.sentDateTime?        .date
+            self.createdDate  = inner.createdDateTime?     .date
+            self.modifiedDate = inner.lastModifiedDateTime?.date
+            self.receivedDate = inner.receivedDateTime?    .date
+            self.sentDate     = inner.sentDateTime?        .date
             self.date         = receivedDate
 
-            self.sender       = microsoft.sender?.emailAddress.map(\.rawValue)
-            self.from         = microsoft.from?.emailAddress.map(\.rawValue)
-            self.to           = microsoft.toRecipients? .compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
-            self.replyTo      = microsoft.replyTo?      .compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
-            self.cc           = microsoft.ccRecipients? .compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
-            self.bcc          = microsoft.bccRecipients?.compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
+            self.sender       = inner.sender?.emailAddress.map(\.rawValue)
+            self.from         = inner.from?.emailAddress.map(\.rawValue)
+            self.to           = inner.toRecipients? .compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
+            self.replyTo      = inner.replyTo?      .compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
+            self.cc           = inner.ccRecipients? .compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
+            self.bcc          = inner.bccRecipients?.compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
             
-            self.bodyPreview  = microsoft.bodyPreview?.nilIfEmpty
+            self.bodyPreview  = inner.bodyPreview?.nilIfEmpty
             
-            if let body = microsoft.body, let contentType = body.contentType, let content = body.content {
+            if let body = inner.body, let contentType = body.contentType, let content = body.content {
                 switch contentType {
                 case .html: self.body = .init(text: content, html:content)
                 case .text: self.body = .init(text: content, html: nil)
                 }
             }
             
-            if let raw = microsoft.raw { self.raw = raw }
+            if let raw = newValue.raw { 
+                self.raw = raw
+            }
 
-            self._graph = try? microsoft.jsonString
+            self._graph = try? newValue.jsonString
         }
     }
 
@@ -75,12 +77,12 @@ public extension Message {
     
     func setGoogle(_ google: GoogleMessage) throws {
         // TODO: id
-        let google = google.data
-        if let internalDate = google.internalDate       { self.date        = internalDate.milliSecondsTimeIntervalSince1970 }
-        if let snippet      = google.snippet            { self.bodyPreview = snippet                                        }
-        if let raw          = google.raw                { self.raw         = raw                                            }
+        let inner = google.inner
+        if let internalDate = inner.internalDate       { self.date        = internalDate.milliSecondsTimeIntervalSince1970 }
+        if let snippet      = inner.snippet            { self.bodyPreview = snippet                                        }
+        if let raw          = inner.raw                { self.raw         = raw                                            }
         
-        if let headers = google.payload?.headers {
+        if let headers = inner.payload?.headers {
             /*
              header fields:
                 subject
@@ -111,7 +113,7 @@ public extension Message {
             }
         }
         
-        if let body = try google.payload?.messageBody {
+        if let body = try inner.payload?.messageBody {
             self.body = body
         }
         
@@ -126,7 +128,7 @@ fileprivate enum MIMEType: String {
     case multipartMixed       = "multipart/mixed"
 }
 
-fileprivate extension GoogleMessageData.Part {
+fileprivate extension GoogleMessageInner.Part {
     var messageBody: Message.Body? { get throws {
         let html = try firstBodyContent(mimeType: .textHtml)
         let text = try firstBodyContent(mimeType: .textPlain)
@@ -140,17 +142,17 @@ fileprivate extension GoogleMessageData.Part {
         else { nil }
     }
 
-    var nonFileParts: [GoogleMessageData.Part] {
+    var nonFileParts: [GoogleMessageInner.Part] {
         parts?.filter { $0.filename?.nilIfEmpty == nil } ?? []
     }
 }
 
-fileprivate extension [GoogleMessageData.Part] {
-    func firstPart(mimeType: MIMEType) -> GoogleMessageData.Part? {
+fileprivate extension [GoogleMessageInner.Part] {
+    func firstPart(mimeType: MIMEType) -> GoogleMessageInner.Part? {
         first(where: { $0.mimeType == mimeType.rawValue })
     }
 
-    var firstMultipartPart: GoogleMessageData.Part? {
+    var firstMultipartPart: GoogleMessageInner.Part? {
         first { ([.multipartMixed, .multipartAlternative] as [MIMEType]).map(\.rawValue).map(Optional.init).contains($0.mimeType) }
     }
 }

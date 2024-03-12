@@ -9,10 +9,13 @@
 import AppAuth
 import JetEmailID
 
-public final class GoogleSession: NSObject & AuthSessionDelegate & OIDAuthStateChangeDelegate & OIDAuthStateErrorDelegate, Sendable {
+public typealias GoogleSessionProtocol = NSObject & AuthSessionDelegate & OIDAuthStateChangeDelegate & OIDAuthStateErrorDelegate
+public final class GoogleSession: GoogleSessionProtocol, PlatformSpecificCase, Sendable {
+    public var platformCaseGeneralID: AccountID { accountID.general }
+        
     public let  accountID  : GoogleAccountID
     public let  username   : String
-           let _gtmSession : AuthSession
+    public let _gtmSession : AuthSession
     
            let keychainItem: Data
     

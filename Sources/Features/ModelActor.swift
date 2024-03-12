@@ -488,7 +488,7 @@ extension ModelContext {
     
     // MARK: - ModelContext: Insert or Delete Atom Operations
         
-    func _insertMailFolder(_ platformCase: PlatformCase<MicrosoftMailFolder, GoogleMailFolder>, parent: MailFolder, in account: Account) throws -> MailFolder {
+    func _insertMailFolder(_ platformCase: MailFolderResource, parent: MailFolder, in account: Account) throws -> MailFolder {
         switch platformCase {
         case .microsoft(let microsoft): return try _insertMailFolder(microsoft: microsoft, parent: parent, in: account)
         case    .google(let    google): return try _insertMailFolder(   google:    google, parent: parent, in: account)
@@ -524,13 +524,12 @@ extension ModelContext {
             
             // If found: update
             model.deleteMark = false
-            model.microsoft = microsoft
-            model.account = account
+            model.update(resource: .microsoft(microsoft), in: account)
             return model
         }
         
         // If not found: create
-        let model = MailFolder(platformCase: .microsoft(microsoft), in: account)
+        let model = MailFolder(resource: .microsoft(microsoft), in: account)
         insert(model)
         return model
         /*
@@ -554,13 +553,12 @@ extension ModelContext {
             
             // If found: update
             model.deleteMark = false
-            model.google = google
-            model.account = account
+            model.update(resource: .google(google), in: account)
             return model
         }
         
         // If not found: create
-        let model = MailFolder(platformCase: .google(google), in: account)
+        let model = MailFolder(resource: .google(google), in: account)
         insert(model)
         return model
         /*
@@ -576,7 +574,7 @@ extension ModelContext {
          */
     }
     
-    func _insertMailFolder(_ platformCase: PlatformCase<MicrosoftMailFolder, GoogleMailFolder>, in account: Account) throws -> MailFolder {
+    func _insertMailFolder(_ platformCase: MailFolderResource, in account: Account) throws -> MailFolder {
         switch platformCase {
         case .microsoft(let microsoft): return try _insertMailFolder(microsoft: microsoft, in: account)
         case    .google(let    google): return try _insertMailFolder(   google:    google, in: account)
@@ -792,7 +790,7 @@ extension ModelStore {
 
 extension ModelStore {
 
-    func insertMailFolder(platform: PlatformCase<MicrosoftMailFolder, GoogleMailFolder>, in accountID: AccountID) throws -> MailFolderID {
+    func insertMailFolder(platform: MailFolderResource, in accountID: AccountID) throws -> MailFolderID {
         let account = try self[accountID]!
         var mailFolder: MailFolder!
         try modelContext.transaction {
@@ -831,18 +829,23 @@ extension ModelStore {
     
     func rootGoogleMailFolder(in accountID: AccountID) throws -> GoogleMailFolder? {
         let account = try self[accountID]!
-        return account.root?.google
+        if account.root != nil, let accountID = accountID.google {
+            return GoogleMailFolder.all(accountID: accountID)
+        } else {
+            return nil
+        }
     }
     
-    func setChildrenMailFolders(platform: [PlatformCase<MicrosoftMailFolder, GoogleMailFolder>], parent parentID: MailFolderID, in accountID: AccountID) throws -> [MailFolderID] {
+    func setChildrenMailFolders(resource: [MailFolderResource], parent parentID: MailFolderID, in accountID: AccountID) throws -> [MailFolderID] {
         let parent =  try self[parentID]!
         let account = try self[accountID]!
         do {
             // insert
             var inserts: [MailFolder] = []
-            for platform in platform {
-                try inserts.append(modelContext._insertMailFolder(platform, parent: parent, in: account))
+            for resource in resource {
+                try inserts.append(modelContext._insertMailFolder(resource, parent: parent, in: account))
             }
+            
             
             // delete
             let removings = try modelContext._fetchMailFolderNotIn(inserts, in: parent)

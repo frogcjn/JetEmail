@@ -13,37 +13,25 @@ import JetEmailID
 
 // MARK: - MailFolder <-> Google, Microsoft
 
-public extension MailFolder {
-    convenience init(platformCase: PlatformCase<MicrosoftMailFolder, GoogleMailFolder>, in account: Account) {
+/*public extension MailFolder {
+    convenience init(resource: MailFolderResource, in account: Account) {
         checkBackgroundThread()
-        let info = MailFolderInfo(
-              isSystemFolder: platformCase.isSystemFolder,
-                 systemOrder: platformCase.systemOrder,
-            nameLocalizedKey: platformCase.nameLocalizedKey,
-                 systemImage: platformCase.systemImage
+        self.init(
+            resourceID: resource.id,
+            name      : resource.name,
+            systemInfo: resource.systemInfo,
+            in        : account
         )
-        switch platformCase {
+        
+        switch resource {
         case .microsoft(let microsoft):
-            self.init(
-                resourceID: microsoft.id.general,
-                name   : microsoft.inner.displayName ?? "",
-                info   : info,
-                in     : account
-            )
             self._graph = try? microsoft.jsonString
         case .google(let google):
-            self.init(
-                resourceID: google.id.general,
-                name   : google.data.name ?? "",
-                info   : info,
-                in     : account
-            )
             self._google = try? google.jsonString
         }
-        
     }
     
-    var microsoft: MicrosoftMailFolder? {
+    /*var microsoft: MicrosoftMailFolder? {
         get {
             try? _graph?.decodeJSON(MicrosoftMailFolder.self)
         }
@@ -55,18 +43,18 @@ public extension MailFolder {
             self._graph   = try? microsoft.jsonString
             self._google = nil
         }
-    }
-    
-    var google: GoogleMailFolder? {
-        get {
-            try? _google?.decodeJSON(GoogleMailFolder.self)
-        }
-        set {
-            guard let google = newValue else { return }
-            // self.id = google.id.general
-            self.name = google.data.name ?? ""
+    }*/
+    func update(resource: MailFolderResource?) {
+        guard let resource else { return }
+        self.resourceID  = resource.id
+        self.name        = resource.name
+        self.systemInfo  = resource.systemInfo
+
+        switch resource {
+        case .microsoft(let microsoft):
+            self._graph = try? microsoft.jsonString
+        case .google(let google):
             self._google = try? google.jsonString
-            self._graph = nil
         }
     }
-}
+}*/

@@ -17,11 +17,11 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(name: "JetEmailCore"      , targets: ["JetEmailData", "JetEmailGoogle", "JetEmailMicrosoft", "JetEmailID", "JetEmailFoundation"]),
         
-        .library(name: "JetEmailData"      , targets: ["JetEmailData"]),
+        /*.library(name: "JetEmailData"      , targets: ["JetEmailData"]),
         .library(name: "JetEmailGoogle"    , targets: ["JetEmailGoogle"]),
         .library(name: "JetEmailMicrosoft" , targets: ["JetEmailMicrosoft"]),
         .library(name: "JetEmailID"        , targets: ["JetEmailID"]),
-        .library(name: "JetEmailFoundation", targets: ["JetEmailFoundation"])
+        .library(name: "JetEmailFoundation", targets: ["JetEmailFoundation"])*/
     ],
     dependencies: [
         .package(url: "https://github.com/frogcjn/AppAuth-iOS.git", branch: "frogcjn/visionOS"), //.package(url: "https://github.com/openid/AppAuth-iOS.git", .upToNextMajor(from: "1.6.2")),

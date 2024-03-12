@@ -17,9 +17,6 @@ import AppKit
 
 fileprivate let kIncludeGrantedScopesParameter = "include_granted_scopes"
 
-//public extension Google {
-//}
-
 extension GoogleClient {
     
     @MainActor  // for window
