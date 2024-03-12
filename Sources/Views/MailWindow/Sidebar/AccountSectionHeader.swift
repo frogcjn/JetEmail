@@ -38,14 +38,26 @@ struct AccountSectionHeader: View {
                 }
                 .onHover { isOnHover = $0 }
             
-            Text(account.username)
-            switch account.resourceID.platform {
-            case .microsoft:           Text("(Microsoft Outlook)")
-            case .google:              Text("(Google Gmail)")
-            case .other(let rawValue): Text("Unknown \(rawValue)")
+            VStack(alignment: .leading, spacing: 4) {
+                Text(account.username)
+                    .lineLimit(2)
+
+                switch account.resourceID.platform {
+                case .microsoft:           makePlatformLabel(LocalizedStringKey("mail.microsoft"))
+                case .google:              makePlatformLabel(LocalizedStringKey("mail.google"))
+                case .other(let rawValue): Text("Unknown \(rawValue)")
+                }
             }
             //Text(account.platformState.rawValue)
             //RefreshButton(isBusy: account.isBusy, action: action)
         }
+    }
+
+    @ViewBuilder
+    private func makePlatformLabel(_ description: LocalizedStringKey) -> some View {
+        Text(description)
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .lineLimit(2)
     }
 }
