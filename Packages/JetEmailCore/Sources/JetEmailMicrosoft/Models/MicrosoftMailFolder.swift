@@ -11,7 +11,7 @@ import JetEmailID
 // https://learn.microsoft.com/en-us/graph/api/resources/mailfolder
 
 public struct MicrosoftMailFolder : MicrosoftProtocol, PlatformSpecificMailFolderProtocol, GetMailFolderProtocol {
-    public typealias PlatformCaseGeneralID = MailFolderID
+    public typealias GeneralID = MailFolderID
     
     public let                  id: MicrosoftMailFolderID
     public let               inner: MicrosoftMailFolderInner

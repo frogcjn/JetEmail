@@ -23,14 +23,14 @@ extension SessionStore {
     }
     
     func insert(msalSession: MSALSession, forceReplacing: Bool) throws -> MicrosoftSession {
-        let (id, username) = try msalSession.accountIDAndUsername
+        let account = try msalSession.outerAccount
         
         if !forceReplacing {
-            if let session = SessionStore.shared[id] { return session }
+            if let session = SessionStore.shared[account.id] { return session }
         }
         
-        let session = MicrosoftSession(accountID: id, username: username, msalSession: msalSession)
-        self[id] = session
+        let session = MicrosoftSession(account: account, msalSession: msalSession)
+        self[account.id] = session
         return session
     }
     

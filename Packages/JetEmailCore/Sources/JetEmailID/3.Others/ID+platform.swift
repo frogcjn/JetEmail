@@ -6,7 +6,6 @@
 //
 
 
-
 public extension AccountID {
     var platformCase: PlatformEnum<AccountID, MicrosoftAccountID, GoogleAccountID>? {
         switch platform {

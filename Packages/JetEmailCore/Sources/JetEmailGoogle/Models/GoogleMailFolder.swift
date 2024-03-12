@@ -8,7 +8,7 @@
 import JetEmailID
 
 public struct GoogleMailFolder : GoogleProtocol, PlatformSpecificMailFolderProtocol, GetMailFolderProtocol {
-    public typealias PlatformCaseGeneralID = MailFolderID
+    public typealias GeneralID = MailFolderID
     public let                  id: GoogleMailFolderID
     public let               inner: GoogleMailFolderInner
     public let                path: String?

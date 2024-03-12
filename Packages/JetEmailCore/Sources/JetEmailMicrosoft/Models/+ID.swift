@@ -15,13 +15,13 @@ extension MSALAccount {
         return .init(innerID: id)
     } }
     
-    var idAndUsername: (id: MicrosoftAccountID, username: String) { get throws {
+    var outerAccount: MicrosoftAccount { get throws {
         guard let id = identifier, let username else { throw AuthError.accountNoIDOrUsername }
-        return (.init(innerID: id), username)
+        return .init(id: .init(innerID: id), username: username)
     } }
 }
 
 extension MSALSession {
     var accountID: MicrosoftAccountID { get throws { try account.id } }
-    var accountIDAndUsername: (id: MicrosoftAccountID, username: String) { get throws { try account.idAndUsername }}
+    var outerAccount: MicrosoftAccount { get throws { try account.outerAccount }}
 }

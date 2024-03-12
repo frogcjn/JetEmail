@@ -5,8 +5,7 @@
 //  Created by Cao, Jiannan on 3/7/24.
 //
 
-public extension Message {
-    struct Body: Codable {
+public struct MessageBody: CodableValueType, Sendable {
         public let text: String
         public let html: String?
         
@@ -23,7 +22,7 @@ public extension Message {
                 self.html = nil
             case (nil, nil):
                 return nil
-            }
         }
     }
 }
+

@@ -169,7 +169,7 @@ fileprivate extension ModelContext {
     
     func _insertAccount(session: Session) throws -> Account {
         // find existed
-        if let model: Account = try self[session.accountID] {
+        if let model: Account = try self[session.generalID] {
             
             /*// If found: update
             model.session = session*/
@@ -183,7 +183,7 @@ fileprivate extension ModelContext {
         }
         
         // If not found: create
-        let model = Account(resourceID: session.accountID, username: session.username)
+        let model = Account(resource: session.account)
         model.orderIndex = try _fetchAccountCount()
         model.deleteMark = false
         insert(model)
@@ -464,42 +464,15 @@ import JetEmailFoundation
 import Foundation
 
 extension ModelContext {
-    func _insertMailFolder(google: GoogleMailFolder, parent: MailFolder, in account: Account) throws -> MailFolder {
-        // check account.root
-        guard account.root != nil else { throw TreeError.accountDoNotHaveRootFolder }
-        
-        // insert before check relationship
-        let folderID = try _insertMailFolder(google: google, in: account)
-        let folder = try self[folderID.resourceID]!
-
-        // check parent and folder account
-        guard parent.account == account else { throw TreeError.parentMailFolderNotInThisAccount }
-        guard folder.account == account else { throw TreeError.mailFolderNotInThisAccount }
-        
-        // check node.parent
-        // if folder.parent != nil && folder.parent != parent { throw TreeError.mailFolderAlreadyHaveParent }
-        folder.parent = parent
-        
-        // check node.children
-        // guard node.children.isEmpty else { throw TreeError.alreadyHaveChild }
-        
-        return folder
-    }
     
     // MARK: - ModelContext: Insert or Delete Atom Operations
-        
-    func _insertMailFolder(_ platformCase: MailFolderResource, parent: MailFolder, in account: Account) throws -> MailFolder {
-        switch platformCase {
-        case .microsoft(let microsoft): return try _insertMailFolder(microsoft: microsoft, parent: parent, in: account)
-        case    .google(let    google): return try _insertMailFolder(   google:    google, parent: parent, in: account)
-        }
-    }
-    func _insertMailFolder(microsoft: MicrosoftMailFolder, parent: MailFolder, in account: Account) throws -> MailFolder {
+
+    func _insertMailFolder(resource: MailFolderResource, parent: MailFolder, in account: Account) throws -> MailFolder {
         // check account.root
         guard account.root != nil else { throw TreeError.accountDoNotHaveRootFolder }
         
         // insert before check relationship
-        let folderID = try _insertMailFolder(microsoft: microsoft, in: account)
+        let folderID = try _insertMailFolder(resource: resource, account: account)
         let folder = try self[folderID.resourceID]!
 
         // check parent and folder account
@@ -507,7 +480,7 @@ extension ModelContext {
         guard folder.account == account else { throw TreeError.mailFolderNotInThisAccount }
         
         // check node.parent
-        if folder.parent != nil && folder.parent != parent { throw TreeError.mailFolderAlreadyHaveParent }
+        // if folder.parent != nil && folder.parent != parent { throw TreeError.mailFolderAlreadyHaveParent } // TODO: Microsoft may need this line
         folder.parent = parent
         
         // check node.children
@@ -515,22 +488,25 @@ extension ModelContext {
         
         return folder
     }
+    
+    
+    func _insertMailFolder(resource: MailFolderResource, account: Account) throws -> MailFolder {
+        let id = resource.generalID
         
-    func _insertMailFolder(microsoft: MicrosoftMailFolder, in account: Account) throws -> MailFolder {
-        let id = microsoft.id.general
-
         // find existed
         if let model = try self[id] {
             
             // If found: update
             model.deleteMark = false
-            model.update(resource: .microsoft(microsoft), in: account)
+            model.update(resource: resource)
+            model.account = account
             return model
         }
         
         // If not found: create
-        let model = MailFolder(resource: .microsoft(microsoft), in: account)
+        let model = MailFolder(resource: resource, account: account)
         insert(model)
+        // model.account = account
         return model
         /*
             SwiftData.ModelContext:
@@ -545,99 +521,42 @@ extension ModelContext {
          */
     }
     
-    func _insertMailFolder(google: GoogleMailFolder, in account: Account) throws -> MailFolder {
-        let id = google.id.general
-        
-        // find existed
-        if let model = try self[id] {
-            
-            // If found: update
-            model.deleteMark = false
-            model.update(resource: .google(google), in: account)
-            return model
-        }
-        
-        // If not found: create
-        let model = MailFolder(resource: .google(google), in: account)
-        insert(model)
-        return model
-        /*
-            SwiftData.ModelContext:
-            insert()
-         
-            if insert a new instance has a value of an unique property that is a duplicated with an old instance in the container:
-                before saving, it has a temperary persistantID.
-                after manual-saving or auto-saving (which is unkown time),
-                    the old instance is updated to the new instance's properties.
-                    the new instance is deleted.
-            *It is unsafe to keep the new instance and access its properties. Developer should refetch to get the right instance after saving.*
-         */
-    }
     
-    func _insertMailFolder(_ platformCase: MailFolderResource, in account: Account) throws -> MailFolder {
-        switch platformCase {
-        case .microsoft(let microsoft): return try _insertMailFolder(microsoft: microsoft, in: account)
-        case    .google(let    google): return try _insertMailFolder(   google:    google, in: account)
-        }
-    }
-    
-    func _insertMessage(google: GoogleMessage, in mailFolder: MailFolder) throws -> Message {
-        let id = google.id.general
+    func _insertMessage(resource: MessageResource, mailFolder: MailFolder, account: Account) throws -> Message {
+        let id = resource.generalID
 
         // find existed
         if let model = try self[id] {
             
             // If found: update
             model.deleteMark = false
-            try model.setGoogle(google)
+            model.update(resource: resource)
+            model.account = account
             model.mailFolder = mailFolder
             return model
         }
         
         // If not found: create
-        let model = Message(resourceID: id, in: mailFolder)
-        try model.setGoogle(google)
+        let model = Message(resource: resource, mailFolder: mailFolder, account: account)
         insert(model)
-        model.mailFolder = mailFolder
+        //model.account = account
+        //model.mailFolder = mailFolder
         return model
     }
-    
-    
-    
-    func _insertMessage(microsoft: MicrosoftMessage, in mailFolder: MailFolder) throws -> Message {
-        let id = microsoft.id.general
-
-        // find existed
-        if let model = try self[id] {
-            
-            // If found: update
-            model.deleteMark = false
-            model.microsoft = microsoft
-            model.mailFolder = mailFolder
-            return model
-        }
-        
-        // If not found: create
-        let model = Message(resourceID: id, in: mailFolder)
-        model.microsoft = microsoft
-        insert(model)
-        return model
-    }
-    
-
 }
 
 
 extension ModelStore {
-    func setMessages(googles messages: [GoogleMessage], in mailFolderID: MailFolderID) throws -> [Message.PersistentID] {
+    func setMessages(resources: [MessageResource], mailFolderID: MailFolderID, accountID: AccountID) throws -> [Message.PersistentID] {
         checkBackgroundThread()
         let mailFolder = try self[mailFolderID]!
+        let account = try self[accountID]!
         do {
             
             // insert
             var inserts: [Message] = []
-            for message in messages {
-                try inserts.append(modelContext._insertMessage(google: message, in: mailFolder))
+            for resource in resources {
+                try inserts.append(modelContext._insertMessage(resource: resource, mailFolder: mailFolder, account: account))
             }
             
             // delete
@@ -652,7 +571,7 @@ extension ModelStore {
         }
     }
     
-    func setMessage(google: GoogleMessage, to messageID: MessageID) throws -> Message.PersistentID {
+    /*func setMessage(google: GoogleMessage, to messageID: MessageID) throws -> Message.PersistentID {
         checkBackgroundThread()
         let message = try self[messageID]!
         do {
@@ -663,13 +582,29 @@ extension ModelStore {
             modelContext.rollback()
             throw error
         }
-    }
+    }*/
+    
+    // MARK: - Message -> Contents API
+    
+    
+    /*func setMessage(microsoft: MicrosoftMessage, to messageID: MessageID) throws -> Message.PersistentID {
+        checkBackgroundThread()
+        let message = try self[messageID]!
+        do {
+            message.microsoft = microsoft
+            try modelContext.save()
+            return message.persistentID
+        } catch {
+            modelContext.rollback()
+            throw error
+        }
+    }*/
     
     // MARK: - ModelContext: MailFolder-Messages API
     
     
     //let batchSize = 1
-    func setMessages(microsofts messages: [MicrosoftMessage], in mailFolderID: MailFolderID) throws -> [Message.PersistentID] {
+    /*func setMessages(microsofts messages: [MicrosoftMessage], in mailFolderID: MailFolderID) throws -> [Message.PersistentID] {
         checkBackgroundThread()
         let mailFolder = try self[mailFolderID]!
         do {
@@ -690,16 +625,17 @@ extension ModelStore {
             modelContext.rollback()
             throw error
         }
-    }
+    }*/
     
-    func setMessagesInsertPart(microsofts messages: [MicrosoftMessage], in mailFolderID: MailFolderID) throws -> [MessageID] {
+    func setMessagesInsertPart(resources: [MessageResource], mailFolderID: MailFolderID, accountID: AccountID) throws -> [MessageID] {
         checkBackgroundThread()
         let mailFolder = try self[mailFolderID]!
+        let account = try self[accountID]!
         do {
             // insert
             var inserts: [Message] = []
-            for message in messages {
-                try inserts.append(modelContext._insertMessage(microsoft: message, in: mailFolder))
+            for resource in resources {
+                try inserts.append(modelContext._insertMessage(resource: resource, mailFolder: mailFolder, account: account))
             }
             try modelContext.save()
             return inserts.map(\.resourceID)
@@ -709,7 +645,7 @@ extension ModelStore {
         }
     }
     
-    func setMessagesInsertPart(googles messages: [GoogleMessage], in mailFolderID: MailFolderID) throws -> [MessageID] {
+    /*func setMessagesInsertPart(googles messages: [GoogleMessage], in mailFolderID: MailFolderID) throws -> [MessageID] {
         checkBackgroundThread()
         let mailFolder = try self[mailFolderID]!
         do {
@@ -724,7 +660,7 @@ extension ModelStore {
             modelContext.rollback()
             throw error
         }
-    }
+    }*/
     
     
     
@@ -771,30 +707,16 @@ extension ModelStore {
     
     
     
-    // MARK: - Message -> Contents API
-    
-    
-    func setMessage(microsoft: MicrosoftMessage, to messageID: MessageID) throws -> Message.PersistentID {
-        checkBackgroundThread()
-        let message = try self[messageID]!
-        do {
-            message.microsoft = microsoft
-            try modelContext.save()
-            return message.persistentID
-        } catch {
-            modelContext.rollback()
-            throw error
-        }
-    }
+
 }
 
 extension ModelStore {
 
-    func insertMailFolder(platform: MailFolderResource, in accountID: AccountID) throws -> MailFolderID {
+    func insertMailFolder(resource: MailFolderResource, accountID: AccountID) throws -> MailFolderID {
         let account = try self[accountID]!
         var mailFolder: MailFolder!
         try modelContext.transaction {
-            mailFolder = try modelContext._insertMailFolder(platform, in: account)
+            mailFolder = try modelContext._insertMailFolder(resource: resource, account: account)
         }
         return mailFolder.resourceID
     }
@@ -836,14 +758,14 @@ extension ModelStore {
         }
     }
     
-    func setChildrenMailFolders(resource: [MailFolderResource], parent parentID: MailFolderID, in accountID: AccountID) throws -> [MailFolderID] {
+    func setChildrenMailFolders(resources: [MailFolderResource], parent parentID: MailFolderID, in accountID: AccountID) throws -> [MailFolderID] {
         let parent =  try self[parentID]!
         let account = try self[accountID]!
         do {
             // insert
             var inserts: [MailFolder] = []
-            for resource in resource {
-                try inserts.append(modelContext._insertMailFolder(resource, parent: parent, in: account))
+            for resource in resources {
+                try inserts.append(modelContext._insertMailFolder(resource: resource, parent: parent, in: account))
             }
             
             

@@ -1630,3 +1630,63 @@ public enum MessagePlatformCase<Microsoft : PlatformResourceProtocol & MessageRe
    
 }
 */
+
+/*
+@MainActor // for @MainActor AttributesStore
+extension Message {
+    
+    var isBusy: Bool {
+        get { AttributesStore[id].isBusy }
+        set { AttributesStore[id].isBusy = newValue }
+    }
+    
+    var isClassifying: Bool {
+        get { AttributesStore[id].isClassifying }
+        set { AttributesStore[id].isClassifying = newValue }
+    }
+    
+    var movePlan: MailFolder? {
+        get { AttributesStore[id].movePlan }
+        set { AttributesStore[id].movePlan = newValue }
+    }
+    
+    /*subscript<Value>(dynamicMember keyPath: KeyPath<Attributes, Value>) -> Value {
+        AttributesStore[modelID][keyPath: keyPath]
+    }
+    
+    subscript<Value>(dynamicMember keyPath: WritableKeyPath<Attributes, Value>) -> Value {
+        _read { yield AttributesStore[modelID][keyPath: keyPath] }
+        _modify { yield &AttributesStore[modelID][keyPath: keyPath] }
+    }*/
+    
+    @MainActor // for @MainActor AttributesStore
+    @Observable
+    class AttributesStore {
+        var rawValue = [Message.ID: Message.Attributes]()
+        
+        static subscript(modelID: Message.ID) -> Message.Attributes {
+            get {
+                if let properties = shared.rawValue[modelID] { return properties }
+                let properties = Message.Attributes()
+                shared.rawValue[modelID] = properties
+                return properties
+            }
+            set { shared.rawValue[modelID] = newValue }
+        }
+    }
+    
+    struct Attributes {
+        var isBusy = false
+        var isClassifying = false
+        var movePlan: MailFolder? = nil
+        var isMoveToVisible = false
+    }
+}*/
+/*
+struct Recipient {
+    let email: String
+    let name: String?
+}
+*/
+
+

@@ -78,6 +78,7 @@ public struct MessageID : MessageIDProtocol {
 // MARK: - Platform Specific: Google
 
 public struct GoogleAccountID : GoogleIDProtocol & PlatformSpecificAccountIDProtocol {
+    public typealias GeneralID = AccountID
     public let innerID: String
     public init(innerID: String) {
         self.innerID  = innerID
@@ -85,6 +86,7 @@ public struct GoogleAccountID : GoogleIDProtocol & PlatformSpecificAccountIDProt
 }
 
 public struct GoogleMailFolderID : GoogleIDProtocol & PlatformSpecificMailFolderIDProtocol {
+    public typealias GeneralID = MailFolderID
     public let accountID: GoogleAccountID
     public let innerID: String
     public init(accountID: GoogleAccountID, innerID: String) {
@@ -94,6 +96,7 @@ public struct GoogleMailFolderID : GoogleIDProtocol & PlatformSpecificMailFolder
 }
 
 public struct GoogleMessageID : GoogleIDProtocol & PlatformSpecificMessageIDProtocol {
+    public typealias GeneralID = MessageID
     public let accountID: GoogleAccountID
     public let innerID: String
     public init(accountID: GoogleAccountID, innerID: String) {
@@ -105,6 +108,7 @@ public struct GoogleMessageID : GoogleIDProtocol & PlatformSpecificMessageIDProt
 // MARK: - Platform Specific: Microsoft
 
 public struct MicrosoftAccountID : MicrosoftIDProtocol & PlatformSpecificAccountIDProtocol {
+    public typealias GeneralID = AccountID
     public let innerID: String
     public init(innerID: String) {
         self.innerID  = innerID
@@ -113,6 +117,7 @@ public struct MicrosoftAccountID : MicrosoftIDProtocol & PlatformSpecificAccount
 
 
 public struct MicrosoftMailFolderID : MicrosoftIDProtocol & PlatformSpecificMailFolderIDProtocol {
+    public typealias GeneralID = MailFolderID
     public let accountID: MicrosoftAccountID
     public let innerID: String
     public init(accountID: MicrosoftAccountID, innerID: String) {
@@ -123,6 +128,7 @@ public struct MicrosoftMailFolderID : MicrosoftIDProtocol & PlatformSpecificMail
 
 
 public struct MicrosoftMessageID : MicrosoftIDProtocol & PlatformSpecificMessageIDProtocol {
+    public typealias GeneralID = MessageID
     public let accountID: MicrosoftAccountID
     public let innerID: String
     public init(accountID: MicrosoftAccountID, innerID: String) {

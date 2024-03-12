@@ -29,7 +29,7 @@ extension SessionStore {
             if let session = SessionStore.shared[id] { return session }
         }
         
-        let session = GoogleSession(accountID: id, username: sessionItem.username, gtmSession: sessionItem.gtmSession, keychainItem: sessionItem.keychainItem)
+        let session = GoogleSession(account: .init(id: id, username: sessionItem.username), gtmSession: sessionItem.gtmSession, keychainItem: sessionItem.keychainItem)
         self[id]  = session
         return session
     }

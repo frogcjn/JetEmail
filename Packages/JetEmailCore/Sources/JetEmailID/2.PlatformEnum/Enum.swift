@@ -5,9 +5,9 @@
 //  Created by Cao, Jiannan on 3/11/24.
 //
 
-public protocol PlatformSpecificCase : Sendable {
-    associatedtype PlatformCaseGeneralID : ResourceIDProtocol
-    var platformCaseGeneralID: PlatformCaseGeneralID { get }
+public protocol GeneralIdentifiable : Sendable {
+    associatedtype GeneralID : ResourceIDProtocol
+    var generalID: GeneralID { get }
 }
 
 /*extension PlatformResourceProtocol where Self : PlatformCase, ID.GeneralID == PlatformCaseGeneralID {
@@ -16,15 +16,27 @@ public protocol PlatformSpecificCase : Sendable {
 
 
 
-public enum PlatformEnum<ID: ResourceSpecificIDProtocol, Microsoft : PlatformSpecificCase, Google : PlatformSpecificCase> : Identifiable & Sendable where Microsoft.PlatformCaseGeneralID == ID, Google.PlatformCaseGeneralID == ID {
+public enum PlatformEnum<GeneralID: ResourceSpecificIDProtocol, Microsoft : GeneralIdentifiable, Google : GeneralIdentifiable> : GeneralIdentifiable where Microsoft.GeneralID == GeneralID, Google.GeneralID == GeneralID {
     case microsoft(Microsoft)
     case    google(Google)
                    
-    public var id: ID {
+    public var generalID: GeneralID {
         switch self {
-        case .microsoft(let platform): platform.platformCaseGeneralID
-        case .google(let platform): platform.platformCaseGeneralID
+        case .microsoft(let platform): platform.generalID
+        case    .google(let platform): platform.generalID
         }
+    }
+}
+
+public extension PlatformEnum {
+    var microsoft: Microsoft? {
+        guard case .microsoft(let microsoft) = self else { return nil }
+        return microsoft
+    }
+    
+    var google: Google? {
+        guard case .google(let google) = self else { return nil }
+        return google
     }
 }
 

@@ -5,23 +5,81 @@
 //  Created by Cao, Jiannan on 2/24/24.
 //
 
-import struct Foundation.Data
 import JetEmailID
+import JetEmailFoundation
+import struct Foundation.Data
+import struct Foundation.Date
 
 public struct GoogleMessage : GoogleProtocol, PlatformSpecificMessageProtocol, GetMessageProtocol {
-    public var platformCaseGeneralID: MessageID {
-        id.general
-    }
+    public typealias GeneralID = MessageID
     
-    public typealias PlatformCaseGeneralID = MessageID
-    public let                  id: GoogleMessageID
-    public let               inner: GoogleMessageInner
-    public var       downloadedRaw: Data? // combined from other request
-    public var                 raw: Data? { downloadedRaw }
-
-    public init(id: GoogleMessageID, inner: GoogleMessageInner) {
+    public let    id       : GoogleMessageID
+    public let inner       : GoogleMessageInner
+    
+    public var subject     : String?
+    
+    public var from        : String?
+    public var sender      : String?
+    public var replyTo     : String?
+    
+    public var to          : String?
+    public var cc          : String?
+    public var bcc         : String?
+    public var deliveredTo : String?
+    
+    public var date        : Date?
+    public var createdDate : Date?
+    public var modifiedDate: Date?
+    public var receivedDate: Date?
+    public var sentDate    : Date?
+    
+    public var bodyPreview: String?
+    public var body       : MessageBody?
+    public var raw        : Data?
+        
+    public init(id: GoogleMessageID, inner: GoogleMessageInner, raw: Data?) throws {
         self.id    = id
         self.inner = inner
+        
+        // TODO: id
+        if let internalDate = inner.internalDate       { date        = internalDate.milliSecondsTimeIntervalSince1970 }
+        if let snippet      = inner.snippet            { bodyPreview = snippet                                        }
+        if let raw          = inner.raw                { self.raw    = raw                                            }
+        
+        if let headers = inner.payload?.headers {
+            /*
+             header fields:
+                subject
+                from/sender/replyTo/to/cc/bcc
+                messageID/inReplyTo/references
+             */
+            for header in headers {
+                let name  = header.name
+                let value = header.value
+                
+                switch name {
+                    
+                case HeaderFieldName.subject    : subject     = value
+                    
+                    // Originator Fields
+                case HeaderFieldName.from       : from        = value
+                case HeaderFieldName.sender     : sender      = value
+                case HeaderFieldName.replyTo    : replyTo     = value
+                    
+                    // Destination Address Fields
+                case HeaderFieldName.to         : to          = value
+                case HeaderFieldName.cc         : cc          = value
+                case HeaderFieldName.bcc        : bcc         = value
+                case HeaderFieldName.deliveredTo: deliveredTo = value
+                    
+                default: break
+                }
+            }
+        }
+        
+        if let body = try inner.payload?.messageBody {
+            self.body = body
+        }
     }
 }
 // https://learn.microsoft.com/en-us/graph/api/resources/message
@@ -86,5 +144,62 @@ public struct GoogleMessageInner : IdentifiableValueType, Sendable {
                 self.attachmentId = attachmentId
             }
         }
+    }
+}
+
+fileprivate enum HeaderFieldName {}
+
+extension HeaderFieldName {
+    static let subject     = "Subject"
+
+    static let from        = "From"
+    static let sender      = "Sender"
+    static let replyTo     = "Reply-To"
+
+    static let to          = "To"
+    static let cc          = "Cc"
+    static let bcc         = "Bcc"
+    static let deliveredTo = "Delivered-To"
+
+    static let date        = "Date"
+
+    static let messageID   = "Message-ID"
+    static let inReplyTo   = "In-Reply-To"
+    static let references  = "References"
+}
+
+fileprivate enum MIMEType: String {
+    case textPlain            = "text/plain"
+    case textHtml             = "text/html"
+    case multipartAlternative = "multipart/alternative"
+    case multipartMixed       = "multipart/mixed"
+}
+
+fileprivate extension GoogleMessageInner.Part {
+    var messageBody: MessageBody? { get throws {
+        let html = try firstBodyContent(mimeType: .textHtml)
+        let text = try firstBodyContent(mimeType: .textPlain)
+        return .init(text: text, html: html)
+    } }
+
+    func firstBodyContent(mimeType: MIMEType) throws -> String? {
+        if let bodyContent = try nonFileParts.firstPart(mimeType: mimeType)?.body?.data?.string { bodyContent }
+        else if let bodyContent = try nonFileParts.firstMultipartPart?.parts?.compactMap({ try $0.firstBodyContent(mimeType: mimeType) }).first { bodyContent }
+        else if let body = body { try body.data?.string }
+        else { nil }
+    }
+
+    var nonFileParts: [GoogleMessageInner.Part] {
+        parts?.filter { $0.filename?.nilIfEmpty == nil } ?? []
+    }
+}
+
+fileprivate extension [GoogleMessageInner.Part] {
+    func firstPart(mimeType: MIMEType) -> GoogleMessageInner.Part? {
+        first(where: { $0.mimeType == mimeType.rawValue })
+    }
+
+    var firstMultipartPart: GoogleMessageInner.Part? {
+        first { ([.multipartMixed, .multipartAlternative] as [MIMEType]).map(\.rawValue).map(Optional.init).contains($0.mimeType) }
     }
 }

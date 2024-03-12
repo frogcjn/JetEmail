@@ -27,4 +27,3 @@ public enum Platform : RawRepresentable, CodableValueType, Sendable {
         }
     }
 }
-

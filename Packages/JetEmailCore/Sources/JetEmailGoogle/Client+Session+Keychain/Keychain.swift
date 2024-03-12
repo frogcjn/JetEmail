@@ -292,5 +292,5 @@ fileprivate extension String {
  */
 
 extension GoogleSession {
-    var _item: Keychain.SessionItem { .init(accountID: accountID, username: username, gtmSession: _gtmSession, keychainItem: keychainItem) }
+    var _item: Keychain.SessionItem { .init(accountID: account.id, username: account.username, gtmSession: _gtmSession, keychainItem: keychainItem) }
 }

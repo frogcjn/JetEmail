@@ -34,7 +34,7 @@ public extension GoogleClient {
 public extension GoogleSession {
     func signOut() async throws -> GoogleSession {
         _ = try await Keychain.shared.deleteItem(_item)
-        _ = await accountID.removeSession()
+        _ = await account.id.removeSession()
         return self
     }
 }

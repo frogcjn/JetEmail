@@ -7,7 +7,7 @@
 
 import JetEmailMicrosoft
 
-public extension Message {
+/*public extension Message {
 
     var microsoft: MicrosoftMessage? {
         get {
@@ -49,15 +49,10 @@ public extension Message {
         }
     }
 
-}
+}*/
 
 
-extension EmailAddress {
-    var rawValue: String {
-        if let name { "\(name) <\(address)>" }
-        else { address }
-    }
-}
+
 
 //
 //  Message+Google.swift
@@ -67,7 +62,7 @@ extension EmailAddress {
 //
 
 import JetEmailGoogle
-
+/*
 public extension Message {
     var google: GoogleMessage? {
         get {
@@ -177,3 +172,4 @@ extension HeaderFieldName {
     static let inReplyTo   = "In-Reply-To"
     static let references  = "References"
 }
+*/

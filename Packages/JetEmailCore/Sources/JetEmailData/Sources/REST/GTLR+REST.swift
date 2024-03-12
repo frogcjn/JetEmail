@@ -24,10 +24,10 @@ public extension GoogleSession {
     
     private func getMailFolders() async throws -> [GoogleMailFolder] {
         let response = try await service.execute(GTLRGmail_ListLabelsResponse.self) {
-            GTLRGmailQuery_UsersLabelsList.query(withUserId: accountID.innerID)
+            GTLRGmailQuery_UsersLabelsList.query(withUserId: account.id.innerID)
         }
         guard let labels = response.labels else { throw GmailApiError.failedToParseData(response) }
-        return try labels.map { try $0.mailFolder.with(accountID: accountID, systemInfo: $0.mailFolder.systemInfo) }
+        return try labels.map { try $0.mailFolder.with(accountID: account.id, systemInfo: $0.mailFolder.systemInfo) }
             //.sorted { "\($0.type?.rawValue)" > "\($1.type?.rawValue)" }
             //.filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
             //.sorted(using: KeyPathComparator(\MailFolder.name))
@@ -66,13 +66,13 @@ public extension GoogleSession {
 
     
     func getMessages(ids: [GoogleMessageID]) async throws -> [GoogleMessage] {
-        return try await getMessages(ids: ids, format: .metadata).map { $0.with(accountID: accountID) }
+        return try await getMessages(ids: ids, format: .metadata).map { try $0.with(accountID: account.id) }
     }
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list
     private func getFolderMessageIDs(id: GoogleMailFolderID) async throws -> [GoogleMessageInner] {
         let response = try await service.execute(GTLRGmail_ListMessagesResponse.self) {
-            let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: accountID.innerID)
+            let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: account.id.innerID)
             query.labelIds = [id.innerID]
             query.maxResults = 500
             return query
@@ -98,7 +98,7 @@ public extension GoogleSession {
         }
         
         let batchResult = try await service.execute(GTLRBatchResult.self) {
-            GTLRBatchQuery(queries: ids.map { [accountID = accountID.innerID] in
+            GTLRBatchQuery(queries: ids.map { [accountID = account.id.innerID] in
                 let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID, identifier: $0.innerID)
                 query.fields = fields
                 query.format = format.rawValue
@@ -124,7 +124,7 @@ public extension GoogleSession {
                     rest = rest.dropFirst(chunkSize)
                     
                     let batchResult = try await service.execute(GTLRBatchResult.self) {
-                        GTLRBatchQuery(queries: chunk.map { [accountID = accountID.innerID] in
+                        GTLRBatchQuery(queries: chunk.map { [accountID = account.id.innerID] in
                             let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID, identifier: $0.innerID)
                             query.fields = fields
                             query.format = format.rawValue
@@ -133,7 +133,7 @@ public extension GoogleSession {
                     }
                     
                     guard let messagesDict = batchResult.successes as? [String: GTLRGmail_Message] else { fatalError() } // TODO: fatalError replace with error
-                    let result: [GoogleMessage] = try messagesDict.values.map { try $0.messageData.with(accountID: accountID) }
+                    let result: [GoogleMessage] = try messagesDict.values.map { try $0.messageData.with(accountID: account.id) }
                     
                     continuation.yield(result)
                     await Task.yield()
@@ -149,7 +149,7 @@ public extension GoogleSession {
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
     func getMessage(id: GoogleMessageID, fields: String? = nil, format: GetMessageFormat) async throws -> GoogleMessageInner {
          try await service.execute(GTLRGmail_Message.self) {
-            let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID.innerID, identifier: id.innerID)
+             let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: account.id.innerID, identifier: id.innerID)
             query.fields = fields
             query.format = format.rawValue
             return query
@@ -177,17 +177,16 @@ public extension GoogleSession {
     }
     
     func getMessageBody(id: GoogleMessageID) async throws -> GoogleMessage {
-        let inner = try await getMessage(id: id, format: .full)
-        var message: GoogleMessage = inner.with(accountID: accountID)
-        message.downloadedRaw = try await getMessage(id: id, format: .raw).raw
-        return message
+        let full = try await getMessage(id: id, format: .full)
+        let raw  = try await getMessage(id: id, format: .raw).raw
+        return try full.with(accountID: account.id, raw: raw)
     }
     
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/modify
     func moveMessage(id messageID: GoogleMessageID, from fromID: GoogleMailFolderID, to toID: GoogleMailFolderID) async throws -> GoogleMessageInner {
         try await service.execute(GTLRGmail_Message.self) {
-            let accountID = accountID.innerID
+            let accountID = account.id.innerID
             let messageID = messageID.innerID
             
             let request = GTLRGmail_ModifyMessageRequest()
@@ -308,7 +307,7 @@ struct FolderViewModel {
 }
 
 extension GoogleMessageInner {
-    func with(accountID: GoogleAccountID) -> GoogleMessage {
-        .init(id: .init(accountID: accountID, innerID: id), inner: self)
+    func with(accountID: GoogleAccountID, raw: Data? = nil) throws -> GoogleMessage {
+        try .init(id: .init(accountID: accountID, innerID: id), inner: self, raw: raw)
     }
 }

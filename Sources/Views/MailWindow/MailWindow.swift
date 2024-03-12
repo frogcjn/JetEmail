@@ -39,7 +39,7 @@ struct MailWindow : View {
                 MessageView()
                     .itemModel(item)
                     .itemModel(item.mailFolder)
-                    .itemModel(item.mailFolder.account)
+                    .itemModel(item.account)
             }
         }
         

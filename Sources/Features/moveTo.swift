@@ -17,7 +17,7 @@ extension AppItemModel<Message> {
         isBusy = true
         defer { isBusy = false }
         
-        do {
+        /*do {
             let message = item
             let account = message.mailFolder.account
             guard let session = account.resourceID.storedSession else { return }
@@ -34,7 +34,7 @@ extension AppItemModel<Message> {
             item.mailFolder = moveTo
         } catch {
             logger.error("\(error)")
-        }
+        }*/
     }
 }
 

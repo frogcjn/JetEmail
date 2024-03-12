@@ -9,17 +9,16 @@
 import JetEmailID
 @preconcurrency import MSAL
 
-public final class MicrosoftSession : PlatformSpecificCase {
-    public var platformCaseGeneralID: AccountID { accountID.general }
+public final class MicrosoftSession : GetAccountProtocol {
+    public var generalID: AccountID { account.id.general }
+    public var  username: String    { account.username   }
     
-    public let accountID   : MicrosoftAccountID
-    public let username    : String
+    public let account     : MicrosoftAccount
            let _msalSession: MSALSession
            let globalIdToWellKnownFolderName: [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName]? = nil
             
-    init(accountID: MicrosoftAccountID, username: String, msalSession: MSALSession) {
-        self.accountID     = accountID
-        self.username      = username
+    init(account: MicrosoftAccount, msalSession: MSALSession) {
+        self.account       = account
         self._msalSession  = msalSession
     }
 }

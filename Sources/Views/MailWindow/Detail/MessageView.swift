@@ -7,6 +7,7 @@
 
 import SwiftUI
 import JetEmailData
+import JetEmailID
 
 struct MessageView : View {
     @Environment(AppItemModel<Message>.self)
@@ -78,7 +79,7 @@ struct EmailBodyView : View {
     @Environment(SettingsModel.self)
     var appSettings
     
-    let messageBody: Message.Body?
+    let messageBody: MessageBody?
     
     var body: some View {
         if let messageBody {

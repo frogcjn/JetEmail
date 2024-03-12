@@ -48,3 +48,10 @@ public struct EmailAddress: CodableValueType, Sendable {
     public let address: String
     public let name: String?
 }
+
+public extension EmailAddress {
+    var rawValue: String {
+        if let name { "\(name) <\(address)>" }
+        else { address }
+    }
+}

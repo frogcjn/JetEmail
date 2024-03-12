@@ -9,28 +9,27 @@ import JetEmailGoogle
 import JetEmailMicrosoft
 import JetEmailID
 
-public typealias Session = PlatformEnum<AccountID, MicrosoftSession, GoogleSession>
 
 public extension Session {
-    var accountID: AccountID {
+    /*var accountID: AccountID {
         switch self {
-        case .microsoft(let microsoftSession): microsoftSession.accountID.general
-        case .google   (let googleSession   ):    googleSession.accountID.general
+        case .microsoft(let microsoftSession): microsoftSession.account.id.general
+        case .google   (let googleSession   ):    googleSession.account.id.general
         }
-    }
+    }*/
 }
 
 public extension Session {
-    var username: String {
+    /*var username: String {
         switch self {
         case .microsoft(let microsoftSession): microsoftSession.username
         case    .google(let    googleSession):    googleSession.username
         }
-    }
+    }*/
 }
 
 public extension Session {
-    var microsoft: MicrosoftSession? {
+    /*var microsoft: MicrosoftSession? {
         guard case .microsoft(let microsoft) = self else { return nil }
         return microsoft
     }
@@ -38,5 +37,5 @@ public extension Session {
     var google: GoogleSession? {
         guard case .google(let google) = self else { return nil }
         return google
-    }
+    }*/
 }

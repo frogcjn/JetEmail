@@ -13,9 +13,9 @@ public protocol MessageProtocol                    : IdentifiableValueType, Send
  
 // MARK: - Platform Specific
 
-public protocol PlatformSpecificProtocol           : IdentifiableValueType, Sendable , PlatformSpecificCase where ID : PlatformSpecificIDProtocol, PlatformCaseGeneralID == ID.PlatformCaseGeneralID {}
+public protocol PlatformSpecificProtocol           : IdentifiableValueType, Sendable , GeneralIdentifiable where ID : PlatformSpecificIDProtocol, GeneralID == ID.GeneralID {}
 public extension PlatformSpecificProtocol {
-    var platformCaseGeneralID : PlatformCaseGeneralID { id.platformCaseGeneralID }
+    var generalID : GeneralID { id.generalID }
 }
 
 public protocol MicrosoftProtocol                  : PlatformSpecificProtocol                      where ID : MicrosoftIDProtocol {}

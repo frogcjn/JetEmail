@@ -61,7 +61,7 @@ public extension MicrosoftSession {
     
     @MainActor
     var idToWellKnownFolderName:  [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName] { get async {
-        if let idToWellKnownFolderName = accountID.idToWellKnownFolderName { return idToWellKnownFolderName }
+        if let idToWellKnownFolderName = generalID.idToWellKnownFolderName { return idToWellKnownFolderName }
         let idToWellKnownFolderName: [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName] =  await {
             do {
                 // catch wellknownFolderName
@@ -79,14 +79,14 @@ public extension MicrosoftSession {
                 return [:]
             }
         }()
-        accountID.idToWellKnownFolderName = idToWellKnownFolderName
+        account.id.idToWellKnownFolderName = idToWellKnownFolderName
         return idToWellKnownFolderName
     } }
     
     func getChildFolders(id: MicrosoftMailFolderID) async throws -> [MicrosoftMailFolder]  {
         let idToWellKnownFolderName = await idToWellKnownFolderName
         return try await getValues(MicrosoftMailFolderInner.self, paths: "mailFolders", "\(id.innerID)", "childFolders")
-            .map { $0.with(accountID: accountID, idToWellKnownFolderName: idToWellKnownFolderName) }
+            .map { $0.with(accountID: account.id, idToWellKnownFolderName: idToWellKnownFolderName) }
     }
     
     fileprivate func getMailFolder(id: MicrosoftMailFolderID)  async throws -> MicrosoftMailFolder {
@@ -95,7 +95,7 @@ public extension MicrosoftSession {
     
     func getMailFolder(wellKnownFolderName: MicrosoftMailFolder.WellKnownFolderName) async throws -> MicrosoftMailFolder {
         try await getValue(MicrosoftMailFolderInner.self, paths: "mailFolders", "\(wellKnownFolderName)")
-            .with(accountID: accountID, wellKnownFolderName: .msgFolderRoot)
+            .with(accountID: account.id, wellKnownFolderName: .msgFolderRoot)
     }
     
     /*func createChildFolder(id: MSGraph.MailFolder.ID, displayName: String, isHidden: Bool? = nil) async throws -> MSGraph.MailFolder {
@@ -142,7 +142,7 @@ public extension MicrosoftSession {
                 "bccRecipients",
                 "bodyPreview"
             )
-        ).map { $0.with(accountID: accountID) }
+        ).map { $0.with(accountID: account.id) }
     }
     
     // pageSize => $top: 1-1000, default: 1000
@@ -151,7 +151,7 @@ public extension MicrosoftSession {
             pageSize.map(URLQueryItem.top),
             .select("id")
         )
-        return values.map { .init(accountID: accountID, innerID: $0.id) }
+        return values.map { .init(accountID: account.id, innerID: $0.id) }
     }
     
     
@@ -179,7 +179,7 @@ public extension MicrosoftSession {
                 )
             )
         
-        let accountID = accountID
+        let accountID = account.id
         return (count, stream.map { $0.map { $0.with(accountID: accountID) } })
     }
     
@@ -232,7 +232,7 @@ public extension MicrosoftSession {
                 "body"
                 // "uniqueBody"
             )
-        ).with(accountID: accountID)
+        ).with(accountID: account.id)
         message.raw = try await getMultipartData(paths: "messages", "\(id.innerID)", "$value")
         return message
     }

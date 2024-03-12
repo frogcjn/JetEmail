@@ -65,17 +65,17 @@ extension MessageIDProtocol {
 
 // MARK: - Platform Speicific
 
-public protocol PlatformSpecificIDProtocol : ResourceIDProtocol, PlatformSpecificCase where PlatformCaseGeneralID == GeneralID {
+public protocol PlatformSpecificIDProtocol : ResourceIDProtocol, GeneralIdentifiable where GeneralID == InnerGeneralID {
     static var platform: Platform { get }
     
-    associatedtype GeneralID : ResourceIDProtocol
-    var general: GeneralID { get }
+    associatedtype InnerGeneralID : ResourceIDProtocol
+    var general: InnerGeneralID { get }
 }
 
 
 public extension PlatformSpecificIDProtocol {
     var platform : Platform { Self.platform }
-    var platformCaseGeneralID : PlatformCaseGeneralID { general }
+    var generalID : InnerGeneralID { general }
 }
 
 public protocol MicrosoftIDProtocol : PlatformSpecificIDProtocol {}

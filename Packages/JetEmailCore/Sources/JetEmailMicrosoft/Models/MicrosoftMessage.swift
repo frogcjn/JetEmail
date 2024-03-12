@@ -6,17 +6,67 @@
 //
 
 import JetEmailID
+import JetEmailFoundation
 import struct Foundation.Data
+import struct Foundation.Date
 
 public struct MicrosoftMessage : MicrosoftProtocol, PlatformSpecificMessageProtocol, GetMessageProtocol {
-    public typealias PlatformCaseGeneralID = MessageID
-    public let    id: MicrosoftMessageID
-    public let inner: MicrosoftMessageInner
-    public var   raw: Data?
+    public typealias GeneralID = MessageID
+    
+    public let    id       : MicrosoftMessageID
+    public let inner       : MicrosoftMessageInner
+    
+    public var subject     : String?
+    
+    public var from        : String?
+    public var sender      : String?
+    public var replyTo     : String?
+    
+    public var to          : String?
+    public var cc          : String?
+    public var bcc         : String?
+    public var deliveredTo : String?
+    
+    public var date        : Date?
+    public var createdDate : Date?
+    public var modifiedDate: Date?
+    public var receivedDate: Date?
+    public var sentDate    : Date?
+    
+    public var bodyPreview: String?
+    public var body       : MessageBody?
+    public var raw        : Data?
 
     public init(id: MicrosoftMessageID, inner: MicrosoftMessageInner) {
-        self.id = id
+        self.id    = id
         self.inner = inner
+        
+        // self.id           = newValue.id.general
+        subject      = inner.subject?.nilIfEmpty
+        
+        createdDate  = inner.createdDateTime?     .date
+        modifiedDate = inner.lastModifiedDateTime?.date
+        receivedDate = inner.receivedDateTime?    .date
+        sentDate     = inner.sentDateTime?        .date
+        date         = receivedDate
+
+        sender       = inner.sender?.emailAddress.map(\.rawValue)
+        from         = inner.from?.emailAddress.map(\.rawValue)
+        to           = inner.toRecipients? .compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
+        replyTo      = inner.replyTo?      .compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
+        cc           = inner.ccRecipients? .compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
+        bcc          = inner.bccRecipients?.compactMap(\.emailAddress?.rawValue).joined(separator: ", ").nilIfEmpty
+        
+        bodyPreview  = inner.bodyPreview?.nilIfEmpty
+        
+        if let body = inner.body, let contentType = body.contentType, let content = body.content {
+            self.body = switch contentType {
+            case .html: .init(text: content, html:content)
+            case .text: .init(text: content, html: nil)
+            }
+        }
+        
+        if let raw { self.raw = raw }
     }
 }
 

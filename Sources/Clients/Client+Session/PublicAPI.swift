@@ -52,3 +52,12 @@ extension Session {
         }
     } }
 }
+
+extension Session {
+    var account: AccountResource {
+        switch self {
+        case .google   (let session): return    .google(session.account)
+        case .microsoft(let session): return .microsoft(session.account)
+        }
+    }
+}

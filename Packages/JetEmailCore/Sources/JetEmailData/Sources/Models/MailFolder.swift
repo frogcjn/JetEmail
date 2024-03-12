@@ -14,60 +14,54 @@ public final class MailFolder {
     
     // MARK: - Delete Mark
     
-    public var deleteMark = false {
-        didSet {
-            if deleteMark {
-                messages.forEach { $0.deleteMark = true }
-            }
+    public var deleteMark = false { didSet {
+        // for casecade deleteMark
+        if deleteMark {
+            messages.forEach { $0.deleteMark = true }
         }
-    }
-    
+    } }
     
     // MARK: - Resource
 
-    // MARK: ResourceID
+    // MARK: Resource - ID
 
-    /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
     public private(set) var platform      : String
-    // public private(set) var platform    : Platform
-    
     public private(set) var innerAccountID: String
     public private(set) var innerID       : String
     
-    /// ID for storing in the database, for unique indexing. So this property is only used in #Query.
     @Attribute(.unique)
     public private(set) var uniqueID      : String
     
     @Transient
-    public lazy var resourceID: MailFolderID = {
+    public private(set) lazy var resourceID: MailFolderID = {
         .init(platform: .init(rawValue: platform), innerAccountID: innerAccountID, innerID: innerID)
     }()
     
-    // MARK: name
+    // MARK: Resource - Name
     
-    public var name: String?
+    public private(set) var name: String?
+    
+    // MARK: Resource - SystemInfo
+    
+    public private(set) var   _isSystemFolder: Bool    // cached whether it is a system folder
+    public private(set) var      _systemOrder: Int?    // cached sytem older
+    public private(set) var _nameLocalizedKey: String? // cached localized name
+    public private(set) var      _systemImage: String? // cached system image
     
     
-    // MARK: systemInfo
+    // MARK: Resource - Storage
     
-    public var   _isSystemFolder: Bool    // cached whether it is a system folder
-    public var      _systemOrder: Int?    // cached sytem older
-    public var _nameLocalizedKey: String? // cached localized name
-    public var      _systemImage: String? // cached system image
-    
-    
-    // MARK: resource
-    
-    public var _resource: String?
+    public private(set) var _resource: String?
 
+    // MARK: - Init & Update
 
-    public init(resource: MailFolderResource, in account: Account) {
+    public init(resource: MailFolderResource, account: Account) {
         checkBackgroundThread()
         
-        platform          = resource.id.platform.rawValue
-        innerAccountID    = resource.id.accountID.innerID
-        innerID           = resource.id.innerID
-        uniqueID          = resource.id.uniqueID
+        platform          = resource.generalID.platform.rawValue
+        innerAccountID    = resource.generalID.accountID.innerID
+        innerID           = resource.generalID.innerID
+        uniqueID          = resource.generalID.uniqueID
         
         name              = resource.name
         _isSystemFolder   = resource.systemInfo != nil
@@ -76,17 +70,16 @@ public final class MailFolder {
         _systemImage      = resource.systemInfo?.systemImage
         
         _resource         = try? resource.jsonString
-        
-        self.account = account
+        self.account      = account
     }
     
-    public func update(resource: MailFolderResource, in account: Account) {
+    public func update(resource: MailFolderResource) {
         checkBackgroundThread()
 
-        platform          = resource.id.platform.rawValue
-        innerAccountID    = resource.id.accountID.innerID
-        innerID           = resource.id.innerID
-        uniqueID          = resource.id.uniqueID
+        platform          = resource.generalID.platform.rawValue
+        innerAccountID    = resource.generalID.accountID.innerID
+        innerID           = resource.generalID.innerID
+        uniqueID          = resource.generalID.uniqueID
         
         name              = resource.name
         _isSystemFolder   = resource.systemInfo != nil
@@ -95,9 +88,9 @@ public final class MailFolder {
         _systemImage      = resource.systemInfo?.systemImage
         
         _resource         = try? resource.jsonString
-        
-        self.account = account
     }
+    
+    // MARK: - Relationships
     
     /// MailFolder.account <<-> Account.mailFolders
     @Relationship(deleteRule: .nullify)
@@ -106,13 +99,13 @@ public final class MailFolder {
     /// MailFolder.parent <<-> MailFOlder.children
     @Relationship(deleteRule: .nullify)
     public var parent: MailFolder?
-    public var  _childIndex: Int? // cached child index in parent folder
+    public var  _childIndex: Int? // cached current child index in parent folder
     
     /// MailFolder.children <->> MailFolder.parent
     @Relationship(deleteRule: .nullify, originalName: "children", inverse: \MailFolder.parent)
     private var _children: [MailFolder] = [] // Should be Ordered Relationship
 
-    //@Transient
+    @Transient
     public var children: [MailFolder] { _children.sortedInParentMailFolderUsingIndex } // TODO: After Swift 6.0
     
     /// MailFolder.messages <->> Message.mailFolder

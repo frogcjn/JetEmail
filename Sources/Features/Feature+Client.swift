@@ -75,7 +75,7 @@ extension MicrosoftSession {
             
             let mailFolderID = current.microsoft! as MicrosoftMailFolderID
             let mailFolders = try await self.getChildFolders(id: mailFolderID)
-            let children = try await ModelStore.shared.setChildrenMailFolders(resource: mailFolders.map(MailFolderResource.microsoft), parent: current, in: id)
+            let children = try await ModelStore.shared.setChildrenMailFolders(resources: mailFolders.map(MailFolderResource.microsoft), parent: current, in: id)
             queue.append(contentsOf: children)
         }
     }
@@ -84,7 +84,7 @@ extension MicrosoftSession {
 extension GoogleSession {
     
     func getRootMailFolder() -> GoogleMailFolder {
-        GoogleMailFolder.all(accountID: accountID)
+        GoogleMailFolder.all(accountID: account.id)
     }
     
     func loadMailFolders(id: AccountID) async throws {
@@ -95,7 +95,7 @@ extension GoogleSession {
             let current = queue.removeFirst()
             
             let googles = current.children.map(\.element)
-            _ = try await ModelStore.shared.setChildrenMailFolders(resource: googles.map(MailFolderResource.google), parent: current.element.id.general, in: id)
+            _ = try await ModelStore.shared.setChildrenMailFolders(resources: googles.map(MailFolderResource.google), parent: current.element.id.general, in: id)
             
             queue.append(contentsOf: current.children)
         }

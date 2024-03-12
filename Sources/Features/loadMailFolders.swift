@@ -46,7 +46,7 @@ extension AppItemModel<Account> {
             let platform = try await session.getRootMailFolder(id: accountID)
             
             // ModelActor
-            let mailFolderID = try await ModelStore.shared.insertMailFolder(platform: platform, in: accountID)
+            let mailFolderID = try await ModelStore.shared.insertMailFolder(resource: platform, accountID: accountID)
             
             // MainActor
             _ = try accountID.setRootMailFolder(id: mailFolderID)

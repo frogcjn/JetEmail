@@ -33,7 +33,7 @@ public extension MicrosoftClient {
 public extension MicrosoftSession {
     func signOut() async throws -> MicrosoftSession {
         _ = try await MicrosoftClient.shared._msalSignout(msalAccount: _msalSession.account)
-        _ = await accountID.removeSession()
+        _ = await account.id.removeSession()
         return self
     }
 }
@@ -59,7 +59,7 @@ public extension MicrosoftAccountID {
 public extension MicrosoftSession {
     var refresh: MicrosoftSession { get async throws {
         if !_isExpired { return self }
-        return try await SessionStore.shared.session(id: accountID, forceRefresh: true)
+        return try await SessionStore.shared.session(id: account.id, forceRefresh: true)
     } }
 }
 
