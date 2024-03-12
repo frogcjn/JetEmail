@@ -571,35 +571,23 @@ extension ModelStore {
         }
     }
     
-    /*func setMessage(google: GoogleMessage, to messageID: MessageID) throws -> Message.PersistentID {
-        checkBackgroundThread()
-        let message = try self[messageID]!
-        do {
-            try message.setGoogle(google)
-            try modelContext.save()
-            return message.persistentID
-        } catch {
-            modelContext.rollback()
-            throw error
-        }
-    }*/
-    
     // MARK: - Message -> Contents API
+
     
-    
-    /*func setMessage(microsoft: MicrosoftMessage, to messageID: MessageID) throws -> Message.PersistentID {
+    func setMessage(resource: MessageResource, to messageID: MessageID) throws -> Message.PersistentID {
         checkBackgroundThread()
         let message = try self[messageID]!
         do {
-            message.microsoft = microsoft
+            message.update(resource: resource)
             try modelContext.save()
             return message.persistentID
         } catch {
             modelContext.rollback()
             throw error
         }
-    }*/
+    }
     
+
     // MARK: - ModelContext: MailFolder-Messages API
     
     

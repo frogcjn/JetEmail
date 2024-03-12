@@ -37,7 +37,7 @@ extension AppItemModel<Message> {
 
 fileprivate func _loadBody(messageID: MessageID, session: Session) async throws {
     checkBackgroundThread()
-    /*switch session {
+    switch session {
     case .microsoft(let session):
         let microsoftMessageID = messageID.microsoft!
         
@@ -47,6 +47,6 @@ fileprivate func _loadBody(messageID: MessageID, session: Session) async throws 
     case .google(let session):
         let googleMessageID = messageID.google!
         let message = try await session.getMessageBody(id: googleMessageID)
-        _ = try await ModelStore.shared.setMessage(google: message, to: messageID) // MSAL to SwiftData
-    }*/
+        _ = try await ModelStore.shared.setMessage(resource: .google(message), to: messageID) // MSAL to SwiftData
+    }
 }

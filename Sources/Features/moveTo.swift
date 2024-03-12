@@ -17,24 +17,24 @@ extension AppItemModel<Message> {
         isBusy = true
         defer { isBusy = false }
         
-        /*do {
+        do {
             let message = item
             let account = message.mailFolder.account
             guard let session = account.resourceID.storedSession else { return }
             switch session {
             case .microsoft(let session):
-                guard let microsoftMessage = message.microsoft else { return }
-                _ = try await session.moveMessage(id: microsoftMessage.id, to: moveTo.resourceID.microsoft!)
+                guard let microsoftMessageID = message.resourceID.microsoft else { return }
+                _ = try await session.moveMessage(id: microsoftMessageID, to: moveTo.resourceID.microsoft!)
                 //item.microsoft = microsoft
             case .google(let session):
-                guard let googleMessage = message.google else { return }
-                _ = try await session.moveMessage(id: googleMessage.id, from: moveFrom.resourceID.google!, to: moveTo.resourceID.google!)
+                guard let googleMessageID = message.resourceID.google else { return }
+                _ = try await session.moveMessage(id: googleMessageID, from: moveFrom.resourceID.google!, to: moveTo.resourceID.google!)
                 // try message.setGoogle(
             }
             item.mailFolder = moveTo
         } catch {
             logger.error("\(error)")
-        }*/
+        }
     }
 }
 
