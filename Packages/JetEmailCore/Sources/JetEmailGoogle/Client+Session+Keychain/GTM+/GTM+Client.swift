@@ -59,8 +59,9 @@ extension AuthSession {
             authState.performAction(freshTokens: { (accessToken, idToken, error) in
                 if let error {
                     continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: (acessToken: accessToken!, idToken: idToken!))
                 }
-                continuation.resume(returning: (acessToken: accessToken!, idToken: idToken!))
             })
         }
     }

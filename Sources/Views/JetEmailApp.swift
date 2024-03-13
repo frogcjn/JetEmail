@@ -19,16 +19,17 @@ struct JetEmailApp: App {
                     .frame(width: 720, height: 300)
             }
             .defaultSize(width: 720, height: 300)
+            #else
+            /*WindowGroup {
+                SettingsView()
+                    .frame(width: 720, height: 300)
+            }
+            .defaultSize(width: 720, height: 300)*/
             #endif
-            
-
             
             /// Mail Windows
             WindowGroup {
                 MailWindow()
-#if TARGET_OS_IPHONE
-Text("Target_OS_IPHONE")
-#endif
             }
             .defaultSize(width: 800, height: 600)
         }
