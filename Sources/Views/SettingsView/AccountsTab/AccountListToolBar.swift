@@ -47,6 +47,7 @@ struct AccountListToolbar : View {
             } label: {
                 Label("Sign In", systemImage: "plus")
             }.menuIndicator(.hidden)
+            .disabled(appModel.isBusy)
             
             // Feature: Accounts - Sign Out Account
             Button("Sign Out", systemImage: "minus") {

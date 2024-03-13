@@ -24,21 +24,24 @@ struct AccountsTab : View {
                 AccountView()
                     .itemModel(item)
             } else {
-                //MyEqualWidthVStack {
+                VStack {
                     Button {
                         Task { await appModel.signIn(platform: .microsoft) }
                     } label: {
                         Label("Microsoft Outlook", image: "Outlook")
-                    }//.disabled(context.isBusy)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
                     
                     Button {
                         Task { await appModel.signIn(platform: .google) }
                     } label: {
                         Label("Google Gmail", image: "Gmail")
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    //.disabled(context.isBusy)
-               // }
+                }
+                .fixedSize(horizontal: true, vertical: false)
                 .labelStyle(.titleAndIcon)
+                .disabled(appModel.isBusy)
             }
         }
     }
