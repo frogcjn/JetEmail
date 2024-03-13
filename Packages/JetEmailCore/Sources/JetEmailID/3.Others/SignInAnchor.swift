@@ -76,10 +76,19 @@ public extension SignInPresentationAnchor {
         return window
     } }
     
+#if !os(macOS)
+
     static var sharedKeyViewController : ViewController { get throws {
         guard let viewController = try sharedKeyWindow.rootViewController  else { throw SignInPresentationAnchorError.authorizeNoMainViewController }
         return viewController
     } }
+#else
+    static var sharedKeyViewController : ViewController { get throws {
+        guard let viewController = try sharedKeyWindow.contentViewController  else { throw SignInPresentationAnchorError.authorizeNoMainViewController }
+        return viewController
+    } }
+#endif
+
 }
 
 
