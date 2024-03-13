@@ -9,13 +9,33 @@ import SwiftUI
 
 struct SettingsView : View {
     
+#if !os(macOS)
+    @Environment(\.dismiss)
+    var dismiss
+#endif
+
     var body: some View {
-        TabView {
-            AccountsTab()
-                .tabItem { Label("Accounts", systemImage: "person.crop.circle.fill") }
-            
-            GeneralTab()
-                .tabItem { Label("General", systemImage: "gearshape") }
+        NavigationStack {
+
+            TabView {
+                
+                    AccountsTab()
+
+
+                    .tabItem { Label("Accounts", systemImage: "person.crop.circle.fill") }
+
+
+                GeneralTab()
+                    .tabItem { Label("General", systemImage: "gearshape") }
+            }
+#if !os(macOS)
+
+                    .toolbar {
+                        Button("close", systemImage: "xmark") {
+                            dismiss()
+                        }
+                    }
+#endif
         }
     }
 }
