@@ -8,6 +8,7 @@
 import Foundation
 @preconcurrency import MSAL
 import JetEmailID
+import JetEmailFoundation
 
 // MARK: - Sessions
 
@@ -22,9 +23,10 @@ public extension MicrosoftClient {
 // MARK: - Sign In
 
 public extension MicrosoftClient {
+    @MainActor
     func signIn() async throws -> MicrosoftSession {
         let msalSession = try await _msalSignIn()
-        return try await SessionStore.shared.insert(msalSession: msalSession, forceReplacing: false)
+        return try SessionStore.shared.insert(msalSession: msalSession, forceReplacing: false)
     }
 }
 

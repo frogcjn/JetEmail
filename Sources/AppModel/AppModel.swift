@@ -24,6 +24,12 @@ final class AppModel {
     var willSignOutAccount = PassthroughSubject<Account, Never>()
     
     var isBusy = false
+    
+    #if os(macOS)
+    var mailWindow: NSWindow?
+    #else
+    var mailWindow: UIWindow?
+    #endif
 }
 
 // @dynamicMemberLookup

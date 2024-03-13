@@ -18,13 +18,15 @@ import UIKit
 import AppKit
 #endif
 
+import JetEmailID
+
 fileprivate let kIncludeGrantedScopesParameter = "include_granted_scopes"
 
 extension GoogleClient {
     
     
     @MainActor  // for WebAuthenticationSession
-    func _gtmSignIn(webAuthenticationSession: WebAuthenticationSession) async throws -> AuthSession {
+    func _gtmSignIn() async throws -> AuthSession {
         MainActor.assertIsolated()
         
         let additionalParameters: [String: String] = [
@@ -45,8 +47,8 @@ extension GoogleClient {
                     responseType: responseType.rawValue,
             additionalParameters: additionalParameters
         )
-        
-        let authState = try await OIDAuthState.present(request: request, webAuthenticationSession: webAuthenticationSession)
+        let window = try SignInPresentationAnchor.sharedKeyWindow
+        let authState = try await OIDAuthState.present(request: request, window: window)
         return AuthSession(authState: authState)
     }
 }
@@ -63,3 +65,8 @@ extension AuthSession {
         }
     }
 }
+
+
+
+
+

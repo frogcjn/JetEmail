@@ -16,9 +16,6 @@ struct AccountsTab : View {
     @Environment(AppModel.self)
     var appModel
     
-    @Environment(\.webAuthenticationSession)
-    var webAuthenticationSession
-    
     var body: some View {
         SplitView {
             AccountList()
@@ -27,15 +24,15 @@ struct AccountsTab : View {
                 AccountView()
                     .itemModel(item)
             } else {
-                VStack {
+                MyEqualWidthVStack {
                     Button {
-                        Task { await appModel.signIn(platform: .microsoft, webAuthenticationSession: webAuthenticationSession) }
+                        Task { await appModel.signIn(platform: .microsoft) }
                     } label: {
                         Label("Microsoft Outlook", image: "Outlook")
                     }//.disabled(context.isBusy)
                     
                     Button {
-                        Task { await appModel.signIn(platform: .google, webAuthenticationSession: webAuthenticationSession) }
+                        Task { await appModel.signIn(platform: .google) }
                     } label: {
                         Label("Google Gmail", image: "Gmail")
                     }

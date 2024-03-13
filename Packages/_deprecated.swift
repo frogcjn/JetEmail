@@ -1690,3 +1690,9 @@ struct Recipient {
 */
 
 
+
+/*
+@globalActor
+public actor BackgroundActor {
+    public static let shared = BackgroundActor()
+}*/

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JetEmailID
 
 struct MailWindow : View {
     
@@ -23,6 +24,9 @@ struct MailWindow : View {
     @State
     var isPresentingSettings = false
 #endif
+    
+    @Environment(\.webAuthenticationSession)
+    var webAuthenticationSession
 
     var body: some View {
         NavigationSplitView(columnVisibility: Bindable(window).splitViewVisibility) {

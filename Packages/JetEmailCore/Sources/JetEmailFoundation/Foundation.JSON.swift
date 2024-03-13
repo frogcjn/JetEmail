@@ -177,6 +177,11 @@ public extension String {
     }
 }
 
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
 
 public extension String {
     var removingHTMLEntities: String {

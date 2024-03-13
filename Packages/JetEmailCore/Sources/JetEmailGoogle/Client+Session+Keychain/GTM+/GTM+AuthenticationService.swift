@@ -9,20 +9,12 @@
 import SwiftUI
 import AuthenticationServices
 
-extension OIDAuthState {
-    @MainActor // for WebAuthenticationSession
-    static func present(request: OIDAuthorizationRequest, webAuthenticationSession: WebAuthenticationSession)  async throws -> OIDAuthState {
-        try await present(request: request, externalUserAgent: webAuthenticationSession.externalUserAgent)
-        // withExtendedLifetime(userAgent) {} // keep authFlow after get auth state
-    }
-}
-
 
 // extension WebAuthenticationSession: @unchecked Sendable {}
 
-fileprivate extension WebAuthenticationSession {
-    var externalUserAgent: ExternalUserAgent {
-        .init(webAuthenticationSession: self)
+extension WebAuthenticationSession {
+    var externalUserAgent: any OIDExternalUserAgent {
+        ExternalUserAgent(webAuthenticationSession: self)
     }
 }
 

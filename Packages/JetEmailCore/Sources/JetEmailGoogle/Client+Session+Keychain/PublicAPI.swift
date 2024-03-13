@@ -26,8 +26,8 @@ public extension GoogleClient {
 
 public extension GoogleClient {
     @MainActor // for WebAuthenticationSession
-    func signIn(webAuthenticationSession: WebAuthenticationSession) async throws -> GoogleSession {
-        let gtmSession = try await _gtmSignIn(webAuthenticationSession: webAuthenticationSession)
+    func signIn() async throws -> GoogleSession {
+        let gtmSession = try await _gtmSignIn()
         let sessionItem = try await Keychain.shared.insertItem(gtmSession: gtmSession)
         return SessionStore.shared.insert(sessionItem: sessionItem, forceReplacing: false)
     }
