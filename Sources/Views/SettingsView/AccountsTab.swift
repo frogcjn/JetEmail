@@ -24,7 +24,7 @@ struct AccountsTab : View {
                 AccountView()
                     .itemModel(item)
             } else {
-                MyEqualWidthVStack {
+                //MyEqualWidthVStack {
                     Button {
                         Task { await appModel.signIn(platform: .microsoft) }
                     } label: {
@@ -37,7 +37,7 @@ struct AccountsTab : View {
                         Label("Google Gmail", image: "Gmail")
                     }
                     //.disabled(context.isBusy)
-                }
+               // }
                 .labelStyle(.titleAndIcon)
             }
         }
