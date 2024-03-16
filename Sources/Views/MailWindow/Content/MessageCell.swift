@@ -18,7 +18,7 @@ struct MessageCell : View {
         VStack(alignment: .leading) {
             // Text(message.lement.sender?.emailAddress?.name ?? message.lement.sender?.emailAddress?.address ?? "")
             HStack {
-                Text(message.senderField ?? "(No Sender)").lineLimit(1)
+                Text(message.from ?? "(No Sender)").lineLimit(1)
                     .font(.headline)
                     .fontWeight(.bold)
                 Spacer()

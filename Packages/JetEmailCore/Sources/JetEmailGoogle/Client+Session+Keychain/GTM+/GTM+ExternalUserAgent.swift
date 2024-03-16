@@ -46,7 +46,7 @@ fileprivate class ExternalUserAgent : NSObject, OIDExternalUserAgent, @unchecked
         do {
             let resultURL: URL
             
-            if #available(visionOS 1.1, macOS 14.4, *) {
+            if #available(visionOS 1.1, macOS 14.4, iOS 17.4, *) {
                 resultURL = try await webAuthenticationSession.authenticate(
                     using: requestURL,
                     callback: .customScheme(requestRedirectScheme),

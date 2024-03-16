@@ -39,7 +39,7 @@ public final class Message {
     
     // MARK: Resource - Originator Fields
     
-    public private(set) var         from: String?
+    public private(set) var         from: String? // important
     public private(set) var       sender: String?
     public private(set) var      replyTo: String? // 回复给
     

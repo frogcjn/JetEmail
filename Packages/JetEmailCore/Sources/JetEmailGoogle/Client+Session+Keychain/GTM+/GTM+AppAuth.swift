@@ -40,8 +40,14 @@ extension OIDAuthState {
     @MainActor // for window
     static func present(request: OIDAuthorizationRequest, window: JetEmailID.Window) async throws -> OIDAuthState {
         var authFlow: OIDExternalUserAgentSession?
+#if os(iOS)
+guard let anchor = window.rootViewController else { throw SignInPresentationAnchorError.authorizeNoMainViewController }
+#else
+let anchor = window
+#endif
+
         let authState = try await withCheckedThrowingContinuation { continuation in
-            authFlow = OIDAuthState.authState(byPresenting: request, presenting: window) { state, error in
+            authFlow = OIDAuthState.authState(byPresenting: request, presenting: anchor) { state, error in
                 // Brings this app to the foreground.
                 // NSRunningApplication.current.activate(options: [.activateAllWindows, .activateAllWindows])
                 
@@ -52,6 +58,7 @@ extension OIDAuthState {
                     continuation.resume(throwing: error)
                 }
             }
+            
         }
          withExtendedLifetime(authFlow) {} // keep authFlow after get auth state
         return authState
