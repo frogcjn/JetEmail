@@ -15,6 +15,7 @@ struct AccountsTab : View {
     var body: some View {
         SplitView {
             AccountList()
+                .clipShape(RoundedRectangle(cornerRadius: 8))
         } detail: {
             if let item = settings.selectedAccount {
                 AccountView()

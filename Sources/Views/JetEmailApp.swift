@@ -30,7 +30,9 @@ struct JetEmailApp: App {
 Text("Target_OS_IPHONE")
 #endif
             }
+            #if !os(visionOS)
             .defaultSize(width: 800, height: 600)
+            #endif
         }
         .appModel(.shared)
     }
