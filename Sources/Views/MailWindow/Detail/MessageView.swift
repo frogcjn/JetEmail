@@ -54,14 +54,14 @@ struct EmailMetadataView: View {
         Form {
             LabeledContent("subject:", value: message.subject ?? "nil")
 
-            Divider()
+            DynamicDivider()
 
             /*LabeledContent("createdDate:" , value: message.createdDate?.formattedRelative() ?? "")
             LabeledContent("modifiedDate:", value: message.modifiedDate?.formattedRelative() ?? "")*/
             LabeledContent("date:", value: message.date?.formattedRelative() ?? "")
             // LabeledContent("sentDate:"    , value: message.sentDate?.formattedRelative() ?? "")
 
-            Divider()
+            DynamicDivider()
 
             if let from    = message.from                             { LabeledContent("from:"    , value: from)    }
             if let sender  = message.sender,   sender != message.from { LabeledContent("sender:"  , value: sender)  }
@@ -71,13 +71,23 @@ struct EmailMetadataView: View {
             if let cc      = message.cc                               { LabeledContent("cc:"      , value: cc)      }
             if let bcc     = message.bcc                              { LabeledContent("bcc:"     , value: bcc )    }
 
-            Divider()
+            DynamicDivider()
 
-            if let bodyPreview = message.bodyPreview {
+            if let bodyPreview = message.bodyPreview, message.body?.html == nil {
+                // no need to display preview if the body is nonnull
                 LabeledContent("bodyPreview:", value: bodyPreview)
             }
         }
         .padding(4)
+    }
+}
+
+struct DynamicDivider: View {
+    var body: some View {
+        #if os(visionOS)
+        #else
+        Divider()
+        #endif
     }
 }
 

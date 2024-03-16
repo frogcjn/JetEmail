@@ -31,7 +31,9 @@ struct JetEmailApp: App {
             WindowGroup {
                 MailWindow()
             }
+            #if !os(visionOS)
             .defaultSize(width: 800, height: 600)
+            #endif
         }
         .appModel(.shared)
     }

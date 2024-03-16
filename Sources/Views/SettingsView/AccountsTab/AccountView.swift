@@ -15,7 +15,9 @@ struct AccountView: View {
         
     var body: some View {
         Form {
+            #if DEBUG
             LabeledContent("_id"     , value: account.uniqueID)
+            #endif
             LabeledContent("username", value: account.username)
             LabeledContent("order"   , value: account.orderIndex.debugDescription)
             LabeledContent("delete"  , value: account.deleteMark.description)
