@@ -66,7 +66,7 @@ private func loadMessagesProgressing(id: MailFolderID, session: MicrosoftSession
         var value = firstIndexToLoad
         id.loadingMessageState = .loading(value: value, total: total)
         for try await messages in stream {
-            value += try await ModelStore.shared.setMessagesInsertPart(resources: messages.map(MessageResource.microsoft), mailFolderID: id, accountID: session.generalID).count // MSAL to SwiftData
+            value += try await ModelStore.shared.setMessagesInsertPart(resources: messages.map(MessageResource.microsoft), mailFolderID: id, accountID: session.account.generalID).count // MSAL to SwiftData
             id.loadingMessageState = .loading(value: value, total: total)
         }
     }
@@ -93,7 +93,7 @@ private func loadMessagesProgressing(id: MailFolderID, session: GoogleSession) a
 
         id.loadingMessageState = .loading(value: value, total: total)
         for try await messages in stream {
-            value += try await ModelStore.shared.setMessagesInsertPart(resources: messages.map(MessageResource.google), mailFolderID: id, accountID: session.generalID).count // MSAL to SwiftData
+            value += try await ModelStore.shared.setMessagesInsertPart(resources: messages.map(MessageResource.google), mailFolderID: id, accountID: session.account.generalID).count // MSAL to SwiftData
             id.loadingMessageState = .loading(value: value, total: total)
         }
     }

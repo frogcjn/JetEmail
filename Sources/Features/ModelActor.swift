@@ -169,7 +169,7 @@ fileprivate extension ModelContext {
     
     func _insertAccount(session: Session) throws -> Account {
         // find existed
-        if let model: Account = try self[session.generalID] {
+        if let model: Account = try self[session.account.generalID] {
             
             /*// If found: update
             model.session = session*/

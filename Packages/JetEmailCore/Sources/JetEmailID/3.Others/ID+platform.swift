@@ -7,7 +7,7 @@
 
 
 public extension AccountID {
-    var platformCase: PlatformEnum<AccountID, MicrosoftAccountID, GoogleAccountID>? {
+    var platformCase: PlatformEnum<MicrosoftAccountID, GoogleAccountID>? {
         switch platform {
         case .microsoft: .microsoft(.init(innerID: innerID))
         case    .google:    .google(.init(innerID: innerID))

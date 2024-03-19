@@ -25,9 +25,21 @@
  */
 
 
+// MARK: - General ID
+
+public protocol GeneralIdentifiable : IdentifiableValueType {
+    associatedtype GeneralID : IdentifiableValueType
+    var generalID: GeneralID { get }
+}
+
+public extension GeneralIdentifiable {
+    var id: GeneralID { generalID }
+}
+
+
 // MARK: - Resource ID
 
-public protocol ResourceIDProtocol : CodableValueType, Sendable {
+public protocol ResourceIDProtocol : GeneralIdentifiable, Sendable {
     associatedtype  AccountIDType: AccountIDProtocol
     
     var resourceType: ResourceType  { get }
@@ -65,7 +77,7 @@ extension MessageIDProtocol {
 
 // MARK: - Platform Speicific
 
-public protocol PlatformSpecificIDProtocol : ResourceIDProtocol, GeneralIdentifiable where GeneralID == InnerGeneralID {
+public protocol PlatformSpecificIDProtocol : ResourceIDProtocol where GeneralID == InnerGeneralID {
     static var platform: Platform { get }
     
     associatedtype InnerGeneralID : ResourceIDProtocol

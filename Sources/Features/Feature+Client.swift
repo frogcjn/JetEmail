@@ -12,14 +12,6 @@ import JetEmailFoundation // Tree
 import JetEmailData
 import JetEmailID
 
-enum Client {
-    static var sessions: [Session] { get async throws {
-        async let microsoftSessions = MicrosoftClient.shared.sessions.map(Session.microsoft)
-        async let googleSessions = GoogleClient.shared.sessions.map(Session.google)
-        return try await microsoftSessions + googleSessions
-    } }
-}
-
 extension Session {
     func signOut() async throws -> Session {
         switch self {

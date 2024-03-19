@@ -9,9 +9,7 @@
 import JetEmailID
 @preconcurrency import MSAL
 
-public final class MicrosoftSession : GetAccountProtocol {
-    public var generalID: AccountID { account.id.general }
-    public var  username: String    { account.username   }
+public final class MicrosoftSession : SessionProtocol, Sendable{
     
     public let account     : MicrosoftAccount
            let _msalSession: MSALSession

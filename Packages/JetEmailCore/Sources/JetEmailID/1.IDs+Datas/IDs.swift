@@ -22,6 +22,8 @@ public struct ResourceID<AccountIDType : AccountIDProtocol> : ResourceIDProtocol
         self.accountID    = accountID
         self.innerID      = innerID
     }
+    
+    public var generalID: ResourceID { self }
 }
 
 // MARK: - Resource Specific
@@ -36,6 +38,8 @@ public struct AccountID : AccountIDProtocol {
         self.platform = platform
         self.innerID  = innerID
     }
+    
+    public var generalID: AccountID { self }
 }
 
 public struct MailFolderID : MailFolderIDProtocol {
@@ -54,6 +58,8 @@ public struct MailFolderID : MailFolderIDProtocol {
         self.accountID = .init(platform: platform, innerID: innerAccountID)
         self.innerID   = innerID
     }
+    
+    public var generalID: MailFolderID { self }
 }
 
 public struct MessageID : MessageIDProtocol {
@@ -72,6 +78,8 @@ public struct MessageID : MessageIDProtocol {
         self.accountID = .init(platform: platform, innerID: innerAccountID)
         self.innerID   = innerID
     }
+    
+    public var generalID: MessageID { self }
 }
 
 
@@ -81,7 +89,7 @@ public struct GoogleAccountID : GoogleIDProtocol & PlatformSpecificAccountIDProt
     public typealias GeneralID = AccountID
     public let innerID: String
     public init(innerID: String) {
-        self.innerID  = innerID
+        self.innerID = innerID
     }
 }
 

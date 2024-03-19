@@ -7,7 +7,7 @@
 
 import JetEmailID
 
-public struct GoogleAccount : GoogleProtocol, PlatformSpecificAccountProtocol, GetAccountProtocol {
+public struct GoogleAccount : GoogleProtocol, PlatformSpecificAccountProtocol, AccountProtocol {
     public typealias GeneralID = AccountID
     
     public let                  id: GoogleAccountID

@@ -61,7 +61,7 @@ public extension MicrosoftSession {
     
     @MainActor
     var idToWellKnownFolderName:  [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName] { get async {
-        if let idToWellKnownFolderName = generalID.idToWellKnownFolderName { return idToWellKnownFolderName }
+        if let idToWellKnownFolderName = account.generalID.idToWellKnownFolderName { return idToWellKnownFolderName }
         let idToWellKnownFolderName: [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName] =  await {
             do {
                 // catch wellknownFolderName

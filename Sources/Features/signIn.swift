@@ -22,27 +22,16 @@ extension AppModel {
         guard !isBusy else { return }
         isBusy = true
         defer { isBusy = false }
-        
-        
-        
         do {
             if delay {
                 let clock = SuspendingClock()
                 try await clock.sleep(for: .seconds(0.5)) // resolve issue when presenting window with orminent in visionOS, delay <= 0.35s will crash
             }
             
-            switch platform {
-            case .microsoft:
-                _ = try await ModelStore.shared.addSession(.microsoft(MicrosoftClient.shared.signIn()))
-            case .google:
-                _ = try await ModelStore.shared.addSession(   .google(   GoogleClient.shared.signIn()))
-            default: fatalError() // TODO: Throw Error
-            }
+            let session = try await Clients.shared.client(platform: platform).signIn()
+            _ = try await ModelStore.shared.addSession(session)
         } catch {
             logger.error("\(error)")
         }
     }
-    
 }
-
-

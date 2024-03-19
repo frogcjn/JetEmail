@@ -7,7 +7,7 @@
 
 import JetEmailID
 
-public struct MicrosoftAccount : MicrosoftProtocol, PlatformSpecificAccountProtocol, GetAccountProtocol {
+public struct MicrosoftAccount : MicrosoftProtocol, PlatformSpecificAccountProtocol, AccountProtocol {
     public typealias GeneralID = AccountID
     
     public let                  id: MicrosoftAccountID

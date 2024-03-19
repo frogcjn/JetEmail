@@ -5,24 +5,28 @@
 //  Created by Cao, Jiannan on 3/9/24.
 //
 
-public protocol ResourceProtocol                   : IdentifiableValueType, Sendable where ID : ResourceIDProtocol {}
-public protocol ResourceSpecificProtocol           : IdentifiableValueType, Sendable where ID : ResourceSpecificIDProtocol{}
-public protocol AccountProtocol                    : IdentifiableValueType, Sendable where ID : AccountIDProtocol {}
-public protocol MailFolderProtocol                 : IdentifiableValueType, Sendable where ID : MailFolderIDProtocol {}
-public protocol MessageProtocol                    : IdentifiableValueType, Sendable where ID : MessageIDProtocol {}
+public protocol ResourceProtocol                   : GeneralIdentifiable, Sendable where ID : ResourceIDProtocol        , ID.GeneralID: ResourceIDProtocol         {}
+public protocol ResourceSpecificProtocol           : GeneralIdentifiable, Sendable where ID : ResourceSpecificIDProtocol, ID.GeneralID: ResourceSpecificIDProtocol {}
+
+public protocol AccountProtocol                    : GeneralIdentifiable, Sendable where ID : AccountIDProtocol         , ID.GeneralID: AccountIDProtocol          {
+    var username: String { get }
+}
+
+public protocol MailFolderProtocol                 : GeneralIdentifiable, Sendable where ID : MailFolderIDProtocol      , ID.GeneralID: MailFolderIDProtocol       {}
+public protocol MessageProtocol                    : GeneralIdentifiable, Sendable where ID : MessageIDProtocol         , ID.GeneralID: MessageIDProtocol          {}
  
 // MARK: - Platform Specific
 
-public protocol PlatformSpecificProtocol           : IdentifiableValueType, Sendable , GeneralIdentifiable where ID : PlatformSpecificIDProtocol, GeneralID == ID.GeneralID {}
+public protocol PlatformSpecificProtocol           : GeneralIdentifiable, Sendable where ID : PlatformSpecificIDProtocol, ID.GeneralID: ResourceIDProtocol, GeneralID == ID.GeneralID {}
 public extension PlatformSpecificProtocol {
     var generalID : GeneralID { id.generalID }
 }
 
-public protocol MicrosoftProtocol                  : PlatformSpecificProtocol                      where ID : MicrosoftIDProtocol {}
-public protocol GoogleProtocol                     : PlatformSpecificProtocol                      where ID : GoogleIDProtocol {}
-public protocol PlatformSpecificAccountProtocol    : PlatformSpecificProtocol & AccountProtocol    where ID : PlatformSpecificAccountIDProtocol {}
+public protocol MicrosoftProtocol                  : PlatformSpecificProtocol                      where ID : MicrosoftIDProtocol                  {}
+public protocol GoogleProtocol                     : PlatformSpecificProtocol                      where ID : GoogleIDProtocol                     {}
+public protocol PlatformSpecificAccountProtocol    : PlatformSpecificProtocol & AccountProtocol    where ID : PlatformSpecificAccountIDProtocol    {}
 public protocol PlatformSpecificMailFolderProtocol : PlatformSpecificProtocol & MailFolderProtocol where ID : PlatformSpecificMailFolderIDProtocol {}
-public protocol PlatformSpecificMessageProtocol    : PlatformSpecificProtocol & MessageProtocol    where ID : PlatformSpecificMessageIDProtocol {}
+public protocol PlatformSpecificMessageProtocol    : PlatformSpecificProtocol & MessageProtocol    where ID : PlatformSpecificMessageIDProtocol    {}
 
 /*
  ResourceIDProtocol                                 -> ResourceProtocol

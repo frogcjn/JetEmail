@@ -9,6 +9,7 @@
 
 import JetEmailFoundation
 import Foundation
+import JetEmailData
 
 extension AppModel {
     
@@ -19,11 +20,10 @@ extension AppModel {
         defer { isBusy = false }
         
         do {
-            _ = try await ModelStore.shared.setSessions(Client.sessions) // load session from local keychain
+            let sessions = try await Clients.shared.sessions
+            _ = try await ModelStore.shared.setSessions(sessions) // load session from local keychain
         } catch {
             logger.error("\(error)")
         }
     }
 }
-
-

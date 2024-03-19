@@ -52,22 +52,22 @@ extension PlatformEnum : GetMessageProtocol where
         }
     }
     
-    public var      subject: String?      { self[platform: \.subject    ] }
+    public var      subject: String?      { self[platform: \.subject     ] }
     
-    public var         from: String?      { self[platform: \.subject    ] }
-    public var       sender: String?      { self[platform: \.sender     ] }
-    public var      replyTo: String?      { self[platform: \.replyTo    ] }
+    public var         from: String?      { self[platform: \.from        ] }
+    public var       sender: String?      { self[platform: \.sender      ] }
+    public var      replyTo: String?      { self[platform: \.replyTo     ] }
     
     // MARK: Resource - Destination Address Fields
 
-    public var           to: String?      { self[platform: \.to         ] }
-    public var           cc: String?      { self[platform: \.cc         ] }
-    public var          bcc: String?      { self[platform: \.bcc        ] }
-    public var  deliveredTo: String?      { self[platform: \.deliveredTo] }
+    public var           to: String?      { self[platform: \.to          ] }
+    public var           cc: String?      { self[platform: \.cc          ] }
+    public var          bcc: String?      { self[platform: \.bcc         ] }
+    public var  deliveredTo: String?      { self[platform: \.deliveredTo ] }
 
     // MARK: Resource - Date
 
-    public var         date: Date?        { self[platform: \.date] }
+    public var         date: Date?        { self[platform: \.date        ] }
     public var  createdDate: Date?        { self[platform: \.createdDate ] }
     public var modifiedDate: Date?        { self[platform: \.modifiedDate] }
     public var receivedDate: Date?        { self[platform: \.receivedDate] }
@@ -75,9 +75,9 @@ extension PlatformEnum : GetMessageProtocol where
     
     // MARK: Resource - Body & Raw
     
-    public var  bodyPreview: String?      { self[platform: \.bodyPreview] }
-    public var         body: MessageBody? { self[platform: \.body       ] }
-    public var          raw: Data?        { self[platform: \.raw        ] }
+    public var  bodyPreview: String?      { self[platform: \.bodyPreview ] }
+    public var         body: MessageBody? { self[platform: \.body        ] }
+    public var          raw: Data?        { self[platform: \.raw         ] }
 }
 
 

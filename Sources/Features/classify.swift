@@ -53,7 +53,7 @@ extension AppItemModel<Message> {
             guard let session = account.resourceID.storedSession else { return }
             switch session {
             case .microsoft(let session): try await session.classify(account: account, message: message)
-            case .google(let session): try await session.classify(account: account, message: message)
+            case    .google(let session): try await session.classify(account: account, message: message)
             }
         } catch {
             context.logger.error("\(error)")
