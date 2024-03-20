@@ -12,7 +12,6 @@ import JetEmailPlatform
 
 extension AppModel {
     
-    // Feature: Accounts - Sign In
     @MainActor // for isBusy, WebAuthenticationSession
     func signIn(platform: Platform, delay: Bool = false) async {
         guard !isBusy else { return }

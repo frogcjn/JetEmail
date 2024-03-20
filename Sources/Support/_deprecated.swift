@@ -3792,7 +3792,7 @@ fileprivate struct ItemModelModifier<Item: UnifiedModel> : ViewModifier {
     }
 }*/
 
-
+/*
 @MainActor
 extension Scene {
     func appModel(_ appModel: AppModel) -> some Scene {
@@ -3802,3 +3802,627 @@ extension Scene {
         environment(settingsModel)
     }
 }
+*/
+/*
+@ -1,81 +0,0 @@
+//
+//  Localizatino.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 3/12/24.
+//
+
+import JetEmailMicrosoft
+import Foundation
+
+fileprivate extension MicrosoftWellKnownFolderName {
+    var systemOrder: Int? {
+        switch self {
+        case .inbox                    : return 0
+        case .drafts                   : return 1
+        case .archive                  : return 2
+        case .sentItems                : return 3
+        case .deletedItems             : return 4
+        case .junkEmail                : return 5
+        case .outbox                   : return 6
+        case .scheduled                : return 7
+        case .clutter                  : return 8
+            // 便笺
+        case .conversationHistory      : return Int.max
+        default: return nil
+        }
+            
+        /* return String(localized: "Microsoft.MailFolder.clutter")
+        case .conflicts                : return String(localized: "Microsoft.MailFolder.conflicts")
+        case .localFailures            : return String(localized: "Microsoft.MailFolder.localFailures")
+        case .msgFolderRoot            : return String(localized: "Microsoft.MailFolder.msgFolderRoot")
+        case .recoverableItemsDeletions: return String(localized: "Microsoft.MailFolder.recoverableItemsDeletions")
+        case .searchFolders            : return String(localized: "Microsoft.MailFolder.searchFolders")
+        case .serverFailures           : return String(localized: "Microsoft.MailFolder.serverFailures")
+        case .syncIssues               : return String(localized: "Microsoft.MailFolder.syncIssues")*/
+    }
+        
+    var nameLocalizedKey: String? {
+        switch self {
+        case .archive                  : return LocalizedStringResource("Microsoft.MailFolder.archive").key
+        case .clutter                  : return LocalizedStringResource("Microsoft.MailFolder.clutter").key
+        case .conflicts                : return LocalizedStringResource("Microsoft.MailFolder.conflicts").key
+        case .conversationHistory      : return LocalizedStringResource("Microsoft.MailFolder.conversationHistory").key
+        case .deletedItems             : return LocalizedStringResource("Microsoft.MailFolder.deletedItems").key
+        case .drafts                   : return LocalizedStringResource("Microsoft.MailFolder.drafts").key
+        case .inbox                    : return LocalizedStringResource("Microsoft.MailFolder.inbox").key
+        case .junkEmail                : return LocalizedStringResource("Microsoft.MailFolder.junkEmail").key
+        case .localFailures            : return LocalizedStringResource("Microsoft.MailFolder.localFailures").key
+        case .msgFolderRoot            : return LocalizedStringResource("Microsoft.MailFolder.msgFolderRoot").key
+        case .outbox                   : return LocalizedStringResource("Microsoft.MailFolder.outbox").key
+        case .recoverableItemsDeletions: return LocalizedStringResource("Microsoft.MailFolder.recoverableItemsDeletions").key
+        case .scheduled                : return LocalizedStringResource("Microsoft.MailFolder.scheduled").key
+        case .searchFolders            : return LocalizedStringResource("Microsoft.MailFolder.searchFolders").key
+        case .sentItems                : return LocalizedStringResource("Microsoft.MailFolder.sentItems").key
+        case .serverFailures           : return LocalizedStringResource("Microsoft.MailFolder.serverFailures").key
+        case .syncIssues               : return LocalizedStringResource("Microsoft.MailFolder.syncIssues").key
+        }
+    }
+    
+    var systemImage: String? {
+        switch self {
+        case .archive                  : return "archivebox"
+        case .clutter                  : return "shippingbox"
+        case .conflicts                : return "bolt.trianglebadge.exclamationmark"
+        case .conversationHistory      : return "bubble"
+        case .deletedItems             : return "trash"
+        case .drafts                   : return "doc"
+        case .inbox                    : return "tray"
+        case .junkEmail                : return "xmark.bin"
+        case .localFailures            : return "exclamationmark.triangle"
+        case .msgFolderRoot            : return "tree"
+        case .outbox                   : return "tray.and.arrow.up"
+        case .recoverableItemsDeletions: return "arrow.triangle.2.circlepath"
+        case .scheduled                : return "clock"
+        case .searchFolders            : return "magnifyingglass"
+        case .sentItems                : return "paperplane"
+        case .serverFailures           : return "server.rack"
+        case .syncIssues               : return "exclamationmark.arrow.triangle.2.circlepath"
+        }
+    }
+}
+*/
+//
+//  VC.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 1/31/24.
+//
+/*
+ 
+ 
+ 
+ struct MyViewRepresentable : NSViewControllerRepresentable {
+     func makeNSViewController(context: Context) -> NSViewController {
+         MyVC()
+     }
+     
+     func updateNSViewController(_ nsViewController: NSViewController, context: Context) {
+         
+     }
+         
+     
+ }
+
+class MyVC: NSViewController {
+    
+    let endPoint = OutlookGraphEndPoint()
+    
+    var callGraphButton: NSButton!
+    var loggingText: NSTextView!
+    var signOutButton: NSButton!
+
+    var usernameLabel: NSTextField!
+
+    /*func initUI() {
+
+        usernameLabel = NSTextField()
+        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        usernameLabel.stringValue = ""
+        usernameLabel.isEditable = false
+        usernameLabel.isBezeled = false
+        self.view.addSubview(usernameLabel)
+
+        usernameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30.0).isActive = true
+        usernameLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10.0).isActive = true
+
+        // Add call Graph button
+        callGraphButton  = NSButton()
+        callGraphButton.translatesAutoresizingMaskIntoConstraints = false
+        callGraphButton.title = "Call Microsoft Graph API"
+        callGraphButton.target = self
+        callGraphButton.action = #selector(callGraphAPI(_:))
+        callGraphButton.bezelStyle = .rounded
+        self.view.addSubview(callGraphButton)
+
+        callGraphButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        callGraphButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 50.0).isActive = true
+        callGraphButton.heightAnchor.constraint(equalToConstant: 34.0).isActive = true
+
+        // Add sign out button
+        signOutButton = NSButton()
+        signOutButton.translatesAutoresizingMaskIntoConstraints = false
+        signOutButton.title = "Sign Out"
+        signOutButton.target = self
+        signOutButton.action = #selector(signOut(_:))
+        signOutButton.bezelStyle = .texturedRounded
+        self.view.addSubview(signOutButton)
+
+        signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        signOutButton.topAnchor.constraint(equalTo: callGraphButton.bottomAnchor, constant: 10.0).isActive = true
+        signOutButton.heightAnchor.constraint(equalToConstant: 34.0).isActive = true
+        signOutButton.isEnabled = false
+
+        // Add logging textfield
+        loggingText = NSTextView()
+        loggingText.translatesAutoresizingMaskIntoConstraints = false
+
+        self.view.addSubview(loggingText)
+
+        loggingText.topAnchor.constraint(equalTo: signOutButton.bottomAnchor, constant: 10.0).isActive = true
+        loggingText.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 10.0).isActive = true
+        loggingText.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10.0).isActive = true
+        loggingText.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -10.0).isActive = true
+        loggingText.widthAnchor.constraint(equalToConstant: 500.0).isActive = true
+        loggingText.heightAnchor.constraint(equalToConstant: 300.0).isActive = true
+    }*/
+
+    func platformViewDidLoadSetup() {}
+    
+    override func viewDidLoad() {
+
+        super.viewDidLoad()
+
+        //initUI()
+
+        /*do {
+            //try self.initMSAL()
+        } catch let error {
+            self.updateLogging(text: "Unable to create Application Context \(error)")
+        }*/
+
+        // self.loadCurrentAccount()
+        // self.platformViewDidLoadSetup()
+    }
+    
+    /*func initMSAL() throws {
+
+        guard let authorityURL = URL(string: endPoint.kAuthority) else {
+            self.updateLogging(text: "Unable to create authority URL")
+            return
+        }
+
+        let authority = try MSALAADAuthority(url: authorityURL)
+
+        let msalConfiguration = MSALPublicClientApplicationConfig(clientId: endPoint.kClientID, redirectUri: nil, authority: authority)
+        endPoint.applicationContext = try MSALPublicClientApplication(configuration: msalConfiguration)
+        self.initWebViewParams()
+    }
+    
+    func initWebViewParams() {
+        endPoint.webViewParameters = MSALWebviewParameters()
+        }*/
+
+    /*@objc func callGraphAPI(_ sender: AnyObject) {
+
+        self.loadCurrentAccount { (account) in
+
+            guard let currentAccount = account else {
+
+                // We check to see if we have a current logged in account.
+                // If we don't, then we need to sign someone in.
+                self.acquireTokenInteractively()
+                return
+            }
+
+            self.acquireTokenSilently(currentAccount)
+        }
+    }*/
+
+    typealias AccountCompletion = (MSGraph.Account?) -> Void
+
+    /*func loadCurrentAccount(completion: AccountCompletion? = nil) {
+
+        guard let applicationContext = endPoint.applicationContext else { return }
+
+        let msalParameters = MSALParameters()
+        msalParameters.completionBlockQueue = DispatchQueue.main
+
+        applicationContext.getCurrentAccount(with: msalParameters, completionBlock: { [endPoint] (currentAccount, previousAccount, error) in
+
+            if let error = error {
+                self.updateLogging(text: "Couldn't query current account with error: \(error)")
+                return
+            }
+
+            if let currentAccount = currentAccount {
+
+                self.updateLogging(text: "Found a signed in account \(String(describing: currentAccount.username)). Updating data for that account...")
+
+                endPoint.currentAccount = currentAccount
+
+                if let completion = completion {
+                    completion(endPoint.currentAccount)
+                }
+
+                return
+            }
+
+            self.updateLogging(text: "Account signed out. Updating UX")
+            endPoint.accessToken = ""
+            endPoint.currentAccount = nil
+
+            if let completion = completion {
+                completion(nil)
+            }
+        })
+    }*/
+    
+    /*func acquireTokenInteractively() {
+
+        guard let applicationContext = endPoint.applicationContext else { return }
+        guard let webViewParameters = endPoint.webViewParameters else { return }
+
+        // #1
+        let parameters = MSALInteractiveTokenParameters(scopes: endPoint.kScopes, webviewParameters: webViewParameters)
+        parameters.promptType = .selectAccount
+
+        // #2
+        applicationContext.acquireToken(with: parameters) { [endPoint] (result, error) in
+
+            // #3
+            if let error = error {
+
+                self.updateLogging(text: "Could not acquire token: \(error)")
+                return
+            }
+
+            guard let result = result else {
+
+                self.updateLogging(text: "Could not acquire token: No result returned")
+                return
+            }
+
+            // #4
+            endPoint.accessToken = result.accessToken
+            self.updateLogging(text: "Access token is \(endPoint.accessToken)")
+            endPoint.currentAccount = result.account
+            endPoint.getContentWithToken()
+        }
+    }
+    
+    
+    func acquireTokenSilently(_ account : MSGraph.Account!) {
+
+        guard let applicationContext = endPoint.applicationContext else { return }
+
+        /**
+
+         Acquire a token for an existing account silently
+
+         - forScopes:           Permissions you want included in the access token received
+         in the result in the completionBlock. Not all scopes are
+         guaranteed to be included in the access token returned.
+         - account:             An account object that we retrieved from the application object before that the
+         authentication flow will be locked down to.
+         - completionBlock:     The completion block that will be called when the authentication
+         flow completes, or encounters an error.
+         */
+
+        let parameters = MSALSilentTokenParameters(scopes: endPoint.kScopes, account: account)
+
+        applicationContext.acquireTokenSilent(with: parameters) { [endPoint] (result, error) in
+
+            if let error = error {
+
+                let nsError = error as NSError
+
+                // interactionRequired means we need to ask the user to sign-in. This usually happens
+                // when the user's Refresh Token is expired or if the user has changed their password
+                // among other possible reasons.
+
+                if (nsError.domain == MSALErrorDomain) {
+
+                    if (nsError.code == MSALError.interactionRequired.rawValue) {
+
+                        DispatchQueue.main.async {
+                            self.acquireTokenInteractively()
+                        }
+                        return
+                    }
+                }
+
+                self.updateLogging(text: "Could not acquire token silently: \(error)")
+                return
+            }
+
+            guard let result = result else {
+
+                self.updateLogging(text: "Could not acquire token: No result returned")
+                return
+            }
+
+            endPoint.accessToken = result.accessToken
+            self.updateLogging(text: "Refreshed Access token is \(endPoint.accessToken)")
+            //? self.updateSignOutButton(enabled: true)
+            endPoint.getContentWithToken()
+        }
+    }*/
+    
+    /*func getContentWithToken() {
+
+        // Specify the Graph API endpoint
+        let graphURI = endPoint.grapEndPointMe()
+        let url = URL(string: graphURI + "mailFolders")
+        
+        var request = URLRequest(url: url!)
+
+        // Set the Authorization header for the request. We use Bearer tokens, so we specify Bearer + the token we got from the result
+        request.setValue("Bearer \(endPoint.accessToken)", forHTTPHeaderField: "Authorization")
+        print(endPoint.accessToken)
+
+        URLSession..dataTask(with: request) { data, response, error in
+
+            if let error = error {
+                self.updateLogging(text: "Couldn't get graph result: \(error)")
+                return
+            }
+
+            guard let result = try? JSONSerialization.jsonObject(with: data!, options: []) else {
+
+                self.updateLogging(text: "Couldn't deserialize result JSON")
+                return
+            }
+
+            self.updateLogging(text: "Result from Graph: \(result))")
+
+            }.resume()
+    }*/
+    
+    /*@objc func signOut(_ sender: AnyObject) {
+
+            guard let applicationContext = endPoint.applicationContext else { return }
+
+            guard let account = endPoint.currentAccount else { return }
+
+            do {
+
+                /**
+                 Removes all tokens from the cache for this application for the provided account
+
+                 - account:    The account to remove from the cache
+                 */
+
+                let signoutParameters = MSALSignoutParameters(webviewParameters: endPoint.webViewParameters!)
+                signoutParameters.signoutFromBrowser = false // set this to true if you also want to signout from browser or webview
+
+                applicationContext.signout(with: account, signoutParameters: signoutParameters, completionBlock: {[endPoint] (success, error) in
+
+                    if let error = error {
+                        self.updateLogging(text: "Couldn't sign out account with error: \(error)")
+                        return
+                    }
+
+                    self.updateLogging(text: "Sign out completed successfully")
+                    endPoint.accessToken = ""
+                    endPoint.currentAccount = nil
+                })
+
+            }
+        }*/
+    
+    func updateLogging(text : String) {
+
+        if Thread.isMainThread {
+            self.loggingText.string = text
+        } else {
+            DispatchQueue.main.async {
+                self.loggingText.string = text
+            }
+        }
+    }
+
+    /*func updateSignOutButton(enabled : Bool) {
+        if Thread.isMainThread {
+            self.signOutButton.isEnabled = enabled
+        } else {
+            DispatchQueue.main.async {
+                self.signOutButton.isEnabled = enabled
+            }
+        }
+    }*/
+
+     /*func updateAccountLabel() {
+
+         guard let currentAccount = endPoint.currentAccount else {
+            self.usernameLabel.stringValue = "Signed out"
+            return
+        }
+
+        self.usernameLabel.stringValue = currentAccount.username ?? ""
+        self.usernameLabel.sizeToFit()
+     }*/
+
+     /*func updateCurrentAccount(account: MSGraph.Account?) {
+         endPoint.currentAccount = account
+        self.updateAccountLabel()
+        self.updateSignOutButton(enabled: account != nil)
+    }*/
+}
+*/
+
+/*// get "archive", "junk" mail folders
+let archiveMailFolder = try await getMailFolder(wellKnownFolderName: Microsoft.MailFolder.WellKnownFolderName.archive)
+let junkMailFolder = try await getMailFolder(wellKnownFolderName: .junkEmail)
+
+guard
+    let archiveNode = root.children.first(where: { $0.element.id == archiveMailFolder.unifiedID }),
+    let junkNode = root.children.first(where: { $0.element.id == junkMailFolder.unifiedID })
+else {
+    throw ClassifyError.noArchiveFolder
+}*/
+//
+//  FolderList.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/1/24.
+//
+/*
+import Foundation
+import AppKit
+
+struct TargetFolderPaths {
+    
+}
+
+extension TargetFolderPaths {
+    static var shared: [[FolderName]] = {
+        let asset = NSDataAsset(name: "TargetFolderPaths", bundle: Bundle.main)!
+        return try! asset.data.jsonDecode([[FolderName]].self)
+    }()
+    static var sharedTree: Tree<FolderName> = {
+        let folders = shared
+        let tree = Tree<FolderName>(rootValue: .special(.root))
+        for path in folders {
+            var current = tree.root
+            for name in path {
+                if let node = current.children.first(where: { $0.element == name }) {
+                    current = node
+                    continue
+                } else {
+                    let child = TreeNode(value: name)
+                    current.children.append(child)
+                    current = child
+                }
+            }
+        }
+        return tree
+    }()
+}
+*/
+/*
+enum SpecialFolderName: String {
+    case root = "root"
+    case archive = "archive"
+    case junkEmail = "junkemail"
+    
+    var graph: MSGraph.MailFolder.WellKnownFolderName {
+        switch self {
+        case .root: .msgFolderRoot
+        case .archive: .archive
+        case .junkEmail: .junkEmail
+        }
+    }
+}
+
+enum FolderName : Codable, RawRepresentable {
+    
+    case display(String)
+    case special(SpecialFolderName)
+    
+    /*init(from decoder: Decoder) throws {
+        let rawValue = try decoder.singleValueContainer().decode(String.self)
+        self.init(rawValue: rawValue)!
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }*/
+    
+    init?(rawValue: String) {
+        if rawValue.starts(with: "$") {
+            let rawValue = String(rawValue.dropFirst())
+            self = .special(.init(rawValue: rawValue)!)
+        } else {
+            self = .display(rawValue)
+        }
+    }
+    
+    var rawValue: String {
+        switch self {
+        case .display(let name): name
+        case .special(let specialName): "$" + specialName.rawValue
+        }
+    }
+}
+*/
+
+//
+//  HStack.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/1/24.
+//
+/*
+import SwiftUI
+
+struct MyEqualWidthHStack: Layout {
+    func sizeThatFits(
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout Void
+    ) -> CGSize {
+        // Return a size.
+        guard !subviews.isEmpty else { return .zero }
+
+        let maxSize = maxSize(subviews: subviews)
+        let spacing = spacing(subviews: subviews)
+        let totalSpacing = spacing.reduce(0) { $0 + $1 }
+
+        return CGSize(
+            width: maxSize.width * CGFloat(subviews.count) + totalSpacing,
+            height: maxSize.height)
+    }
+
+    func placeSubviews(
+        in bounds: CGRect,
+        proposal: ProposedViewSize,
+        subviews: Subviews,
+        cache: inout Void
+    ) {
+        // Place child views.
+        guard !subviews.isEmpty else { return }
+      
+        let maxSize = maxSize(subviews: subviews)
+        let spacing = spacing(subviews: subviews)
+
+        let placementProposal = ProposedViewSize(width: maxSize.width, height: maxSize.height)
+        var x = bounds.minX + maxSize.width / 2
+      
+        for index in subviews.indices {
+            subviews[index].place(
+                at: CGPoint(x: x, y: bounds.midY),
+                anchor: .center,
+                proposal: placementProposal)
+            
+            x += maxSize.width + spacing[index]
+        }
+    }
+    
+    private func maxSize(subviews: Subviews) -> CGSize {
+        let subviewSizes = subviews.map { $0.sizeThatFits(.unspecified) }
+        let maxSize: CGSize = subviewSizes.reduce(.zero) { currentMax, subviewSize in
+            CGSize(
+                width: max(currentMax.width, subviewSize.width),
+                height: max(currentMax.height, subviewSize.height))
+        }
+
+        return maxSize
+    }
+    
+    private func spacing(subviews: Subviews) -> [CGFloat] {
+        subviews.indices.map { index in
+            guard index < subviews.count - 1 else { return 0 }
+            return subviews[index].spacing.distance(
+                to: subviews[index + 1].spacing,
+                along: .horizontal)
+        }
+    }
+}
+*/
