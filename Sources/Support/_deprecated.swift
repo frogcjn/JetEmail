@@ -4432,3 +4432,103 @@ struct MyEqualWidthHStack: Layout {
     
 }*/
  // ResourceSpecificProtocol
+/*
+ enum GeneralConstants {
+     enum Gmail {
+         static let clientID = "679326713487-5r16ir2f57bpmuh2d6dal1bcm9m1ffqc.apps.googleusercontent.com"
+         static let redirectURL = URL(string: "com.googleusercontent.apps.679326713487-5r16ir2f57bpmuh2d6dal1bcm9m1ffqc:/oauthredirect")!
+         //static let mailScope: [GoogleScope] = [.userInfo, .userEmail, .mail]
+         //static let contactsScope: [GoogleScope] = mailScope + [.contacts, .otherContacts]
+         static let trashLabelPath = "TRASH"
+         // Empty pass is For All MAIL
+         static let standardGmailPaths = ["INBOX", "CHAT", "SENT", "IMPORTANT", trashLabelPath, "DRAFT", "SPAM", "STARRED", "UNREAD", ""]
+         static let gmailRecoveryEmailSubjects = [
+             "Your FlowCrypt Backup",
+             "Your CryptUp Backup",
+             "All you need to know about CryptUP (contains a backup)",
+             "CryptUP Account Backup"
+         ]
+     }
+
+     enum Global {
+         static let attachmentSizeLimit = 10_000_000
+         static let signatureSeparator = "______"
+     }
+
+     enum Mock {
+         static let backendUrl = "https://127.0.0.1:8001"
+         static let userEmail = "e2e.enterprise.test@flowcrypt.com"
+     }
+
+     enum EmailConstant {
+         static let recoverAccountSearchSubject = [
+             "Your FlowCrypt Backup",
+             "Your CryptUp Backup",
+             "Your CryptUP Backup",
+             "CryptUP Account Backup",
+             "All you need to know about CryptUP (contains a backup)"
+         ]
+     }
+ }
+
+ */
+
+// import GoogleAPIClientForREST_Gmail
+/*extension Client {
+    func loadAccountMailFolders() async {
+        
+            [service executeQuery:query completionHandler:^(GTLRServiceTicket *ticket, GTLRGmail_ListLabelsResponse *response, NSError *error) {
+                if (error == nil) {
+                    completion(response.labels, nil);
+                } else {
+                    completion(nil, error);
+                }
+            }];
+    }
+}*/
+
+
+
+
+/*fileprivate struct FolderViewModel {
+    enum ItemType: String {
+        case folder, settings, separator, logOut
+    }
+}*/
+/*
+
+extension Microsoft {
+    struct Session {
+        let endpointURL         : URL
+        let accessToken         : String
+        let authorizationHeader : String
+        let authenticationScheme: String
+        let expiresOn           : Date?
+    }
+    
+}
+
+
+
+extension Session {
+    init(endpointURL: URL, result: MSALResult) {
+        self.init(
+            endpointURL         : endpointURL,
+            accessToken         : result.accessToken,
+            authorizationHeader : result.authorizationHeader,
+            authenticationScheme: result.authenticationScheme,
+            expiresOn           : result.expiresOn
+        )
+        
+        
+        /*
+         print(result.authority.url) // https://login.microsoftonline.com/9188040d-6c67-4c5b-b112-36a304b66dad
+         print(result.tenantProfile.environment) // login.windows.net
+         print(result.tenantProfile.identifier) // 00000000-0000-0000-6a55-0f478222bc8f
+         print(result.tenantProfile.tenantId) // 9188040d-6c67-4c5b-b112-36a304b66dad
+         print(result.tenantProfile.isHomeTenantProfile)
+         */
+    }
+}
+
+*/

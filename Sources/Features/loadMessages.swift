@@ -19,7 +19,7 @@ extension AppModel {
         
         do {
             guard let session = try await accountID.refreshSession else { return }                               // get Session
-            try await session.loadMessagesProgressing(mailFolderID: mailFolderID, modelStore: modelStore) // Session, ModelStore
+            try await session.loadMessages(mailFolderID: mailFolderID, modelStore: modelStore) // Session, ModelStore
         } catch {
             logger.error("\(error)")
         }

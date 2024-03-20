@@ -27,14 +27,14 @@
 
 // MARK: - General ID
 
-public protocol GeneralIdentifiable : IdentifiableValueType {
-    associatedtype GeneralID : IdentifiableValueType
+public protocol GeneralIdentifiable : CodableValueType {
+    associatedtype GeneralID : CodableValueType
     var generalID: GeneralID { get }
 }
-
-public extension GeneralIdentifiable {
+/*
+public extension GeneralID {
     var id: GeneralID { generalID }
-}
+}*/
 
 
 // MARK: - Resource ID

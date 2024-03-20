@@ -8,18 +8,18 @@
 import struct Foundation.Date
 import struct Foundation.Data
 
-public protocol ResourceProtocol                   : GeneralIdentifiable, Sendable where ID : ResourceIDProtocol        , GeneralID: ResourceIDProtocol, GeneralID == ID.GeneralID         {}
-public protocol ResourceSpecificProtocol           : GeneralIdentifiable, Sendable where ID : ResourceSpecificIDProtocol, GeneralID: ResourceSpecificIDProtocol {}
+public protocol ResourceProtocol                   : GeneralIdentifiable & IdentifiableValueType, Sendable where ID : ResourceIDProtocol        , GeneralID == ID.GeneralID {}
+public protocol ResourceSpecificProtocol           : GeneralIdentifiable & IdentifiableValueType, Sendable where ID : ResourceSpecificIDProtocol, GeneralID == ID.GeneralID {}
 
-public protocol AccountProtocol                    : GeneralIdentifiable, Sendable where ID : AccountIDProtocol         , GeneralID == AccountID         {
+public protocol AccountProtocol                    : GeneralIdentifiable & IdentifiableValueType, Sendable where GeneralID == AccountID {
     var username: String { get }
 }
 
-public protocol MailFolderProtocol                 : GeneralIdentifiable, Sendable where ID : MailFolderIDProtocol      , GeneralID == MailFolderID      {
+public protocol MailFolderProtocol                 : GeneralIdentifiable & IdentifiableValueType, Sendable where GeneralID == MailFolderID {
     var name: String? { get }
     var systemInfo: MailFolderSystemInfo? { get }
 }
-public protocol MessageProtocol                    : GeneralIdentifiable, Sendable where ID : MessageIDProtocol         , GeneralID == MessageID       {
+public protocol MessageProtocol                    : GeneralIdentifiable & IdentifiableValueType, Sendable where GeneralID == MessageID {
     
     var      subject: String?      { get }
     
@@ -54,7 +54,7 @@ public protocol MessageProtocol                    : GeneralIdentifiable, Sendab
  
 // MARK: - Platform Specific
 
-public protocol PlatformSpecificProtocol           : GeneralIdentifiable, Sendable where ID : PlatformSpecificIDProtocol, ID.GeneralID: ResourceIDProtocol, GeneralID == ID.GeneralID {}
+public protocol PlatformSpecificProtocol : GeneralIdentifiable & IdentifiableValueType, Sendable where ID : PlatformSpecificIDProtocol, GeneralID == ID.GeneralID {}
 public extension PlatformSpecificProtocol {
     var generalID : GeneralID { id.generalID }
 }

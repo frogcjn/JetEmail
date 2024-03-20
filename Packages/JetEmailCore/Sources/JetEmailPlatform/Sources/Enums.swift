@@ -14,3 +14,4 @@ public typealias            Session = PlatformEnum<MicrosoftSession   , GoogleSe
 public typealias    AccountResource = PlatformEnum<MicrosoftAccount   , GoogleAccount   >
 public typealias MailFolderResource = PlatformEnum<MicrosoftMailFolder, GoogleMailFolder>
 public typealias    MessageResource = PlatformEnum<MicrosoftMessage   , GoogleMessage   >
+

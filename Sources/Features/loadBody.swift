@@ -18,8 +18,9 @@ extension AppModel {
         defer { messageID.isBusy = false }
         
         do {
-            guard let session = try await accountID.refreshSession else { return }          // get Session
-            try await session.loadBody(messageID: messageID, modelStore: modelStore) // Session, ModelStore
+            guard let session = try await accountID.refreshSession else { return }   // get Session
+            let resource = try await    session.getMessageBody(messageID: messageID) // Session
+                       _ = try await modelStore.setMessage    ( resource: resource ) // ModelStore
         } catch {
             logger.error("\(error)")
         }

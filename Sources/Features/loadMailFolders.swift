@@ -27,8 +27,9 @@ extension AppModel {
         defer {accountID.isBusy = false }
         
         do {
-            guard let session = try await accountID.refreshSession else { return }                     // get Session
-            _ = try await session.loadMailFolders(accountID: accountID, modelStore: modelStore) // Session, ModelStore
+            guard let session = try await accountID.refreshSession else { return }              // get Session
+            _ = try await session.loadMailFolders(modelStore: modelStore) // Session, ModelStore
+            accountID.loadedMailFolder = true
         } catch {
             logger.error("\(error)")
         }
