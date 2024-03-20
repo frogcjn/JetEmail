@@ -169,7 +169,7 @@ fileprivate extension GoogleSession {
                     break
                 }
             }
-            (node.parent, node.element) = (parent, node.element.with(systemInfo: node.element.systemInfo, processedName: processedName))
+            (node.parent, node.element) = (parent, node.element.with(processedName: processedName))
             parent.children.append(node)
         }
         
@@ -181,7 +181,7 @@ fileprivate extension GoogleSession {
             GTLRGmailQuery_UsersLabelsList.query(withUserId: account.id.innerID)
         }
         guard let labels = response.labels else { throw GmailApiError.failedToParseData(response) }
-        return try labels.map { try $0.mailFolder.with(accountID: account.id, systemInfo: $0.mailFolder.systemInfo) }
+        return try labels.map { try $0.mailFolder.with(accountID: account.id) }
             //.sorted { "\($0.type?.rawValue)" > "\($1.type?.rawValue)" }
             //.filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
             //.sorted(using: KeyPathComparator(\MailFolder.name))

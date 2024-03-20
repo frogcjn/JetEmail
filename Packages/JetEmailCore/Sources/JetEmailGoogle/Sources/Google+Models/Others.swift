@@ -10,6 +10,6 @@ import JetEmailData
 extension GoogleMailFolder {
     public static func all(accountID: GoogleAccountID) -> GoogleMailFolder {
         let inner = GoogleMailFolderInner(id: .init("ALL"), name: "ALL")
-        return inner.with(accountID: accountID, systemInfo: inner.systemInfo)
+        return inner.with(accountID: accountID)
     }
 }

@@ -96,13 +96,13 @@ extension String {
 }
 
 public extension GoogleMailFolder {
-    func with(systemInfo: MailFolderSystemInfo?, processedName: String?) -> GoogleMailFolder {
-        .init(id: id, inner: inner, systemInfo: systemInfo, processedName: processedName)
+    func with(processedName: String?) -> GoogleMailFolder {
+        .init(id: id, inner: inner, processedName: processedName)
     }
 }
 
 extension GoogleMailFolderInner {
-    func with(accountID: GoogleAccountID, systemInfo: MailFolderSystemInfo?, processedName: String? = nil) -> GoogleMailFolder {
-        .init(id: .init(accountID: accountID, innerID: id), inner: self, systemInfo: systemInfo, processedName: processedName)
+    func with(accountID: GoogleAccountID, processedName: String? = nil) -> GoogleMailFolder {
+        .init(id: .init(accountID: accountID, innerID: id), inner: self, processedName: processedName)
     }
 }

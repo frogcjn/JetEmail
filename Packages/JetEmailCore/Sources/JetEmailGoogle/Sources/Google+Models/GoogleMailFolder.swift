@@ -9,19 +9,29 @@ import JetEmailData
 
 public struct GoogleMailFolder : GoogleProtocol, PlatformSpecificMailFolderProtocol {
     public typealias GeneralID = MailFolderID
-    public let                  id: GoogleMailFolderID
-    public let               inner: GoogleMailFolderInner
-    public let                path: String?
-    public let       processedName: String? // adjust for google mailfolder path-name algrithm
+    public let            id: GoogleMailFolderID
+    public let         inner: GoogleMailFolderInner
     
-    public var                name: String? { processedName }
-    public let          systemInfo: MailFolderSystemInfo?
+    public let    systemName: GoogleMailFolderSystemName?
+    public let    systemInfo: MailFolderSystemInfo?
+    
+    public let          path: String?
+    public let processedName: String? // adjust for google mailfolder path-name algrithm
+    public var          name: String? { processedName }
 
-    public init(id: GoogleMailFolderID, inner: GoogleMailFolderInner, systemInfo: MailFolderSystemInfo?, processedName: String? = nil) {
+    public init(id: GoogleMailFolderID, inner: GoogleMailFolderInner, processedName: String? = nil) {
         self.id            = id
         self.inner         = inner
+        
+        if inner.isSystemFolder, let systemName = id.systemName {
+            self.systemName = systemName
+            self.systemInfo = systemName.systemInfo
+        } else {
+            self.systemName = nil
+            self.systemInfo = nil
+        }
+        
         self.path          = inner.name
-        self.systemInfo    = systemInfo
         self.processedName = processedName ?? inner.name?.components(separatedBy: "/").last
     }
 }
@@ -90,3 +100,9 @@ public struct GoogleMailFolderInner : CodableValueType, Sendable {
     }
 }
 
+public extension GoogleMailFolderInner {
+    var isSystemFolder: Bool {
+        guard let type = type else { return false }
+        return type == .system
+    }
+}

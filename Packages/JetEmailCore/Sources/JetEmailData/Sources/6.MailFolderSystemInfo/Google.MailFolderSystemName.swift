@@ -28,8 +28,14 @@ public enum GoogleMailFolderSystemName : String, CaseIterable, CodableValueType,
     case categoryPersonal   = "CATEGORY_PERSONAL"
 }
 
+public extension GoogleMailFolderID {
+    var systemName: GoogleMailFolderSystemName? {
+        .init(rawValue: innerID)
+    }
+}
+
 public extension GoogleMailFolderSystemName {
-    var systemInfo: MailFolderSystemInfo? {
+    var systemInfo: MailFolderSystemInfo {
         .init(systemOrder: systemOrder, nameLocalizedKey: nameLocalizedKey, systemImage: systemImage)
     }
 }

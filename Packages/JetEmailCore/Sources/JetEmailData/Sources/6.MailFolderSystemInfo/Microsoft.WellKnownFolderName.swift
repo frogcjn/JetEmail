@@ -28,7 +28,7 @@ public enum MicrosoftMailFolderSystemName : String, CaseIterable, CodableValueTy
 }
 
 public extension MicrosoftMailFolderSystemName {
-    var systemInfo: MailFolderSystemInfo? {
+    var systemInfo: MailFolderSystemInfo {
         .init(systemOrder: systemOrder, nameLocalizedKey: nameLocalizedKey, systemImage: systemImage)
     }
 }
