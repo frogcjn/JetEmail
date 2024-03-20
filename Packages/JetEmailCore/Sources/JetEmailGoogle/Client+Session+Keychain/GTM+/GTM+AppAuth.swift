@@ -6,7 +6,7 @@
 //
 
 import AppAuth
-import JetEmailID
+import JetEmailData
 import SwiftUI
 import AuthenticationServices
 
@@ -38,7 +38,7 @@ extension OIDAuthState {
     }
     
     @MainActor // for window
-    static func present(request: OIDAuthorizationRequest, window: JetEmailID.Window) async throws -> OIDAuthState {
+    static func present(request: OIDAuthorizationRequest, window: JetEmailData.Window) async throws -> OIDAuthState {
         var authFlow: OIDExternalUserAgentSession?
 #if os(iOS)
 guard let anchor = window.rootViewController else { throw SignInPresentationAnchorError.authorizeNoMainViewController }

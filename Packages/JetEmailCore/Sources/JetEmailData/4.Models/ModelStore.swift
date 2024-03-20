@@ -7,8 +7,6 @@
 
 import Foundation
 import SwiftData // for ModelContainer
-import JetEmailID
-import JetEmailData
 import JetEmailFoundation
 import os
 
@@ -93,10 +91,10 @@ fileprivate extension ModelContext {
     
     // MARK: - Insert
     
-    func _insertAccount(session: Session) throws -> Account {
+    func _insertAccount<AccountResource: AccountProtocol>(resource: AccountResource) throws -> Account {
         // find existed
         do {
-            let model = try self[session.account.generalID]
+            let model = try self[resource.generalID]
             
             // If deleteMark: recover
             if model.deleteMark {
@@ -107,7 +105,7 @@ fileprivate extension ModelContext {
         } catch ModelStoreError.notFound {
             
             // If not found: create
-            let model = Account(resource: session.account)
+            let model = Account(resource: resource)
             model.orderIndex = try _fetchAccountCount()
             model.deleteMark = false
             insert(model)
@@ -202,10 +200,10 @@ fileprivate extension ModelContext {
 
 public extension ModelStore {
     
-    // MARK: - Sessions/Accounts
+    // MARK: - Accounts
     
     // loadAccounts
-    func setSessions(_ sessions: [Session]) async throws {
+    func setAccounts<AccountResource: AccountProtocol>(_ accounts: [AccountResource]) async throws -> (inserts: [AccountID], delete: [AccountID]) {
         checkBackgroundThread()
         
         var inserts   = [Account]()
@@ -213,23 +211,23 @@ public extension ModelStore {
         
         try modelContext.transaction {
             // inserts
-            inserts = try sessions.map(modelContext._insertAccount(session:))
+            inserts = try accounts.map(modelContext._insertAccount(resource:))
             
-            // others: not have session
+            // others: not have
             removings = try modelContext._fetchAccountNotIn(inserts)
             try removings.forEach { _ = try modelContext._deleteModel($0) }
         }
-        try await removings.map(\.resourceID).forEachTask { @MainActor in _ = $0.platformCase?.removeSession() }
+        return (inserts.map(\.resourceID), removings.map(\.resourceID))
     }
        
     // signIn
-    func insertSession(_ session: Session) async throws -> AccountID {
+    func insertAccount<AccountResource: AccountProtocol>(_ account: AccountResource) async throws -> AccountID {
         checkBackgroundThread()
-        var account: Account!
+        var accountID: AccountID!
         try modelContext.transaction {
-            account = try modelContext._insertAccount(session: session)
+            accountID = try modelContext._insertAccount(resource: account).resourceID
         }
-        return account.resourceID
+        return accountID
     }
         
     // signOut
@@ -293,7 +291,7 @@ public extension ModelStore {
     
 
     // loadMailFolders
-    func setChildrenMailFolders<MailFolderResource : MailFolderProtocol>(resources: [MailFolderResource], parentID: MailFolderID, accountID: AccountID) throws -> [MailFolderID] where MailFolderResource : JetEmailID.MailFolderProtocol {
+    func setChildrenMailFolders<MailFolderResource : MailFolderProtocol>(resources: [MailFolderResource], parentID: MailFolderID, accountID: AccountID) throws -> [MailFolderID] where MailFolderResource : JetEmailData.MailFolderProtocol {
         let parent =  try modelContext[parentID]
         let account = try modelContext[accountID]
         
@@ -343,7 +341,7 @@ public extension ModelStore {
     }
     
     // loadMessages
-    func setMessagesInsertPart<MessageResource>(resources: [MessageResource], mailFolderID: MailFolderID) throws -> [MessageID] where MessageResource : JetEmailID.MessageProtocol {
+    func setMessagesInsertPart<MessageResource>(resources: [MessageResource], mailFolderID: MailFolderID) throws -> [MessageID] where MessageResource : JetEmailData.MessageProtocol {
         checkBackgroundThread()
         let mailFolder = try modelContext[mailFolderID]
         

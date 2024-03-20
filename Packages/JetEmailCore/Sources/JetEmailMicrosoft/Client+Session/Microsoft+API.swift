@@ -7,14 +7,14 @@
 
 import Foundation
 @preconcurrency import MSAL
-import JetEmailID
+import JetEmailData
 import JetEmailFoundation
 
 // MARK: - AccountID
 // used for checking status
 
 @MainActor
-extension MicrosoftAccountID : AccountIDSessionAPI {
+extension MicrosoftAccountID : AccountSessionAPI {
     public var storedSession: MicrosoftSession? { SessionStore.shared[self] }
     public var refreshSession: MicrosoftSession? { get async throws {
         let session = try await SessionStore.shared.session(id: self, forceRefresh: false)
@@ -25,7 +25,7 @@ extension MicrosoftAccountID : AccountIDSessionAPI {
 
 // MARK: - Sessions
 
-extension MicrosoftClient : ClientProtocol {
+extension MicrosoftClient : ClientAPIProtocol {
     @MainActor // for SessionStore
     public var sessions: [MicrosoftSession] { get async throws { // the sessions should be refresh before using to fetch
         let msalAccounts = try _msalClient.allAccounts()

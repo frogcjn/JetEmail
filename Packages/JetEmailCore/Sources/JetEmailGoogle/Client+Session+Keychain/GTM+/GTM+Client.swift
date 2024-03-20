@@ -18,7 +18,7 @@ import UIKit
 import AppKit
 #endif
 
-import JetEmailID
+import JetEmailData
 
 fileprivate let kIncludeGrantedScopesParameter = "include_granted_scopes"
 

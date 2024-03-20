@@ -6,9 +6,8 @@
 //
 
 import SwiftUI
-import ObservableUserDefault
-import JetEmailData
-import JetEmailID
+import ObservableUserDefault // for ObservableUserDefault
+import JetEmailData          // for Account
 
 @MainActor
 @Observable

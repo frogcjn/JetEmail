@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/1/24.
 //
 
-import JetEmailID
+import JetEmailData
 
 // MARK: - MailFolder
 // https://learn.microsoft.com/en-us/graph/api/resources/mailfolder
@@ -15,11 +15,11 @@ public struct MicrosoftMailFolder : MicrosoftProtocol, PlatformSpecificMailFolde
     
     public let                  id: MicrosoftMailFolderID
     public let               inner: MicrosoftMailFolderInner
-    public let wellKnownFolderName: MicrosoftWellKnownFolderName?
+    public let wellKnownFolderName: MicrosoftMailFolderSystemName?
     public var                name: String? { inner.displayName }
     public var          systemInfo: MailFolderSystemInfo?
 
-    public init(id: MicrosoftMailFolderID, inner: MicrosoftMailFolderInner, wellKnownFolderName: MicrosoftWellKnownFolderName?, systemInfo: MailFolderSystemInfo?) {
+    public init(id: MicrosoftMailFolderID, inner: MicrosoftMailFolderInner, wellKnownFolderName: MicrosoftMailFolderSystemName?, systemInfo: MailFolderSystemInfo?) {
         self.id                  = id
         self.inner               = inner
         self.wellKnownFolderName = wellKnownFolderName

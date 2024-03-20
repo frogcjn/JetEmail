@@ -5,10 +5,9 @@
 //  Created by Cao, Jiannan on 2/24/24.
 //
 
-// MARK: Feature: Account - Load Messages
+// MARK: Feature: MailFolder - Load Messages
 
-import JetEmailID
-import JetEmailPlatform
+import JetEmailData // for MailFolderID
 
 extension AppModel {
         
@@ -20,7 +19,7 @@ extension AppModel {
         
         do {
             guard let session = try await accountID.refreshSession else { return }                               // get Session
-            try await session.loadMessagesProgressing(mailFolderID: mailFolderID, modelStore: ModelStore.shared) // Session, ModelStore
+            try await session.loadMessagesProgressing(mailFolderID: mailFolderID, modelStore: modelStore) // Session, ModelStore
         } catch {
             logger.error("\(error)")
         }

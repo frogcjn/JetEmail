@@ -5,12 +5,12 @@
 //  Created by Cao, Jiannan on 2/24/24.
 //
 
-import JetEmailID
+import JetEmailData
 import JetEmailFoundation
 import struct Foundation.Data
 import struct Foundation.Date
 
-public struct GoogleMessage : GoogleProtocol, PlatformSpecificMessageProtocol, GetMessageProtocol {
+public struct GoogleMessage : GoogleProtocol, PlatformSpecificMessageProtocol {
     public typealias GeneralID = MessageID
     
     public let    id       : GoogleMessageID

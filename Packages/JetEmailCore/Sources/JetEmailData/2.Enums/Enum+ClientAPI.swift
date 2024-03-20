@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 3/12/24.
 //
 
-public protocol ClientProtocol<SessionType> {
+public protocol ClientAPIProtocol<SessionType> {
     associatedtype SessionType
     func signIn() async throws -> SessionType
     var sessions: [SessionType] { get async throws }
@@ -14,9 +14,9 @@ public protocol ClientProtocol<SessionType> {
 
 // Account Enum
 
-extension PlatformEnum : ClientProtocol where
-    Microsoft : ClientProtocol,
-    Google    : ClientProtocol
+extension PlatformEnum : ClientAPIProtocol where
+    Microsoft : ClientAPIProtocol,
+    Google    : ClientAPIProtocol
 {
     public typealias SesisonType = PlatformEnum<Microsoft.SessionType, Google.SessionType>
     public func signIn() async throws -> SesisonType  {

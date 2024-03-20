@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import SwiftData // for @Query
-import JetEmailData
+import SwiftData    // for @Query
+import JetEmailData // for Account
 
 fileprivate struct _MessageList : View {
     
@@ -98,13 +98,13 @@ fileprivate struct _MessageList : View {
                  Text(resultText)
                  }*/
                 
-                if messages.contains(where: { $0.movePlan != nil }) {
+                if messages.contains(where: { $0.movePlanID != nil }) {
                     Button {
-                        for message in messages.filter({ $0.movePlan != nil }) {
-                            if let to = message.movePlan {
+                        for message in messages.filter({ $0.movePlanID != nil }) {
+                            if let toID = message.movePlanID {
                                 Task {
-                                    await appModel.move(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: to.resourceID)
-                                    message.movePlan = nil
+                                    await appModel.move(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: toID)
+                                    message.movePlanID = nil
                                 }
                             }
                         }
@@ -124,14 +124,14 @@ fileprivate struct _MessageList : View {
             if let message = window.selectedMessage, let selectedIndex = messages.firstIndex(of: message) {
                 classifyStartIndex = selectedIndex
             } else {
-                classifyStartIndex = (messages.lastIndex { $0.movePlan != nil } ?? -1) + 1
+                classifyStartIndex = (messages.lastIndex { $0.movePlanID != nil } ?? -1) + 1
             }
         
             let classifyMessages = messages.dropFirst(classifyStartIndex).prefix(count) // .filter({ $0.movePlan == nil })
             if auto {
                 try await classifyMessages.map(\.resourceID).forEachTask { @MainActor in await appModel.classify(messageID: $0) }
             } else {
-                classifyMessages.forEach { message in message.movePlan = mailFolder }
+                classifyMessages.forEach { message in message.movePlanID = mailFolder.resourceID }
             }
         } catch {
             appModel.logger.error("\(error)")

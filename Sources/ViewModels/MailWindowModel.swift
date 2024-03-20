@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-import JetEmailData
-import JetEmailID
+import JetEmailData // for Message
 
 @Observable
 class MailWindowModel {

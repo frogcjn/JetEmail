@@ -7,7 +7,7 @@
 
 @preconcurrency import GTMAppAuth
 import AppAuth
-import JetEmailID
+import JetEmailData
 
 public typealias GoogleSessionProtocol = NSObject & AuthSessionDelegate & OIDAuthStateChangeDelegate & OIDAuthStateErrorDelegate
 public final class GoogleSession: GoogleSessionProtocol, Sendable {

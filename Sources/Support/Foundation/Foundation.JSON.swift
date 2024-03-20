@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/13/24.
 //
 
-import Foundation
+import Foundation // for Data
 
 extension String {
     var data: Data { get throws {

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import JetEmailData
+import JetEmailData // for MailFolder
 
 struct MailFolderCell : View {
     

@@ -7,7 +7,8 @@
 
 import JetEmailGoogle
 import JetEmailMicrosoft
-import JetEmailID
+import JetEmailData
+
 public typealias             Client = PlatformEnum<MicrosoftClient    , GoogleClient    >
 public typealias            Session = PlatformEnum<MicrosoftSession   , GoogleSession   >
 public typealias    AccountResource = PlatformEnum<MicrosoftAccount   , GoogleAccount   >

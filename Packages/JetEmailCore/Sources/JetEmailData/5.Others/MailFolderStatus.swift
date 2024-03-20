@@ -24,7 +24,7 @@ public struct MailFolderAttributes : AttributesProtocol {
     public init() {}
 }
 
-public typealias MailFolderAttributesStore = JetEmailID.AttributesStore<MailFolderID, MailFolderAttributes>
+public typealias MailFolderAttributesStore = JetEmailData.AttributesStore<MailFolderID, MailFolderAttributes>
 
 public extension MailFolderAttributesStore {
     @MainActor

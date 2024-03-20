@@ -8,9 +8,8 @@
 @preconcurrency import OpenAI
 import JetEmailMicrosoft
 import JetEmailGoogle
-import JetEmailFoundation
+import JetEmailFoundation // for Tree
 import JetEmailData
-import JetEmailID
 import SwiftData
 
 extension AppModel {
@@ -24,7 +23,7 @@ extension AppModel {
         do {
             let message = try mainContext[messageID]
             let account = try mainContext[messageID.accountID]
-            guard let session = account.resourceID.platformCase?.storedSession else { return }
+            guard let session = account.storedSession else { return }
             switch session {
             case .microsoft(let session): try await session.classify(account: account, message: message)
             case    .google(let session): try await session.classify(account: account, message: message)
@@ -61,7 +60,7 @@ extension MicrosoftSession {
     @MainActor // for classifyResultText
     func classify(account: Account, message: Message) async throws {
         guard let folders = try await classifyRange(account: account) else { return }
-        message.movePlan = try await Agent.classify(folders: folders.map { (folder: $0.element, path: $0.path ) }, message: message)
+        message.movePlanID = try await Agent.classify(folders: folders.map { (folder: $0.element, path: $0.path ) }, message: message)?.resourceID
     }
     
     @MainActor // for classifyResultText
@@ -75,7 +74,7 @@ extension GoogleSession {
     @MainActor // for classifyResultText
     func classify(account: Account, message: Message) async throws {
         guard let folders = try await classifyRange(account: account) else { return }
-        message.movePlan = try await Agent.classify(folders: folders.map { (folder: $0.element, path: $0.path ) }, message: message)
+        message.movePlanID = try await Agent.classify(folders: folders.map { (folder: $0.element, path: $0.path ) }, message: message)?.resourceID
     }
     
     @MainActor // for classifyResultText

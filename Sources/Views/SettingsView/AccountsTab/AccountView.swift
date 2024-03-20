@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import JetEmailData
+import JetEmailData // for account
 
 struct AccountView: View {
     @Environment(Account.self)
@@ -20,7 +20,7 @@ struct AccountView: View {
             LabeledContent("username", value: account.username)
             LabeledContent("order"   , value: account.orderIndex.debugDescription)
             LabeledContent("delete"  , value: account.deleteMark.description)
-            LabeledContent("session" , value: account.resourceID.platformCase?.storedSession.debugDescription ?? "nil")
+            LabeledContent("session" , value: account.storedSession.debugDescription)
         }
     }
 }

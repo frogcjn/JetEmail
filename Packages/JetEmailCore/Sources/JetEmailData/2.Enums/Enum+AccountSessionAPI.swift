@@ -2,27 +2,22 @@
 //  File.swift
 //  
 //
-//  Created by Cao, Jiannan on 3/12/24.
+//  Created by Cao, Jiannan on 3/19/24.
 //
 
-extension PlatformEnum: AccountProtocol where
-Microsoft : AccountProtocol,
-   Google : AccountProtocol,
-Microsoft.GeneralID == AccountID,
-   Google.GeneralID == AccountID
-{
-    public var username: String {
-        switch self {
-        case .microsoft(let platform): platform.username
-        case    .google(let platform): platform.username
-        }
-    }
+@MainActor
+public protocol AccountSessionAPI {
+    associatedtype SessionType
+    
+    var storedSession: SessionType? { get }
+    var refreshSession: SessionType? { get async throws }
+    func removeSession() -> SessionType?
 }
 
 @MainActor
-extension PlatformEnum : AccountIDSessionAPI where
-Microsoft : AccountIDSessionAPI,
-Google : AccountIDSessionAPI
+extension PlatformEnum : AccountSessionAPI where
+Microsoft : AccountSessionAPI,
+   Google : AccountSessionAPI
 {
     public typealias SessionType = PlatformEnum<Microsoft.SessionType, Google.SessionType>
     

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import JetEmailData
+import JetEmailData // for Account
 
 struct AccountSectionHeader: View {
     
@@ -21,7 +21,7 @@ struct AccountSectionHeader: View {
     var body: some View {
         HStack(spacing: 4) {
             Image(systemName: "circle.fill")
-                .foregroundColor(account.resourceID.platformCase?.sessionState.color)
+                .foregroundColor(account.sessionState.color)
                 .frame(width: 18, alignment: .center)
                 .opacity(isOnHover || account.isBusy ? 0 : 1)
                 .overlay {

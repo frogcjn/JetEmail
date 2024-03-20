@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 3/8/24.
 //
 
-import JetEmailID
+import JetEmailData
 
 // Session new remove
 @MainActor

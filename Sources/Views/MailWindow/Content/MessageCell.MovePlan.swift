@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import JetEmailFoundation
-import JetEmailData
+import JetEmailFoundation  // for TreeNode
+import JetEmailData        // for Account
 
 extension MessageCell {
     struct MovePlan: View {
@@ -47,22 +47,25 @@ extension MessageCell {
                         .foregroundStyle(.secondary)
                     Spacer()
                 }
-            } else if let _ = message.movePlan {
+            } else if let _ = message.movePlanID {
                 //VStack(alignment: .leading) {
                 HStack {
                     switch style {
                     case .menu:
                         HStack {
                             Text("Move To: ")
-                            MenuGroup(data: account.root?.children ?? [], children: \.children.nilIfEmpty, selection: Bindable(message).movePlan) { element in
+                            MenuGroup(data: account.root?.children ?? [], children: \.children.nilIfEmpty) { element in
                                 Label(element.localizedName, systemImage: element.systemImage)//.frame(width: 40)
                             } primaryLabel: {
-                                if let movePlan = message.movePlan {
+                                if let movePlanID = message.movePlanID, let movePlan = try? appModel.mainContext[movePlanID] {
                                     HStack {
                                         Label("/" + movePlan.path.joined(separator: "/"), systemImage: movePlan.systemImage)
                                     }
                                 }
-                            } action: {
+                            } selection: { element in
+                                message.movePlanID = element.resourceID
+                                moveTo()
+                            } primaryAction: {
                                 moveTo()
                             }
                             .menuStyle(.button)
@@ -71,9 +74,9 @@ extension MessageCell {
                             Spacer()
                         }
                     case .picker:
-                        Picker(selection: Bindable(message).movePlan) {
+                        Picker(selection: Bindable(message).movePlanID) {
                             ForEach(selectionRange(), id: \.element.id) {
-                                Label($0.path.joined(separator: "/"), systemImage: $0.element.systemImage).tag(Optional($0.element))
+                                Label($0.path.joined(separator: "/"), systemImage: $0.element.systemImage).tag(Optional($0.element.resourceID))
                             }
                         } label: {
                             Button("Move To: ", systemImage: "folder", action: moveTo)
@@ -83,7 +86,7 @@ extension MessageCell {
                    
                     Spacer()
                     Button("Cancel Moving", systemImage: "xmark.circle.fill") {
-                        message.movePlan = nil
+                        message.movePlanID = nil
                     }
                     .buttonStyle(.borderless)
                     .labelStyle(.iconOnly)
@@ -93,12 +96,11 @@ extension MessageCell {
         
         @MainActor
         func moveTo() {
-            guard let movePlan = message.movePlan else { return }
+            guard let movePlanID = message.movePlanID else { return }
             Task {
-                await appModel.move(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: movePlan.resourceID)
-                message.movePlan = nil
+                await appModel.move(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: movePlanID)
+                message.movePlanID = nil
             }
         }
     }
 }
-

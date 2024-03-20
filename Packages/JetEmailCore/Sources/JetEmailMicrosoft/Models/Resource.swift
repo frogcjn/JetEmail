@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 3/11/24.
 //
 
-import JetEmailID
+import JetEmailData
 
 /*public struct MicrosoftResource<ResourceID: PlatformSpecificResourceIDProtocol, Inner : PlatformResourceInner> : PlatformResourceProtocol {
     public var generalID: ResourceID.GeneralID { id.general }

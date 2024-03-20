@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/22/24.
 //
 
-import JetEmailID
+import JetEmailData
 
 extension MicrosoftClient {
     @MainActor

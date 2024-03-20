@@ -11,17 +11,16 @@ struct MenuGroup<Data : RandomAccessCollection, Label : View, Leaf : View> : Vie
     let data: Data
     
     let children: KeyPath<Data.Element, Data?>
-    
-    @Binding
-    var selection: Data.Element?
-    
+        
     @ViewBuilder
     let content: (Data.Element) -> Leaf
 
     @ViewBuilder
     let primaryLabel: () -> Label
     
-    let action: () -> Void
+    let selection: (Data.Element) -> Void
+        
+    let primaryAction: () -> Void
     
     var body: some View {
         Menu(
@@ -30,14 +29,13 @@ struct MenuGroup<Data : RandomAccessCollection, Label : View, Leaf : View> : Vie
                     _MenuGroup(
                           element: element,
                          children: children,
-                        selection: $selection,
                           content: content,
-                           action: action
+                        selection: selection
                     )
                 }
             },
             label: primaryLabel,
-            primaryAction: action
+            primaryAction: primaryAction
         )
     }
 }
@@ -48,14 +46,11 @@ fileprivate struct _MenuGroup<Data: RandomAccessCollection, Leaf : View> : View 
     
     let children: KeyPath<Data.Element, Data?>
     
-    @Binding
-    var selection: Data.Element?
-    
     @ViewBuilder
     let content: (Data.Element) -> Leaf
     
-    let action: () -> Void
-    
+    let selection: (Data.Element) -> ()
+
     
     var body: some View {
         if let data = element[keyPath: children] {
@@ -81,9 +76,8 @@ fileprivate struct _MenuGroup<Data: RandomAccessCollection, Leaf : View> : View 
         _MenuGroup(
               element: element,
              children: children,
-            selection: $selection,
               content: content,
-               action: action
+            selection: selection
         )
     }
     
@@ -97,8 +91,7 @@ fileprivate struct _MenuGroup<Data: RandomAccessCollection, Leaf : View> : View 
     }
     
     private func buttonAction(_ element: Data.Element) {
-        selection = element
-        action()
+        selection(element)
     }
 }
 

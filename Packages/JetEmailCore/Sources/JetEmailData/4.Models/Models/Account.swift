@@ -6,7 +6,6 @@
 //
 
 import SwiftData // for @Model
-import JetEmailID
 
 @Model
 public final class Account {
@@ -41,7 +40,7 @@ public final class Account {
     
     // MARK: - Init & Update
     
-    public init<AccountResource: AccountProtocol>(resource: AccountResource) where AccountResource.GeneralID : UniqueID {
+    public init<AccountResource: AccountProtocol>(resource: AccountResource) {
         checkBackgroundThread()
         
         platform          = resource.generalID.platform.rawValue
@@ -51,7 +50,7 @@ public final class Account {
         username          = resource.username
     }
     
-    public func update<AccountResource: AccountProtocol>(resource: AccountResource)  where AccountResource.GeneralID : UniqueID {
+    public func update<AccountResource: AccountProtocol>(resource: AccountResource) {
         checkBackgroundThread()
 
         platform          = resource.generalID.platform.rawValue

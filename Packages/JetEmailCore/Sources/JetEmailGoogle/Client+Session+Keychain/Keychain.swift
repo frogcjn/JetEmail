@@ -7,7 +7,7 @@
 
 import Foundation
 @preconcurrency import GTMAppAuth
-import JetEmailID
+import JetEmailData
 
 actor Keychain {
     static let securityAttributeCreator           = "jtem".fourCharUInt32! /*Jet Email*/

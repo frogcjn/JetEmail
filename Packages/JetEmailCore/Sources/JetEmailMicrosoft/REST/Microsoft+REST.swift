@@ -7,7 +7,7 @@
 
 import Foundation
 import JetEmailData
-import JetEmailID
+import JetEmailData
 /*
 
 extension Microsoft {
@@ -73,13 +73,13 @@ public extension MicrosoftSession {
     }*/
     
     @MainActor
-    var idToWellKnownFolderName:  [MailFolderID: MicrosoftWellKnownFolderName] { get async {
+    var idToWellKnownFolderName:  [MailFolderID: MicrosoftMailFolderSystemName] { get async {
         if let idToWellKnownFolderName = account.id.idToWellKnownFolderName { return idToWellKnownFolderName }
-        let idToWellKnownFolderName: [MailFolderID: MicrosoftWellKnownFolderName] =  await {
+        let idToWellKnownFolderName: [MailFolderID: MicrosoftMailFolderSystemName] =  await {
             do {
                 // catch wellknownFolderName
-                var idToWellKnownFolderName = [MailFolderID: MicrosoftWellKnownFolderName]()
-                for name in MicrosoftWellKnownFolderName.allCases {
+                var idToWellKnownFolderName = [MailFolderID: MicrosoftMailFolderSystemName]()
+                for name in MicrosoftMailFolderSystemName.allCases {
                     do {
                         let folder = try await getMailFolder(wellKnownFolderName: name)
                         idToWellKnownFolderName[folder.id] = name
@@ -106,7 +106,7 @@ public extension MicrosoftSession {
         try await getValue(paths: "mailFolders", "\(id.innerID)")
     }
     
-    func getMailFolder(wellKnownFolderName: MicrosoftWellKnownFolderName) async throws -> MicrosoftMailFolder {
+    func getMailFolder(wellKnownFolderName: MicrosoftMailFolderSystemName) async throws -> MicrosoftMailFolder {
         try await getValue(MicrosoftMailFolderInner.self, paths: "mailFolders", "\(wellKnownFolderName)")
             .with(accountID: account.id, wellKnownFolderName: .msgFolderRoot)
     }
@@ -692,11 +692,11 @@ extension MSGraph.Context {
 
 
 extension MicrosoftMailFolderInner {
-    func with(accountID: MicrosoftAccountID, wellKnownFolderName: MicrosoftWellKnownFolderName?) -> MicrosoftMailFolder {
+    func with(accountID: MicrosoftAccountID, wellKnownFolderName: MicrosoftMailFolderSystemName?) -> MicrosoftMailFolder {
         .init(id: .init(accountID: accountID, innerID: id), inner: self, wellKnownFolderName: wellKnownFolderName, systemInfo: wellKnownFolderName?.systemInfo)
     }
     
-    func with(accountID: MicrosoftAccountID, idToWellKnownFolderName: [MailFolderID: MicrosoftWellKnownFolderName]) -> MicrosoftMailFolder {
+    func with(accountID: MicrosoftAccountID, idToWellKnownFolderName: [MailFolderID: MicrosoftMailFolderSystemName]) -> MicrosoftMailFolder {
         with(accountID: accountID, wellKnownFolderName: idToWellKnownFolderName[MailFolderID(platform: .microsoft, innerAccountID: accountID.innerID, innerID: id)])
     }
 }

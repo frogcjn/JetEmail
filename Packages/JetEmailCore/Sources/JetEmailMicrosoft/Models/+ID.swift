@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/15/24.
 //
 
-import JetEmailID
+import JetEmailData
 
 // MARK: - Account.ID <- MSAL
 

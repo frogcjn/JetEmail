@@ -7,7 +7,7 @@
 
 import GoogleAPIClientForREST_Gmail
 import JetEmailFoundation
-import JetEmailID
+import JetEmailData
 
 extension GTLRGmail_Label {
     var mailFolder: GoogleMailFolderInner { get throws  {

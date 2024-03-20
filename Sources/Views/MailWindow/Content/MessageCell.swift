@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-import JetEmailFoundation
-import JetEmailData
+import JetEmailData // for Message
 
 struct MessageCell : View {
     

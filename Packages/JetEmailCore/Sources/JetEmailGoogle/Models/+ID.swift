@@ -6,7 +6,7 @@
 //
 
 import GTMAppAuth
-import JetEmailID
+import JetEmailData
 
 // MARK: - Account.ID <- GTM
 

@@ -5,10 +5,7 @@
 //  Created by Cao, Jiannan on 3/4/24.
 //
 
-import JetEmailPlatform
-import JetEmailData
-import JetEmailID
-import SwiftData
+import JetEmailData // for MessageID
 
 extension AppModel {
     
@@ -20,7 +17,6 @@ extension AppModel {
         
         do {
             guard let session = try await messageID.accountID.refreshSession else { return }
-            let modelStore = await ModelStore.shared
 
             try await    session.moveMessage(messageID: messageID, fromID: fromID, toID: toID)
             try await modelStore.moveMessage(messageID: messageID, fromID: fromID, toID: toID)

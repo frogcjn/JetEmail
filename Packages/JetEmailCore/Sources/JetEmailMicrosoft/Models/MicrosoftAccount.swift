@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 3/12/24.
 //
 
-import JetEmailID
+import JetEmailData
 
 public struct MicrosoftAccount : MicrosoftProtocol, PlatformSpecificAccountProtocol, AccountProtocol {
     public typealias GeneralID = AccountID

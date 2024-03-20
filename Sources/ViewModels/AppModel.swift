@@ -8,7 +8,7 @@
 import class  Combine.PassthroughSubject
 import struct os.Logger
 import SwiftData        // for ModelContainer, ModelContext, Observable
-import JetEmailID       // for AccountID
+import JetEmailData       // for AccountID
 import JetEmailPlatform // for ModelStore
 
 // @dynamicMemberLookup
@@ -25,6 +25,7 @@ final class AppModel {
 
 
 extension AppModel {
+    var     clients: Clients      { get       {       .shared       } }
+    var  modelStore: ModelStore   { get async { await .shared       } }
     var mainContext: ModelContext { ModelContainer.shared.mainContext }
-    var modelStore: ModelStore { get async { await ModelStore.shared } }
 }

@@ -1321,7 +1321,7 @@ public struct MicrosoftMessageID<Owner> : ResourceIDProtocol, MicrosoftType {
 import JetEmailGoogle
 import JetEmailMicrosoft
 import Foundation
-import JetEmailID
+import JetEmailData
 
 public extension PlatformCase<MicrosoftMailFolder, GoogleMailFolder> {
     var isSystemFolder: Bool {
@@ -1882,7 +1882,7 @@ import Foundation
 import SwiftData
 import JetEmailGoogle
 import JetEmailMicrosoft
-import JetEmailID
+import JetEmailData
 
 // MARK: - MailFolder <-> Google, Microsoft
 
@@ -3623,7 +3623,7 @@ extension Tree<Google.MailFolder> {
 
 import JetEmailGoogle
 import JetEmailMicrosoft
-import JetEmailID
+import JetEmailData
 
 
 public extension Session {
@@ -3665,7 +3665,7 @@ public extension Session {
 import JetEmailData
 import SwiftData
 import os
-import JetEmailID
+import JetEmailData
 
 // typealias AppItemModel<Item> = CombineContext<AppModel, Item>
 
@@ -3751,7 +3751,7 @@ extension AppItemModel where Context == AppModel, Item : UnifiedModel {
 
 import SwiftUI
 import JetEmailData
-import JetEmailID
+import JetEmailData
 
 
 /*extension View {
@@ -4426,3 +4426,9 @@ struct MyEqualWidthHStack: Layout {
     }
 }
 */
+
+
+/*extension PlatformEnum: ResourceProtocol where Microsoft : PlatformSpecificDataProtocol, Google : PlatformSpecificDataProtocol, Microsoft.ID == ID, Google.ID == ID {
+    
+}*/
+ // ResourceSpecificProtocol

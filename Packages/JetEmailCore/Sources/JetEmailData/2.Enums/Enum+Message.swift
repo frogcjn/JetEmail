@@ -8,10 +8,6 @@
 import struct Foundation.Data
 import struct Foundation.Date
 
-public protocol GetMessageProtocol: GeneralIdentifiable where GeneralID : MessageIDProtocol {
-
-}
-
 extension PlatformEnum : MessageProtocol where
     Microsoft : MessageProtocol,
     Google: MessageProtocol,
@@ -55,8 +51,3 @@ extension PlatformEnum : MessageProtocol where
 }
 
 
-
-/*extension PlatformEnum: ResourceProtocol where Microsoft : PlatformSpecificDataProtocol, Google : PlatformSpecificDataProtocol, Microsoft.ID == ID, Google.ID == ID {
-    
-}*/
- // ResourceSpecificProtocol

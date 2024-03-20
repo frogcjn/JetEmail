@@ -7,8 +7,6 @@
 
 // MARK: Feature: Accounts - Load Accounts
 
-import JetEmailPlatform
-
 extension AppModel {
     
     @MainActor // for isBusy
@@ -18,8 +16,9 @@ extension AppModel {
         defer { isBusy = false }
         
         do {
-            let sessions = try await Clients.shared.sessions      // get Sessions
-            _ = try await ModelStore.shared.setSessions(sessions) // ModelStore
+            let sessions = try await clients.sessions                                     // Clients
+            let (_, deletes) =  try await modelStore.setAccounts(sessions.map(\.account)) // ModelStore
+            try await deletes.forEachTask { _ = await $0.removeSession() }                // Sessions
         } catch {
             logger.error("\(error)")
         }

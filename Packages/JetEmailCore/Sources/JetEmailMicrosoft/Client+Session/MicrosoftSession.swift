@@ -6,14 +6,14 @@
 //
 
 
-import JetEmailID
+import JetEmailData
 @preconcurrency import MSAL
 
 public final class MicrosoftSession : Sendable {
     
     public let account     : MicrosoftAccount
            let _msalSession: MSALSession
-           let globalIdToWellKnownFolderName: [MailFolderID: MicrosoftWellKnownFolderName]? = nil
+           let globalIdToWellKnownFolderName: [MailFolderID: MicrosoftMailFolderSystemName]? = nil
             
     init(account: MicrosoftAccount, msalSession: MSALSession) {
         self.account       = account
@@ -23,12 +23,12 @@ public final class MicrosoftSession : Sendable {
 
 @MainActor
 public extension MicrosoftAccountID {
-    typealias AttributesStore = JetEmailID.AttributesStore<MicrosoftAccountID, Attributes>
+    typealias AttributesStore = JetEmailData.AttributesStore<MicrosoftAccountID, Attributes>
     struct Attributes : AttributesProtocol {
-        var idToWellKnownFolderName : [MailFolderID: MicrosoftWellKnownFolderName]?
+        var idToWellKnownFolderName : [MailFolderID: MicrosoftMailFolderSystemName]?
         public init() {}
     }
-    var idToWellKnownFolderName: [MailFolderID: MicrosoftWellKnownFolderName]? {
+    var idToWellKnownFolderName: [MailFolderID: MicrosoftMailFolderSystemName]? {
         get { AttributesStore.shared[self].idToWellKnownFolderName }
         nonmutating set { AttributesStore.shared[self].idToWellKnownFolderName = newValue }
     }

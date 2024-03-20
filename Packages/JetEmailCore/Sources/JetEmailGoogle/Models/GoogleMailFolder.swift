@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/23/24.
 //
 
-import JetEmailID
+import JetEmailData
 
 public struct GoogleMailFolder : GoogleProtocol, PlatformSpecificMailFolderProtocol, GetMailFolderProtocol {
     public typealias GeneralID = MailFolderID

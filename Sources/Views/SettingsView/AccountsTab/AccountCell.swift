@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-import JetEmailData
-import JetEmailID
+import JetEmailData // for account
 
 struct AccountCell: View {
     
@@ -27,7 +26,7 @@ struct AccountCell: View {
             Spacer()
             
             Image(systemName: "circle.fill")
-                .foregroundColor(account.resourceID.platformCase?.sessionState.color)
+                .foregroundColor(account.sessionState.color)
                 .dynamicTypeSize(.xSmall)
                 .opacity(account.isBusy ? 0 : 1)
                 .overlay {

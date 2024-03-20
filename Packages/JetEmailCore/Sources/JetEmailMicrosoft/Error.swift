@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/15/24.
 //
 
-import JetEmailID
+import JetEmailData
 import JetEmailFoundation // for JSON
 
 public enum AuthError : CodableErrorType, Sendable {

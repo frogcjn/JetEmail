@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 3/8/24.
 //
 
-import JetEmailID
+import JetEmailData
 
 // MARK: - WellKnownFolderName
 // Well-known folder names https://learn.microsoft.com/en-us/graph/api/resources/mailfolder?view=graph-rest-1.0#methods

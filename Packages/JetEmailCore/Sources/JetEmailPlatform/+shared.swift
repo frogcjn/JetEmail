@@ -6,30 +6,12 @@
 //
 
 import JetEmailData
-import JetEmailID
-import SwiftData
+import JetEmailData
 
-
-extension Message.AttributesStore {
-    static var shared = AttributesStore()
-}
 
 public extension Clients {
     static var shared = Clients()
 }
-
-public extension ModelContainer {
-    @MainActor
-    static var shared = {
-        do {
-            return try ModelContainer(for: Account.self, MailFolder.self, Message.self)
-        } catch {
-            print(error)
-            fatalError()
-        }
-    }()
-}
-
 
 extension ModelStore {
     

@@ -6,7 +6,7 @@
 //
 
 @preconcurrency import MSAL
-import JetEmailID
+import JetEmailData
 
 // Session new remove
 @MainActor

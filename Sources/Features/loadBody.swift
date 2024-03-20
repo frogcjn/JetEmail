@@ -7,8 +7,7 @@
 
 // MARK: Feature: Message - Load Body
 
-import JetEmailID
-import JetEmailPlatform
+import JetEmailData // for MessageID
 
 extension AppModel {
     
@@ -20,7 +19,7 @@ extension AppModel {
         
         do {
             guard let session = try await accountID.refreshSession else { return }          // get Session
-            try await session.loadBody(messageID: messageID, modelStore: ModelStore.shared) // Session, ModelStore
+            try await session.loadBody(messageID: messageID, modelStore: modelStore) // Session, ModelStore
         } catch {
             logger.error("\(error)")
         }

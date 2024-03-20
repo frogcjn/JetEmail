@@ -7,7 +7,6 @@
 
 import Foundation // for Date
 import SwiftData  // for @Model
-import JetEmailID
 
 // @dynamicMemberLookup
 @Model
@@ -70,7 +69,7 @@ public final class Message {
 
     public private(set) var _resource: String?
     
-    public init<MessageResource : MessageProtocol>(resource: MessageResource, account: Account) where MessageResource.GeneralID : UniqueID {
+    public init<MessageResource : MessageProtocol>(resource: MessageResource, account: Account) {
         checkBackgroundThread()
 
         platform        = resource.generalID.platform.rawValue
@@ -102,7 +101,7 @@ public final class Message {
         self.account    = account
     }
     
-    public func update<MessageResource: MessageProtocol>(resource: MessageResource) where MessageResource.GeneralID : UniqueID {
+    public func update<MessageResource: MessageProtocol>(resource: MessageResource) {
         checkBackgroundThread()
 
         platform        = resource.generalID.platform.rawValue

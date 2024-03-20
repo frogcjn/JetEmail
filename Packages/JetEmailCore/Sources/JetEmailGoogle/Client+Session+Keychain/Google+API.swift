@@ -6,14 +6,14 @@
 //
 
 @preconcurrency import GTMAppAuth
-import JetEmailID
+import JetEmailData
 
 import SwiftUI
 import AuthenticationServices
 
 // MARK: - Sessions
 
-extension GoogleClient: ClientProtocol {
+extension GoogleClient: ClientAPIProtocol {
     
     @MainActor // for SessionStore
     public var sessions: [GoogleSession] { get async throws { // the sessions should be refresh before using to fetch
@@ -43,7 +43,7 @@ extension GoogleSession : SessionProtocol {
 // MARK: - AccountIDPublicAPI
 
 @MainActor
-extension GoogleAccountID : AccountIDSessionAPI {
+extension GoogleAccountID : AccountSessionAPI {
 
     public var storedSession: GoogleSession? { SessionStore.shared[self] }
     public var refreshSession: GoogleSession? { get async throws {

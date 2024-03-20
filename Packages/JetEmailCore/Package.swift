@@ -15,12 +15,12 @@ let package = Package(
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(name: "JetEmailCore"      , targets: ["JetEmailPlatform", "JetEmailGoogle", "JetEmailMicrosoft", "JetEmailData", "JetEmailID", "JetEmailFoundation"]),
+        .library(name: "JetEmailCore"      , targets: ["JetEmailPlatform", "JetEmailGoogle", "JetEmailMicrosoft", "JetEmailData", "JetEmailFoundation"]),
         
         /*.library(name: "JetEmailData"      , targets: ["JetEmailData"]),
         .library(name: "JetEmailGoogle"    , targets: ["JetEmailGoogle"]),
         .library(name: "JetEmailMicrosoft" , targets: ["JetEmailMicrosoft"]),
-        .library(name: "JetEmailID"        , targets: ["JetEmailID"]),
+        .library(name: "JetEmailData"        , targets: ["JetEmailData"]),
         .library(name: "JetEmailFoundation", targets: ["JetEmailFoundation"])*/
     ],
     dependencies: [
@@ -40,6 +40,7 @@ let package = Package(
             dependencies: [
                 .target (name: "JetEmailGoogle"                         ),
                 .target (name: "JetEmailMicrosoft"                      ),
+                .target (name: "JetEmailData"                           )
             ]
         ),
         .target(
@@ -49,8 +50,7 @@ let package = Package(
                 .product(name: "GTMAppAuth"                  , package: "GTMAppAuth"                           ),
                 .product(name: "GoogleAPIClientForREST_Gmail", package: "google-api-objectivec-client-for-rest"),
                 .target (name: "JetEmailFoundation"                                                            ),
-                .target (name: "JetEmailID"                                                                    ),
-                .target (name: "JetEmailData"                                                                  )
+                .target (name: "JetEmailData"                                                                 ),
             ],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
@@ -60,9 +60,8 @@ let package = Package(
             name: "JetEmailMicrosoft",
             dependencies: [
                 .product(name: "MSAL"               , package: "MSAL"),
-                .target (name: "JetEmailFoundation"                 ),
-                .target (name: "JetEmailID"                         ),
-                .target (name: "JetEmailData"                       )
+                .target (name: "JetEmailFoundation"                  ),
+                .target (name: "JetEmailData"                        )
             ],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
@@ -71,19 +70,9 @@ let package = Package(
         .target(
             name: "JetEmailData",
             dependencies: [
-                .target(name: "JetEmailID"),
                 .target(name: "JetEmailFoundation")
             ],
             resources: [.process("Resources/Localizable.xcstrings")],
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
-            ]
-        ),
-        .target(
-            name: "JetEmailID",
-            dependencies: [
-                .target(name: "JetEmailFoundation")
-            ],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
             ]

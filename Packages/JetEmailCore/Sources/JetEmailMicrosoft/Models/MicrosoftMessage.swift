@@ -5,12 +5,12 @@
 //  Created by Cao, Jiannan on 2/7/24.
 //
 
-import JetEmailID
+import JetEmailData
 import JetEmailFoundation
 import struct Foundation.Data
 import struct Foundation.Date
 
-public struct MicrosoftMessage : MicrosoftProtocol, PlatformSpecificMessageProtocol, GetMessageProtocol {
+public struct MicrosoftMessage : MicrosoftProtocol, PlatformSpecificMessageProtocol {
     public typealias GeneralID = MessageID
     
     public let    id       : MicrosoftMessageID

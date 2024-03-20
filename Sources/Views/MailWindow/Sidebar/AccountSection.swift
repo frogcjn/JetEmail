@@ -6,10 +6,8 @@
 //
 
 import SwiftUI
-import SwiftData // for @Query
-import JetEmailData
-import JetEmailID
-import JetEmailFoundation
+import SwiftData    // for @Query
+import JetEmailData // for Account
 
 struct AccountSection: View {
     

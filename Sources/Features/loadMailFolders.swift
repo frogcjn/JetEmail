@@ -7,8 +7,7 @@
 
 // MARK: Feature: Account - Load Mail Folder
 
-import JetEmailID
-import JetEmailPlatform
+import JetEmailData // for AcocuntID
 
 extension AppModel {
     
@@ -29,7 +28,7 @@ extension AppModel {
         
         do {
             guard let session = try await accountID.refreshSession else { return }                     // get Session
-            _ = try await session.loadMailFolders(accountID: accountID, modelStore: ModelStore.shared) // Session, ModelStore
+            _ = try await session.loadMailFolders(accountID: accountID, modelStore: modelStore) // Session, ModelStore
         } catch {
             logger.error("\(error)")
         }

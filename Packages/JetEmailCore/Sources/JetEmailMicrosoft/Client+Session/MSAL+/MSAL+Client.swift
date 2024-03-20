@@ -6,7 +6,7 @@
 //
 
 @preconcurrency import MSAL
-import JetEmailID
+import JetEmailData
 import JetEmailFoundation
 
 typealias MSALAccount = MSAL.MSALAccount

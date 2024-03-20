@@ -8,8 +8,7 @@
 // MARK: Feature: Accounts - Move Accounts
 
 import struct Foundation.IndexSet
-import JetEmailID
-import JetEmailPlatform
+import JetEmailData // for AccountID
 
 extension AppModel {
     
@@ -20,7 +19,7 @@ extension AppModel {
         defer { isBusy = false }
         
         do {
-            _ = try await ModelStore.shared.moveAccounts(accountIDs: accountIDs, fromOffsets: source, toOffset: destination) // ModelStore
+            _ = try await modelStore.moveAccounts(accountIDs: accountIDs, fromOffsets: source, toOffset: destination) // ModelStore
         } catch {
             logger.error("\(error)")
         }

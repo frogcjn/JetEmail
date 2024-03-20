@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 3/19/24.
 //
 
-import JetEmailID
+import JetEmailData
 import JetEmailGoogle
 import JetEmailMicrosoft
 import Observation
@@ -18,7 +18,7 @@ public class Clients : Sendable {
     public var microsoft: MicrosoftClient { get async throws {
         try await MicrosoftClient.shared
     } }
-    public var google: GoogleClient { GoogleClient.shared }
+    public var    google:    GoogleClient { GoogleClient.shared }
     
     public func client(platform: Platform) async throws -> Client {
         switch platform {

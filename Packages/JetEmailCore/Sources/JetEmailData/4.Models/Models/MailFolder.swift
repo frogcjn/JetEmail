@@ -7,7 +7,6 @@
 
 import Foundation // for KeyPathComparator
 import SwiftData  // for @Model
-import JetEmailID
 
 @Model
 public final class MailFolder {
@@ -55,7 +54,7 @@ public final class MailFolder {
 
     // MARK: - Init & Update
 
-    public init<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource, account: Account) where MailFolderResource.GeneralID : UniqueID {
+    public init<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource, account: Account) {
         checkBackgroundThread()
         
         platform          = resource.generalID.platform.rawValue
@@ -73,7 +72,7 @@ public final class MailFolder {
         self.account      = account
     }
     
-    public func update<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource) where MailFolderResource.GeneralID : UniqueID {
+    public func update<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource) {
         checkBackgroundThread()
 
         platform          = resource.generalID.platform.rawValue
@@ -121,13 +120,7 @@ public extension MailFolder {
     
     @Transient
     var localizedName : String {
-        if let key = _nameLocalizedKey {
-            let result = String(localized: .init(key), bundle: .module)
-            if key == result { return name ?? "" }
-            else { return result }
-        } else {
-            return name ?? String(localized: "(MailFolder.NoName)", defaultValue: .init(name ?? ""))
-        }
+        MailFolderSystemInfo.localizedName(name: name, localizedKey: _nameLocalizedKey)
     }
     
     @Transient

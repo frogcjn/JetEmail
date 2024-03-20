@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-import JetEmailData
-import JetEmailID
+import JetEmailData // for MailFolderLoadingMessageState
 
 struct LoadingMessageProgressBar : View {
     let mailFolderName: String
