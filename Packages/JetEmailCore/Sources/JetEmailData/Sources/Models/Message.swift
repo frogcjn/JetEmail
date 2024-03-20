@@ -70,7 +70,7 @@ public final class Message {
 
     public private(set) var _resource: String?
     
-    public init(resource: MessageResource, mailFolder: MailFolder, account: Account) {
+    public init<MessageResource : MessageProtocol>(resource: MessageResource, account: Account) where MessageResource.GeneralID : UniqueID {
         checkBackgroundThread()
 
         platform        = resource.generalID.platform.rawValue
@@ -100,10 +100,9 @@ public final class Message {
         _resource       = try? resource.jsonString
         
         self.account    = account
-        self.mailFolder = mailFolder
     }
     
-    public func update(resource: MessageResource) {
+    public func update<MessageResource: MessageProtocol>(resource: MessageResource) where MessageResource.GeneralID : UniqueID {
         checkBackgroundThread()
 
         platform        = resource.generalID.platform.rawValue
@@ -139,7 +138,7 @@ public final class Message {
     @Relationship(deleteRule: .nullify)
     public var account: Account
     
-    /// Message.mailFolder <<-> MailFolder.messages
+    /// Message.mailFolders <<->> MailFolder.messages
     @Relationship(deleteRule: .nullify)
-    public var mailFolder: MailFolder
+    public var mailFolders: [MailFolder] = []
 }

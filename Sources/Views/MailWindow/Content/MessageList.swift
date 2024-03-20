@@ -10,17 +10,18 @@ import SwiftData // for @Query
 import JetEmailData
 
 fileprivate struct _MessageList : View {
+    
+    @Environment(MailWindowModel.self)
+    var window
+    
     @Environment(AppModel.self)
     var appModel
     
-    @Environment(AppItemModel<MailFolder>.self)
-    var itemModel
+    @Environment(Account.self)
+    var account
     
     @Environment(MailFolder.self)
     var mailFolder
-
-    @Environment(MailWindowModel.self)
-    var window
 
     @Query
     var messages: [Message]
@@ -28,10 +29,10 @@ fileprivate struct _MessageList : View {
     var body: some View {
         List(selection: Bindable(window).selectedMessage) {
             Section {
-                ForEach(messages) { item in
+                ForEach(messages) { message in
                     MessageCell()
-                        .itemModel(item)
-                        .tag(item)
+                        .environment(message)
+                        .tag(message)
                 }
             } header: {
                 LoadingMessageProgressBar(mailFolderName: mailFolder.localizedName, loadingMessageState: mailFolder.resourceID.loadingMessageState)
@@ -63,7 +64,7 @@ fileprivate struct _MessageList : View {
         
         // Feature: Account - Load Messages
         .onChange(of: mailFolder, initial: true) {
-            Task { await itemModel.loadMessages() }
+            Task { await appModel.loadMessages(mailFolderID: mailFolder.resourceID, accountID: account.resourceID) }
         }
         
         // Feature: Classify
@@ -102,7 +103,7 @@ fileprivate struct _MessageList : View {
                         for message in messages.filter({ $0.movePlan != nil }) {
                             if let to = message.movePlan {
                                 Task {
-                                    await appModel(message).move(from: mailFolder, to: to)
+                                    await appModel.move(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: to.resourceID)
                                     message.movePlan = nil
                                 }
                             }
@@ -128,7 +129,7 @@ fileprivate struct _MessageList : View {
         
             let classifyMessages = messages.dropFirst(classifyStartIndex).prefix(count) // .filter({ $0.movePlan == nil })
             if auto {
-                try await classifyMessages.map(\.resourceID).forEachTask { @MainActor in try await appModel($0)?.classify() }
+                try await classifyMessages.map(\.resourceID).forEachTask { @MainActor in await appModel.classify(messageID: $0) }
             } else {
                 classifyMessages.forEach { message in message.movePlan = mailFolder }
             }
@@ -141,10 +142,16 @@ fileprivate struct _MessageList : View {
 struct MessageList : View {
     @Environment(MailFolder.self)
     var mailFolder
+    
+    @State
+    var uniqueIDs: [String] = []
 
     var body: some View {
-        let rawID = mailFolder.uniqueID
-        _MessageList(_messages: Query(filter: #Predicate<Message> { $0.mailFolder.uniqueID == rawID && !$0.deleteMark }, sort: \.date, order: .reverse))
+        // let uniqueID = mailFolder.uniqueID
+        _MessageList(_messages: Query(filter: #Predicate<Message> { uniqueIDs.contains($0.uniqueID) && !$0.deleteMark }, sort: \.date, order: .reverse))
+            .onChange(of: mailFolder._messages, initial: true) {
+                uniqueIDs = $1.map(\.uniqueID)
+            }
     }
 }
 

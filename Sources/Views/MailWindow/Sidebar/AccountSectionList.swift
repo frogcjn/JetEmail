@@ -40,12 +40,12 @@ struct AccountSectionList : View, Sendable {
                 List(selection: Bindable(window).selectedMailFolder) {
                     ForEach(accounts) { item in
                         AccountSection()
-                            .itemModel(item)
+                            .environment(item)
                     }
                     
                     // Feature: Accounts - Move Accounts
                     .onMove { source, destination in
-                        Task { await appModel.moveAccounts(accounts, fromOffsets: source, toOffset: destination) }
+                        Task { await appModel.moveAccounts(accountIDs: accounts.map(\.resourceID), fromOffsets: source, toOffset: destination) }
                     }
                 }
             }
@@ -56,8 +56,8 @@ struct AccountSectionList : View, Sendable {
         
         // Feature: Account - Load Mail Folders
         .onChange(of: accounts, initial: true) { (oldValue, newValue) in
-            let shouldLoad = newValue.filter { !$0.loadedMailFolder }
-            Task{ await appModel.loadMailFolders(accounts: shouldLoad) }
+            let accoundIDs = newValue.filter { !$0.loadedMailFolder }.map(\.resourceID)
+            Task{ await appModel.loadMailFolders(accountIDs: accoundIDs) }
         }
         
         #if !os(macOS)

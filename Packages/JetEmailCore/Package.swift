@@ -15,7 +15,7 @@ let package = Package(
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(name: "JetEmailCore"      , targets: ["JetEmailData", "JetEmailGoogle", "JetEmailMicrosoft", "JetEmailID", "JetEmailFoundation"]),
+        .library(name: "JetEmailCore"      , targets: ["JetEmailPlatform", "JetEmailGoogle", "JetEmailMicrosoft", "JetEmailData", "JetEmailID", "JetEmailFoundation"]),
         
         /*.library(name: "JetEmailData"      , targets: ["JetEmailData"]),
         .library(name: "JetEmailGoogle"    , targets: ["JetEmailGoogle"]),
@@ -36,15 +36,10 @@ let package = Package(
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "JetEmailData",
+            name: "JetEmailPlatform",
             dependencies: [
-                .target(name: "JetEmailGoogle"),
-                .target(name: "JetEmailMicrosoft"),
-                .target(name: "JetEmailFoundation")
-            ],
-            resources: [.process("Resources/Localizable.xcstrings")],
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
+                .target (name: "JetEmailGoogle"                         ),
+                .target (name: "JetEmailMicrosoft"                      ),
             ]
         ),
         .target(
@@ -53,8 +48,9 @@ let package = Package(
                 .product(name: "AppAuth"                     , package: "AppAuth-iOS"                          ),
                 .product(name: "GTMAppAuth"                  , package: "GTMAppAuth"                           ),
                 .product(name: "GoogleAPIClientForREST_Gmail", package: "google-api-objectivec-client-for-rest"),
-                .target (name: "JetEmailFoundation"                                                           ),
-                .target (name: "JetEmailID"                                                                   )
+                .target (name: "JetEmailFoundation"                                                            ),
+                .target (name: "JetEmailID"                                                                    ),
+                .target (name: "JetEmailData"                                                                  )
             ],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
@@ -65,8 +61,20 @@ let package = Package(
             dependencies: [
                 .product(name: "MSAL"               , package: "MSAL"),
                 .target (name: "JetEmailFoundation"                 ),
-                .target (name: "JetEmailID"                         )
+                .target (name: "JetEmailID"                         ),
+                .target (name: "JetEmailData"                       )
             ],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency")
+            ]
+        ),
+        .target(
+            name: "JetEmailData",
+            dependencies: [
+                .target(name: "JetEmailID"),
+                .target(name: "JetEmailFoundation")
+            ],
+            resources: [.process("Resources/Localizable.xcstrings")],
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
             ]

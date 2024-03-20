@@ -19,7 +19,7 @@ enum SwiftDataError : Error {
     //ccase noGraphInstance(model: any PersistentModel)
 }
 
-enum TreeError : Error {
+public enum TreeError : Error {
     /*case multipleRoot*/
     case mailFolderNotInThisAccount
     case parentMailFolderNotInThisAccount

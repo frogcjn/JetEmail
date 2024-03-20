@@ -131,6 +131,7 @@ actor Keychain {
     
     var items: [SessionItem] { get throws {
         //SessionKeychain.assertIsolated()
+        checkBackgroundThread()
         let query =  [
             /* class */
             kSecClass                    : kSecClassGenericPassword,

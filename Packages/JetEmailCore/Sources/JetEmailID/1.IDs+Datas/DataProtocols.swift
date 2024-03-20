@@ -5,15 +5,52 @@
 //  Created by Cao, Jiannan on 3/9/24.
 //
 
-public protocol ResourceProtocol                   : GeneralIdentifiable, Sendable where ID : ResourceIDProtocol        , ID.GeneralID: ResourceIDProtocol         {}
-public protocol ResourceSpecificProtocol           : GeneralIdentifiable, Sendable where ID : ResourceSpecificIDProtocol, ID.GeneralID: ResourceSpecificIDProtocol {}
+import struct Foundation.Date
+import struct Foundation.Data
 
-public protocol AccountProtocol                    : GeneralIdentifiable, Sendable where ID : AccountIDProtocol         , ID.GeneralID: AccountIDProtocol          {
+public protocol ResourceProtocol                   : GeneralIdentifiable, Sendable where ID : ResourceIDProtocol        , GeneralID: ResourceIDProtocol, GeneralID == ID.GeneralID         {}
+public protocol ResourceSpecificProtocol           : GeneralIdentifiable, Sendable where ID : ResourceSpecificIDProtocol, GeneralID: ResourceSpecificIDProtocol {}
+
+public protocol AccountProtocol                    : GeneralIdentifiable, Sendable where ID : AccountIDProtocol         , GeneralID == AccountID         {
     var username: String { get }
 }
 
-public protocol MailFolderProtocol                 : GeneralIdentifiable, Sendable where ID : MailFolderIDProtocol      , ID.GeneralID: MailFolderIDProtocol       {}
-public protocol MessageProtocol                    : GeneralIdentifiable, Sendable where ID : MessageIDProtocol         , ID.GeneralID: MessageIDProtocol          {}
+public protocol MailFolderProtocol                 : GeneralIdentifiable, Sendable where ID : MailFolderIDProtocol      , GeneralID == MailFolderID      {
+    var name: String? { get }
+    var systemInfo: MailFolderSystemInfo? { get }
+}
+public protocol MessageProtocol                    : GeneralIdentifiable, Sendable where ID : MessageIDProtocol         , GeneralID == MessageID       {
+    
+    var      subject: String?      { get }
+    
+    // MARK: Resource - Originator Fields
+    
+    var         from: String?      { get }
+    var       sender: String?      { get }
+    var      replyTo: String?      { get }
+    
+    // MARK: Resource - Destination Address Fields
+
+    var           to: String?      { get }
+    var           cc: String?      { get }
+    var          bcc: String?      { get }
+    var  deliveredTo: String?      { get }
+
+    // MARK: Resource - Date
+
+    var         date: Date?        { get }
+    var  createdDate: Date?        { get }
+    var modifiedDate: Date?        { get }
+    var receivedDate: Date?        { get }
+    var     sentDate: Date?        { get }
+    
+    // MARK: Resource - Body & Raw
+    
+    var  bodyPreview: String?      { get }
+    var         body: MessageBody? { get }
+    var          raw: Data?        { get }
+    // var   uniqueBody: Body?
+}
  
 // MARK: - Platform Specific
 

@@ -41,7 +41,7 @@ public final class Account {
     
     // MARK: - Init & Update
     
-    public init(resource: AccountResource) {
+    public init<AccountResource: AccountProtocol>(resource: AccountResource) where AccountResource.GeneralID : UniqueID {
         checkBackgroundThread()
         
         platform          = resource.generalID.platform.rawValue
@@ -51,7 +51,7 @@ public final class Account {
         username          = resource.username
     }
     
-    public func update(resource: AccountResource) {
+    public func update<AccountResource: AccountProtocol>(resource: AccountResource)  where AccountResource.GeneralID : UniqueID {
         checkBackgroundThread()
 
         platform          = resource.generalID.platform.rawValue

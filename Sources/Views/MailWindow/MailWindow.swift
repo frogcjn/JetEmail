@@ -10,15 +10,14 @@ import JetEmailID
 
 struct MailWindow : View {
     
-    @Environment(AppModel.self) // the app model instance is associate with the applciation
-    var appModel
-    
     @Environment(SettingsModel.self)
     var settings
     
-    
     @State  // a MainWindowModel instance is associated with a window
     var window = MailWindowModel()
+    
+    @Environment(AppModel.self) // the app model instance is associate with the applciation
+    var appModel
     
 #if !os(macOS)
     @State
@@ -30,17 +29,19 @@ struct MailWindow : View {
             AccountSectionList()
                 .navigationSplitViewColumnWidth(min: 220, ideal: 220)
         } content: {
-            if let item = window.selectedMailFolder {
+            if let mailFolder = window.selectedMailFolder {
+                let account = mailFolder.account
                 MessageList()
-                    .itemModel(item)
-                    .itemModel(item.account)
+                    .environment(mailFolder)
+                    .environment(account)
             }
         } detail: {
-            if let item = window.selectedMessage {
+            if let message = window.selectedMessage, let mailFolder = window.selectedMailFolder  {
+                let account = message.account
                 MessageView()
-                    .itemModel(item)
-                    .itemModel(item.mailFolder)
-                    .itemModel(item.account)
+                    .environment(message)
+                    .environment(mailFolder)
+                    .environment(account)
             }
         }
         

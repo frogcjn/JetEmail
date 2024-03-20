@@ -21,9 +21,9 @@ struct AccountsTab : View {
             AccountList()
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         } detail: {
-            if let item = settings.selectedAccount {
+            if let account = settings.selectedAccount {
                 AccountView()
-                    .itemModel(item)
+                    .environment(account)
             } else {
                 VStack {
                     Button {

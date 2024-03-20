@@ -10,11 +10,11 @@ import AuthenticationServices
 
 struct AccountListToolbar : View {
     
-    @Environment(AppModel.self)
-    var appModel
-    
     @Environment(SettingsModel.self)
     var settings
+    
+    @Environment(AppModel.self)
+    var appModel
     
     var body: some View {
         HStack {
@@ -52,7 +52,7 @@ struct AccountListToolbar : View {
             // Feature: Accounts - Sign Out Account
             Button("Sign Out", systemImage: "minus") {
                 guard let account = settings.selectedAccount else { return }
-                Task { await appModel(account).signOut() }
+                Task { await appModel.signOut(accountID: account.resourceID) }
             }.disabled(settings.selectedAccount?.isBusy ?? true)
 
             Spacer()

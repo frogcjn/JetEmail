@@ -6,13 +6,14 @@
 //
 
 public protocol GetMailFolderProtocol : GeneralIdentifiable where GeneralID : MailFolderIDProtocol {
-          var name: String? { get }
-    var systemInfo: MailFolderSystemInfo? { get }
+
 }
 
-extension PlatformEnum : GetMailFolderProtocol where
-    Microsoft : GetMailFolderProtocol,
-    Google : GetMailFolderProtocol, GeneralID : MailFolderIDProtocol
+extension PlatformEnum : MailFolderProtocol where
+    Microsoft : MailFolderProtocol,
+    Google: MailFolderProtocol,
+    Microsoft.GeneralID == MailFolderID,
+    Google.GeneralID == MailFolderID
 {
     public var name: String? {
         switch self {

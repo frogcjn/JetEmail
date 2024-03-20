@@ -11,26 +11,26 @@ import JetEmailData
 
 struct AccountList: View {
     
-    @Environment(AppModel.self)
-    var appModel
-    
     @Environment(SettingsModel.self)
     var settings
     
-    @Query(filter: #Predicate { $0.deleteMark == false } , sort: \Account.orderIndex, order: .forward)
+    @Environment(AppModel.self)
+    var appModel
+    
+    @Query(filter: #Predicate { !$0.deleteMark } , sort: \Account.orderIndex, order: .forward)
     var accounts: [Account]
     
     var body: some View {
         List(selection: Bindable(settings).selectedAccount) {
-            ForEach(accounts) { item in
+            ForEach(accounts) { account in
                 AccountCell()
-                    .itemModel(item)
-                    .tag(item)
+                    .environment(account)
+                    .tag(account)
             }
             
             // Feature: Accounts - Move Accounts
             .onMove { source, destination in
-                Task { await appModel.moveAccounts(accounts, fromOffsets: source, toOffset: destination) }
+                Task { await appModel.moveAccounts(accountIDs: accounts.map(\.resourceID), fromOffsets: source, toOffset: destination) }
             }
         }
         .safeAreaInset(edge: .bottom) {

@@ -10,10 +10,33 @@ import JetEmailMicrosoft
 import JetEmailGoogle
 import JetEmailFoundation
 import JetEmailData
+import JetEmailID
+import SwiftData
 
-enum Agent {
+extension AppModel {
     
+    @MainActor // for isClassifying
+    func classify(messageID: MessageID) async {
+        guard !messageID.isClassifying else { return }
+        messageID.isClassifying = true
+        defer { messageID.isClassifying = false }
+        
+        do {
+            let message = try mainContext[messageID]
+            let account = try mainContext[messageID.accountID]
+            guard let session = account.resourceID.platformCase?.storedSession else { return }
+            switch session {
+            case .microsoft(let session): try await session.classify(account: account, message: message)
+            case    .google(let session): try await session.classify(account: account, message: message)
+            }
+        } catch {
+            logger.error("\(error)")
+        }
+    }
 }
+
+
+enum Agent {}
 
 extension Account {
     var mailFolderTree: Tree<MailFolder>? {
@@ -33,33 +56,6 @@ extension Account {
 }
 
 
-extension AppItemModel<Message> {
-    
-    @MainActor
-    var isClassifying: Bool {
-        get { item.isClassifying }
-        set { item.isClassifying = newValue }
-    }
-    
-    @MainActor // for isClassifying
-    func classify() async {
-        guard !isClassifying else { return }
-        isClassifying = true
-        defer { isClassifying = false }
-        
-        do {
-            let message = item
-            let account = message.mailFolder.account
-            guard let session = account.resourceID.storedSession else { return }
-            switch session {
-            case .microsoft(let session): try await session.classify(account: account, message: message)
-            case    .google(let session): try await session.classify(account: account, message: message)
-            }
-        } catch {
-            context.logger.error("\(error)")
-        }
-    }
-}
 
 extension MicrosoftSession {
     @MainActor // for classifyResultText
@@ -149,3 +145,10 @@ extension Agent {
     }
 }
 
+struct ClassifyResult : Codable {
+    let existedFolder: String?
+    
+    private enum CodingKeys: String, CodingKey {
+        case existedFolder = "existed_folder"
+    }
+}

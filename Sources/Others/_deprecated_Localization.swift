@@ -10,7 +10,7 @@
 import JetEmailMicrosoft
 import Foundation
 
-fileprivate extension MicrosoftMailFolder.WellKnownFolderName {
+fileprivate extension MicrosoftWellKnownFolderName {
     var systemOrder: Int? {
         switch self {
         case .inbox                    : return 0

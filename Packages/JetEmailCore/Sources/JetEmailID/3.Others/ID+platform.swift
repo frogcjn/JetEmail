@@ -11,41 +11,27 @@ public extension AccountID {
         switch platform {
         case .microsoft: .microsoft(.init(innerID: innerID))
         case    .google:    .google(.init(innerID: innerID))
-        case     .other: nil
+        default        : nil
         }
-    }
-    
-    var microsoft: MicrosoftAccountID? {
-        guard platform == .microsoft  else { return nil }
-        return .init(innerID: innerID)
-    }
-    
-    var google: GoogleAccountID? {
-        guard platform == .google else { return nil }
-        return .init(innerID: innerID)
     }
 }
 
 public extension MailFolderID {
-    var microsoft: MicrosoftMailFolderID? {
-        guard let accountID = accountID.microsoft else { return nil }
-        return .init(accountID: accountID, innerID: innerID)
-    }
-    
-    var google: GoogleMailFolderID? {
-        guard let accountID = accountID.google else { return nil }
-        return .init(accountID: accountID, innerID: innerID)
+    var platformCase: PlatformEnum<MicrosoftMailFolderID, GoogleMailFolderID>? {
+        switch accountID.platformCase {
+        case .microsoft(let accountID): .microsoft(.init(accountID: accountID, innerID: innerID))
+        case    .google(let accountID):    .google(.init(accountID: accountID, innerID: innerID))
+        default                       : nil
+        }
     }
 }
 
 public extension MessageID {
-    var microsoft: MicrosoftMessageID? {
-        guard let accountID = accountID.microsoft else { return nil }
-        return .init(accountID: accountID, innerID: innerID)
-    }
-    
-    var google: GoogleMessageID? {
-        guard let accountID = accountID.google else { return nil }
-        return .init(accountID: accountID, innerID: innerID)
+    var platformCase: PlatformEnum<MicrosoftMessageID, GoogleMessageID>? {
+        switch accountID.platformCase {
+        case .microsoft(let accountID): .microsoft(.init(accountID: accountID, innerID: innerID))
+        case    .google(let accountID):    .google(.init(accountID: accountID, innerID: innerID))
+        default                       : nil
+        }
     }
 }

@@ -5,8 +5,8 @@
 //  Created by Cao, Jiannan on 2/1/24.
 //
 
-public class Tree<Value> {
-    public var root: TreeNode<Value>
+public final class Tree<Value> {
+    public let root: TreeNode<Value>
     
     public init(rootElement: Value) {
         self.root = TreeNode(element: rootElement)
@@ -36,7 +36,7 @@ public extension TreeNode {
     
 
 // @dynamicMemberLookup
-public class TreeNode<Element> {
+public final class TreeNode<Element> {
     public var parent: TreeNode<Element>?
     public var children: [TreeNode<Element>] = []
     public var element: Element

@@ -55,7 +55,7 @@ public final class MailFolder {
 
     // MARK: - Init & Update
 
-    public init(resource: MailFolderResource, account: Account) {
+    public init<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource, account: Account) where MailFolderResource.GeneralID : UniqueID {
         checkBackgroundThread()
         
         platform          = resource.generalID.platform.rawValue
@@ -73,7 +73,7 @@ public final class MailFolder {
         self.account      = account
     }
     
-    public func update(resource: MailFolderResource) {
+    public func update<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource) where MailFolderResource.GeneralID : UniqueID {
         checkBackgroundThread()
 
         platform          = resource.generalID.platform.rawValue
@@ -103,14 +103,14 @@ public final class MailFolder {
     
     /// MailFolder.children <->> MailFolder.parent
     @Relationship(deleteRule: .nullify, originalName: "children", inverse: \MailFolder.parent)
-    private var _children: [MailFolder] = [] // Should be Ordered Relationship
+    public var _children: [MailFolder] = [] // Should be Ordered Relationship
 
     @Transient
-    public var children: [MailFolder] { _children.sortedInParentMailFolderUsingIndex } // TODO: After Swift 6.0
+    public var children: [MailFolder] { _children.sortedByChildIndex } // TODO: After Swift 6.0
     
     /// MailFolder.messages <->> Message.mailFolder
-    @Relationship(deleteRule: .cascade, originalName: "messages", inverse: \Message.mailFolder)
-    private var _messages: [Message] = [] // Should be Ordered Relationship
+    @Relationship(deleteRule: .cascade, originalName: "messages", inverse: \Message.mailFolders)
+    public var _messages: [Message] = [] // Should be Ordered Relationship
     
     @Transient
     public var messages: [Message] { _messages.sorted(using: KeyPathComparator(\.date, order: .reverse))}

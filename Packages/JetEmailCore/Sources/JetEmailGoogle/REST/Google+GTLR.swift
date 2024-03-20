@@ -7,7 +7,6 @@
 
 import GoogleAPIClientForREST_Gmail
 import JetEmailFoundation
-import JetEmailGoogle
 import JetEmailID
 
 extension GTLRGmail_Label {

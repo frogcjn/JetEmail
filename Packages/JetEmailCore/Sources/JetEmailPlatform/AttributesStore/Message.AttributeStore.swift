@@ -6,6 +6,7 @@
 //
 
 import JetEmailID
+import JetEmailData
 
 @MainActor
 public extension Message {

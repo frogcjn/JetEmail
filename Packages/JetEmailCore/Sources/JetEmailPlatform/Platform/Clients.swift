@@ -23,14 +23,12 @@ public class Clients : Sendable {
     public func client(platform: Platform) async throws -> Client {
         switch platform {
         case .microsoft: try await .microsoft(microsoft)
-        case .google   : .google(google)
+        case .google   :              .google(   google)
         default        : fatalError() // TODO: Throw Error
         }
     }
     
     public var sessions: [Session] { get async throws {
-        async let microsoftSessions = microsoft.sessions.map(Session.microsoft)
-        async let googleSessions = google.sessions.map(Session.google)
-        return try await microsoftSessions + googleSessions
+        try await client(platform: .microsoft).sessions + client(platform: .google).sessions
     } }
 }

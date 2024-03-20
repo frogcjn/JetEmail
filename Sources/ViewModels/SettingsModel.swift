@@ -8,6 +8,7 @@
 import SwiftUI
 import ObservableUserDefault
 import JetEmailData
+import JetEmailID
 
 @MainActor
 @Observable
@@ -23,4 +24,12 @@ class SettingsModel {
     #if !os(macOS)
     var isPresenting = false
     #endif
+}
+
+extension SettingsModel {
+    
+    // Feature: Unselection - Will Sign Out Account
+    func willSignOutAccount(_ accountID: AccountID) {
+        if selectedAccount?.resourceID == accountID { selectedAccount = nil }
+    }
 }

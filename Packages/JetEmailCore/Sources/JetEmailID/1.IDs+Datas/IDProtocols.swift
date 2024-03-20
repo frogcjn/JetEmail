@@ -59,6 +59,7 @@ public extension ResourceSpecificIDProtocol {
 }
 
 public protocol AccountIDProtocol : ResourceSpecificIDProtocol where AccountIDType == Self {}
+
 extension AccountIDProtocol {
     public static var resourceType: ResourceType { .account }
     public var accountID: Self { self }
@@ -77,17 +78,13 @@ extension MessageIDProtocol {
 
 // MARK: - Platform Speicific
 
-public protocol PlatformSpecificIDProtocol : ResourceIDProtocol where GeneralID == InnerGeneralID {
+public protocol PlatformSpecificIDProtocol : ResourceIDProtocol {
     static var platform: Platform { get }
-    
-    associatedtype InnerGeneralID : ResourceIDProtocol
-    var general: InnerGeneralID { get }
 }
 
 
 public extension PlatformSpecificIDProtocol {
     var platform : Platform { Self.platform }
-    var generalID : InnerGeneralID { general }
 }
 
 public protocol MicrosoftIDProtocol : PlatformSpecificIDProtocol {}
@@ -108,7 +105,7 @@ public protocol PlatformSpecificAccountIDProtocol : PlatformSpecificIDProtocol, 
 }
 
 extension PlatformSpecificAccountIDProtocol {
-    public var general: AccountID {
+    public var generalID: AccountID {
         .init(platform: platform, innerID: innerID)
     }
 }
@@ -121,15 +118,15 @@ public protocol PlatformSpecificResourceIDProtocol : PlatformSpecificIDProtocol 
 
 public protocol PlatformSpecificMailFolderIDProtocol : PlatformSpecificResourceIDProtocol, MailFolderIDProtocol where AccountIDType : PlatformSpecificAccountIDProtocol {}
 public extension PlatformSpecificMailFolderIDProtocol {
-    var general: MailFolderID {
-        .init(accountID: accountID.general, innerID: innerID)
+    var generalID: MailFolderID {
+        .init(accountID: accountID.generalID, innerID: innerID)
     }
 }
 
 public protocol PlatformSpecificMessageIDProtocol : PlatformSpecificResourceIDProtocol, MessageIDProtocol where AccountIDType : PlatformSpecificAccountIDProtocol {}
 public extension PlatformSpecificMessageIDProtocol {
-    var general: MessageID {
-        .init(accountID: accountID.general, innerID: innerID)
+    var generalID: MessageID {
+        .init(accountID: accountID.generalID, innerID: innerID)
     }
 }
 

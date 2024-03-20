@@ -8,11 +8,13 @@
 import SwiftUI
 import SwiftData // for @Query
 import JetEmailData
+import JetEmailID
 import JetEmailFoundation
 
 struct AccountSection: View {
-    @Environment(AppItemModel<Account>.self)
-    private var itemModel
+    
+    @Environment(AppModel.self)
+    private var appModel
     
     @Environment(Account.self)
     private var account
@@ -27,7 +29,7 @@ struct AccountSection: View {
             }
         } header: {
             // Feature: Account - Load Mail Folders
-            AccountSectionHeader { await itemModel.loadMailFolders() }
+            AccountSectionHeader { await appModel.loadMailFolders(accountID: account.resourceID) }
         }
     }
 }
@@ -39,10 +41,10 @@ fileprivate struct _AcciontSection: View {
     var rootChildren: [MailFolder]
     
     var body: some View {
-        OutlineGroup(rootChildren.sortedInParentMailFolderUsingIndex, children: \.children.nilIfEmpty) { item in
+        OutlineGroup(rootChildren.sortedByChildIndex, children: \.children.nilIfEmpty) { mailFolder in
             MailFolderCell()
-                .itemModel(item)
-                .tag(item) // selection tag
+                .environment(mailFolder)
+                .tag(mailFolder) // selection tag
         }
     }
 }

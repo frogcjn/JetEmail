@@ -5,36 +5,27 @@
 //  Created by Cao, Jiannan on 2/23/24.
 //
 
-import JetEmailData
-import JetEmailID
-
 // MARK: Feature: Accounts - Sign Out
 
-extension AppItemModel<Account> {
+import JetEmailID
+import JetEmailPlatform
+
+extension AppModel {
 
     @MainActor // for isBusy, willSignOutAccount
-    func signOut() async {
-        guard !isBusy else { return }
-        isBusy = true
-        defer { isBusy = false }
-                        
+    func signOut(accountID: AccountID) async {
+        guard !accountID.isBusy else { return }
+        accountID.isBusy = true
+        defer { accountID.isBusy = false }
+        
         // Feature: Unselection - Will Sign Out Account
-        context.willSignOutAccount.send(item)
+        willSignOutAccount.send(accountID)
         
         do {
-            try await _signOut(resourceID: item.resourceID)
+            _ = try await accountID.platformCase?.storedSession?.signOut()      // Session
+            _ = try await ModelStore.shared.deleteAccount(accountID: accountID) // ModelStore
         } catch {
             logger.error("\(error)")
         }
     }
-    
-    // @BackgroundActor
-    
-}
-
-
-fileprivate func _signOut(resourceID: AccountID) async throws {
-    checkBackgroundThread()
-    _ = try await resourceID.storedSession?.signOut()
-    _ = try await ModelStore.shared.deleteAccount(id: resourceID)
 }

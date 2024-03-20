@@ -7,7 +7,6 @@
 
 import struct Foundation.LocalizedStringResource
 import JetEmailID
-import JetEmailGoogle
 
 fileprivate extension GoogleMailFolderInner {
     var isSystemFolder: Bool {

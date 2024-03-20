@@ -16,25 +16,18 @@ struct SettingsView : View {
 
     var body: some View {
         NavigationStack {
-
             TabView {
-                
-                    AccountsTab()
-
-
+                AccountsTab()
                     .tabItem { Label("Accounts", systemImage: "person.crop.circle.fill") }
-
-
                 GeneralTab()
                     .tabItem { Label("General", systemImage: "gearshape") }
             }
 #if !os(macOS)
-
-                    .toolbar {
-                        Button("close", systemImage: "xmark") {
-                            dismiss()
-                        }
-                    }
+            .toolbar {
+                Button("close", systemImage: "xmark") {
+                    dismiss()
+                }
+            }
 #endif
         }
     }

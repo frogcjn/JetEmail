@@ -7,10 +7,11 @@
 
 import SwiftUI
 import JetEmailData
+import JetEmailID
 
 struct LoadingMessageProgressBar : View {
     let mailFolderName: String
-    let loadingMessageState: MailFolder.LoadingMessageState
+    let loadingMessageState: MailFolderLoadingMessageState
     var body: some View {
         switch loadingMessageState {
         case .none: EmptyView()
@@ -40,14 +41,23 @@ struct LoadingMessageProgressBar : View {
 
 struct MailFolderRefreshButton : View {
     
-    @Environment(AppItemModel<MailFolder>.self)
+    @Environment(AppModel.self)
+    var appModel
+    
+    @Environment(MailFolder.self)
     var mailFolder
+    
+    @Environment(Account.self)
+    var account
+    
     
     var body: some View {
         Button("Refresh", systemImage: "arrow.clockwise") {
-            Task { await mailFolder.loadMessages() }
+            Task {
+                await appModel.loadMessages(mailFolderID: mailFolder.resourceID, accountID: account.resourceID)
+            }
         }
         .labelStyle(.titleAndIcon)
-        .disabled(mailFolder.item.resourceID.loadingMessageState.isLoading)
+        .disabled(mailFolder.resourceID.loadingMessageState.isLoading)
     }
 }

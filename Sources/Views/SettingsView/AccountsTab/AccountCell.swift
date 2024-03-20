@@ -27,7 +27,7 @@ struct AccountCell: View {
             Spacer()
             
             Image(systemName: "circle.fill")
-                .foregroundColor(account.resourceID.sessionState.color)
+                .foregroundColor(account.resourceID.platformCase?.sessionState.color)
                 .dynamicTypeSize(.xSmall)
                 .opacity(account.isBusy ? 0 : 1)
                 .overlay {

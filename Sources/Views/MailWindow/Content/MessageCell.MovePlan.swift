@@ -12,17 +12,17 @@ import JetEmailData
 extension MessageCell {
     struct MovePlan: View {
         
-        @Environment(AppItemModel<Message>.self)
-        var itemModel
+        @Environment(AppModel.self)
+        var appModel
+
+        @Environment(Account.self)
+        var account
         
         @Environment(MailFolder.self)
-        var moveFrom
+        var mailFolder
         
         @Environment(Message.self)
         var message
-        
-        @Environment(Account.self)
-        var account
         
         enum MovePlanStyle {
             case menu
@@ -95,7 +95,7 @@ extension MessageCell {
         func moveTo() {
             guard let movePlan = message.movePlan else { return }
             Task {
-                await itemModel.move(from: moveFrom, to: movePlan)
+                await appModel.move(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: movePlan.resourceID)
                 message.movePlan = nil
             }
         }

@@ -10,9 +10,13 @@ import JetEmailData
 import JetEmailID
 
 struct MessageView : View {
-    @Environment(AppItemModel<Message>.self)
-    var itemModel
+    
+    @Environment(AppModel.self)
+    var appModel
 
+    @Environment(Account.self)
+    var account
+    
     @Environment(Message.self)
     var message
 
@@ -42,7 +46,9 @@ struct MessageView : View {
             }
         }*/
         .onChange(of: message, initial: true) {
-            Task { await itemModel.loadBody() }
+            Task {
+                await appModel.loadBody(messageID: message.resourceID, accountID: account.resourceID)
+            }
         }
     }
 }

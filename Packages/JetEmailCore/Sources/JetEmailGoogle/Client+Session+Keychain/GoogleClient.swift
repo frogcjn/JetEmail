@@ -10,7 +10,7 @@ import AppAuth
 import GTMAppAuth
 import JetEmailID
 
-public actor GoogleClient : ClientProtocol, Sendable {
+public actor GoogleClient : Sendable {
     let      clientID               = "383073233076-bs69m1og40cpgqr4d209hlk40mlmdfo4.apps.googleusercontent.com"
     let   redirectURL               = URL(string: "com.googleusercontent.apps.383073233076-bs69m1og40cpgqr4d209hlk40mlmdfo4:/oauth2callback")!
     let        scopes: [Scope]      = [.email, .profile /* optional*/, .gmailReadOnly, .gmailLabels, .gmailModify]

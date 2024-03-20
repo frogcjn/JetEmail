@@ -9,7 +9,7 @@
 import AppAuth
 import JetEmailID
 
-public typealias GoogleSessionProtocol = NSObject & AuthSessionDelegate & OIDAuthStateChangeDelegate & OIDAuthStateErrorDelegate & SessionProtocol
+public typealias GoogleSessionProtocol = NSObject & AuthSessionDelegate & OIDAuthStateChangeDelegate & OIDAuthStateErrorDelegate
 public final class GoogleSession: GoogleSessionProtocol, Sendable {
 
     public let  account    : GoogleAccount

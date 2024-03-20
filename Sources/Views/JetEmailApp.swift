@@ -35,6 +35,8 @@ struct JetEmailApp: App {
             .defaultSize(width: 800, height: 600)
             #endif
         }
-        .appModel(.shared)
+        .environment(SettingsModel.shared)
+        .environment(AppModel.shared)
+        .modelContainer(.shared)
     }
 }

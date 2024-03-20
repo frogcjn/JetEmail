@@ -7,6 +7,7 @@
 
 import SwiftUI
 import JetEmailData
+import JetEmailID
 
 @Observable
 class MailWindowModel {
@@ -18,4 +19,20 @@ class MailWindowModel {
     { willSet { willChangeSelectedMailFolder(oldValue: selectedMailFolder, newValue: newValue) } }
     
     var selectedMessage: Message? = nil
+}
+
+extension MailWindowModel {
+    
+    // Feature: Unselection - Will Sign Out Account
+    func willSignOutAccount(_ accountID: AccountID) {
+        if selectedMessage?.account.resourceID == accountID { selectedMessage = nil }
+        if selectedMailFolder?.account.resourceID == accountID { selectedMailFolder = nil }
+    }
+    
+    // Feature: Unselection - Change Selected Mail Folder
+    func willChangeSelectedMailFolder(oldValue: MailFolder?, newValue: MailFolder?) {
+        if oldValue != newValue {
+            selectedMessage = nil
+        }
+    }
 }

@@ -9,43 +9,17 @@ import struct Foundation.Data
 import struct Foundation.Date
 
 public protocol GetMessageProtocol: GeneralIdentifiable where GeneralID : MessageIDProtocol {
-    var      subject: String?      { get }
-    
-    // MARK: Resource - Originator Fields
-    
-    var         from: String?      { get }
-    var       sender: String?      { get }
-    var      replyTo: String?      { get }
-    
-    // MARK: Resource - Destination Address Fields
 
-    var           to: String?      { get }
-    var           cc: String?      { get }
-    var          bcc: String?      { get }
-    var  deliveredTo: String?      { get }
-
-    // MARK: Resource - Date
-
-    var         date: Date?        { get }
-    var  createdDate: Date?        { get }
-    var modifiedDate: Date?        { get }
-    var receivedDate: Date?        { get }
-    var     sentDate: Date?        { get }
-    
-    // MARK: Resource - Body & Raw
-    
-    var  bodyPreview: String?      { get }
-    var         body: MessageBody? { get }
-    var          raw: Data?        { get }
-    // var   uniqueBody: Body?
 }
 
-extension PlatformEnum : GetMessageProtocol where
-    Microsoft : GetMessageProtocol,
-    Google : GetMessageProtocol, GeneralID : MessageIDProtocol
+extension PlatformEnum : MessageProtocol where
+    Microsoft : MessageProtocol,
+    Google: MessageProtocol,
+    Microsoft.GeneralID == MessageID,
+    Google.GeneralID == MessageID
 {
     
-    private subscript<Value>(platform keyPath: KeyPath<any GetMessageProtocol, Value>) -> Value {
+    private subscript<Value>(platform keyPath: KeyPath<any MessageProtocol, Value>) -> Value {
         switch self {
         case .microsoft(let platform): platform[keyPath: keyPath]
         case    .google(let platform): platform[keyPath: keyPath]

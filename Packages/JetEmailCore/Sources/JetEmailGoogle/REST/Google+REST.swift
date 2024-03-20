@@ -9,7 +9,7 @@ import Foundation
 @preconcurrency import GoogleAPIClientForREST_Gmail
 import JetEmailFoundation // for Tree
 import JetEmailID
-import JetEmailGoogle
+import JetEmailData
 
 // MARK: - Microsoft.Context: Account-MailFolders API
 
@@ -21,20 +21,25 @@ public extension GoogleSession {
         return service
     }
     
+    func getRootMailFolder() -> GoogleMailFolder {
+        GoogleMailFolder.all(accountID: account.id)
+    }
     
-    private func getMailFolders() async throws -> [GoogleMailFolder] {
-        let response = try await service.execute(GTLRGmail_ListLabelsResponse.self) {
-            GTLRGmailQuery_UsersLabelsList.query(withUserId: account.id.innerID)
+    func loadMailFoldersUnderRoot<ModelStore: ModelStoreProtocol>(rootMailFolderResource: GoogleMailFolder, accountID: AccountID, modelStore: ModelStore) async throws {
+        let tree = try await getMailFolderTree(rootElement: rootMailFolderResource)
+        var queue: [TreeNode<GoogleMailFolder>] = [tree.root]
+        while !queue.isEmpty {
+            let current = queue.removeFirst()
+            
+            let googles = current.children.map(\.element)
+            _ = try await modelStore.setChildrenMailFolders(resources: googles, parentID: current.element.id.generalID, accountID: accountID)
+            
+            queue.append(contentsOf: current.children)
         }
-        guard let labels = response.labels else { throw GmailApiError.failedToParseData(response) }
-        return try labels.map { try $0.mailFolder.with(accountID: account.id, systemInfo: $0.mailFolder.systemInfo) }
-            //.sorted { "\($0.type?.rawValue)" > "\($1.type?.rawValue)" }
-            //.filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
-            //.sorted(using: KeyPathComparator(\MailFolder.name))
     }
     
     // google mailfolder path-name algrithm
-    func getMailFolderTree(rootElement: GoogleMailFolder) async throws -> Tree<GoogleMailFolder> {
+    fileprivate func getMailFolderTree(rootElement: GoogleMailFolder) async throws -> Tree<GoogleMailFolder> {
         let tree = Tree(rootElement: rootElement)
         
         // copy name to path
@@ -63,7 +68,45 @@ public extension GoogleSession {
         return tree
     }
     
-
+    func getMailFolders() async throws -> [GoogleMailFolder] {
+        let response = try await service.execute(GTLRGmail_ListLabelsResponse.self) {
+            GTLRGmailQuery_UsersLabelsList.query(withUserId: account.id.innerID)
+        }
+        guard let labels = response.labels else { throw GmailApiError.failedToParseData(response) }
+        return try labels.map { try $0.mailFolder.with(accountID: account.id, systemInfo: $0.mailFolder.systemInfo) }
+            //.sorted { "\($0.type?.rawValue)" > "\($1.type?.rawValue)" }
+            //.filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
+            //.sorted(using: KeyPathComparator(\MailFolder.name))
+    }
+    
+    
+    @MainActor // for id.loadingMessageState
+    func loadMessagesProgressing<ModelStore: ModelStoreProtocol & Sendable>(mailFolderID: MailFolderID, modelStore: ModelStore) async throws {
+        guard let googleID = mailFolderID.platformCase?.google else { return }
+        
+        let newMessageIDs: [MessageID] = try await getMessagesID(in: googleID).map { $0.generalID }
+        
+        // remove
+        let shouldInsertMessageIDs = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs, mailFolderID: mailFolderID).compactMap(\.element.platformCase?.google)
+        
+        
+        if !shouldInsertMessageIDs.isEmpty  {
+            // do {
+            let stream = try await getMessagesStream(ids: shouldInsertMessageIDs, format: .metadata)
+            //}
+            /* catch let error as URLError where error.code == .badURL {
+             (total, stream) = try await session.getMessagesStream(id: innerID)
+             }*/
+            let total = newMessageIDs.count
+            var value = total - shouldInsertMessageIDs.count
+            
+            mailFolderID.loadingMessageState = .loading(value: value, total: total)
+            for try await messages in stream {
+                value += try await modelStore.setMessagesInsertPart(resources: messages, mailFolderID: mailFolderID).count // MSAL to SwiftData
+                mailFolderID.loadingMessageState = .loading(value: value, total: total)
+            }
+        }
+    }
     
     func getMessages(ids: [GoogleMessageID]) async throws -> [GoogleMessage] {
         return try await getMessages(ids: ids, format: .metadata).map { try $0.with(accountID: account.id) }
@@ -83,7 +126,7 @@ public extension GoogleSession {
     }
     
     // pageSize => $top: 1-1000, default: 1000
-    func xxxgetMessagesID(in mailFolderID: GoogleMailFolderID, pageSize: Int? = 1000) async throws -> [GoogleMessageID] {
+    func getMessagesID(in mailFolderID: GoogleMailFolderID, pageSize: Int? = 1000) async throws -> [GoogleMessageID] {
         let ids: [GoogleMessageID] = try await getFolderMessageIDs(id: mailFolderID).map { .init(accountID: mailFolderID.accountID,  innerID: $0.id) }
         return ids
     }
@@ -176,16 +219,25 @@ public extension GoogleSession {
         ])*/
     }
     
-    func getMessageBody(id: GoogleMessageID) async throws -> GoogleMessage {
+    func loadBody<ModelStore: ModelStoreProtocol & Sendable>(messageID: MessageID, modelStore: ModelStore) async throws {
+        guard let id = messageID.platformCase?.google else { throw AuthError.accountNoIDOrUsername }
         let full = try await getMessage(id: id, format: .full)
         let raw  = try await getMessage(id: id, format: .raw).raw
-        return try full.with(accountID: account.id, raw: raw)
+        let message = try full.with(accountID: account.id, raw: raw)
+        _ = try await modelStore.setMessage(resource: message, messageID: messageID)
+        // return message
     }
     
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/modify
-    func moveMessage(id messageID: GoogleMessageID, from fromID: GoogleMailFolderID, to toID: GoogleMailFolderID) async throws -> GoogleMessageInner {
-        try await service.execute(GTLRGmail_Message.self) {
+    func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) async throws {
+        guard let messageID = messageID.platformCase?.google else { throw AuthError.accountNoIDOrUsername }
+        guard let fromID = fromID.platformCase?.google else { throw AuthError.accountNoIDOrUsername }
+        guard let toID = toID.platformCase?.google else { throw AuthError.accountNoIDOrUsername }
+
+        //item.microsoft = microsoft
+        
+        _ = try await service.execute(GTLRGmail_Message.self) {
             let accountID = account.id.innerID
             let messageID = messageID.innerID
             

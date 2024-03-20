@@ -15,11 +15,11 @@ public struct MicrosoftMailFolder : MicrosoftProtocol, PlatformSpecificMailFolde
     
     public let                  id: MicrosoftMailFolderID
     public let               inner: MicrosoftMailFolderInner
-    public let wellKnownFolderName: WellKnownFolderName?
+    public let wellKnownFolderName: MicrosoftWellKnownFolderName?
     public var                name: String? { inner.displayName }
     public var          systemInfo: MailFolderSystemInfo?
 
-    public init(id: MicrosoftMailFolderID, inner: MicrosoftMailFolderInner, wellKnownFolderName: WellKnownFolderName?, systemInfo: MailFolderSystemInfo?) {
+    public init(id: MicrosoftMailFolderID, inner: MicrosoftMailFolderInner, wellKnownFolderName: MicrosoftWellKnownFolderName?, systemInfo: MailFolderSystemInfo?) {
         self.id                  = id
         self.inner               = inner
         self.wellKnownFolderName = wellKnownFolderName

@@ -11,25 +11,7 @@ import JetEmailID
 // Well-known folder names https://learn.microsoft.com/en-us/graph/api/resources/mailfolder?view=graph-rest-1.0#methods
 public extension MicrosoftMailFolder {
     
-    enum WellKnownFolderName : String, CaseIterable, CodableValueType, Sendable {
-        case msgFolderRoot             = "msgfolderroot"
-        case archive
-        case clutter
-        case conflicts
-        case conversationHistory       = "conversationhistory"
-        case deletedItems              = "deleteditems"
-        case drafts
-        case inbox
-        case junkEmail                 = "junkemail"
-        case localFailures             = "localfailures"
-        case outbox
-        case recoverableItemsDeletions = "recoverableitemsdeletions"
-        case scheduled
-        case searchFolders             = "searchfolders"
-        case sentItems                 = "sentitems"
-        case serverFailures            = "serverfailures"
-        case syncIssues                = "syncissues"
-    }
+
     
     /*
      Contacts 1 The Contacts folder.

@@ -8,7 +8,7 @@
 import JetEmailID
 @preconcurrency import MSAL
 
-public actor MicrosoftClient : ClientProtocol, Sendable {
+public actor MicrosoftClient : Sendable {
     public static let       scopes: [Scope] = [.userRead, .mailRead] // request permission to read the profile of the signed-in user
     public static let  endpointURL          = URL(string: "https://graph.microsoft.com/v1.0/me/")!
     

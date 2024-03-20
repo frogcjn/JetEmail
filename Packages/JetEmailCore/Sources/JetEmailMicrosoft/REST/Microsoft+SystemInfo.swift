@@ -7,17 +7,14 @@
 
 import struct Foundation.LocalizedStringResource
 import JetEmailID
-import JetEmailMicrosoft
 
-
-
-extension MicrosoftMailFolder.WellKnownFolderName {
+extension MicrosoftWellKnownFolderName {
     var systemInfo: MailFolderSystemInfo? {
         .init(systemOrder: systemOrder, nameLocalizedKey: nameLocalizedKey, systemImage: systemImage)
     }
 }
 
-fileprivate extension MicrosoftMailFolder.WellKnownFolderName {
+fileprivate extension MicrosoftWellKnownFolderName {
     var systemOrder: Int? {
         switch self {
         case .inbox                    : return 0

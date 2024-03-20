@@ -1,19 +1,24 @@
 //
-//  Shared.swift
-//  JetEmail
+//  File.swift
+//  
 //
-//  Created by Cao, Jiannan on 2/22/24.
+//  Created by Cao, Jiannan on 3/7/24.
 //
 
-import SwiftData
-import Foundation
 import JetEmailData
+import JetEmailID
+import SwiftData
 
-extension AppModel {
-    static let shared = AppModel()
+
+extension Message.AttributesStore {
+    static var shared = AttributesStore()
 }
 
-extension ModelContainer {
+public extension Clients {
+    static var shared = Clients()
+}
+
+public extension ModelContainer {
     @MainActor
     static var shared = {
         do {
@@ -25,17 +30,13 @@ extension ModelContainer {
     }()
 }
 
-extension SettingsModel {
-    static var shared = SettingsModel()
-}
 
-import SwiftData
-
-@ModelStoreActor
 extension ModelStore {
     
+    @ModelStoreActor
     static var _shared: ModelStore?
     
+    @ModelStoreActor
     public static var shared: ModelStore { get async {
         if let _shared { return _shared }
         let modelStore = await ModelStore(modelContainer: .shared)
@@ -45,7 +46,6 @@ extension ModelStore {
 }
 
 @globalActor
-actor ModelStoreActor : Actor {
-    static let shared = ModelStoreActor()
+public actor ModelStoreActor : Actor {
+    public static let shared = ModelStoreActor()
 }
-

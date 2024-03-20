@@ -2006,3 +2006,1799 @@ extension Google.Client {
 
 
 //
+//
+//  Model+GoogleAPI.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/18/24.
+//
+
+// MARK: - Model <-> MSGraph
+/*
+extension Account {
+    convenience init(google: Google.Account, orderIndex: Int) throws {
+        self.init(
+            modelID: google.modelID,
+            username: google.username,
+            orderIndex: orderIndex
+        )
+    }
+    
+    func update(google: Google.Account, deleteMark: Bool = false) {
+        if self.modelID == google.modelID && self.username == google.username && self.deleteMark == deleteMark { return }
+        self.deleteMark = deleteMark
+        self.modelID  = google.modelID
+        self.username = google.username
+    }
+    /*
+    var googleAccount: Google.Account? {
+        @available(macOS, unavailable, message: "Parse Use graph(_ client: MSGraph) instead.")
+        @available(iOS, unavailable, message: "Parse Use graph(_ client: MSGraph) instead.")
+        get {
+            nil // should use graph(_:)
+            // self.graph
+        }
+        set {
+            guard let google = newValue else { return }
+            self.modelID  = google.modelID
+            self.username = google.username
+        }
+    }*/
+}
+
+*/
+
+/*.onChange(of: account.hasAccount, initial: true) {
+    Task {
+        await account.updateState()
+    }
+}
+.onChange(of: account.hasSession, initial: true) {
+    Task {
+        await account.updateState()
+    }
+}*/
+
+
+/*// Feature: Accounts - Remove Account
+/// Remove an account from `MSGraph.Context` and `ModelContext`.
+/// - Parameter account: the account to remove.
+@MainActor // for isAppModelBusy, item.isBusy
+func removeAccountForGoogle(_ model: Account) async {
+    await model.removeAccount()
+}*/
+
+/*// Feature: Accounts - Remove Account
+/// Remove an account from `MSGraph.Context` and `ModelContext`.
+/// - Parameter account: the account to remove.
+@MainActor // for isAppModelBusy, item.isBusy
+func removeAccount(_ model: Account) async {
+    await AppItemModel(context: self, item: model).delete()
+}*/
+
+
+
+/*func loadMailFolders(account accountPersistentID: Account.PersistentID) async throws {
+    BackgroundModelActor.assertIsolated()
+    
+    let account = self[accountPersistentID]!
+    
+    switch try await account.refreshedIfExpiredSession {
+    case .microsoft(let session):
+        let microsoftRoot = try await session.getRootMailFolder()
+        let root = try modelContext.setRootMailFolder(microsoft: microsoftRoot, in: account.persistentID)
+        
+        var queue: [MailFolder] = [root]
+        while !queue.isEmpty {
+            let current = queue.removeFirst()
+            
+            let microsofts = try await session.getChildFolders(microsoftID: .init(string: current.platformID))
+            let children = try modelContext.setChildrenMailFolders(microsofts: microsofts, parentID: current.persistentID, in: account.persistentID)
+            
+            queue.append(contentsOf: children)
+        }
+    case .google(let session):
+        let googles = try await session.getMailFolders()
+        try modelContext._setMailFolders(googles: googles, in: account)
+    default:
+        return
+    }
+}*/
+
+/// Set all messages from graphContext to `ModelContainer`.
+/// - Parameters:
+///   - elements: Messages from  `MSGraph.Context`.
+///   - mailFolder: mai
+/// - Returns: Messages from `ModelContainer`.
+
+//
+//  Google+Account.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/19/24.
+//
+
+/*
+
+extension Google.Client {
+    
+    func addAccount() async throws -> Google.Session {
+        try await sessionStore.signInSession()
+    }
+    
+    var accounts: [Google.Account] {
+        get async throws { try await sessionStore.sessions.map(\.account) }
+    }
+    
+    func deleteAccount(id: Google.ID) async throws -> Google.Account? {
+        try await sessionStore.deleteSession(id: id)?.account
+    }
+    
+    func account(id: Google.ID) async throws -> Google.Account {
+        guard let account = try await sessionStore.session(id: id)?.account else { throw Google.AuthError.noAccountFound }
+        return account
+    }
+    
+    /*func refreshAccount(_ account: Google.Account) async throws -> Google.Session? {
+        try await sessionStore.refreshSession(account: account)
+    }*/
+    
+    func hasAccount(id: Google.ID) async -> Bool {
+        (try? await account(id: id)) != nil
+    }
+    
+    func hasSession(id: Google.ID) async throws -> Bool {
+        (try await sessionStore.session(id: id)) != nil
+    }
+}
+
+
+extension Google.Client {
+    /*func signInSession() async throws -> Google.SessionKeychainStore.Item {
+        let gtmSession = try await _gtmSignIn()
+        guard let stringID = gtmSession.userID, let username = gtmSession.userEmail else { throw Google.AuthError.accountNoIDOrUsername }
+        let id = Google.ID(string: stringID)
+        // add session
+        
+        // try to find existed session
+        if let session = try await session(id: id) {
+            // if existed update the gtmSession
+            session.gtmSession = gtmSession // trigger update session
+            return session
+        }
+        
+        // try to add to keychain
+        let item = try await SessionKeychainStore..addItem(id: id, username: username, gtm: gtmSession)
+        
+        // find duplicated existed keychain item add fail
+        guard let item else { throw Google.AuthError.sessionStoreAddFail  }
+        
+        // add success
+        return item
+        // return try _storeSession(item: item)
+    }*/
+}
+
+extension Google {
+    
+    actor SessionStore {
+        unowned let client: Google.Client
+        init(client: Google.Client) { self.client = client }
+        
+        private var _rawValue = [Google.ID: Google.Session]()
+
+        func signInSession() async throws -> Google.Session {
+            let gtmSession = try await client._gtmSignIn()
+            guard let stringID = gtmSession.userID, let username = gtmSession.userEmail else { throw Google.AuthError.accountNoIDOrUsername }
+            let id = Google.ID(string: stringID)
+            // add session
+            
+            // try to find existed session
+            if let session = try await session(id: id) {
+                // if existed update the gtmSession
+                session.gtmSession = gtmSession // trigger update session
+                return session
+            }
+            
+            // try to add to keychain
+            let item = try await SessionKeychainStore..addItem(id: id, username: username, gtm: gtmSession)
+            
+            // find duplicated existed keychain item add fail
+            guard let item else { throw Google.AuthError.sessionStoreAddFail  }
+            
+            // add success
+            return try _storeSession(item: item)
+        }
+        
+        var sessions: [Google.Session] {
+            get async throws {
+                // access from keychain
+                let items = try await SessionKeychainStore..items()
+                
+                // map keychain items to existed or creating sessions
+                let sessions = try items.map { item throws in
+                    if let storeAccount = _rawValue[item.id] {
+                        // storeAccount.gtmSession
+                        assert(storeAccount.keychain === item.keychain)
+                        return storeAccount
+                    } else {
+                        return try _storeSession(item: item)
+                    }
+                }
+                
+                // removing sessions not existed in keychain
+                let existedIDs = sessions.map(\.id)
+                let removingIDs = _rawValue.keys.filter { !existedIDs.contains($0) }
+                for id in removingIDs {
+                    _rawValue.removeValue(forKey: id)
+                }
+                return sessions
+            }
+        }
+        
+        fileprivate func deleteSession(id: Google.ID) async throws -> Google.Session? {
+            if let item = try await SessionKeychainStore..item(id: id) {
+                _ = try await SessionKeychainStore..deleteItem(item)
+            }
+            
+            if let storedSession = _rawValue[id] {
+                _rawValue.removeValue(forKey: id)
+                return storedSession
+            }
+            return nil
+        }
+        
+        fileprivate func session(id: Google.ID) async throws -> Google.Session? {
+            let item = try await SessionKeychainStore..item(id: id)
+            
+            guard let item else {
+                // Not found item in keychain
+                _rawValue.removeValue(forKey: id)
+                return nil
+            }
+            
+            // Found item in keychain, and session store
+            if let stored = _rawValue[id] {
+                // storeAccount.gtm == item.gtm
+                assert(stored.keychain === item.keychain)
+                return stored
+            }
+            
+            // Found item in keychain, but not session store
+            return try _storeSession(item: item)
+        }
+        
+
+        
+        /*private func refreshSession(account: Google.Account) async throws -> Google.Session? {
+                                
+         }*/
+        
+        func updateSession(_ session: Session) async throws -> Session {
+            let id = session.id
+            
+            // update keychain
+            let item = try await SessionKeychainStore..updateItem(session.keychainItem)
+            
+            // varify sessionStore
+            if let storedSession = _rawValue[id] {
+                assert(storedSession === self)
+                return storedSession
+            } else {
+                return try _storeSession(item: item)
+            }
+        }
+        
+        /*fileprivate func refreshedSession(account: Microsoft.Account) async throws -> Session {
+            if let session = try await session(id: account.id), !session.isExpired { return session }
+            return try await refreshSession(account)
+        }*/
+        
+        private func refreshSession(_ session: Session) async throws -> Session {
+            _ = try await session._gtmRefresh() // will trgger update session
+            return session
+        }
+        
+        private func _storeSession(item: SessionKeychainStore.Item) throws -> Google.Session {
+            guard let username = item.gtm.userEmail else { throw Google.AuthError.accountNoIDOrUsername }
+            let id = item.id
+            let session = try Google.Session(sessionStore: client.sessionStore, id: id, username: username, gtmSession: item.gtm, keychain: item.keychain)
+            _rawValue[id] = session
+            return session
+        }
+    }
+}
+/*
+
+*/
+/*
+extension Google.Account {
+    init(session: Google.Session) {
+        self.init(client: session.sessionStore.client, id: session.id, username: session.username)
+    }
+}*/
+*/
+
+//
+//  MSALApp.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 1/31/24.
+//
+/*
+
+extension Microsoft.Client {
+    
+    /*func addAccount() async throws -> Microsoft.Session {
+        try await sessionStore.signInSession()
+    }*/
+    
+    var accounts: [Microsoft.Account] {
+        get throws {
+            print("Microsoft.Client.accounts")
+            
+            // access MSALAcount from keychain
+            let msalAccounts = try _msalClient.allAccounts()
+            
+            // map MSALAccount to Microsoft.Account
+            return try msalAccounts.map { try $0.microsoftAccount(client: self) }
+        }
+    }
+    
+    /*func deleteAccount(id: Microsoft.ID) async throws -> Microsoft.Account {
+        print("Microsoft.Client.deleteAccount")
+        let account = try await account(id: id)
+        try _msalClient.remove(account.msalAccount)
+        return account
+        /*
+         try await sessionStore.deleteSession(account: account)?.account ?? account
+         let parameters = MSALSignoutParameters(webviewParameters: webViewParameters)
+         let result = try await _msalClient.signout(with: msalAccount, signoutParameters: parameters)
+         return result
+         */
+    }
+    
+
+    func hasAccount(id: Microsoft.ID) async -> Bool {
+        (try? await account(id: id)) != nil
+    }
+    
+    func hasSession(id: Microsoft.ID) async throws -> Bool {
+        (try await sessionStore.session(id: id)) != nil
+    }*/
+}
+
+extension Microsoft.Account {
+    
+    var refreshedSession: Microsoft.Session { get async throws {
+        try await client.sessionStore.refreshedSession(account: self)
+    } }
+    
+    var authorizationHeader: String { get async throws {
+        try await refreshedSession.msalSession.authorizationHeader
+    } }
+    
+    /*func refreshAccount(_ account: Microsoft.Account) async throws -> Microsoft.Session {
+        try await sessionStore.refreshSession(account)
+    }*/
+}
+
+
+
+/*extension Microsoft.Account {
+    var session: Microsoft.Session? {
+        get async throws { try await client.sessionStore.session(id: id) }
+    }*/
+    
+    /*var refreshedSession: Microsoft.Session {
+        get async throws {
+            if let session = try await session, !session.isExpired { return session }
+            return try await client.refreshAccount(self)
+        }
+    }
+}*/
+
+
+extension Microsoft {
+    actor SessionStore {
+        unowned let client: Microsoft.Client
+        init(client: Microsoft.Client) { self.client = client }
+        
+        private var _rawValue = [Microsoft.ID: Session]()
+
+        fileprivate func signInSession() async throws -> Session {
+            
+            // MSALSession get from sign-in process
+            let msalSession = try await client._msalSignin()
+            let id = try msalSession.id
+            
+            // try to find existed session
+            if let session = try await session(id: id) {
+                // if exists: update the msalSession
+                session.msalSession = msalSession
+                return session
+            }
+            
+            return try _storeSession(msalSession: msalSession)
+        }
+        
+        fileprivate func refreshedSession(account: Microsoft.Account) async throws -> Session {
+            if let session = try await session(id: account.id), !session.isExpired { return session }
+            return try await refreshSession(account)
+        }
+
+        
+        fileprivate func session(id: Microsoft.ID) async throws -> Session? {
+            let msalAccount = try client._msalClient.allAccounts().first { $0.identifier == id.string }
+            
+            guard let msalAccount else {
+                // Not found item in keychain
+                _rawValue.removeValue(forKey: id)
+                return nil
+            }
+            
+            // Found item in keychain, and session store
+            if let stored = _rawValue[id] { return stored }
+            
+            // Found item in keychain, but not session store
+            let msalSession = try await client._msalRefresh(msalAccount: msalAccount)
+            return try _storeSession(msalSession: msalSession)
+        }
+        
+        private func refreshSession(_ account: Microsoft.Account) async throws -> Session {
+            let msalSession = try await client._msalRefresh(msalAccount: account.msalAccount)
+            
+            // try to find existed session
+            if let session = try await session(id: account.id) {
+                // if exists: update the msalSession
+                session.msalSession = msalSession
+                return session
+            }
+            
+            let session = try _storeSession(msalSession: msalSession)
+            return session
+        }
+        
+        /*var sessions: [Session] { // session in memory
+            /*get async throws {
+                // access MSALAccounts from keychain
+                let msalAccounts = try client.msalClient.allAccounts()
+                
+
+                // map account items to existed or creating sessions
+                let sessions = try msalAccounts.map { msalAccount throws in
+                    guard let stringID = msalAccount.identifier else { throw Microsoft.AuthError.accountNoIDOrUsername }
+                    let id = Microsoft.ID(string: stringID)
+                    if let stored = _rawValue[id] {
+                        // storeAccount.gtmSession
+                        assert(stored.msalSession.account == msalAccount)
+                        return stored
+                    } else {
+                        // access MSALSessions from keychain
+                        let msalSessions = msalAccounts.map { client._msalRefreshedRequest(msalAccount: $0) }
+                        
+                        return try _createAndStoreSession(item: item)
+                    }
+                }
+                
+                // removing sessions not existed in keychain
+                let existedIDs = sessions.map(\.id)
+                let removingIDs = _rawValue.keys.filter { !existedIDs.contains($0) }
+                for id in removingIDs {
+                    _rawValue.removeValue(forKey: id)
+                }
+                return sessions
+                
+                return try items.map { try Microsoft.Account(client: self, msal: $0) }
+                _msalRefreshedRequest
+                Array(_rawValue.values)
+            }*/
+            return []
+        }*/
+        
+
+        
+
+        
+        /*func deleteSession(account: Microsoft.Account) async throws -> Session? {
+            let id = account.id
+            let result = try await client._msalSignoutRequest(msalAccount: account.msalAccount)
+            
+            if let storedSession = _rawValue[id] {
+                _rawValue.removeValue(forKey: id)
+                return storedSession
+            }
+            return nil
+        }
+        
+        func updateSession(_ session: Session) -> Session? {
+            _rawValue[session.id] = session
+            return session
+        }*/
+        
+        private func _storeSession(msalSession: MSALSession) throws -> Microsoft.Session {
+            let id = try msalSession.id
+            guard let username = msalSession..username else { throw Microsoft.AuthError.accountNoIDOrUsername }
+            
+            let session = Microsoft.Session(sessionStore: self, id: id, username: username, msalSession: msalSession)
+            _rawValue[id] = session
+            return session
+        }
+    }
+}
+
+
+extension Microsoft.Session {
+    fileprivate var isExpired: Bool {
+        guard let expiresOn = msalSession.expiresOn else { return false }
+        return Date.now >= expiresOn
+    }
+}
+
+*/
+
+//
+//  MSAL.Account.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/15/24.
+//
+
+// Account = Client + Account.ID
+
+/*
+extension Microsoft {
+    struct Account {
+        let client  : Client
+
+        let id         : ID
+        let username   : String
+        let msalAccount: MSALAccount
+        
+        fileprivate init(client: Client, id: ID, username: String, msalAccount: MSALAccount) {
+            self.client = client
+            self.id = id
+            self.username = username
+            self.msalAccount = msalAccount
+        }
+    }
+}
+*/
+
+// Microsoft.Session -> Miccrosoft.Account
+
+/*extension Microsoft.Session {
+    /*func account(client: Microsoft.Client) -> Microsoft.Account {
+        .init(client: client, id: id, username: username, msalAccount: msalSession.account)
+    }*/
+}
+
+// MSALAccount -> Microsoft.Account
+
+extension MSALAccount {
+    func microsoftAccount(client: Microsoft.Client) throws -> Microsoft.Account {
+        guard let id = identifier, let username = username else { throw Microsoft.AuthError.accountNoIDOrUsername }
+        return Microsoft.Account(client: client, id: .init(string: id), username: username, msalAccount: self)
+    }
+}*/
+
+
+//
+//  Google.Account.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/20/24.
+//
+
+// Account = Client + Account.ID
+/*
+extension Google {
+    struct Account {
+        let client  : Client
+
+        let id      : ID
+        let username: String
+        
+        fileprivate init(client: Client, id: ID, username: String) {
+            self.client = client
+            self.id = id
+            self.username = username
+        }
+
+    }
+}*/
+/*
+extension Google.Session {
+    var account: Google.Account {
+        .init(client: sessionStore.client, id: id, username: username)
+    }
+}
+*/
+//
+//  Google+Message+.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/25/24.
+//
+
+/*set {
+    guard let google = newValue else { return }
+    
+    
+    
+    self.modelID      = google.modelID
+    self.subject      = headerValue(name: "Subject")
+    
+    /*self.createdDate  = graph.createdDateTime?     .date
+    self.modifiedDate = graph.lastModifiedDateTime?.date*/
+    //self.receivedDate = headerValue(name: "Date")?.rfc2822
+    self.receivedDate = google.internalDate?.milliSecondsTimeIntervalSince1970
+    self.date         = self.receivedDate
+    //self.sentDate     = headerValue(name: "Date")?.rfc2822
+    
+    //self.sender       = graph.sender?.emailAddress
+    self.from         = headerValue(name: "From")
+    //self.to           = graph.toRecipients? .compactMap(\.emailAddress).nilIfEmpty
+    //self.replyTo      = graph.replyTo?      .compactMap(\.emailAddress).nilIfEmpty
+    ////self.cc           = graph.ccRecipients? .compactMap(\.emailAddress).nilIfEmpty
+    // self.bcc          = graph.bccRecipients?.compactMap(\.emailAddress).nilIfEmpty
+    
+    self.bodyPreview  = google.snippet
+    
+    
+    let firstPart = google.payload?.parts?.first { $0.partID == "1" }
+    let firstPartMIME = firstPart?.mimeType
+    let firstPartString = try? firstPart?.body?.data?.string
+    print(firstPartMIME ?? "nil", firstPartString ?? "nil")
+    
+    if firstPartMIME == "text/html" {
+        self.body  =  .init(content: firstPartString, contentType: .html)
+    } else if firstPartMIME == "text/plain" {
+        self.body  =  .init(content: firstPartString, contentType: .text)
+    } else if firstPartMIME == nil {
+        () // self.body  =
+    } else {
+        fatalError()
+    }
+    // print(#function, google.payload?.body?.data ?? "nil")
+    /*self.uniqueBody   = graph.uniqueBody*/
+
+    self._google = try? google.jsonString
+}*/
+
+/*let firstPart = google.payload?.parts?.first { $0.partID == "1" }
+let firstPartMIME = firstPart?.mimeType
+let firstPartString = try? firstPart?.body?.data?.string
+print(firstPartMIME ?? "nil", firstPartString ?? "nil")
+
+if firstPartMIME == "text/html" {
+    self.body  =  .init(content: firstPartString, contentType: .html)
+} else if firstPartMIME == "text/plain" {
+    self.body  =  .init(content: firstPartString, contentType: .text)
+} else if firstPartMIME == nil {
+    () // self.body  =
+} else {
+    fatalError()
+}*/
+
+/*
+ MessageBody
+   - text : ""
+   - html : nil
+   - attachment : nil
+ */
+
+
+/*
+    attachments
+ */
+/*let attachmentsIds = payload.parts?.compactMap { $0.body?.attachmentId } ?? []
+var attachments = google.parseAttachments()
+if body.hasNoContent, let bodyPartAttachment = google.parseBodyPartAttachment() {
+    attachments.append(bodyPartAttachment)
+}*/
+
+//self.body = body
+// self.size = google.sizeEstimate.flatMap(Int.init)
+// self.label = labels
+// self.attachmentIds = attachmentIds
+// self.attachments = attachments
+//self.threadID = google.threadId
+//self.rfcu22MegId = rfc822MsgId
+//self.raw = google.raw
+
+/*self.init(
+    identifier: Identifier(stringId: identifier),
+    // convert miliseconds to seconds
+    date: Date(timeIntervalSince1970: internalDate / 1000),
+    sender: sender,
+    subject: subject,
+    size: gmailMessage.sizeEstimate.flatMap(Int.init),
+    labels: labels,
+    attachmentIds: attachmentsIds,
+    body: body,
+    attachments: attachments,
+    threadId: gmailMessage.threadId,
+    rfc822MsgId: rfc822MsgId,
+    raw: gmailMessage.raw,
+    to: to,
+    cc: cc,
+    bcc: bcc,
+    replyTo: replyTo,
+    inReplyTo: inReplyTo
+)*/
+
+
+
+
+// Gmail string extension identifier
+
+
+
+
+/*
+fileprivate extension Google.Message.Full {
+var attachmentParts: [Google.Message.Part] {
+payload?.parts?.filter { !$0.filename.isEmptyOrNil } ?? []
+}
+
+func parseBodyAttachment() -> MessageAttachment? {
+guard let part = payload?.body,
+      let attachmentId = part.attachmentId
+else { return nil }
+
+return MessageAttachment(
+    id: attachmentId,
+    name: "body",
+    estimatedSize: part.size,
+    mimeType: "text/plain"
+)
+}
+
+func parseAttachments() -> [MessageAttachment] {
+attachmentParts.compactMap { (part: Google.Message.Part) -> MessageAttachment? in
+    guard let body = part.body, let id = body.attachmentId, let name = part.filename
+    else { return nil }
+
+    return MessageAttachment(
+        id: id,
+        name: name,
+        estimatedSize: body.size,
+        mimeType: part.mimeType,
+        data: body.data
+    )
+}
+}
+
+func parseBodyPartAttachment() -> MessageAttachment? {
+guard let body = payload?.parts?.first(where: { $0.mimeType == "text/plain" })?.body,
+      let attachmentId = body.attachmentId
+else { return nil }
+
+return MessageAttachment(
+    id: attachmentId,
+    name: "encrypted.asc",
+    estimatedSize: body.size,
+    mimeType: "text/plain"
+)
+}
+}
+
+fileprivate extension MessageBody {
+var hasNoContent: Bool {
+text.isEmpty && attachment == nil
+}
+}
+
+fileprivate extension Optional where Wrapped: Collection {
+var isEmptyOrNil: Bool {
+ self?.isEmpty ?? true
+}
+}
+
+
+struct MessageAttachment: Equatable, Hashable, FileType {
+let id           : String
+let name         : String
+let estimatedSize: Int?
+let mimeType     : String?
+
+var treatAs      : String?
+var data         : Data?
+}
+
+
+protocol FileType {
+var name         : String  { get }
+var estimatedSize: Int?    { get }
+var mimeType     : String? { get }
+
+var treatAs      : String? { get set }
+var data         : Data?   { get set }
+}
+
+*/
+/*
+ enum HeaderFieldValue {
+     
+     // mailbox-list
+     struct From: RawRepresentable {
+         let rawValue: String
+     }
+     
+     // mailbox
+     struct Sender: RawRepresentable {
+         let rawValue: String
+     }
+     
+     // address-list
+     struct ReplyTo: RawRepresentable {
+         let rawValue: String
+     }
+     
+     // address-list
+     struct To: RawRepresentable {
+         let rawValue: String
+     }
+     
+     // address-list
+     struct CC: RawRepresentable {
+         let rawValue: String
+     }
+     
+     // address-list / CFWS
+     struct BCC: RawRepresentable {
+         let rawValue: String
+     }
+     
+     // mailSpec
+     struct DeliveredTo: RawRepresentable {
+         let rawValue: String
+     }
+ }
+
+ extension String {
+     var headerValueFrom       : HeaderFieldValue.From        { .init(rawValue: self) }
+     var headerValueSender     : HeaderFieldValue.Sender      { .init(rawValue: self) }
+     var headerValueReplyTo    : HeaderFieldValue.ReplyTo     { .init(rawValue: self) }
+     var headerValueTo         : HeaderFieldValue.To          { .init(rawValue: self) }
+     var headerValueCC         : HeaderFieldValue.CC          { .init(rawValue: self) }
+     var headerValueBCC        : HeaderFieldValue.BCC         { .init(rawValue: self) }
+     var headerValueDeliveredTo: HeaderFieldValue.DeliveredTo { .init(rawValue: self) }
+ }
+
+ */
+
+// MARK: - AppModel: Account Status
+/*
+extension AppItemModel<Account> {
+    
+    var _hasAccount: Bool {
+        get async {
+            switch item.modelID.enumValue {
+            case .microsoft(let id):
+                (try? await microsoftClient.account(id: id)) != nil
+            case .google(let id):
+                (try? await    googleClient.account(id: id)) != nil
+            }
+        }
+    }
+    
+    var _hasSession: Bool {
+        get async throws {
+            switch item.modelID.enumValue {
+            case .microsoft(let id):
+                try await microsoftClient.hasSession(id: id)
+            case .google(let id):
+                try await googleClient.hasSession(id: id)
+            }
+        }
+    }*/
+    
+    /*func updateState() async {
+        do {
+            print("AppItemModel.updateState")
+            item.hasAccount = await _hasAccount
+            item.hasSession = try await _hasSession
+            print(item.state)
+        } catch {
+            logger.debug("\(error)")
+        }
+    }
+}
+     */
+
+
+
+
+
+
+
+
+/*fileprivate extension AppModel {
+    func graphContext(graphID: MicrosoftAPI.Account.ID) async throws -> CombineContext<MicrosoftAPI, MicrosoftAPI.Account> {
+        let graphClient = try await MicrosoftAPI.
+        return .init(context: graphClient, item: try graphClient.account(graphID: graphID))
+    }
+}*/
+
+
+
+/*func syncFolderTree() async throws {
+    guard !self.isLoadingFolderTree else { return }
+    self.isLoadingFolderTree = true
+    defer { self.isLoadingFolderTree = false }
+    
+    
+    let root  = TargetFolderPaths..root
+    let rootFolder = try await self.mailFoldersRequest.getMailFolder(wellKnownFolderName: .msgFolderRoot)
+    
+    var queue: [(TreeNode<FolderName>, MailFolder)] = [(root, rootFolder)]
+    while !queue.isEmpty {
+        let (parent, parentFolder) = queue.removeFirst()
+        print("<checking: \(parentFolder.displayName)>")
+        for child in parent.children {
+            let childName = child.element
+            var childFolder: MailFolder
+            
+            switch childName {
+            case .special(let specialName):
+                childFolder = try await self.mailFoldersRequest.getMailFolder(wellKnownFolderName: specialName.graph)
+                // verified existed
+                assert(childFolder.parentFolderId == parentFolder.id)
+                print("    <exists: \(childFolder.displayName)/>")
+            case .display(let displayName):
+                let childFolders = try await self.mailFoldersRequest.getChildFolders(id: parentFolder.id)
+                if let mailFolder = childFolders.first(where: { $0.displayName == displayName }) {
+                    childFolder = mailFolder
+                } else {
+                    childFolder = try await self.mailFoldersRequest.createChildFolder(id: parentFolder.id, displayName: displayName)
+                }
+                print("    <created: \(childFolder.displayName)/>")
+            }
+            queue.append((child, childFolder))
+        }
+        print("</checking: \(parentFolder.displayName)>")
+    }
+    
+    // var queue: [TreeNode<String>] = [root]
+            
+    /*while !queue.isEmpty {
+        
+    }*/
+}*/
+
+
+
+
+ 
+/*
+extension Address {
+    init(rawValue: String) {
+        //guard let address = MCOAddress(nonEncodedRFC822String: string) else {
+        /*let b = try! MimeEmailParser().parseAddressList(addresses: rawValue)
+            self.name = nil
+            self.email = string
+            return
+         //}*/
+        self.name = ""  //address.displayName
+        self.email = "" //address.mailbox
+    }
+}*/
+/*
+extension Microsoft.EmailAddress {
+    var recipient: Address {
+        Address(email: address!, name: name)
+    }
+}
+ 
+ extension Microsoft.EmailAddress {
+     var mailbox: MailBox {
+         .init(addrSpec: address, displayName: name)
+     }
+ }
+*/
+
+
+
+// Microsoft.MSALAccount -> MSALSession
+/*extension Microsoft.MSALAccount {
+    func msalSession(client: Microsoft.Client) async throws -> Microsoft.MSALSession {
+        try await client._msalRefresh(msalAccount: self)
+    }
+}*/
+/*
+extension Microsoft.ID {
+    var refreshSession: Microsoft.MSALSession {
+        get async throws {
+            let client = try await Microsoft.Client.
+            return try await client._msalClient.account(forIdentifier: string).refreshMSALSession
+        }
+    }
+}*/
+
+
+    
+    /*var lazyMSALSession: Microsoft.MSALSession {
+        get async throws {
+            if let session = try Microsoft.MSALSession[self] { return session }
+            return  try await refreshMSALSession
+        }
+    }*/
+
+/*
+extension Microsoft.MSALSession {
+    var refresh: Microsoft.MSALSession {
+        get async throws {
+            try await account._msalRefreshMSALSession
+        }
+    }
+}
+*/
+
+/*extension Microsoft.Session {
+    var refresh: Microsoft.Session { get async throws {
+        _msalSession = try await _msalSession.refresh
+        return self
+    } }
+}*/
+
+/*
+ //
+ //  GoogleAPI.Account.swift
+ //  JetEmail
+ //
+ //  Created by Cao, Jiannan on 2/17/24.
+ //
+
+ import Security
+ import JetEmailGoogle
+
+ /*
+ Google.Session = Google.Account + GTMAuthSession
+ */
+ /*
+ extension Google {
+     class Session: SessionProtocol {
+                 let  accountID         : Google.ID
+                 let  username   : String
+                 let  gtmSession : GTMSession
+         // { didSet { if gtmSession != oldValue { Task { _ = try await updateKeychainItem() } } } }
+           
+                 let keychainItem: SecKeychainItem
+          
+         
+         init(accountID: Google.ID, username: String, gtmSession: GTMSession, keychainItem: SecKeychainItem) {
+             self.accountID    = accountID
+             self.username     = username
+             self.gtmSession   = gtmSession
+             self.keychainItem = keychainItem
+             super.init()
+             
+             gtmSession.delegate = self
+             gtmSession.authState.stateChangeDelegate = self
+             gtmSession.authState.errorDelegate = self
+         }
+         
+         func additionalTokenRefreshParameters(forAuthSession gtmSession: GTMSession) -> [String : String]? {
+             return nil
+         }
+         
+         func updateError(forAuthSession gtmSession: GTMSession, originalError: Error, completion: @escaping (Error?) -> Void) {
+             completion(originalError)
+         }
+         
+         func didChange(_ state: OpenIDState) {
+             Task { _ = try await updateKeychainItem() }
+         }
+         
+         func authState(_ state: OpenIDState, didEncounterAuthorizationError error: Error) {
+             print(#function, state)
+         }
+         
+         func authState(_ state: OpenIDState, didEncounterTransientError error: Error) {
+             print(#function, state)
+         }
+         
+         fileprivate func updateKeychainItem() async throws {
+             _ = try await Google.Client.sared.keychain.updateItem(item)
+         }
+         
+         func refresh() async throws {
+             _ = try await gtmSession.refresh()
+         }
+     }
+ }
+
+
+
+
+ // Google.GTMSession -> Google.SessionKeychain.Item
+ extension Google.GTMSession {
+     func insertTo(keychain: Google.Keychain) async throws -> Google.Keychain.SessionItem {
+         try await keychain.insertItem(gtmSession: self)
+     }
+     
+     
+ }
+
+
+ extension Google.Keychain.SessionItem {
+     
+     func deleteFrom(keychain: Google.Keychain) async throws -> Google.Keychain.SessionItem {
+         try await keychain.deleteItem(self)
+     }
+ }
+*/*/
+
+
+/*
+protocol AppStorage {
+    func setSessions(_ sessions: [Session]) async throws -> [Account.PersistentID]
+    nonisolated var modelContainer: ModelContainer { get }
+}
+
+extension AppStorage {
+    public var context: ModelContext { fatalError() }
+    
+    
+}*/
+
+extension ModelStore {
+    
+    /*func moveAccounts(_ accounts: [Account], fromOffsets source: IndexSet, toOffset destination: Int) throws -> [Account] {
+        try modelContext.moveAccounts(accounts, fromOffsets: source, toOffset: destination)
+    }*/
+
+    /*func setRootMailFolder(microsoft: Microsoft.MailFolder, in accountID: Account.ID) async throws -> MailFolder.ID {
+        try await modelContext.setRootMailFolder(microsoft: microsoft, in: accountID)
+    }
+    
+    func setChildrenMailFolders(microsofts: [Microsoft.MailFolder], parentID: MailFolder.ID, in accountID: Account.ID) async throws -> [MailFolder.ID] {
+        try await modelContext.setChildrenMailFolders(microsofts: microsofts, parentID: parentID, in: accountID)
+    }
+    
+    func setMessages(microsofts: [Microsoft.Message], in mailFolderID: MailFolder.ID) async throws -> [Message.ID] {
+        try await modelContext.setMessages(microsofts: microsofts, in: mailFolderID)
+    }
+    
+    func setMessage(microsoft: Microsoft.Message, to messageID: Message.ID) async throws -> Message.ID {
+        try await modelContext.setMessage(microsoft: microsoft, to: messageID)
+    }*/
+    
+}
+
+/*
+extension ModelContext {
+    func _fetchAccount(modelID: Account.ID) throws -> Account? {
+        let rawID = modelID.rawValue
+        return try fetch(.init(predicate: #Predicate<Account> { $0.rawID == rawID })).first
+    }
+    
+    func _fetchMailFolder(modelID: MailFolder.ID) throws -> MailFolder? {
+        let rawID = modelID.rawValue
+        return try fetch(.init(predicate: #Predicate<MailFolder> { $0.rawID == rawID })).first
+    }
+    
+    func _fetchMessage(modelID: Message.ID) throws -> Message? {
+        let rawID = modelID.rawValue
+        return try fetch(.init(predicate: #Predicate<Message> { $0.rawID == rawID })).first
+    }
+}
+
+*/
+// MA
+
+
+
+
+/*func _insertMailFolder(google: Google.MailFolder, parent: MailFolder, in account: Account) throws -> MailFolder {
+    // check account.root
+    guard account.root != nil else { throw TreeError.accountDoNotHaveRootFolder }
+    
+    // insert before check relationship
+    let folderID = try _insertMailFolder(google: google, in: account)
+    let folder = try _fetchMailFolder(modelID: folderID.modelID)!
+
+    // check parent and folder account
+    guard parent.account == account else { throw TreeError.parentMailFolderNotInThisAccount }
+    guard folder.account == account else { throw TreeError.mailFolderNotInThisAccount }
+    
+    // check node.parent
+    if folder.parent != nil && folder.parent != parent { throw TreeError.mailFolderAlreadyHaveParent }
+    folder.parent = parent
+    
+    // check node.children
+    // guard node.children.isEmpty else { throw TreeError.alreadyHaveChild }
+    
+    return folder
+}*/
+
+/*func setAccounts(microsofts: [Microsoft.Account]) async throws -> [Account.PersistentID] {
+ MainActor.assertIsolated()
+ do {
+ // insert
+ var inserts: [Account] = []
+ for microsoft in microsofts {
+ try inserts.append(_insertAccount(microsoft: microsoft))
+ }
+ 
+ /* do not delete, just keep it to show status
+  // delete*/
+ let otherAccounts = try _fetchAccountNotIn(inserts, in: .microsoft)
+ // update state
+ 
+ await Task { @MainActor [inserts, otherAccounts]  in
+ //inserts.forEach { $0.platformState = .hasAccount(nil) }
+ //otherAccounts.forEach { $0.platformState = .noAccount }
+ }.value
+ 
+ 
+ print("modelContext.save")
+ try save()
+ return inserts.map(\.persistentID)
+ } catch {
+ rollback()
+ throw error
+ }
+ }*/
+
+/*func setAccounts(googles: [Google.Account]) throws -> [Account.PersistentID] {
+ MainActor.assertIsolated()
+ do {
+ // insert
+ var inserts: [Account] = []
+ for google in googles {
+ try inserts.append(_insertAccount(google: google))
+ }
+ 
+ /* do not delete, just keep it to show status
+  // delete
+  let removing = try _fetchAccountNotIn(inserts, in: .google)
+  try removing.forEach { _ = try _deleteAccount($0) }
+  */
+ 
+ try save()
+ return inserts.map(\.persistentID)
+ } catch {
+ rollback()
+ throw error
+ }
+ }*/
+/*func setChildrenMailFolders(googles: [GoogleMailFolder], parent parentID: MailFolder.ID, in accountID: Account.ID) throws -> [ MailFolder.ID] {
+    let parent = try self[parentID]!
+    let account = try self[accountID]!
+    do {
+        var inserts: [MailFolder] = []
+        for google in googles {
+            try inserts.append(modelContext._insertMailFolder(google: google, parent: parent, in: account))
+        }
+        
+        // delete
+        let removings = try modelContext._fetchMailFolderNotIn(inserts, in: parent)
+        try removings.forEach { _ = try modelContext._deleteMailFolder($0) }
+        
+        try modelContext.save()
+        return inserts.map { ($0.id) }
+    } catch {
+        modelContext.rollback()
+        throw error
+    }
+}*/
+
+    
+/*func insertMailFolder(platform: MicrosoftMailFolder, in accountID: Account.ID) throws -> MailFolderID {
+    let account = try self[accountID]!
+    do {
+        let root = try modelContext._insertMailFolder(microsoft: microsoft, in: account)
+        try modelContext.save()
+        return root.id
+    } catch {
+        modelContext.rollback()
+        throw error
+    }
+}
+
+func setRootMailFolder(google: GoogleMailFolder, in accountID: Account.ID) throws -> MailFolderID {
+    let account = try self[accountID]!
+    do {
+        if let root = account.root { return root.id }
+        let root = try modelContext._insertMailFolder(google: google, in: account)
+        account.root = root
+        try modelContext.save()
+        return root.id
+    } catch {
+        print(error)
+        modelContext.rollback()
+        throw error
+    }
+}*/
+
+/*func setMessagesInsertPart(googles messages: [GoogleMessage], in mailFolderID: MailFolderID) throws -> [MessageID] {
+    checkBackgroundThread()
+    let mailFolder = try self[mailFolderID]!
+    do {
+        // insert
+        var inserts: [Message] = []
+        for message in messages {
+            try inserts.append(modelContext._insertMessage(google: message, in: mailFolder))
+        }
+        try modelContext.save()
+        return inserts.map(\.resourceID)
+    } catch {
+        modelContext.rollback()
+        throw error
+    }
+}*/
+
+
+
+//let batchSize = 1
+/*func setMessages(microsofts messages: [MicrosoftMessage], in mailFolderID: MailFolderID) throws -> [Message.PersistentID] {
+    checkBackgroundThread()
+    let mailFolder = try self[mailFolderID]!
+    do {
+        
+        // insert
+        var inserts: [Message] = []
+        for message in messages {
+            try inserts.append(modelContext._insertMessage(microsoft: message, in: mailFolder))
+        }
+        
+        // delete
+        let removings = try modelContext._fetchMessageNotIn(inserts, in: mailFolder)
+        try removings.forEach { _ = try modelContext._deleteMessage($0) }
+        
+        try modelContext.save()
+        return inserts.map(\.persistentID)
+    } catch {
+        modelContext.rollback()
+        throw error
+    }
+}*/
+/*
+    SwiftData.ModelContext:
+    insert()
+ 
+    if insert a new instance has a value of an unique property that is a duplicated with an old instance in the container:
+        before saving, it has a temperary persistantID.
+        after manual-saving or auto-saving (which is unkown time),
+            the old instance is updated to the new instance's properties.
+            the new instance is deleted.
+    *It is unsafe to keep the new instance and access its properties. Developer should refetch to get the right instance after saving.*
+ */
+
+
+extension ModelStore {
+    
+    
+    
+    
+    /*func addAccount(microsoft: Microsoft.Account) throws -> Account.PersistentID {
+     BackgroundModelActor.assertIsolated()
+     do {
+     // insert
+     let account = try modelContext._insertAccount(microsoft: microsoft)
+     try modelContext.save()
+     return account.persistentID
+     } catch {
+     modelContext.rollback()
+     throw error
+     }
+     }
+     
+     func addAccount(google: Google.Account) throws -> Account.PersistentID {
+     BackgroundModelActor.assertIsolated()
+     do {
+     // insert
+     let account = try modelContext._insertAccount(google: google)
+     try modelContext.save()
+     return account.persistentID
+     } catch {
+     modelContext.rollback()
+     throw error
+     }
+     }*/
+    
+    
+    
+    
+    
+    
+    
+
+}
+    
+
+
+
+//extension MessageContext {
+    
+    /*func classify() async {
+        guard !self.isClassifying else { return }
+        self.isClassifying = true
+        defer { self.isClassifying = false }
+        
+        guard let tree = self.tree else { return }
+        let message = _message
+        do {
+            
+            let root = tree.root
+            let accountContext = self._accountContext
+            
+            let archiveMailFolder = try await accountContext.mailFoldersRequest.getMailFolder(wellKnownFolderName: .archive)
+            let junkMailFolder = try await accountContext.mailFoldersRequest.getMailFolder(wellKnownFolderName: .junkEmail)
+            guard let archiveNode = root.children.first(where: { $0.id == archiveMailFolder.id }), let junkNode = root.children.first(where: { $0.id == junkMailFolder.id }) else {
+                throw ClassifyError.noArchiveFolder
+            }
+            
+            classifyResultText = try await Agent.classify(archiveNode: archiveNode, junkNode: junkNode, message: message) ?? "nil"
+        } catch {
+            classifyResultText = String(describing: error)
+        }
+    }*/
+    
+    
+//}
+/*func _insertAccount(microsoft: Microsoft.Account) throws -> Account {
+    let modelID = microsoft.modelID
+    
+    // find existed
+    if let model = try _fetchAccount(modelID: modelID) {
+        
+        // If found: update
+        model.update(microsoft: microsoft)
+        return model
+    }
+        
+    // If not found: create
+    let count = try _fetchAccountCount()
+    let model = try Account(microsoft: microsoft, orderIndex: count)
+    insert(model)
+    return model
+}
+
+func _insertAccount(google: Google.Account) throws -> Account {
+    let modelID = google.modelID
+    
+    // find existed
+    if let model = try _fetchAccount(modelID: modelID) {
+        
+        // If found: update
+        model.update(google: google)
+        return model
+    }
+        
+    // If not found: create
+    let count = try _fetchAccountCount()
+    let model = try Account(google: google, orderIndex: count)
+    insert(model)
+    return model
+}*/
+
+
+
+
+
+
+/*func setMessages(resources: [MessageResource], mailFolderID: MailFolderID, accountID: AccountID) throws -> [Message.PersistentID] {
+    checkBackgroundThread()
+    let mailFolder = try modelContext[mailFolderID]
+    let account = try modelContext[accountID]
+    do {
+        
+        // insert
+        var inserts: [Message] = []
+        for resource in resources {
+            try inserts.append(modelContext._insertMessage(resource: resource, mailFolder: mailFolder, account: account))
+        }
+        
+        // delete
+        let removings = try modelContext._fetchMessageNotIn(inserts.map(\.resourceID), in: mailFolder.resourceID)
+        try removings.forEach { _ = try modelContext._deleteMessage($0) }
+        
+        try modelContext.save()
+        return inserts.map(\.persistentID)
+    } catch {
+        modelContext.rollback()
+        throw error
+    }
+}*/
+
+/*func setMessagesDeletePart(keep: [MessageID], in mailFolderID: MailFolderID) throws -> [MessageID] {
+    checkBackgroundThread()
+    let mailFolder = try modelContext[mailFolderID]
+    do {
+        // delete
+        let removings = try modelContext._fetchMessageNotIn(keep, in: mailFolder.resourceID)
+        try removings.forEach { _ = try modelContext._deleteMessage($0) }
+        
+        try modelContext.save()
+        return removings.map(\.resourceID)
+    } catch {
+        modelContext.rollback()
+        throw error
+    }
+}*/
+
+/*func rootGoogleMailFolder(in accountID: AccountID) throws -> GoogleMailFolder? {
+    let account = try modelContext[accountID]
+    if account.root != nil, let accountID = accountID.google {
+        return GoogleMailFolder.all(accountID: accountID)
+    } else {
+        return nil
+    }
+}*/
+
+/*func _fetchMessageNotIn(_ messages: [MessageID], mailFolderID: MailFolderID) throws -> [Message] {
+    let rawIDs = messages.map(\.uniqueID)
+    //let mailFolderUniqueID = mailFolder.uniqueID
+    let mailFolder = try self[mailFolderID]
+    let uniqueIDs = mailFolder._messages.map(\.uniqueID)
+    return try fetch(.init(predicate: #Predicate<Message> { !$0.deleteMark && uniqueIDs.contains($0.uniqueID) && !rawIDs.contains($0.uniqueID) }))
+}*/
+
+/*func _fetchMessages(mailFolderID: MailFolderID) throws -> [Message] {
+    let mailFolderUniqueID = mailFolderID.uniqueID
+    return try fetch(.init(predicate: #Predicate<Message> { !$0.deleteMark && $0.mailFolders.map(\.uniqueID).contains(mailFolderUniqueID) }))
+}*/
+
+/*func insertMailFolder(resource: MailFolderResource, accountID: AccountID) throws -> MailFolderID {
+    let account = try modelContext[accountID]
+    var mailFolder: MailFolder!
+    try modelContext.transaction {
+        mailFolder = try modelContext._insertMailFolder(resource: resource, account: account)
+    }
+    return mailFolder.resourceID
+}*/
+//
+//  Clients+.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/22/24.
+//
+
+import SwiftData
+
+
+
+
+
+
+
+
+
+/*extension Google.Client {
+    func loadAccountMailFolders() async {
+        
+            [service executeQuery:query completionHandler:^(GTLRServiceTicket *ticket, GTLRGmail_ListLabelsResponse *response, NSError *error) {
+                if (error == nil) {
+                    completion(response.labels, nil);
+                } else {
+                    completion(nil, error);
+                }
+            }];
+    }
+}*/
+
+
+/*// MARK: - Update Session
+extension Microsoft.Client {
+    func session(id: Microsoft.ID) async throws -> Session {
+        try await .microsoft(_msalRefreshSession(id: id).session)
+    }
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+extension Tree<Google.MailFolder> {
+    func element(forPath path: [String]) -> Google.MailFolder? {
+        var current: TreeNode<Google.MailFolder>? = root
+        var currentPath = path
+        
+        while let unwrappedCurrent = current {
+            unwrappedCurrent.children.first { $0.path ==  }
+        }
+    }
+}
+*/
+
+//
+//  Session.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/21/24.
+//
+
+import JetEmailGoogle
+import JetEmailMicrosoft
+import JetEmailID
+
+
+public extension Session {
+    /*var accountID: AccountID {
+        switch self {
+        case .microsoft(let microsoftSession): microsoftSession.account.id.general
+        case .google   (let googleSession   ):    googleSession.account.id.general
+        }
+    }*/
+}
+
+public extension Session {
+    /*var username: String {
+        switch self {
+        case .microsoft(let microsoftSession): microsoftSession.username
+        case    .google(let    googleSession):    googleSession.username
+        }
+    }*/
+}
+
+public extension Session {
+    /*var microsoft: MicrosoftSession? {
+        guard case .microsoft(let microsoft) = self else { return nil }
+        return microsoft
+    }
+    
+    var google: GoogleSession? {
+        guard case .google(let google) = self else { return nil }
+        return google
+    }*/
+}
+//
+//  Model+Graph.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/15/24.
+//
+
+import JetEmailData
+import SwiftData
+import os
+import JetEmailID
+
+// typealias AppItemModel<Item> = CombineContext<AppModel, Item>
+
+/*extension AppModel {
+    func callAsFunction<Item: UnifiedModel>(_ item: Item) -> AppItemModel<Item> {
+        AppItemModel(context: self, item: item)
+    }
+    
+    func callAsFunction<Item: ResourceIDProtocol>(_ item: Item) -> AppItemModel<Item> {
+        AppItemModel(context: self, item: item)
+    }
+    
+    /*func callAsFunction<Item: DataModel>(_ persistentID: Item.ID) -> AppItemModel<Item>? {
+     guard let item = ModelContainer.shared.mainContext[persistentID] else { return nil }
+     return AppItemModel(context: self, item: item)
+     }*/
+}
+
+extension AppModel {
+    /*func callAsFunction<Item: DataModel>(_ id: Item.ID) -> AppItemModel<Item>? {
+        guard let item = try ModelContainer.shared.mainContext[id] else { return nil }
+        return AppItemModel(context: self, item: item)
+    }*/
+    
+    func callAsFunction(_ persistentID: AccountID) throws -> AppItemModel<Account> {
+        let item = try mainContext[persistentID]
+        return AppItemModel(context: self, item: item)
+    }
+    
+    func callAsFunction(_ persistentID: MailFolderID) throws -> AppItemModel<MailFolder>? {
+        let item = try mainContext[persistentID]
+        return AppItemModel(context: self, item: item)
+    }
+    
+    func callAsFunction(_ persistentID: MessageID) throws -> AppItemModel<Message>? {
+        let item = try mainContext[persistentID]
+        return AppItemModel(context: self, item: item)
+    }
+}*/
+
+
+
+/*extension AccountID {
+    @MainActor
+    var mainContext: ModelContext {
+        ModelContainer.shared.mainContext
+    }
+}
+
+extension AppItemModel where Context == AppModel {
+    var mainContext: ModelContext {
+        context.mainContext
+    }
+}*/
+
+//
+//  Google+.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/25/24.
+//
+
+import JetEmailGoogle
+import JetEmailMicrosoft
+import os
+import JetEmailData
+
+/*@MainActor
+extension AppItemModel where Context == AppModel, Item : UnifiedModel {
+    var appModel: AppModel { context }
+    var logger: Logger { appModel.logger }
+    /*var isBusy: Bool {
+        get { item.isBusy }
+        set { item.isBusy = newValue }
+    }*/
+}*/
+//
+//  ViewModifiers.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/13/24.
+//
+
+import SwiftUI
+import JetEmailData
+import JetEmailID
+
+
+/*extension View {
+    /*func appModel(_ appModel: AppModel) -> some View {
+        modifier(AppModelResultModifier(appModel: appModel))
+    }*/
+    
+    func itemModel<Item : UnifiedModel>(_ item: Item) -> some View {
+        modifier(ItemModelModifier(item: item))
+    }
+}
+
+// MARK: - Modifier: AppModel.Init
+
+/*fileprivate struct AppModelResultModifier : ViewModifier {
+    let appModel: AppModel
+    func body(content: Content) -> some View {
+        content
+            .environment(appModel)
+            .modelContainer(.shared)
+    }
+}*/
+
+// MARK: - Modifier: AppModel.Item
+
+fileprivate struct ItemModelModifier<Item: UnifiedModel> : ViewModifier {
+    
+    @Environment(AppModel.self)
+    var appModel
+    
+    let item: Item
+    
+    func body(content: Content) -> some View {
+        content
+            .environment(appModel(item))
+            .environment(appModel(item.resourceID))
+            .environment(item)
+    }
+}*/
+
+
+@MainActor
+extension Scene {
+    func appModel(_ appModel: AppModel) -> some Scene {
+    }
+    
+    func settingsModel(_ settingsModel: SettingsModel) -> some Scene {
+        environment(settingsModel)
+    }
+}

@@ -13,20 +13,16 @@ import AuthenticationServices
 
 // MARK: - Sessions
 
-public extension GoogleClient {
+extension GoogleClient: ClientProtocol {
     
-    @MainActor
-    var sessions: [GoogleSession] { get async throws { // the sessions should be refresh before using to fetch
+    @MainActor // for SessionStore
+    public var sessions: [GoogleSession] { get async throws { // the sessions should be refresh before using to fetch
         let items = try await Keychain.shared.items
         return items.map { SessionStore.shared.insert(sessionItem: $0, forceReplacing: false) }
     } }
-}
 
-// MARK: - Sign In
-
-public extension GoogleClient {
     @MainActor // for WebAuthenticationSession
-    func signIn() async throws -> GoogleSession {
+    public func signIn() async throws -> GoogleSession {
         let gtmSession = try await _gtmSignIn()
         let sessionItem = try await Keychain.shared.insertItem(gtmSession: gtmSession)
         return SessionStore.shared.insert(sessionItem: sessionItem, forceReplacing: false)
@@ -35,40 +31,33 @@ public extension GoogleClient {
 
 // MARK: - Sign Out
 
-public extension GoogleSession {
-    func signOut() async throws -> GoogleSession {
+extension GoogleSession : SessionProtocol {
+    
+    public func signOut() async throws -> GoogleSession {
         _ = try await Keychain.shared.deleteItem(_item)
         _ = await account.id.removeSession()
         return self
     }
 }
 
-// MARK: - Stored Session
-// used for checking status
+// MARK: - AccountIDPublicAPI
 
 @MainActor
-public extension GoogleAccountID {
-    var storedSession: GoogleSession? { SessionStore.shared[self] }
+extension GoogleAccountID : AccountIDSessionAPI {
+
+    public var storedSession: GoogleSession? { SessionStore.shared[self] }
+    public var refreshSession: GoogleSession? { get async throws {
+        try await SessionStore.shared.session(id: self, forceRefresh: false)?.refresh
+    } }
+    public func removeSession() -> GoogleSession? { SessionStore.shared.remove(id: self) }
 }
 
 // MARK: - Refresh Session 
 // used for request, refresh if neccessary
-
-public extension GoogleAccountID {
-    var refreshGoogleSession: GoogleSession? { get async throws {
-        try await SessionStore.shared.session(id: self, forceRefresh: false)?.refresh
-    } }
-}
 
 public extension GoogleSession {
     var refresh: GoogleSession { get async throws {
         _ = try await _gtmSession._refresh()
         return self
     } }
-}
-
-// MARK: - Remove Session
-@MainActor
-public extension GoogleAccountID {
-    func removeSession() -> GoogleSession? { SessionStore.shared.remove(id: self) }
 }

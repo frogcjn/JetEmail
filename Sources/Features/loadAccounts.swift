@@ -7,9 +7,7 @@
 
 // MARK: Feature: Accounts - Load Accounts
 
-import JetEmailFoundation
-import Foundation
-import JetEmailData
+import JetEmailPlatform
 
 extension AppModel {
     
@@ -20,8 +18,8 @@ extension AppModel {
         defer { isBusy = false }
         
         do {
-            let sessions = try await Clients.shared.sessions
-            _ = try await ModelStore.shared.setSessions(sessions) // load session from local keychain
+            let sessions = try await Clients.shared.sessions      // get Sessions
+            _ = try await ModelStore.shared.setSessions(sessions) // ModelStore
         } catch {
             logger.error("\(error)")
         }

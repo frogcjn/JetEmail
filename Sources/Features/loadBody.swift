@@ -5,48 +5,24 @@
 //  Created by Cao, Jiannan on 2/24/24.
 //
 
-import JetEmailID
-import JetEmailData
-import JetEmailGoogle
-
 // MARK: Feature: Message - Load Body
 
-extension AppItemModel<Message> {
-    
-    @MainActor
-    var isBusy: Bool {
-        get { item.isBusy }
-        set { item.isBusy = newValue }
-    }
+import JetEmailID
+import JetEmailPlatform
+
+extension AppModel {
     
     @MainActor // for .isBusy
-    func loadBody() async {
-        guard !isBusy else { return }
-        isBusy = true
-        defer { isBusy = false }
+    func loadBody(messageID: MessageID, accountID: AccountID) async {
+        guard !messageID.isBusy else { return }
+        messageID.isBusy = true
+        defer { messageID.isBusy = false }
         
         do {
-            guard let session = try await item.mailFolder.account.resourceID.refreshSession else { return }
-            try await _loadBody(messageID: item.resourceID, session: session)
+            guard let session = try await accountID.refreshSession else { return }          // get Session
+            try await session.loadBody(messageID: messageID, modelStore: ModelStore.shared) // Session, ModelStore
         } catch {
             logger.error("\(error)")
         }
-    }
-}
-
-
-fileprivate func _loadBody(messageID: MessageID, session: Session) async throws {
-    checkBackgroundThread()
-    switch session {
-    case .microsoft(let session):
-        let microsoftMessageID = messageID.microsoft!
-        
-        async let microsoftMessage = session.getMessageBody(id: microsoftMessageID) // load from MSAL
-        _ = try await ModelStore.shared.setMessage(resource: .microsoft(microsoftMessage), to: messageID) // MSAL to SwiftData
-        
-    case .google(let session):
-        let googleMessageID = messageID.google!
-        let message = try await session.getMessageBody(id: googleMessageID)
-        _ = try await ModelStore.shared.setMessage(resource: .google(message), to: messageID) // MSAL to SwiftData
     }
 }

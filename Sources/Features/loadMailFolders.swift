@@ -5,58 +5,33 @@
 //  Created by Cao, Jiannan on 2/23/24.
 //
 
-import JetEmailFoundation
-import JetEmailData
-import JetEmailMicrosoft
-
 // MARK: Feature: Account - Load Mail Folder
 
+import JetEmailID
+import JetEmailPlatform
+
 extension AppModel {
+    
     @MainActor
-    func loadMailFolders(accounts: [Account]) async {
+    func loadMailFolders(accountIDs: [AccountID]) async {
         do {
-            try await accounts.map(\.resourceID).forEachTask { @MainActor in try await self($0)?.loadMailFolders() }
+            try await accountIDs.forEachTask { await self.loadMailFolders(accountID: $0) }
         } catch {
             logger.error("\(error)")
         }
     }
-}
 
-//@BackgroundActor // for .isBusy
-extension AppItemModel<Account> {
-    
     @MainActor
-    var isBusy: Bool {
-        get { item.isBusy }
-        set { item.isBusy = newValue }
-    }
-    
-    @MainActor
-    func loadMailFolders() async {
-        guard !isBusy else { return }
-        isBusy = true
-        defer { isBusy = false }
+    func loadMailFolders(accountID: AccountID) async {
+        guard !accountID.isBusy else { return }
+        accountID.isBusy = true
+        defer {accountID.isBusy = false }
         
         do {
-            let account = item
-            let accountID = account.resourceID
-            guard let session = try await accountID.refreshSession else { return }
-            
-            // SessionActor
-            let platform = try await session.getRootMailFolder(id: accountID)
-            
-            // ModelActor
-            let mailFolderID = try await ModelStore.shared.insertMailFolder(resource: platform, accountID: accountID)
-            
-            // MainActor
-            _ = try accountID.setRootMailFolder(id: mailFolderID)
-            
-            
-            try await session.loadMailFolders(id: accountID, rootID: mailFolderID)
-            account.loadedMailFolder = true
+            guard let session = try await accountID.refreshSession else { return }                     // get Session
+            _ = try await session.loadMailFolders(accountID: accountID, modelStore: ModelStore.shared) // Session, ModelStore
         } catch {
             logger.error("\(error)")
         }
     }
-    
 }

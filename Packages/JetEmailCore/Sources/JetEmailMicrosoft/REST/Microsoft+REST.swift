@@ -6,8 +6,8 @@
 //
 
 import Foundation
+import JetEmailData
 import JetEmailID
-import JetEmailMicrosoft
 /*
 
 extension Microsoft {
@@ -46,27 +46,40 @@ extension Session {
 
 */
 
-
-
 // MARK: - Context: Account-MailFolders API
 
 public extension MicrosoftSession {
+    
     func getRootMailFolder() async throws -> MicrosoftMailFolder {
         try await getMailFolder(wellKnownFolderName: .msgFolderRoot)
     }
-      
+    
+    @MainActor
+    func loadMailFoldersUnderRoot<ModelStore: ModelStoreProtocol & Sendable>(rootMailFolderResource: MicrosoftMailFolder, accountID: AccountID, modelStore: ModelStore) async throws {
+        var queue: [MicrosoftMailFolderID] = [rootMailFolderResource.id]
+        while !queue.isEmpty {
+            let current = queue.removeFirst()
+            
+            let mailFolders = try await getChildFolders(id: current)
+            let children = try await modelStore.setChildrenMailFolders(resources: mailFolders, parentID: current.generalID, accountID: accountID).compactMap(\.platformCase?.microsoft)
+            queue.append(contentsOf: children)
+        }
+    }
+    
+
+    
     /*func getMailFolders() async throws -> [MSGraph.MailFolder] {
         try await getItems("mailFolders")
     }*/
     
     @MainActor
-    var idToWellKnownFolderName:  [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName] { get async {
-        if let idToWellKnownFolderName = account.generalID.idToWellKnownFolderName { return idToWellKnownFolderName }
-        let idToWellKnownFolderName: [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName] =  await {
+    var idToWellKnownFolderName:  [MailFolderID: MicrosoftWellKnownFolderName] { get async {
+        if let idToWellKnownFolderName = account.id.idToWellKnownFolderName { return idToWellKnownFolderName }
+        let idToWellKnownFolderName: [MailFolderID: MicrosoftWellKnownFolderName] =  await {
             do {
                 // catch wellknownFolderName
-                var idToWellKnownFolderName = [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName]()
-                for name in MicrosoftMailFolder.WellKnownFolderName.allCases {
+                var idToWellKnownFolderName = [MailFolderID: MicrosoftWellKnownFolderName]()
+                for name in MicrosoftWellKnownFolderName.allCases {
                     do {
                         let folder = try await getMailFolder(wellKnownFolderName: name)
                         idToWellKnownFolderName[folder.id] = name
@@ -93,7 +106,7 @@ public extension MicrosoftSession {
         try await getValue(paths: "mailFolders", "\(id.innerID)")
     }
     
-    func getMailFolder(wellKnownFolderName: MicrosoftMailFolder.WellKnownFolderName) async throws -> MicrosoftMailFolder {
+    func getMailFolder(wellKnownFolderName: MicrosoftWellKnownFolderName) async throws -> MicrosoftMailFolder {
         try await getValue(MicrosoftMailFolderInner.self, paths: "mailFolders", "\(wellKnownFolderName)")
             .with(accountID: account.id, wellKnownFolderName: .msgFolderRoot)
     }
@@ -101,6 +114,34 @@ public extension MicrosoftSession {
     /*func createChildFolder(id: MSGraph.MailFolder.ID, displayName: String, isHidden: Bool? = nil) async throws -> MSGraph.MailFolder {
         try await postItem("mailFolders", "\(id)", "childFolders", body: MailFoldersCreateRequestBody(displayName: displayName, isHidden: isHidden))
     }*/
+    
+    @MainActor
+    func loadMessagesProgressing<ModelStore: ModelStoreProtocol & Sendable>(mailFolderID: MailFolderID, modelStore: ModelStore) async throws {
+        guard let microsoftID = mailFolderID.platformCase?.microsoft else { return }
+        
+        let newMessageIDs: [MessageID] = try await getMessagesID(in: microsoftID).map { $0.generalID }
+
+        // remove
+        let firstIndexToLoad = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs, mailFolderID: mailFolderID).first?.offset
+        
+        
+        let (total, stream): (total: Int, stream: AsyncThrowingStream<[MicrosoftMessage], Error>)
+        
+        if let firstIndexToLoad {
+           // do {
+            (total, stream) = try await getMessagesStream(id: microsoftID, skip: firstIndexToLoad)
+            //}
+            /* catch let error as URLError where error.code == .badURL {
+                (total, stream) = try await session.getMessagesStream(id: innerID)
+            }*/
+            var value = firstIndexToLoad
+            mailFolderID.loadingMessageState = .loading(value: value, total: total)
+            for try await messages in stream {
+                value += try await modelStore.setMessagesInsertPart(resources: messages, mailFolderID: mailFolderID).count // MSAL to SwiftData
+                mailFolderID.loadingMessageState = .loading(value: value, total: total)
+            }
+        }
+    }
 }
 
 
@@ -213,7 +254,8 @@ public extension MicrosoftSession {
 public extension MicrosoftSession {
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
-    func getMessageBody(id: MicrosoftMessageID) async throws -> MicrosoftMessage {
+    func loadBody<ModelStore : ModelStoreProtocol & Sendable>(messageID: MessageID, modelStore: ModelStore) async throws{
+        guard let id = messageID.platformCase?.microsoft else { throw AuthError.accountNoIDOrUsername }
         var message: MicrosoftMessage = try await getValue(MicrosoftMessageInner.self, paths: "messages", "\(id.innerID)", queryItems:
             .select(
                 "id",
@@ -234,15 +276,22 @@ public extension MicrosoftSession {
             )
         ).with(accountID: account.id)
         message.raw = try await getMultipartData(paths: "messages", "\(id.innerID)", "$value")
-        return message
+        
+        _ = try await modelStore.setMessage(resource: message, messageID: messageID) // MSAL to SwiftData
+        // return message
     }
     
     // https://learn.microsoft.com/en-us/graph/api/message-move?view=graph-rest-1.0
-    func moveMessage(id messageID: MicrosoftMessageID, to toID: MicrosoftMailFolderID) async throws -> MicrosoftMessage {
+    func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) async throws {
+        
+        guard let messageID = messageID.platformCase?.microsoft else { throw AuthError.accountNoIDOrUsername }
+        // guard let fromID = fromID.platformCase?.microsoft else { throw AuthError.accountNoIDOrUsername }
+        guard let toID = toID.platformCase?.microsoft else { throw AuthError.accountNoIDOrUsername }
+        
         struct MessageMoveRequestBody : Encodable {
-            let destinationId: MicrosoftMailFolderID
+            let destinationId: String
         }
-        return try await postItem("messages", "\(messageID)", "move", body: MessageMoveRequestBody(destinationId: toID))
+        _ = try await postItem(type: MicrosoftMessage.self, "messages", "\(messageID)", "move", body: MessageMoveRequestBody(destinationId: toID.innerID))
     }
 }
 
@@ -643,12 +692,12 @@ extension MSGraph.Context {
 
 
 extension MicrosoftMailFolderInner {
-    func with(accountID: MicrosoftAccountID, wellKnownFolderName: MicrosoftMailFolder.WellKnownFolderName?) -> MicrosoftMailFolder {
+    func with(accountID: MicrosoftAccountID, wellKnownFolderName: MicrosoftWellKnownFolderName?) -> MicrosoftMailFolder {
         .init(id: .init(accountID: accountID, innerID: id), inner: self, wellKnownFolderName: wellKnownFolderName, systemInfo: wellKnownFolderName?.systemInfo)
     }
     
-    func with(accountID: MicrosoftAccountID, idToWellKnownFolderName: [MicrosoftMailFolderID: MicrosoftMailFolder.WellKnownFolderName]) -> MicrosoftMailFolder {
-        with(accountID: accountID, wellKnownFolderName: idToWellKnownFolderName[MicrosoftMailFolderID(accountID: accountID, innerID: id)])
+    func with(accountID: MicrosoftAccountID, idToWellKnownFolderName: [MailFolderID: MicrosoftWellKnownFolderName]) -> MicrosoftMailFolder {
+        with(accountID: accountID, wellKnownFolderName: idToWellKnownFolderName[MailFolderID(platform: .microsoft, innerAccountID: accountID.innerID, innerID: id)])
     }
 }
 

@@ -5,14 +5,10 @@
 //  Created by Cao, Jiannan on 2/23/24.
 //
 
-import JetEmailID
-import JetEmailGoogle
-import JetEmailMicrosoft
-import JetEmailData
-import SwiftUI
-import AuthenticationServices
-
 // MARK: Feature: Accounts - Sign In
+
+import JetEmailID
+import JetEmailPlatform
 
 extension AppModel {
     
@@ -28,8 +24,8 @@ extension AppModel {
                 try await clock.sleep(for: .seconds(0.5)) // resolve issue when presenting window with orminent in visionOS, delay <= 0.35s will crash
             }
             
-            let session = try await Clients.shared.client(platform: platform).signIn()
-            _ = try await ModelStore.shared.addSession(session)
+            let session = try await Clients.shared.client(platform: platform).signIn() // get Session
+            _ = try await ModelStore.shared.insertSession(session)                     // ModelStore
         } catch {
             logger.error("\(error)")
         }
