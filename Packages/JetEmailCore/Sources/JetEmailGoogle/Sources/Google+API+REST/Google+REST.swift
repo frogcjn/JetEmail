@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 import JetEmailData
 import JetEmailFoundation // for Tree
 @preconcurrency import GoogleAPIClientForREST_Gmail
@@ -36,8 +37,6 @@ public extension GoogleSession {
     }
     
     // MARK: - MailFolder-Messages
-    
-    @MainActor // for id.loadingMessageState
     func loadMessages(mailFolderID: GoogleMailFolderID, modelStore: ModelStore) async throws {
         
         let newMessageIDs: [MessageID] = try await getMessagesID(in: mailFolderID).map { $0.generalID }
@@ -56,13 +55,44 @@ public extension GoogleSession {
             let total = newMessageIDs.count
             var value = total - shouldInsertMessageIDs.count
             
-            mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+            await MainActor.run { [value] in
+                mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+            }
             for try await messages in stream {
                 value += try await modelStore.setMessagesInsertPart(resources: messages, mailFolderID: mailFolderID.generalID).count // MSAL to SwiftData
-                mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+                await MainActor.run { [value] in
+                    mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+                }
             }
         }
     }
+    
+    /*@MainActor // for id.loadingMessageState
+    func loadMessagesMain(mailFolderID: GoogleMailFolderID, modelContext: ModelContext) async throws {
+        
+        let newMessageIDs: [MessageID] = try await getMessagesID(in: mailFolderID).map { $0.generalID }
+        
+        // remove
+        let shouldInsertMessageIDs = try await modelContext.setMessagesDeletePart(newMessageIDs: newMessageIDs, mailFolderID: mailFolderID.generalID).compactMap(\.element.platformCase?.google)
+        
+        
+        if !shouldInsertMessageIDs.isEmpty  {
+            // do {
+            let stream = try await getMessagesStream(ids: shouldInsertMessageIDs, format: .metadata)
+            //}
+            /* catch let error as URLError where error.code == .badURL {
+             (total, stream) = try await session.getMessagesStream(id: innerID)
+             }*/
+            let total = newMessageIDs.count
+            var value = total - shouldInsertMessageIDs.count
+            
+            mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+            for try await messages in stream {
+                value += try modelContext.setMessagesInsertPart(resources: messages, mailFolderID: mailFolderID.generalID).count // MSAL to SwiftData
+                mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+            }
+        }
+    }*/
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/modify
     func moveMessage(messageID: GoogleMessageID, fromID: GoogleMailFolderID, toID: GoogleMailFolderID) async throws {

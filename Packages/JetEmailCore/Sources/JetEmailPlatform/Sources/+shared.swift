@@ -15,10 +15,10 @@ public extension Clients {
 
 extension ModelStore {
     
-    @ModelStoreActor
+    //@ModelStoreActor
     static var _shared: ModelStore?
     
-    @ModelStoreActor
+    //@ModelStoreActor
     public static var shared: ModelStore { get async {
         if let _shared { return _shared }
         let modelStore = await ModelStore(modelContainer: .shared)
@@ -26,8 +26,9 @@ extension ModelStore {
         return modelStore
     } }
 }
-
+/*
 @globalActor
 public actor ModelStoreActor : Actor {
     public static let shared = ModelStoreActor()
 }
+*/

@@ -112,7 +112,7 @@ public final class MailFolder {
     public var _messages: [Message] = [] // Should be Ordered Relationship
     
     @Transient
-    public var messages: [Message] { _messages.sorted(using: KeyPathComparator(\.date, order: .reverse))}
+    public var messages: [Message] { _messages.filter{ !$0.isDeleted }/*.sorted(using: KeyPathComparator(\.date, order: .reverse))*/}
 }
 
 

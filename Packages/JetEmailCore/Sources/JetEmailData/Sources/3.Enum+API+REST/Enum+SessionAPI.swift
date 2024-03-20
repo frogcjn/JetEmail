@@ -11,6 +11,8 @@ public actor SessionActor {
     public static var shared: SessionActor = SessionActor()
 }*/
 
+import SwiftData
+
 public protocol SessionProtocol<AccountType> {
     associatedtype AccountType: AccountProtocol
     associatedtype MailFolderType: MailFolderProtocol
@@ -32,7 +34,12 @@ public protocol SessionProtocol<AccountType> {
 
     // mailFolder - messages
     //@SessionActor
+    
     func loadMessages(mailFolderID: MailFolderType.ID, modelStore: ModelStore) async throws
+    
+    
+    /*@MainActor
+    func loadMessagesMain(mailFolderID: MailFolderType.ID, modelContext: ModelContext) async throws*/
     
     //@SessionActor
     func moveMessage(messageID: MessageType.ID, fromID: MailFolderType.ID, toID: MailFolderType.ID) async throws
@@ -94,14 +101,14 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
     }
     
     //@SessionActor
-    public func loadMailFolders(modelStore: ModelStore) async throws -> MailFolderType {
+    /*public func loadMailFolders(modelStore: ModelStore) async throws -> MailFolderType {
         checkBackgroundThread()
         let rootMailFolder = try await getRootMailFolder()                                  // Session
         _ = try await modelStore.setRootMailFolder(resource: rootMailFolder, accountID: account.id)  // ModelStore
         
         try await loadMailFoldersUnderRoot(root: rootMailFolder, modelStore: modelStore)
         return rootMailFolder
-    }
+    }*/
     
     public func loadMailFoldersUnderRoot(root: MailFolderType, modelStore: ModelStore) async throws {
         checkBackgroundThread()
@@ -117,11 +124,10 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
     
     // mailFolder - messages
 
-    
     public func loadMessages(mailFolderID: MailFolderID, modelStore: ModelStore) async throws {
         checkBackgroundThread()
         switch self {
-        case .microsoft(let session): 
+        case .microsoft(let session):
             guard let mailFolderID = mailFolderID.platformCase?.microsoft else { return }
             try await session.loadMessages(mailFolderID: mailFolderID, modelStore: modelStore)
         case    .google(let session):
@@ -129,6 +135,19 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
             try await session.loadMessages(mailFolderID: mailFolderID, modelStore: modelStore)
         }
     }
+    
+    /*@MainActor
+    public func loadMessagesMain(mailFolderID: MailFolderID, modelContext: ModelContext) async throws {
+        checkBackgroundThread()
+        switch self {
+        case .microsoft(let session): 
+            guard let mailFolderID = mailFolderID.platformCase?.microsoft else { return }
+            try await session.loadMessagesMain(mailFolderID: mailFolderID, modelContext: modelContext)
+        case    .google(let session):
+            guard let mailFolderID = mailFolderID.platformCase?.google else { return }
+            try await session.loadMessagesMain(mailFolderID: mailFolderID, modelContext: modelContext)
+        }
+    }*/
     
     public func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) async throws {
         checkBackgroundThread()

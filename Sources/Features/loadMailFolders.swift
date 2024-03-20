@@ -28,8 +28,22 @@ extension AppModel {
         
         do {
             guard let session = try await accountID.refreshSession else { return }              // get Session
-            _ = try await session.loadMailFolders(modelStore: modelStore) // Session, ModelStore
+            
+            // loadRootMailFolder
+
+            let rootMailFolder = try await session.getRootMailFolder()                                 // Session
+            _ = try await modelStore.setRootMailFolder(resource: rootMailFolder, accountID: accountID)  // ModelStore
+            
+            /*// update mainContext for root
+            let account = try mainContext[accountID]
+            account.root = account.root*/
+            
+            // loadMailFolders under root
+            try await session.loadMailFoldersUnderRoot(root: rootMailFolder, modelStore: modelStore) // Session, ModelStore
+            
+            // record loadedMailFolder
             accountID.loadedMailFolder = true
+            
         } catch {
             logger.error("\(error)")
         }

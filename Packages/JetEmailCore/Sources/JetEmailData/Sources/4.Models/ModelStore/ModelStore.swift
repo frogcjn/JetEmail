@@ -5,16 +5,268 @@
 //  Created by Cao, Jiannan on 2/13/24.
 //
 
-import Foundation
+import Foundation // for Predicate
 import SwiftData // for ModelContainer
-import JetEmailFoundation
-import os
+import JetEmailFoundation // for TreeError
+
+public extension ModelStore {
+    
+    // MARK: - Accounts
+    
+    // loadAccounts
+    func setAccounts<AccountResource: AccountProtocol>(_ accounts: [AccountResource]) async throws -> (inserts: [AccountID], delete: [AccountID]) {
+        checkBackgroundThread()
+        
+        var inserts   = [Account]()
+        var removings = [Account]()
+        
+        try modelContext.transaction {
+            // inserts
+            inserts = try accounts.map(modelContext._insertAccount(resource:))
+            
+            // others: not have
+            removings = try modelContext._fetchAccountNotIn(inserts)
+            try removings.forEach { _ = try modelContext._deleteModel($0) }
+        }
+        return (inserts.map(\.resourceID), removings.map(\.resourceID))
+    }
+       
+    // signIn
+    func insertAccount<AccountResource: AccountProtocol>(_ account: AccountResource) async throws -> AccountID {
+        checkBackgroundThread()
+        var accountID: AccountID!
+        try modelContext.transaction {
+            accountID = try modelContext._insertAccount(resource: account).resourceID
+        }
+        return accountID
+    }
+        
+    // signOut
+    func deleteAccount(accountID: AccountID) throws -> AccountID {
+        checkBackgroundThread()
+        let account = try modelContext[accountID]
+        try modelContext.transaction {
+            _ = try modelContext._deleteModel(account)
+            account.orderIndex = nil
+            
+            // reorder
+            let accounts = try modelContext._fetchAccounts()
+            for (index, item) in accounts.enumerated() {
+                item.orderIndex = index
+            }
+        }
+        return accountID
+    }
+    
+    // move account
+    func moveAccounts(accountIDs: [AccountID], fromOffsets source: IndexSet, toOffset destination: Int) throws -> [Account.ResourceID] {
+        checkBackgroundThread()
+        
+        // contacts.move(fromOffsets: from, toOffset: to)
+        // Make a copy of the current list of items
+        var accounts = try accountIDs.map { try modelContext[$0] }
+        
+        // Apply the move operation to the items
+        accounts.move(fromOffsets: source, toOffset: destination)
+        
+        try modelContext.transaction {
+            
+            // Update each item's relative index order based on the new items
+            // Can extract and reuse this part if the order of the items is changed elsewhere (like when deleting items)
+            // The iteration could be done in reverse to reduce changes to the indices but isn't necessary
+            for (index, item) in accounts.filter({ !$0.deleteMark }).enumerated() {
+                item.orderIndex = index
+            }
+            for item in accounts.filter({ $0.deleteMark }) {
+                item.orderIndex = nil
+            }
+        }
+        return accounts.map(\.resourceID)
+    }
+    
+    // MARK: - Account-Mailfolders
+    
+    
+    
+    // loadMailFolders
+    func setRootMailFolder<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource, accountID: AccountID) throws -> MailFolderID {
+        var mailFolder: MailFolder!
+        try modelContext.transaction {
+            let account = try modelContext[accountID]
+            mailFolder = try modelContext._insertMailFolder(resource: resource, account: account)
+            account.root = mailFolder
+        }
+        return mailFolder.resourceID
+    }
+    
+    
+
+    // loadMailFolders
+    func setChildrenMailFolders<MailFolderResource : MailFolderProtocol>(resources: [MailFolderResource], parentID: MailFolderID, accountID: AccountID) throws -> [MailFolderID] where MailFolderResource : JetEmailData.MailFolderProtocol {
+        let parent =  try modelContext[parentID]
+        let account = try modelContext[accountID]
+        
+        var inserts = [MailFolder]()
+        try modelContext.transaction {
+            for resource in resources {
+                try inserts.append(modelContext._insertMailFolder(resource: resource, parent: parent, account: account))
+            }
+            
+            // inserts order
+            inserts = inserts.sortedChildren
+            for (index, insert) in inserts.enumerated() {
+                insert._childIndex = index
+            }
+            
+            // delete
+            let deletings = try modelContext._fetchMailFolderNotIn(inserts, parent: parent)
+            try deletings.forEach {
+                $0._childIndex = nil
+                _ = try modelContext._deleteModel($0)
+            }
+        }
+        return inserts.map { $0.resourceID }
+    }
+    
+    // MARK: - MailFolder-Messages
+    
+    // loadMessages
+    func setMessagesDeletePart(newMessageIDs: [MessageID], mailFolderID: MailFolderID) async throws -> [(offset: Int,  element: MessageID)] {
+        checkBackgroundThread()
+                
+        let oldMessages =  try modelContext[mailFolderID]._messages.filter { !$0.deleteMark }/* Set(try modelContext._fetchMessages(mailFolderID: mailFolderID))*/
+        
+        let newMessageIDSet = Set(newMessageIDs)
+        let oldMessageIDSet = Set(oldMessages.map(\.resourceID))
+
+        let deletingIDSet = oldMessageIDSet.subtracting(newMessageIDSet)
+        let   insertIDSet = newMessageIDSet.subtracting(oldMessageIDSet)
+        
+        try modelContext.transaction {
+            let deletings = oldMessages.filter { deletingIDSet.contains($0.resourceID) }
+            try deletings.forEach { _ = try modelContext._deleteModel($0) }
+        }
+        
+        let enumeratedInsertIDs = newMessageIDs.enumerated().filter { insertIDSet.contains($0.element) }
+        return enumeratedInsertIDs
+    }
+    
+    // loadMessages
+    func setMessagesInsertPart<MessageResource>(resources: [MessageResource], mailFolderID: MailFolderID) throws -> [MessageID] where MessageResource : JetEmailData.MessageProtocol {
+        checkBackgroundThread()
+        let mailFolder = try modelContext[mailFolderID]
+        
+        var inserts = [Message]()
+        try modelContext.transaction {
+            try resources.forEach { resource in
+                try inserts.append(modelContext._insertMessage(resource: resource, mailFolder: mailFolder))
+            }
+        }
+        return inserts.map(\.resourceID)
+    }
+    
+    // moveMessages
+    func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) throws {
+        let message = try modelContext[messageID]
+        let from    = try modelContext[fromID]
+        let to      = try modelContext[toID]
+        try modelContext.transaction {
+            message.mailFolders.replace([from], with: [to])
+            
+            /*var fromMessages = from._messages
+            fromMessages.removeAll { $0 == message }
+            from._messages = fromMessages
+            
+            var toMessages = to._messages
+            toMessages.append(message)
+            to._messages = toMessages*/
+        }
+    }
+    
+    // MARK: - Message
+    
+    // load body
+    func setMessage<MessageResource: MessageProtocol>(resource: MessageResource) throws -> MessageID {
+        checkBackgroundThread()
+        let message = try modelContext[resource.generalID]
+        try modelContext.transaction {
+            message.update(resource: resource)
+        }
+        return message.resourceID
+    }
+}
+
+/*@MainActor
+public extension ModelContext {
+    
+    func setRootMailFolder<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource, accountID: AccountID) throws -> MailFolderID {
+        let account = try self[accountID]
+        var mailFolder: MailFolder!
+        try transaction {
+            mailFolder = try _insertMailFolder(resource: resource, account: account)
+            account.root = mailFolder
+        }
+        return mailFolder.resourceID
+    }
+    
+    func setMessagesDeletePart(newMessageIDs: [MessageID], mailFolderID: MailFolderID) async throws -> [(offset: Int,  element: MessageID)] {
+        checkBackgroundThread()
+                
+        let oldMessages =  try self[mailFolderID]._messages.filter { !$0.deleteMark }/* Set(try modelContext._fetchMessages(mailFolderID: mailFolderID))*/
+        
+        let newMessageIDSet = Set(newMessageIDs)
+        let oldMessageIDSet = Set(oldMessages.map(\.resourceID))
+
+        let deletingIDSet = oldMessageIDSet.subtracting(newMessageIDSet)
+        let   insertIDSet = newMessageIDSet.subtracting(oldMessageIDSet)
+        
+        try transaction {
+            let deletings = oldMessages.filter { deletingIDSet.contains($0.resourceID) }
+            try deletings.forEach { _ = try _deleteModel($0) }
+        }
+        
+        let enumeratedInsertIDs = newMessageIDs.enumerated().filter { insertIDSet.contains($0.element) }
+        return enumeratedInsertIDs
+    }
+    
+    
+    // loadMessages
+    func setMessagesInsertPart<MessageResource>(resources: [MessageResource], mailFolderID: MailFolderID) throws -> [MessageID] where MessageResource : JetEmailData.MessageProtocol {
+        checkBackgroundThread()
+        let mailFolder = try self[mailFolderID]
+        
+        var inserts = [Message]()
+        try transaction {
+            try resources.forEach { resource in
+                try inserts.append(_insertMessage(resource: resource, mailFolder: mailFolder))
+            }
+        }
+        return inserts.map(\.resourceID)
+    }
+    
+    func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) throws {
+        let message = try self[messageID]
+        let    from = try self[   fromID]
+        let      to = try self[     toID]
+
+        try transaction {
+            var moveFromMessages = from._messages
+            moveFromMessages.removeAll { $0.uniqueID == message.uniqueID }
+            from._messages = moveFromMessages
+            
+            var moveToMessages = to._messages
+            moveToMessages.append(message)
+            to._messages = moveToMessages
+        }
+    }
+}*/
+
 
 @ModelActor
 public actor ModelStore {
     
 
-    let logger = Logger(subsystem: "me.frogcjn.jet-email.ModelStore", category: "ModelStore")
+   //  let logger = Logger(subsystem: "me.frogcjn.jet-email.ModelStore", category: "ModelStore")
 }
 
 enum ModelStoreError : Error {
@@ -175,7 +427,7 @@ fileprivate extension ModelContext {
             // If not found: create
             let model = Message(resource: resource, account: mailFolder.account)
             insert(model)
-            model.mailFolders.append(mailFolder)
+            mailFolder._messages.append(model)
             return model
         }
     }
@@ -195,205 +447,5 @@ fileprivate extension ModelContext {
     func _deleteModel(_ model: Message) throws -> Message {
         model.deleteMark = true
         return model
-    }
-}
-
-public extension ModelStore {
-    
-    // MARK: - Accounts
-    
-    // loadAccounts
-    func setAccounts<AccountResource: AccountProtocol>(_ accounts: [AccountResource]) async throws -> (inserts: [AccountID], delete: [AccountID]) {
-        checkBackgroundThread()
-        
-        var inserts   = [Account]()
-        var removings = [Account]()
-        
-        try modelContext.transaction {
-            // inserts
-            inserts = try accounts.map(modelContext._insertAccount(resource:))
-            
-            // others: not have
-            removings = try modelContext._fetchAccountNotIn(inserts)
-            try removings.forEach { _ = try modelContext._deleteModel($0) }
-        }
-        return (inserts.map(\.resourceID), removings.map(\.resourceID))
-    }
-       
-    // signIn
-    func insertAccount<AccountResource: AccountProtocol>(_ account: AccountResource) async throws -> AccountID {
-        checkBackgroundThread()
-        var accountID: AccountID!
-        try modelContext.transaction {
-            accountID = try modelContext._insertAccount(resource: account).resourceID
-        }
-        return accountID
-    }
-        
-    // signOut
-    func deleteAccount(accountID: AccountID) throws -> AccountID {
-        checkBackgroundThread()
-        let account = try modelContext[accountID]
-        try modelContext.transaction {
-            _ = try modelContext._deleteModel(account)
-            account.orderIndex = nil
-            
-            // reorder
-            let accounts = try modelContext._fetchAccounts()
-            for (index, item) in accounts.enumerated() {
-                item.orderIndex = index
-            }
-        }
-        return accountID
-    }
-    
-    // move account
-    func moveAccounts(accountIDs: [AccountID], fromOffsets source: IndexSet, toOffset destination: Int) throws -> [Account.ResourceID] {
-        checkBackgroundThread()
-        
-        // contacts.move(fromOffsets: from, toOffset: to)
-        // Make a copy of the current list of items
-        var accounts = try accountIDs.map { try modelContext[$0] }
-        
-        // Apply the move operation to the items
-        accounts.move(fromOffsets: source, toOffset: destination)
-        
-        try modelContext.transaction {
-            
-            // Update each item's relative index order based on the new items
-            // Can extract and reuse this part if the order of the items is changed elsewhere (like when deleting items)
-            // The iteration could be done in reverse to reduce changes to the indices but isn't necessary
-            for (index, item) in accounts.filter({ !$0.deleteMark }).enumerated() {
-                item.orderIndex = index
-            }
-            for item in accounts.filter({ $0.deleteMark }) {
-                item.orderIndex = nil
-            }
-        }
-        return accounts.map(\.resourceID)
-    }
-    
-    // MARK: - Account-Mailfolders
-    
-    
-    
-    // loadMailFolders
-    func setRootMailFolder<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource, accountID: AccountID) throws -> MailFolderID {
-        let account = try modelContext[accountID]
-        var mailFolder: MailFolder!
-        try modelContext.transaction {
-            mailFolder = try modelContext._insertMailFolder(resource: resource, account: account)
-            account.root = mailFolder // set root mail folder relation on main
-        }
-        return mailFolder.resourceID
-    }
-    
-    
-
-    // loadMailFolders
-    func setChildrenMailFolders<MailFolderResource : MailFolderProtocol>(resources: [MailFolderResource], parentID: MailFolderID, accountID: AccountID) throws -> [MailFolderID] where MailFolderResource : JetEmailData.MailFolderProtocol {
-        let parent =  try modelContext[parentID]
-        let account = try modelContext[accountID]
-        
-        var inserts = [MailFolder]()
-        try modelContext.transaction {
-            for resource in resources {
-                try inserts.append(modelContext._insertMailFolder(resource: resource, parent: parent, account: account))
-            }
-            
-            // inserts order
-            inserts = inserts.sortedChildren
-            for (index, insert) in inserts.enumerated() {
-                insert._childIndex = index
-            }
-            
-            // delete
-            let deletings = try modelContext._fetchMailFolderNotIn(inserts, parent: parent)
-            try deletings.forEach {
-                $0._childIndex = nil
-                _ = try modelContext._deleteModel($0)
-            }
-        }
-        return inserts.map { $0.resourceID }
-    }
-    
-    // MARK: - MailFolder-Messages
-    
-    // loadMessages
-    func setMessagesDeletePart(newMessageIDs: [MessageID], mailFolderID: MailFolderID) async throws -> [(offset: Int,  element: MessageID)] {
-        checkBackgroundThread()
-                
-        let oldMessages =  try modelContext[mailFolderID]._messages.filter { !$0.deleteMark }/* Set(try modelContext._fetchMessages(mailFolderID: mailFolderID))*/
-        
-        let newMessageIDSet = Set(newMessageIDs)
-        let oldMessageIDSet = Set(oldMessages.map(\.resourceID))
-
-        let deletingIDSet = oldMessageIDSet.subtracting(newMessageIDSet)
-        let   insertIDSet = newMessageIDSet.subtracting(oldMessageIDSet)
-        
-        try modelContext.transaction {
-            let deletings = oldMessages.filter { deletingIDSet.contains($0.resourceID) }
-            try deletings.forEach { _ = try modelContext._deleteModel($0) }
-        }
-        
-        let enumeratedInsertIDs = newMessageIDs.enumerated().filter { insertIDSet.contains($0.element) }
-        return enumeratedInsertIDs
-    }
-    
-    // loadMessages
-    func setMessagesInsertPart<MessageResource>(resources: [MessageResource], mailFolderID: MailFolderID) throws -> [MessageID] where MessageResource : JetEmailData.MessageProtocol {
-        checkBackgroundThread()
-        let mailFolder = try modelContext[mailFolderID]
-        
-        var inserts = [Message]()
-        try modelContext.transaction {
-            try resources.forEach { resource in
-                try inserts.append(modelContext._insertMessage(resource: resource, mailFolder: mailFolder))
-            }
-        }
-        return inserts.map(\.resourceID)
-    }
-    
-    // moveMessages
-    func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) throws {
-        let message = try modelContext[messageID]
-        let from    = try modelContext[fromID]
-        let to      = try modelContext[toID]
-        try modelContext.transaction {
-            var fromMessages = from._messages
-            fromMessages.removeAll { $0 == message }
-            from._messages = fromMessages
-            
-            var toMessages = to._messages
-            toMessages.append(message)
-            to._messages = toMessages
-        }
-    }
-    
-    // MARK: - Message
-    
-    // load body
-    func setMessage<MessageResource: MessageProtocol>(resource: MessageResource) throws -> MessageID {
-        checkBackgroundThread()
-        let message = try modelContext[resource.generalID]
-        try modelContext.transaction {
-            message.update(resource: resource)
-        }
-        return message.resourceID
-    }
-}
-
-public extension ModelContext {
-    @MainActor
-    func moveMessage(message: Message, from: MailFolder, to: MailFolder) throws {
-        try transaction {
-            var moveFromMessages = from._messages
-            moveFromMessages.removeAll { $0.uniqueID == message.uniqueID }
-            from._messages = moveFromMessages
-            
-            var moveToMessages = to._messages
-            moveToMessages.append(message)
-            to._messages = moveToMessages
-        }
     }
 }

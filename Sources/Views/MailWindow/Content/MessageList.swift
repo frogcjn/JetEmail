@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData    // for @Query
 import JetEmailData // for Account
 
-fileprivate struct _MessageList : View {
+private struct _MessageList : View {
     
     @Environment(MailWindowModel.self)
     var window
@@ -22,9 +22,15 @@ fileprivate struct _MessageList : View {
     
     @Environment(MailFolder.self)
     var mailFolder
-
+    
     @Query
     var messages: [Message]
+    
+    /*init(mailFolder: MailFolder) {
+        let uniqueID = mailFolder.uniqueID
+        self.mailFolder = mailFolder
+        self._messages = Query(filter: #Predicate<Message> { $0.mailFolders.contains { $0.uniqueID == uniqueID } }, sort: \.date, order: .reverse)
+    }*/
     
     var body: some View {
         List(selection: Bindable(window).selectedMessage) {
@@ -103,7 +109,7 @@ fileprivate struct _MessageList : View {
                         for message in messages.filter({ $0.movePlanID != nil }) {
                             if let toID = message.movePlanID {
                                 Task {
-                                    await appModel.move(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: toID)
+                                    await appModel.moveMessage(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: toID)
                                     message.movePlanID = nil
                                 }
                             }
@@ -142,16 +148,17 @@ fileprivate struct _MessageList : View {
 struct MessageList : View {
     @Environment(MailFolder.self)
     var mailFolder
-    
-    @State
-    var uniqueIDs: [String] = []
 
     var body: some View {
-        // let uniqueID = mailFolder.uniqueID
-        _MessageList(_messages: Query(filter: #Predicate<Message> { uniqueIDs.contains($0.uniqueID) && !$0.deleteMark }, sort: \.date, order: .reverse))
+        let uniqueID = mailFolder.uniqueID
+        _MessageList(_messages: Query(filter: #Predicate<Message> { $0.mailFolders.contains { $0.uniqueID == uniqueID } }, sort: \.date, order: .reverse))
+        
+        /*_MessageList(_messages: Query(filter: #Predicate<Message> { uniqueIDs.contains($0.uniqueID) && !$0.deleteMark }, sort: \.date, order: .reverse))
             .onChange(of: mailFolder._messages, initial: true) {
                 uniqueIDs = $1.map(\.uniqueID)
-            }
+            }*/
+        /*_MessageList(messages: mailFolder.messages)*/
+        //_MessageList(mailFolder: mailFolder)
     }
 }
 

@@ -28,7 +28,6 @@ public extension MicrosoftSession {
     
     // MARK: - MailFolder-Messages
     
-    @MainActor // for id.loadingMessageState
     func loadMessages(mailFolderID: MicrosoftMailFolderID, modelStore: ModelStore) async throws {
         
         let newMessageIDs: [MessageID] = try await getMessagesID(in: mailFolderID).map { $0.generalID }
@@ -47,13 +46,45 @@ public extension MicrosoftSession {
                 (total, stream) = try await session.getMessagesStream(id: innerID)
             }*/
             var value = firstIndexToLoad
-            mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+            await MainActor.run { [value] in
+                mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+            }
+            
             for try await messages in stream {
                 value += try await modelStore.setMessagesInsertPart(resources: messages, mailFolderID: mailFolderID.generalID).count // MSAL to SwiftData
-                mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+                await MainActor.run { [value] in
+                    mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+                }
             }
         }
     }
+    
+    /*@MainActor // for id.loadingMessageState
+    func loadMessagesMain(mailFolderID: MicrosoftMailFolderID, modelContext: ModelContext) async throws {
+        
+        let newMessageIDs: [MessageID] = try await getMessagesID(in: mailFolderID).map { $0.generalID }
+
+        // remove
+        let firstIndexToLoad = try await modelContext.setMessagesDeletePart(newMessageIDs: newMessageIDs, mailFolderID: mailFolderID.generalID).first?.offset
+        
+        
+        let (total, stream): (total: Int, stream: AsyncThrowingStream<[MicrosoftMessage], Error>)
+        
+        if let firstIndexToLoad {
+           // do {
+            (total, stream) = try await getMessagesStream(id: mailFolderID, skip: firstIndexToLoad)
+            //}
+            /* catch let error as URLError where error.code == .badURL {
+                (total, stream) = try await session.getMessagesStream(id: innerID)
+            }*/
+            var value = firstIndexToLoad
+            mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+            for try await messages in stream {
+                value += try modelContext.setMessagesInsertPart(resources: messages, mailFolderID: mailFolderID.generalID).count // MSAL to SwiftData
+                mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+            }
+        }
+    }*/
         
     // https://learn.microsoft.com/en-us/graph/api/message-move?view=graph-rest-1.0
     func moveMessage(messageID: MicrosoftMessageID, fromID: MicrosoftMailFolderID, toID: MicrosoftMailFolderID) async throws {

@@ -64,9 +64,9 @@ extension MessageCell {
                                 }
                             } selection: { element in
                                 message.movePlanID = element.resourceID
-                                moveTo()
+                                moveMessage()
                             } primaryAction: {
-                                moveTo()
+                                moveMessage()
                             }
                             .menuStyle(.button)
                             .labelStyle(.titleAndIcon)
@@ -79,7 +79,7 @@ extension MessageCell {
                                 Label($0.path.joined(separator: "/"), systemImage: $0.element.systemImage).tag(Optional($0.element.resourceID))
                             }
                         } label: {
-                            Button("Move To: ", systemImage: "folder", action: moveTo)
+                            Button("Move To: ", systemImage: "folder", action: moveMessage)
                         }
                         .labelStyle(.titleAndIcon)
                     }
@@ -95,10 +95,10 @@ extension MessageCell {
         }
         
         @MainActor
-        func moveTo() {
+        func moveMessage() {
             guard let movePlanID = message.movePlanID else { return }
             Task {
-                await appModel.move(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: movePlanID)
+                await appModel.moveMessage(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: movePlanID)
                 message.movePlanID = nil
             }
         }

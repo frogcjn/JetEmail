@@ -38,9 +38,9 @@ struct AccountSectionList : View, Sendable {
                 #endif
             } else {
                 List(selection: Bindable(window).selectedMailFolder) {
-                    ForEach(accounts) { item in
-                        AccountSection()
-                            .environment(item)
+                    ForEach(accounts) { account in
+                        AccountSection(root: account.root)
+                            .environment(account)
                     }
                     
                     // Feature: Accounts - Move Accounts

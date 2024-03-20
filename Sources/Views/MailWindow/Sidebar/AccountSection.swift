@@ -17,12 +17,12 @@ struct AccountSection: View {
     @Environment(Account.self)
     private var account
     
-    @State
-    var root: MailFolder?
+    // pass account.root: AccountSection will update if account's root changes in the background
+    let root: MailFolder?
     
     var body: some View {
         Section {
-            if let rootID = account.root?.uniqueID {
+            if let rootID = root?.uniqueID {
                 _AcciontSection(_rootChildren: Query(filter: #Predicate<MailFolder> { !$0.deleteMark &&  $0.parent?.uniqueID == rootID }))
             }
         } header: {

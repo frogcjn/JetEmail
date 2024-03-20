@@ -18,7 +18,7 @@ extension AppModel {
         defer { mailFolderID.loadingMessageState = .none }
         
         do {
-            guard let session = try await accountID.refreshSession else { return }                               // get Session
+            guard let session = try await accountID.refreshSession else { return }             // get Session
             try await session.loadMessages(mailFolderID: mailFolderID, modelStore: modelStore) // Session, ModelStore
         } catch {
             logger.error("\(error)")
