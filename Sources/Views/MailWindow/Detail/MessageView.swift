@@ -26,7 +26,7 @@ struct MessageView : View {
             Spacer()
         }
         .overlay {
-            if message.isBusy {
+            if message.isLoadingBody {
                 ProgressView()
             }
         }

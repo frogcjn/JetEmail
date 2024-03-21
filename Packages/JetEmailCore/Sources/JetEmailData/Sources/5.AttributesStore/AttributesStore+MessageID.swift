@@ -8,7 +8,8 @@
 extension MessageID {
     typealias AttributesStore = JetEmailData.AttributesStore<MessageID, Attributes>
     struct Attributes : AttributesProtocol {
-        public var isBusy        = false
+        public var isMoving      = false
+        public var isLoadingBody = false
         public var isClassifying = false
         public var movePlanID: MailFolderID?
         public init() {}
@@ -22,9 +23,14 @@ extension MessageID.AttributesStore {
 
 @MainActor
 public extension MessageID {
-    var isBusy: Bool {
-        get { MessageID.AttributesStore.shared[self].isBusy }
-        nonmutating set { MessageID.AttributesStore.shared[self].isBusy = newValue }
+    var isMoving: Bool {
+        get { MessageID.AttributesStore.shared[self].isMoving }
+        nonmutating set { MessageID.AttributesStore.shared[self].isMoving = newValue }
+    }
+    
+    var isLoadingBody: Bool {
+        get { MessageID.AttributesStore.shared[self].isLoadingBody }
+        nonmutating set { MessageID.AttributesStore.shared[self].isLoadingBody = newValue }
     }
     
     var isClassifying: Bool {

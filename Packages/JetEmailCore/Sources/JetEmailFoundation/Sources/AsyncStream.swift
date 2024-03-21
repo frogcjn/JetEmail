@@ -9,7 +9,7 @@ import Foundation
 
 public extension AsyncThrowingStream {
     
-    func map<T>(_ transform: @Sendable @escaping (Element) throws -> T) rethrows -> AsyncThrowingStream<T, Error> where Element : Sendable {
+    /*func map<T>(_ transform: @Sendable @escaping (Element) throws -> T) rethrows -> AsyncThrowingStream<T, Error> where Element : Sendable {
         return  AsyncThrowingStream<T, Error> { continuation in Task {
             do {
                 for try await element in self {
@@ -20,5 +20,10 @@ public extension AsyncThrowingStream {
                 continuation.finish(throwing: error)
             }
         } }
-    }
+    }*/
 }
+
+
+public protocol AsyncSequenceOf<Element>: AsyncSequence {}
+extension AsyncThrowingStream : AsyncSequenceOf {}
+extension AsyncMapSequence : AsyncSequenceOf {}

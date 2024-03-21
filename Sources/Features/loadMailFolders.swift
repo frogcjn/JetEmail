@@ -35,7 +35,7 @@ extension AppModel {
         guard let session = try await accountID.refreshSession else { throw AppModelError.noSession }              // get Session
         
         // loadRootMailFolder
-        let rootMailFolder = try await session.getRootMailFolder()                                 // Session
+        let rootMailFolder = try await session.rootMailFolder()                                 // Session
         _ = try await modelStore.setRootMailFolder(resource: rootMailFolder, accountID: accountID)  // ModelStore
         
         /*// update mainContext for root

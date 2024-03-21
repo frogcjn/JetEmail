@@ -134,7 +134,7 @@ private struct _MessageList : View {
     
         let classifyMessages = messages.dropFirst(classifyStartIndex).prefix(count) // .filter({ $0.movePlan == nil })
         if auto {
-            await classifyMessages.map(\.resourceID).forEachTask { @MainActor in await appModel.classify(messageID: $0) }
+            await classifyMessages.map(\.resourceID).forEachTask {[appModel] in await appModel.classify(messageID: $0) }
         } else {
             classifyMessages.forEach { message in message.movePlanID = mailFolder.resourceID }
         }

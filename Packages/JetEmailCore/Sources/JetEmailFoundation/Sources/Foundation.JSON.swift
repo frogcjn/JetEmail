@@ -96,6 +96,22 @@ public extension Sequence {
 }
 
 public extension Sequence where Element: Sendable {
+    /*func forEachTask(isolation actor: isolated any Actor, operation: @Sendable @escaping (Element) async throws -> Void) async throws { // TODO: Swift 6.0, infer actor
+        try await withThrowingDiscardingTaskGroup { group in
+            forEach { element in
+                group.addTask { try await operation(element) }
+            }
+        }
+    }
+    
+    func forEachTask(isolation actor: isolated any Actor, operation: @Sendable @escaping (Element) async -> Void) async { // TODO: Swift 6.0, infer actor
+        await withDiscardingTaskGroup { group in
+            forEach { element in
+                group.addTask { await operation(element) }
+            }
+        }
+    }*/
+    
     func forEachTask(operation: @Sendable @escaping (Element) async throws -> Void) async throws { // TODO: Swift 6.0, infer actor
         try await withThrowingDiscardingTaskGroup { group in
             forEach { element in

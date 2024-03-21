@@ -17,12 +17,12 @@ public extension GoogleSession {
     
     // MARK: - Account-MailFolders
     
-    func getRootMailFolder() -> GoogleMailFolder {
+    func rootMailFolder() -> GoogleMailFolder {
         .all(accountID: account.id)
     }
     
     func loadMailFoldersUnderRoot(root: GoogleMailFolder, modelStore: ModelStore) async throws {
-        let tree = try await getMailFolderTree(rootElement: root)
+        let tree = try await mailFolderTree(rootElement: root)
         var queue: [TreeNode<GoogleMailFolder>] = [tree.root]
         while !queue.isEmpty {
             let                node = queue.removeFirst()
@@ -112,7 +112,7 @@ public extension GoogleSession {
     // MARK: - Message
 
     
-    func getMessageBody(messageID: GoogleMessageID) async throws -> GoogleMessage {
+    func messageBody(messageID: GoogleMessageID) async throws -> GoogleMessage {
         let full = try await getMessage(id: messageID, format: .full)
         let raw  = try await getMessage(id: messageID, format: .raw).raw
         let message = try full.with(accountID: account.id, raw: raw)
@@ -177,7 +177,7 @@ public extension GoogleSession {
 
 fileprivate extension GoogleSession {
     // google mailfolder path-name algrithm
-    func getMailFolderTree(rootElement: GoogleMailFolder) async throws -> Tree<GoogleMailFolder> {
+    func mailFolderTree(rootElement: GoogleMailFolder) async throws -> Tree<GoogleMailFolder> {
         let tree = Tree(rootElement: rootElement)
         
         // copy name to path

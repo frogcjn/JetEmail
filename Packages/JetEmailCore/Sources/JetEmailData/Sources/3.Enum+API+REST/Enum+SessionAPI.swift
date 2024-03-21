@@ -27,7 +27,7 @@ public protocol SessionProtocol<AccountType> {
     
     // account - mailFolders
     //@SessionActor
-    func getRootMailFolder() async throws -> MailFolderType
+    func rootMailFolder() async throws -> MailFolderType
     
     //@SessionActor
     func loadMailFoldersUnderRoot(root: MailFolderType, modelStore: ModelStore) async throws
@@ -46,7 +46,7 @@ public protocol SessionProtocol<AccountType> {
 
     // message
     //@SessionActor
-    func getMessageBody(messageID: MessageType.ID) async throws -> MessageType
+    func messageBody(messageID: MessageType.ID) async throws -> MessageType
 }
 
 
@@ -92,11 +92,11 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
     
     // account - mailFolders
     
-    public func getRootMailFolder() async throws -> MailFolderType {
+    public func rootMailFolder() async throws -> MailFolderType {
         checkBackgroundThread()
         switch self {
-        case .microsoft(let session): return .microsoft(try await session.getRootMailFolder())
-        case    .google(let session): return    .google(try await session.getRootMailFolder())
+        case .microsoft(let session): return .microsoft(try await session.rootMailFolder())
+        case    .google(let session): return    .google(try await session.rootMailFolder())
         }
     }
     
@@ -171,15 +171,15 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
     
     // message
 
-    public func getMessageBody(messageID: MessageID) async throws -> MessageType {
+    public func messageBody(messageID: MessageID) async throws -> MessageType {
         checkBackgroundThread()
         switch self {
         case .microsoft(let session): 
             guard let messageID = messageID.platformCase?.microsoft else { throw SessionError.idNotForThePlatform }
-            return .microsoft(try await session.getMessageBody(messageID: messageID))
+            return .microsoft(try await session.messageBody(messageID: messageID))
         case    .google(let session): 
             guard let messageID = messageID.platformCase?.google else { throw SessionError.idNotForThePlatform  }
-            return .google(try await session.getMessageBody(messageID: messageID))
+            return .google(try await session.messageBody(messageID: messageID))
         }
     }
 }

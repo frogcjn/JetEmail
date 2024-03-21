@@ -7,9 +7,14 @@
 
 @MainActor
 public extension Message {
-    var isBusy: Bool {
-        get { resourceID.isBusy }
-        set { resourceID.isBusy = newValue }
+    var isMoving: Bool {
+        get { resourceID.isMoving }
+        set { resourceID.isMoving = newValue }
+    }
+    
+    var isLoadingBody: Bool {
+        get { resourceID.isLoadingBody }
+        set { resourceID.isLoadingBody = newValue }
     }
     
     var isClassifying: Bool {

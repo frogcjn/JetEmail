@@ -7,12 +7,13 @@
 
 import Foundation
 import JetEmailData
+import JetEmailFoundation
 
 public extension MicrosoftSession {
     
     // MARK: - Account-MailFolders
     
-    func getRootMailFolder() async throws -> MicrosoftMailFolder {
+    func rootMailFolder() async throws -> MicrosoftMailFolder {
         try await getMailFolder(systemName: .msgFolderRoot)
     }
     
@@ -36,11 +37,11 @@ public extension MicrosoftSession {
         let firstIndexToLoad = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs, mailFolderID: mailFolderID.generalID).first?.offset
         
         
-        let (total, stream): (total: Int, stream: AsyncThrowingStream<[MicrosoftMessage], Error>)
+        //let (total, stream): (total: Int, stream: some AsyncSequenceOf<[MicrosoftMessage]>)
         
         if let firstIndexToLoad {
            // do {
-            (total, stream) = try await getMessagesStream(id: mailFolderID, skip: firstIndexToLoad)
+            let (total, stream) = try await getMessagesStream(id: mailFolderID, skip: firstIndexToLoad)
             //}
             /* catch let error as URLError where error.code == .badURL {
                 (total, stream) = try await session.getMessagesStream(id: innerID)
@@ -97,7 +98,7 @@ public extension MicrosoftSession {
     // MARK: - Message
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
-    func getMessageBody(messageID: MicrosoftMessageID) async throws -> MicrosoftMessage {
+    func messageBody(messageID: MicrosoftMessageID) async throws -> MicrosoftMessage {
         var message: MicrosoftMessage = try await getValue(MicrosoftMessageInner.self, paths: "messages", "\(messageID.innerID)", queryItems:
             .select(
                 "id",
@@ -182,7 +183,10 @@ fileprivate extension MicrosoftSession {
     }
     
     // pageSize => $top: 1-1000, default: nil (10)
-    func getMessagesStream(id: MicrosoftMailFolderID, pageSize: Int? = nil, skip: Int? = nil) async throws -> (count: Int, stream: AsyncThrowingStream<[MicrosoftMessage], Error>)  {
+    func getMessagesStream(id: MicrosoftMailFolderID, pageSize: Int? = nil, skip: Int? = nil) async throws -> (
+        count: Int,
+        stream: some AsyncSequenceOf<[MicrosoftMessage]>
+    )  {
         let (count, stream) = try await getValuesStream(MicrosoftMessageInner.self, paths: "mailFolders", "\(id.innerID)", "messages", queryItems:
                 // .orderBy(name: "receivedDateTime", .descending),
                 pageSize.map(URLQueryItem.top),

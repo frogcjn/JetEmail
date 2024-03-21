@@ -11,9 +11,9 @@ extension AppModel {
     
     @MainActor // for isClassifying
     func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) async { // message and mailFolder should in the same context
-        guard !messageID.isBusy else { return }
-        messageID.isBusy = true
-        defer { messageID.isBusy = false }
+        guard !messageID.isMoving else { return }
+        messageID.isMoving = true
+        defer { messageID.isMoving = false }
         
         do {
             guard let session = try await messageID.accountID.refreshSession else { return }

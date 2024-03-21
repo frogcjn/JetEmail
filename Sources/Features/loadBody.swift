@@ -13,13 +13,13 @@ extension AppModel {
     
     @MainActor // for .isBusy
     func loadBody(messageID: MessageID, accountID: AccountID) async {
-        guard !messageID.isBusy else { return }
-        messageID.isBusy = true
-        defer { messageID.isBusy = false }
+        guard !messageID.isLoadingBody else { return }
+        messageID.isLoadingBody = true
+        defer { messageID.isLoadingBody = false }
         
         do {
             guard let session = try await accountID.refreshSession else { return }   // get Session
-            let resource = try await    session.getMessageBody(messageID: messageID) // Session
+            let resource = try await    session.messageBody(messageID: messageID) // Session
                        _ = try await modelStore.setMessage    ( resource: resource ) // ModelStore
         } catch {
             logger.error("\(error)")
