@@ -13,11 +13,7 @@ extension AppModel {
     
     @MainActor
     func loadMailFolders(accountIDs: [AccountID]) async {
-        do {
-            try await accountIDs.forEachTask { await self.loadMailFolders(accountID: $0) }
-        } catch {
-            logger.error("\(error)")
-        }
+        await accountIDs.forEachTask { await self.loadMailFolders(accountID: $0) }
     }
 
     @MainActor
@@ -27,25 +23,37 @@ extension AppModel {
         defer {accountID.isBusy = false }
         
         do {
-            guard let session = try await accountID.refreshSession else { return }              // get Session
-            
-            // loadRootMailFolder
-
-            let rootMailFolder = try await session.getRootMailFolder()                                 // Session
-            _ = try await modelStore.setRootMailFolder(resource: rootMailFolder, accountID: accountID)  // ModelStore
-            
-            /*// update mainContext for root
-            let account = try mainContext[accountID]
-            account.root = account.root*/
-            
-            // loadMailFolders under root
-            try await session.loadMailFoldersUnderRoot(root: rootMailFolder, modelStore: modelStore) // Session, ModelStore
-            
-            // record loadedMailFolder
-            accountID.loadedMailFolder = true
-            
+            try await Task.detached { try await self._loadMailFolders(accountID: accountID) }.value
         } catch {
             logger.error("\(error)")
         }
     }
+    
+    // @BackgroundThreadPool
+    nonisolated
+    private func _loadMailFolders(accountID: AccountID) async throws {
+        guard let session = try await accountID.refreshSession else { throw AppModelError.noSession }              // get Session
+        
+        // loadRootMailFolder
+        let rootMailFolder = try await session.getRootMailFolder()                                 // Session
+        _ = try await modelStore.setRootMailFolder(resource: rootMailFolder, accountID: accountID)  // ModelStore
+        
+        /*// update mainContext for root
+        await MainActor.run {
+            let account = try mainContext[accountID]
+            account.root = account.root
+        }*/
+        
+        // loadMailFolders under root
+        try await session.loadMailFoldersUnderRoot(root: rootMailFolder, modelStore: modelStore) // Session, ModelStore
+        
+        // record loadedMailFolder
+        await MainActor.run {
+            accountID.loadedMailFolder = true
+        }
+    }
+}
+
+enum AppModelError : Error {
+    case noSession
 }

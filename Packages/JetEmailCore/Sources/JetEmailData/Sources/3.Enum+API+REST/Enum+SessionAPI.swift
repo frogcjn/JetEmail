@@ -14,9 +14,9 @@ public actor SessionActor {
 import SwiftData
 
 public protocol SessionProtocol<AccountType> {
-    associatedtype AccountType: AccountProtocol
-    associatedtype MailFolderType: MailFolderProtocol
-    associatedtype MessageType: MessageProtocol
+    associatedtype    AccountType: AccountProtocol    where    AccountType.ID : Sendable
+    associatedtype MailFolderType: MailFolderProtocol where MailFolderType.ID : Sendable
+    associatedtype    MessageType: MessageProtocol    where    MessageType.ID : Sendable
 
     // sessions
     var account: AccountType { get }

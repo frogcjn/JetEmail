@@ -44,8 +44,9 @@ fileprivate class ExternalUserAgent : NSObject, OIDExternalUserAgent, @unchecked
     
     func task(requestURL: URL, requestRedirectScheme: String, session: any OIDExternalUserAgentSession) async {
         do {
-            let resultURL: URL
             
+            #if compiler(>=5.10)
+            let resultURL: URL
             if #available(visionOS 1.1, macOS 14.4, iOS 17.4, *) {
                 resultURL = try await webAuthenticationSession.authenticate(
                     using: requestURL,
@@ -60,6 +61,13 @@ fileprivate class ExternalUserAgent : NSObject, OIDExternalUserAgent, @unchecked
                     //preferredBrowserSession: .ephemeral
                 )
             }
+            #else
+            let resultURL = try await webAuthenticationSession.authenticate(
+                using: requestURL,
+                callbackURLScheme: requestRedirectScheme
+                //preferredBrowserSession: .ephemeral
+            )
+            #endif
                 
             session.resumeExternalUserAgentFlow(with: resultURL)
         } catch {

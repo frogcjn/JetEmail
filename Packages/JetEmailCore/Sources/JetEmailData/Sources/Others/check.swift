@@ -7,8 +7,8 @@
 
 import Foundation
 
-public func checkBackgroundThread(function: String = #function) {
+public func checkBackgroundThread(file: String = #file, function: String = #function) {
     if Thread.isMainThread {
-        print(function, "on main thread")
+        print(file, function, "on main thread")
     }
 }

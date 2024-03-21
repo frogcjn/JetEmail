@@ -103,6 +103,14 @@ public extension Sequence where Element: Sendable {
             }
         }
     }
+    
+    func forEachTask(operation: @Sendable @escaping (Element) async -> Void) async { // TODO: Swift 6.0, infer actor
+        await withDiscardingTaskGroup { group in
+            forEach { element in
+                group.addTask { await operation(element) }
+            }
+        }
+    }
 }
 
 public extension Date {

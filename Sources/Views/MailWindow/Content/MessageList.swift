@@ -125,22 +125,18 @@ private struct _MessageList : View {
         
     @MainActor
     func classifyMultiple(auto: Bool, count: Int) async {
-        do {
-            let classifyStartIndex: Int
-            if let message = window.selectedMessage, let selectedIndex = messages.firstIndex(of: message) {
-                classifyStartIndex = selectedIndex
-            } else {
-                classifyStartIndex = (messages.lastIndex { $0.movePlanID != nil } ?? -1) + 1
-            }
-        
-            let classifyMessages = messages.dropFirst(classifyStartIndex).prefix(count) // .filter({ $0.movePlan == nil })
-            if auto {
-                try await classifyMessages.map(\.resourceID).forEachTask { @MainActor in await appModel.classify(messageID: $0) }
-            } else {
-                classifyMessages.forEach { message in message.movePlanID = mailFolder.resourceID }
-            }
-        } catch {
-            appModel.logger.error("\(error)")
+        let classifyStartIndex: Int
+        if let message = window.selectedMessage, let selectedIndex = messages.firstIndex(of: message) {
+            classifyStartIndex = selectedIndex
+        } else {
+            classifyStartIndex = (messages.lastIndex { $0.movePlanID != nil } ?? -1) + 1
+        }
+    
+        let classifyMessages = messages.dropFirst(classifyStartIndex).prefix(count) // .filter({ $0.movePlan == nil })
+        if auto {
+            await classifyMessages.map(\.resourceID).forEachTask { @MainActor in await appModel.classify(messageID: $0) }
+        } else {
+            classifyMessages.forEach { message in message.movePlanID = mailFolder.resourceID }
         }
     }
 }

@@ -16,11 +16,16 @@ extension AppModel {
         defer { isBusy = false }
         
         do {
-            let sessions = try await clients.sessions                                     // Clients
-            let (_, deletes) =  try await modelStore.setAccounts(sessions.map(\.account)) // ModelStore
-            try await deletes.forEachTask { _ = await $0.removeSession() }                // Sessions
+            try await Task.detached { try await self._loadAccounts() }.value
         } catch {
-            logger.error("\(error)")
+            logger.error("\(error.localizedDescription)")
         }
+    }
+    
+    // @BackgroundThreadPool
+    nonisolated private func _loadAccounts() async throws {
+        let sessions = try await clients.sessions                                     // Clients
+        let (_, deletes) =  try await modelStore.setAccounts(sessions.map(\.account)) // ModelStore
+        await deletes.forEachTask { _ = await $0.removeSession() }                // Sessions
     }
 }

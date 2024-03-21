@@ -20,7 +20,7 @@ extension GoogleClient: ClientProtocol {
 
     @MainActor // for WebAuthenticationSession
     public func signIn() async throws -> GoogleSession {
-        let gtmSession = try await _gtmSignIn()
+        let gtmSession  = try await _gtmSignIn()
         let sessionItem = try await Keychain.shared.insertItem(gtmSession: gtmSession)
         return SessionStore.shared.insert(sessionItem: sessionItem, forceReplacing: false)
     }

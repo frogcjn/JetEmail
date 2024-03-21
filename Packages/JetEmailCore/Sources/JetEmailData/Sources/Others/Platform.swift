@@ -19,7 +19,7 @@ public enum Platform : RawRepresentable, CodableValueType, Sendable {
                  default: .other(rawValue)
         }
     }
-    public var rawValue: RawValue {
+    public var rawValue: String {
         switch self {
         case .microsoft: "microsoft"
         case .google   : "google"
