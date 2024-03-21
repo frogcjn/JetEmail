@@ -23,7 +23,7 @@ struct AccountSection: View {
     var body: some View {
         Section {
             if let rootID = root?.uniqueID {
-                _AcciontSection(_rootChildren: Query(filter: #Predicate<MailFolder> { !$0.deleteMark &&  $0.parent?.uniqueID == rootID }))
+                AccountSectionBody(_rootChildren: Query(filter: #Predicate<MailFolder> { !$0.deleteMark &&  $0.parent?.uniqueID == rootID }))
             }
         } header: {
             // Feature: Account - Load Mail Folders
@@ -33,7 +33,7 @@ struct AccountSection: View {
 }
 
 
-fileprivate struct _AcciontSection: View {
+fileprivate struct AccountSectionBody: View {
 
     @Query  /*sort: \Account.orderIndex*/
     var rootChildren: [MailFolder]
