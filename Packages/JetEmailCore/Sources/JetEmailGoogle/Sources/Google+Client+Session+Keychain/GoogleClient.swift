@@ -31,7 +31,7 @@ extension GoogleClient {
         case gmailModify   = "https://www.googleapis.com/auth/gmail.modify"
     }
     
-    enum ResponseType: String, Sendable {
+    enum ResponseType: String, CodableValueType, Sendable {
         case code // OIDResponseTypeCode
     }
 }

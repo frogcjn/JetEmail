@@ -42,7 +42,7 @@ public protocol SessionProtocol<AccountType> {
     func loadMessagesMain(mailFolderID: MailFolderType.ID, modelContext: ModelContext) async throws*/
     
     //@SessionActor
-    func moveMessage(messageID: MessageType.ID, fromID: MailFolderType.ID, toID: MailFolderType.ID) async throws
+    func moveMessage(messageID: MessageType.ID, fromID: MailFolderType.ID, toID: MailFolderType.ID) async throws -> MessageType
 
     // message
     //@SessionActor
@@ -149,7 +149,7 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
         }
     }*/
     
-    public func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) async throws {
+    public func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) async throws -> MessageType {
         checkBackgroundThread()
         switch self {
         case .microsoft(let session): 
@@ -157,15 +157,15 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
                 let messageID = messageID.platformCase?.microsoft,
                 let    fromID =    fromID.platformCase?.microsoft,
                 let      toID =      toID.platformCase?.microsoft
-            else { return }
-            try await session.moveMessage(messageID: messageID, fromID: fromID, toID: toID)
+            else { throw SessionError.idNotForThePlatform }
+            return .microsoft(try await session.moveMessage(messageID: messageID, fromID: fromID, toID: toID))
         case    .google(let session):
             guard
                 let messageID = messageID.platformCase?.google,
                 let    fromID =    fromID.platformCase?.google,
                 let      toID =      toID.platformCase?.google
-            else { return }
-            try await session.moveMessage(messageID: messageID, fromID: fromID, toID: toID)
+            else { throw SessionError.idNotForThePlatform }
+            return .google(try await session.moveMessage(messageID: messageID, fromID: fromID, toID: toID))
         }
     }
     

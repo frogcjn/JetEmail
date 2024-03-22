@@ -88,18 +88,18 @@ public extension MicrosoftSession {
     }*/
         
     // https://learn.microsoft.com/en-us/graph/api/message-move?view=graph-rest-1.0
-    func moveMessage(messageID: MicrosoftMessageID, fromID: MicrosoftMailFolderID, toID: MicrosoftMailFolderID) async throws {
+    func moveMessage(messageID: MicrosoftMessageID, fromID: MicrosoftMailFolderID, toID: MicrosoftMailFolderID) async throws -> MicrosoftMessage {
         struct MessageMoveRequestBody : Encodable {
             let destinationId: String
         }
-        _ = try await postItem(type: MicrosoftMessage.self, "messages", "\(messageID)", "move", body: MessageMoveRequestBody(destinationId: toID.innerID))
+        return try await postItem("mailFolders", fromID.innerID, "messages", messageID.innerID, "move", body: MessageMoveRequestBody(destinationId: toID.innerID), responseType: MicrosoftMessageInner.self).with(accountID: account.id)
     }
     
     // MARK: - Message
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
     func messageBody(messageID: MicrosoftMessageID) async throws -> MicrosoftMessage {
-        var message: MicrosoftMessage = try await getValue(MicrosoftMessageInner.self, paths: "messages", "\(messageID.innerID)", queryItems:
+        var message: MicrosoftMessage = try await getValue(MicrosoftMessageInner.self, paths: "messages", messageID.innerID, queryItems:
             .select(
                 "id",
                 "subject",
@@ -303,7 +303,7 @@ fileprivate extension MicrosoftSession {
         try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader).responseJSON(Value.self)
     }
     
-    func postResponse<RequestBody: Encodable, Value: Decodable & Sendable>(url: URL, body: RequestBody, _ type: Value.Type = Value.self) async throws -> Value {
+    func postResponse<RequestBody: Encodable, Value: Decodable & Sendable>(url: URL, body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
         try await URLRequest._post(url: url, body: body)._settingAuthorization(header: authorizationHeader).responseJSON(Value.self)
     }
 }
@@ -389,7 +389,7 @@ fileprivate extension MicrosoftSession {
     }
     
     
-    func postItem<RequestBody: Encodable, Value: Decodable & Sendable>(type: Value.Type = Value.self, _ paths: String..., body: RequestBody) async throws -> Value {
+    func postItem<RequestBody: Encodable, Value: Decodable & Sendable>(_ paths: String..., body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
         let url = paths.reduce(endpointURL) { $0.appending(path: $1) }
         return try await postResponse(url: url, body: body)
     }

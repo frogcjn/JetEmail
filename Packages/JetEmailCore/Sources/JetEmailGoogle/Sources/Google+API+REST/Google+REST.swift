@@ -95,8 +95,8 @@ public extension GoogleSession {
     }*/
     
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/modify
-    func moveMessage(messageID: GoogleMessageID, fromID: GoogleMailFolderID, toID: GoogleMailFolderID) async throws {
-        _ = try await service.execute(GTLRGmail_Message.self) {
+    func moveMessage(messageID: GoogleMessageID, fromID: GoogleMailFolderID, toID: GoogleMailFolderID) async throws -> GoogleMessage {
+        try await service.execute(GTLRGmail_Message.self) {
             let accountID = account.id.innerID
             let messageID = messageID.innerID
             
@@ -106,7 +106,7 @@ public extension GoogleSession {
             
             let query = GTLRGmailQuery_UsersMessagesModify.query(withObject: request, userId: accountID, identifier: messageID)
             return query
-        }
+        }.messageInner.with(accountID: account.id)
     }
     
     // MARK: - Message
