@@ -16,22 +16,14 @@ public struct MicrosoftMailFolder : MicrosoftProtocol, PlatformSpecificMailFolde
     public let         id: MicrosoftMailFolderID
     public let      inner: MicrosoftMailFolderInner
     
-    public let systemName: MicrosoftMailFolderSystemName?
-    public var systemInfo: MailFolderSystemInfo?
+    public let systemName: MailFolderSystemName?
 
     public var       name: String? { inner.displayName }
 
-    public init(id: MicrosoftMailFolderID, inner: MicrosoftMailFolderInner, systemName: MicrosoftMailFolderSystemName?) {
+    public init(id: MicrosoftMailFolderID, inner: MicrosoftMailFolderInner, systemName: MailFolderSystemName?) {
         self.id         = id
         self.inner      = inner
-        
-        if let systemName = systemName {
-            self.systemName = systemName
-            self.systemInfo = systemName.systemInfo
-        } else {
-            self.systemName = nil
-            self.systemInfo = nil
-        }
+        self.systemName = systemName
     }
 }
 

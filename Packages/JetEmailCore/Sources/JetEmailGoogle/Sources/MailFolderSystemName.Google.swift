@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import JetEmailData
 
-public enum GoogleMailFolderSystemName : String, CaseIterable, CodableValueType, Sendable {
+fileprivate enum GoogleMailFolderSystemName : String, CaseIterable, CodableValueType, Sendable {
     case inbox              = "INBOX"
     case starred            = "STARRED"
     case snoozed            = "SNOOZED"
@@ -28,18 +29,49 @@ public enum GoogleMailFolderSystemName : String, CaseIterable, CodableValueType,
     case categoryPersonal   = "CATEGORY_PERSONAL"
 }
 
-public extension GoogleMailFolderID {
-    var systemName: GoogleMailFolderSystemName? {
-        .init(rawValue: innerID)
+fileprivate extension GoogleMailFolderSystemName {
+    var generalSystemName: MailFolderSystemName {
+        switch self {
+        case .inbox             : .inbox
+        case .starred           : .starred
+        case .snoozed           : .snoozed
+        case .important         : .important
+        case .chat              : .chat
+        case .sent              : .sent
+        case .scheduled         : .scheduled
+        case .draft             : .drafts
+        case .all               : .all
+        case .spam              : .junk
+        case .trash             : .trash
+        case .unread            : .unread
+        case .categorySocial    : .social
+        case .categoryForums    : .forums
+        case .categoryUpdates   : .updates
+        case .categoryPromotions: .promotions
+        case .categoryPersonal  : .personal
+        }
     }
 }
 
-public extension GoogleMailFolderSystemName {
-    var systemInfo: MailFolderSystemInfo {
-        .init(systemOrder: systemOrder, nameLocalizedKey: nameLocalizedKey, systemImage: systemImage)
+
+extension GoogleMailFolderInner {
+    fileprivate var googleSystemName: GoogleMailFolderSystemName? {
+        .init(rawValue: id)
+    }
+    
+    fileprivate var isSystemFolder: Bool {
+        guard let type = type else { return false }
+        return type == .system
+    }
+    
+    var systemName: MailFolderSystemName? {
+        guard isSystemFolder else { return nil }
+        guard let googleSystemName else { return nil }
+        return googleSystemName.generalSystemName
     }
 }
 
+/*
 public extension GoogleMailFolderSystemName {
     var systemOrder: Int {
         switch self {
@@ -109,3 +141,4 @@ public extension GoogleMailFolderSystemName {
         }
     }
 }
+*/

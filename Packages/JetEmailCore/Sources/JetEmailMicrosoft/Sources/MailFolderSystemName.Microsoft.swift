@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import JetEmailData
 
-public enum MicrosoftMailFolderSystemName : String, CaseIterable, CodableValueType, Sendable {
+enum MicrosoftMailFolderSystemName : String, CaseIterable, CodableValueType, Sendable {
     case msgFolderRoot             = "msgfolderroot"
     case archive
     case clutter
@@ -27,12 +28,31 @@ public enum MicrosoftMailFolderSystemName : String, CaseIterable, CodableValueTy
     case syncIssues                = "syncissues"
 }
 
-public extension MicrosoftMailFolderSystemName {
-    var systemInfo: MailFolderSystemInfo {
-        .init(systemOrder: systemOrder, nameLocalizedKey: nameLocalizedKey, systemImage: systemImage)
+extension MicrosoftMailFolderSystemName {
+    var generalSystemName: MailFolderSystemName {
+        switch self {
+        case .msgFolderRoot:             .root
+        case .archive:                   .archive
+        case .clutter:                   .clutter
+        case .conflicts:                 .conflicts
+        case .conversationHistory:       .chat
+        case .deletedItems:              .trash
+        case .drafts:                    .drafts
+        case .inbox:                     .inbox
+        case .junkEmail:                 .junk
+        case .outbox:                    .outbox
+        case .recoverableItemsDeletions: .recoverableItemsDeletions
+        case .scheduled:                 .scheduled
+        case .searchFolders:             .searchFolders
+        case .sentItems:                 .sent
+        case .localFailures:             .localFailures
+        case .serverFailures:            .serverFailures
+        case .syncIssues:                .syncIssues
+        }
     }
 }
 
+/*
 public extension MicrosoftMailFolderSystemName {
     var systemOrder: Int? {
         switch self {
@@ -104,6 +124,9 @@ public extension MicrosoftMailFolderSystemName {
         }
     }
 }
+
+
+
 /*
 //
 //  File.swift
@@ -191,4 +214,5 @@ public extension MicrosoftMailFolder {
      The Voicemail folder.
      */
 }
+*/
 */

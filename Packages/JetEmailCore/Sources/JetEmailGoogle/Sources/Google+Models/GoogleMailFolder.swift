@@ -12,8 +12,7 @@ public struct GoogleMailFolder : GoogleProtocol, PlatformSpecificMailFolderProto
     public let            id: GoogleMailFolderID
     public let         inner: GoogleMailFolderInner
     
-    public let    systemName: GoogleMailFolderSystemName?
-    public let    systemInfo: MailFolderSystemInfo?
+    public let    systemName: MailFolderSystemName?
     
     public let          path: String?
     public let processedName: String? // adjust for google mailfolder path-name algrithm
@@ -22,15 +21,7 @@ public struct GoogleMailFolder : GoogleProtocol, PlatformSpecificMailFolderProto
     public init(id: GoogleMailFolderID, inner: GoogleMailFolderInner, processedName: String? = nil) {
         self.id            = id
         self.inner         = inner
-        
-        if inner.isSystemFolder, let systemName = id.systemName {
-            self.systemName = systemName
-            self.systemInfo = systemName.systemInfo
-        } else {
-            self.systemName = nil
-            self.systemInfo = nil
-        }
-        
+        self.systemName    = inner.systemName
         self.path          = inner.name
         self.processedName = processedName ?? inner.name?.components(separatedBy: "/").last
     }
@@ -100,9 +91,4 @@ public struct GoogleMailFolderInner : CodableValueType, Sendable {
     }
 }
 
-public extension GoogleMailFolderInner {
-    var isSystemFolder: Bool {
-        guard let type = type else { return false }
-        return type == .system
-    }
-}
+

@@ -42,10 +42,12 @@ public final class MailFolder {
     
     // MARK: Resource - SystemInfo
     
-    public private(set) var   _isSystemFolder: Bool    // cached whether it is a system folder
+    public private(set) var       _systemName: MailFolderSystemName?    // cached sytem older
+    
+    /*public private(set) var   _isSystemFolder: Bool    // cached whether it is a system folder
     public private(set) var      _systemOrder: Int?    // cached sytem older
     public private(set) var _nameLocalizedKey: String? // cached localized name
-    public private(set) var      _systemImage: String? // cached system image
+    public private(set) var      _systemImage: String? // cached system image*/
     
     
     // MARK: Resource - Storage
@@ -63,10 +65,11 @@ public final class MailFolder {
         uniqueID          = resource.generalID.uniqueID
         
         name              = resource.name
-        _isSystemFolder   = resource.systemInfo != nil
+        _systemName       = resource.systemName
+        /*_isSystemFolder   = resource.systemInfo != nil
         _systemOrder      = resource.systemInfo?.order
         _nameLocalizedKey = resource.systemInfo?.nameLocalizedKey
-        _systemImage      = resource.systemInfo?.systemImage
+        _systemImage      = resource.systemInfo?.systemImage*/
         
         _resource         = try? resource.jsonString
         self.account      = account
@@ -81,10 +84,12 @@ public final class MailFolder {
         uniqueID          = resource.generalID.uniqueID
         
         name              = resource.name
-        _isSystemFolder   = resource.systemInfo != nil
+        _systemName       = resource.systemName
+
+        /*_isSystemFolder   = resource.systemInfo != nil
         _systemOrder      = resource.systemInfo?.order
         _nameLocalizedKey = resource.systemInfo?.nameLocalizedKey
-        _systemImage      = resource.systemInfo?.systemImage
+        _systemImage      = resource.systemInfo?.systemImage*/
         
         _resource         = try? resource.jsonString
     }
@@ -120,11 +125,16 @@ public extension MailFolder {
     
     @Transient
     var localizedName : String {
-        MailFolderSystemInfo.localizedName(name: name, localizedKey: _nameLocalizedKey)
+        MailFolderSystemName.localizedName(name: name, systemName: _systemName)
     }
     
     @Transient
     var systemImage : String {
-        _systemImage ?? "folder"
+        _systemName?.systemImage ?? "folder"
+    }
+    
+    @Transient
+    var isSystemFolder: Bool {
+        _systemName != nil
     }
 }

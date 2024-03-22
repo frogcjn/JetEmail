@@ -17,7 +17,7 @@ public protocol AccountProtocol                    : GeneralIdentifiable & Ident
 
 public protocol MailFolderProtocol                 : GeneralIdentifiable & IdentifiableValueType, Sendable where GeneralID == MailFolderID {
     var name: String? { get }
-    var systemInfo: MailFolderSystemInfo? { get }
+    var systemName: MailFolderSystemName? { get }
 }
 public protocol MessageProtocol                    : GeneralIdentifiable & IdentifiableValueType, Sendable where GeneralID == MessageID {
     

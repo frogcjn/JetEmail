@@ -18,10 +18,10 @@ extension PlatformEnum : MailFolderProtocol where
         }
     }
     
-    public var systemInfo: MailFolderSystemInfo? {
+    public var systemName: MailFolderSystemName? {
         switch self {
-        case .microsoft(let platform): platform.systemInfo
-        case    .google(let platform): platform.systemInfo
+        case .microsoft(let platform): platform.systemName
+        case    .google(let platform): platform.systemName
         }
     }
 }

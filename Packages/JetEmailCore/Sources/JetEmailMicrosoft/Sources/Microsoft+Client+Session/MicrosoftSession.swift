@@ -21,7 +21,7 @@ public actor MicrosoftSession : Sendable {
 }
 
 @MainActor
-public extension MicrosoftAccountID {
+extension MicrosoftAccountID {
     typealias AttributesStore = JetEmailData.AttributesStore<MicrosoftAccountID, Attributes>
     struct Attributes : AttributesProtocol {
         var idToWellKnownFolderName : [MicrosoftMailFolderID: MicrosoftMailFolderSystemName]?

@@ -274,7 +274,7 @@ fileprivate extension MicrosoftMessageInner {
 
 fileprivate extension MicrosoftMailFolderInner {
     func with(accountID: MicrosoftAccountID, systemName: MicrosoftMailFolderSystemName?) -> MicrosoftMailFolder {
-        .init(id: .init(accountID: accountID, innerID: id), inner: self, systemName: systemName)
+        .init(id: .init(accountID: accountID, innerID: id), inner: self, systemName: systemName?.generalSystemName)
     }
     
     func with(accountID: MicrosoftAccountID, idToSystemName: [MicrosoftMailFolderID: MicrosoftMailFolderSystemName]) -> MicrosoftMailFolder {
