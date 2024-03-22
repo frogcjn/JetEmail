@@ -39,6 +39,11 @@ private struct _MessageList : View {
                     MessageCell()
                         .environment(message)
                         .tag(message)
+                        .contextMenu {
+                            Button("Delete") {
+                                deleteMessage(message)
+                            }
+                        }
                 }
             } header: {
                 LoadingMessageProgressBar(mailFolderName: mailFolder.localizedName, loadingMessageState: mailFolder.resourceID.loadingMessageState)
@@ -122,7 +127,25 @@ private struct _MessageList : View {
             .labelStyle(.titleAndIcon)
         }
     }
-        
+
+    @MainActor
+    func deleteMessage(_ message: Message) {
+        moveMessage(message, to: .trash)
+    }
+
+    @MainActor
+    func moveMessage(_ message: Message, to: MailFolderSystemName) {
+        if let folders = try? appModel.mainContext[message.account.resourceID].mailFolders,
+           let folder = folders.first(where: {
+            $0._systemName == MailFolderSystemName.trash
+        }) {
+            Task {
+                await appModel.moveMessage(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: folder.resourceID)
+                message.movePlanID = nil
+            }
+        }
+    }
+
     @MainActor
     func classifyMultiple(auto: Bool, count: Int) async {
         let classifyStartIndex: Int
