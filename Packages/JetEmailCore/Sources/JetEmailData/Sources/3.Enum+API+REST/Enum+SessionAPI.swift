@@ -35,7 +35,7 @@ public protocol SessionProtocol<AccountType> {
     // mailFolder - messages
     //@SessionActor
     
-    func loadMessages(mailFolderID: MailFolderType.ID, modelStore: ModelStore) async throws
+    func syncMessages(mailFolderID: MailFolderType.ID, modelStore: ModelStore) async throws
     
     
     /*@MainActor
@@ -124,15 +124,15 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
     
     // mailFolder - messages
 
-    public func loadMessages(mailFolderID: MailFolderID, modelStore: ModelStore) async throws {
+    public func syncMessages(mailFolderID: MailFolderID, modelStore: ModelStore) async throws {
         checkBackgroundThread()
         switch self {
         case .microsoft(let session):
             guard let mailFolderID = mailFolderID.platformCase?.microsoft else { return }
-            try await session.loadMessages(mailFolderID: mailFolderID, modelStore: modelStore)
+            try await session.syncMessages(mailFolderID: mailFolderID, modelStore: modelStore)
         case    .google(let session):
             guard let mailFolderID = mailFolderID.platformCase?.google else { return }
-            try await session.loadMessages(mailFolderID: mailFolderID, modelStore: modelStore)
+            try await session.syncMessages(mailFolderID: mailFolderID, modelStore: modelStore)
         }
     }
     

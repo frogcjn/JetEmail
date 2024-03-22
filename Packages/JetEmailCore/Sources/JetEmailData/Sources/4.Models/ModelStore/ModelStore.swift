@@ -26,7 +26,7 @@ public extension ModelStore {
             
             // others: not have
             removings = try modelContext._fetchAccountNotIn(inserts)
-            try removings.forEach { _ = try modelContext._deleteModel($0) }
+            removings.forEach { _ = modelContext._deleteModel($0) }
         }
         return (inserts.map(\.resourceID), removings.map(\.resourceID))
     }
@@ -46,7 +46,7 @@ public extension ModelStore {
         checkBackgroundThread()
         let account = try modelContext[accountID]
         try modelContext.transaction {
-            _ = try modelContext._deleteModel(account)
+            _ = modelContext._deleteModel(account)
             account.orderIndex = nil
             
             // reorder
@@ -120,9 +120,9 @@ public extension ModelStore {
             
             // delete
             let deletings = try modelContext._fetchMailFolderNotIn(inserts, parent: parent)
-            try deletings.forEach {
+            deletings.forEach {
                 $0._childIndex = nil
-                _ = try modelContext._deleteModel($0)
+                _ = modelContext._deleteModel($0)
             }
         }
         return inserts.map { $0.resourceID }
@@ -144,35 +144,81 @@ public extension ModelStore {
         
         try modelContext.transaction {
             let deletings = oldMessages.filter { deletingIDSet.contains($0.resourceID) }
-            try deletings.forEach { _ = try modelContext._deleteModel($0) }
+            deletings.forEach { _ = modelContext._deleteModel($0) }
         }
         
         let enumeratedInsertIDs = newMessageIDs.enumerated().filter { insertIDSet.contains($0.element) }
         return enumeratedInsertIDs
     }
     
-    // loadMessages
-    func setMessagesInsertPart<MessageResource>(resources: [MessageResource], mailFolderID: MailFolderID) throws -> [MessageID] where MessageResource : JetEmailData.MessageProtocol {
+    func messageIDs(mailFolderID: MailFolderID) async throws -> [MessageID] {
         checkBackgroundThread()
         let mailFolder = try modelContext[mailFolderID]
-        
-        var inserts = [Message]()
+        return mailFolder.messages.map(\.resourceID)
+    }
+    
+    // loadMessages
+    func insertMessages<MessageSource: MessageProtocol>(sources: [MessageSource], mailFolderID: MailFolderID) throws -> [MessageID] {
+        checkBackgroundThread()
+        let mailFolder = try modelContext[mailFolderID]
+        let account = mailFolder.account
+
         try modelContext.transaction {
-            try resources.forEach { resource in
-                try inserts.append(modelContext._insertMessage(resource: resource, mailFolder: mailFolder))
+            try sources.forEach { source in
+                let message = try modelContext._insertMessage(source: source, account: account)
+                message.mailFolders.append(mailFolder)
             }
         }
-        return inserts.map(\.resourceID)
+        return sources.map(\.generalID)
     }
+
+    
+    func deleteMessages(messageIDs: [MessageID], mailFolderID: MailFolderID) throws -> [MessageID] {
+        checkBackgroundThread()
+        try modelContext.transaction {
+            for messageID in messageIDs {
+                let message = try modelContext[messageID]
+                message.mailFolders.removeAll { $0.resourceID == mailFolderID }
+                if message.mailFolders.isEmpty {
+                    _ = modelContext._deleteModel(message)
+                }
+            }
+        }
+        return messageIDs
+    }
+    
+    
+    /*func insertMessage(message: any MessageProtocol, mailFolderID: MailFolderID) throws -> MessageID {
+        checkBackgroundThread()
+        let mailFolder = try modelContext[mailFolderID]
+        let account = mailFolder.account
+        try modelContext.transaction {
+            let message = try modelContext._insertMessage(source: message, account: account)
+            message.mailFolders.append(mailFolder)
+        }
+        return message.generalID
+    }
+    
+    func deleteMessage(messageID: MessageID, mailFolderID: MailFolderID) throws -> MessageID {
+        checkBackgroundThread()
+        let message    = try modelContext[messageID]
+        try modelContext.transaction {
+            message.mailFolders.removeAll { $0.resourceID == mailFolderID }
+            if message.mailFolders.isEmpty {
+                _ = modelContext._deleteModel(message)
+            }
+        }
+        return messageID
+    }*/
     
     // moveMessages
     func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) throws {
         let message = try modelContext[messageID]
-        let from    = try modelContext[fromID]
         let to      = try modelContext[toID]
         try modelContext.transaction {
-            message.mailFolders.replace([from], with: [to])
-            
+            message.mailFolders.removeAll { $0.resourceID == fromID }
+            message.mailFolders.append(to)
+
             /*var fromMessages = from._messages
             fromMessages.removeAll { $0 == message }
             from._messages = fromMessages
@@ -190,7 +236,7 @@ public extension ModelStore {
         checkBackgroundThread()
         let message = try modelContext[resource.generalID]
         try modelContext.transaction {
-            message.update(resource: resource)
+            message.update(source: resource)
         }
         return message.resourceID
     }
@@ -409,7 +455,7 @@ fileprivate extension ModelContext {
     }
     
     
-    func _insertMessage<MessageResource: MessageProtocol>(resource: MessageResource, mailFolder: MailFolder) throws -> Message {
+    /*func _insertMessage<MessageResource: MessageProtocol>(resource: MessageResource, mailFolder: MailFolder) throws -> Message {
         let id = resource.generalID
 
         // find existed
@@ -430,21 +476,42 @@ fileprivate extension ModelContext {
             mailFolder._messages.append(model)
             return model
         }
+    }*/
+    
+    func _insertMessage(source: any MessageProtocol, account: Account) throws -> Message {
+        let id = source.generalID
+
+        // find existed
+        do {
+            let model = try self[id]
+            
+            // If found: update
+            model.deleteMark = false
+            model.update(source: source)
+            model.account = account
+            return model
+        } catch ModelStoreError.notFound {
+            
+            // If not found: create
+            let model = Message(source: source, account: account)
+            insert(model)
+            return model
+        }
     }
     
     // MARK: - Delete
     
-    func _deleteModel(_ model: Account) throws -> Account {
+    func _deleteModel(_ model: Account) -> Account {
         model.deleteMark = true
         return model
     }
     
-    func _deleteModel(_ model: MailFolder) throws -> MailFolder {
+    func _deleteModel(_ model: MailFolder) -> MailFolder {
         model.deleteMark = true
         return model
     }
     
-    func _deleteModel(_ model: Message) throws -> Message {
+    func _deleteModel(_ model: Message) -> Message {
         model.deleteMark = true
         return model
     }

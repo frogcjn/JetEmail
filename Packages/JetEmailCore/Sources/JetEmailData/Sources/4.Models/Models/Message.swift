@@ -69,66 +69,66 @@ public final class Message {
 
     public private(set) var _resource: String?
     
-    public init<MessageResource : MessageProtocol>(resource: MessageResource, account: Account) {
+    public init<MessageResource : MessageProtocol>(source: MessageResource, account: Account) {
         checkBackgroundThread()
 
-        platform        = resource.generalID.platform.rawValue
-        innerAccountID  = resource.generalID.accountID.innerID
-        innerID         = resource.generalID.innerID
-        uniqueID        = resource.generalID.uniqueID
+        platform        = source.generalID.platform.rawValue
+        innerAccountID  = source.generalID.accountID.innerID
+        innerID         = source.generalID.innerID
+        uniqueID        = source.generalID.uniqueID
         
-        subject         = resource.subject
+        subject         = source.subject
         
-        createdDate     = resource.createdDate
-        modifiedDate    = resource.modifiedDate
-        receivedDate    = resource.receivedDate
-        sentDate        = resource.sentDate
-        date            = resource.date
+        createdDate     = source.createdDate
+        modifiedDate    = source.modifiedDate
+        receivedDate    = source.receivedDate
+        sentDate        = source.sentDate
+        date            = source.date
 
-        sender          = resource.sender
-        from            = resource.from
-        to              = resource.to
-        replyTo         = resource.replyTo
-        cc              = resource.cc
-        bcc             = resource.bcc
+        sender          = source.sender
+        from            = source.from
+        to              = source.to
+        replyTo         = source.replyTo
+        cc              = source.cc
+        bcc             = source.bcc
         
-        bodyPreview     = resource.bodyPreview
-        body            = resource.body
-        raw             = resource.raw
+        bodyPreview     = source.bodyPreview
+        body            = source.body
+        raw             = source.raw
         
-        _resource       = try? resource.jsonString
+        _resource       = try? source.jsonString
         
         self.account    = account
     }
     
-    public func update<MessageResource: MessageProtocol>(resource: MessageResource) {
+    public func update<MessageResource: MessageProtocol>(source: MessageResource) {
         checkBackgroundThread()
 
-        platform        = resource.generalID.platform.rawValue
-        innerAccountID  = resource.generalID.accountID.innerID
-        innerID         = resource.generalID.innerID
-        uniqueID        = resource.generalID.uniqueID
+        platform        = source.generalID.platform.rawValue
+        innerAccountID  = source.generalID.accountID.innerID
+        innerID         = source.generalID.innerID
+        uniqueID        = source.generalID.uniqueID
         
-        subject         = resource.subject
+        subject         = source.subject
         
-        createdDate     = resource.createdDate
-        modifiedDate    = resource.modifiedDate
-        receivedDate    = resource.receivedDate
-        sentDate        = resource.sentDate
-        date            = resource.date
+        createdDate     = source.createdDate
+        modifiedDate    = source.modifiedDate
+        receivedDate    = source.receivedDate
+        sentDate        = source.sentDate
+        date            = source.date
 
-        sender          = resource.sender
-        from            = resource.from
-        to              = resource.to
-        replyTo         = resource.replyTo
-        cc              = resource.cc
-        bcc             = resource.bcc
+        sender          = source.sender
+        from            = source.from
+        to              = source.to
+        replyTo         = source.replyTo
+        cc              = source.cc
+        bcc             = source.bcc
         
-        bodyPreview     = resource.bodyPreview
-        body            = resource.body
-        raw             = resource.raw
+        bodyPreview     = source.bodyPreview
+        body            = source.body
+        raw             = source.raw
         
-        _resource       = try? resource.jsonString
+        _resource       = try? source.jsonString
     }
     
     // MARK: - Relationships

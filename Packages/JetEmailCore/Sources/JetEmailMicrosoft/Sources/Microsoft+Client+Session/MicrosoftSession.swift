@@ -20,18 +20,7 @@ public actor MicrosoftSession : Sendable {
     }
 }
 
-@MainActor
-extension MicrosoftAccountID {
-    typealias AttributesStore = JetEmailData.AttributesStore<MicrosoftAccountID, Attributes>
-    struct Attributes : AttributesProtocol {
-        var idToWellKnownFolderName : [MicrosoftMailFolderID: MicrosoftMailFolderSystemName]?
-        public init() {}
-    }
-    var idToWellKnownFolderName: [MicrosoftMailFolderID: MicrosoftMailFolderSystemName]? {
-        get { AttributesStore.shared[self].idToWellKnownFolderName }
-        nonmutating set { AttributesStore.shared[self].idToWellKnownFolderName = newValue }
-    }
-}
+
 
 
 

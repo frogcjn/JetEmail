@@ -28,8 +28,49 @@ public extension MicrosoftSession {
     }
     
     // MARK: - MailFolder-Messages
+    /*
+    // https://learn.microsoft.com/en-us/graph/delta-query-messages#example-1-synchronize-messages-in-a-folder
+    func _loadMessages(mailFolderID: MicrosoftMailFolderID, modelStore: ModelStore) async throws {
+        if let deltaLink = await mailFolderID.deltaLink{
+            // let currentMessageIDs = try await modelStore.messageIDs(mailFolderID: mailFolderID.generalID)
+            let stream = try await messagesDeltaStream(deltaLink: deltaLink, maxPageSize: nil)
+            for try await delta in stream {
+                let deltaInserts = delta.values.filter { $0.inner.removed == nil }
+                let deltaDeletes = delta.values.filter { $0.inner.removed != nil }.map { $0.generalID }
+                
+                _ = try await modelStore.insertMessages(sources   : deltaInserts, mailFolderID: mailFolderID.generalID) // MSAL to SwiftData
+                _ = try await modelStore.deleteMessages(messageIDs: deltaDeletes, mailFolderID: mailFolderID.generalID) // MSAL to SwiftData
+            }
+        } else {
+            let count = Int(try await messagesCount(mailFolderID: mailFolderID))
+            
+            var inserts = [MicrosoftMessage]()
+            
+            await MainActor.run {
+                mailFolderID.generalID.loadingMessageState = .loading(value: 0, total: count)
+            }
+            
+            let stream = try await messagesDeltaStream(mailFolderID: mailFolderID, maxPageSize: nil)
+            for try await delta in stream {
+                let deltaInserts = delta.values.filter { $0.inner.removed == nil }
+                let deltaDeletes = delta.values.filter { $0.inner.removed != nil }.map { $0.generalID }
+                
+                _ = try await modelStore.insertMessages(sources   : deltaInserts, mailFolderID: mailFolderID.generalID) // MSAL to SwiftData
+                _ = try await modelStore.deleteMessages(messageIDs: deltaDeletes, mailFolderID: mailFolderID.generalID) // MSAL to SwiftData
+
+                
+                inserts.append(contentsOf: deltaInserts)
+                
+                await MainActor.run { [value = inserts.count] in
+                    mailFolderID.generalID.loadingMessageState = .loading(value: value, total: count)
+                    mailFolderID.deltaLink = delta.deltaLink
+                }
+            }
+        }
+    }*/
     
-    func loadMessages(mailFolderID: MicrosoftMailFolderID, modelStore: ModelStore) async throws {
+    
+    func syncMessages(mailFolderID: MicrosoftMailFolderID, modelStore: ModelStore) async throws {
         
         let newMessageIDs: [MessageID] = try await getMessagesID(in: mailFolderID).map { $0.generalID }
 
@@ -37,7 +78,6 @@ public extension MicrosoftSession {
         let shouldInsertMessageIDs = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs, mailFolderID: mailFolderID.generalID).compactMap(\.element.platformCase?.microsoft)
         
         guard !shouldInsertMessageIDs.isEmpty else { return }
-        
         // do {
         let stream = try await getMessagesStream(mailFolderID: mailFolderID, messageIDs: shouldInsertMessageIDs)
         //}
@@ -47,13 +87,15 @@ public extension MicrosoftSession {
         let total = newMessageIDs.count
         var value = total - shouldInsertMessageIDs.count
         
-        await MainActor.run { [value] in
+        /*await MainActor.run { [value] in
             mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
-        }
+        }*/
         for try await messages in stream {
-            value += try await modelStore.setMessagesInsertPart(resources: messages, mailFolderID: mailFolderID.generalID).count // MSAL to SwiftData
-            await MainActor.run { [value] in
-                mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+            value += try await modelStore.insertMessages(sources: messages, mailFolderID: mailFolderID.generalID).count // MSAL to SwiftData
+            if value < total {
+                await MainActor.run { [value] in
+                    mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+                }
             }
         }
     }
@@ -121,7 +163,11 @@ public extension MicrosoftSession {
         struct MessageMoveRequestBody : Encodable {
             let destinationId: String
         }
-        return try await postItem("mailFolders", fromID.innerID, "messages", messageID.innerID, "move", body: MessageMoveRequestBody(destinationId: toID.innerID), responseType: MicrosoftMessageInner.self).with(accountID: account.id)
+        return try await postItem(
+            "mailFolders", fromID.innerID, "messages", messageID.innerID, "move",
+            body: MessageMoveRequestBody(destinationId: toID.innerID),
+            responseType: MicrosoftMessageInner.self).with(accountID: account.id
+        )
     }
     
     // MARK: - Message
@@ -208,45 +254,63 @@ fileprivate extension MicrosoftSession {
     }*/
     
     // pageSize => $top: 1-1000, default: 1000
-    func getMessagesID(in mailFolderID: MicrosoftMailFolderID, pageSize: Int? = 1000) async throws -> [MicrosoftMessageID] {
+    func getMessagesID(in mailFolderID: MicrosoftMailFolderID, pageSize: Int? = 100) async throws -> [MicrosoftMessageID] {
         try await getValues(
             paths: "mailFolders", mailFolderID.innerID, "messages",
             queryItems:
                 pageSize.map(URLQueryItem.top),
-                .select("id"),
+                // .select("id"),
             responseType: MicrosoftMessageInner.self
-        ).map { $0.with(accountID: account.id) }
+        ).map { 
+            if $0.removed != nil { fatalError() }
+            return $0.with(accountID: account.id)
+        }
     }
     
     // pageSize => $top: 1-1000, default: nil (10)
-    /*func getMessagesStream(id: MicrosoftMailFolderID, pageSize: Int? = nil, skip: Int? = nil) async throws -> (
-        count: Int,
-        stream: some AsyncSequenceOf<[MicrosoftMessage]>
-    )  {
-        let (count, stream) = try await getValuesStream(MicrosoftMessageInner.self, paths: "mailFolders", "\(id.innerID)", "messages", queryItems:
-                // .orderBy(name: "receivedDateTime", .descending),
-                pageSize.map(URLQueryItem.top),
-                skip.flatMap(URLQueryItem.skip),
-                .select(
-                    "id",
-                    "subject",
-                    "createdDateTime",
-                    "lastModifiedDateTime",
-                    "receivedDateTime",
-                    "sentDateTime",
-                    "sender",
-                    "from",
-                    "toRecipients",
-                    "replyTo",
-                    "ccRecipients",
-                    "bccRecipients",
-                    "bodyPreview"
-                )
-            )
+    func messagesCount(mailFolderID: MicrosoftMailFolderID) async throws -> Int32 {
+        let count = try await getValue(
+            paths: "mailFolders", mailFolderID.innerID,
+            queryItems: .select("totalItemCount"),
+            responseType: MicrosoftMailFolderInner.self
+        ).totalItemCount
         
-        let accountID = account.id
-        return (count, stream.map { $0.map { $0.with(accountID: accountID) } })
-    }*/
+        guard let count else { throw AuthError.collectionResponseNoCount }
+        return count
+    }
+    
+    func messagesDeltaStream(mailFolderID: MicrosoftMailFolderID, maxPageSize: Int?) async throws -> some AsyncSequenceOf<Delta<MicrosoftMessage>> {
+        try await getValuesDeltaStream(
+            paths: "mailFolders", mailFolderID.innerID, "messages", "delta",
+            queryItems:
+                    .select(
+                        "id",
+                        "subject",
+                        "createdDateTime",
+                        "lastModifiedDateTime",
+                        "receivedDateTime",
+                        "sentDateTime",
+                        "sender",
+                        "from",
+                        "toRecipients",
+                        "replyTo",
+                        "ccRecipients",
+                        "bccRecipients",
+                        "bodyPreview"
+                    ),
+            maxPageSize: maxPageSize,
+            responseType: MicrosoftMessageInner.self
+        ).map { [accountID = account.id] in $0.map { $0.with(accountID: accountID) } }
+    }
+    
+    func messagesDeltaStream(deltaLink: URL, maxPageSize: Int?) async throws -> some AsyncSequenceOf<Delta<MicrosoftMessage>> {
+        try await getValuesDeltaStream(
+            url: deltaLink,
+            maxPageSize: maxPageSize,
+            responseType: MicrosoftMessageInner.self
+        ).map { [accountID = account.id] in $0.map { $0.with(accountID: accountID) } }
+    }
+    
     // pageSize => $top: 1-1000, default: nil (10)
     func getMessagesStream(mailFolderID: MicrosoftMailFolderID, messageIDs: [MicrosoftMessageID]) async throws -> AsyncThrowingStream<[MicrosoftMessage], Error> {
         .init { continuation in Task {
@@ -375,38 +439,38 @@ fileprivate extension MicrosoftSession {
     
     var endpointURL: URL { MicrosoftClient.endpointURL }
     
-    func getResponseString(url: URL) async throws -> String {
-        try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader).responseString
+    func getResponseString(url: URL, maxPageSize: Int?) async throws -> String {
+        try await URLRequest._get(url: url, authorization: authorizationHeader, maxPageSize: maxPageSize).responseString
     }
     
-    func getResponseDataForString(url: URL) async throws -> Data {
-        try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader).responseDataForString
+    func getResponseDataForString(url: URL, maxPageSize: Int?) async throws -> Data {
+        try await URLRequest._get(url: url, authorization: authorizationHeader, maxPageSize: maxPageSize).responseDataForString
     }
     
-    func getResponse<Value: Decodable & Sendable>(url: URL, responseType: Value.Type = Value.self) async throws -> Value {
-        try await URLRequest._get(url: url)._settingAuthorization(header: authorizationHeader).responseJSON(Value.self)
+    func getResponse<Value: Decodable & Sendable>(url: URL, maxPageSize: Int?, responseType: Value.Type = Value.self) async throws -> Value {
+        try await URLRequest._get(url: url, authorization: authorizationHeader, maxPageSize: maxPageSize).responseJSON(Value.self)
     }
     
-    func postResponse<RequestBody: Encodable, Value: Decodable & Sendable>(url: URL, body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
-        try await URLRequest._post(url: url, body: body)._settingAuthorization(header: authorizationHeader).responseJSON(Value.self)
+    func postResponse<RequestBody: Encodable, Value: Decodable & Sendable>(url: URL, maxPageSize: Int?, body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
+        try await URLRequest._post(url: url, authorization: authorizationHeader, maxPageSize: maxPageSize, body: body).responseJSON(Value.self)
     }
 }
 
 fileprivate extension MicrosoftSession {
 
-    func getMultipartData(paths: String..., queryItems: [URLQueryItem] = []) async throws -> Data {
+    func getMultipartData(paths: String..., queryItems: [URLQueryItem] = [], maxPageSize: Int? = nil) async throws -> Data {
         var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
         if queryItems.count > 0 { url.append(queryItems: queryItems) }
-        return try await getResponseDataForString(url: url)
+        return try await getResponseDataForString(url: url, maxPageSize: maxPageSize)
     }
     
-    func getValue<Value: Decodable & Sendable>(paths: String..., queryItems: URLQueryItem?..., responseType: Value.Type = Value.self) async throws -> Value {
+    func getValue<Value: Decodable & Sendable>(paths: String..., queryItems: URLQueryItem?..., maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> Value {
         var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
         if let queryItems = queryItems.compactMap({ $0 }).nilIfEmpty { url.append(queryItems: queryItems) }
-        return try await getResponse(url: url)
+        return try await getResponse(url: url, maxPageSize: maxPageSize)
     }
     
-    func getValues<Value: Decodable & Sendable>(paths: String..., queryItems: URLQueryItem?..., responseType: Value.Type = Value.self) async throws -> [Value] {
+    func getValues<Value: Decodable & Sendable>(paths: String..., queryItems: URLQueryItem?..., maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> [Value] {
         var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
         // get count
         /*let count = try await {
@@ -425,7 +489,7 @@ fileprivate extension MicrosoftSession {
         
         
         while let url = nextLink {
-            let response: GraphCollectionResponse<Value> = try await getResponse(url: url)
+            let response: GraphCollectionResponse<Value> = try await getResponse(url: url, maxPageSize: maxPageSize)
             values.append(contentsOf: response.values)
             nextLink = response.nextLink
         }
@@ -433,14 +497,14 @@ fileprivate extension MicrosoftSession {
         return values
     }
     
-    func getValuesStream<Value: Sendable & Decodable>(paths: String..., queryItems: URLQueryItem?..., responseType: Value.Type = Value.self) async throws -> (count: Int, stream: AsyncThrowingStream<[Value], Error>) {
+    func getValuesStream<Value: Sendable & Decodable>(paths: String..., queryItems: URLQueryItem?..., maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> (count: Int, stream: AsyncThrowingStream<[Value], Error>) {
         let queryItems = queryItems.compactMap({ $0 }) + [URLQueryItem.count()]
         let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems)
         var firlstNextLink: URL?
         
         // get count
         let (count, firstValues) = try await {
-            let response: GraphCollectionResponse<Value> = try await getResponse(url: url)
+            let response: GraphCollectionResponse<Value> = try await getResponse(url: url, maxPageSize: maxPageSize)
             guard let count = response.count else { throw AuthError.collectionResponseNoCount }
             let values = response.values
             firlstNextLink = response.nextLink
@@ -458,7 +522,7 @@ fileprivate extension MicrosoftSession {
                 var nextLink: URL? = firlstNextLink
                 
                 while let url = nextLink {
-                    let response: GraphCollectionResponse<Value> = try await getResponse(url: url)
+                    let response: GraphCollectionResponse<Value> = try await getResponse(url: url, maxPageSize: maxPageSize)
                     continuation.yield(response.values)
                     await Task.yield()
                     nextLink = response.nextLink
@@ -472,10 +536,42 @@ fileprivate extension MicrosoftSession {
         return (count, stream)
     }
     
+    func getValuesDeltaStream<Value: Sendable & Decodable>(paths: String..., queryItems: URLQueryItem?..., maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> AsyncThrowingStream<Delta<Value>, Error> {
+        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems.compactMap{ $0 })
+        return try await getValuesDeltaStream(url: url, maxPageSize: maxPageSize, responseType: responseType)
+    }
     
-    func postItem<RequestBody: Encodable, Value: Decodable & Sendable>(_ paths: String..., body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
+    func getValuesDeltaStream<Value: Sendable & Decodable>(url: URL, maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> AsyncThrowingStream<Delta<Value>, Error> {
+                
+        // get count
+        let response: GraphCollectionResponse<Value> = try await getResponse(url: url, maxPageSize: maxPageSize)
+        let stream: AsyncThrowingStream<Delta<Value>, Error> = .init { continuation in Task { [delta = response.delta] in
+            do {
+                // get paging results
+                
+                continuation.yield(delta)
+                await Task.yield()
+
+                var nextLink: URL? = delta.nextLink
+                
+                while let url = nextLink {
+                    let response: GraphCollectionResponse<Value> = try await getResponse(url: url, maxPageSize: maxPageSize)
+                    continuation.yield(response.delta)
+                    await Task.yield()
+                    nextLink = response.nextLink
+                }
+                
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
+            }
+        } }
+        return stream
+    }
+    
+    func postItem<RequestBody: Encodable, Value: Decodable & Sendable>(_ paths: String..., maxPageSize: Int? = nil, body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
         let url = paths.reduce(endpointURL) { $0.appending(path: $1) }
-        return try await postResponse(url: url, body: body)
+        return try await postResponse(url: url, maxPageSize: maxPageSize, body: body)
     }
 }
 
@@ -488,18 +584,36 @@ struct MailFoldersCreateRequestBody : Codable {
 }*/
 
 
-fileprivate struct GraphCollectionResponse<Value : Decodable & Sendable> : Decodable & Sendable {
+fileprivate struct GraphCollectionResponse<Value : Decodable & Sendable> : Decodable, Sendable {
     let values: [Value]
 
-    let  context: URL?
-    let    count: Int?
-    let nextLink: URL?
+    let   context: URL?
+    let     count: Int?
+    let  nextLink: URL?
+    let deltaLink: URL?
     
     enum CodingKeys : String, CodingKey {
-        case  context = "@odata.context"
-        case    count = "@odata.count"
-        case nextLink = "@odata.nextLink"
-        case   values = "value"
+        case   context = "@odata.context"
+        case     count = "@odata.count"
+        case  nextLink = "@odata.nextLink"
+        case deltaLink = "@odata.deltaLink"
+        case    values = "value"
+    }
+}
+
+fileprivate struct Delta<Value: Sendable & Decodable> {
+    let    values: [Value]
+    let  nextLink: URL?
+    let deltaLink: URL?
+    
+    func map<Transformed : Sendable>(_ transform: (Value) throws -> Transformed) rethrows -> Delta<Transformed> {
+        .init(values: try values.map(transform), nextLink: nextLink, deltaLink: deltaLink)
+    }
+}
+
+fileprivate extension GraphCollectionResponse {
+    var delta: Delta<Value> {
+        .init(values: values, nextLink: nextLink, deltaLink: deltaLink)
     }
 }
 
@@ -518,22 +632,32 @@ fileprivate struct GraphErrorResponse : Codable {
 
 fileprivate extension URLRequest {
     
-    static func _get(url: URL) -> Self {
-        URLRequest(url: url)
+    static func _get(url: URL, authorization: String, maxPageSize: Int?) -> Self {
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(authorization, forHTTPHeaderField: "Authorization")
+        if let maxPageSize {
+            request.setValue("odata.maxpagesize=\(maxPageSize)", forHTTPHeaderField: "Prefer")
+        }
+        return request
     }
     
-    static func _post<T: Encodable>(url: URL, body: T) throws -> URLRequest {
-        __post(url: url, bodyData: try body.jsonData)
+    static func _post<T: Encodable>(url: URL, authorization: String, maxPageSize: Int?, body: T) throws -> URLRequest {
+        __post(url: url, authorization: authorization, maxPageSize: maxPageSize, bodyData: try body.jsonData)
     }
     
-    private static func __post(url: URL, bodyData: Data) -> Self {
+    private static func __post(url: URL, authorization: String, maxPageSize: Int?, bodyData: Data) -> Self {
         var request = URLRequest(url: url)
         
         // Set the Authorization header for the request. We use Bearer tokens, so we specify Bearer + the token we got from the result
         request.httpMethod = "POST"
         request.httpBody = bodyData
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+        request.setValue(authorization, forHTTPHeaderField: "Authorization")
+        if let maxPageSize {
+            request.setValue("odata.maxpagesize=\(maxPageSize)", forHTTPHeaderField: "Prefer")
+        }
         return request
     }
     

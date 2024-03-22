@@ -29,6 +29,4 @@ extension SessionStore {
     static let shared = SessionStore()
 }
 
-extension MicrosoftAccountID.AttributesStore {
-    static var shared = AttributesStore()
-}
+

@@ -37,17 +37,16 @@ public extension GoogleSession {
     }
     
     // MARK: - MailFolder-Messages
-    func loadMessages(mailFolderID: GoogleMailFolderID, modelStore: ModelStore) async throws {
+    func syncMessages(mailFolderID: GoogleMailFolderID, modelStore: ModelStore) async throws {
         
         let newMessageIDs: [MessageID] = try await getMessagesID(in: mailFolderID).map { $0.generalID }
         
         // remove
         let shouldInsertMessageIDs = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs, mailFolderID: mailFolderID.generalID).compactMap(\.element.platformCase?.google)
         
-        
         guard !shouldInsertMessageIDs.isEmpty else { return }
         // do {
-        let stream = try await getMessagesStream(messageIDs: shouldInsertMessageIDs, format: .metadata)
+        let stream = try await getMessagesStream(mailFolderID: mailFolderID, messageIDs: shouldInsertMessageIDs, format: .metadata)
         //}
         /* catch let error as URLError where error.code == .badURL {
          (total, stream) = try await session.getMessagesStream(id: innerID)
@@ -55,13 +54,15 @@ public extension GoogleSession {
         let total = newMessageIDs.count
         var value = total - shouldInsertMessageIDs.count
         
-        await MainActor.run { [value] in
+        /*await MainActor.run { [value] in
             mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
-        }
+        }*/
         for try await messages in stream {
-            value += try await modelStore.setMessagesInsertPart(resources: messages, mailFolderID: mailFolderID.generalID).count // MSAL to SwiftData
-            await MainActor.run { [value] in
-                mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+            value += try await modelStore.insertMessages(sources: messages, mailFolderID: mailFolderID.generalID).count // MSAL to SwiftData
+            if value < total {
+                await MainActor.run { [value] in
+                    mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
+                }
             }
         }
     }
@@ -237,7 +238,7 @@ fileprivate extension GoogleSession {
         return try messages.map{ try $0.messageInner }
     }
     
-    func getMessagesStream(messageIDs: [GoogleMessageID], fields: String? = nil, format: GetMessageFormat) async throws -> AsyncThrowingStream<[GoogleMessage], Error> {
+    func getMessagesStream(mailFolderID: GoogleMailFolderID, messageIDs: [GoogleMessageID], fields: String? = nil, format: GetMessageFormat) async throws -> AsyncThrowingStream<[GoogleMessage], Error> {
         .init { continuation in Task { [service] in
             do {
                 let chunkSize = 10

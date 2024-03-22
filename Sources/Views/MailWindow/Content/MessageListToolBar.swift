@@ -13,15 +13,15 @@ struct LoadingMessageProgressBar : View {
     let loadingMessageState: MailFolderLoadingMessageState
     var body: some View {
         switch loadingMessageState {
-        case .none: EmptyView()
-        case .start:
+        case .none, .start: EmptyView()
+        /*case .start:
             ProgressView(value: Float?.none) {
                 HStack {
                     Text("Checking Messages in \(mailFolderName)…")
                     Spacer()
                 }
             }
-            .controlSize(.small)
+            .controlSize(.small)*/
         case .loading(value: let value, total: let total):
             ProgressView(value: Float(value), total: Float(total)) {
                 HStack {
@@ -46,14 +46,11 @@ struct MailFolderRefreshButton : View {
     @Environment(MailFolder.self)
     var mailFolder
     
-    @Environment(Account.self)
-    var account
-    
     
     var body: some View {
         Button("Refresh", systemImage: "arrow.clockwise") {
             Task {
-                await appModel.loadMessages(mailFolderID: mailFolder.resourceID, accountID: account.resourceID)
+                await appModel.loadMessages(mailFolderID: mailFolder.resourceID)
             }
         }
         .labelStyle(.titleAndIcon)

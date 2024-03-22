@@ -96,6 +96,9 @@ public struct MicrosoftMessageInner : CodableValueType, Sendable {
     public let                       body: ItemBody? // * Important * may load later
     public let                 uniqueBody: ItemBody? //?
     
+    public let                       type: String?
+    public let                       etag: String?
+    public let                    removed: Removed?
     /*
      let                 categories: [String]?
      let                  changeKey: String?
@@ -115,5 +118,34 @@ public struct MicrosoftMessageInner : CodableValueType, Sendable {
      let             parentFolderId: String?
      
      let                    webLink: String?*/
+    
+    enum CodingKeys: String, CodingKey, Sendable {
+        case id
+        case subject
+        case createdDateTime
+        case lastModifiedDateTime
+        case receivedDateTime
+        case sentDateTime
+        case sender
+        case from
+        case toRecipients
+        case replyTo
+        case ccRecipients
+        case bccRecipients
+        case bodyPreview
+        case body
+        case uniqueBody
+
+        case type    = "@odata.type"
+        case etag    = "@odata.etag"
+        case removed = "@removed"
+    }
 }
 
+public struct Removed : CodableValueType, Sendable {
+    public let reason: Reason
+    public enum Reason: String, CodableValueType, Sendable {
+        case changed
+        case deleted
+    }
+}

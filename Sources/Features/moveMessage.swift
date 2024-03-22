@@ -18,9 +18,18 @@ extension AppModel {
         do {
             guard let session = try await messageID.accountID.refreshSession else { return }
 
-            try await    session.moveMessage(messageID: messageID, fromID: fromID, toID: toID)
+            _ = try await session.moveMessage(messageID: messageID, fromID: fromID, toID: toID)
+            
+            // method 1: directly update modelStore
             try await modelStore.moveMessage(messageID: messageID, fromID: fromID, toID: toID)
             
+            /* or method 2: sync mailFolder's messages from server
+            await loadMessages(mailFolderID: fromID)
+            await loadMessages(mailFolderID: toID)
+             */
+
+            // try await session.syncMessages(mailFolderID:   toID, modelStore: modelStore)
+
             /*// update main thread context
             let from = try mainContext[fromID]
             let   to = try mainContext[toID]

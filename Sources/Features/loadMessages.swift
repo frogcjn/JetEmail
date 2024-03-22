@@ -12,14 +12,14 @@ import JetEmailData // for MailFolderID
 extension AppModel {
         
     @MainActor // for .isBusy
-    func loadMessages(mailFolderID: MailFolderID, accountID: AccountID) async {
+    func loadMessages(mailFolderID: MailFolderID) async {
         guard !mailFolderID.loadingMessageState.isLoading else { return }
         mailFolderID.loadingMessageState = .start
         defer { mailFolderID.loadingMessageState = .none }
         
         do {
-            guard let session = try await accountID.refreshSession else { return }             // get Session
-            try await session.loadMessages(mailFolderID: mailFolderID, modelStore: modelStore) // Session, ModelStore
+            guard let session = try await mailFolderID.accountID.refreshSession else { return }             // get Session
+            try await session.syncMessages(mailFolderID: mailFolderID, modelStore: modelStore) // Session, ModelStore
         } catch {
             logger.error("\(error)")
         }

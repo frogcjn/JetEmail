@@ -17,9 +17,6 @@ private struct _MessageList : View {
     @Environment(AppModel.self)
     var appModel
     
-    @Environment(Account.self)
-    var account
-    
     @Environment(MailFolder.self)
     var mailFolder
     
@@ -70,7 +67,7 @@ private struct _MessageList : View {
         
         // Feature: Account - Load Messages
         .onChange(of: mailFolder, initial: true) {
-            Task { await appModel.loadMessages(mailFolderID: mailFolder.resourceID, accountID: account.resourceID) }
+            Task { await appModel.loadMessages(mailFolderID: mailFolder.resourceID) }
         }
         
         // Feature: Classify
@@ -147,7 +144,7 @@ struct MessageList : View {
 
     var body: some View {
         let uniqueID = mailFolder.uniqueID
-        _MessageList(_messages: Query(filter: #Predicate<Message> { $0.mailFolders.contains { $0.uniqueID == uniqueID } }, sort: \.date, order: .reverse))
+        _MessageList(_messages: Query(filter: #Predicate<Message> { !$0.deleteMark && $0.mailFolders.contains { $0.uniqueID == uniqueID } }, sort: \.date, order: .reverse))
         
         /*_MessageList(_messages: Query(filter: #Predicate<Message> { uniqueIDs.contains($0.uniqueID) && !$0.deleteMark }, sort: \.date, order: .reverse))
             .onChange(of: mailFolder._messages, initial: true) {
