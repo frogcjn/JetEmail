@@ -124,17 +124,19 @@ public final class MailFolder {
 public extension MailFolder {
     
     @Transient
+    var isSystemFolder: Bool {
+        _systemName != nil
+    }
+    
+    @Transient
     var localizedName : String {
-        MailFolderSystemName.localizedName(name: name, systemName: _systemName)
+        if let systemLocalizedName = _systemName?.localized { return systemLocalizedName }
+        if let name = name?.nilIfEmpty { return name }
+        return String(localized: "(No Name)", bundle: .module)
     }
     
     @Transient
     var systemImage : String {
         _systemName?.systemImage ?? "folder"
-    }
-    
-    @Transient
-    var isSystemFolder: Bool {
-        _systemName != nil
     }
 }

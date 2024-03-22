@@ -11,7 +11,7 @@ public enum MailFolderSystemName : String, CaseIterable, CodableValueType, Senda
     
     case root
     case all
-
+    
     case inbox
     case starred
     case snoozed
@@ -41,26 +41,16 @@ public enum MailFolderSystemName : String, CaseIterable, CodableValueType, Senda
     case serverFailures
     case syncIssues
     
-    public static func localizedName(name: String?, systemName: Self?) -> String {
-        if let localizedKey = systemName?.nameLocalizedKey {
-            let localizedName = String(localized: .init(localizedKey), bundle: .module)
-            
-            // found localized key
-            if localizedName != localizedKey {
-                return localizedName
-            }
-        }
-        
-        if let name = name?.nilIfEmpty {
-            return name
-        }
-        
-        return String(localized: "(No Name)", bundle: .module)
+}
+
+extension MailFolderSystemName {
+    var localized : String {
+        .init(localized: .init(localizedKey), bundle: .module)
     }
 }
 
 public extension MailFolderSystemName {
-    var systemOrder: Int? {
+    var systemOrder: Int {
         switch self {
         case .root                     : 0
         case .all                      : 1 // All Mails
@@ -100,7 +90,7 @@ public extension MailFolderSystemName {
         }
     }
         
-    var nameLocalizedKey: String? {
+    var localizedKey: String {
         switch self {
         case .inbox                    : LocalizedStringResource("Inbox"                      ).key
         case .starred                  : LocalizedStringResource("Starred"                    ).key
@@ -132,7 +122,7 @@ public extension MailFolderSystemName {
         }
     }
     
-    var systemImage: String? {
+    var systemImage: String {
         switch self {
         case .inbox                    : "tray"
         case .starred                  : "star"
