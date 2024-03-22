@@ -41,7 +41,7 @@ private struct _MessageList : View {
                         .tag(message)
                         .contextMenu {
                             Button("Delete") {
-                                deleteMessage(message)
+                                trashMessage(message)
                             }
                         }
                 }
@@ -129,15 +129,14 @@ private struct _MessageList : View {
     }
 
     @MainActor
-    func deleteMessage(_ message: Message) {
-        moveMessage(message, to: .trash)
+    func trashMessage(_ message: Message) {
+        moveMessage(message, toSystemFolderWithName: .trash)
     }
 
     @MainActor
-    func moveMessage(_ message: Message, to: MailFolderSystemName) {
-        if let folders = try? appModel.mainContext[message.account.resourceID].mailFolders,
-           let folder = folders.first(where: {
-            $0._systemName == MailFolderSystemName.trash
+    func moveMessage(_ message: Message, toSystemFolderWithName name: MailFolderSystemName) {
+        if let folder = account.mailFolders.first(where: {
+            $0._systemName == name
         }) {
             Task {
                 await appModel.moveMessage(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: folder.resourceID)
