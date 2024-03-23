@@ -20,6 +20,9 @@ private struct _MessageList : View {
     @Environment(MailFolder.self)
     var mailFolder
     
+    @Environment(Account.self)
+    var account
+    
     @Query
     var messages: [Message]
     
@@ -38,7 +41,7 @@ private struct _MessageList : View {
                         .tag(message)
                         .contextMenu {
                             Button("Delete") {
-                                trashMessage(message)
+                                appModel.moveMessage(message, toSystemName: .trash, in: mailFolder, account)
                             }
                         }
                 }
@@ -112,14 +115,7 @@ private struct _MessageList : View {
                 
                 if messages.contains(where: { $0.movePlanID != nil }) {
                     Button {
-                        for message in messages.filter({ $0.movePlanID != nil }) {
-                            if let toID = message.movePlanID {
-                                Task {
-                                    await appModel.moveMessage(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: toID)
-                                    message.movePlanID = nil
-                                }
-                            }
-                        }
+                        appModel.moveAllMessagesToMovePlan(messages, in: mailFolder, account)
                     } label: {
                         Label("Move All", systemImage: "folder")
                     }
@@ -129,22 +125,6 @@ private struct _MessageList : View {
         }
     }
 
-    @MainActor
-    func trashMessage(_ message: Message) {
-        moveMessage(message, toSystemFolderWithName: .trash)
-    }
-
-    @MainActor
-    func moveMessage(_ message: Message, toSystemFolderWithName name: MailFolderSystemName) {
-        if let folder = account.mailFolders.first(where: {
-            $0._systemName == name
-        }) {
-            Task {
-                await appModel.moveMessage(messageID: message.resourceID, fromID: mailFolder.resourceID, toID: folder.resourceID)
-                message.movePlanID = nil
-            }
-        }
-    }
 
     @MainActor
     func classifyMultiple(auto: Bool, count: Int) async {

@@ -14,7 +14,7 @@ public extension [MailFolder] {
             if mailFolder1.isSystemFolder != mailFolder2.isSystemFolder { return mailFolder1.isSystemFolder }
             
             // both system folders: system order compare
-            if let systemOlder0 = mailFolder1._systemName?.systemOrder, let systemOlder1 = mailFolder2._systemName?.systemOrder {
+            if let systemOlder0 = mailFolder1.systemName?.systemOrder, let systemOlder1 = mailFolder2.systemName?.systemOrder {
                 return systemOlder0 < systemOlder1
             }
             

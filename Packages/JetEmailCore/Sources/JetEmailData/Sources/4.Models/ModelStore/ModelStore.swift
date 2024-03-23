@@ -212,7 +212,7 @@ public extension ModelStore {
     }*/
     
     // moveMessages
-    func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) throws {
+    func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) throws -> MessageID {
         let message = try modelContext[messageID]
         let to      = try modelContext[toID]
         try modelContext.transaction {
@@ -227,6 +227,7 @@ public extension ModelStore {
             toMessages.append(message)
             to._messages = toMessages*/
         }
+        return messageID
     }
     
     // MARK: - Message

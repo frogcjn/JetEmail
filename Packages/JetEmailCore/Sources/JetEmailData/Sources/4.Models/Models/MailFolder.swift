@@ -42,7 +42,7 @@ public final class MailFolder {
     
     // MARK: Resource - SystemInfo
     
-    public private(set) var       _systemName: MailFolderSystemName?    // cached sytem older
+    public private(set) var systemName: MailFolderSystemName?    // cached sytem older
     
     /*public private(set) var   _isSystemFolder: Bool    // cached whether it is a system folder
     public private(set) var      _systemOrder: Int?    // cached sytem older
@@ -65,7 +65,7 @@ public final class MailFolder {
         uniqueID          = resource.generalID.uniqueID
         
         name              = resource.name
-        _systemName       = resource.systemName
+        systemName        = resource.systemName
         /*_isSystemFolder   = resource.systemInfo != nil
         _systemOrder      = resource.systemInfo?.order
         _nameLocalizedKey = resource.systemInfo?.nameLocalizedKey
@@ -84,7 +84,7 @@ public final class MailFolder {
         uniqueID          = resource.generalID.uniqueID
         
         name              = resource.name
-        _systemName       = resource.systemName
+        systemName       = resource.systemName
 
         /*_isSystemFolder   = resource.systemInfo != nil
         _systemOrder      = resource.systemInfo?.order
@@ -125,18 +125,18 @@ public extension MailFolder {
     
     @Transient
     var isSystemFolder: Bool {
-        _systemName != nil
+        systemName != nil
     }
     
     @Transient
     var localizedName : String {
-        if let systemLocalizedName = _systemName?.localized { return systemLocalizedName }
+        if let systemLocalizedName = systemName?.localized { return systemLocalizedName }
         if let name = name?.nilIfEmpty { return name }
         return String(localized: "(No Name)", bundle: .module)
     }
     
     @Transient
     var systemImage : String {
-        _systemName?.systemImage ?? "folder"
+        systemName?.systemImage ?? "folder"
     }
 }
