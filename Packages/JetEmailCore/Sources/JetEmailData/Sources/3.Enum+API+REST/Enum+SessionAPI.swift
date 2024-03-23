@@ -14,10 +14,20 @@ public actor SessionActor {
 import SwiftData
 
 public protocol SessionProtocol<AccountType> {
+    associatedtype  AccountIDType: Sendable
     associatedtype    AccountType: AccountProtocol    where    AccountType.ID : Sendable
     associatedtype MailFolderType: MailFolderProtocol where MailFolderType.ID : Sendable
     associatedtype    MessageType: MessageProtocol    where    MessageType.ID : Sendable
 
+    @MainActor
+    static func  storedSession(accountID: AccountIDType)              -> Self?
+    
+    @MainActor
+    static func refreshSession(accountID: AccountIDType) async throws -> Self?
+    
+    @MainActor
+    static func  removeSession(accountID: AccountIDType)              -> Self?
+    
     // sessions
     var account: AccountType { get }
     var refresh: Self { get async throws }
@@ -55,17 +65,44 @@ extension PlatformEnum: SessionProtocol where
        Google : SessionProtocol,
     Microsoft.AccountType.GeneralID == AccountID,
        Google.AccountType.GeneralID == AccountID,
+   Microsoft.AccountIDType ==     MicrosoftAccountID,
+      Google.AccountIDType ==        GoogleAccountID,
 Microsoft.MailFolderType.ID == MicrosoftMailFolderID,
    Google.MailFolderType.ID ==    GoogleMailFolderID,
-Microsoft   .MessageType.ID == MicrosoftMessageID,
-   Google   .MessageType.ID ==    GoogleMessageID
+Microsoft   .MessageType.ID ==    MicrosoftMessageID,
+   Google   .MessageType.ID ==       GoogleMessageID
 //Microsoft.ModelStoreType == Google.ModelStoreType
 {
-    public typealias    AccountType = PlatformEnum<Microsoft   .AccountType, Google   .AccountType>
-    public typealias MailFolderType = PlatformEnum<Microsoft.MailFolderType, Google.MailFolderType>
-    public typealias    MessageType = PlatformEnum<Microsoft   .MessageType, Google   .MessageType>
+    public typealias  AccountIDType = PlatformEnum<Microsoft   .AccountIDType,  Google   .AccountIDType>
+    public typealias    AccountType = PlatformEnum<Microsoft   .AccountType   , Google   .AccountType  >
+    public typealias MailFolderType = PlatformEnum<Microsoft.MailFolderType   , Google.MailFolderType  >
+    public typealias    MessageType = PlatformEnum<Microsoft   .MessageType   , Google   .MessageType  >
 
     // sessions
+    
+    @MainActor
+    public static func storedSession(accountID: AccountIDType) -> Self? {
+        switch accountID {
+        case .microsoft(let accountID): Microsoft.storedSession(accountID: accountID).map(Self.microsoft)
+        case    .google(let accountID):    Google.storedSession(accountID: accountID).map(Self.google)
+        }
+    }
+    
+    @MainActor
+    public static func refreshSession(accountID: AccountIDType) async throws -> Self? {
+        switch accountID {
+        case .microsoft(let accountID): try await Microsoft.refreshSession(accountID: accountID).map(Self.microsoft)
+        case    .google(let accountID): try await    Google.refreshSession(accountID: accountID).map(Self.google)
+        }
+    }
+    
+    @MainActor
+    public static func removeSession(accountID: AccountIDType) -> Self? {
+        switch accountID {
+        case .microsoft(let accountID): Microsoft.removeSession(accountID: accountID).map(Self.microsoft)
+        case    .google(let accountID):    Google.removeSession(accountID: accountID).map(Self.google)
+        }
+    }
 
     public var account: AccountType {
         switch self {
@@ -128,10 +165,10 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
         checkBackgroundThread()
         switch self {
         case .microsoft(let session):
-            guard let mailFolderID = mailFolderID.platformCase?.microsoft else { throw SessionError.idNotForThePlatform }
+            guard let mailFolderID = mailFolderID.microsoft else { throw SessionError.idNotForThePlatform }
             try await session.syncMessages(mailFolderID: mailFolderID, modelStore: modelStore)
         case    .google(let session):
-            guard let mailFolderID = mailFolderID.platformCase?.google else { throw SessionError.idNotForThePlatform }
+            guard let mailFolderID = mailFolderID.google else { throw SessionError.idNotForThePlatform }
             try await session.syncMessages(mailFolderID: mailFolderID, modelStore: modelStore)
         }
     }
@@ -141,10 +178,10 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
         checkBackgroundThread()
         switch self {
         case .microsoft(let session): 
-            guard let mailFolderID = mailFolderID.platformCase?.microsoft else { return }
+            guard let mailFolderID = mailFolderID.microsoft else { return }
             try await session.loadMessagesMain(mailFolderID: mailFolderID, modelContext: modelContext)
         case    .google(let session):
-            guard let mailFolderID = mailFolderID.platformCase?.google else { return }
+            guard let mailFolderID = mailFolderID.google else { return }
             try await session.loadMessagesMain(mailFolderID: mailFolderID, modelContext: modelContext)
         }
     }*/
@@ -154,16 +191,16 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
         switch self {
         case .microsoft(let session): 
             guard 
-                let messageID = messageID.platformCase?.microsoft,
-                let    fromID =    fromID.platformCase?.microsoft,
-                let      toID =      toID.platformCase?.microsoft
+                let messageID = messageID.microsoft,
+                let    fromID =    fromID.microsoft,
+                let      toID =      toID.microsoft
             else { throw SessionError.idNotForThePlatform }
             return .microsoft(try await session.moveMessage(messageID: messageID, fromID: fromID, toID: toID))
         case    .google(let session):
             guard
-                let messageID = messageID.platformCase?.google,
-                let    fromID =    fromID.platformCase?.google,
-                let      toID =      toID.platformCase?.google
+                let messageID = messageID.google,
+                let    fromID =    fromID.google,
+                let      toID =      toID.google
             else { throw SessionError.idNotForThePlatform }
             return .google(try await session.moveMessage(messageID: messageID, fromID: fromID, toID: toID))
         }
@@ -175,10 +212,10 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
         checkBackgroundThread()
         switch self {
         case .microsoft(let session): 
-            guard let messageID = messageID.platformCase?.microsoft else { throw SessionError.idNotForThePlatform }
+            guard let messageID = messageID.microsoft else { throw SessionError.idNotForThePlatform }
             return .microsoft(try await session.messageBody(messageID: messageID))
         case    .google(let session): 
-            guard let messageID = messageID.platformCase?.google else { throw SessionError.idNotForThePlatform  }
+            guard let messageID = messageID.google else { throw SessionError.idNotForThePlatform  }
             return .google(try await session.messageBody(messageID: messageID))
         }
     }
@@ -187,3 +224,5 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
 enum SessionError : Error {
     case idNotForThePlatform
 }
+
+

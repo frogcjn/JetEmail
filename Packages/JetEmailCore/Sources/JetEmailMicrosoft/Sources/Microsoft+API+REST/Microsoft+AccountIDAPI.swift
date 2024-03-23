@@ -7,7 +7,7 @@
 
 // MARK: - AccountSessionAPI
 // used for checking status
-
+/*
 import JetEmailData
 
 @MainActor
@@ -19,3 +19,4 @@ extension MicrosoftAccountID : AccountSessionAPI {
     } }
     public func removeSession() -> MicrosoftSession? { SessionStore.shared.remove(id: self) }
 }
+*/

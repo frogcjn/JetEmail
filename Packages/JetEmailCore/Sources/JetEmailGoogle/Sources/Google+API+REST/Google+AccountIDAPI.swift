@@ -8,7 +8,7 @@
 // MARK: - AccountIDPublicAPI
 
 import JetEmailData
-
+/*
 @MainActor
 extension GoogleAccountID : AccountSessionAPI {
 
@@ -18,3 +18,4 @@ extension GoogleAccountID : AccountSessionAPI {
     } }
     public func removeSession() -> GoogleSession? { SessionStore.shared.remove(id: self) }
 }
+*/

@@ -35,3 +35,20 @@ public extension MessageID {
         }
     }
 }
+
+
+public extension AccountID {
+    var microsoft: MicrosoftAccountID? { platformCase?.microsoft }
+    var google   : GoogleAccountID?    { platformCase?.google    }
+}
+
+public extension MailFolderID {
+    var microsoft: MicrosoftMailFolderID? { platformCase?.microsoft }
+    var google   : GoogleMailFolderID?    { platformCase?.google    }
+}
+
+
+public extension MessageID {
+    var microsoft: MicrosoftMessageID? { platformCase?.microsoft }
+    var google   : GoogleMessageID?    { platformCase?.google }
+}

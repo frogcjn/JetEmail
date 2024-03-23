@@ -4,15 +4,29 @@
 //
 
 import JetEmailData
-import JetEmailData
 
 @MainActor
-extension AccountID : AccountSessionAPI {
+extension PlatformEnum<MicrosoftAccountID, GoogleAccountID> {
+    public var storedSession: Session? {
+        return Session.storedSession(accountID: self)
+    }
+    
+    public func removeSession()-> Session? {
+        return Session.removeSession(accountID: self)
+    }
+    
+    public var refreshSession: Session? { get async throws {
+        return try await Session.refreshSession(accountID: self)
+    } }
+}
+
+@MainActor
+extension AccountID {
     public var storedSession: Session? {
         platformCase?.storedSession
     }
     
-    public func removeSession() -> Session? {
+    public func removeSession()-> Session? {
         platformCase?.removeSession()
     }
     
@@ -21,17 +35,19 @@ extension AccountID : AccountSessionAPI {
     } }
 }
 
+
+
 @MainActor
-extension Account : AccountSessionAPI {
+extension Account {
     public var storedSession: Session? {
-        resourceID.platformCase?.storedSession
+        resourceID.storedSession
     }
     
     public func removeSession() -> Session? {
-        resourceID.platformCase?.removeSession()
+        resourceID.removeSession()
     }
     
     public var refreshSession: Session? { get async throws {
-        try await resourceID.platformCase?.refreshSession
+        try await resourceID.refreshSession
     } }
 }

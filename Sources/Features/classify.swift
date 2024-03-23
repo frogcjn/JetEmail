@@ -11,6 +11,7 @@ import JetEmailGoogle
 import JetEmailFoundation // for Tree
 import JetEmailData
 import SwiftData
+import JetEmailPlatform
 
 extension AppModel {
     
@@ -23,7 +24,7 @@ extension AppModel {
         do {
             let message = try mainContext[messageID]
             let account = try mainContext[messageID.accountID]
-            guard let session = account.storedSession else { return }
+            guard let session = account.resourceID.storedSession else { return }
             switch session {
             case .microsoft(let session): try await session.classify(account: account, message: message)
             case    .google(let session): try await session.classify(account: account, message: message)

@@ -42,7 +42,7 @@ public extension GoogleSession {
         let newMessageIDs: [GoogleMessageID] = try await messageIDs(mailFolderID: mailFolderID)
         
         // remove
-        let shouldInsertMessageIDs = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs.map { $0.generalID }, mailFolderID: mailFolderID.generalID).compactMap(\.element.platformCase?.google)
+        let shouldInsertMessageIDs = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs.map { $0.generalID }, mailFolderID: mailFolderID.generalID).compactMap(\.element.google)
         
         guard !shouldInsertMessageIDs.isEmpty else { return }
         let stream = try await getMessagesStream(mailFolderID: mailFolderID, messageIDs: shouldInsertMessageIDs)
@@ -64,7 +64,7 @@ public extension GoogleSession {
         let newMessageIDs: [MessageID] = try await getMessagesID(in: mailFolderID).map { $0.generalID }
         
         // remove
-        let shouldInsertMessageIDs = try await modelContext.setMessagesDeletePart(newMessageIDs: newMessageIDs, mailFolderID: mailFolderID.generalID).compactMap(\.element.platformCase?.google)
+        let shouldInsertMessageIDs = try await modelContext.setMessagesDeletePart(newMessageIDs: newMessageIDs, mailFolderID: mailFolderID.generalID).compactMap(\.element.google)
         
         
         if !shouldInsertMessageIDs.isEmpty  {

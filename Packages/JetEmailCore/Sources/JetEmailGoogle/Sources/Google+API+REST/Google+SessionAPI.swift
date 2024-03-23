@@ -13,7 +13,7 @@ extension GoogleSession : SessionProtocol {
     
     public func signOut() async throws -> GoogleSession {
         _ = try await Keychain.shared.deleteItem(_item)
-        _ = await account.id.removeSession()
+        _ = await Self.removeSession(accountID: account.id)
         return self
     }
     
@@ -22,4 +22,16 @@ extension GoogleSession : SessionProtocol {
         _ = try await _gtmSession._refresh()
         return self
     } }
+    
+    
+    @MainActor
+    public static func storedSession(accountID: GoogleAccountID) -> GoogleSession? { SessionStore.shared[accountID] }
+    
+    @MainActor
+    public static func refreshSession(accountID: GoogleAccountID) async throws -> GoogleSession? {
+        try await SessionStore.shared.session(id: accountID, forceRefresh: false)?.refresh
+    }
+    
+    @MainActor
+    public static func removeSession(accountID: GoogleAccountID) -> GoogleSession? { SessionStore.shared.remove(id: accountID) }
 }

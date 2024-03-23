@@ -22,7 +22,7 @@ public extension MicrosoftSession {
         while !queue.isEmpty {
             let current = queue.removeFirst()
             let childrenMailFolders = try await getChildFolders(mailFolderID: current)
-            let children = try await modelStore.setChildrenMailFolders(resources: childrenMailFolders, parentID: current.generalID, accountID: account.generalID).compactMap(\.platformCase?.microsoft)
+            let children = try await modelStore.setChildrenMailFolders(resources: childrenMailFolders, parentID: current.generalID, accountID: account.generalID).compactMap(\.microsoft)
             queue.append(contentsOf: children)
         }
     }
@@ -75,7 +75,7 @@ public extension MicrosoftSession {
         let newMessageIDs: [MicrosoftMessageID] = try await messageIDs(mailFolderID: mailFolderID)
 
         // remove
-        let shouldInsertMessageIDs = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs.map(\.generalID), mailFolderID: mailFolderID.generalID).compactMap(\.element.platformCase?.microsoft)
+        let shouldInsertMessageIDs = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs.map(\.generalID), mailFolderID: mailFolderID.generalID).compactMap(\.element.microsoft)
         
         guard !shouldInsertMessageIDs.isEmpty else { return }
         let stream = try await getMessagesStream(mailFolderID: mailFolderID, messageIDs: shouldInsertMessageIDs)

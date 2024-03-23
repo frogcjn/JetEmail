@@ -8,7 +8,7 @@
 import JetEmailData
 
 @MainActor
-public extension AccountSessionAPI {
+public extension Account {
     var sessionState: SessionState {
         storedSession != nil ? .hasSession : .noSession
     }

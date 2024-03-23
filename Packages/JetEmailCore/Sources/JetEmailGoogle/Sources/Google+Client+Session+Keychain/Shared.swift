@@ -9,9 +9,7 @@ extension GoogleClient {
     public static let shared = GoogleClient()
 }
 
-extension SessionStore {
-    static let shared = SessionStore()
-}
+
 
 extension Keychain {
     static let shared = Keychain()

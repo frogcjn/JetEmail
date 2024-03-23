@@ -17,6 +17,7 @@ class SessionStore {
         get { rawValue[id] }
         set { rawValue[id] = newValue }
     }
+    static let shared = SessionStore()
 }
 
 // Session new remove

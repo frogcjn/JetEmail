@@ -4,7 +4,7 @@
 //
 //  Created by Cao, Jiannan on 3/19/24.
 //
-
+/*
 @MainActor
 public protocol AccountSessionAPI {
     associatedtype SessionType
@@ -42,3 +42,4 @@ Microsoft : AccountSessionAPI,
         }
     }
 }
+*/
