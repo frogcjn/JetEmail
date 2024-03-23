@@ -128,10 +128,10 @@ Microsoft   .MessageType.ID == MicrosoftMessageID,
         checkBackgroundThread()
         switch self {
         case .microsoft(let session):
-            guard let mailFolderID = mailFolderID.platformCase?.microsoft else { return }
+            guard let mailFolderID = mailFolderID.platformCase?.microsoft else { throw SessionError.idNotForThePlatform }
             try await session.syncMessages(mailFolderID: mailFolderID, modelStore: modelStore)
         case    .google(let session):
-            guard let mailFolderID = mailFolderID.platformCase?.google else { return }
+            guard let mailFolderID = mailFolderID.platformCase?.google else { throw SessionError.idNotForThePlatform }
             try await session.syncMessages(mailFolderID: mailFolderID, modelStore: modelStore)
         }
     }

@@ -38,7 +38,11 @@ private struct _MessageList : View {
                         .tag(message)
                 }
             } header: {
-                LoadingMessageProgressBar(mailFolderName: mailFolder.localizedName, loadingMessageState: mailFolder.resourceID.loadingMessageState)
+                LoadingMessageProgressBar(
+                    mailFolderName: mailFolder.localizedName,
+                    loadingMessageState: mailFolder.resourceID.loadingMessageState,
+                    isEmpty: messages.isEmpty
+                )
             }
         }
         .toolbar {
@@ -67,7 +71,7 @@ private struct _MessageList : View {
         
         // Feature: Account - Load Messages
         .onChange(of: mailFolder, initial: true) {
-            Task { await appModel.loadMessages(mailFolderID: mailFolder.resourceID) }
+            Task { await appModel.syncMessages(mailFolderID: mailFolder.resourceID) }
         }
         
         // Feature: Classify

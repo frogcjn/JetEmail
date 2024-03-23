@@ -14,6 +14,7 @@ public enum AuthError : CodableErrorType, Sendable {
     case noAccountFound
     case notRightPlatform
     case authorizeNoMainWindow
+    case batchRequestOffsetBody
 }
 
 public struct PublicError : CodableErrorType, Sendable {

@@ -12,7 +12,7 @@ import JetEmailData // for MailFolderID
 extension AppModel {
         
     @MainActor // for .isBusy
-    func loadMessages(mailFolderID: MailFolderID) async {
+    func syncMessages(mailFolderID: MailFolderID) async {
         guard !mailFolderID.loadingMessageState.isLoading else { return }
         mailFolderID.loadingMessageState = .start
         defer { mailFolderID.loadingMessageState = .none }

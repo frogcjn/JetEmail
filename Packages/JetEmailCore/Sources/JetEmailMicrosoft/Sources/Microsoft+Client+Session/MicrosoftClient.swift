@@ -10,7 +10,7 @@ import JetEmailData
 
 public actor MicrosoftClient : Sendable {
     static      public let       scopes: [Scope] = [.userRead, .mailReadWrite, .mailSend, .mailboxSettingsReadWrite] // request permission to read the profile of the signed-in user
-    static      public let  endpointURL          = URL(string: "https://graph.microsoft.com/v1.0/me/")!
+    static      public let  endpointURL          = URL(string: "https://graph.microsoft.com/v1.0/")!
     
            fileprivate let     clientID          = "0ef42f9f-afc7-4463-bcbe-1c6dd4076b40"
            fileprivate let  redirectURL          = URL(string: "msauth.me.frogcjn.jet-email://auth")!

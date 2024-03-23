@@ -72,24 +72,15 @@ public extension MicrosoftSession {
     
     func syncMessages(mailFolderID: MicrosoftMailFolderID, modelStore: ModelStore) async throws {
         
-        let newMessageIDs: [MessageID] = try await getMessagesID(in: mailFolderID).map { $0.generalID }
+        let newMessageIDs: [MicrosoftMessageID] = try await messageIDs(mailFolderID: mailFolderID)
 
         // remove
-        let shouldInsertMessageIDs = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs, mailFolderID: mailFolderID.generalID).compactMap(\.element.platformCase?.microsoft)
+        let shouldInsertMessageIDs = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs.map(\.generalID), mailFolderID: mailFolderID.generalID).compactMap(\.element.platformCase?.microsoft)
         
         guard !shouldInsertMessageIDs.isEmpty else { return }
-        // do {
         let stream = try await getMessagesStream(mailFolderID: mailFolderID, messageIDs: shouldInsertMessageIDs)
-        //}
-        /* catch let error as URLError where error.code == .badURL {
-         (total, stream) = try await session.getMessagesStream(id: innerID)
-         }*/
         let total = newMessageIDs.count
         var value = total - shouldInsertMessageIDs.count
-        
-        /*await MainActor.run { [value] in
-            mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
-        }*/
         for try await messages in stream {
             value += try await modelStore.insertMessages(sources: messages, mailFolderID: mailFolderID.generalID).count // MSAL to SwiftData
             if value < total {
@@ -164,9 +155,9 @@ public extension MicrosoftSession {
             let destinationId: String
         }
         return try await postItem(
-            "mailFolders", fromID.innerID, "messages", messageID.innerID, "move",
+            url: .endpoint(pathComponents: "me", "mailFolders", fromID.innerID, "messages", messageID.innerID, "move"),
             body: MessageMoveRequestBody(destinationId: toID.innerID),
-            responseType: MicrosoftMessageInner.self).with(accountID: account.id
+            responseType: MicrosoftMessageInner.self).outer(accountID: account.id
         )
     }
     
@@ -175,26 +166,9 @@ public extension MicrosoftSession {
     // https://learn.microsoft.com/en-us/graph/api/message-get
     func messageBody(messageID: MicrosoftMessageID) async throws -> MicrosoftMessage {
         var message: MicrosoftMessage = try await getValue(
-            paths: "messages", messageID.innerID,
-            queryItems: .select(
-                "id",
-                "subject",
-                "createdDateTime",
-                "lastModifiedDateTime",
-                "receivedDateTime",
-                "sentDateTime",
-                "sender",
-                "from",
-                "toRecipients",
-                "replyTo",
-                "ccRecipients",
-                "bccRecipients",
-                "bodyPreview",
-                "body"
-                // "uniqueBody"
-            ),
-            responseType: MicrosoftMessageInner.self).with(accountID: account.id)
-        message.raw = try await getMultipartData(paths: "messages", messageID.innerID, "$value")
+            url: .endpoint(pathComponents: "me", "messages", messageID.innerID, queryItems: .selectForMessageBody),
+            responseType: MicrosoftMessageInner.self).outer(accountID: account.id)
+        message.raw = try await getMultipartData(url: .endpoint(pathComponents: "me", "messages", messageID.innerID, "$value"))
         return message
     }
 }
@@ -233,82 +207,52 @@ fileprivate extension MicrosoftSession {
     func getChildFolders(mailFolderID: MicrosoftMailFolderID) async throws -> [MicrosoftMailFolder]  {
         let idToSystemName = await idToSystemName
         return try await getValues(
-            paths: "mailFolders", mailFolderID.innerID, "childFolders",
+            url: .endpoint(pathComponents: "me", "mailFolders", mailFolderID.innerID, "childFolders"),
             responseType: MicrosoftMailFolderInner.self
         ).map { $0.with(accountID: account.id, idToSystemName: idToSystemName) }
     }
     
     func getMailFolder(systemName: MicrosoftMailFolderSystemName) async throws -> MicrosoftMailFolder {
         try await getValue(
-            paths: "mailFolders", systemName.rawValue,
+            url: .endpoint(pathComponents: "me", "mailFolders", systemName.rawValue),
             responseType: MicrosoftMailFolderInner.self
         ).with(accountID: account.id, systemName: systemName)
     }
     
     /*func getMailFolder(mailFolderID: MicrosoftMailFolderID)  async throws -> MicrosoftMailFolder {
-        try await getValue(paths: "mailFolders", "\(mailFolderID.innerID)")
+        try await getValue(pathComponents: "mailFolders", "\(mailFolderID.innerID)")
     }*/
     
     /*func createChildFolder(id: MSGraph.MailFolder.ID, displayName: String, isHidden: Bool? = nil) async throws -> MSGraph.MailFolder {
         try await postItem("mailFolders", "\(id)", "childFolders", body: MailFoldersCreateRequestBody(displayName: displayName, isHidden: isHidden))
     }*/
     
-    // pageSize => $top: 1-1000, default: 1000
-    func getMessagesID(in mailFolderID: MicrosoftMailFolderID, pageSize: Int? = 100) async throws -> [MicrosoftMessageID] {
+    func messageIDs(mailFolderID: MicrosoftMailFolderID) async throws -> [MicrosoftMessageID] {
         try await getValues(
-            paths: "mailFolders", mailFolderID.innerID, "messages",
-            queryItems:
-                pageSize.map(URLQueryItem.top),
-                // .select("id"),
+            url: .endpoint(
+                pathComponents: "me", "mailFolders", mailFolderID.innerID, "messages",
+                queryItems: URLQueryItem.top(100) // pageSize => $top: 1-1000, default: 100
+                    // .select("id"),
+            ),
             responseType: MicrosoftMessageInner.self
         ).map { 
             if $0.removed != nil { fatalError() }
-            return $0.with(accountID: account.id)
+            return $0.id(accountID: account.id)
         }
     }
     
     // pageSize => $top: 1-1000, default: nil (10)
     func messagesCount(mailFolderID: MicrosoftMailFolderID) async throws -> Int32 {
         let count = try await getValue(
-            paths: "mailFolders", mailFolderID.innerID,
-            queryItems: .select("totalItemCount"),
+            url: .endpoint(
+                pathComponents: "me", "mailFolders", mailFolderID.innerID,
+                queryItems: .selectTotalItemCount
+            ),
             responseType: MicrosoftMailFolderInner.self
         ).totalItemCount
         
         guard let count else { throw AuthError.collectionResponseNoCount }
         return count
-    }
-    
-    func messagesDeltaStream(mailFolderID: MicrosoftMailFolderID, maxPageSize: Int?) async throws -> some AsyncSequenceOf<Delta<MicrosoftMessage>> {
-        try await getValuesDeltaStream(
-            paths: "mailFolders", mailFolderID.innerID, "messages", "delta",
-            queryItems:
-                    .select(
-                        "id",
-                        "subject",
-                        "createdDateTime",
-                        "lastModifiedDateTime",
-                        "receivedDateTime",
-                        "sentDateTime",
-                        "sender",
-                        "from",
-                        "toRecipients",
-                        "replyTo",
-                        "ccRecipients",
-                        "bccRecipients",
-                        "bodyPreview"
-                    ),
-            maxPageSize: maxPageSize,
-            responseType: MicrosoftMessageInner.self
-        ).map { [accountID = account.id] in $0.map { $0.with(accountID: accountID) } }
-    }
-    
-    func messagesDeltaStream(deltaLink: URL, maxPageSize: Int?) async throws -> some AsyncSequenceOf<Delta<MicrosoftMessage>> {
-        try await getValuesDeltaStream(
-            url: deltaLink,
-            maxPageSize: maxPageSize,
-            responseType: MicrosoftMessageInner.self
-        ).map { [accountID = account.id] in $0.map { $0.with(accountID: accountID) } }
     }
     
     // pageSize => $top: 1-1000, default: nil (10)
@@ -322,29 +266,7 @@ fileprivate extension MicrosoftSession {
                     let chunk = rest.prefix(chunkSize)
                     rest = rest.dropFirst(chunkSize)
                     
-                    let messages: [MicrosoftMessage] = try await chunk.asyncMap {
-                        try await getValue(
-                            paths: "mailFolders", mailFolderID.innerID, "messages", $0.innerID,
-                            queryItems:
-                                // .orderBy(name: "receivedDateTime", .descending),
-                                .select(
-                                    "id",
-                                    "subject",
-                                    "createdDateTime",
-                                    "lastModifiedDateTime",
-                                    "receivedDateTime",
-                                    "sentDateTime",
-                                    "sender",
-                                    "from",
-                                    "toRecipients",
-                                    "replyTo",
-                                    "ccRecipients",
-                                    "bccRecipients",
-                                    "bodyPreview"
-                                ),
-                            responseType: MicrosoftMessageInner.self
-                        ).with(accountID: account.id)
-                    }
+                    let messages: [MicrosoftMessage] = try await getMessagesBatch(mailFolderID: mailFolderID, messageIDs: Array(chunk))
                     continuation.yield(messages)
                     await Task.yield()
                 }
@@ -354,6 +276,48 @@ fileprivate extension MicrosoftSession {
                 continuation.finish(throwing: error)
             }
         } }
+    }
+    
+    func getBatch<Value: Decodable & Sendable>(paths: [String], responseType: Value.Type = Value.self) async throws -> [Value] {
+        let batchRequest: BatchRequest = .init(requests: paths.enumerated().map { offset, element in
+                .init(id: String(offset), method: .get, url: element, headers: nil, body: nil)
+        })
+        let batchResponse: BatchResponse = try await postResponse(url: .endpoint(pathComponents: "$batch"), maxPageSize: nil, body: batchRequest)
+        return try batchResponse.responses.map {
+            guard let offset = Int($0.id), let body = $0.body else { throw AuthError.batchRequestOffsetBody }
+            return (offset: offset, element: try body.jsonData.decodeGraphJSON(Value.self))
+        }.sorted(using: KeyPathComparator(\.offset)).map { $0.element as Value }
+    }
+    
+    func getMessagesBatch(mailFolderID: MicrosoftMailFolderID, messageIDs: [MicrosoftMessageID]) async throws -> [MicrosoftMessage] {
+        let paths = messageIDs.map { URL.path(
+            pathComponents: "me", "mailFolders",
+            mailFolderID.innerID, "messages", $0.innerID,
+            queryItems: .selectForMessagePreview
+        ) }
+        return try await getBatch(paths: paths, responseType: MicrosoftMessageInner.self).map { $0.outer(accountID: account.id) }
+    }
+    
+    // Delta version
+    // https://learn.microsoft.com/en-us/graph/delta-query-messages#example-1-synchronize-messages-in-a-folder
+    func messagesDeltaStream(mailFolderID: MicrosoftMailFolderID, maxPageSize: Int?) async throws -> some AsyncSequenceOf<Delta<MicrosoftMessage>> {
+        try await getValuesDeltaStream(
+            url: .endpoint(
+                pathComponents: "me", "mailFolders", mailFolderID.innerID, "messages", "delta",
+                queryItems: .selectForMessagePreview
+            ),
+            maxPageSize: maxPageSize,
+            responseType: MicrosoftMessageInner.self
+        ).map { [accountID = account.id] in $0.map { $0.outer(accountID: accountID) } }
+    }
+    
+    // https://learn.microsoft.com/en-us/graph/delta-query-messages#example-1-synchronize-messages-in-a-folder
+    func messagesDeltaStream(deltaLink: URL, maxPageSize: Int?) async throws -> some AsyncSequenceOf<Delta<MicrosoftMessage>> {
+        try await getValuesDeltaStream(
+            url: deltaLink,
+            maxPageSize: maxPageSize,
+            responseType: MicrosoftMessageInner.self
+        ).map { [accountID = account.id] in $0.map { $0.outer(accountID: accountID) } }
     }
     
     // https://learn.microsoft.com/en-us/graph/api/mailfolder-list-messages
@@ -411,11 +375,11 @@ fileprivate extension MicrosoftSession {
 
 
 fileprivate extension MicrosoftMessageInner {
-    func with(accountID: MicrosoftAccountID) -> MicrosoftMessage {
+    func outer(accountID: MicrosoftAccountID) -> MicrosoftMessage {
         .init(id: .init(accountID: accountID, innerID: id), inner: self)
     }
     
-    func with(accountID: MicrosoftAccountID) -> MicrosoftMessageID {
+    func id(accountID: MicrosoftAccountID) -> MicrosoftMessageID {
         .init(accountID: accountID, innerID: id)
     }
 }
@@ -437,7 +401,7 @@ fileprivate extension MicrosoftMailFolderInner {
 
 fileprivate extension MicrosoftSession {
     
-    var endpointURL: URL { MicrosoftClient.endpointURL }
+    // var endpointURL: URL { MicrosoftClient.endpointURL }
     
     func getResponseString(url: URL, maxPageSize: Int?) async throws -> String {
         try await URLRequest._get(url: url, authorization: authorizationHeader, maxPageSize: maxPageSize).responseString
@@ -448,42 +412,25 @@ fileprivate extension MicrosoftSession {
     }
     
     func getResponse<Value: Decodable & Sendable>(url: URL, maxPageSize: Int?, responseType: Value.Type = Value.self) async throws -> Value {
-        try await URLRequest._get(url: url, authorization: authorizationHeader, maxPageSize: maxPageSize).responseJSON(Value.self)
+        try await URLRequest._get(url: url, authorization: authorizationHeader, maxPageSize: maxPageSize).responseDataForJSON.decodeGraphJSON(Value.self)
     }
     
     func postResponse<RequestBody: Encodable, Value: Decodable & Sendable>(url: URL, maxPageSize: Int?, body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
-        try await URLRequest._post(url: url, authorization: authorizationHeader, maxPageSize: maxPageSize, body: body).responseJSON(Value.self)
+        try await URLRequest._post(url: url, authorization: authorizationHeader, maxPageSize: maxPageSize, body: body).responseDataForJSON.decodeGraphJSON(Value.self)
     }
 }
 
 fileprivate extension MicrosoftSession {
 
-    func getMultipartData(paths: String..., queryItems: [URLQueryItem] = [], maxPageSize: Int? = nil) async throws -> Data {
-        var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
-        if queryItems.count > 0 { url.append(queryItems: queryItems) }
+    func getMultipartData(url: URL, maxPageSize: Int? = nil) async throws -> Data {
         return try await getResponseDataForString(url: url, maxPageSize: maxPageSize)
     }
     
-    func getValue<Value: Decodable & Sendable>(paths: String..., queryItems: URLQueryItem?..., maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> Value {
-        var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
-        if let queryItems = queryItems.compactMap({ $0 }).nilIfEmpty { url.append(queryItems: queryItems) }
+    func getValue<Value: Decodable & Sendable>(url: URL, maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> Value {
         return try await getResponse(url: url, maxPageSize: maxPageSize)
     }
     
-    func getValues<Value: Decodable & Sendable>(paths: String..., queryItems: URLQueryItem?..., maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> [Value] {
-        var url = paths.reduce(endpointURL) { $0.appending(path: $1) }
-        // get count
-        /*let count = try await {
-            let url = urlPaths.appending(path: "$count")
-            let string = try await getResponseString(url: url)
-            guard let count = Int(string) else { throw AuthError.collectionResponseNoCount }
-            return count
-        }()*/
-        
-        // get paging results
-        
-        if let queryItems = queryItems.compactMap({ $0 }).nilIfEmpty { url.append(queryItems: queryItems) }
-
+    func getValues<Value: Decodable & Sendable>(url: URL, maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> [Value] {
         var nextLink: URL? = url
         var values = [Value]()
         
@@ -497,9 +444,8 @@ fileprivate extension MicrosoftSession {
         return values
     }
     
-    func getValuesStream<Value: Sendable & Decodable>(paths: String..., queryItems: URLQueryItem?..., maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> (count: Int, stream: AsyncThrowingStream<[Value], Error>) {
-        let queryItems = queryItems.compactMap({ $0 }) + [URLQueryItem.count()]
-        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems)
+    func getValuesStream<Value: Sendable & Decodable>(url: URL, maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> (count: Int, stream: AsyncThrowingStream<[Value], Error>) {
+        let url: URL =  url.appending(queryItems: [.count()])
         var firlstNextLink: URL?
         
         // get count
@@ -536,11 +482,6 @@ fileprivate extension MicrosoftSession {
         return (count, stream)
     }
     
-    func getValuesDeltaStream<Value: Sendable & Decodable>(paths: String..., queryItems: URLQueryItem?..., maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> AsyncThrowingStream<Delta<Value>, Error> {
-        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }.appending(queryItems: queryItems.compactMap{ $0 })
-        return try await getValuesDeltaStream(url: url, maxPageSize: maxPageSize, responseType: responseType)
-    }
-    
     func getValuesDeltaStream<Value: Sendable & Decodable>(url: URL, maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> AsyncThrowingStream<Delta<Value>, Error> {
                 
         // get count
@@ -569,8 +510,7 @@ fileprivate extension MicrosoftSession {
         return stream
     }
     
-    func postItem<RequestBody: Encodable, Value: Decodable & Sendable>(_ paths: String..., maxPageSize: Int? = nil, body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
-        let url = paths.reduce(endpointURL) { $0.appending(path: $1) }
+    func postItem<RequestBody: Encodable, Value: Decodable & Sendable>(url: URL, maxPageSize: Int? = nil, body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
         return try await postResponse(url: url, maxPageSize: maxPageSize, body: body)
     }
 }
@@ -654,6 +594,8 @@ fileprivate extension URLRequest {
         request.httpMethod = "POST"
         request.httpBody = bodyData
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+
         request.setValue(authorization, forHTTPHeaderField: "Authorization")
         if let maxPageSize {
             request.setValue("odata.maxpagesize=\(maxPageSize)", forHTTPHeaderField: "Prefer")
@@ -667,7 +609,7 @@ fileprivate extension URLRequest {
         return request
     }
     
-    private var _responseDataForJSON: Data { get async throws {
+    var responseDataForJSON: Data { get async throws {
         let (data, response) = try await URLSession.shared.data(for: self)
         if !data.isEmpty {
             assert(response.mimeType == "application/json")
@@ -685,7 +627,7 @@ fileprivate extension URLRequest {
         try await responseDataForString.string
     } }
 
-    func responseJSON<T: Decodable>(_ type: T.Type) async throws -> T {
+    /*func responseGraphJSON<T: Decodable>(_ type: T.Type) async throws -> T {
         let data = try await _responseDataForJSON
         let result = Result { try data.decodeJSON(type) }
         switch result {
@@ -698,9 +640,25 @@ fileprivate extension URLRequest {
         case .success(let success):
             return success
         }
-    }
+    }*/
     
 
+}
+
+extension Data {
+    func decodeGraphJSON<T: Decodable>(_ type: T.Type) throws -> T {
+        let result = Result { try decodeJSON(type) }
+        switch result {
+        case .failure(let failure):
+            if let error = try? decodeJSON(GraphErrorResponse.self).error {
+                throw error
+            } else {
+                throw failure
+            }
+        case .success(let success):
+            return success
+        }
+    }
 }
 
 fileprivate extension URLQueryItem {
@@ -725,6 +683,45 @@ fileprivate extension URLQueryItem {
     static func select(_ names: String...) -> URLQueryItem {
         .init(name: "$select", value: names.joined(separator: ","))
     }
+    
+    static let selectTotalItemCount: URLQueryItem = .select(
+        "totalItemCount"
+    )
+    
+    static let selectForMessagePreview: URLQueryItem = .select(
+            "id",
+            "subject",
+            "createdDateTime",
+            "lastModifiedDateTime",
+            "receivedDateTime",
+            "sentDateTime",
+            "sender",
+            "from",
+            "toRecipients",
+            "replyTo",
+            "ccRecipients",
+            "bccRecipients",
+            "bodyPreview"
+        )
+    
+    static let selectForMessageBody: URLQueryItem = .select(
+            "id",
+            "subject",
+            "createdDateTime",
+            "lastModifiedDateTime",
+            "receivedDateTime",
+            "sentDateTime",
+            "sender",
+            "from",
+            "toRecipients",
+            "replyTo",
+            "ccRecipients",
+            "bccRecipients",
+            "bodyPreview",
+            "body"
+            // "uniqueBody"
+        )
+    
     
     static func count(_ value: Bool = true) -> URLQueryItem {
         .init(name: "$count", value: "\(value)")
@@ -887,3 +884,66 @@ extension MSGraph.Context {
 }()*/
 
 // SecItemAdd
+struct BatchRequest: CodableValueType, Sendable {
+    let requests: [Request] // no more than 20
+    
+    struct Request : CodableValueType, Sendable {
+        let id: String
+        let method: HTTPMethod
+        let url: String
+        let headers: [String: String]?
+        let body: JSON?
+    }
+    
+    enum HTTPMethod: String, CodableValueType, Sendable {
+        case `get` = "GET"
+        case post  = "POST"
+    }
+}
+
+struct BatchResponse: CodableValueType, Sendable {
+    let responses: [Response]
+    
+    struct Response: CodableValueType, Sendable {
+        let id: String
+        let status: Int
+        let headers: [String: String]?
+        let body: JSON?
+    }
+}
+
+enum URLError : CodableErrorType, Sendable {
+    case prePathNotTheSame
+    case pathComponentNotTheSame
+}
+
+fileprivate extension URL {
+    
+    static func endpoint(pathComponents: String..., queryItems: URLQueryItem?...) -> URL {
+        var url = pathComponents.reduce(MicrosoftClient.endpointURL) {
+            $0.appending(path: $1)
+        }
+        if let queryItems = queryItems.compactMap({ $0 }).nilIfEmpty {
+            url.append(queryItems: queryItems) // should not append empty queryItems
+        }
+        return url
+    }
+    
+    static func path(pathComponents: String..., queryItems: URLQueryItem?...) -> String {
+        let baseURL = URL(string: "https://localhost/")!
+        var url = pathComponents.reduce(baseURL) { 
+            $0.appending(path: $1)
+        }
+        if let queryItems = queryItems.compactMap({ $0 }).nilIfEmpty {
+            url.append(queryItems: queryItems) // should not append empty queryItems
+        }
+        return try! url.relativePath(from: baseURL)
+    }
+
+    private func relativePath(from base: URL) throws -> String {
+        // [scheme]://[user[:password]@][host][:port][path:/123]
+        guard base.scheme == scheme, base.user == user, base.password == password, base.host == host, base.port == port else { throw URLError.prePathNotTheSame }
+        guard base.pathComponents[...] == pathComponents.prefix(upTo: base.pathComponents.count) else { throw URLError.pathComponentNotTheSame }
+        return pathComponents.dropFirst(base.pathComponents.count).joined(separator: "/")
+    }
+}

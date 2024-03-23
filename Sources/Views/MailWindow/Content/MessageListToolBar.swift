@@ -11,17 +11,21 @@ import JetEmailData // for MailFolderLoadingMessageState
 struct LoadingMessageProgressBar : View {
     let mailFolderName: String
     let loadingMessageState: MailFolderLoadingMessageState
+    let isEmpty: Bool
     var body: some View {
         switch loadingMessageState {
-        case .none, .start: EmptyView()
-        /*case .start:
-            ProgressView(value: Float?.none) {
-                HStack {
-                    Text("Checking Messages in \(mailFolderName)…")
-                    Spacer()
-                }
+        case .start where isEmpty:
+            /*ProgressView {
+                Text("Checking Messages in \(mailFolderName)…")
             }
+            .progressViewStyle(.linear)
             .controlSize(.small)*/
+            HStack {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .controlSize(.small)
+                Text("Checking Messages in \(mailFolderName)…")
+            }
         case .loading(value: let value, total: let total):
             ProgressView(value: Float(value), total: Float(total)) {
                 HStack {
@@ -34,6 +38,7 @@ struct LoadingMessageProgressBar : View {
                 }
             }
             .controlSize(.small)
+        default: EmptyView()
         }
     }
 }
@@ -50,7 +55,7 @@ struct MailFolderRefreshButton : View {
     var body: some View {
         Button("Refresh", systemImage: "arrow.clockwise") {
             Task {
-                await appModel.loadMessages(mailFolderID: mailFolder.resourceID)
+                await appModel.syncMessages(mailFolderID: mailFolder.resourceID)
             }
         }
         .labelStyle(.titleAndIcon)
