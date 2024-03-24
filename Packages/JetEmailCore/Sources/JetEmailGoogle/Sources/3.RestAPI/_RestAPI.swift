@@ -121,7 +121,7 @@ extension GoogleSession {
     }
 
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
-    func _getMessage(messageID: GoogleMessageID, fields: String? = nil, format: GetMessageFormat) async throws -> GoogleMessageInner {
+    func _getMessage(messageID: GoogleMessageID, fields: String? = nil, format: _GoogleAPI.GetMessageFormat) async throws -> _GoogleAPI.GoogleMessageInner {
         let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: account.id.innerID, identifier: messageID.innerID)
         query.fields = fields
         query.format = format.rawValue
@@ -173,7 +173,7 @@ fileprivate extension ThrowingTaskGroup where ChildTaskResult == [GoogleMessage]
             let query = GTLRBatchQuery(queries: chunk.map {
                 let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID.innerID, identifier: $0.innerID)
                 // query.fields = fields
-                query.format = GetMessageFormat.metadata.rawValue
+                query.format = _GoogleAPI.GetMessageFormat.metadata.rawValue
                 return query
             })
             

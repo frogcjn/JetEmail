@@ -13,7 +13,7 @@ public struct GoogleMessage : GoogleProtocol, PlatformSpecificMessageProtocol {
     public typealias GeneralID = MessageID
     
     public let          id: GoogleMessageID
-           let      _inner: GoogleMessageInner
+           let      _inner: _GoogleAPI.GoogleMessageInner
     
     public let     subject: String?
     
