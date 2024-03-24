@@ -7,48 +7,48 @@
 
 
 public extension AccountID {
-    var platformCase: PlatformEnum<MicrosoftAccountID, GoogleAccountID>? {
+    var platformCase: PlatformEnum<MicrosoftAccountID, GoogleAccountID> { get throws {
         switch platform {
         case .microsoft: .microsoft(.init(innerID: innerID))
         case    .google:    .google(.init(innerID: innerID))
-        default        : nil
+        default        : throw PlatformEnumError.noPlatform(platform)
         }
-    }
+    } }
 }
 
 public extension MailFolderID {
-    var platformCase: PlatformEnum<MicrosoftMailFolderID, GoogleMailFolderID>? {
-        switch accountID.platformCase {
+    var platformCase: PlatformEnum<MicrosoftMailFolderID, GoogleMailFolderID> { get throws {
+        switch try accountID.platformCase {
         case .microsoft(let accountID): .microsoft(.init(accountID: accountID, innerID: innerID))
         case    .google(let accountID):    .google(.init(accountID: accountID, innerID: innerID))
-        default                       : nil
+        // default                       : throw PlatformEnumError.noPlatform(platform)
         }
-    }
+    } }
 }
 
 public extension MessageID {
-    var platformCase: PlatformEnum<MicrosoftMessageID, GoogleMessageID>? {
-        switch accountID.platformCase {
+    var platformCase: PlatformEnum<MicrosoftMessageID, GoogleMessageID> { get throws {
+        switch try accountID.platformCase {
         case .microsoft(let accountID): .microsoft(.init(accountID: accountID, innerID: innerID))
         case    .google(let accountID):    .google(.init(accountID: accountID, innerID: innerID))
-        default                       : nil
+        // default                       : throw PlatformEnumError.noPlatform(platform)
         }
-    }
+    } }
 }
 
 
 public extension AccountID {
-    var microsoft: MicrosoftAccountID? { platformCase?.microsoft }
-    var google   : GoogleAccountID?    { platformCase?.google    }
+    var microsoft: MicrosoftAccountID { get throws { try platformCase.microsoft } }
+    var google   : GoogleAccountID    { get throws { try platformCase.google    } }
 }
 
 public extension MailFolderID {
-    var microsoft: MicrosoftMailFolderID? { platformCase?.microsoft }
-    var google   : GoogleMailFolderID?    { platformCase?.google    }
+    var microsoft: MicrosoftMailFolderID { get throws { try platformCase.microsoft } }
+    var google   : GoogleMailFolderID    { get throws { try platformCase.google    } }
 }
 
 
 public extension MessageID {
-    var microsoft: MicrosoftMessageID? { platformCase?.microsoft }
-    var google   : GoogleMessageID?    { platformCase?.google }
+    var microsoft: MicrosoftMessageID { get throws { try platformCase.microsoft } }
+    var google   : GoogleMessageID    { get throws { try platformCase.google    } }
 }

@@ -32,7 +32,7 @@ extension AppModel {
     // @BackgroundThreadPool
     nonisolated
     private func _loadMailFolders(accountID: AccountID) async throws {
-        guard let session = try await accountID.refreshSession else { throw AppModelError.noSession }              // get Session
+        let session = try await accountID.refreshSession             // get Session
         
         // loadRootMailFolder
         let rootMailFolder = try await session.rootMailFolder()                                 // Session

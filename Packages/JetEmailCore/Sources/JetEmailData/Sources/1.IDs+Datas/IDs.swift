@@ -28,10 +28,11 @@ public struct ResourceID<AccountIDType : AccountIDProtocol> : ResourceIDProtocol
 
 // MARK: - Resource Specific
 
+// ublic typealias AccountID = PlatformEnum<MicrosoftAccountID, GoogleAccountID>
 public struct AccountID : AccountIDProtocol {
     public var id: Self { self }
 
-    public let  platform: Platform
+    public var  platform: Platform
     public let   innerID: String
     
     public init(platform: Platform, innerID: String) {

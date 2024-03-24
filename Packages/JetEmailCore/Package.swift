@@ -3,7 +3,7 @@
 
 import PackageDescription
 
-let package = Package(
+var package = Package(
     name: "JetEmailCore",
     defaultLocalization: "en",
     platforms: [
@@ -26,7 +26,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/frogcjn/AppAuth-iOS.git", branch: "frogcjn/visionOS"), //.package(url: "https://github.com/openid/AppAuth-iOS.git", .upToNextMajor(from: "1.6.2")),
         .package(url: "https://github.com/frogcjn/GTMAppAuth.git", branch: "frogcjn/visionOS"), // .package(url: "https://github.com/google/GTMAppAuth.git", .upToNextMajor(from: "4.0.0")),
-        .package(url: "https://github.com/google/google-api-objectivec-client-for-rest.git", .upToNextMajor(from: "3.5.1")),
+        .package(url: "https://github.com/frogcjn/google-api-objectivec-client-for-rest.git", branch: "frogcjn/GTLR_SKIP_PAGES_WARNING"),
+        //.package(url: "https://github.com/google/google-api-objectivec-client-for-rest.git", .upToNextMajor(from: "3.5.1")),
         .package(url: "https://github.com/frogcjn/MSAL.git", branch: "main"),
         //.package(url: "https://github.com/frogcjn/microsoft-authentication-library-for-objc.git", .upToNextMajor(from: "1.3.0")),
         //.package(name: "MSAL", path: "../microsoft-authentication-library-for-objc"),
@@ -50,11 +51,12 @@ let package = Package(
                 .product(name: "GTMAppAuth"                  , package: "GTMAppAuth"                           ),
                 .product(name: "GoogleAPIClientForREST_Gmail", package: "google-api-objectivec-client-for-rest"),
                 .target (name: "JetEmailFoundation"                                                            ),
-                .target (name: "JetEmailData"                                                                 ),
-            ],
+                .target (name: "JetEmailData"                                                                  ),
+            ]/*,
             swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
-            ]
+                .enableUpcomingFeature("StrictConcurrency"),
+                .define("GTLR_SKIP_PAGES_WARNING")
+            ]*/
         ),
         .target(
             name: "JetEmailMicrosoft",
@@ -62,29 +64,29 @@ let package = Package(
                 .product(name: "MSAL"               , package: "MSAL"),
                 .target (name: "JetEmailFoundation"                  ),
                 .target (name: "JetEmailData"                        )
-            ],
+            ]/*,
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
-            ]
+            ]*/
         ),
         .target(
             name: "JetEmailData",
             dependencies: [
                 .target(name: "JetEmailFoundation")
             ],
-            resources: [.process("Resources/Localizable.xcstrings")],
+            resources: [.process("Resources/Localizable.xcstrings")]/*,
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
-            ]
+            ]*/
         ),
         .target(
             name: "JetEmailFoundation",
             dependencies: [
                 .product(name: "MimeEmailParser", package: "MimeEmailParser")
-            ],
+            ]/*,
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
-            ]
+            ]*/
         ),
         
         /*.binaryTarget(
@@ -93,3 +95,7 @@ let package = Package(
         )*/
     ]
 )
+
+for target in package.targets {
+    target.swiftSettings = (target.swiftSettings ?? []) + [.enableUpcomingFeature("StrictConcurrency")]
+}

@@ -10,16 +10,20 @@ public enum PlatformEnum<Microsoft, Google> {
     case    google(Google   )
 }
 
+public enum PlatformEnumError : CodableErrorType, Sendable {
+    case noPlatform(Platform)
+}
+
 public extension PlatformEnum {
-    var microsoft: Microsoft? {
-        guard case .microsoft(let microsoft) = self else { return nil }
+    var microsoft: Microsoft { get throws {
+        guard case .microsoft(let microsoft) = self else { throw PlatformEnumError.noPlatform(.microsoft) }
         return microsoft
-    }
+    } }
     
-    var google   : Google?    {
-        guard case .google   (let google   ) = self else { return nil }
+    var google   : Google    { get throws {
+        guard case .google   (let google   ) = self else { throw PlatformEnumError.noPlatform(.google) }
         return google
-    }
+    } }
 }
 
 extension PlatformEnum:  Sendable where Microsoft :  Sendable, Google :  Sendable {}

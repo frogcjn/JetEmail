@@ -35,7 +35,7 @@ extension AppModel {
             do {
                 _ = try await modelStore.moveMessage(messageID: messageID, fromID: fromID, toID: toID)
                 do {
-                    guard let session = try await messageID.accountID.refreshSession else { throw AppModelError.noSession }
+                    let session = try await messageID.accountID.refreshSession
                     _ = try await session.moveMessage(messageID: messageID, fromID: fromID, toID: toID)
                     
                     // method 1: directly update modelStore

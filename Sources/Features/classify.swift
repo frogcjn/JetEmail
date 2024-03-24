@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 2/7/24.
 //
 
-@preconcurrency import OpenAI
+import OpenAI
 import JetEmailMicrosoft
 import JetEmailGoogle
 import JetEmailFoundation // for Tree

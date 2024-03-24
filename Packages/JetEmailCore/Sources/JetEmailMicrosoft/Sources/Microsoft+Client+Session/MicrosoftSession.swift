@@ -10,13 +10,21 @@ import JetEmailData
 
 public actor MicrosoftSession : Sendable {
     
-    public let account     : MicrosoftAccount
-           let _msalSession: MSALSession
+    public let       client: MicrosoftClient
+    public let      account: MicrosoftAccount
+           let        _item: Item
+
            let globalIdToWellKnownFolderName: [MicrosoftMailFolderID: MicrosoftMailFolderSystemName]? = nil
             
-    init(account: MicrosoftAccount, msalSession: MSALSession) {
-        self.account       = account
-        self._msalSession  = msalSession
+    init(client: MicrosoftClient, item: Item) {
+        self.client  = client
+        self.account = item.account
+        self._item    = item
+    }
+    
+    struct Item : ValueType, Sendable {
+        let        account: MicrosoftAccount
+        let    msalSession: MSALSession
     }
 }
 

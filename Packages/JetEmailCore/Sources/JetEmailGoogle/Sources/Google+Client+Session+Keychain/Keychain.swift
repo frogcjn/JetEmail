@@ -6,28 +6,21 @@
 //
 
 import Foundation
-@preconcurrency import GTMAppAuth
 import JetEmailData
 
 actor Keychain {
+    static let shared = Keychain()
     static let securityAttributeCreator           = "jtem".fourCharUInt32! /*Jet Email*/
     static let securityAttributeTypeGoogleAccount = "GGac".fourCharUInt32! /*Google Acccount*/
     
-    struct SessionItem : ValueType, Sendable {
-        let      accountID: GoogleAccountID
-        let       username: String
-        let     gtmSession: AuthSession
-        let   keychainItem: Data
-    }
-    
-    func insertItem(gtmSession: AuthSession) throws -> SessionItem {
+    func insertItem(gtmSession: GTMSession) throws -> GoogleSessionItem {
         //SessionKeychain.assertIsolated()
-        if let item = try item(id: try gtmSession.accountID) { item }
-        else if let item = try addItem(gtmSession: gtmSession) { item }
+        if let item = try item(id: try gtmSession.accountID) { item } // find item in keyChain
+        else if let item = try addItem(gtmSession: gtmSession) { item } // if not find add item in keyChain
         else { throw AuthError.sessionStoreAddFail }
     }
     
-    func addItem(gtmSession: AuthSession) throws -> SessionItem? {
+    func addItem(gtmSession: GTMSession) throws -> GoogleSessionItem? {
         let (id, username) = try gtmSession.accountIDAndUsername
         //SessionKeychain.assertIsolated()
         let attributes = [
@@ -62,7 +55,7 @@ actor Keychain {
         switch resultCode {
         case errSecSuccess:
             let keychainItem = value as! Data
-            return .init(accountID: id, username: username, gtmSession: gtmSession, keychainItem: keychainItem)
+            return .init(account: .init(id: id, username: username), gtmSession: gtmSession, keychainItem: keychainItem)
         case errSecDuplicateItem:
             return nil
         default: fatalError()
@@ -70,7 +63,7 @@ actor Keychain {
     }
     
     
-    func deleteItem(_ item: SessionItem) throws -> SessionItem {
+    func deleteItem(_ item: GoogleSessionItem) throws -> GoogleSessionItem {
         //SessionKeychain.assertIsolated()
         let query = [
             kSecValuePersistentRef: item.keychainItem
@@ -80,7 +73,7 @@ actor Keychain {
         return item
     }
     
-    func item(id: GoogleAccountID) throws -> SessionItem? {
+    func item(id: GoogleAccountID) throws -> GoogleSessionItem? {
         //SessionKeychain.assertIsolated()
         
         let query =  [
@@ -121,7 +114,7 @@ actor Keychain {
             let username     = try (attributes[kSecAttrGeneric]         as! Data).string
             let keychainItem =      attributes[kSecValuePersistentRef] as! Data
             let gtmSession   = try (attributes[kSecValueData]           as! Data).gtmSession
-            return .init(accountID: id, username: username, gtmSession: gtmSession, keychainItem: keychainItem)
+            return .init(account: .init(id: id, username: username), gtmSession: gtmSession, keychainItem: keychainItem)
         case errSecItemNotFound:
             return nil
         default: fatalError()
@@ -129,7 +122,7 @@ actor Keychain {
         
     }
     
-    var items: [SessionItem] { get throws {
+    var items: [GoogleSessionItem] { get throws {
         //SessionKeychain.assertIsolated()
         checkBackgroundThread()
         let query =  [
@@ -168,7 +161,7 @@ actor Keychain {
             return []
         case errSecSuccess:
             let attriutesList = value as! [[CFString: Any]]
-            let items: [SessionItem] = try attriutesList.map { attributes in
+            let items: [GoogleSessionItem] = try attriutesList.map { attributes in
                 
                 let id           = GoogleAccountID(innerID: attributes[kSecAttrAccount] as! String)
                 let username     = try (attributes[kSecAttrGeneric] as! Data).string
@@ -183,7 +176,7 @@ actor Keychain {
                 assert(resultCode == errSecSuccess)
                 let gtmSession = try (value as! Data).gtmSession
                 
-                return (.init(accountID: id, username: username, gtmSession: gtmSession, keychainItem: keychainItem))
+                return (.init(account: .init(id: id, username: username), gtmSession: gtmSession, keychainItem: keychainItem))
             }
             return items
             
@@ -191,7 +184,7 @@ actor Keychain {
         }
     }   }
     
-    func updateItem(_ item: SessionItem) throws -> SessionItem {
+    func updateItem(_ item: GoogleSessionItem) throws -> GoogleSessionItem {
         checkBackgroundThread()
         let query = [
             kSecValuePersistentRef: item.keychainItem
@@ -232,7 +225,7 @@ actor Keychain {
 }
 // }
 
-fileprivate extension AuthSession {
+fileprivate extension GTMSession {
     var data: Data {
         get throws {
             let keyedArchiver = NSKeyedArchiver(requiringSecureCoding: true)
@@ -244,13 +237,13 @@ fileprivate extension AuthSession {
 }
 
 fileprivate extension Data {
-    var gtmSession: AuthSession {
+    var gtmSession: GTMSession {
         get throws {
             let keyedUnarchiver = try NSKeyedUnarchiver(forReadingFrom: self)
             keyedUnarchiver.requiresSecureCoding = true
-            //keyedUnarchiver.setClass(AuthSession.self, forClassName: "GTMAppAuthFetcherAuthorization")
+            //keyedUnarchiver.setClass(GTMSession.self, forClassName: "GTMAppAuthFetcherAuthorization")
 
-            guard let authSession = keyedUnarchiver.decodeObject(of: AuthSession.self, forKey: NSKeyedArchiveRootObjectKey) else {
+            guard let authSession = keyedUnarchiver.decodeObject(of: GTMSession.self, forKey: NSKeyedArchiveRootObjectKey) else {
                 throw AuthError.decodeFromKeychainError
             }
             return authSession
@@ -293,5 +286,5 @@ fileprivate extension String {
  */
 
 extension GoogleSession {
-    var _item: Keychain.SessionItem { .init(accountID: account.id, username: account.username, gtmSession: _gtmSession, keychainItem: keychainItem) }
+    var _item: GoogleSessionItem { .init(account: account, gtmSession: _gtmSession, keychainItem: keychainItem) }
 }

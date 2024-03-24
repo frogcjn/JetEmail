@@ -13,22 +13,29 @@ import Observation
 @MainActor
 @Observable
 public class Clients : Sendable {
+    public static let shared = Clients()
     init() {}
     
-    public var microsoft: MicrosoftClient { get async throws {
-        try await MicrosoftClient.shared
-    } }
-    public var    google:    GoogleClient { GoogleClient.shared }
+    public var microsoft: Client { .microsoft(MicrosoftClient.shared) }
+    public var    google: Client {     .google(GoogleClient.shared) }
     
-    public func client(platform: Platform) async throws -> Client {
+    public func client(platform: Platform) throws -> Client {
         switch platform {
-        case .microsoft: try await .microsoft(microsoft)
-        case .google   :              .google(   google)
-        default        : fatalError() // TODO: Throw Error
+        case .microsoft:  microsoft
+        case .google   :  google
+        default        : throw PlatformEnumError.noPlatform(platform)
         }
     }
     
+    public var clients: [Client] {
+        [microsoft, google]
+    }
+    
     public var sessions: [Session] { get async throws {
-        try await client(platform: .microsoft).sessions + client(platform: .google).sessions
+        try await microsoft.sessions + google.sessions
     } }
+    
+    public func signIn(platform: Platform) async throws -> Session {
+        try await client(platform: platform).signIn()
+    }
 }

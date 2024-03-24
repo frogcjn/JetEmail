@@ -13,16 +13,16 @@ public enum Platform : RawRepresentable, CodableValueType, Sendable {
     case other(String)
     
     public init(rawValue: String) {
-        self = switch rawValue {
-        case "microsoft": .microsoft
-           case "google": .google
-                 default: .other(rawValue)
+        switch rawValue {
+        case "microsoft": self = .microsoft
+           case "google": self = .google
+                 default: self = .other(rawValue)
         }
     }
     public var rawValue: String {
         switch self {
-        case .microsoft: "microsoft"
-        case .google   : "google"
+        case .microsoft          : "microsoft"
+        case .google             : "google"
         case .other(let rawValue): rawValue
         }
     }

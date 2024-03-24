@@ -15,3 +15,34 @@ public typealias    AccountResource = PlatformEnum<MicrosoftAccount   , GoogleAc
 public typealias MailFolderResource = PlatformEnum<MicrosoftMailFolder, GoogleMailFolder>
 public typealias    MessageResource = PlatformEnum<MicrosoftMessage   , GoogleMessage   >
 
+
+@MainActor
+extension AccountID : AccountToSessionProtocol {
+    public var storedSession: Session? {
+        try? platformCase.storedSession
+    }
+    
+    public func removeSession() -> Session? {
+        try? platformCase.removeSession()
+    }
+    
+    public var refreshSession : Session { get async throws {
+        try await platformCase.refreshSession
+    } }
+}
+
+@MainActor
+extension Account : AccountToSessionProtocol {
+    public var storedSession: Session? {
+        resourceID.storedSession
+    }
+    
+    public func removeSession() -> Session? {
+        resourceID.removeSession()
+    }
+    
+    public var refreshSession : Session { get async throws {
+        try await resourceID.refreshSession
+    } }
+}
+

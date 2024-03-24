@@ -15,7 +15,7 @@ extension MSALAccount {
         return .init(innerID: id)
     } }
     
-    var outerAccount: MicrosoftAccount { get throws {
+    var outer: MicrosoftAccount { get throws {
         guard let id = identifier, let username else { throw AuthError.accountNoIDOrUsername }
         return .init(id: .init(innerID: id), username: username)
     } }
@@ -23,5 +23,5 @@ extension MSALAccount {
 
 extension MSALSession {
     var accountID: MicrosoftAccountID { get throws { try account.id } }
-    var outerAccount: MicrosoftAccount { get throws { try account.outerAccount }}
+    var outerAccount: MicrosoftAccount { get throws { try account.outer }}
 }

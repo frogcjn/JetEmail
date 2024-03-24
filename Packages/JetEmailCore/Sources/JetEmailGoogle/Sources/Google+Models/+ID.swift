@@ -5,12 +5,11 @@
 //  Created by Cao, Jiannan on 2/15/24.
 //
 
-import GTMAppAuth
 import JetEmailData
 
 // MARK: - Account.ID <- GTM
 
-extension AuthSession {
+extension GTMSession {
     var accountID: GoogleAccountID { get throws {
         guard let innerID = userID else { throw AuthError.accountNoIDOrUsername }
         return .init(innerID: innerID)

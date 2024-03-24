@@ -1,3 +1,4 @@
+/*
 //
 //  File.swift
 //  
@@ -4565,3 +4566,82 @@ import Foundation
         return name?.nilIfEmpty ?? String(localized: "(MailFolder.NoName)", defaultValue: .init(name ?? ""))
     }
 }*/
+//
+//  File.swift
+//
+//
+
+import JetEmailData
+
+/*@MainActor
+extension PlatformEnum<MicrosoftAccountID, GoogleAccountID> {
+    public func storedSession() -> Session? {
+        switch self {
+        case .microsoft(let id): id.storedSession.map(Session.microsoft)
+        case    .google(let id): id.storedSession.map(Session.google)
+        }
+    }
+    
+    public func removeSession() -> Session? {
+        switch self {
+        case .microsoft(let id): id.removeSession().map(Session.microsoft)
+        case    .google(let id): id.removeSession().map(Session.google)
+        }
+    }
+    
+    public func refreshSession() async throws -> Session? {
+        switch self {
+        case .microsoft(let id): try await .microsoft(id.refreshSession())
+        case    .google(let id): try await .google(id.refreshSession())
+        }
+    }
+}*/
+
+/*@MainActor
+extension AccountID {
+    public func storedSession() -> Session? {
+        platformCase?.storedSession()
+    }
+    
+    public func removeSession() -> Session? {
+        platformCase?.removeSession()
+    }
+    
+    public func refreshSession() async throws -> Session? {
+        try await platformCase?.refreshSession()
+    }
+}*/
+
+ //
+ //  File.swift
+ //
+ //
+ //  Created by Cao, Jiannan on 3/7/24.
+ //
+ /*
+ import JetEmailData
+
+ extension ModelStore {
+     
+     //@ModelStoreActor
+     static var _shared: ModelStore?
+     
+     //@ModelStoreActor
+     public static var shared: ModelStore { get async {
+         if let _shared { return _shared }
+         let modelStore = await ModelStore(modelContainer: .shared)
+         _shared = modelStore
+         return modelStore
+     } }
+ }
+ /*
+ @globalActor
+ public actor ModelStoreActor : Actor {
+     public static let shared = ModelStoreActor()
+ }
+ */
+ */
+
+
+
+*/

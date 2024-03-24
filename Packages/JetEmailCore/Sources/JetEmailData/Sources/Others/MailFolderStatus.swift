@@ -8,12 +8,12 @@
 public enum MailFolderLoadingMessageState {
     case none
     case start
+    case checking(value: Int, total: Int)
     case loading(value: Int, total: Int)
     
     public var isLoading: Bool {
         switch self {
-        case .start: true
-        case .loading: true
+        case .start, .checking, .loading: true
         default: false
         }
     }

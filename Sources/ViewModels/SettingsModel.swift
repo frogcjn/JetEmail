@@ -26,7 +26,6 @@ class SettingsModel {
 }
 
 extension SettingsModel {
-    
     // Feature: Unselection - Will Sign Out Account
     func willSignOutAccount(_ accountID: AccountID) {
         if selectedAccount?.resourceID == accountID { selectedAccount = nil }

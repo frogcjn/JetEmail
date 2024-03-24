@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 import JetEmailData
 import JetEmailFoundation // for Tree
-@preconcurrency import GoogleAPIClientForREST_Gmail
+@preconcurrency import GoogleAPIClientForREST_Gmail // @preconcurrency for GTLRGmail_Message, GTLRGmail_ListMessagesResponse
 
 // MARK: - Microsoft.Context: Account-MailFolders API
 
@@ -38,22 +38,32 @@ public extension GoogleSession {
     
     // MARK: - MailFolder-Messages
     func syncMessages(mailFolderID: GoogleMailFolderID, modelStore: ModelStore) async throws {
+        let checkingPageSize: Int? = 100 // max: 500, default: 100
         
-        let newMessageIDs: [GoogleMessageID] = try await messageIDs(mailFolderID: mailFolderID)
+        // loadingBatchSize: max: 100
+        // loadingMaxTaskCount: max: Int.max. bestMax: 2. If more than 2, some message will drop in Swift async stream.
+        let loading = (batchSize: 50, maxTaskCount: 2)
+        
+        var newMessageIDs = [GoogleMessageID]()
+        let (idEstimateCount, idStream) = try await checkMessageIDs(mailFolderID: mailFolderID, pageSize: checkingPageSize)
+        for try await ids in idStream {
+            newMessageIDs.append(contentsOf: ids)
+            await MainActor.run { [value = newMessageIDs.count] in
+                mailFolderID.generalID.loadingMessageState = .checking(value: value, total: max(value, idEstimateCount))
+            }
+        }
         
         // remove
-        let shouldInsertMessageIDs = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs.map { $0.generalID }, mailFolderID: mailFolderID.generalID).compactMap(\.element.google)
+        let shouldInsertMessageIDs = try await modelStore.setMessagesDeletePart(newMessageIDs: newMessageIDs.map { $0.generalID }, mailFolderID: mailFolderID.generalID).map { try $0.element.google }
         
         guard !shouldInsertMessageIDs.isEmpty else { return }
-        let stream = try await getMessagesStream(mailFolderID: mailFolderID, messageIDs: shouldInsertMessageIDs)
+        let stream = try await getMessagesStream(mailFolderID: mailFolderID, messageIDs: shouldInsertMessageIDs, batchSize: loading.batchSize, maxTaskCount: loading.maxTaskCount)
         let total = newMessageIDs.count
         var value = total - shouldInsertMessageIDs.count
         for try await messages in stream {
             value += try await modelStore.insertMessages(sources: messages, mailFolderID: mailFolderID.generalID).count // MSAL to SwiftData
-            if value < total {
-                await MainActor.run { [value] in
-                    mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
-                }
+            await MainActor.run { [value] in
+                mailFolderID.generalID.loadingMessageState = .loading(value: value, total: total)
             }
         }
     }
@@ -208,7 +218,7 @@ fileprivate extension GoogleSession {
 }
 
 fileprivate extension GoogleSession {
-    // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list
+    /*// https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list
     func messageIDs(mailFolderID: GoogleMailFolderID) async throws -> [GoogleMessageID] {
         let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: account.id.innerID)
         query.labelIds = [mailFolderID.innerID]
@@ -218,22 +228,78 @@ fileprivate extension GoogleSession {
         let response: GTLRGmail_ListMessagesResponse = try await service.execute(query)
         let messages = response.messages ?? []
         return try messages.map { try $0.messageInner.id(accountID: account.id) }
+    }*/
+    
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - mailFolderID: <#mailFolderID description#>
+    ///   - pageSize: max: 500, default: 100
+    /// - Returns: <#description#>
+    /// https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list
+    func checkMessageIDs(mailFolderID: GoogleMailFolderID, pageSize: Int?) async throws -> (estimateCount: Int, stream: AsyncThrowingStream<[GoogleMessageID], Error>) {
+        let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: account.id.innerID)
+        query.labelIds = [mailFolderID.innerID]
+        if let pageSize {
+            query.maxResults = UInt(pageSize)
+        }
+                
+        // get count
+        let (estimateCount, messageIDs, nextPageToken) = try await {
+            let response: GTLRGmail_ListMessagesResponse = try await serviceStream.execute(query)
+            guard let estimateCount = response.resultSizeEstimate?.uint32Value else { throw AuthError.collectionResponseNoCount }
+            let messageIDs = try (response.messages ?? []).map { try $0.messageInner.id(accountID: account.id) }
+            let nextPageToken = response.nextPageToken
+            return (Int(estimateCount), messageIDs, nextPageToken)
+        }()
+        
+        
+        let stream: AsyncThrowingStream<[GoogleMessageID], Error> = .init { continuation in Task { [messageIDs, nextPageToken] in
+            do {
+                // get paging results
+                
+                continuation.yield(messageIDs)
+                await Task.yield()
+
+                var nextPageToken: String? = nextPageToken
+                
+                while let pageToken = nextPageToken {
+                    let query = GTLRGmailQuery_UsersMessagesList.query(withUserId: account.id.innerID)
+                    query.labelIds = [mailFolderID.innerID]
+                    if let pageSize {
+                        query.maxResults = UInt(pageSize)
+                    }
+                    query.pageToken = pageToken
+                    let response: GTLRGmail_ListMessagesResponse = try await serviceStream.execute(query)
+                    let messageIDs = try (response.messages ?? []).map { try $0.messageInner.id(accountID: account.id) }
+                    continuation.yield(messageIDs)
+                    await Task.yield()
+                    nextPageToken = response.nextPageToken
+                }
+                
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
+            }
+        } }
+        return (estimateCount, stream)
     }
     
-    func getMessagesStream(mailFolderID: GoogleMailFolderID, messageIDs: [GoogleMessageID]) async throws -> AsyncThrowingStream<[GoogleMessage], Error> {
-        .init(messageIDs: messageIDs, accountID: account.id, service: service, chunkSize: 50, maxTaskCount: 2)
+    
+    /// <#Description#>
+    /// - Parameters:
+    ///   - mailFolderID: <#mailFolderID description#>
+    ///   - messageIDs: <#messageIDs description#>
+    ///   - batchSize: max: 100
+    ///   - maxTaskCount: max: Int.max. bestMax: 2. If more than 2, some message will drop in Swift async stream.
+    /// - Returns: <#description#>
+    func getMessagesStream(mailFolderID: GoogleMailFolderID, messageIDs: [GoogleMessageID], batchSize: Int, maxTaskCount: Int) async throws -> AsyncThrowingStream<[GoogleMessage], Error> {
+        .init(messageIDs: messageIDs, accountID: account.id, service: service, batchSize: batchSize, maxTaskCount: maxTaskCount)
     }
 }
 
 fileprivate extension AsyncThrowingStream where Element == [GoogleMessage], Failure == Error {
-    /// <#Description#>
-    /// - Parameters:
-    ///   - messageIDs: <#messageIDs description#>
-    ///   - accountID: <#accountID description#>
-    ///   - service: <#service description#>
-    ///   - chunkSize: max: 100
-    ///   - maxTaskCount: Int.max for unlimited task count. Best practise: no more than 2. If more than 2, some message will drop in Swift async stream.
-    init(messageIDs: [GoogleMessageID], accountID: GoogleAccountID, service: GTLRGmailService, chunkSize: Int, maxTaskCount: Int) {
+    init(messageIDs: [GoogleMessageID], accountID: GoogleAccountID, service: GTLRGmailService, batchSize: Int, maxTaskCount: Int) {
         // maxTaskCount =
         self.init { [service] (continuation: Continuation) in Task {
             var rest = messageIDs[...]
@@ -241,18 +307,18 @@ fileprivate extension AsyncThrowingStream where Element == [GoogleMessage], Fail
                 try await withThrowingTaskGroup(of: [GoogleMessage].self) { group in
                     if maxTaskCount < Int.max {
                         for _ in 0..<maxTaskCount {
-                            group.addTask(accountID: accountID, service: service, rest: &rest, chunkSize: chunkSize)
+                            group.addTask(accountID: accountID, service: service, rest: &rest, batchSize: batchSize)
                         }
                     } else {
                         while rest.count > 0 {
-                            group.addTask(accountID: accountID, service: service, rest: &rest, chunkSize: chunkSize)
+                            group.addTask(accountID: accountID, service: service, rest: &rest, batchSize: batchSize)
                         }
                     }
                     
                     for try await result in group {
                         continuation.yield(result)
                         await Task.yield()
-                        group.addTask(accountID: accountID, service: service, rest: &rest, chunkSize: chunkSize)
+                        group.addTask(accountID: accountID, service: service, rest: &rest, batchSize: batchSize)
                     }
                     //}
                 }
@@ -265,10 +331,10 @@ fileprivate extension AsyncThrowingStream where Element == [GoogleMessage], Fail
 }
 
 fileprivate extension ThrowingTaskGroup where ChildTaskResult == [GoogleMessage] {
-    mutating func addTask(accountID: GoogleAccountID, service: GTLRGmailService, rest: inout Array<GoogleMessageID>.SubSequence, chunkSize: Int) {
+    mutating func addTask(accountID: GoogleAccountID, service: GTLRGmailService, rest: inout Array<GoogleMessageID>.SubSequence, batchSize: Int) {
         guard !rest.isEmpty else { return }
-        let chunk = rest.prefix(chunkSize)
-        rest = rest.dropFirst(chunkSize)
+        let chunk = rest.prefix(batchSize)
+        rest = rest.dropFirst(batchSize)
         addTask {
             let query = GTLRBatchQuery(queries: chunk.map {
                 let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID.innerID, identifier: $0.innerID)
@@ -324,6 +390,13 @@ fileprivate extension GoogleSession {
         let service = GTLRGmailService()
         service.authorizer = _gtmSession
         service.shouldFetchNextPages = true
+        return service
+    }
+    
+    var serviceStream: GTLRGmailService {
+        let service = GTLRGmailService()
+        service.authorizer = _gtmSession
+        service.shouldFetchNextPages = false
         return service
     }
 }

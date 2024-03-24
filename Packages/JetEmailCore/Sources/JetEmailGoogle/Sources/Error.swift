@@ -16,6 +16,7 @@ import JetEmailData
 public enum AuthError : LocalizedError {
     case accountNoIDOrUsername
     case currentAuthorizationFlowIsExisted
+    case collectionResponseNoCount
     
     case sessionStoreAddFail
     case accountStoreExistedWhenAddNewToKeychain(GoogleSession)

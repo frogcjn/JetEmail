@@ -13,34 +13,49 @@ struct LoadingMessageProgressBar : View {
     let loadingMessageState: MailFolderLoadingMessageState
     let isEmpty: Bool
     var body: some View {
-        switch loadingMessageState {
-        case .start where isEmpty:
-            /*ProgressView {
-                Text("Checking Messages in \(mailFolderName)…")
-            }
-            .progressViewStyle(.linear)
-            .controlSize(.small)*/
-            HStack {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .controlSize(.small)
-                Text("Checking Messages in \(mailFolderName)…")
-            }
-        case .loading(value: let value, total: let total):
-            ProgressView(value: Float(value), total: Float(total)) {
+        Group {
+            switch loadingMessageState {
+            case .start where isEmpty:
+                /*ProgressView {
+                 Text("Checking Messages in \(mailFolderName)…")
+                 }
+                 .progressViewStyle(.linear)
+                 .controlSize(.small)*/
                 HStack {
-                    Text("Downloading Messages in \(mailFolderName)…")
-                    Spacer()
-                    if value > 0 && total > 0 {
-                        Text("\(value) of \(total)")
-                            .foregroundStyle(.secondary)
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                    Text("Checking Messages in \(mailFolderName)…")
+                }
+            case .checking(value: let value, total: let total) where isEmpty:
+                ProgressView(value: Float(value), total: Float(total)) {
+                    HStack {
+                        Text("Checking Messages in \(mailFolderName)…")
+                        Spacer()
+                        if value > 0 && total > 0 {
+                            Text("\(value) of \(total)")
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
+                .progressViewStyle(.linear)
+            case .loading(value: let value, total: let total):
+                ProgressView(value: Float(value), total: Float(total)) {
+                    HStack {
+                        Text("Downloading Messages in \(mailFolderName)…")
+                        Spacer()
+                        if value > 0 && total > 0 {
+                            Text("\(value) of \(total)")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .progressViewStyle(.linear)
+            default: EmptyView()
             }
-            .controlSize(.small)
-        default: EmptyView()
         }
+        .controlSize(.small)
     }
+    
 }
 
 struct MailFolderRefreshButton : View {

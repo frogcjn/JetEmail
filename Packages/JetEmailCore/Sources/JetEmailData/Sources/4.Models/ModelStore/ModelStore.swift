@@ -316,6 +316,29 @@ public actor ModelStore {
    //  let logger = Logger(subsystem: "me.frogcjn.jet-email.ModelStore", category: "ModelStore")
 }
 
+/*@globalActor
+public actor ModelStoreActor : Actor {
+    public static let shared = ModelStoreActor()
+}*/
+
+extension ModelStore {
+    
+    @MainActor
+    static var _shared: ModelStore?
+    
+    @MainActor
+    public static var shared: ModelStore { get async {
+        if let _shared { return _shared }
+        let modelStore = await Task.detached {
+            checkBackgroundThread()
+            // must create ModelStore actor in background
+            return await ModelStore(modelContainer: .shared)
+        }.value
+        _shared = modelStore
+        return modelStore
+    } }
+}
+
 enum ModelStoreError : Error {
     case notFound
 }

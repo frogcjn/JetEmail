@@ -5,20 +5,43 @@
 //  Created by Cao, Jiannan on 3/12/24.
 //
 
-@preconcurrency import AppAuth
+@preconcurrency import AppAuth // @preconcurrency for any OIDExternalUserAgentSession
 import SwiftUI
 import AuthenticationServices
 
-
-// extension WebAuthenticationSession: @unchecked Sendable {}
-
-extension WebAuthenticationSession {
+extension WebAuthenticationSession : @unchecked Sendable {
     var externalUserAgent: any OIDExternalUserAgent {
         ExternalUserAgent(webAuthenticationSession: self)
     }
+    
+    @MainActor
+    fileprivate func authenticate(requestURL: URL, requestRedirectScheme: String) async throws -> URL {
+        #if compiler(>=5.10)
+        if #available(visionOS 1.1, macOS 14.4, iOS 17.4, *) {
+            try await authenticate(
+                using: requestURL,
+                callback: .customScheme(requestRedirectScheme),
+                //preferredBrowserSession: .ephemeral,
+                additionalHeaderFields: [:]
+            )
+        } else {
+            try await authenticate(
+                using: requestURL,
+                callbackURLScheme: requestRedirectScheme
+                //preferredBrowserSession: .ephemeral
+            )
+        }
+        #else
+        try await authenticate(
+            using: requestURL,
+            callbackURLScheme: requestRedirectScheme
+            //preferredBrowserSession: .ephemeral
+        )
+        #endif
+    }
 }
 
-fileprivate class ExternalUserAgent : NSObject, OIDExternalUserAgent, @unchecked Sendable {
+fileprivate final class ExternalUserAgent : NSObject, OIDExternalUserAgent {
     
     let webAuthenticationSession: WebAuthenticationSession
     
@@ -36,45 +59,17 @@ fileprivate class ExternalUserAgent : NSObject, OIDExternalUserAgent, @unchecked
         _externalUserAgentFlowInProgress = true
         _session = session
         
-        Task {
-            await task(requestURL: requestURL, requestRedirectScheme: requestRedirectScheme, session: session)
+        Task { [webAuthenticationSession] in
+            do {
+                let resultURL = try await webAuthenticationSession.authenticate(requestURL:requestURL, requestRedirectScheme: requestRedirectScheme)
+                session.resumeExternalUserAgentFlow(with: resultURL)
+            } catch {
+                session.failExternalUserAgentFlowWithError(OIDErrorUtilities.error(with: .userCanceledAuthorizationFlow, underlyingError: error, description: nil))
+            }
         }
         return true
     }
     
-    func task(requestURL: URL, requestRedirectScheme: String, session: any OIDExternalUserAgentSession) async {
-        do {
-            
-            #if compiler(>=5.10)
-            let resultURL: URL
-            if #available(visionOS 1.1, macOS 14.4, iOS 17.4, *) {
-                resultURL = try await webAuthenticationSession.authenticate(
-                    using: requestURL,
-                    callback: .customScheme(requestRedirectScheme),
-                    //preferredBrowserSession: .ephemeral,
-                    additionalHeaderFields: [:]
-                )
-            } else {
-                resultURL = try await webAuthenticationSession.authenticate(
-                    using: requestURL,
-                    callbackURLScheme: requestRedirectScheme
-                    //preferredBrowserSession: .ephemeral
-                )
-            }
-            #else
-            let resultURL = try await webAuthenticationSession.authenticate(
-                using: requestURL,
-                callbackURLScheme: requestRedirectScheme
-                //preferredBrowserSession: .ephemeral
-            )
-            #endif
-                
-            session.resumeExternalUserAgentFlow(with: resultURL)
-        } catch {
-            session.failExternalUserAgentFlowWithError(OIDErrorUtilities.error(with: .userCanceledAuthorizationFlow, underlyingError: error, description: nil))
-        }
-    }
-
     public func dismiss(animated: Bool) async {
         if !_externalUserAgentFlowInProgress { return }
         clearUp()

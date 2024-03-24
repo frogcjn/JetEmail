@@ -5,33 +5,35 @@
 //  Created by Cao, Jiannan on 2/17/24.
 //
 
-@preconcurrency import GTMAppAuth
+import GTMAppAuth
 import AppAuth
 import JetEmailData
 
 public typealias GoogleSessionProtocol = NSObject & AuthSessionDelegate & OIDAuthStateChangeDelegate & OIDAuthStateErrorDelegate
 public final class GoogleSession: GoogleSessionProtocol, Sendable {
 
-    public let  account    : GoogleAccount
-    public let _gtmSession : AuthSession
+    public let      client : GoogleClient
+    public let     account : GoogleAccount
+           let _gtmSession : GTMSession
     
            let keychainItem: Data
     
-    init(account: GoogleAccount, gtmSession: AuthSession, keychainItem: Data) {
-        self.account      = account
-        self._gtmSession  = gtmSession
-        self.keychainItem = keychainItem
+    init(client: GoogleClient, item: GoogleSessionItem) {
+        self.client       = client
+        self.account      = item.account
+        self._gtmSession  = item.gtmSession
+        self.keychainItem = item.keychainItem
         super.init()
         
-        gtmSession.delegate                      = self
-        gtmSession.authState.stateChangeDelegate = self
-        gtmSession.authState.errorDelegate       = self
+        _gtmSession.delegate                      = self
+        _gtmSession.authState.stateChangeDelegate = self
+        _gtmSession.authState.errorDelegate       = self
     }
 }
 
 
 public extension GoogleSession {
-    // MARK: - AuthSessionDelegate
+    // MARK: - GTMSessionDelegate
     func additionalTokenRefreshParameters(forAuthSession gtmSession: AuthSession) -> [String : String]? {
         return nil
     }
@@ -43,7 +45,9 @@ public extension GoogleSession {
     // MARK: - OIDAuthStateChangeDelegate
     
     func didChange(_ state: OIDAuthState) {
-        Task { _ = try await Keychain.shared.updateItem(_item) }
+        Task {
+            try await client.updateFrom(session: self)
+        }
     }
 
 

@@ -58,7 +58,9 @@ public extension ResourceSpecificIDProtocol {
     var resourceType : ResourceType { Self.resourceType }
 }
 
-public protocol AccountIDProtocol : ResourceSpecificIDProtocol where AccountIDType == Self {}
+public protocol AccountIDProtocol : ResourceSpecificIDProtocol where AccountIDType == Self {
+    // associatedtype SessionType
+}
 
 extension AccountIDProtocol {
     public static var resourceType: ResourceType { .account }

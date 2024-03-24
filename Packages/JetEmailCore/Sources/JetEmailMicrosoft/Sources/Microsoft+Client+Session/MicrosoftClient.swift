@@ -6,30 +6,26 @@
 //
 
 import JetEmailData
-@preconcurrency import MSAL
+import MSAL
 
-public actor MicrosoftClient : Sendable {
-    static      public let       scopes: [Scope] = [.userRead, .mailReadWrite, .mailSend, .mailboxSettingsReadWrite] // request permission to read the profile of the signed-in user
-    static      public let  endpointURL          = URL(string: "https://graph.microsoft.com/v1.0/")!
+public actor MicrosoftClient {
     
-           fileprivate let     clientID          = "0ef42f9f-afc7-4463-bcbe-1c6dd4076b40"
-           fileprivate let  redirectURL          = URL(string: "msauth.me.frogcjn.jet-email://auth")!
-           fileprivate let authorityURL          = URL(string: "https://login.microsoftonline.com/common")!
-                       let _msalClient: MSALPublicClientApplication
+    @MainActor
+    public static var shared = MicrosoftClient()
     
-    init() throws {
-        checkBackgroundThread()
-        
-        let configuration = MSALPublicClientApplicationConfig(
-            clientId: clientID,
-            redirectUri: redirectURL.absoluteString,
-            authority: try MSALAADAuthority(url: authorityURL)
-        )
-        
-        _msalClient = try MSALPublicClientApplication(configuration: configuration)
-    }
+    let  endpointURL         = URL(string: "https://graph.microsoft.com/v1.0/")!
+    let     clientID         = "0ef42f9f-afc7-4463-bcbe-1c6dd4076b40"
+    let  redirectURL         = URL(string: "msauth.me.frogcjn.jet-email://auth")!
+    let authorityURL         = URL(string: "https://login.microsoftonline.com/common")!
+    let      scopes: [Scope] = [.userRead, .mailReadWrite, .mailSend, .mailboxSettingsReadWrite] // request permission to read the profile of the signed-in user
+    
+    var _msalClient: MSALClient?
+    
+    init() {}
+    
+    @MainActor
+    var sessionStore: SessionStore { .shared }
 }
-    
 
 extension MicrosoftClient {
     // https://learn.microsoft.com/en-us/graph/permissions-reference#mail-permissions
@@ -54,4 +50,24 @@ extension MicrosoftClient {
         case mailboxSettingsRead      = "MailboxSettings.Read"
         case mailboxSettingsReadWrite = "MailboxSettings.ReadWrite"
     }
+}
+
+typealias MSALAccount = MSAL.MSALAccount
+typealias MSALSession = MSAL.MSALResult
+typealias MSALClient  = MSAL.MSALPublicClientApplication
+
+extension                        MSALClient: @unchecked Sendable {}
+extension                       MSALAccount: @unchecked Sendable {}
+extension                       MSALSession: @unchecked Sendable {}
+extension MSALPublicClientApplicationConfig: @unchecked Sendable {}
+extension    MSALInteractiveTokenParameters: @unchecked Sendable {}
+extension         MSALSilentTokenParameters: @unchecked Sendable {}
+extension             MSALSignoutParameters: @unchecked Sendable {}
+
+
+
+extension MSALSession {
+    var item: MicrosoftSession.Item { get throws {
+        .init(account: try outerAccount, msalSession: self)
+    } }
 }

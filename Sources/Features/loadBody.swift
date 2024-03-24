@@ -18,7 +18,7 @@ extension AppModel {
         defer { messageID.isLoadingBody = false }
         
         do {
-            guard let session = try await accountID.refreshSession else { return }   // get Session
+            let session = try await accountID.refreshSession
             let resource = try await    session.messageBody(messageID: messageID) // Session
                        _ = try await modelStore.setMessage    ( resource: resource ) // ModelStore
         } catch {

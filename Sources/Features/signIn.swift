@@ -8,6 +8,7 @@
 // MARK: Feature: Accounts - Sign In
 
 import JetEmailData // for Platform
+import JetEmailPlatform
 
 extension AppModel {
     
@@ -22,8 +23,8 @@ extension AppModel {
                 try await clock.sleep(for: .seconds(0.5)) // resolve issue when presenting window with orminent in visionOS, delay <= 0.35s will crash
             }
             
-            let session = try await clients.client(platform: platform).signIn() // get Session
-            _ = try await modelStore.insertAccount(session.account)                     // ModelStore
+            let session = try await Clients.shared.signIn(platform: platform) // get Session
+            _ = try await modelStore.insertAccount(session.account)           // ModelStore
         } catch {
             logger.error("\(error)")
         }
