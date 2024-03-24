@@ -5,9 +5,9 @@
 //  Created by Cao, Jiannan on 3/11/24.
 //
 
+import JetEmailData
 import JetEmailGoogle
 import JetEmailMicrosoft
-import JetEmailData
 
 public typealias             Client = PlatformEnum<MicrosoftClient    , GoogleClient    >
 public typealias            Session = PlatformEnum<MicrosoftSession   , GoogleSession   >
@@ -16,8 +16,10 @@ public typealias MailFolderResource = PlatformEnum<MicrosoftMailFolder, GoogleMa
 public typealias    MessageResource = PlatformEnum<MicrosoftMessage   , GoogleMessage   >
 
 
+// AccountToSessionProtocol -> AccountID, Account
+
 @MainActor
-extension AccountID : AccountToSessionProtocol {
+extension AccountID : AccountIDSessionAPI {
     public var storedSession: Session? {
         try? platformCase.storedSession
     }
@@ -32,7 +34,7 @@ extension AccountID : AccountToSessionProtocol {
 }
 
 @MainActor
-extension Account : AccountToSessionProtocol {
+extension Account : AccountIDSessionAPI {
     public var storedSession: Session? {
         resourceID.storedSession
     }
@@ -45,4 +47,3 @@ extension Account : AccountToSessionProtocol {
         try await resourceID.refreshSession
     } }
 }
-

@@ -8,18 +8,18 @@
 import SwiftData // for ModelContext
 import Foundation
 
-enum FoudnationError : Error {
+enum FoudnationError : CodableErrorType, Sendable {
     case stringToData
     case dataToString
 }
 
-enum SwiftDataError : Error {
+enum SwiftDataError : CodableErrorType, Sendable {
     //case noModelInstance(id: String, in: ModelContext)
     case noModelInstance(id: PersistentIdentifier)
     //ccase noGraphInstance(model: any PersistentModel)
 }
 
-public enum TreeError : Error {
+public enum TreeError : CodableErrorType, Sendable {
     /*case multipleRoot*/
     case mailFolderNotInThisAccount
     case parentMailFolderNotInThisAccount
@@ -36,13 +36,13 @@ public enum TreeError : Error {
     case noLast*/
 }
 
-enum ClassifyError : Error {
+enum ClassifyError : CodableErrorType, Sendable {
     case noArchiveFolder
 }
 
 
 
-struct JSONInitializationError: Error {}
+struct JSONInitializationError: CodableErrorType, Sendable {}
 
 
 /*enum MSALAPIError : Error {
@@ -70,3 +70,8 @@ public extension Error {
     }
 }
 
+
+public enum SignInPresentationAnchorError : CodableErrorType, Sendable {
+    case authorizeNoMainWindow
+    case authorizeNoMainViewController
+}

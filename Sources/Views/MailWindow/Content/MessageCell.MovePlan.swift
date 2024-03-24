@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import JetEmailFoundation  // for TreeNode
+import class JetEmailFoundation.TreeNode
 import JetEmailData        // for Account
 
 extension MessageCell {

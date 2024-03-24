@@ -5,10 +5,11 @@
 //  Created by Cao, Jiannan on 3/19/24.
 //
 
+import Observation
+
 import JetEmailData
 import JetEmailGoogle
 import JetEmailMicrosoft
-import Observation
 
 @MainActor
 @Observable
@@ -17,7 +18,7 @@ public class Clients : Sendable {
     init() {}
     
     public var microsoft: Client { .microsoft(MicrosoftClient.shared) }
-    public var    google: Client {     .google(GoogleClient.shared) }
+    public var    google: Client {    .google(   GoogleClient.shared) }
     
     public func client(platform: Platform) throws -> Client {
         switch platform {

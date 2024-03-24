@@ -8,7 +8,8 @@
 import OpenAI
 import JetEmailMicrosoft
 import JetEmailGoogle
-import JetEmailFoundation // for Tree
+import class JetEmailFoundation.Tree
+import class JetEmailFoundation.TreeNode
 import JetEmailData
 import SwiftData
 import JetEmailPlatform
