@@ -7,6 +7,7 @@
 
 import SwiftUI
 import JetEmailData // for Account
+import JetEmailPlatform
 
 struct MessageView : View {
     

@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData    // for @Query
 import JetEmailData // for account
+import JetEmailPlatform
 
 @MainActor
 struct AccountSectionList : View, Sendable {

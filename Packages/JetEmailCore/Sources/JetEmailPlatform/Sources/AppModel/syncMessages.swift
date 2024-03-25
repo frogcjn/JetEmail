@@ -9,7 +9,7 @@
 
 import JetEmailData // for MailFolderID
 
-extension AppModel {
+public extension AppModel {
         
     @MainActor // for .isBusy
     func syncMessages(mailFolderID: MailFolderID) async {

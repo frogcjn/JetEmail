@@ -9,7 +9,7 @@
 
 import JetEmailData // for AcocuntID
 
-extension AppModel {
+public extension AppModel {
     
     @MainActor
     func loadMailFolders(accountIDs: [AccountID]) async {

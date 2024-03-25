@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import JetEmailPlatform
 
 struct AccountListToolbar : View {
     

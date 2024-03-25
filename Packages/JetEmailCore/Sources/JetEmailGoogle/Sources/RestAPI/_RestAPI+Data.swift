@@ -85,13 +85,7 @@ extension GoogleMailFolder {
         .init(id: id, _inner: _inner, name: name)
     }
 
-    init(id: GoogleMailFolderID, _inner: _GoogleAPI.GoogleMailFolderInner, name: String? = nil) {
-        self.id         = id
-        self._inner     = _inner
-        self.systemName = _inner.systemName
-        self.path       = _inner.name
-        self.name       = name ?? _inner.name?.components(separatedBy: "/").last
-    }
+
 
     static func all(accountID: GoogleAccountID) -> GoogleMailFolder {
         let inner = _GoogleAPI.GoogleMailFolderInner(id: .init("ALL"), name: "ALL")
@@ -167,63 +161,21 @@ extension _GoogleAPI {
     }
 }
 
-extension GoogleMessage {
-        
-    init(id: GoogleMessageID, _inner: _GoogleAPI.GoogleMessageInner, raw: Data?) throws {
-        self.id     = id
-        self._inner = _inner
-        
-        /*
-         header fields:
-            subject
-            from/sender/replyTo/to/cc/bcc
-            messageID/inReplyTo/references
-         */
-        
-        if let headers = _inner.payload?.headers {
-            self.headers = headers
-            self.subject = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.subject.rawValue) == .orderedSame }?.value
-            self.from    = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.from   .rawValue) == .orderedSame }?.value
-            self.sender  = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.sender .rawValue) == .orderedSame }?.value
-            self.replyTo = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.replyTo.rawValue) == .orderedSame }?.value
-            self.to      = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.to     .rawValue) == .orderedSame }?.value
-            self.cc      = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.cc     .rawValue) == .orderedSame }?.value
-            self.bcc     = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.bcc    .rawValue) == .orderedSame }?.value
-            self.date    = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.date   .rawValue) == .orderedSame }?.value.rfc2822
-        } else {
-            self.headers = nil
-            self.subject = nil
-            self.from    = nil
-            self.sender  = nil
-            self.replyTo = nil
-            self.to      = nil
-            self.cc      = nil
-            self.bcc     = nil
-            self.date    = nil
-        }
-        
-        self.body        = try _inner.payload?.messageBody
-        self.bodyPreview = _inner.snippet
-        self.raw         = _inner.raw ?? raw
-    }
-}
-
-
-fileprivate extension _GoogleAPI.GoogleMessageInner.Part {
+extension _GoogleAPI.GoogleMessageInner.Part {
     var messageBody: MessageBody? { get throws {
         let html = try firstBodyContent(mimeType: .textHtml)
         let text = try firstBodyContent(mimeType: .textPlain)
         return .init(text: text, html: html)
     } }
 
-    func firstBodyContent(mimeType: _GoogleAPI.MIMEType) throws -> String? {
+    fileprivate func firstBodyContent(mimeType: _GoogleAPI.MIMEType) throws -> String? {
         if let bodyContent = try nonFileParts.firstPart(mimeType: mimeType)?.body?.data?.string { bodyContent }
         else if let bodyContent = try nonFileParts.firstMultipartPart?.parts?.compactMap({ try $0.firstBodyContent(mimeType: mimeType) }).first { bodyContent }
         else if let body = body { try body.data?.string }
         else { nil }
     }
 
-    var nonFileParts: [_GoogleAPI.GoogleMessageInner.Part] {
+    fileprivate var nonFileParts: [_GoogleAPI.GoogleMessageInner.Part] {
         parts?.filter { $0.filename?.nilIfEmpty == nil } ?? []
     }
 }
@@ -241,17 +193,23 @@ fileprivate extension [_GoogleAPI.GoogleMessageInner.Part] {
 // MARK: - Inner -> Outter
 
 extension _GoogleAPI.GoogleMailFolderInner {
+    
+    func id(accountID: GoogleAccountID) -> GoogleMailFolderID {
+        .init(accountID: accountID, innerID: id)
+    }
+    
     func outer(accountID: GoogleAccountID, name: String? = nil) -> GoogleMailFolder {
-        .init(id: .init(accountID: accountID, innerID: id), _inner: self, name: name)
+        .init(id: id(accountID: accountID), _inner: self, name: name)
     }
 }
 
 extension _GoogleAPI.GoogleMessageInner {
-    func outer(accountID: GoogleAccountID, raw: Data?) throws -> GoogleMessage {
-        try .init(id: .init(accountID: accountID, innerID: id), _inner: self, raw: raw)
-    }
     
     func id(accountID: GoogleAccountID) -> GoogleMessageID {
         .init(accountID: accountID, innerID: id)
+    }
+    
+    func outer(accountID: GoogleAccountID, raw: Data?) throws -> GoogleMessage {
+        try .init(id: .init(accountID: accountID, innerID: id), _inner: self, raw: raw)
     }
 }

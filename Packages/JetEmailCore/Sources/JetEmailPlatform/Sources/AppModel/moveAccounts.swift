@@ -10,7 +10,7 @@
 import struct Foundation.IndexSet
 import JetEmailData // for AccountID
 
-extension AppModel {
+public extension AppModel {
     
     @MainActor // for isBusy
     func moveAccounts(accountIDs: [AccountID], fromOffsets source: IndexSet, toOffset destination: Int) async {

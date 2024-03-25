@@ -9,21 +9,21 @@ import class  Combine.PassthroughSubject
 import struct os.Logger
 import SwiftData        // for ModelContainer, ModelContext, Observable
 import JetEmailData     // for AccountID
-import JetEmailPlatform // for ModelStore
 
 // @dynamicMemberLookup
 @MainActor // for @MainActor AppModel
 @Observable
-final class AppModel {
-    var isBusy = false
-    let logger = Logger(subsystem: "me.frogcjn.jet-email.AppModel", category: "AppModel")
+public final class AppModel {
+    public var isBusy = false
+    public let logger = Logger(subsystem: "me.frogcjn.jet-email.AppModel", category: "AppModel")
     
     // Feature: Unselection - Will Sign Out Account
-    let willSignOutAccount = PassthroughSubject<AccountID, Never>()
-
+    public let willSignOutAccount = PassthroughSubject<AccountID, Never>()
+    
+    public static let shared = AppModel()
 }
 
-extension AppModel {
+public extension AppModel {
     var    sessions: [Session]    { get async throws { try await Clients.shared.sessions           } }
     var  modelStore: ModelStore   { get async        {     await .shared                           } }
     var mainContext: ModelContext                    {           ModelContainer.shared.mainContext }

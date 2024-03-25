@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData    // for @Query
 import JetEmailData // for Account
+import JetEmailPlatform
 
 struct AccountList: View {
     

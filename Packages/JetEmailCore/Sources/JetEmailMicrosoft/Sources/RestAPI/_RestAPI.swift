@@ -11,46 +11,22 @@ import   struct Foundation.URLQueryItem
 import protocol JetEmailFoundation.AsyncSequenceOf
 import          JetEmailData
 
+
 extension MicrosoftSession {
     
-    
-    @MainActor
-    var _idToSystemName:  [MicrosoftMailFolderID: _MicrosoftAPI.MicrosoftMailFolderSystemName] { get async {
-        if let idToWellKnownFolderName = account.id._idToSystemName { return idToWellKnownFolderName }
-        let idToWellKnownFolderName: [MicrosoftMailFolderID: _MicrosoftAPI.MicrosoftMailFolderSystemName] =  await {
-            do {
-                // catch wellknownFolderName
-                var idToWellKnownFolderName = [MicrosoftMailFolderID: _MicrosoftAPI.MicrosoftMailFolderSystemName]()
-                for systemName in _MicrosoftAPI.MicrosoftMailFolderSystemName.allCases {
-                    do {
-                        let folder = try await _getMailFolder(systemName: systemName)
-                        idToWellKnownFolderName[folder.id] = systemName
-                    } catch let error as JetEmailMicrosoft.MicrosoftAPIError.Public where error.code == "ErrorFolderNotFound" {
-                        continue
-                    }
-                }
-                return idToWellKnownFolderName
-            } catch {
-                return [:]
-            }
-        }()
-        account.id._idToSystemName = idToWellKnownFolderName
-        return idToWellKnownFolderName
-    } }
-    
     func _getChildFolders(mailFolderID: MicrosoftMailFolderID) async throws -> [MicrosoftMailFolder]  {
-        let idToSystemName = await _idToSystemName
+        let idToSystemName = try await _idToSystemName
         return try await _getValues(
             url: client.endpointURL.appending(pathComponents: "me", "mailFolders", mailFolderID.innerID, "childFolders"),
             responseType: _MicrosoftAPI.MicrosoftMailFolderInner.self
-        ).map { $0.with(accountID: account.id, _idToSystemName: idToSystemName) }
+        ).map { $0.outer(accountID: account.id, _idToSystemName: idToSystemName) }
     }
     
     func _getMailFolder(systemName: _MicrosoftAPI.MicrosoftMailFolderSystemName) async throws -> MicrosoftMailFolder {
         try await _getValue(
             url: client.endpointURL.appending(pathComponents: "me", "mailFolders", systemName.rawValue),
             responseType: _MicrosoftAPI.MicrosoftMailFolderInner.self
-        ).with(accountID: account.id, _systemName: systemName)
+        ).outer(accountID: account.id, _systemName: systemName)
     }
     
     /*func getMailFolder(mailFolderID: MicrosoftMailFolderID)  async throws -> MicrosoftMailFolder {
@@ -186,4 +162,30 @@ extension MicrosoftSession {
             )
         )
     }*/
+}
+
+// IDToSystemName
+
+private extension MicrosoftSession {
+    func requestIDToSystemName() async throws -> IDToSystemName {
+        // catch wellknownFolderName
+        var idToSystemName = IDToSystemName()
+        for systemName in _MicrosoftAPI.MicrosoftMailFolderSystemName.allCases {
+            do {
+                let folder = try await _getMailFolder(systemName: systemName)
+                idToSystemName[folder.id] = systemName
+            } catch MicrosoftAPIError.publicError(let publicError) where publicError.code == "ErrorFolderNotFound" {
+                continue
+            }
+        }
+        return idToSystemName
+    }
+    
+    @MainActor
+    var _idToSystemName: IDToSystemName? { get async throws {
+        if let idToSystemName = account.id._idToSystemName { return idToSystemName }
+        let idToSystemName = try await requestIDToSystemName()
+        account.id._idToSystemName = idToSystemName
+        return idToSystemName
+    } }
 }

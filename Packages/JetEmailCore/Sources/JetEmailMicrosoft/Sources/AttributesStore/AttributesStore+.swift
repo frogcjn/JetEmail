@@ -13,17 +13,21 @@ extension MicrosoftAccountID.AttributesStore {
     static var shared = AttributesStore()
 }
 
+typealias IDToSystemName = [MicrosoftMailFolderID: _MicrosoftAPI.MicrosoftMailFolderSystemName]
+
 @MainActor
 extension MicrosoftAccountID {
     typealias AttributesStore = JetEmailData.AttributesStore<MicrosoftAccountID, Attributes>
     struct Attributes : AttributesProtocol {
-        var _idToSystemName : [MicrosoftMailFolderID: _MicrosoftAPI.MicrosoftMailFolderSystemName]?
+        var _idToSystemName : IDToSystemName?
         var session : MicrosoftSession?
     }
-    var _idToSystemName: [MicrosoftMailFolderID: _MicrosoftAPI.MicrosoftMailFolderSystemName]? {
+    
+    var _idToSystemName: IDToSystemName? {
         get { AttributesStore.shared[self]._idToSystemName }
         nonmutating set { AttributesStore.shared[self]._idToSystemName = newValue }
     }
+    
     var session: MicrosoftSession? {
         get { AttributesStore.shared[self].session }
         nonmutating set { AttributesStore.shared[self].session = newValue }

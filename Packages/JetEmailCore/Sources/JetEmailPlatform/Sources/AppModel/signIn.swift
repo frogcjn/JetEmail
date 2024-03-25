@@ -8,9 +8,8 @@
 // MARK: Feature: Accounts - Sign In
 
 import JetEmailData // for Platform
-import JetEmailPlatform
 
-extension AppModel {
+public extension AppModel {
     
     @MainActor // for isBusy, WebAuthenticationSession
     func signIn(platform: Platform, delay: Bool = false) async {

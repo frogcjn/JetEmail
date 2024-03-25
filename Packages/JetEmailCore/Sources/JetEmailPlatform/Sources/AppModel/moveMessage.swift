@@ -7,7 +7,7 @@
 
 import JetEmailData // for MessageID
 
-extension AppModel {
+public extension AppModel {
 
     func moveMessage(_ message: Message, toSystemName: MailFolderSystemName, in mailFolder: MailFolder, _ account: Account) {
         guard let toID = account.mailFolders.first(where: { $0.systemName == toSystemName })?.resourceID else { return }

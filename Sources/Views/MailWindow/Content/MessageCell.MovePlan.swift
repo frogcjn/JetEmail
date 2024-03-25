@@ -8,6 +8,7 @@
 import SwiftUI
 import class JetEmailFoundation.TreeNode
 import JetEmailData        // for Account
+import JetEmailPlatform
 
 extension MessageCell {
     struct MovePlan: View {

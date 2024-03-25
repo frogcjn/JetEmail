@@ -9,7 +9,7 @@
 
 import JetEmailData // for AccountID
 
-extension AppModel {
+public extension AppModel {
 
     @MainActor // for isBusy, willSignOutAccount
     func signOut(accountID: AccountID) async {

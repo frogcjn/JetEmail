@@ -7,7 +7,7 @@
 
 // MARK: Feature: Accounts - Load Accounts
 
-extension AppModel {
+public extension AppModel {
     
     @MainActor // for isBusy
     func loadAccounts() async {

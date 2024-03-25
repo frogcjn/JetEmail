@@ -86,7 +86,7 @@ public final class MailFolder {
         uniqueID          = resource.generalID.uniqueID
         
         name              = resource.name
-        systemName       = resource.systemName
+        systemName        = resource.systemName
 
         /*_isSystemFolder   = resource.systemInfo != nil
         _systemOrder      = resource.systemInfo?.order

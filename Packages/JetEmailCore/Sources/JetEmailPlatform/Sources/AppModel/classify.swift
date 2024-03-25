@@ -12,9 +12,8 @@ import class JetEmailFoundation.Tree
 import class JetEmailFoundation.TreeNode
 import JetEmailData
 import SwiftData
-import JetEmailPlatform
 
-extension AppModel {
+public extension AppModel {
     
     @MainActor // for isClassifying
     func classify(messageID: MessageID) async {
@@ -39,7 +38,7 @@ extension AppModel {
 
 enum Agent {}
 
-extension Account {
+public extension Account {
     var mailFolderTree: Tree<MailFolder>? {
         guard let root = root else { return nil }
         let tree = Tree(rootElement: root)
@@ -86,13 +85,13 @@ extension GoogleSession {
     }
 }
 
-extension TreeNode<MailFolder> {
+public extension TreeNode<MailFolder> {
     var path: [String] {
         Array(sequence(first: self) { $0.parent }.map(\.element.localizedName).reversed().dropFirst())
     }
 }
 
-extension MailFolder {
+public extension MailFolder {
     var path: [String] {
         Array(sequence(first: self) { $0.parent }.map(\.localizedName).reversed().dropFirst())
     }

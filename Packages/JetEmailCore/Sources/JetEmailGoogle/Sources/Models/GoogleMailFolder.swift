@@ -17,4 +17,12 @@ public struct GoogleMailFolder : GoogleProtocol, PlatformSpecificMailFolderProto
     
     public let       name: String? // adjust for google mailfolder path-name algrithm
     public let       path: String?
+    
+    init(id: GoogleMailFolderID, _inner: _GoogleAPI.GoogleMailFolderInner, name: String? = nil) {
+        self.id         = id
+        self._inner     = _inner
+        self.systemName = _inner.systemName
+        self.path       = _inner.name
+        self.name       = name ?? _inner.name?.components(separatedBy: "/").last
+    }
 }

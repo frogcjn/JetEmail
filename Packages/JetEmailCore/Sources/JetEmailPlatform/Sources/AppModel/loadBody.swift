@@ -9,7 +9,7 @@
 
 import JetEmailData // for MessageID
 
-extension AppModel {
+public extension AppModel {
     
     @MainActor // for .isBusy
     func loadBody(messageID: MessageID, accountID: AccountID) async {
