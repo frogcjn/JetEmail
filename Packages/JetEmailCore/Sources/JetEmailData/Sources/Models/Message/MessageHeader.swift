@@ -14,6 +14,11 @@ public struct MessageHeader : CodableValueType, Sendable {
     }
 }
 
+public protocol MessageHeaderProtocol {
+    var  name: String { get }
+    var value: String { get }
+}
+
 
 public enum MessageHeaderName: String, CodableValueType, Sendable {
     case subject     = "Subject"

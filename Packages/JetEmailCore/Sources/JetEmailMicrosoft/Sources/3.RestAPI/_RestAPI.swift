@@ -25,7 +25,7 @@ extension MicrosoftSession {
                     do {
                         let folder = try await _getMailFolder(systemName: systemName)
                         idToWellKnownFolderName[folder.id] = systemName
-                    } catch let error as JetEmailMicrosoft.PublicError where error.code == "ErrorFolderNotFound" {
+                    } catch let error as JetEmailMicrosoft.MicrosoftAPIError.Public where error.code == "ErrorFolderNotFound" {
                         continue
                     }
                 }
@@ -40,15 +40,15 @@ extension MicrosoftSession {
     
     func _getChildFolders(mailFolderID: MicrosoftMailFolderID) async throws -> [MicrosoftMailFolder]  {
         let idToSystemName = await _idToSystemName
-        return try await getValues(
-            url: client.endpoint(pathComponents: "me", "mailFolders", mailFolderID.innerID, "childFolders"),
+        return try await _getValues(
+            url: client.endpointURL.appending(pathComponents: "me", "mailFolders", mailFolderID.innerID, "childFolders"),
             responseType: _MicrosoftAPI.MicrosoftMailFolderInner.self
         ).map { $0.with(accountID: account.id, _idToSystemName: idToSystemName) }
     }
     
     func _getMailFolder(systemName: _MicrosoftAPI.MicrosoftMailFolderSystemName) async throws -> MicrosoftMailFolder {
-        try await getValue(
-            url: client.endpoint(pathComponents: "me", "mailFolders", systemName.rawValue),
+        try await _getValue(
+            url: client.endpointURL.appending(pathComponents: "me", "mailFolders", systemName.rawValue),
             responseType: _MicrosoftAPI.MicrosoftMailFolderInner.self
         ).with(accountID: account.id, _systemName: systemName)
     }
@@ -67,8 +67,8 @@ extension MicrosoftSession {
     ///   - pageSize: max:1000, default: 100
     /// - Returns: <#description#>
     func _checkMessageIDs(mailFolderID: MicrosoftMailFolderID, pageSize: Int?) async throws -> (count: Int, stream: some AsyncSequenceOf<[MicrosoftMessageID]>) {
-        let (count, stream) = try await getValuesStream(
-            url: client.endpoint(
+        let (count, stream) = try await _getValuesStream(
+            url: client.endpointURL.appending(
                 pathComponents: "me", "mailFolders", mailFolderID.innerID, "messages",
                 queryItems: pageSize.map(URLQueryItem.top) // pageSize => $top: 1-1000, default: 100
                 // .select("id"),
@@ -112,23 +112,12 @@ extension MicrosoftSession {
     }
     
     private func _getMessagesBatch(mailFolderID: MicrosoftMailFolderID, messageIDs: [MicrosoftMessageID]) async throws -> [MicrosoftMessage] {
-        let paths = messageIDs.map { client.relative(
+        let paths = messageIDs.map { client.endpointURL.relative(
             pathComponents: "me", "mailFolders",
             mailFolderID.innerID, "messages", $0.innerID,
             queryItems: .selectForMessagePreview
         ) }
         return try await _getBatch(paths: paths, responseType: _MicrosoftAPI.MicrosoftMessageInner.self).map { $0.outer(accountID: account.id, raw: nil) }
-    }
-    
-    private func _getBatch<Value: Decodable & Sendable>(paths: [String], responseType: Value.Type = Value.self) async throws -> [Value] {
-        let batchRequest: BatchRequest = .init(requests: paths.enumerated().map { offset, element in
-                .init(id: String(offset), method: .get, url: element, headers: nil, body: nil)
-        })
-        let batchResponse: BatchResponse = try await postResponse(url: client.endpoint(pathComponents: "$batch"), maxPageSize: nil, body: batchRequest)
-        return try batchResponse.responses.map {
-            guard let offset = Int($0.id), let body = $0.body else { throw MicrosoftAuthError.batchRequestOffsetBody }
-            return (offset: offset, element: try body.jsonData.decodeGraphJSON(Value.self))
-        }.sorted(using: KeyPathComparator(\.offset)).map { $0.element as Value }
     }
     
     /*

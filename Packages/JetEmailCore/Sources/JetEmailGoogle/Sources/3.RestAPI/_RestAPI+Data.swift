@@ -11,6 +11,8 @@ import struct Foundation.Data
 enum _GoogleAPI {
 }
 
+// MARK: - Mail Folder
+
 extension _GoogleAPI {
     
     // https://learn.microsoft.com/en-us/graph/api/resources/mailfolder
@@ -79,54 +81,34 @@ extension _GoogleAPI {
 }
 
 extension _GoogleAPI.GoogleMailFolderInner {
-    func with(accountID: GoogleAccountID, name: String? = nil) -> GoogleMailFolder {
+    func outer(accountID: GoogleAccountID, name: String? = nil) -> GoogleMailFolder {
         .init(id: .init(accountID: accountID, innerID: id), _inner: self, name: name)
     }
 }
 
+extension GoogleMailFolder {
+    func replace(name: String?) -> GoogleMailFolder {
+        .init(id: id, _inner: _inner, name: name)
+    }
 
-extension GoogleMessage {
-        
-    init(id: GoogleMessageID, _inner: _GoogleAPI.GoogleMessageInner, raw: Data?) throws {
-        self.id     = id
-        self._inner = _inner
-        
-        /*
-         header fields:
-            subject
-            from/sender/replyTo/to/cc/bcc
-            messageID/inReplyTo/references
-         */
-        
-        if let headers = _inner.payload?.headers {
-            self.headers = headers
-            self.subject = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.subject.rawValue) == .orderedSame }?.value
-            self.from    = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.from   .rawValue) == .orderedSame }?.value
-            self.sender  = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.sender .rawValue) == .orderedSame }?.value
-            self.replyTo = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.replyTo.rawValue) == .orderedSame }?.value
-            self.to      = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.to     .rawValue) == .orderedSame }?.value
-            self.cc      = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.cc     .rawValue) == .orderedSame }?.value
-            self.bcc     = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.bcc    .rawValue) == .orderedSame }?.value
-            self.date    = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.date   .rawValue) == .orderedSame }?.value.rfc2822
-        } else {
-            self.headers = nil
-            self.subject = nil
-            self.from    = nil
-            self.sender  = nil
-            self.replyTo = nil
-            self.to      = nil
-            self.cc      = nil
-            self.bcc     = nil
-            self.date    = nil
-        }
-        
-        self.body        = try _inner.payload?.messageBody
-        self.bodyPreview = _inner.snippet
-        self.raw         = _inner.raw ?? raw
+    init(id: GoogleMailFolderID, _inner: _GoogleAPI.GoogleMailFolderInner, name: String? = nil) {
+        self.id         = id
+        self._inner     = _inner
+        self.systemName = _inner.systemName
+        self.path       = _inner.name
+        self.name       = name ?? _inner.name?.components(separatedBy: "/").last
+    }
+
+    static func all(accountID: GoogleAccountID) -> GoogleMailFolder {
+        let inner = _GoogleAPI.GoogleMailFolderInner(id: .init("ALL"), name: "ALL")
+        return inner.outer(accountID: accountID)
     }
 }
 
+// MARK: - Message
+
 extension _GoogleAPI {
+    
     // https://learn.microsoft.com/en-us/graph/api/resources/message
     struct GoogleMessageInner : IdentifiableValueType, Sendable {
         let                         id: String
@@ -183,19 +165,62 @@ extension _GoogleAPI {
         }
     }
     
-    
     fileprivate enum MIMEType: String {
         case textPlain            = "text/plain"
         case textHtml             = "text/html"
         case multipartAlternative = "multipart/alternative"
         case multipartMixed       = "multipart/mixed"
     }
+}
+
+extension GoogleMessage {
+        
+    init(id: GoogleMessageID, _inner: _GoogleAPI.GoogleMessageInner, raw: Data?) throws {
+        self.id     = id
+        self._inner = _inner
+        
+        /*
+         header fields:
+            subject
+            from/sender/replyTo/to/cc/bcc
+            messageID/inReplyTo/references
+         */
+        
+        if let headers = _inner.payload?.headers {
+            self.headers = headers
+            self.subject = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.subject.rawValue) == .orderedSame }?.value
+            self.from    = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.from   .rawValue) == .orderedSame }?.value
+            self.sender  = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.sender .rawValue) == .orderedSame }?.value
+            self.replyTo = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.replyTo.rawValue) == .orderedSame }?.value
+            self.to      = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.to     .rawValue) == .orderedSame }?.value
+            self.cc      = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.cc     .rawValue) == .orderedSame }?.value
+            self.bcc     = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.bcc    .rawValue) == .orderedSame }?.value
+            self.date    = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.date   .rawValue) == .orderedSame }?.value.rfc2822
+        } else {
+            self.headers = nil
+            self.subject = nil
+            self.from    = nil
+            self.sender  = nil
+            self.replyTo = nil
+            self.to      = nil
+            self.cc      = nil
+            self.bcc     = nil
+            self.date    = nil
+        }
+        
+        self.body        = try _inner.payload?.messageBody
+        self.bodyPreview = _inner.snippet
+        self.raw         = _inner.raw ?? raw
+    }
+}
+
+extension _GoogleAPI.GoogleMessageInner {
+    func outer(accountID: GoogleAccountID, raw: Data?) throws -> GoogleMessage {
+        try .init(id: .init(accountID: accountID, innerID: id), _inner: self, raw: raw)
+    }
     
-    enum GetMessageFormat: String, Sendable {
-        case raw
-        case full
-        case metadata
-        case minimal
+    func id(accountID: GoogleAccountID) -> GoogleMessageID {
+        .init(accountID: accountID, innerID: id)
     }
 }
 
@@ -225,32 +250,5 @@ fileprivate extension [_GoogleAPI.GoogleMessageInner.Part] {
 
     var firstMultipartPart: _GoogleAPI.GoogleMessageInner.Part? {
         first { ([.multipartMixed, .multipartAlternative] as [_GoogleAPI.MIMEType]).map(\.rawValue).map(Optional.init).contains($0.mimeType) }
-    }
-}
-
-extension _GoogleAPI.GoogleMessageInner {
-    func outer(accountID: GoogleAccountID, raw: Data?) throws -> GoogleMessage {
-        try .init(id: .init(accountID: accountID, innerID: id), _inner: self, raw: raw)
-    }
-    
-    func id(accountID: GoogleAccountID) -> GoogleMessageID {
-        .init(accountID: accountID, innerID: id)
-    }
-}
-
-extension GoogleMailFolder {
-    func with(name: String?) -> GoogleMailFolder {
-        .init(id: id, _inner: _inner, name: name)
-    }
-}
-
-extension GoogleMailFolder {
-
-    init(id: GoogleMailFolderID, _inner: _GoogleAPI.GoogleMailFolderInner, name: String? = nil) {
-        self.id         = id
-        self._inner     = _inner
-        self.systemName = _inner.systemName
-        self.path       = _inner.name
-        self.name       = name ?? _inner.name?.components(separatedBy: "/").last
     }
 }

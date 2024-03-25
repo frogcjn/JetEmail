@@ -18,7 +18,7 @@ actor Keychain {
         //SessionKeychain.assertIsolated()
         if let item = try item(id: try gtmSession.accountID) { item } // find item in keyChain
         else if let item = try addItem(gtmSession: gtmSession) { item } // if not find add item in keyChain
-        else { throw AuthError.sessionStoreAddFail }
+        else { throw GoogleAuthError.sessionStoreAddFail }
     }
     
     func addItem(gtmSession: GTMSession) throws -> GoogleSession.Item? {
@@ -245,7 +245,7 @@ fileprivate extension Data {
             //keyedUnarchiver.setClass(GTMSession.self, forClassName: "GTMAppAuthFetcherAuthorization")
 
             guard let authSession = keyedUnarchiver.decodeObject(of: GTMSession.self, forKey: NSKeyedArchiveRootObjectKey) else {
-                throw AuthError.decodeFromKeychainError
+                throw GoogleAuthError.decodeFromKeychainError
             }
             return authSession
         }

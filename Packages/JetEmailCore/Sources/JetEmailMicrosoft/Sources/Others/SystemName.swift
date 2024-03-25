@@ -8,6 +8,9 @@
 import typealias JetEmailFoundation.CodableValueType
 import JetEmailData
 
+// MARK: - WellKnownFolderName
+
+// Well-known folder names https://learn.microsoft.com/en-us/graph/api/resources/mailfolder
 extension _MicrosoftAPI {
     enum MicrosoftMailFolderSystemName : String, CaseIterable, CodableValueType, Sendable {
         case msgFolderRoot             = "msgfolderroot"
@@ -139,8 +142,7 @@ public extension MicrosoftMailFolderSystemName {
 
 import JetEmailData
 
-// MARK: - WellKnownFolderName
-// Well-known folder names https://learn.microsoft.com/en-us/graph/api/resources/mailfolder?view=graph-rest-1.0#methods
+
 public extension MicrosoftMailFolder {
     
 

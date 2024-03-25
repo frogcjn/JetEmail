@@ -10,7 +10,7 @@ import JetEmailData
 // MARK: - Client-Session API
 
 @MainActor
-extension MicrosoftClient : ClientSessionAPI {
+extension MicrosoftClient : ClientAuthProtocol {
     public var sessions: [MicrosoftSession] { get async throws {
         try await _sessions()
     } }
@@ -23,7 +23,7 @@ extension MicrosoftClient : ClientSessionAPI {
 
 // MARK: - Session API
 
-extension MicrosoftSession : SessionAPIProtocol {
+extension MicrosoftSession : SessionAuthProtocol {
     public typealias  SessionType = MicrosoftSession
     
     @MainActor
@@ -50,7 +50,7 @@ public extension MicrosoftSession {
 // MARK: - Account ID Session API
 
 @MainActor
-extension MicrosoftAccountID  : AccountIDSessionAPI {
+extension MicrosoftAccountID  : AccountIDAuthProtocol {
     public var storedSession: MicrosoftSession? {
         session
     }

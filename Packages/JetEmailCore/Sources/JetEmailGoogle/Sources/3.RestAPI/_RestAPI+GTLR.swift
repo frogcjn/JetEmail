@@ -10,7 +10,7 @@ import JetEmailData
 
 extension GTLRGmail_Label {
     var mailFolder: _GoogleAPI.GoogleMailFolderInner { get throws  {
-        guard let innerID = identifier else { throw GmailApiError.missingMessageInfo("identifier") }
+        guard let innerID = identifier else { throw GoogleAPIError.missingMessageInfo("identifier") }
         return _GoogleAPI.GoogleMailFolderInner(
             id                   : .init(innerID),
             name                 : name,
@@ -37,7 +37,7 @@ extension GTLRGmail_LabelColor {
 
 extension GTLRGmail_Message {
     var messageInner : _GoogleAPI.GoogleMessageInner { get throws {
-        guard let id = identifier else { throw GmailApiError.missingMessageInfo("id") }
+        guard let id = identifier else { throw GoogleAPIError.missingMessageInfo("id") }
         return .init(
             id          :     id,
             internalDate:     internalDate?.int64Value,
@@ -67,7 +67,7 @@ extension GTLRGmail_MessagePart {
 
 extension GTLRGmail_MessagePartHeader {
     var messageInnerPartHeader: MessageHeader { get throws {
-        guard let name, let value else { throw GmailApiError.missingMessageInfo("name") }
+        guard let name, let value else { throw GoogleAPIError.missingMessageInfo("name") }
         return .init(
             name : name,
             value: value
@@ -77,7 +77,7 @@ extension GTLRGmail_MessagePartHeader {
 
 extension GTLRGmail_MessagePartBody {
     var messageInnerPartBody: _GoogleAPI.GoogleMessageInner.Part.Body? { get throws {
-        guard let size else { throw GmailApiError.missingMessageInfo("size") }
+        guard let size else { throw GoogleAPIError.missingMessageInfo("size") }
         if size.intValue == 0 && data  == nil { return nil }
         return .init(
             size        : size.intValue,
@@ -98,8 +98,8 @@ extension GTLRGmailService {
     func execute<Q: GTLRQueryProtocol, T: NSObject & Sendable>(_ query: Q, responseType: T.Type = T.self) async throws -> T {
         try await withCheckedThrowingContinuation { continuation in
             executeQuery(query) { (ticket: GTLRServiceTicket, object: Any?, error: Error?) in
-                if let error { return continuation.resume(throwing: GmailApiError.convert(from: error as NSError)) }
-                guard let result = object as? T else { return continuation.resume(throwing: AppErr.cast(T.description())) }
+                if let error { return continuation.resume(throwing: GoogleAPIError.convert(from: error as NSError)) }
+                guard let result = object as? T else { return continuation.resume(throwing: GoogleAPIError.cast(T.description())) }
                 Task {
                     continuation.resume(returning: result)
                 }

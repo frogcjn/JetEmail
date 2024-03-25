@@ -64,8 +64,8 @@ extension MicrosoftSession : RestAPIProtocol {
         struct MessageMoveRequestBody : Encodable {
             let destinationId: String
         }
-        return try await postItem(
-            url: client.endpoint(pathComponents: "me", "mailFolders", fromID.innerID, "messages", messageID.innerID, "move"),
+        return try await _postItem(
+            url: client.endpointURL.appending(pathComponents: "me", "mailFolders", fromID.innerID, "messages", messageID.innerID, "move"),
             body: MessageMoveRequestBody(destinationId: toID.innerID),
             responseType: _MicrosoftAPI.MicrosoftMessageInner.self).outer(accountID: account.id, raw: nil)
     }
@@ -73,10 +73,10 @@ extension MicrosoftSession : RestAPIProtocol {
     
     // https://learn.microsoft.com/en-us/graph/api/message-get
     public func messageBody(messageID: MicrosoftMessageID) async throws -> MicrosoftMessage {
-        let inner: _MicrosoftAPI.MicrosoftMessageInner = try await getValue(
-            url: client.endpoint(pathComponents: "me", "messages", messageID.innerID, queryItems: .selectForMessageBody)
+        let inner: _MicrosoftAPI.MicrosoftMessageInner = try await _getValue(
+            url: client.endpointURL.appending(pathComponents: "me", "messages", messageID.innerID, queryItems: .selectForMessageBody)
         )
-        let raw = try await getMultipartData(url: client.endpoint(pathComponents: "me", "messages", messageID.innerID, "$value"))
+        let raw = try await _getMultipartData(url: client.endpointURL.appending(pathComponents: "me", "messages", messageID.innerID, "$value"))
         return inner.outer(accountID: account.id, raw: raw)
     }
 }

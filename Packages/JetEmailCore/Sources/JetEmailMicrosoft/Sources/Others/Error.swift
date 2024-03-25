@@ -11,16 +11,18 @@ import JetEmailData
 
 public enum MicrosoftAuthError : CodableErrorType, Sendable {
     case accountNoIDOrUsername
-    case collectionResponseNoCount
-    case noAccountFound
-    case notRightPlatform
-    case authorizeNoMainWindow
-    case batchRequestOffsetBody
 }
+public enum MicrosoftAPIError : CodableErrorType, Sendable {
+    case prePathNotTheSame
+    case pathComponentNotTheSame
+    case collectionResponseNoCount
+    case batchRequestWrongOffsetOrBody
+    case publicError(Public)
 
-public struct PublicError : CodableErrorType, Sendable {
-    public let code: String?
-    public let message: String?
-    public let innerError: JSON?
-    public let details: [JSON]?
+    public struct Public : CodableErrorType, Sendable {
+        public let       code: String?
+        public let    message: String?
+        public let innerError: JSON?
+        public let    details: [JSON]?
+    }
 }

@@ -231,9 +231,9 @@ extension PlatformEnum : MessageProtocol where
 
 // MARK: - Session API
 
-extension PlatformEnum : ClientSessionAPI where 
-    Microsoft : ClientSessionAPI,
-       Google : ClientSessionAPI
+extension PlatformEnum : ClientAuthProtocol where 
+    Microsoft : ClientAuthProtocol,
+       Google : ClientAuthProtocol
 {
     public typealias ClientSessionType = PlatformEnum<Microsoft.ClientSessionType, Google.ClientSessionType>
     
@@ -253,9 +253,9 @@ extension PlatformEnum : ClientSessionAPI where
     }
 }
 
-extension PlatformEnum: SessionAPIProtocol where
-    Microsoft : SessionAPIProtocol,
-       Google : SessionAPIProtocol
+extension PlatformEnum: SessionAuthProtocol where
+    Microsoft : SessionAuthProtocol,
+       Google : SessionAuthProtocol
 //Microsoft.ModelStoreType == Google.ModelStoreType
 {
     @MainActor
@@ -277,9 +277,9 @@ extension PlatformEnum: SessionAPIProtocol where
 }
 
 @MainActor
-extension PlatformEnum : AccountIDSessionAPI where
-Microsoft : AccountIDSessionAPI,
-   Google : AccountIDSessionAPI
+extension PlatformEnum : AccountIDAuthProtocol where
+Microsoft : AccountIDAuthProtocol,
+   Google : AccountIDAuthProtocol
 {
     public typealias AccountIDSessionType = PlatformEnum<Microsoft.AccountIDSessionType, Google.AccountIDSessionType>
     

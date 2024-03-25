@@ -37,7 +37,7 @@ extension GoogleSession {
                     break
                 }
             }
-            (node.parent, node.element) = (parent, node.element.with(name: processedName))
+            (node.parent, node.element) = (parent, node.element.replace(name: processedName))
             parent.children.append(node)
         }
         
@@ -47,8 +47,8 @@ extension GoogleSession {
     private func _getMailFolders() async throws -> [GoogleMailFolder] {
         let query = GTLRGmailQuery_UsersLabelsList.query(withUserId: account.id.innerID)
         let response: GTLRGmail_ListLabelsResponse = try await service.execute(query)
-        guard let labels = response.labels else { throw GmailApiError.failedToParseData(response) }
-        return try labels.map { try $0.mailFolder.with(accountID: account.id) }
+        guard let labels = response.labels else { throw GoogleAPIError.failedToParseData(response) }
+        return try labels.map { try $0.mailFolder.outer(accountID: account.id) }
             //.sorted { "\($0.type?.rawValue)" > "\($1.type?.rawValue)" }
             //.filter { $0.type == .user || $0.path == "SPAM" || $0.path == "INBOX"}
             //.sorted(using: KeyPathComparator(\MailFolder.name))
@@ -70,7 +70,7 @@ extension GoogleSession {
         // get count
         let (estimateCount, messageIDs, nextPageToken) = try await {
             let response: GTLRGmail_ListMessagesResponse = try await serviceStream.execute(query)
-            guard let estimateCount = response.resultSizeEstimate?.uint32Value else { throw AuthError.collectionResponseNoCount }
+            guard let estimateCount = response.resultSizeEstimate?.uint32Value else { throw GoogleAPIError.collectionResponseNoCount }
             let messageIDs = try (response.messages ?? []).map { try $0.messageInner.id(accountID: account.id) }
             let nextPageToken = response.nextPageToken
             return (Int(estimateCount), messageIDs, nextPageToken)
@@ -121,7 +121,7 @@ extension GoogleSession {
     }
 
     // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
-    func _getMessage(messageID: GoogleMessageID, fields: String? = nil, format: _GoogleAPI.GetMessageFormat) async throws -> _GoogleAPI.GoogleMessageInner {
+    func _getMessage(messageID: GoogleMessageID, fields: String? = nil, format: GetMessageFormat) async throws -> _GoogleAPI.GoogleMessageInner {
         let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: account.id.innerID, identifier: messageID.innerID)
         query.fields = fields
         query.format = format.rawValue
@@ -173,7 +173,7 @@ fileprivate extension ThrowingTaskGroup where ChildTaskResult == [GoogleMessage]
             let query = GTLRBatchQuery(queries: chunk.map {
                 let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: accountID.innerID, identifier: $0.innerID)
                 // query.fields = fields
-                query.format = _GoogleAPI.GetMessageFormat.metadata.rawValue
+                query.format = GetMessageFormat.metadata.rawValue
                 return query
             })
             
@@ -183,4 +183,12 @@ fileprivate extension ThrowingTaskGroup where ChildTaskResult == [GoogleMessage]
             return try messagesDict.values.map { try $0.messageInner.outer(accountID: accountID, raw: nil) }
         }
     }
+}
+
+
+enum GetMessageFormat: String, Sendable {
+    case raw
+    case full
+    case metadata
+    case minimal
 }

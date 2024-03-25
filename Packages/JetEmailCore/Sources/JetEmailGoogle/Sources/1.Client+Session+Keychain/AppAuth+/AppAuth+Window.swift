@@ -27,7 +27,7 @@ let anchor = window
                 if let state = state {
                     continuation.resume(returning: state)
                 } else {
-                    let error: Error = error ?? AuthError.message("Auth with Google failed.")
+                    let error: Error = error ?? GoogleAuthError.OIDAuthStateCompletionFail
                     continuation.resume(throwing: error)
                 }
             }

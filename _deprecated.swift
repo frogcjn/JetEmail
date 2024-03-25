@@ -5242,3 +5242,1029 @@ extension MicrosoftClient {
 }
 
 */
+/*
+ extension _MicrosoftAPI {
+     
+     // MARK: - Message
+     // https://learn.microsoft.com/en-us/graph/api/resources/message
+     
+     struct MicrosoftMessageInner : CodableValueType, Sendable {
+         let                         id: String
+         
+         // subject
+         /*let                    subject: String?*/
+         
+        /* let            createdDateTime: DateTimeOffset?
+         let       lastModifiedDateTime: DateTimeOffset?
+         let           receivedDateTime: DateTimeOffset? // * Important *
+         let               sentDateTime: DateTimeOffset?*/
+         
+        /* let                     sender: Recipient?   // sender?
+         let                       from: Recipient?   // * Important * from
+         let               toRecipients: [Recipient]? // * Important * to
+         let                    replyTo: [Recipient]? // 回复给
+         let               ccRecipients: [Recipient]? // * Important * 抄送, carbon copy
+         let              bccRecipients: [Recipient]? // 密件抄送，密送，blind carbon copy*/
+         let     internetMessageHeaders: [MessageHeader]?
+         
+         let                bodyPreview: String?   // * Important *
+         let                       body: ItemBody? // * Important * may load later
+        //  public let                 uniqueBody: ItemBody? //?
+         
+         let                       type: String?
+         let                       etag: String?
+         let                    removed: Removed?
+         /*
+          let                 categories: [String]?
+          let                  changeKey: String?
+          let             conversationId: String?
+          let          conversationIndex: Data? // Edm.Binary is typically represented as Data in Swift
+          
+          let                       flag: FollowupFlag?
+          let             hasAttachments: Bool?
+          let                 importance: Importance?
+          let    inferenceClassification: InferenceClassificationType?
+          let     internetMessageHeaders: [InternetMessageHeader]?
+          let          internetMessageId: String?
+          let isDeliveryReceiptRequested: Bool?
+          let                    isDraft: Bool?
+          let                     isRead: Bool?
+          let     isReadReceiptRequested: Bool?
+          let             parentFolderId: String?
+          
+          let                    webLink: String?*/
+         
+         enum CodingKeys: String, CodingKey, Sendable {
+             case id
+             /*case subject
+             case createdDateTime
+             case lastModifiedDateTime
+             case receivedDateTime
+             case sentDateTime
+             case sender
+             case from
+             case toRecipients
+             case replyTo
+             case ccRecipients
+             case bccRecipients*/
+             case internetMessageHeaders
+             case bodyPreview
+             case body
+             // case uniqueBody
+             
+             case type    = "@odata.type"
+             case etag    = "@odata.etag"
+             case removed = "@removed"
+         }
+         
+         struct Removed : CodableValueType, Sendable {
+             let reason: Reason
+             enum Reason: String, CodableValueType, Sendable {
+                 case changed
+                 case deleted
+             }
+         }
+
+     }
+ }
+ 
+ */
+
+/*
+extension MSGraph.Context {
+ 
+     
+     
+     /*func signIn(allowInteractive: Bool) async {
+      guard account == nil else { return }
+      
+      (_loginResult, loginHint) = await {
+      do {
+      return try await _getAccount(allowInteractive: allowInteractive)
+      } catch {
+      return (nil, "Couldn't sign in account with error: \(error)")
+      }
+      }()
+      }
+      
+      func signOut() async {
+      guard let account else { return }
+      
+      (_loginResult, loginHint) = await _signOut(account: account.account)
+      }*/
+     
+     
+    func _signOut(account: MSGraph.Account) async -> (MSALResult?, String) {
+        do {
+            // Removes all tokens from the cache for this application for the provided account; - account: The account to remove from the cache
+            let parameters = MSALSignoutParameters(webviewParameters: self.webViewParameters)
+            parameters.signoutFromBrowser = false // set this to true if you also want to signout from browser or webview
+            let success = try await self.msalClient.signout(with: account, signoutParameters: parameters)
+            return (nil, success ? "Sign out completed successfully" : "Sign out completed unsuccessfully")
+        } catch {
+            return (nil, "Couldn't sign out account with error: \(error)")
+        }
+    }
+    
+    func _getAccount(allowInteractive: Bool) async throws -> (MSALResult?, String) {
+        
+        let account: MSGraph.Account?
+        do {
+            let msalParameters = MSALParameters()
+            msalParameters.completionBlockQueue = DispatchQueue.main
+            (account, _) = try await msalClient.currentAccount(with: msalParameters)
+        } catch {
+            throw MSALAppError.getAccount(error)
+        }
+            
+        return try await _getToken(allowInteractive: allowInteractive, account: account)
+    }
+    
+    func _getToken(allowInteractive: Bool, account: MSGraph.Account?) async throws -> (MSALResult?, String) {
+        
+        guard let account else {
+            // We check to see if we have a current logged in account.
+            // If we don't, then we need to sign someone in.
+            return try await _getTokenInteractively(allowInteractive: allowInteractive)
+        }
+
+        do {
+            return try await _getTokenSilently(account: account)
+        } catch MSALAppError.getTokenInteractively(let nsError as NSError) where
+            allowInteractive &&
+            nsError.domain == MSALErrorDomain &&
+            nsError.code == MSALError.interactionRequired.rawValue
+        {
+            // interactionRequired means we need to ask the user to sign-in. This usually happens
+            // when the user's Refresh Token is expired or if the user has changed their password
+            // among other possible reasons.
+            return try await _getTokenInteractively(allowInteractive: allowInteractive)
+        }
+    }
+    
+    func _getTokenSilently(account: MSGraph.Account) async throws -> (MSALResult?, String) {
+        do {
+            /**
+             
+             Acquire a token for an existing account silently
+             
+             - forScopes:           Permissions you want included in the access token received
+             in the result in the completionBlock. Not all scopes are
+             guaranteed to be included in the access token returned.
+             - account:             An account object that we retrieved from the application object before that the
+             authentication flow will be locked down to.
+             - completionBlock:     The completion block that will be called when the authentication
+             flow completes, or encounters an error.
+             */
+            let parameters = MSALSilentTokenParameters(scopes: scopes, account: account)
+            let result = try await msalClient.acquireTokenSilent(with: parameters)
+            return (result, "accessToken=\(result.accessToken)")
+        } catch {
+            throw MSALAppError.getTokenInteractively(error)
+        }
+    }
+    
+    func _getTokenInteractively(allowInteractive: Bool) async throws -> (MSALResult?, String) {
+        guard allowInteractive else {
+            // We check to see if we have a current logged in account.
+            // If we don't, then we need to sign someone in.
+            throw MSALAppError.getTokenInteractivelyDoNotAllow
+        }
+        
+        do {
+            let parameters = MSALInteractiveTokenParameters(scopes: scopes, webviewParameters: webViewParameters)
+            parameters.promptType = .selectAccount
+            let result = try await msalClient.acquireToken(with: parameters)
+            return (result, "accessToken=\(result.accessToken)")
+        } catch {
+            throw MSALAppError.getTokenInteractively(error)
+        }
+    }
+}
+ */
+
+/*let items = {
+    var value: CFTypeRef?
+    
+    let kGeneralTypePrefix = 3000
+    let query = [
+        ✅kSecMatchLimit               : kSecMatchLimitAll as String, // kSecMatchLimitAll
+        
+        kSecUseDataProtectionKeychain: true,
+
+        ✅kSecAttrAccessGroup2          : "ED72FQVT6C.com.microsoft.identity.universalstorage",
+        ✅kSecClass                    : kSecClassGenericPassword as String,
+        kSecReturnAttributes         : true,
+        kSecReturnData               : true,
+        kSecAttrType                 : kGeneralTypePrefix + MSIDGeneralCacheItemType.appMetadataType.rawValue
+    ]  as [String: Any]
+    
+    assert(SecItemCopyMatching(query as CFDictionary, &value) == errSecSuccess)
+    
+    let items = value as! [NSDictionary]
+    return items.map { item in
+        let data = item[kSecValueData as String] as! Data
+        let cacheItem = MSIDCacheItemJsonSerializer().deserializeCacheItem(data, of: MSIDAppMetadataCacheItem.self) as! MSIDAppMetadataCacheItem
+        return cacheItem
+    }
+}()*/
+
+//
+//  File.swift
+//
+//
+//  Created by Cao, Jiannan on 3/5/24.
+//
+/*
+import MimeEmailParser
+
+public struct MailBox : Codable, Equatable {
+    public let    addrSpec: String
+    public let displayName: String?
+}
+
+public extension MailBox {
+    var rawValue: String {
+        if let displayName { "\(displayName) <\(addrSpec)>" }
+        else { addrSpec }
+    }
+}
+
+public extension String {
+    var mailboxs: [MailBox] { get throws {
+        try MimeEmailParser().parseAddressList(addresses: self).map(\.mailbox)
+    } }
+    
+    var mailbox: MailBox { get throws {
+        try MimeEmailParser().parseSingleAddress(address: self).mailbox
+    } }
+}
+
+public extension Address {
+    var mailbox: MailBox {
+        .init(addrSpec: Address, displayName: Name)
+    }
+}
+*/
+
+/*
+extension Message {
+    var senderField: String? {
+        let fromMailboxes = (try? from?.mailboxs) ?? []
+        let senderMailboxes = (try? sender?.mailboxs) ?? []
+        let mailboxes = (fromMailboxes + senderMailboxes).compactMap { $0.displayName }
+        if mailboxes.count == 0 {
+            return nil
+        } else {
+            return mailboxes.joined(separator: ", ")
+        }
+    }
+}
+*/
+/*//
+//  Error.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/15/24.
+//
+
+enum FoudnationError : Error {
+    case stringToData
+    case dataToString
+}
+
+/*enum SwiftDataError : Error {
+    //case noModelInstance(id: String, in: ModelContext)
+    case noModelInstance(id: PersistentIdentifier)
+}*/
+
+enum TreeError : Error {
+    /*case multipleRoot*/
+    case mailFolderNotInThisAccount
+    case parentMailFolderNotInThisAccount
+    case accountDoNotHaveRootFolder
+    case mailFolderAlreadyHaveParent
+    
+    /*case noTargetParent
+    case alreadyHaveChild
+    case nodeAlreadyHaveChild*/
+    /*case doNotHaveChild
+    case doNotHaveRightParent
+    case notFound
+    case noModelContext
+    case noLast*/
+}
+
+enum ClassifyError : Error {
+    case noArchiveFolder
+}
+
+/*
+extension Google {
+    /*struct AuthError: LocalizedError {
+        var message: String
+    }*/
+    
+    enum AuthError : LocalizedError {
+        case accountNoIDOrUsername
+        case currentAuthorizationFlowIsExisted
+        
+        case sessionStoreAddFail
+        case accountStoreExistedWhenAddNewToKeychain(Google.Session)
+        case accountStoreNotExistedWhenAddDuplicatedFound(Google.ID)
+        case accountStoreNotExistedWhenDelete(Google.ID)
+        case accountStoreNotExistedWhenUpdate(Google.ID)
+
+        case authorizeNoMainWindow
+        case message(String)
+        case decodeFromKeychainError
+        case noAccountFound
+    }
+    
+    enum ResponseError : Error {
+        case format
+    }
+}
+*/
+
+struct JSONInitializationError: Error {}
+
+
+
+
+/*enum MSALAPIError : Error {
+    case description(String)
+}*/
+/*enum MSALAppError : Error {
+    case getAccount(Error)
+    case getTokenInteractivelyDoNotAllow
+    case getTokenInteractively(Error)
+    case getTokenSilently(Error)
+}*/
+/*
+enum GmailApiError: Error {
+    /// Gmail API response parsing
+    case failedToParseData(Any?)
+    /// Can't get GTLREncodeBase64 data
+    case messageEncode
+    /// Missing message part
+    case missingMessageInfo(String)
+    /// Provider Error
+    case providerError(Error)
+    /// Search backup error
+    case searchBackup(Error)
+    /// Pagination Error
+    // case paginationError(MessagesListPagination?)
+    /// Invalid auth grant
+    case invalidGrant(Error)
+}
+
+extension GmailApiError {
+    static func convert(from error: NSError) -> GmailApiError {
+        switch error.code {
+        case -10: // invalid_grant error code
+            return .invalidGrant(error)
+        default:
+            return .providerError(error)
+        }
+    }
+}
+*/
+/*
+extension AppErr {
+    init(_ error: Error) {
+        if let alreadyAppError = error as? AppErr {
+            self = alreadyAppError
+            return
+        }
+        if let gmailError = error as? GmailApiError {
+            self = .general(gmailError.localizedDescription)
+            return
+        }
+        self = .unexpected(error.localizedDescription)
+        /*let code = (error as NSError).code
+        switch code {
+        case MCOErrorCode.authentication.rawValue:
+            self = .authentication
+        case MCOErrorCode.connection.rawValue,
+             MCOErrorCode.tlsNotAvailable.rawValue:
+            self = .connection
+        default:
+            self = .unexpected(error.localizedDescription)
+        }*/
+    }
+}
+
+enum AppErr: Error, CustomStringConvertible {
+    // network
+    case authentication
+    case connection
+    // code
+    case nilSelf // guard let self = self else { throw AppErr.nilSelf }
+    case unexpected(String) // we did not expect to ever see this error in practice
+
+    /// something as? Something is unexpectedly nil
+    case cast(Any)
+    /// user error (user did something wrong?)
+    case user(String)
+    /// when you want to cancel execution without showing any error (eg after user clicks cancel button)
+    case silentAbort
+    case noCurrentUser
+    case wrongMailProvider
+    case general(String)
+
+    var description: String {
+        switch self {
+        case .connection: return "error_app_connection"
+        case .wrongMailProvider: return "error_wrong_mail_provider"
+        case let .general(message), let .user(message), let .unexpected(message):
+            return message
+        default: return errorMessage
+        }
+    }
+}*/
+
+public extension Error {
+    var errorMessage: String {
+        switch self {
+        case let self as CustomStringConvertible:
+            return String(describing: self)
+        default:
+            return localizedDescription
+        }
+    }
+}
+
+*/
+//
+//  JSON.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/13/24.
+//
+/*
+import Foundation // for Data
+
+extension String {
+    var data: Data { get throws {
+        guard let data = data(using: .utf8) else { throw FoudnationError.stringToData }
+        return data
+    } }
+    func decodeJSON<T: Decodable>(_ type: T.Type) throws -> T {
+        return try data.decodeJSON(type)
+    }
+}
+
+extension Data {
+    // // String(decoding: self, as: UTF8.self)
+    var string: String { get throws {
+        guard let string = String(data: self, encoding: .utf8) else { throw FoudnationError.dataToString }
+        return string
+    } }
+    func decodeJSON<T: Decodable>(_ type: T.Type) throws -> T {
+        try JSONDecoder().decode(T.self, from: self)
+    }
+}
+
+/*extension Result {
+    func catching<T: Sendable>(_ closure: @Sendable @escaping () async throws -> T) async -> Result<T, Error> {
+        await Task { try await closure() }.result
+    }
+}*/
+
+extension Encodable {
+    var jsonString: String { get throws {
+        try jsonData.string
+    } }
+}
+
+extension Encodable {
+    var jsonData: Data { get throws {
+        try JSONEncoder().encode(self)
+    } }
+    /*
+     func jsonData() throws -> Data {
+         try JSONEncoder().encode(self)
+     }
+     */
+}
+
+
+
+
+import SwiftData
+
+/*extension PersistentModel {
+    func to(_ modelContext: ModelContext) throws -> Self {
+        guard let transfered = modelContext.model(for: persistentID) as? Self else {
+            throw SwiftDataError.noModelInstance(id: persistentID, in: modelContext)
+        }
+        return transfered
+    }
+}*/
+/*
+extension Sequence where Element: PersistentModel {
+    func to(_ modelContext: ModelContext) throws -> [Element] {
+        try map { try $0.to(modelContext) }
+    }
+}
+*/
+
+
+extension Collection {
+    var nilIfEmpty: Self? {
+        isEmpty ? nil : self
+    }
+}
+
+
+
+
+extension Sequence {
+    func asyncMap<T>(
+        _ transform: @Sendable (Element) async throws -> T
+    ) async rethrows -> [T] {
+        var values = [T]()
+
+        for element in self {
+            try await values.append(transform(element))
+        }
+
+        return values
+    }
+}
+
+extension Date {
+    var formattedRelative: String {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.day], from: self, to: .now)
+        switch components.day ?? 0 {
+        case 3...:
+            return formatted(.dateTime.day(.defaultDigits).month(.defaultDigits).year(.defaultDigits))
+        default:
+            return formatted(.relative(presentation: .named)/*.locale(.current)*/)
+        }
+    }
+}
+
+extension String {
+    
+    var iso8601: Date? {
+        try? Date.ISO8601FormatStyle().parse(self)
+        // ISO8601DateFormatter().date(from: rawValue) else { return nil }
+    }
+    
+    var rfc2822 : Date? {
+        // "EEE, dd MMM yyyy HH:mm:ss Z"
+        let format: Date.FormatString = """
+            \(weekday: .abbreviated), \(day: .twoDigits) \(month: .abbreviated) \(year: .padded(4)) \
+            \(hour: .twoDigits(clock: .twentyFourHour, hourCycle: .zeroBased)):\(minute: .twoDigits):\(second: .twoDigits) \
+            \(timeZone: .iso8601(.short))
+        """
+        
+        let strategy = Date.ParseStrategy(
+            format: format,
+            locale: .enUSPosix,
+            timeZone: .gmt
+        )
+        // let strategy2 = Date.ParseStrategy.fixed(format: format, timeZone: .gmt/* Locale(identifier: "en_US_POSIX")*/ /* locale: Locale(identifier: "en_US_POSIX")*/)
+        
+        // assert(strategy.format == "EEE', 'dd' 'MMM' 'yyyy' 'HH':'mm':'ss' 'Z")
+        
+        return try? strategy.parse(self)
+    }
+}
+
+extension Int64 {
+    var milliSecondsTimeIntervalSince1970: Date? {
+        Date(timeIntervalSince1970: TimeInterval(self / 1000))
+    }
+}
+
+extension Locale {
+    static let enUSPosix = Locale(identifier: "en_US_POSIX")
+}
+
+
+extension String {
+    var isHTMLString: Bool {
+        do {
+            let regex = try NSRegularExpression(pattern: "<[a-z][\\s\\S]*>", options: .caseInsensitive)
+            let range = NSRange(startIndex..., in: self)
+            return regex.firstMatch(in: self, options: [], range: range) != nil
+        } catch {
+            return false
+        }
+    }
+
+    var removingHTMLTags: String {
+        if isHTMLString {
+            replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
+        } else {
+            self
+        }
+    }
+}
+*/
+/*//
+//  JSON.swift
+//  JetEmail
+//
+//  Created by Cao, Jiannan on 2/1/24.
+//
+
+@dynamicMemberLookup
+public enum JSON: Equatable {
+    case string(String)
+    case number(Double)
+    case object([String:JSON])
+    case array([JSON])
+    case bool(Bool)
+    case null
+}
+
+extension JSON: Codable {
+
+    public func encode(to encoder: Encoder) throws {
+
+        var container = encoder.singleValueContainer()
+
+        switch self {
+        case let .array(array):
+            try container.encode(array)
+        case let .object(object):
+            try container.encode(object)
+        case let .string(string):
+            try container.encode(string)
+        case let .number(number):
+            try container.encode(number)
+        case let .bool(bool):
+            try container.encode(bool)
+        case .null:
+            try container.encodeNil()
+        }
+    }
+
+    public init(from decoder: Decoder) throws {
+
+        let container = try decoder.singleValueContainer()
+
+        if let object = try? container.decode([String: JSON].self) {
+            self = .object(object)
+        } else if let array = try? container.decode([JSON].self) {
+            self = .array(array)
+        } else if let string = try? container.decode(String.self) {
+            self = .string(string)
+        } else if let bool = try? container.decode(Bool.self) {
+            self = .bool(bool)
+        } else if let number = try? container.decode(Double.self) {
+            self = .number(number)
+        } else if container.decodeNil() {
+            self = .null
+        } else {
+            throw DecodingError.dataCorrupted(
+                .init(codingPath: decoder.codingPath, debugDescription: "Invalid JSON value.")
+            )
+        }
+    }
+}
+
+extension JSON: CustomDebugStringConvertible {
+
+    public var debugDescription: String {
+        switch self {
+        case .string(let str):
+            return str.debugDescription
+        case .number(let num):
+            return num.debugDescription
+        case .bool(let bool):
+            return bool.description
+        case .null:
+            return "null"
+        default:
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted]
+            return try! String(data: encoder.encode(self), encoding: .utf8)!
+        }
+    }
+}
+
+extension JSON: Hashable {}
+
+public extension JSON {
+
+    /// Return the string value if this is a `.string`, otherwise `nil`
+    var stringValue: String? {
+        if case .string(let value) = self {
+            return value
+        }
+        return nil
+    }
+
+    /// Return the double value if this is a `.number`, otherwise `nil`
+    var doubleValue: Double? {
+        if case .number(let value) = self {
+            return value
+        }
+        return nil
+    }
+
+    /// Return the bool value if this is a `.bool`, otherwise `nil`
+    var boolValue: Bool? {
+        if case .bool(let value) = self {
+            return value
+        }
+        return nil
+    }
+
+    /// Return the object value if this is an `.object`, otherwise `nil`
+    var objectValue: [String: JSON]? {
+        if case .object(let value) = self {
+            return value
+        }
+        return nil
+    }
+
+    /// Return the array value if this is an `.array`, otherwise `nil`
+    var arrayValue: [JSON]? {
+        if case .array(let value) = self {
+            return value
+        }
+        return nil
+    }
+
+    /// Return `true` iff this is `.null`
+    var isNull: Bool {
+        if case .null = self {
+            return true
+        }
+        return false
+    }
+
+    /// If this is an `.array`, return item at index
+    ///
+    /// If this is not an `.array` or the index is out of bounds, returns `nil`.
+    subscript(index: Int) -> JSON? {
+        if case .array(let arr) = self, arr.indices.contains(index) {
+            return arr[index]
+        }
+        return nil
+    }
+
+    /// If this is an `.object`, return item at key
+    subscript(key: String) -> JSON? {
+        if case .object(let dict) = self {
+            return dict[key]
+        }
+        return nil
+    }
+
+    /// Dynamic member lookup sugar for string subscripts
+    ///
+    /// This lets you write `json.foo` instead of `json["foo"]`.
+    subscript(dynamicMember member: String) -> JSON? {
+        return self[member]
+    }
+    
+    /// Return the JSON type at the keypath if this is an `.object`, otherwise `nil`
+    ///
+    /// This lets you write `json[keyPath: "foo.bar.jar"]`.
+    subscript(keyPath keyPath: String) -> JSON? {
+        return queryKeyPath(keyPath.components(separatedBy: "."))
+    }
+    
+    func queryKeyPath<T>(_ path: T) -> JSON? where T: Collection, T.Element == String {
+        
+        // Only object values may be subscripted
+        guard case .object(let object) = self else {
+            return nil
+        }
+        
+        // Is the path non-empty?
+        guard let head = path.first else {
+            return nil
+        }
+        
+        // Do we have a value at the required key?
+        guard let value = object[head] else {
+            return nil
+        }
+        
+        let tail = path.dropFirst()
+        
+        return tail.isEmpty ? value : value.queryKeyPath(tail)
+    }
+    
+}
+
+
+import Foundation
+
+extension JSON {
+
+    /// Return a new JSON value by merging two other ones
+    ///
+    /// If we call the current JSON value `old` and the incoming JSON value
+    /// `new`, the precise merging rules are:
+    ///
+    /// 1. If `old` or `new` are anything but an object, return `new`.
+    /// 2. If both `old` and `new` are objects, create a merged object like this:
+    ///     1. Add keys from `old` not present in `new` (“no change” case).
+    ///     2. Add keys from `new` not present in `old` (“create” case).
+    ///     3. For keys present in both `old` and `new`, apply merge recursively to their values (“update” case).
+    public func merging(with new: JSON) -> JSON {
+
+        // If old or new are anything but an object, return new.
+        guard case .object(let lhs) = self, case .object(let rhs) = new else {
+            return new
+        }
+
+        var merged: [String: JSON] = [:]
+
+        // Add keys from old not present in new (“no change” case).
+        for (key, val) in lhs where rhs[key] == nil {
+            merged[key] = val
+        }
+
+        // Add keys from new not present in old (“create” case).
+        for (key, val) in rhs where lhs[key] == nil {
+            merged[key] = val
+        }
+
+        // For keys present in both old and new, apply merge recursively to their values.
+        for key in lhs.keys where rhs[key] != nil {
+            merged[key] = lhs[key]?.merging(with: rhs[key]!)
+        }
+
+        return JSON.object(merged)
+    }
+}
+
+
+import Foundation
+
+extension JSON {
+
+    /// Create a JSON value from anything.
+    ///
+    /// Argument has to be a valid JSON structure: A `Double`, `Int`, `String`,
+    /// `Bool`, an `Array` of those types or a `Dictionary` of those types.
+    ///
+    /// You can also pass `nil` or `NSNull`, both will be treated as `.null`.
+    public init(_ value: Any) throws {
+        switch value {
+        case _ as NSNull:
+            self = .null
+        case let opt as Optional<Any> where opt == nil:
+            self = .null
+        case let num as NSNumber:
+            if num.isBool {
+                self = .bool(num.boolValue)
+            } else {
+                self = .number(num.doubleValue)
+            }
+        case let str as String:
+            self = .string(str)
+        case let bool as Bool:
+            self = .bool(bool)
+        case let array as [Any]:
+            self = .array(try array.map(JSON.init))
+        case let dict as [String:Any]:
+            self = .object(try dict.mapValues(JSON.init))
+        default:
+            throw JSONInitializationError()
+        }
+    }
+}
+
+extension JSON {
+
+    /// Create a JSON value from an `Encodable`. This will give you access to the “raw”
+    /// encoded JSON value the `Encodable` is serialized into.
+    public init<T: Encodable>(encodable: T) throws {
+        let encoded = try encodable.jsonData
+        self = try encoded.decodeJSON(JSON.self)
+    }
+}
+
+extension JSON: ExpressibleByBooleanLiteral {
+
+    public init(booleanLiteral value: Bool) {
+        self = .bool(value)
+    }
+}
+
+extension JSON: ExpressibleByNilLiteral {
+
+    public init(nilLiteral: ()) {
+        self = .null
+    }
+}
+
+extension JSON: ExpressibleByArrayLiteral {
+
+    public init(arrayLiteral elements: JSON...) {
+        self = .array(elements)
+    }
+}
+
+extension JSON: ExpressibleByDictionaryLiteral {
+
+    public init(dictionaryLiteral elements: (String, JSON)...) {
+        var object: [String:JSON] = [:]
+        for (k, v) in elements {
+            object[k] = v
+        }
+        self = .object(object)
+    }
+}
+
+extension JSON: ExpressibleByFloatLiteral {
+
+    public init(floatLiteral value: Double) {
+        self = .number(value)
+    }
+}
+
+extension JSON: ExpressibleByIntegerLiteral {
+
+    public init(integerLiteral value: Int) {
+        self = .number(Double(value))
+    }
+}
+
+extension JSON: ExpressibleByStringLiteral {
+
+    public init(stringLiteral value: String) {
+        self = .string(value)
+    }
+}
+
+// MARK: - NSNumber
+
+extension NSNumber {
+
+    /// Boolean value indicating whether this `NSNumber` wraps a boolean.
+    ///
+    /// For example, when using `NSJSONSerialization` Bool values are converted into `NSNumber` instances.
+    ///
+    /// - seealso: https://stackoverflow.com/a/49641315/3589408
+    fileprivate var isBool: Bool {
+        let objCType = String(cString: self.objCType)
+        if (self.compare(trueNumber) == .orderedSame && objCType == trueObjCType) || (self.compare(falseNumber) == .orderedSame && objCType == falseObjCType) {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+private let trueNumber = NSNumber(value: true)
+private let falseNumber = NSNumber(value: false)
+private let trueObjCType = String(cString: trueNumber.objCType)
+private let falseObjCType = String(cString: falseNumber.objCType)
+*/
+   
+/*
+ func jsonData() throws -> Data {
+     try JSONEncoder().encode(self)
+ }
+ */
+
+/*public extension Result {
+    func catching<T>(_ closure: @escaping () async throws -> T) async -> Result<T, Error> {
+        await Task { try await closure() }.result
+    }
+}*/
+
+/*extension PersistentModel {
+    func to(_ modelContext: ModelContext) throws -> Self {
+        guard let transfered = modelContext.model(for: persistentID) as? Self else {
+            throw SwiftDataError.noModelInstance(id: persistentID, in: modelContext)
+        }
+        return transfered
+    }
+}*/
+/*
+extension Sequence where Element: PersistentModel {
+    func to(_ modelContext: ModelContext) throws -> [Element] {
+        try map { try $0.to(modelContext) }
+    }
+}
+*/
+
+/*public extension AsyncThrowingStream {
+    
+    func map<T>(_ transform: @Sendable @escaping (Element) throws -> T) rethrows -> AsyncThrowingStream<T, Error> where Element : Sendable {
+        return  AsyncThrowingStream<T, Error> { continuation in Task {
+            do {
+                for try await element in self {
+                    try continuation.yield(transform(element))
+                }
+                continuation.finish()
+            } catch {
+                continuation.finish(throwing: error)
+            }
+        } }
+    }
+}*/

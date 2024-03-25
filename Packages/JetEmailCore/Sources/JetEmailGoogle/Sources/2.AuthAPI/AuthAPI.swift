@@ -9,7 +9,7 @@ import JetEmailData
 
 // MARK: - Client Session API
 
-extension GoogleClient : ClientSessionAPI {
+extension GoogleClient : ClientAuthProtocol {
     @MainActor
     public var sessions: [GoogleSession] { get async throws {
         try await keychain.items.asyncMap { @MainActor sessionItem in
@@ -27,7 +27,7 @@ extension GoogleClient : ClientSessionAPI {
 
 // MARK: - Session API
 
-extension GoogleSession : SessionAPIProtocol {
+extension GoogleSession : SessionAuthProtocol {
     public var refresh: GoogleSession { get async throws {
         try await client._refresh(session: self)
     } }
@@ -43,7 +43,7 @@ extension GoogleSession : SessionAPIProtocol {
 // MARK: - AccountID Session API
 
 @MainActor
-extension GoogleAccountID  : AccountIDSessionAPI {
+extension GoogleAccountID  : AccountIDAuthProtocol {
     public var storedSession: GoogleSession? {
         session
     }

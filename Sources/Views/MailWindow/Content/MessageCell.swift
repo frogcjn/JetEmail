@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+
+import JetEmailFoundation
 import JetEmailData // for Message
 
 struct MessageCell : View {
@@ -21,7 +23,7 @@ struct MessageCell : View {
                     .font(.headline)
                     .fontWeight(.bold)
                 Spacer()
-                Text(message.date?.formattedRelative() ?? "(No Date)")
+                Text(message.date?.formattedRelative ?? "(No Date)")
             }
             Text(message.subject ?? "(No Subject)").lineLimit(1)
                 .fontWeight(.medium)

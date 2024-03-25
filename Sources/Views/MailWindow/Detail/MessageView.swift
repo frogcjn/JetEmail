@@ -63,7 +63,7 @@ struct EmailMetadataView: View {
 
             /*LabeledContent("createdDate:" , value: message.createdDate?.formattedRelative() ?? "")
             LabeledContent("modifiedDate:", value: message.modifiedDate?.formattedRelative() ?? "")*/
-            LabeledContent("date:", value: message.date?.formattedRelative() ?? "")
+            LabeledContent("date:", value: message.date?.formattedRelative ?? "")
             // LabeledContent("sentDate:"    , value: message.sentDate?.formattedRelative() ?? "")
 
             DynamicDivider()

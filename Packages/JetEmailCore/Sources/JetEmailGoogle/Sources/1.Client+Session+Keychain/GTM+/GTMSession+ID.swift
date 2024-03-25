@@ -11,12 +11,12 @@ import JetEmailData
 
 extension GTMSession {
     var accountID: GoogleAccountID { get throws {
-        guard let innerID = userID else { throw AuthError.accountNoIDOrUsername }
+        guard let innerID = userID else { throw GoogleAuthError.accountNoIDOrUsername }
         return .init(innerID: innerID)
     } }
     
     var accountIDAndUsername: (id: GoogleAccountID, username: String) { get throws {
-        guard let innerID = userID, let username = userEmail else { throw AuthError.accountNoIDOrUsername }
+        guard let innerID = userID, let username = userEmail else { throw GoogleAuthError.accountNoIDOrUsername }
         return (.init(innerID: innerID), username)
     } }
 }

@@ -19,7 +19,7 @@ public typealias    MessageResource = PlatformEnum<MicrosoftMessage   , GoogleMe
 // AccountToSessionProtocol -> AccountID, Account
 
 @MainActor
-extension AccountID : AccountIDSessionAPI {
+extension AccountID : AccountIDAuthProtocol {
     public var storedSession: Session? {
         try? platformCase.storedSession
     }
@@ -34,7 +34,7 @@ extension AccountID : AccountIDSessionAPI {
 }
 
 @MainActor
-extension Account : AccountIDSessionAPI {
+extension Account : AccountIDAuthProtocol {
     public var storedSession: Session? {
         resourceID.storedSession
     }

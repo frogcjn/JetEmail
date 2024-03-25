@@ -7,7 +7,7 @@
 
 // MARK: Client - Session API
 
-public protocol ClientSessionAPI {
+public protocol ClientAuthProtocol {
     associatedtype ClientSessionType
 
     @MainActor
@@ -18,7 +18,7 @@ public protocol ClientSessionAPI {
 }
 
 
-public protocol SessionAPIProtocol {
+public protocol SessionAuthProtocol {
     @MainActor
     var refresh: Self { get async throws }
     
@@ -27,7 +27,7 @@ public protocol SessionAPIProtocol {
 }
 
 @MainActor
-public protocol AccountIDSessionAPI {
+public protocol AccountIDAuthProtocol {
     associatedtype AccountIDSessionType
     
     var  storedSession: AccountIDSessionType? { get }
