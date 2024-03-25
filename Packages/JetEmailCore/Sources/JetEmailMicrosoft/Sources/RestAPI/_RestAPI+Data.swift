@@ -12,9 +12,30 @@ import JetEmailData
     
 enum _MicrosoftAPI {}
 
+// MARK: - MailFolder
+
 extension _MicrosoftAPI {
     
-    // MARK: - Message
+    // https://learn.microsoft.com/en-us/graph/api/resources/message
+    struct MicrosoftMailFolderInner : CodableValueType, Sendable {
+        let               id: String
+        let      displayName: String?
+        let         isHidden: Bool?
+        
+        // parent-children relationship
+        let   parentFolderId: String?
+        let childFolderCount: Int32?
+        
+        // mailFolder-messages relationship
+        let  unreadItemCount: Int32?
+        let   totalItemCount: Int32?
+    }
+}
+
+// MARK: - Message
+
+extension _MicrosoftAPI {
+    
     // https://learn.microsoft.com/en-us/graph/api/resources/message
     struct MicrosoftMessageInner : CodableValueType, Sendable {
         let                     id: String
@@ -41,26 +62,92 @@ extension _MicrosoftAPI {
             case removed = "@removed"
         }
     }
-    
+}
 
-    // MARK: - MailFolder
-    
-    // https://learn.microsoft.com/en-us/graph/api/resources/message
-    struct MicrosoftMailFolderInner : CodableValueType, Sendable {
-        let               id: String
-        let      displayName: String?
-        let         isHidden: Bool?
+extension MicrosoftMessage {
+
+    init(id: MicrosoftMessageID, _inner: _MicrosoftAPI.MicrosoftMessageInner, raw: Data?) {
+        self.id    = id
+        self._inner = _inner
         
-        // parent-children relationship
-        let   parentFolderId: String?
-        let childFolderCount: Int32?
+        /*
+         header fields:
+            subject
+            date
+            from/sender/replyTo
+            to/cc/bcc
+         */
+        if let headers = _inner.internetMessageHeaders {
+            let headers = headers.map { MessageHeader(name: $0.name, value: $0.value) }
+            self.headers = headers
+            self.subject = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.subject.rawValue) == .orderedSame }?.value
+            self.from    = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.from   .rawValue) == .orderedSame }?.value
+            self.sender  = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.sender .rawValue) == .orderedSame }?.value
+            self.replyTo = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.replyTo.rawValue) == .orderedSame }?.value
+            self.to      = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.to     .rawValue) == .orderedSame }?.value
+            self.cc      = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.cc     .rawValue) == .orderedSame }?.value
+            self.bcc     = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.bcc    .rawValue) == .orderedSame }?.value
+            self.date    = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.date   .rawValue) == .orderedSame }?.value.rfc2822
+        } else {
+            self.headers = nil
+            self.subject = nil
+            self.from    = nil
+            self.sender  = nil
+            self.replyTo = nil
+            self.to      = nil
+            self.cc      = nil
+            self.bcc     = nil
+            self.date    = nil
+        }
         
-        // mailFolder-messages relationship
-        let  unreadItemCount: Int32?
-        let   totalItemCount: Int32?
+        // Informational fields
+        // subject      = inner.subject?.nilIfEmpty
+        
+        // Mailbox System
+        /*receivedDate = inner.receivedDateTime?    .date // 2024-01-30 19:44:34 +0000
+         createdDate = inner.createdDateTime?     .date // 2024-03-02 08:20:30 +0000
+        modifiedDate = inner.lastModifiedDateTime?.date // 2024-03-02 21:46:30 +0000*/
+        
+        self.bodyPreview  = _inner.bodyPreview?.nilIfEmpty
+        
+        if let body = _inner.body, let contentType = body.contentType, let content = body.content {
+            self.body = switch contentType {
+            case .html: .init(text: content, html:content)
+            case .text: .init(text: content, html: nil)
+            }
+        } else {
+            self.body = nil
+        }
+        
+        self.raw = raw
+    }
+}
+
+// MARK: - Inner -> Outter
+
+extension _MicrosoftAPI.MicrosoftMessageInner {
+    func outer(accountID: MicrosoftAccountID, raw: Data?) -> MicrosoftMessage {
+        .init(id: .init(accountID: accountID, innerID: id), _inner: self, raw: raw)
     }
     
-    // MARK: - Other
+    func id(accountID: MicrosoftAccountID) -> MicrosoftMessageID {
+        .init(accountID: accountID, innerID: id)
+    }
+}
+
+extension _MicrosoftAPI.MicrosoftMailFolderInner {
+    func with(accountID: MicrosoftAccountID, _systemName: _MicrosoftAPI.MicrosoftMailFolderSystemName?) -> MicrosoftMailFolder {
+        .init(id: .init(accountID: accountID, innerID: id), _inner: self, systemName: _systemName?.systemName, name: displayName)
+    }
+    
+    func with(accountID: MicrosoftAccountID, _idToSystemName: [MicrosoftMailFolderID: _MicrosoftAPI.MicrosoftMailFolderSystemName]) -> MicrosoftMailFolder {
+        with(accountID: accountID, _systemName: _idToSystemName[MicrosoftMailFolderID(accountID: accountID, innerID: id)])
+    }
+}
+
+// MARK: - Other
+    
+extension _MicrosoftAPI {
     
     /*
      The date and time the message was created.
@@ -133,94 +220,5 @@ extension _MicrosoftAPI {
             case changed
             case deleted
         }
-    }
-}
-
-
-
-
-
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
-
-extension MicrosoftMessage {
-
-    init(id: MicrosoftMessageID, _inner: _MicrosoftAPI.MicrosoftMessageInner, raw: Data?) {
-        self.id    = id
-        self._inner = _inner
-        
-        /*
-         header fields:
-            subject
-            date
-            from/sender/replyTo
-            to/cc/bcc
-         */
-        if let headers = _inner.internetMessageHeaders {
-            let headers = headers.map { MessageHeader(name: $0.name, value: $0.value) }
-            self.headers = headers
-            self.subject = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.subject.rawValue) == .orderedSame }?.value
-            self.from    = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.from   .rawValue) == .orderedSame }?.value
-            self.sender  = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.sender .rawValue) == .orderedSame }?.value
-            self.replyTo = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.replyTo.rawValue) == .orderedSame }?.value
-            self.to      = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.to     .rawValue) == .orderedSame }?.value
-            self.cc      = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.cc     .rawValue) == .orderedSame }?.value
-            self.bcc     = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.bcc    .rawValue) == .orderedSame }?.value
-            self.date    = headers.first { $0.name.caseInsensitiveCompare(MessageHeaderName.date   .rawValue) == .orderedSame }?.value.rfc2822
-        } else {
-            self.headers = nil
-            self.subject = nil
-            self.from    = nil
-            self.sender  = nil
-            self.replyTo = nil
-            self.to      = nil
-            self.cc      = nil
-            self.bcc     = nil
-            self.date    = nil
-        }
-        
-        // Informational fields
-        // subject      = inner.subject?.nilIfEmpty
-        
-        // Mailbox System
-        /*receivedDate = inner.receivedDateTime?    .date // 2024-01-30 19:44:34 +0000
-         createdDate = inner.createdDateTime?     .date // 2024-03-02 08:20:30 +0000
-        modifiedDate = inner.lastModifiedDateTime?.date // 2024-03-02 21:46:30 +0000*/
-        
-        self.bodyPreview  = _inner.bodyPreview?.nilIfEmpty
-        
-        if let body = _inner.body, let contentType = body.contentType, let content = body.content {
-            self.body = switch contentType {
-            case .html: .init(text: content, html:content)
-            case .text: .init(text: content, html: nil)
-            }
-        } else {
-            self.body = nil
-        }
-        
-        self.raw = raw
-    }
-
-}
-
-// MARK: - Inner -> Outter
-
-extension _MicrosoftAPI.MicrosoftMessageInner {
-    func outer(accountID: MicrosoftAccountID, raw: Data?) -> MicrosoftMessage {
-        .init(id: .init(accountID: accountID, innerID: id), _inner: self, raw: raw)
-    }
-    
-    func id(accountID: MicrosoftAccountID) -> MicrosoftMessageID {
-        .init(accountID: accountID, innerID: id)
-    }
-}
-
-extension _MicrosoftAPI.MicrosoftMailFolderInner {
-    func with(accountID: MicrosoftAccountID, _systemName: _MicrosoftAPI.MicrosoftMailFolderSystemName?) -> MicrosoftMailFolder {
-        .init(id: .init(accountID: accountID, innerID: id), _inner: self, systemName: _systemName?.systemName, name: displayName)
-    }
-    
-    func with(accountID: MicrosoftAccountID, _idToSystemName: [MicrosoftMailFolderID: _MicrosoftAPI.MicrosoftMailFolderSystemName]) -> MicrosoftMailFolder {
-        with(accountID: accountID, _systemName: _idToSystemName[MicrosoftMailFolderID(accountID: accountID, innerID: id)])
     }
 }

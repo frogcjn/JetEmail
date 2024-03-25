@@ -80,12 +80,6 @@ extension _GoogleAPI {
     }
 }
 
-extension _GoogleAPI.GoogleMailFolderInner {
-    func outer(accountID: GoogleAccountID, name: String? = nil) -> GoogleMailFolder {
-        .init(id: .init(accountID: accountID, innerID: id), _inner: self, name: name)
-    }
-}
-
 extension GoogleMailFolder {
     func replace(name: String?) -> GoogleMailFolder {
         .init(id: id, _inner: _inner, name: name)
@@ -214,15 +208,6 @@ extension GoogleMessage {
     }
 }
 
-extension _GoogleAPI.GoogleMessageInner {
-    func outer(accountID: GoogleAccountID, raw: Data?) throws -> GoogleMessage {
-        try .init(id: .init(accountID: accountID, innerID: id), _inner: self, raw: raw)
-    }
-    
-    func id(accountID: GoogleAccountID) -> GoogleMessageID {
-        .init(accountID: accountID, innerID: id)
-    }
-}
 
 fileprivate extension _GoogleAPI.GoogleMessageInner.Part {
     var messageBody: MessageBody? { get throws {
@@ -250,5 +235,23 @@ fileprivate extension [_GoogleAPI.GoogleMessageInner.Part] {
 
     var firstMultipartPart: _GoogleAPI.GoogleMessageInner.Part? {
         first { ([.multipartMixed, .multipartAlternative] as [_GoogleAPI.MIMEType]).map(\.rawValue).map(Optional.init).contains($0.mimeType) }
+    }
+}
+
+// MARK: - Inner -> Outter
+
+extension _GoogleAPI.GoogleMailFolderInner {
+    func outer(accountID: GoogleAccountID, name: String? = nil) -> GoogleMailFolder {
+        .init(id: .init(accountID: accountID, innerID: id), _inner: self, name: name)
+    }
+}
+
+extension _GoogleAPI.GoogleMessageInner {
+    func outer(accountID: GoogleAccountID, raw: Data?) throws -> GoogleMessage {
+        try .init(id: .init(accountID: accountID, innerID: id), _inner: self, raw: raw)
+    }
+    
+    func id(accountID: GoogleAccountID) -> GoogleMessageID {
+        .init(accountID: accountID, innerID: id)
     }
 }
