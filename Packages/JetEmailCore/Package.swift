@@ -31,7 +31,8 @@ var package = Package(
         .package(url: "https://github.com/frogcjn/MSAL.git", branch: "main"),
         //.package(url: "https://github.com/frogcjn/microsoft-authentication-library-for-objc.git", .upToNextMajor(from: "1.3.0")),
         //.package(name: "MSAL", path: "../microsoft-authentication-library-for-objc"),
-        .package(url: "https://github.com/igorrendulic/MimeEmailParser.git", .upToNextMajor(from: "1.0.5"))
+        .package(url: "https://github.com/igorrendulic/MimeEmailParser.git", .upToNextMajor(from: "1.0.5")),
+        .package(url: "https://github.com/frogcjn/OpenAI", branch:"main")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -41,7 +42,8 @@ var package = Package(
             dependencies: [
                 .target (name: "JetEmailGoogle"                         ),
                 .target (name: "JetEmailMicrosoft"                      ),
-                .target (name: "JetEmailData"                           )
+                .target (name: "JetEmailData"                           ),
+                .product(name: "OpenAI"                     , package: "OpenAI"                          ),
             ]
         ),
         .target(
@@ -97,5 +99,5 @@ var package = Package(
 )
 
 for target in package.targets {
-    target.swiftSettings = (target.swiftSettings ?? []) + [.enableUpcomingFeature("StrictConcurrency")]
+    target.swiftSettings = (target.swiftSettings ?? []) + [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("GlobalConcurrency"), .enableUpcomingFeature("IsolatedDefaultValues")]
 }
