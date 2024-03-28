@@ -77,7 +77,8 @@ extension GoogleSession {
         }()
         
         
-        let stream: AsyncThrowingStream<[GoogleMessageID], Error> = .init { continuation in Task { [messageIDs, nextPageToken] in
+        let (stream, continuation) = AsyncThrowingStream<[GoogleMessageID], Error>.makeStream()
+        Task { [messageIDs, nextPageToken] in
             do {
                 // get paging results
                 
@@ -104,38 +105,17 @@ extension GoogleSession {
             } catch {
                 continuation.finish(throwing: error)
             }
-        } }
+        }
+        
         return (estimateCount, stream)
     }
     
     
-    /// <#Description#>
-    /// - Parameters:
-    ///   - mailFolderID: <#mailFolderID description#>
-    ///   - messageIDs: <#messageIDs description#>
-    ///   - batchSize: max: 100
-    ///   - maxTaskCount: max: Int.max. bestMax: 2. If more than 2, some message will drop in Swift async stream.
-    /// - Returns: <#description#>
+
     func _getMessagesStream(mailFolderID: GoogleMailFolderID, messageIDs: [GoogleMessageID], batchSize: Int, maxTaskCount: Int) async throws -> AsyncThrowingStream<[GoogleMessage], Error> {
-        .init(messageIDs: messageIDs, accountID: account.id, service: service, batchSize: batchSize, maxTaskCount: maxTaskCount)
-    }
-
-    // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
-    func _getMessage(messageID: GoogleMessageID, fields: String? = nil, format: GetMessageFormat) async throws -> _GoogleAPI.GoogleMessageInner {
-        let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: account.id.innerID, identifier: messageID.innerID)
-        query.fields = fields
-        query.format = format.rawValue
-        
-        return try await service.execute(query, responseType: GTLRGmail_Message.self).messageInner
-    }
-}
-
-
-
-fileprivate extension AsyncThrowingStream where Element == [GoogleMessage], Failure == Error {
-    init(messageIDs: [GoogleMessageID], accountID: GoogleAccountID, service: GTLRGmailService, batchSize: Int, maxTaskCount: Int) {
-        // maxTaskCount =
-        self.init { [service] (continuation: Continuation) in Task {
+        let accountID = account.id
+        let (stream, continuation) = AsyncThrowingStream<[GoogleMessage], Error>.makeStream()
+        Task {
             var rest = messageIDs[...]
             do {
                 try await withThrowingTaskGroup(of: [GoogleMessage].self) { group in
@@ -160,7 +140,17 @@ fileprivate extension AsyncThrowingStream where Element == [GoogleMessage], Fail
             } catch {
                 continuation.finish(throwing: error)
             }
-        } }
+        }
+        return stream
+    }
+
+    // https://developers.google.com/gmail/api/reference/rest/v1/users.messages/get
+    func _getMessage(messageID: GoogleMessageID, fields: String? = nil, format: GetMessageFormat) async throws -> _GoogleAPI.GoogleMessageInner {
+        let query = GTLRGmailQuery_UsersMessagesGet.query(withUserId: account.id.innerID, identifier: messageID.innerID)
+        query.fields = fields
+        query.format = format.rawValue
+        
+        return try await service.execute(query, responseType: GTLRGmail_Message.self).messageInner
     }
 }
 

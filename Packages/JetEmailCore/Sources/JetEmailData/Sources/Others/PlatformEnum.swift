@@ -283,10 +283,10 @@ Microsoft : AccountIDAuthProtocol,
 {
     public typealias AccountIDSessionType = PlatformEnum<Microsoft.AccountIDSessionType, Google.AccountIDSessionType>
     
-    public var storedSession: AccountIDSessionType? {
+    public var cachedSession: AccountIDSessionType? {
         switch self {
-        case .microsoft(let id): id.storedSession.map(AccountIDSessionType.microsoft)
-        case    .google(let id): id.storedSession.map(AccountIDSessionType.google)
+        case .microsoft(let id): id.cachedSession.map(AccountIDSessionType.microsoft)
+        case    .google(let id): id.cachedSession.map(AccountIDSessionType.google)
         }
     }
     
@@ -355,7 +355,7 @@ extension PlatformEnum: RestAPIProtocol where
         checkBackgroundThread()
         return switch self {
         case .microsoft(let session): .microsoft(try await session.moveMessage(messageID: messageID.microsoft, fromID: fromID.microsoft, toID: toID.microsoft))
-        case    .google(let session): .google(try await session.moveMessage(messageID: messageID.google   , fromID: fromID.google   , toID: toID.google   ))
+        case    .google(let session):    .google(try await session.moveMessage(messageID: messageID.google   , fromID: fromID.google   , toID: toID.google   ))
         }
     }
     

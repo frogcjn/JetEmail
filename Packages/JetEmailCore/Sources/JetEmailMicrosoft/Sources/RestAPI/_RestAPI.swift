@@ -67,7 +67,8 @@ extension MicrosoftSession {
     ///   - batchSize: max: 20
     /// - Returns: <#description#>
     func _loadMessagesStream(mailFolderID: MicrosoftMailFolderID, messageIDs: [MicrosoftMessageID], batchSize: Int) async throws -> AsyncThrowingStream<[MicrosoftMessage], Error> {
-        .init { continuation in Task {
+        let (stream, continuation) = AsyncThrowingStream<[MicrosoftMessage], Error>.makeStream()
+        Task {
             do {
                 var rest = messageIDs[...]
                 
@@ -84,7 +85,8 @@ extension MicrosoftSession {
             } catch {
                 continuation.finish(throwing: error)
             }
-        } }
+        }
+        return stream
     }
     
     private func _getMessagesBatch(mailFolderID: MicrosoftMailFolderID, messageIDs: [MicrosoftMessageID]) async throws -> [MicrosoftMessage] {

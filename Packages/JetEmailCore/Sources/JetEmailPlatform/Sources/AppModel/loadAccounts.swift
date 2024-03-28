@@ -24,8 +24,8 @@ public extension AppModel {
     
     // @BackgroundThreadPool
     nonisolated private func _loadAccounts() async throws {
-        let sessions = try await sessions                                     // Clients
+        let sessions = try await sessions                                             // Clients
         let (_, deletes) =  try await modelStore.setAccounts(sessions.map(\.account)) // ModelStore
-        await deletes.forEachTask { _ = await $0.removeSession() }                // Sessions
+        await deletes.forEachTask { _ = await $0.removeSession() }                    // Sessions
     }
 }

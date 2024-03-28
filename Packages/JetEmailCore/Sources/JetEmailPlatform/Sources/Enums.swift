@@ -20,8 +20,8 @@ public typealias    MessageResource = PlatformEnum<MicrosoftMessage   , GoogleMe
 
 @MainActor
 extension AccountID : AccountIDAuthProtocol {
-    public var storedSession: Session? {
-        try? platformCase.storedSession
+    public var cachedSession: Session? {
+        try? platformCase.cachedSession
     }
     
     public func removeSession() -> Session? {
@@ -35,8 +35,8 @@ extension AccountID : AccountIDAuthProtocol {
 
 @MainActor
 extension Account : AccountIDAuthProtocol {
-    public var storedSession: Session? {
-        resourceID.storedSession
+    public var cachedSession: Session? {
+        resourceID.cachedSession
     }
     
     public func removeSession() -> Session? {

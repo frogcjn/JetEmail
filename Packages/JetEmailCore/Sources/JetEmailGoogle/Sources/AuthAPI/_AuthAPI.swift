@@ -17,7 +17,7 @@ extension GoogleClient {
     func _sessions() async throws -> [GoogleSession] {
         try await keychain.items.asyncMap { @MainActor sessionItem in
             let accountID = sessionItem.account.id
-            let session = accountID.storedSession ?? _insertSession(item: sessionItem)
+            let session = accountID.cachedSession ?? _insertSession(item: sessionItem)
             return try await _refresh(session: session)
         }
     }

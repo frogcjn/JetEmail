@@ -70,7 +70,8 @@ extension MicrosoftSession {
         }()
         
         
-        let stream: AsyncThrowingStream<[Value], Error> = .init { continuation in Task { [firstValues, firlstNextLink] in
+        let (stream, continuation) = AsyncThrowingStream<[Value], Error>.makeStream()
+        Task { [firstValues, firlstNextLink] in
             do {
                 // get paging results
                 
@@ -90,7 +91,7 @@ extension MicrosoftSession {
             } catch {
                 continuation.finish(throwing: error)
             }
-        } }
+        }
         return (count, stream)
     }
     

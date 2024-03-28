@@ -51,7 +51,7 @@ public extension MicrosoftSession {
 
 @MainActor
 extension MicrosoftAccountID  : AccountIDAuthProtocol {
-    public var storedSession: MicrosoftSession? {
+    public var cachedSession: MicrosoftSession? {
         session
     }
     

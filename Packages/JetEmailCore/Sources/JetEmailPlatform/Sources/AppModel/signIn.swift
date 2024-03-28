@@ -18,8 +18,7 @@ public extension AppModel {
         defer { isBusy = false }
         do {
             if delay {
-                let clock = SuspendingClock()
-                try await clock.sleep(for: .seconds(0.5)) // resolve issue when presenting window with orminent in visionOS, delay <= 0.35s will crash
+                try await Task.sleep(for: .seconds(0.5))  // resolve issue when presenting window with orminent in visionOS, delay <= 0.35s will crash
             }
             
             let session = try await Clients.shared.signIn(platform: platform) // get Session

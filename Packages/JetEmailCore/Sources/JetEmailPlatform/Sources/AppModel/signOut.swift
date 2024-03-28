@@ -21,7 +21,7 @@ public extension AppModel {
         willSignOutAccount.send(accountID)
         
         do {
-            _ = try await accountID.storedSession?.signOut()      // Session
+            _ = try await accountID.cachedSession?.signOut()      // Session
             _ = try await modelStore.deleteAccount(accountID: accountID) // ModelStore
         } catch {
             logger.error("\(error)")

@@ -14,7 +14,7 @@ extension GoogleClient : ClientAuthProtocol {
     public var sessions: [GoogleSession] { get async throws {
         try await keychain.items.asyncMap { @MainActor sessionItem in
             let accountID = sessionItem.account.id
-            let session = accountID.storedSession ?? _insertSession(item: sessionItem)
+            let session = accountID.cachedSession ?? _insertSession(item: sessionItem)
             return try await _refresh(session: session)
         }
     } }
@@ -44,7 +44,7 @@ extension GoogleSession : SessionAuthProtocol {
 
 @MainActor
 extension GoogleAccountID  : AccountIDAuthProtocol {
-    public var storedSession: GoogleSession? {
+    public var cachedSession: GoogleSession? {
         session
     }
     

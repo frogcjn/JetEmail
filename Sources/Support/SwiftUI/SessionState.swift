@@ -10,7 +10,7 @@ import JetEmailData
 @MainActor
 public extension Account {
     var sessionState: SessionState {
-        storedSession != nil ? .hasSession : .noSession
+        cachedSession != nil ? .hasSession : .noSession
     }
 }
 

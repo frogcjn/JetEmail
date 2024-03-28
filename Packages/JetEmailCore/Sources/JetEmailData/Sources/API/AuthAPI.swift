@@ -30,7 +30,7 @@ public protocol SessionAuthProtocol {
 public protocol AccountIDAuthProtocol {
     associatedtype AccountIDSessionType
     
-    var  storedSession: AccountIDSessionType? { get }
+    var  cachedSession: AccountIDSessionType? { get }
     var refreshSession: AccountIDSessionType  { get async throws }
     func removeSession() -> AccountIDSessionType?
 }

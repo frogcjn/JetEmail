@@ -16,7 +16,7 @@ public extension ModelStore {
     // MARK: - Accounts
     
     // loadAccounts
-    func setAccounts<AccountResource: AccountProtocol>(_ accounts: [AccountResource]) async throws -> (inserts: [AccountID], delete: [AccountID]) {
+    func setAccounts<AccountResource: AccountProtocol>(_ accounts: [AccountResource]) throws -> (inserts: [AccountID], delete: [AccountID]) {
         checkBackgroundThread()
         
         var inserts   = [Account]()
@@ -34,7 +34,7 @@ public extension ModelStore {
     }
        
     // signIn
-    func insertAccount<AccountResource: AccountProtocol>(_ account: AccountResource) async throws -> AccountID {
+    func insertAccount<AccountResource: AccountProtocol>(_ account: AccountResource) throws -> AccountID {
         checkBackgroundThread()
         var accountID: AccountID!
         try modelContext.transaction {
@@ -133,7 +133,7 @@ public extension ModelStore {
     // MARK: - MailFolder-Messages
     
     // loadMessages
-    func setMessagesDeletePart(newMessageIDs: [MessageID], mailFolderID: MailFolderID) async throws -> [(offset: Int,  element: MessageID)] {
+    func setMessagesDeletePart(newMessageIDs: [MessageID], mailFolderID: MailFolderID) throws -> [(offset: Int,  element: MessageID)] {
         checkBackgroundThread()
                 
         let oldMessages =  try modelContext[mailFolderID]._messages.filter { !$0.deleteMark }/* Set(try modelContext._fetchMessages(mailFolderID: mailFolderID))*/
@@ -153,7 +153,7 @@ public extension ModelStore {
         return enumeratedInsertIDs
     }
     
-    func messageIDs(mailFolderID: MailFolderID) async throws -> [MessageID] {
+    func messageIDs(mailFolderID: MailFolderID) throws -> [MessageID] {
         checkBackgroundThread()
         let mailFolder = try modelContext[mailFolderID]
         return mailFolder.messages.map(\.resourceID)
@@ -258,7 +258,7 @@ public extension ModelContext {
         return mailFolder.resourceID
     }
     
-    func setMessagesDeletePart(newMessageIDs: [MessageID], mailFolderID: MailFolderID) async throws -> [(offset: Int,  element: MessageID)] {
+    func setMessagesDeletePart(newMessageIDs: [MessageID], mailFolderID: MailFolderID) throws -> [(offset: Int,  element: MessageID)] {
         checkBackgroundThread()
                 
         let oldMessages =  try self[mailFolderID]._messages.filter { !$0.deleteMark }/* Set(try modelContext._fetchMessages(mailFolderID: mailFolderID))*/
