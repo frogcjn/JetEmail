@@ -168,7 +168,7 @@ extension MicrosoftSession {
 
 // IDToSystemName
 
-private extension MicrosoftSession {
+extension MicrosoftSession {
     func requestIDToSystemName() async throws -> IDToSystemName {
         // catch wellknownFolderName
         var idToSystemName = IDToSystemName()
