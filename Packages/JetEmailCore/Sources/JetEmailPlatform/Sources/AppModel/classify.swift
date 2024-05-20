@@ -136,7 +136,7 @@ extension Agent {
             )
         ]
         
-        let query = ChatQuery(model: .gpt4, messages: messages, tools: tools)
+        let query = ChatQuery(model: "gpt-4o", messages: messages, tools: tools)
         let response = try await openAI.chats(query: query)
         // print(response.choices[0].message)
         guard let folderDescription = try? response.choices[0].message.toolCalls?.first?.function.arguments?.decodeJSON(ClassifyResult.self).existedFolder else { return nil }

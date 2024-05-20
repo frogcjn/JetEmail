@@ -130,7 +130,7 @@ extension _MicrosoftAPI {
     struct ItemBody : CodableValueType, Sendable {
         let     content: String?
         let contentType: ContentType?
-        let        type: String
+        let        type: String?
 
         enum ContentType : String, CodableValueType, Sendable {
             case text
@@ -147,7 +147,7 @@ extension _MicrosoftAPI {
     // https://learn.microsoft.com/en-us/graph/api/resources/recipient
     struct Recipient : CodableValueType, Sendable {
         let emailAddress: EmailAddress?
-        let         type: String
+        let         type: String?
 
         enum CodingKeys: String, CodingKey, Sendable {
             case emailAddress
@@ -164,7 +164,7 @@ extension _MicrosoftAPI {
     struct InternetMessageHeader : CodableValueType, Sendable {
         let  name: String
         let value: String
-        let  type: String
+        let  type: String?
         
         enum CodingKeys: String, CodingKey, Sendable {
             case  name
