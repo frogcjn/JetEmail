@@ -148,7 +148,7 @@ public final class Message {
     
     /// Message.account <<-> Account.messages
     @Relationship(deleteRule: .nullify)
-    public var account: Account
+    public var account: Account?
     
     /// Message.mailFolders <<->> MailFolder.messages
     @Relationship(deleteRule: .nullify)

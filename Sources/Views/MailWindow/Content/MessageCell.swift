@@ -30,7 +30,7 @@ struct MessageCell : View {
             Text(message.bodyPreview ?? "(No Preview)").lineLimit(2)
                 .foregroundStyle(.secondary)
             
-            MovePlan(style: .menu)
+            MovePlan(style: .roundedRect)
         }
     }
 }

@@ -24,11 +24,11 @@ public protocol SessionProtocol {
     var account: AccountType { get }
 }
 
-public protocol MailFolderProtocol                 : GeneralIdentifiable & IdentifiableValueType, Sendable where GeneralID == MailFolderID {
+public protocol MailFolderProtocol                 : GeneralIdentifiable & IdentifiableValueType, Sendable where GeneralID == MailFolderID, ID : Sendable {
     var       name: String?               { get }
     var systemName: MailFolderSystemName? { get }
 }
-public protocol MessageProtocol                    : GeneralIdentifiable & IdentifiableValueType, Sendable where GeneralID == MessageID {
+public protocol MessageProtocol                    : GeneralIdentifiable & IdentifiableValueType, Sendable where GeneralID == MessageID, ID : Sendable {
     
     // MARK: Resource - Information Fields
 

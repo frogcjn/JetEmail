@@ -39,7 +39,7 @@ extension GoogleClient {
             configuration: configuration,
             clientId: clientID,
             clientSecret: nil,
-            scopes: scopes.map(\.rawValue),
+            scopes: scopes,
             redirectURL: redirectURL,
             responseType: responseType.rawValue,
             additionalParameters: additionalParameters

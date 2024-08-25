@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -7,11 +7,11 @@ var package = Package(
     name: "JetEmailCore",
     defaultLocalization: "en",
     platforms: [
-        .macOS(.v14),
-        .iOS(.v17),
+        .macOS(.v15),
+        .iOS(.v18),
         //.tvOS(.v12),
         //.watchOS(.v4),
-        .visionOS(.v1)
+        .visionOS(.v2)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
@@ -44,7 +44,10 @@ var package = Package(
                 .target (name: "JetEmailMicrosoft"                      ),
                 .target (name: "JetEmailData"                           ),
                 .product(name: "OpenAI"                     , package: "OpenAI"                          ),
-            ]
+            ]/*,
+            swiftSettings: [
+                .swiftLanguageVersion(.v6)
+            ]*/
         ),
         .target(
             name: "JetEmailGoogle",
@@ -56,8 +59,9 @@ var package = Package(
                 .target (name: "JetEmailData"                                                                  ),
             ]/*,
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .define("GTLR_SKIP_PAGES_WARNING")
+                //.enableUpcomingFeature("StrictConcurrency"),
+                //.define("GTLR_SKIP_PAGES_WARNING")
+                .swiftLanguageVersion(.v6)
             ]*/
         ),
         .target(
@@ -67,6 +71,9 @@ var package = Package(
                 .target (name: "JetEmailFoundation"                  ),
                 .target (name: "JetEmailData"                        )
             ]/*,
+            swiftSettings: [
+                .swiftLanguageVersion(.v6)
+            ]*//*,
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
             ]*/
@@ -78,6 +85,9 @@ var package = Package(
             ],
             resources: [.process("Resources/Localizable.xcstrings")]/*,
             swiftSettings: [
+                .swiftLanguageVersion(.v6)
+            ]*//*,
+            swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
             ]*/
         ),
@@ -86,6 +96,10 @@ var package = Package(
             dependencies: [
                 .product(name: "MimeEmailParser", package: "MimeEmailParser")
             ]/*,
+            swiftSettings: [
+                .swiftLanguageVersion(.v6)
+            ]*/
+            /*,
             swiftSettings: [
                 .enableExperimentalFeature("StrictConcurrency")
             ]*/
@@ -99,5 +113,5 @@ var package = Package(
 )
 
 for target in package.targets {
-    target.swiftSettings = (target.swiftSettings ?? []) + [.enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("GlobalConcurrency"), .enableUpcomingFeature("IsolatedDefaultValues")]
+    target.swiftSettings = (target.swiftSettings ?? []) + [.swiftLanguageVersion(.v6)/*, .enableUpcomingFeature("StrictConcurrency"), .enableUpcomingFeature("GlobalConcurrency"), .enableUpcomingFeature("IsolatedDefaultValues")*/]
 }

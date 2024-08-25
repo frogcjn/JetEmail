@@ -46,8 +46,8 @@ public extension ModelStore {
     // signOut
     func deleteAccount(accountID: AccountID) throws -> AccountID {
         checkBackgroundThread()
-        let account = try modelContext[accountID]
         try modelContext.transaction {
+            let account = try modelContext[accountID]
             _ = modelContext._deleteModel(account)
             account.orderIndex = nil
             
@@ -93,10 +93,22 @@ public extension ModelStore {
     // loadMailFolders
     func setRootMailFolder<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource, accountID: AccountID) throws -> MailFolderID {
         var mailFolder: MailFolder!
-        try modelContext.transaction {
+        do {
+            try modelContext.transaction {
+                let account = try modelContext[accountID]
+                mailFolder = try modelContext._insertMailFolder(resource: resource, account: account)
+                account.root = mailFolder
+            }
+        } catch {
+            
+            // If not found: create
             let account = try modelContext[accountID]
-            mailFolder = try modelContext._insertMailFolder(resource: resource, account: account)
-            account.root = mailFolder
+            let model = MailFolder(resource: resource, account: account)
+            modelContext.insert(model)
+            model.account = account
+            try! modelContext.save()
+            
+            print(error)
         }
         return mailFolder.resourceID
     }
@@ -105,11 +117,11 @@ public extension ModelStore {
 
     // loadMailFolders
     func setChildrenMailFolders<MailFolderResource : MailFolderProtocol>(resources: [MailFolderResource], parentID: MailFolderID, accountID: AccountID) throws -> [MailFolderID] where MailFolderResource : JetEmailData.MailFolderProtocol {
-        let parent =  try modelContext[parentID]
-        let account = try modelContext[accountID]
         
         var inserts = [MailFolder]()
         try modelContext.transaction {
+            let parent =  try modelContext[parentID]
+            let account = try modelContext[accountID]
             for resource in resources {
                 try inserts.append(modelContext._insertMailFolder(resource: resource, parent: parent, account: account))
             }
@@ -135,21 +147,25 @@ public extension ModelStore {
     // loadMessages
     func setMessagesDeletePart(newMessageIDs: [MessageID], mailFolderID: MailFolderID) throws -> [(offset: Int,  element: MessageID)] {
         checkBackgroundThread()
-                
-        let oldMessages =  try modelContext[mailFolderID]._messages.filter { !$0.deleteMark }/* Set(try modelContext._fetchMessages(mailFolderID: mailFolderID))*/
-        
-        let newMessageIDSet = Set(newMessageIDs)
-        let oldMessageIDSet = Set(oldMessages.map(\.resourceID))
-
-        let deletingIDSet = oldMessageIDSet.subtracting(newMessageIDSet)
-        let   insertIDSet = newMessageIDSet.subtracting(oldMessageIDSet)
+             
+        var enumeratedInsertIDs: [(offset: Int,  element: MessageID)] = []
         
         try modelContext.transaction {
+            let oldMessages =  try modelContext[mailFolderID]._messages.filter { !$0.deleteMark }/* Set(try modelContext._fetchMessages(mailFolderID: mailFolderID))*/
+            
+            let newMessageIDSet = Set(newMessageIDs)
+            let oldMessageIDSet = Set(oldMessages.map(\.resourceID))
+
+            let deletingIDSet = oldMessageIDSet.subtracting(newMessageIDSet)
+            let   insertIDSet = newMessageIDSet.subtracting(oldMessageIDSet)
+            
+            
             let deletings = oldMessages.filter { deletingIDSet.contains($0.resourceID) }
             deletings.forEach { _ = modelContext._deleteModel($0) }
+            
+            enumeratedInsertIDs = newMessageIDs.enumerated().filter { insertIDSet.contains($0.element) }
         }
         
-        let enumeratedInsertIDs = newMessageIDs.enumerated().filter { insertIDSet.contains($0.element) }
         return enumeratedInsertIDs
     }
     
@@ -162,13 +178,14 @@ public extension ModelStore {
     // loadMessages
     func insertMessages<MessageSource: MessageProtocol>(sources: [MessageSource], mailFolderID: MailFolderID) throws -> [MessageID] {
         checkBackgroundThread()
-        let mailFolder = try modelContext[mailFolderID]
-        let account = mailFolder.account
-
+        
         try modelContext.transaction {
-            try sources.forEach { source in
-                let message = try modelContext._insertMessage(source: source, account: account)
-                message.mailFolders.append(mailFolder)
+            let mailFolder = try modelContext[mailFolderID]
+            if let account = mailFolder.account {
+                for source in sources {
+                    let message = try modelContext._insertMessage(source: source, account: account)
+                    message.mailFolders.append(mailFolder)
+                }
             }
         }
         return sources.map(\.generalID)
@@ -351,7 +368,7 @@ public extension ModelContext {
     
     subscript(accountID: AccountID) -> Account { get throws {
         let uniqueID = accountID.uniqueID
-        let first = try fetch(.init(predicate: #Predicate<Account>    { $0.uniqueID == uniqueID })).first
+        let first = try fetch(.init(predicate: #Predicate<Account> { $0.uniqueID == uniqueID })).first
         guard let first else { throw ModelStoreError.notFound }
         return first
     } }

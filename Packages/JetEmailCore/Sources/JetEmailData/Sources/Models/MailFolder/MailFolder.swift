@@ -100,7 +100,7 @@ public final class MailFolder {
     
     /// MailFolder.account <<-> Account.mailFolders
     @Relationship(deleteRule: .nullify)
-    public var account: Account
+    public var account: Account?
     
     /// MailFolder.parent <<-> MailFOlder.children
     @Relationship(deleteRule: .nullify)

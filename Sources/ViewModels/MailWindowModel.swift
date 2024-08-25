@@ -24,8 +24,8 @@ extension MailWindowModel {
     
     // Feature: Unselection - Will Sign Out Account
     func willSignOutAccount(_ accountID: AccountID) {
-        if selectedMessage?.account.resourceID == accountID { selectedMessage = nil }
-        if selectedMailFolder?.account.resourceID == accountID { selectedMailFolder = nil }
+        if selectedMessage?.account?.resourceID == accountID { selectedMessage = nil }
+        if selectedMailFolder?.account?.resourceID == accountID { selectedMailFolder = nil }
     }
     
     // Feature: Unselection - Change Selected Mail Folder

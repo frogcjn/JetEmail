@@ -54,10 +54,10 @@ typealias MSALAccount = MSAL.MSALAccount
 typealias MSALSession = MSAL.MSALResult
 typealias MSALClient  = MSAL.MSALPublicClientApplication
 
-extension                        MSALClient: @unchecked Sendable {}
-extension                       MSALAccount: @unchecked Sendable {}
-extension                       MSALSession: @unchecked Sendable {}
-extension MSALPublicClientApplicationConfig: @unchecked Sendable {}
-extension    MSALInteractiveTokenParameters: @unchecked Sendable {}
-extension         MSALSilentTokenParameters: @unchecked Sendable {}
-extension             MSALSignoutParameters: @unchecked Sendable {}
+extension                        MSALClient: @unchecked @retroactive Sendable {}
+extension                       MSALAccount: @unchecked @retroactive Sendable {}
+extension                       MSALSession: @unchecked @retroactive Sendable {}
+extension MSALPublicClientApplicationConfig: @unchecked @retroactive Sendable {}
+extension    MSALInteractiveTokenParameters: @unchecked @retroactive Sendable {}
+extension         MSALSilentTokenParameters: @unchecked @retroactive Sendable {}
+extension             MSALSignoutParameters: @unchecked @retroactive Sendable {}

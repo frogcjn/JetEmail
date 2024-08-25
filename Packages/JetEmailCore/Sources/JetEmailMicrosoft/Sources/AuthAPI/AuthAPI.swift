@@ -50,7 +50,7 @@ public extension MicrosoftSession {
 // MARK: - Account ID Session API
 
 @MainActor
-extension MicrosoftAccountID  : AccountIDAuthProtocol {
+extension MicrosoftAccountID  : @retroactive AccountIDAuthProtocol {
     public var cachedSession: MicrosoftSession? {
         session
     }
