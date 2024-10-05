@@ -44,10 +44,7 @@ var package = Package(
                 .target (name: "JetEmailMicrosoft"                      ),
                 .target (name: "JetEmailData"                           ),
                 .product(name: "OpenAI"                     , package: "OpenAI"                          ),
-            ]/*,
-            swiftSettings: [
-                .swiftLanguageVersion(.v6)
-            ]*/
+            ]
         ),
         .target(
             name: "JetEmailGoogle",
@@ -59,9 +56,7 @@ var package = Package(
                 .target (name: "JetEmailData"                                                                  ),
             ]/*,
             swiftSettings: [
-                //.enableUpcomingFeature("StrictConcurrency"),
                 //.define("GTLR_SKIP_PAGES_WARNING")
-                .swiftLanguageVersion(.v6)
             ]*/
         ),
         .target(
@@ -70,39 +65,20 @@ var package = Package(
                 .product(name: "MSAL"               , package: "MSAL"),
                 .target (name: "JetEmailFoundation"                  ),
                 .target (name: "JetEmailData"                        )
-            ]/*,
-            swiftSettings: [
-                .swiftLanguageVersion(.v6)
-            ]*//*,
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
-            ]*/
+            ]
         ),
         .target(
             name: "JetEmailData",
             dependencies: [
                 .target(name: "JetEmailFoundation")
             ],
-            resources: [.process("Resources/Localizable.xcstrings")]/*,
-            swiftSettings: [
-                .swiftLanguageVersion(.v6)
-            ]*//*,
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
-            ]*/
+            resources: [.process("Resources/Localizable.xcstrings")]
         ),
         .target(
             name: "JetEmailFoundation",
             dependencies: [
                 .product(name: "MimeEmailParser", package: "MimeEmailParser")
-            ]/*,
-            swiftSettings: [
-                .swiftLanguageVersion(.v6)
-            ]*/
-            /*,
-            swiftSettings: [
-                .enableExperimentalFeature("StrictConcurrency")
-            ]*/
+            ]
         ),
         
         /*.binaryTarget(
