@@ -108,7 +108,7 @@ extension Agent {
             .init(role: .system, content: "You are an email classifier agent, you need classify my email into different folders."),
             .init(role: .user, content: """
                 What is best folder for this email:
-                    from: \(message.from.debugDescription)")
+                    from: \(message.from ?? "nil")")
                     subject: \(message.subject ?? "nil")
                     bodyPreview: \(message.bodyPreview ?? "nil")
                 
