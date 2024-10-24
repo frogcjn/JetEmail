@@ -14,9 +14,81 @@ import enum JetEmailFoundation.TreeError
 public extension ModelStore {
     
     // MARK: - Accounts
+
+    func setAccounts<AccountResource: AccountProtocol>(_ accounts: [AccountResource]) throws -> (inserts: [AccountID], delete: [AccountID]) {
+        try modelContext.setAccounts(accounts)
+    }
+    
+    func insertAccount<AccountResource: AccountProtocol>(_ account: AccountResource) throws -> AccountID {
+        try modelContext.insertAccount(account)
+    }
+    
+    func deleteAccount(accountID: AccountID) throws -> AccountID {
+        try modelContext.deleteAccount(accountID: accountID)
+    }
+    
+    func moveAccounts(accountIDs: [AccountID], fromOffsets source: IndexSet, toOffset destination: Int) throws -> [Account.ResourceID] {
+        try modelContext.moveAccounts(accountIDs: accountIDs, fromOffsets: source, toOffset: destination)
+    }
+    
+    // MARK: - Account-Mailfolders
+    
+    func setRootMailFolder<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource, accountID: AccountID) throws -> MailFolderID {
+        try modelContext.setRootMailFolder(resource: resource, accountID: accountID)
+    }
+    
+    func setChildrenMailFolders<MailFolderResource : MailFolderProtocol>(resources: [MailFolderResource], parentID: MailFolderID, accountID: AccountID) throws -> [MailFolderID] where MailFolderResource : JetEmailData.MailFolderProtocol {
+        try modelContext.setChildrenMailFolders(resources: resources, parentID: parentID, accountID: accountID)
+    }
+
+    // MARK: - MailFolder-Messages
+
+    func setMessagesDeletePart(newMessageIDs: [MessageID], mailFolderID: MailFolderID) throws -> [(offset: Int,  element: MessageID)] {
+        try modelContext.setMessagesDeletePart(newMessageIDs: newMessageIDs, mailFolderID: mailFolderID)
+    }
+    
+    func insertMessages<MessageSource: MessageProtocol>(sources: [MessageSource], mailFolderID: MailFolderID) throws -> [MessageID] {
+        try modelContext.insertMessages(sources: sources, mailFolderID: mailFolderID)
+    }
+    
+    func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) throws -> MessageID {
+        try modelContext.moveMessage(messageID: messageID, fromID: fromID, toID: toID)
+    }
+    
+    // MARK: - Message
+
+    func setMessage<MessageResource: MessageProtocol>(resource: MessageResource) throws -> MessageID {
+        try modelContext.setMessage(resource: resource)
+    }
+}
+
+/*
+public extension ModelStore {
+    /*subscript<Model: DataModel>(id: UnifiedID<Model>) -> Model? { get throws { // TODO: WWDC2024
+        let uniqueID = id.rawValue
+        return try? fetch(.init(predicate: #Predicate<Model> { $0.uniqueID == uniqueID })).first // Error,  keypath could not figure right, since it is from protocol key path
+    } }*/
+    
+    subscript(accountID: AccountID) -> Account { get throws {
+        try modelContext[accountID]
+    } }
+    
+    subscript(mailFolderID: MailFolderID) -> MailFolder { get throws {
+        try modelContext[mailFolderID]
+    } }
+    
+    subscript(messageID: MessageID) -> Message { get throws {
+        try modelContext[messageID]
+    } }
+}*/
+
+fileprivate extension ModelContext {
+    
+    // MARK: - Accounts
     
     // loadAccounts
     func setAccounts<AccountResource: AccountProtocol>(_ accounts: [AccountResource]) throws -> (inserts: [AccountID], delete: [AccountID]) {
+        let modelContext = self
         checkBackgroundThread()
         
         var inserts   = [Account]()
@@ -35,6 +107,7 @@ public extension ModelStore {
        
     // signIn
     func insertAccount<AccountResource: AccountProtocol>(_ account: AccountResource) throws -> AccountID {
+        let modelContext = self
         checkBackgroundThread()
         var accountID: AccountID!
         try modelContext.transaction {
@@ -45,6 +118,7 @@ public extension ModelStore {
         
     // signOut
     func deleteAccount(accountID: AccountID) throws -> AccountID {
+        let modelContext = self
         checkBackgroundThread()
         try modelContext.transaction {
             let account = try modelContext[accountID]
@@ -62,6 +136,7 @@ public extension ModelStore {
     
     // move account
     func moveAccounts(accountIDs: [AccountID], fromOffsets source: IndexSet, toOffset destination: Int) throws -> [Account.ResourceID] {
+        let modelContext = self
         checkBackgroundThread()
         
         // contacts.move(fromOffsets: from, toOffset: to)
@@ -92,6 +167,7 @@ public extension ModelStore {
     
     // loadMailFolders
     func setRootMailFolder<MailFolderResource : MailFolderProtocol>(resource: MailFolderResource, accountID: AccountID) throws -> MailFolderID {
+        let modelContext = self
         var mailFolder: MailFolder!
         do {
             try modelContext.transaction {
@@ -117,6 +193,7 @@ public extension ModelStore {
 
     // loadMailFolders
     func setChildrenMailFolders<MailFolderResource : MailFolderProtocol>(resources: [MailFolderResource], parentID: MailFolderID, accountID: AccountID) throws -> [MailFolderID] where MailFolderResource : JetEmailData.MailFolderProtocol {
+        let modelContext = self
         
         var inserts = [MailFolder]()
         try modelContext.transaction {
@@ -146,6 +223,7 @@ public extension ModelStore {
     
     // loadMessages
     func setMessagesDeletePart(newMessageIDs: [MessageID], mailFolderID: MailFolderID) throws -> [(offset: Int,  element: MessageID)] {
+        let modelContext = self
         checkBackgroundThread()
              
         var enumeratedInsertIDs: [(offset: Int,  element: MessageID)] = []
@@ -169,14 +247,16 @@ public extension ModelStore {
         return enumeratedInsertIDs
     }
     
-    func messageIDs(mailFolderID: MailFolderID) throws -> [MessageID] {
+    /*func messageIDs(mailFolderID: MailFolderID) throws -> [MessageID] {
+        let modelContext = self
         checkBackgroundThread()
         let mailFolder = try modelContext[mailFolderID]
         return mailFolder.messages.map(\.resourceID)
-    }
+    }*/
     
     // loadMessages
     func insertMessages<MessageSource: MessageProtocol>(sources: [MessageSource], mailFolderID: MailFolderID) throws -> [MessageID] {
+        let modelContext = self
         checkBackgroundThread()
         
         try modelContext.transaction {
@@ -192,7 +272,8 @@ public extension ModelStore {
     }
 
     
-    func deleteMessages(messageIDs: [MessageID], mailFolderID: MailFolderID) throws -> [MessageID] {
+    /*func deleteMessages(messageIDs: [MessageID], mailFolderID: MailFolderID) throws -> [MessageID] {
+        let modelContext = self
         checkBackgroundThread()
         try modelContext.transaction {
             for messageID in messageIDs {
@@ -204,7 +285,7 @@ public extension ModelStore {
             }
         }
         return messageIDs
-    }
+    }*/
     
     
     /*func insertMessage(message: any MessageProtocol, mailFolderID: MailFolderID) throws -> MessageID {
@@ -232,6 +313,7 @@ public extension ModelStore {
     
     // moveMessages
     func moveMessage(messageID: MessageID, fromID: MailFolderID, toID: MailFolderID) throws -> MessageID {
+        let modelContext = self
         let message = try modelContext[messageID]
         let to      = try modelContext[toID]
         try modelContext.transaction {
@@ -253,6 +335,7 @@ public extension ModelStore {
     
     // load body
     func setMessage<MessageResource: MessageProtocol>(resource: MessageResource) throws -> MessageID {
+        let modelContext = self
         checkBackgroundThread()
         let message = try modelContext[resource.generalID]
         try modelContext.transaction {

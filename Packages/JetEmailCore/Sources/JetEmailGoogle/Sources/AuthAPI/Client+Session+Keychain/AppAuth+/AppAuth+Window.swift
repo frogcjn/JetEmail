@@ -5,7 +5,7 @@
 //  Created by Cao, Jiannan on 3/12/24.
 //
 
-import AppAuth
+@preconcurrency import AppAuth
 import class JetEmailFoundation.Window
 
 extension OIDAuthState {

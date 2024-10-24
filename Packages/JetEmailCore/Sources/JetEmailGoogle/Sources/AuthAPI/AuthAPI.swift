@@ -43,7 +43,7 @@ extension GoogleSession : SessionAuthProtocol {
 // MARK: - AccountID Session API
 
 @MainActor
-extension GoogleAccountID  : @retroactive AccountIDAuthProtocol {
+extension GoogleAccountID  : AccountIDAuthProtocol {
     public var cachedSession: GoogleSession? {
         session
     }

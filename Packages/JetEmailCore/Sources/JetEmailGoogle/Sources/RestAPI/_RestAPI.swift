@@ -121,18 +121,18 @@ extension GoogleSession {
                 try await withThrowingTaskGroup(of: [GoogleMessage].self) { group in
                     if maxTaskCount < Int.max {
                         for _ in 0..<maxTaskCount {
-                            group.addTask(accountID: accountID, service: service, rest: &rest, batchSize: batchSize)
+                            group.addTask(accountID: accountID, session: self, rest: &rest, batchSize: batchSize)
                         }
                     } else {
                         while rest.count > 0 {
-                            group.addTask(accountID: accountID, service: service, rest: &rest, batchSize: batchSize)
+                            group.addTask(accountID: accountID, session: self, rest: &rest, batchSize: batchSize)
                         }
                     }
                     
                     for try await result in group {
                         continuation.yield(result)
                         await Task.yield()
-                        group.addTask(accountID: accountID, service: service, rest: &rest, batchSize: batchSize)
+                        group.addTask(accountID: accountID, session: self, rest: &rest, batchSize: batchSize)
                     }
                     //}
                 }
@@ -155,7 +155,7 @@ extension GoogleSession {
 }
 
 fileprivate extension ThrowingTaskGroup where ChildTaskResult == [GoogleMessage] {
-    mutating func addTask(accountID: GoogleAccountID, service: GTLRGmailService, rest: inout Array<GoogleMessageID>.SubSequence, batchSize: Int) {
+    mutating func addTask(accountID: GoogleAccountID, session: GoogleSession, rest: inout Array<GoogleMessageID>.SubSequence, batchSize: Int) {
         guard !rest.isEmpty else { return }
         let chunk = rest.prefix(batchSize)
         rest = rest.dropFirst(batchSize)
@@ -167,7 +167,7 @@ fileprivate extension ThrowingTaskGroup where ChildTaskResult == [GoogleMessage]
                 return query
             })
             
-            let batchResult: GTLRBatchResult = try await service.execute(query)
+            let batchResult: GTLRBatchResult = try await session.service.execute(query)
             
             guard let messagesDict = batchResult.successes as? [String: GTLRGmail_Message] else { fatalError() } // TODO: fatalError replace with error
             return try messagesDict.values.map { try $0.messageInner.outer(accountID: accountID, raw: nil) }
