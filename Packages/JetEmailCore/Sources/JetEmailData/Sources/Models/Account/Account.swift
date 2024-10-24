@@ -13,6 +13,9 @@ import func JetEmailFoundation.checkBackgroundThread
 @Model
 public final class Account {
     
+    #Unique<Account>([\.platform, \.innerID])
+    #Index<Account>([\.platform, \.innerID])
+
     // MARK: - Delete Mark
     
     public var deleteMark = false { didSet {
@@ -26,10 +29,12 @@ public final class Account {
     
     // MARK: Resource - ID
 
+    @Attribute(.preserveValueOnDeletion)
     public private(set) var platform    : String
+    @Attribute(.preserveValueOnDeletion)
     public private(set) var innerID     : String
     
-    @Attribute(.unique)
+    @Attribute(.preserveValueOnDeletion)
     public private(set) var uniqueID    : String
     
     @Transient
@@ -82,3 +87,15 @@ public final class Account {
     public var messages: [Message] = []
 }
 
+/*extension Account : Equatable {
+    public static func == (lhs: Account, rhs: Account) -> Bool {
+        lhs.platform == rhs.platform && lhs.innerID == rhs.innerID
+    }
+}
+
+extension Account : Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(platform)
+        hasher.combine(innerID)
+    }
+}*/
