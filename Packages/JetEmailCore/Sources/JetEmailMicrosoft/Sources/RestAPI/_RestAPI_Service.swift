@@ -199,7 +199,7 @@ fileprivate extension URLRequest {
     
     var responseDataForString: Data { get async throws {
         let (data, response) = try await URLSession.shared.data(for: self)
-        assert(response.mimeType == "text/plain")
+        assert(response.mimeType == "text/plain") // TODO: "application/json": "{\"error\":{\"code\":\"ErrorItemNotFound\",\"message\":\"The specified object was not found in the store., The process failed to get the correct properties.\"}}"
         return data
     } }
 
