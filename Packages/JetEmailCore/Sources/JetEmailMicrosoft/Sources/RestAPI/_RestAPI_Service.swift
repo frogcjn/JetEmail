@@ -23,7 +23,7 @@ import JetEmailData
 extension MicrosoftSession {
     
     func _getMultipartData(url: URL, maxPageSize: Int? = nil) async throws -> Data {
-        return try await _getResponseDataForString(url: url, maxPageSize: maxPageSize)
+        try await _getResponseDataForString(url: url, maxPageSize: maxPageSize)
     }
     
     func _getBatch<Value: Decodable & Sendable>(paths: [String], responseType: Value.Type = Value.self) async throws -> [Value] {
@@ -39,7 +39,7 @@ extension MicrosoftSession {
 
 
     func _getValue<Value: Decodable & Sendable>(url: URL, maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> Value {
-        return try await _getResponse(url: url, maxPageSize: maxPageSize)
+        try await _getResponse(url: url, maxPageSize: maxPageSize)
     }
     
     func _getValues<Value: Decodable & Sendable>(url: URL, maxPageSize: Int? = nil, responseType: Value.Type = Value.self) async throws -> [Value] {
@@ -94,9 +94,15 @@ extension MicrosoftSession {
         }
         return (count, stream)
     }
-    
+
+    func _patchItem<RequestBody: Encodable, Value: Decodable & Sendable>(
+        url: URL, body: RequestBody, responseType: Value.Type = Value.self
+    ) async throws -> Value {
+        try await _patchResponse(url: url, body: body, responseType: responseType)
+    }
+
     func _postItem<RequestBody: Encodable, Value: Decodable & Sendable>(url: URL, maxPageSize: Int? = nil, body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
-        return try await _postResponse(url: url, maxPageSize: maxPageSize, body: body)
+        try await _postResponse(url: url, maxPageSize: maxPageSize, body: body)
     }
     
     /*
@@ -144,7 +150,11 @@ fileprivate extension MicrosoftSession {
     func _getResponse<Value: Decodable & Sendable>(url: URL, maxPageSize: Int?, responseType: Value.Type = Value.self) async throws -> Value {
         try await URLRequest._get(url: url, authorization: refreshAuthorizationHeader, maxPageSize: maxPageSize).responseDataForJSON.decodeGraphJSON(Value.self)
     }
-    
+
+    func _patchResponse<RequestBody: Encodable, Value: Decodable & Sendable>(url: URL, body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
+        try await URLRequest._patch(url: url, authorization: refreshAuthorizationHeader, body: body).responseDataForJSON.decodeGraphJSON(Value.self)
+    }
+
     func _postResponse<RequestBody: Encodable, Value: Decodable & Sendable>(url: URL, maxPageSize: Int?, body: RequestBody, responseType: Value.Type = Value.self) async throws -> Value {
         try await URLRequest._post(url: url, authorization: refreshAuthorizationHeader, maxPageSize: maxPageSize, body: body).responseDataForJSON.decodeGraphJSON(Value.self)
     }
@@ -162,7 +172,19 @@ fileprivate extension URLRequest {
         }
         return request
     }
-    
+
+    private static func _patch(url: URL, authorization: String, bodyData: Data) -> Self {
+        var request = URLRequest(url: url)
+        // Set the Authorization header for the request. We use Bearer tokens, so we specify Bearer + the token we got from the result
+        request.httpMethod = "PATCH"
+        request.httpBody = bodyData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue(authorization, forHTTPHeaderField: "Authorization")
+
+        return request
+    }
+
     private static func _post(url: URL, authorization: String, maxPageSize: Int?, bodyData: Data) -> Self {
         var request = URLRequest(url: url)
         
@@ -178,7 +200,11 @@ fileprivate extension URLRequest {
         }
         return request
     }
-    
+
+    static func _patch<T: Encodable>(url: URL, authorization: String, body: T) throws -> URLRequest {
+        _patch(url: url, authorization: authorization, bodyData: try body.jsonData)
+    }
+
     static func _post<T: Encodable>(url: URL, authorization: String, maxPageSize: Int?, body: T) throws -> URLRequest {
         _post(url: url, authorization: authorization, maxPageSize: maxPageSize, bodyData: try body.jsonData)
     }

@@ -33,7 +33,11 @@ extension GoogleSession : RestAPIProtocol {
             queue.append(contentsOf: childrenNodes)
         }
     }
-    
+
+    public func renameMailFolder(_ displayName: String, for folder: GoogleMailFolderID) async throws -> GoogleMailFolder {
+        .init(id: .init(accountID: account.id, innerID: "empty"), _inner: .init(id: "empty"))
+    }
+
     // MARK: - MailFolder-Messages
     
     public func syncMessages(mailFolderID: GoogleMailFolderID, modelStore: ModelStore) async throws {
