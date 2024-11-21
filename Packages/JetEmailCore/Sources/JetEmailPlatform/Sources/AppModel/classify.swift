@@ -101,7 +101,7 @@ extension Agent {
     @MainActor
     static func classify(folders: [(folder: MailFolder, path: [String])], message: Message) async throws -> MailFolder? {
         let folderDescriptions = folders.enumerated().map { "\($0.offset): \($0.element.path.reversed().joined(separator: "/"))" }
-        let openAI = OpenAI(apiToken: "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")
+        let openAI = OpenAI(apiToken: "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")
         // print(folderDescriptions.joined(separator: "\n"))
         
         let messages: [Chat] =  [
