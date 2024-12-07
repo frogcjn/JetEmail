@@ -338,7 +338,15 @@ extension PlatformEnum: RestAPIProtocol where
         case    .google(let session): try await session.loadMailFoldersUnderRoot(root: root.google   , modelStore: modelStore)
         }
     }
-    
+
+    public func renameMailFolder(_ displayName: String, for folder: Microsoft.MailFolderType.GeneralID) 
+    async throws -> PlatformEnum<Microsoft.MailFolderType, Google.MailFolderType> {
+        switch self {
+        case .microsoft(let session): .microsoft(try await session.renameMailFolder(displayName, for: folder.microsoft))
+        case    .google(let session): .google(try await session.renameMailFolder(displayName, for: folder.google))
+        }
+    }
+
     // MARK: mailFolder - messages
 
     public func syncMessages(mailFolderID: MailFolderID, modelStore: ModelStore) async throws {

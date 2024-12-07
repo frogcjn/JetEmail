@@ -24,7 +24,27 @@ extension MicrosoftSession : RestAPIProtocol {
             queue.append(contentsOf: children)
         }
     }
-    
+
+    /// Rename mail folder with new name.
+    /// 
+    /// - Seealso: https://learn.microsoft.com/en-us/graph/api/mailfolder-update
+    /// - Parameters:
+    ///   - displayName: The new name for mail folder.
+    ///   - folder: The ID of mail folder which is renamed.
+    /// - Returns: A mail folder value with the give `displayName`.
+    public func renameMailFolder(_ displayName: String, for folder: MicrosoftMailFolderID) async throws -> MicrosoftMailFolder {
+        struct RenameFolderRequestBody : Encodable {
+            let displayName: String
+        }
+        let inner = try await _patchItem(
+            url: client.endpointURL.appending(pathComponents: "me", "mailFolders", folder.innerID),
+            body: RenameFolderRequestBody(displayName: displayName),
+            responseType: _MicrosoftAPI.MicrosoftMailFolderInner.self
+        )
+        let idToSystemName = try await _idToSystemName
+        return inner.outer(accountID: account.id, _idToSystemName: idToSystemName)
+    }
+
     // MARK: - MailFolder-Messages
     
     public func syncMessages(mailFolderID: MicrosoftMailFolderID, modelStore: ModelStore) async throws {
